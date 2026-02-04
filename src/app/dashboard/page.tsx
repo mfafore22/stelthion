@@ -1,0 +1,122 @@
+import { StatCard } from '@/components/dashboard/stat-card'
+import { MetricCard } from '@/components/dashboard/metric-card'
+import { Tabs } from '@/components/dashboard/tabs'
+
+export default function DashboardPage() {
+  return (
+    <div className="space-y-6">
+      {/* Stats Row */}
+      <div className="grid grid-cols-4 gap-4">
+        <StatCard
+          label="Total Retail Units"
+          value="189"
+          trend="Updated 11/11/2024"
+          color="emerald"
+        />
+        <StatCard
+          label="Top Category"
+          value="Restaurant"
+          subtitle="31 units (16.4%)"
+          color="emerald"
+        />
+        <StatCard
+          label="Food & Beverage"
+          value="29.6%"
+          subtitle="56 units"
+          color="emerald"
+        />
+        <StatCard
+          label="Fashion & Retail"
+          value="18.0%"
+          subtitle="34 units"
+          color="emerald"
+        />
+      </div>
+
+      {/* Tabs */}
+      <Tabs 
+        tabs={['Overview', 'Performance', 'Location & Access', 'Tenant Mix', 'Events', 'Weather', 'Campaigns']}
+        defaultTab="Performance"
+      />
+
+      {/* Content Grid */}
+      <div className="grid grid-cols-3 gap-6">
+        {/* Left Column - Metrics */}
+        <div className="space-y-4">
+          <MetricCard
+            label="Current Visitors"
+            value="1.5k"
+            change="+8.7%"
+            changeLabel="vs plan"
+            progress={75}
+          />
+          <MetricCard
+            label="Dwell Time"
+            value="45 min"
+            change="+12.0%"
+            changeLabel="vs baseline"
+            progress={60}
+          />
+          <MetricCard
+            label="Conversion Rate"
+            value="23%"
+            change="+5.2%"
+            changeLabel="vs last week"
+            progress={45}
+          />
+        </div>
+
+        {/* Right Column - Chart */}
+        <div className="col-span-2 bg-white rounded-xl p-6 border border-gray-100">
+          <h3 className="text-sm font-medium text-gray-900 mb-6">
+            Actual vs Predicted Footfall (Today)
+          </h3>
+          
+          {/* Chart Placeholder */}
+          <div className="h-64 relative">
+            <div className="absolute left-0 top-0 bottom-8 w-12 flex flex-col justify-between text-xs text-gray-400">
+              <span>2800</span>
+              <span>2100</span>
+              <span>1400</span>
+              <span>700</span>
+              <span>0</span>
+            </div>
+            
+            <div className="ml-12 h-full border-l border-b border-gray-200 relative">
+              <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#10b981" stopOpacity="0.2" />
+                    <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M 0 180 Q 50 170, 100 150 T 200 120 T 300 100 T 400 60 T 500 50 T 600 70 T 700 90 T 800 100"
+                  fill="url(#chartGradient)"
+                  stroke="#10b981"
+                  strokeWidth="2"
+                />
+                <path
+                  d="M 0 200 Q 100 190, 200 185 T 400 180 T 600 175 T 800 170"
+                  fill="none"
+                  stroke="#9ca3af"
+                  strokeWidth="2"
+                  strokeDasharray="5,5"
+                />
+              </svg>
+              
+              <div className="absolute bottom-0 left-0 right-0 translate-y-6 flex justify-between text-xs text-gray-400 px-4">
+                <span>10am</span>
+                <span>12pm</span>
+                <span>2pm</span>
+                <span>4pm</span>
+                <span>6pm</span>
+                <span>8pm</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
