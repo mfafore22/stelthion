@@ -1,12 +1,5 @@
-import Link from "next/link"
+import { redirect } from 'next/navigation';
 
 export default async function Home() {
- 
-
-  return (
-    <main className="p-8">
-      <Link href="/login">
-      <span>Log in</span>
-      </Link>    </main>
-  )
+  redirect('/login');
 }
