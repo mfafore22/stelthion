@@ -1,3 +1,5 @@
+import { Suspense } from "react"
+import LoginForm from "@/app/ui/login-form";
 export default function LoginPage() {
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -5,6 +7,9 @@ export default function LoginPage() {
         <h1 className="text-2xl font-bold mb-4">Login</h1>
         <p>Login page coming soon...</p>
       </div>
+      <Suspense fallback={<div>Loading...</div>}>
+         <LoginForm />
+      </Suspense>
     </div>
   )
 }

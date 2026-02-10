@@ -1,6 +1,6 @@
-import { StatCard } from '@/components/dashboard/stat-card'
-import { MetricCard } from '@/components/dashboard/metric-card'
-import { Tabs } from '@/components/dashboard/tabs'
+import { StatCard } from '@/app/ui/dashboard/stat-card'
+import { MetricCard } from '@/app/ui/dashboard/metric-card'
+import { Tabs } from '@/app/ui/dashboard/tabs'
 
 export default function DashboardPage() {
   return (

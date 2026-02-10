@@ -1,5 +1,12 @@
-import Image from "next/image";
+import Link from "next/link"
 
-export default function Home() {
-  return <h1>Welcome to Stelthion Dashboard</h1>
+export default async function Home() {
+ 
+
+  return (
+    <main className="p-8">
+      <Link href="/login">
+      <span>Log in</span>
+      </Link>    </main>
+  )
 }
