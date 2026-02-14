@@ -1,11 +1,19 @@
-import { Sidebar } from '@/app/ui/dashboard/sidebar'
-import { Header } from '@/app/ui/dashboard/header'
+import { redirect } from 'next/navigation';
+import { auth, signOut } from '@/auth';
+import { Sidebar } from '@/app/ui/dashboard/sidebar';
+import { Header } from '../ui/dashboard/header';
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const session = await auth();
+
+  if (!session) {
+    redirect('/login');
+  }
+
   return (
     <div className="flex h-screen bg-gray-50">
       <Sidebar />
@@ -16,5 +24,5 @@ export default function DashboardLayout({
         </main>
       </div>
     </div>
-  )
+  );
 }

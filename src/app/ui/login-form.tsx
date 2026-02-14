@@ -3,8 +3,11 @@
 import { Button } from "./button";
 import { useActionState } from "react";
 import { authenticate } from "../lib/action";
+import { useSearchParams } from "next/navigation";
 
 export default function LoginForm() {
+    const searchParams = useSearchParams();
+    const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
     const [errorMessage, formAction, isPending] = useActionState(authenticate, undefined);
 
     return (
@@ -48,7 +51,7 @@ export default function LoginForm() {
                     {errorMessage}
                 </div>
             )}
-
+            <input type="hidden" name="redirectTo" value={callbackUrl}/>
             <Button type="submit" disabled={isPending}>
                 {isPending ? 'Logging in...' : 'Log in'}
             </Button>

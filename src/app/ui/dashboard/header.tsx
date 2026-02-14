@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Calendar, Search, Download, HelpCircle } from 'lucide-react'
+import { Calendar, Search, Download, HelpCircle, LogOut } from 'lucide-react'
+import { logout } from '@/app/lib/action'
 
 export function Header() {
   const [currentDate, setCurrentDate] = useState('')
@@ -9,18 +10,15 @@ export function Header() {
   const [language, setLanguage] = useState('ENG')
 
   useEffect(() => {
-    // Update time every second
     const updateDateTime = () => {
       const now = new Date()
       
-      // Format date: DD.MM.YYYY
       const date = now.toLocaleDateString('fi-FI', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric'
       }).replace(/\//g, '.')
       
-      // Format time: HH:MM
       const time = now.toLocaleTimeString('fi-FI', {
         hour: '2-digit',
         minute: '2-digit'
@@ -61,7 +59,6 @@ export function Header() {
           <span>Ask Stelthion</span>
         </button>
         
-        {/* Language Dropdown */}
         <select 
           value={language}
           onChange={(e) => setLanguage(e.target.value)}
@@ -77,6 +74,19 @@ export function Header() {
           <Download size={16} />
           <span>Export</span>
         </button>
+
+        <div className="w-px h-6 bg-gray-200" />
+
+        {/* Logout Button */}
+        <form action={logout}>
+          <button 
+            type="submit"
+            className="flex items-center gap-2 text-sm text-red-600 hover:text-red-800"
+          >
+            <LogOut size={16} />
+            <span>Logout</span>
+          </button>
+        </form>
       </div>
     </header>
   )

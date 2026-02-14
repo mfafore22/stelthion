@@ -31,6 +31,7 @@ export async function GET() {
     include: { users: true },
   })
 
+
   return NextResponse.json({ 
     message: 'Seed successful',
     customer: customerWithUser 
