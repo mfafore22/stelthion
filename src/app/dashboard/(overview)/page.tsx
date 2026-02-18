@@ -1,34 +1,78 @@
+import { auth } from '@/auth'
+import { redirect } from 'next/navigation'
+import prisma from '@/app/lib/prisma'
 import { StatCard } from '@/app/ui/dashboard/stat-card'
 import { MetricCard } from '@/app/ui/dashboard/metric-card'
 import { Tabs } from '@/app/ui/dashboard/tabs'
+import { isAdminOrManager } from '@/app/lib/role-check'
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const session = await auth()
+
+  if (!session) {
+    redirect('/login')
+  }
+
+  const customerId = session.user.customerId
+  const role = session.user.role
+
+  // Fetch company stats
+  let stats = await prisma.stats.findUnique({
+    where: { customerId }
+  })
+
+  // If no stats exist, create default
+  if (!stats) {
+    stats = await prisma.stats.create({
+      data: {
+        customerId,
+        totalUnits: 0,
+        topCategory: 'N/A',
+        foodBeverage: 0,
+        fashionRetail: 0,
+        currentVisitors: 0,
+        dwellTime: 0,
+        conversionRate: 0,
+      }
+    })
+  }
+
   return (
     <div className="space-y-6">
+      {/* Welcome Message */}
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">
+          Welcome, {session.user.customerName}
+        </h1>
+        <p className="text-gray-600">
+          Logged in as {session.user.name} ({role})
+        </p>
+      </div>
+
       {/* Stats Row */}
       <div className="grid grid-cols-4 gap-4">
         <StatCard
           label="Total Retail Units"
-          value="189"
-          trend="Updated 11/11/2024"
+          value={stats.totalUnits.toString()}
+          trend={`Updated ${stats.updatedAt.toLocaleDateString()}`}
           color="emerald"
         />
         <StatCard
           label="Top Category"
-          value="Restaurant"
-          subtitle="31 units (16.4%)"
+          value={stats.topCategory}
+          subtitle="Based on units"
           color="emerald"
         />
         <StatCard
           label="Food & Beverage"
-          value="29.6%"
-          subtitle="56 units"
+          value={`${stats.foodBeverage}%`}
+          subtitle="of total units"
           color="emerald"
         />
         <StatCard
           label="Fashion & Retail"
-          value="18.0%"
-          subtitle="34 units"
+          value={`${stats.fashionRetail}%`}
+          subtitle="of total units"
           color="emerald"
         />
       </div>
@@ -45,25 +89,31 @@ export default function DashboardPage() {
         <div className="space-y-4">
           <MetricCard
             label="Current Visitors"
-            value="1.5k"
+            value={stats.currentVisitors >= 1000 
+              ? `${(stats.currentVisitors / 1000).toFixed(1)}k` 
+              : stats.currentVisitors.toString()}
             change="+8.7%"
             changeLabel="vs plan"
             progress={75}
           />
           <MetricCard
             label="Dwell Time"
-            value="45 min"
+            value={`${stats.dwellTime} min`}
             change="+12.0%"
             changeLabel="vs baseline"
             progress={60}
           />
-          <MetricCard
-            label="Conversion Rate"
-            value="23%"
-            change="+5.2%"
-            changeLabel="vs last week"
-            progress={45}
-          />
+          
+          {/* Only ADMIN and MANAGER see conversion rate */}
+          {isAdminOrManager(role) && (
+            <MetricCard
+              label="Conversion Rate"
+              value={`${stats.conversionRate}%`}
+              change="+5.2%"
+              changeLabel="vs last week"
+              progress={45}
+            />
+          )}
         </div>
 
         {/* Right Column - Chart */}
