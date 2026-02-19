@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { Calendar, Search, Download, HelpCircle, LogOut } from 'lucide-react'
 import { logout } from '@/app/lib/action'
 
@@ -37,9 +38,14 @@ export function Header() {
   return (
     <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6">
       {/* Left - Logo/Brand */}
-      <div className="flex items-center gap-2">
-        <span className="text-xl font-semibold text-gray-900">stelthion</span>
-        <span className="text-xs text-gray-400">Synexis™</span>
+      <div className="flex items-center">
+        <Image
+          src="/stelthion-brandmark.png"
+          alt="Stelthion"
+          width={120}
+          height={40}
+          className="object-contain"
+        />
       </div>
 
       {/* Center - Date & Time */}

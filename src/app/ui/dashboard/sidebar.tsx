@@ -2,23 +2,25 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { 
-  LayoutGrid, 
-  FileText, 
-  MessageSquare, 
-  BarChart3, 
-  Sparkles, 
-  Layers, 
-  Settings 
+import {
+  LayoutGrid,
+  Building2,
+  Megaphone,
+  BarChart3,
+  TrendingUpDown,
+  HandPlatter,
+  Brain,
+  Settings,
 } from 'lucide-react'
 
 const navItems = [
-  { href: '/dashboard', icon: LayoutGrid, label: 'Overview' },
-  { href: '/dashboard/reports', icon: FileText, label: 'Reports' },
-  { href: '/dashboard/messages', icon: MessageSquare, label: 'Messages' },
+  { href: '/dashboard', icon: LayoutGrid, label: 'Portfolio' },
+  { href: '/dashboard/tenants', icon: Building2, label: 'My Properties' },
+  { href: '/dashboard/reports', icon: Megaphone, label: 'Campaigns' },
   { href: '/dashboard/analytics', icon: BarChart3, label: 'Analytics' },
-  { href: '/dashboard/insights', icon: Sparkles, label: 'Insights' },
-  { href: '/dashboard/tenants', icon: Layers, label: 'Tenants' },
+  { href: '/dashboard/insights', icon: TrendingUpDown, label: 'Scenarios' },
+  { href: '/dashboard/messages', icon: HandPlatter, label: 'Assistants' },
+  { href: '/dashboard/shoppermind', icon: Brain, label: 'ShopperMind' },
   { href: '/dashboard/settings', icon: Settings, label: 'Settings' },
 ]
 
@@ -27,10 +29,6 @@ export function Sidebar() {
 
   return (
     <aside className="w-16 bg-white border-r border-gray-200 flex flex-col items-center py-6">
-      <div className="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center mb-8">
-        <span className="text-white font-bold text-lg">S</span>
-      </div>
-
       <nav className="flex-1 flex flex-col gap-2">
         {navItems.map((item) => {
           const isActive = pathname === item.href
