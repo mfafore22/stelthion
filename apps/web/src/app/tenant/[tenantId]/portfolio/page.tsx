@@ -509,7 +509,7 @@ export default function TenantPortfolioPage() {
     const totalProperties = authorizedProperties.length;
     const totalAnnualVisitors = authorizedProperties.reduce((sum, p) => sum + p.annualVisitors, 0);
     const totalAnnualSales = authorizedProperties.reduce((sum, p) => sum + p.annualSales, 0);
-    const companyName = tenantName || MANAGEMENT_COMPANY.name;
+    const companyName = tenantName || '';
 
     return {
       propertyCount: totalProperties,
@@ -526,7 +526,7 @@ export default function TenantPortfolioPage() {
     <div className="min-h-screen bg-bo-beige-100">
       {/* Left Navigation */}
       <MallLeftNav
-        managementCompanyId={MANAGEMENT_COMPANY.id}
+        managementCompanyId={tenantId || ''}
         onNavigate={(itemId) => console.log(`Navigate to: ${itemId}`)}
       />
 
@@ -544,6 +544,12 @@ export default function TenantPortfolioPage() {
 
       {/* Main Content */}
       <main className="ml-[80px] mt-[80px] p-8">
+        {/* Guard: render nothing until session is confirmed — prevents flash of wrong tenant data */}
+        {(sessionLoading || !user) ? (
+          <div className="flex items-center justify-center h-64">
+            <div className="text-bo-neutral-400 text-sm">Loading...</div>
+          </div>
+        ) : (
         <div className="max-w-[1600px] mx-auto flex gap-8">
           <div className="flex-1 space-y-8">
             {/* Management Company Header */}
@@ -890,6 +896,7 @@ export default function TenantPortfolioPage() {
             </div>
           </aside>
         </div>
+        )}
       </main>
     </div>
   );
