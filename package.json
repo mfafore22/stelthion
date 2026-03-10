@@ -17,6 +17,8 @@
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
+    "i18next": "^25.8.17",
+    "i18next-browser-languagedetector": "^8.2.1",
     "jsonwebtoken": "^9.0.3",
     "lucide-react": "^0.563.0",
     "next": "^16.1.6",
@@ -25,6 +27,9 @@
     "qrcode": "^1.5.4",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-i18next": "^16.5.6",
+    "recharts": "^3.8.0",
+    "swr": "^2.4.1",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
