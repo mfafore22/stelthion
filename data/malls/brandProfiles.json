@@ -1,0 +1,40 @@
+{
+  "profiles": {
+    "ideapark": {
+      "name": "Ideapark Lempäälä",
+      "logo": "/logo.png",
+      "colors": {
+        "primary": "#1A1A2E",
+        "secondary": "#E94560",
+        "accent": "#F5A623",
+        "background": "#F8F6F3"
+      },
+      "gradient": {
+        "from": "#1A1A2E",
+        "to": "#16213E"
+      },
+      "typography": {
+        "fontFamily": "Inter, sans-serif",
+        "headingWeight": 700
+      }
+    }
+  },
+  "fallback": {
+    "name": "Ideapark Lempäälä",
+    "logo": "/logo.png",
+    "colors": {
+      "primary": "#1A1A2E",
+      "secondary": "#E94560",
+      "accent": "#F5A623",
+      "background": "#F8F6F3"
+    },
+    "gradient": {
+      "from": "#1A1A2E",
+      "to": "#16213E"
+    },
+    "typography": {
+      "fontFamily": "Inter, sans-serif",
+      "headingWeight": 700
+    }
+  }
+}

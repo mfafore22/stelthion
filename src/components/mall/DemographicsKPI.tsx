@@ -10,7 +10,7 @@ import { MallCard } from './ui/MallCard';
 import { Users, Briefcase, TrendingUp, MapPin, Database, Home, ChevronRight } from 'lucide-react';
 import type { CatchmentDemographics } from '@/lib/types/transport';
 import { HouseholdDataModal } from './HouseholdDataModal';
-import { getTriplaHouseholdData } from '@/lib/data/triplaHousehold';
+import { getHouseholdData } from '@/lib/data/household';
 
 interface DemographicsKPIProps {
   demographics: CatchmentDemographics;
@@ -18,7 +18,7 @@ interface DemographicsKPIProps {
 
 export function DemographicsKPI({ demographics }: DemographicsKPIProps) {
   const [isHouseholdModalOpen, setIsHouseholdModalOpen] = useState(false);
-  const householdData = getTriplaHouseholdData();
+  const householdData = getHouseholdData();
   // Format numbers
   const formatNumber = (num: number) => {
     if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
@@ -34,6 +34,7 @@ export function DemographicsKPI({ demographics }: DemographicsKPIProps) {
   const profileColors = {
     'urban-professional': 'bg-bo-info-100 text-bo-info-dark border border-bo-info-300',
     'family-suburban': 'bg-bo-success-light/70 text-bo-success-dark border border-bo-success/30',
+    'suburban-families': 'bg-bo-success-light/70 text-bo-success-dark border border-bo-success/30',
     'student': 'bg-bo-accent-100 text-bo-accent-700 border border-bo-accent-300',
     'mixed': 'bg-bo-neutral-200 text-bo-neutral-950 border border-bo-neutral-300',
   };

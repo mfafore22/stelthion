@@ -31,8 +31,7 @@ import { getMallLogo } from '@/lib/mall/mallLogos';
 import { getMallIdentity } from '@/lib/mall/mallIdentity';
 import { getMallsByOperator, OPERATORS, getMallBrandColors, getMall } from '@/lib/mall/mallDatabase';
 import { getOperatorLogoOrFallback } from '@/lib/mall/operatorLogos';
-import { getTriplaParkingSnapshot } from '@/lib/data/triplaTransport';
-import { getTriplaCurrentFootfall } from '@/lib/data/triplaFootfall';
+import { getCurrentFootfall } from '@/lib/data/footfall';
 
 // SWR fetcher
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -76,8 +75,8 @@ const getPortfolioKPIs = (t: (key: string) => string) => [
 ];
 
 // All properties across all tenants - mock data until DB integration
-// Get current footfall data for Tripla
-const triplaFootfall = getTriplaCurrentFootfall();
+// Get current footfall data
+const triplaFootfall = getCurrentFootfall();
 
 const ALL_PROPERTIES = [
   {

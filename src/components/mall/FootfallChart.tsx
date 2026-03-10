@@ -8,7 +8,7 @@
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { estimateTotalFootfall } from '@/lib/data/triplaFootfall';
+import { estimateCurrentFootfall } from '@/lib/data/footfall';
 import { useWeather } from '@/hooks/mall/useWeather';
 import { useTranslation } from 'react-i18next';
 
@@ -18,7 +18,7 @@ interface FootfallChartProps {
 }
 
 // Generate realistic chart data based on real footfall model
-const generateChartData = (mallId: string, weatherImpactPercent: number) => {
+const generateChartData = (_mallId: string, weatherImpactPercent: number) => {
   const hours = [
     { label: '10am', hour: 10 },
     { label: '12pm', hour: 12 },
@@ -28,41 +28,19 @@ const generateChartData = (mallId: string, weatherImpactPercent: number) => {
     { label: '8pm', hour: 20 },
   ];
 
-  if (mallId === 'tripla') {
-    // Use real footfall model for Tripla
-    return hours.map(({ label, hour }) => {
-      const now = new Date();
-      now.setHours(hour, 0, 0, 0);
+  return hours.map(({ label, hour }) => {
+    const now = new Date();
+    now.setHours(hour, 0, 0, 0);
 
-      const { currentVisitors } = estimateTotalFootfall(now);
+    const { currentVisitors } = estimateCurrentFootfall(now);
 
-      // Add realistic variation (±5%)
-      const variation = 0.95 + Math.random() * 0.1;
-      const actual = Math.round(currentVisitors * variation);
+    const variation = 0.95 + Math.random() * 0.1;
+    const actual = Math.round(currentVisitors * variation);
+    const predicted = Math.round(actual / 1.08);
+    const weatherBoost = Math.round(actual * (weatherImpactPercent / 100));
 
-      // Predicted is slightly lower (8% below actual, as per vs plan)
-      const predicted = Math.round(actual / 1.08);
-
-      // Weather boost calculation using real weather impact percentage
-      const weatherBoost = Math.round(actual * (weatherImpactPercent / 100));
-
-      return {
-        time: label,
-        actual,
-        predicted,
-        weatherBoost,
-      };
-    });
-  }
-
-  // Fallback for other malls
-  const hours_fallback = ['10am', '12pm', '2pm', '4pm', '6pm', '8pm'];
-  return hours_fallback.map((hour) => ({
-    time: hour,
-    actual: 30000 + Math.random() * 15000,
-    predicted: 28000 + Math.random() * 12000,
-    weatherBoost: 2000 + Math.random() * 3000,
-  }));
+    return { time: label, actual, predicted, weatherBoost };
+  });
 };
 
 export function FootfallChart({ mallId, showPredicted = false }: FootfallChartProps) {

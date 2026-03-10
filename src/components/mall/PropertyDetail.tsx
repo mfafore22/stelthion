@@ -21,20 +21,22 @@ import { TenantMixChart } from './TenantMixChart';
 import { TopCategoriesTable } from './TopCategoriesTable';
 import { TransportAccessibilityKPI } from './TransportAccessibilityKPI';
 import { ParkingStatusKPI } from './ParkingStatusKPI';
+import { DemographicsKPI } from './DemographicsKPI';
+import { CatchmentMap } from './CatchmentMap';
 import { EventsCalendar } from './EventsCalendar';
 import { MallKPICard } from './ui/MallKPICard';
 import { useMallDetail } from '@/hooks/mall/useMallData';
 import { useMallIdentity } from '@/hooks/mall/useMallIdentity';
 import type { HSLAccessibility, NysseAccessibility, VRConnections, CatchmentDemographics, ParkingData, LiveDepartures } from '@/lib/types/transport';
 import type { EventsData } from '@/lib/types/events';
-import { getTriplaCurrentFootfall } from '@/lib/data/triplaFootfall';
+import { getCurrentFootfall } from '@/lib/data/footfall';
 import { useTranslation } from 'react-i18next';
 
 /**
  * Generate realistic time-aware footfall for a mall
  * Based on operating hours and typical shopping patterns
  */
-function generateRealisticFootfall(mallId: string, date: Date = new Date()): number {
+function generateRealisticFootfall(_mallId: string, date: Date = new Date()): number {
   const hour = date.getHours();
   const dayOfWeek = date.getDay(); // 0 = Sunday, 6 = Saturday
 
@@ -42,17 +44,8 @@ function generateRealisticFootfall(mallId: string, date: Date = new Date()): num
   const isClosed = (dayOfWeek === 0 && (hour < 10 || hour >= 20)) ||
                    (dayOfWeek !== 0 && (hour < 9 || hour >= 21));
 
-  // Peak capacity varies by mall size
-  const peakCapacity: Record<string, number> = {
-    tripla: 45000,    // Large flagship mall
-    sello: 48000,     // Large regional mall
-    itis: 35000,
-    jumbo: 32000,
-    ideapark: 12000,  // Suburban mega-mall, 7.5M annual (lower density format)
-    // Default for other malls
-  };
-
-  const basePeak = peakCapacity[mallId] || 30000;
+  // Ideapark peak simultaneous occupancy (7.5M annual visitors, lower density format)
+  const basePeak = 12000;
 
   // If closed, only security/cleaning staff (very minimal)
   if (isClosed) {
@@ -97,23 +90,15 @@ function generateRealisticFootfall(mallId: string, date: Date = new Date()): num
   return Math.round(calculatedFootfall * variance);
 }
 
-// Base performance metrics (non-time-dependent values)
+// Base performance metrics for Ideapark Lempäälä
 const BASE_METRICS: Record<string, any> = {
-  tripla: {
-    deltaVsPlan: 8.3,
-    weatherImpact: 6.2,
-    dwellTime: 48,
+  ideapark: {
+    deltaVsPlan: 8.7,
+    weatherImpact: 3.2,
+    dwellTime: 47,
     dwellDelta: 12,
-    conversionRate: 32.4,
-    conversionDelta: 2.1,
-  },
-  sello: {
-    deltaVsPlan: 5.1,
-    weatherImpact: 3.4,
-    dwellTime: 52,
-    dwellDelta: 8,
-    conversionRate: 28.6,
-    conversionDelta: 1.2,
+    conversionRate: 23.4,
+    conversionDelta: 5.2,
   },
 };
 
@@ -129,10 +114,10 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
   const { data: mallData, loading, error } = useMallDetail(mallId);
   const identity = useMallIdentity(mallId);
 
-  // Calculate real footfall data for Tripla
+  // Calculate real footfall data
   const basePerformance = React.useMemo(() => {
-    if (mallId === 'tripla') {
-      const footfallData = getTriplaCurrentFootfall();
+    if (mallId === 'ideapark') {
+      const footfallData = getCurrentFootfall();
       return {
         currentVisitors: footfallData.currentVisitors,
         deltaVsPlan: footfallData.vsPlanned,
@@ -144,8 +129,8 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
         alerts: [],
       };
     }
-    // Use BASE_METRICS for other malls
-    const baseMetrics = BASE_METRICS[mallId] || BASE_METRICS.tripla;
+    // Use BASE_METRICS for the mall
+    const baseMetrics = BASE_METRICS[mallId] || BASE_METRICS.ideapark;
     return {
       currentVisitors: generateRealisticFootfall(mallId),
       ...baseMetrics,
@@ -160,17 +145,13 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
   const [liveDepartures, setLiveDepartures] = useState<LiveDepartures | null>(null);
   const [eventsData, setEventsData] = useState<EventsData | null>(null);
   const [locationDataLoading, setLocationDataLoading] = useState(false);
+  const [selectedZone, setSelectedZone] = useState<number | null>(null);
 
   // Generate time-aware performance metrics
   const performance = React.useMemo(() => {
-    // For Tripla, use the real ground truth model
-    if (mallId === 'tripla') {
-      return basePerformance;
-    }
-
     // For other malls, use the generated footfall
     const now = new Date();
-    const baseMetrics = BASE_METRICS[mallId] || BASE_METRICS.tripla;
+    const baseMetrics = BASE_METRICS[mallId] || BASE_METRICS.ideapark;
     const currentVisitors = generateRealisticFootfall(mallId, now);
 
     return {
@@ -229,8 +210,7 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
   // Fetch transport, demographics, and parking data
   useEffect(() => {
     const fetchLocationData = async () => {
-      // Support both Tripla and Ideapark
-      if (mallId !== 'tripla' && mallId !== 'ideapark') return;
+      if (mallId !== 'ideapark') return;
 
       setLocationDataLoading(true);
       try {
@@ -270,8 +250,7 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
 
   // Fetch live departures (updates every 30 seconds)
   useEffect(() => {
-    // Support both Tripla and Ideapark
-    if (mallId !== 'tripla' && mallId !== 'ideapark') return;
+    if (mallId !== 'ideapark') return;
 
     const fetchDepartures = async () => {
       try {
@@ -535,6 +514,22 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
                   <ParkingStatusKPI parkingData={parkingData} />
                 )}
               </div>
+
+              {/* Demographics */}
+              {demographicsData && (
+                <DemographicsKPI demographics={demographicsData} />
+              )}
+
+              {/* Catchment map */}
+              {demographicsData && (
+                <CatchmentMap
+                  demographics={demographicsData}
+                  selectedZone={selectedZone}
+                  onZoneSelect={setSelectedZone}
+                  mallId={mallId}
+                  mallName={mallData?.summary?.mall_name || 'Ideapark Lempäälä'}
+                />
+              )}
 
               {/* Fallback for malls without location data */}
               {!transportData && !demographicsData && !parkingData && (

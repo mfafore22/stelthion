@@ -60,7 +60,7 @@ export function ScenarioPlanner({ mallId }: ScenarioPlannerProps) {
 
     setResults([
       {
-        mall: 'Mall of Tripla',
+        mall: 'Ideapark Lempäälä',
         baselineVisitors: baseVisitors,
         predictedVisitors: predicted,
         delta,
@@ -127,10 +127,7 @@ export function ScenarioPlanner({ mallId }: ScenarioPlannerProps) {
                   setSelectedMalls(Array.from(e.target.selectedOptions, (option) => option.value))
                 }
               >
-                <option value="tripla">Mall of Tripla</option>
-                <option value="sello">Sello</option>
-                <option value="kamppi">Kamppi Helsinki</option>
-                <option value="isoomena">Iso Omena</option>
+                <option value="ideapark">Ideapark Lempäälä</option>
               </select>
             </div>
 

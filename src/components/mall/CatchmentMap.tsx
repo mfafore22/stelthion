@@ -22,9 +22,7 @@ interface CatchmentMapProps {
 
 // Default centers for known malls [lng, lat]
 const MALL_CENTERS: Record<string, [number, number]> = {
-  tripla: [24.9318, 60.1995],
   ideapark: [23.7592, 61.4033],
-  sello: [24.8092, 60.2176],
 };
 
 export function CatchmentMap({ demographics, selectedZone, onZoneSelect, onPostalCodeClick, mallId, mallName }: CatchmentMapProps) {
@@ -39,8 +37,7 @@ export function CatchmentMap({ demographics, selectedZone, onZoneSelect, onPosta
   const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
   const mmlApiKey = process.env.NEXT_PUBLIC_MML_API_KEY;
 
-  // Mall center (fallback to Tripla if unknown)
-  const mallCenter: [number, number] = MALL_CENTERS[mallId] || MALL_CENTERS.tripla;
+  const mallCenter: [number, number] = MALL_CENTERS[mallId] || MALL_CENTERS.ideapark;
 
   // Zone colors - matching drive time zones
   const zoneColors: Record<number, { color: string; opacity: number }> = {

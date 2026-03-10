@@ -1,17 +1,23 @@
 /**
  * Mall Property Manager Login API
- * Validates credentials and establishes secure session
+ * Step 1 of 2: Validates credentials and sends an OTP to the tenant's registered email.
+ * Step 2 is handled by /api/mall/auth/verify-otp.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { validatePropertyManager } from '@/config/mall-auth';
 import { cookies } from 'next/headers';
-import { SESSION_COOKIE_NAME, createSessionToken } from '@/lib/auth/session';
+import { SESSION_COOKIE_NAME, createSessionToken, decodeSessionToken } from '@/lib/auth/session';
 import { checkRateLimit, resetRateLimit, getClientIP } from '@/lib/auth/rate-limiter';
 import { logAuthSuccess, logAuthFailure } from '@/lib/audit/logger.server';
+import { createPendingOTP } from '@/lib/auth/otp-store';
+import { sendOTPEmail, maskEmail } from '@/lib/email/sendOTP';
 
 // Session configuration
 const SESSION_MAX_AGE = 8 * 60 * 60; // 8 hours
+
+// When DEMO_MODE=true, skip OTP so demos don't require SMTP setup
+const DEMO_MODE = process.env.DEMO_MODE === 'true';
 
 interface LoginRequest {
   userId: string;
@@ -20,7 +26,9 @@ interface LoginRequest {
 
 /**
  * POST /api/mall/auth/login
- * Authenticates property manager and creates session
+ * Authenticates property manager and either:
+ *  - (DEMO_MODE) creates session immediately, or
+ *  - sends OTP email and returns { requiresOTP: true, pendingToken, emailHint }
  */
 export async function POST(request: NextRequest) {
   try {
@@ -40,7 +48,7 @@ export async function POST(request: NextRequest) {
         {
           status: 429,
           headers: {
-            'Retry-After': String(resetInMinutes * 60), // seconds
+            'Retry-After': String(resetInMinutes * 60),
           },
         }
       );
@@ -49,7 +57,6 @@ export async function POST(request: NextRequest) {
     const body: LoginRequest = await request.json();
     const { userId, password } = body;
 
-    // Validate input
     if (!userId || !password) {
       return NextResponse.json(
         { error: 'User ID and password are required' },
@@ -57,11 +64,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate credentials (now async with bcrypt)
+    // Validate credentials
     const propertyAuth = await validatePropertyManager(userId, password);
 
     if (!propertyAuth) {
-      // Log failed attempt
       console.warn(`Failed login attempt for userId: ${userId} from IP: ${clientIP}`);
       await logAuthFailure(userId, 'Invalid credentials', clientIP);
 
@@ -71,48 +77,67 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Successful login - reset rate limit
-    resetRateLimit(clientIP);
+    // DEMO MODE — skip OTP, create session immediately
+    if (DEMO_MODE) {
+      resetRateLimit(clientIP);
+      await logAuthSuccess(userId, propertyAuth.mallId, clientIP);
 
-    // Log successful authentication
-    await logAuthSuccess(userId, propertyAuth.mallId, clientIP);
+      const sessionToken = createSessionToken(
+        propertyAuth.userId,
+        propertyAuth.mallId,
+        propertyAuth.isMultiProperty,
+        propertyAuth.properties
+      );
 
-    // Create session token with multi-property support
-    const sessionToken = createSessionToken(
-      propertyAuth.userId,
-      propertyAuth.mallId,
-      propertyAuth.isMultiProperty,
-      propertyAuth.properties
-    );
+      const sessionData = decodeSessionToken(sessionToken);
+      const cookieStore = await cookies();
+      const isProduction = process.env.NODE_ENV === 'production';
 
-    // Decode token to extract CSRF token for client
-    const { decodeSessionToken } = await import('@/lib/auth/session');
-    const sessionData = decodeSessionToken(sessionToken);
-    const csrfToken = sessionData?.csrfToken;
+      cookieStore.set(SESSION_COOKIE_NAME, sessionToken, {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: 'lax',
+        maxAge: SESSION_MAX_AGE,
+        path: '/',
+        ...(process.env.COOKIE_DOMAIN && { domain: process.env.COOKIE_DOMAIN }),
+      });
 
-    // Set secure cookie with enhanced security settings
-    const cookieStore = await cookies();
-    const isProduction = process.env.NODE_ENV === 'production';
+      return NextResponse.json({
+        success: true,
+        mallId: propertyAuth.mallId,
+        companyName: propertyAuth.companyName,
+        mallDisplayName: propertyAuth.mallDisplayName,
+        isMultiProperty: propertyAuth.isMultiProperty ?? false,
+        properties: propertyAuth.properties ?? [],
+        csrfToken: sessionData?.csrfToken,
+      });
+    }
 
-    cookieStore.set(SESSION_COOKIE_NAME, sessionToken, {
-      httpOnly: true, // Prevent XSS access to cookie
-      secure: isProduction, // HTTPS only in production (allows HTTP in dev)
-      sameSite: 'lax', // CSRF protection while allowing legitimate cross-site navigation
-      maxAge: SESSION_MAX_AGE, // 8 hours
-      path: '/', // Available to all routes (needed for /api/mall/* endpoints)
-      // domain can be set via env var for multi-subdomain setups
-      ...(process.env.COOKIE_DOMAIN && { domain: process.env.COOKIE_DOMAIN }),
-    });
+    // PRODUCTION — send OTP
+    if (!propertyAuth.email) {
+      // No email configured for this tenant — fail securely
+      console.error(`No email configured for userId: ${userId}`);
+      return NextResponse.json(
+        { error: 'Two-factor authentication is not configured for this account. Contact your administrator.' },
+        { status: 500 }
+      );
+    }
 
-    // Return success with authorized mall ID and CSRF token
-    return NextResponse.json({
-      success: true,
+    const { pendingToken, code } = createPendingOTP({
+      userId: propertyAuth.userId,
       mallId: propertyAuth.mallId,
       companyName: propertyAuth.companyName,
       mallDisplayName: propertyAuth.mallDisplayName,
-      isMultiProperty: propertyAuth.isMultiProperty ?? false,
-      properties: propertyAuth.properties ?? [],
-      csrfToken, // Return CSRF token for client-side storage
+      isMultiProperty: propertyAuth.isMultiProperty,
+      properties: propertyAuth.properties,
+    });
+
+    await sendOTPEmail(propertyAuth.email, code, propertyAuth.mallDisplayName);
+
+    return NextResponse.json({
+      requiresOTP: true,
+      pendingToken,
+      emailHint: maskEmail(propertyAuth.email),
     });
 
   } catch (error) {
@@ -137,15 +162,12 @@ export async function GET() {
       return NextResponse.json({ authenticated: false });
     }
 
-    // Decode and verify JWT session token
-    const { decodeSessionToken } = await import('@/lib/auth/session');
     const sessionData = decodeSessionToken(sessionToken);
 
     if (!sessionData) {
       return NextResponse.json({ authenticated: false, expired: true });
     }
 
-    // Get property details
     const { getPropertyAuth } = await import('@/config/mall-auth');
     const property = getPropertyAuth(sessionData.userId);
 

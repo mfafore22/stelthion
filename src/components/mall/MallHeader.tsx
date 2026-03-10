@@ -50,11 +50,10 @@ export function MallHeader({
   return (
     <div className={cn('flex items-center justify-between border-b bg-card p-4', className)}>
       <div className="flex items-center gap-6">
-        {/* Operator Selector - Hardcoded to Realidea */}
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-muted-foreground">Operator</span>
           <div className="flex items-center gap-2 rounded-md border bg-background px-3 py-2">
-            <span className="text-sm font-semibold">Realidea Property Management</span>
+            <span className="text-sm font-semibold">KOY Ideapark Oy</span>
           </div>
         </div>
 

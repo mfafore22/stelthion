@@ -53,7 +53,7 @@ export function TopCategoriesTable({ categories, limit = 10 }: TopCategoriesTabl
                     <span className="text-bo-neutral-500 font-mono text-xs">
                       {index + 1}.
                     </span>
-                    {category.category}
+                    {t(`tenants.categoryNames.${category.category}`, { defaultValue: category.category })}
                   </div>
                 </td>
                 <td className="px-4 py-3 text-sm text-bo-neutral-950 text-right font-medium">

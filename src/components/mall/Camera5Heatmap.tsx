@@ -57,9 +57,8 @@ export function Camera5Heatmap({
 }: Camera5HeatmapProps) {
   const identity = useMallIdentity(mallId);
 
-  // IMPORTANT: This component only works for Tripla
-  // The backend API reads Tripla's camera data regardless of mallId
-  if (mallId !== 'tripla') {
+  // Camera heatmap requires live sensor integration — not yet available
+  if (mallId !== 'ideapark') {
     return (
       <Card className="p-6">
         <div className="flex items-center justify-center" style={{ height }}>
@@ -67,7 +66,7 @@ export function Camera5Heatmap({
             <div className="mb-3 text-4xl">📹</div>
             <p className="text-sm font-medium">Camera Heatmap Not Available</p>
             <p className="text-xs text-muted-foreground mt-1">
-              Real-time camera footage is currently only available for Tripla
+              Live camera analytics are not yet activated for this property.
             </p>
           </div>
         </div>

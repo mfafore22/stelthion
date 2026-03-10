@@ -98,7 +98,7 @@ const NAV_ITEMS: MallNavItem[] = [
 export interface MallLeftNavProps {
   /**
    * Management company ID for filtering properties
-   * Example: 'realidea' shows Iso Omena, Mall of Tripla, etc.
+   * Management company ID for filtering properties.
    */
   managementCompanyId?: string;
   /**

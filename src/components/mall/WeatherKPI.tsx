@@ -1,7 +1,7 @@
 /**
  * Weather KPI Component
  * Displays real-time weather impact on portfolio
- * Uses FMI data from a representative mall (default: Tripla/Helsinki)
+ * Uses FMI data for the given mall (defaults to Ideapark Lempäälä)
  */
 
 'use client';
@@ -14,7 +14,7 @@ interface WeatherKPIProps {
   representativeMallId?: string; // Mall to use for portfolio-wide weather
 }
 
-export function WeatherKPI({ representativeMallId = 'tripla' }: WeatherKPIProps) {
+export function WeatherKPI({ representativeMallId = 'ideapark' }: WeatherKPIProps) {
   const { weather, isLoading } = useWeather(representativeMallId);
 
   if (isLoading) {

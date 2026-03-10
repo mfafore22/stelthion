@@ -47,7 +47,7 @@ export function TenantMixChart({ retailerTypePercentages, totalShops }: TenantMi
           return (
             <div key={type}>
               <div className="flex justify-between items-center mb-1">
-                <span className="text-sm text-bo-neutral-700">{type}</span>
+                <span className="text-sm text-bo-neutral-700">{t(`tenants.categoryNames.${type}`, { defaultValue: type })}</span>
                 <span className="text-sm font-medium text-bo-neutral-950">
                   {percentage.toFixed(1)}%
                 </span>

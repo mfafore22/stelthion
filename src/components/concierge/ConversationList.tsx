@@ -89,7 +89,7 @@ export function ConversationList() {
       {/* Footer */}
       <div className="border-t border-gray-800 px-4 py-3 text-xs text-gray-500">
         <div>Agent: General Assistant 🤖</div>
-        <div className="mt-1">Tenant: Tripla</div>
+        <div className="mt-1">Tenant: Ideapark Lempäälä</div>
       </div>
 
       {/* Agent Selection Modal */}

@@ -11,6 +11,7 @@ import { Calendar, MapPin, Users, Clock, RefreshCw, Ticket, TrendingUp } from 'l
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useEvents } from '@/hooks/mall/useEvents';
+import { useTranslation } from 'react-i18next';
 
 interface EventsPanelProps {
   mallId: string;
@@ -18,14 +19,19 @@ interface EventsPanelProps {
 }
 
 export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
-  const { eventsData, events, venues, isLoading, isError, refresh } = useEvents(mallId, expanded ? 168 : 24);
+  const { t } = useTranslation('mall');
+  const { eventsData, events: rawEvents, venues: rawVenues, isLoading, isError, refresh } = useEvents(mallId, expanded ? 168 : 24);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const events = rawEvents as any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const venues = rawVenues as any[];
 
   if (isLoading && !eventsData) {
     return (
       <Card className="p-6 bg-bo-glass border-bo-neutral-200/30 shadow-bo-glass">
         <div className="flex items-center justify-center py-8">
           <RefreshCw className="h-6 w-6 animate-spin text-bo-primary-600" />
-          <span className="ml-2 text-sm text-bo-neutral-600">Loading events data...</span>
+          <span className="ml-2 text-sm text-bo-neutral-600">{t('events.loadingData')}</span>
         </div>
       </Card>
     );
@@ -45,18 +51,12 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'concert':
-        return '🎵';
-      case 'sports':
-        return '⚽';
-      case 'conference':
-        return '💼';
-      case 'exhibition':
-        return '🎨';
-      case 'theater':
-        return '🎭';
-      default:
-        return '📅';
+      case 'concert': return '🎵';
+      case 'sports': return '⚽';
+      case 'conference': return '💼';
+      case 'exhibition': return '🎨';
+      case 'theater': return '🎭';
+      default: return '📅';
     }
   };
 
@@ -68,9 +68,9 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
   const formatHoursUntil = (isoString: string) => {
     const eventTime = new Date(isoString).getTime();
     const hoursUntil = Math.round((eventTime - now) / (1000 * 60 * 60));
-    if (hoursUntil < 1) return 'Starting soon';
-    if (hoursUntil === 1) return 'In 1 hour';
-    return `In ${hoursUntil} hours`;
+    if (hoursUntil < 1) return t('events.startingSoon');
+    if (hoursUntil === 1) return t('events.inOneHour');
+    return t('events.inHours', { count: hoursUntil });
   };
 
   return (
@@ -79,7 +79,7 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
         <div className="flex items-center gap-2">
           <Calendar className="h-5 w-5 text-bo-info-dark" />
           <h3 className="text-lg font-semibold text-bo-neutral-950 tracking-tight">
-            {expanded ? 'Event Venues & Upcoming Events' : 'Nearby Events Impact'}
+            {expanded ? t('events.venuesAndUpcoming') : t('events.nearbyImpact')}
           </h3>
         </div>
         <Button
@@ -90,19 +90,19 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
           className="gap-2"
         >
           <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
-          Refresh
+          {t('events.refresh')}
         </Button>
       </div>
 
       {isError && (
         <div className="mb-4 rounded-md bg-yellow-50 p-3 text-sm text-yellow-800 dark:bg-yellow-950 dark:text-yellow-200">
-          ⚠️ Unable to fetch events data - Showing cached information
+          ⚠️ {t('events.fetchError')}
         </div>
       )}
 
       {/* Nearby Event Venues */}
       <div className="mb-6">
-        <h4 className="mb-3 text-sm font-medium text-bo-neutral-700">Nearby Event Venues</h4>
+        <h4 className="mb-3 text-sm font-medium text-bo-neutral-700">{t('events.nearbyVenues')}</h4>
         <div className="space-y-2">
           {venues.slice(0, expanded ? 10 : 3).map((venue) => (
             <div
@@ -114,7 +114,7 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
                 <div>
                   <div className="font-medium text-bo-neutral-950">{venue.name}</div>
                   <div className="text-xs text-bo-neutral-600">
-                    {venue.distanceKm}km · {venue.walkingMinutes} min walk
+                    {t('events.distanceAndWalk', { km: venue.distanceKm, min: venue.walkingMinutes })}
                   </div>
                 </div>
               </div>
@@ -130,7 +130,7 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
       {displayEvents.length > 0 ? (
         <div>
           <h4 className="mb-3 text-sm font-medium text-bo-neutral-700">
-            {expanded ? 'All Upcoming Events' : 'Events (Next 2-6 hours)'}
+            {expanded ? t('events.allUpcoming') : t('events.nextHours')}
           </h4>
           <div className="space-y-3">
             {displayEvents.map((event) => (
@@ -149,7 +149,7 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
                   {event.ticketsAvailable && (
                     <span className="flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700 dark:bg-green-900 dark:text-green-200">
                       <Ticket className="h-3 w-3" />
-                      Available
+                      {t('events.ticketsAvailable')}
                     </span>
                   )}
                 </div>
@@ -170,8 +170,8 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
                   <div className="flex items-center gap-2 text-bo-neutral-700">
                     <MapPin className="h-4 w-4 text-bo-info-dark" />
                     <div>
-                      <div className="font-medium">{event.venue.distanceKm}km away</div>
-                      <div className="text-xs text-bo-neutral-500">{event.venue.walkingMinutes} min walk</div>
+                      <div className="font-medium">{t('events.awayKm', { km: event.venue.distanceKm })}</div>
+                      <div className="text-xs text-bo-neutral-500">{t('events.minWalk', { min: event.venue.walkingMinutes })}</div>
                     </div>
                   </div>
 
@@ -180,9 +180,9 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
                       <Users className="h-4 w-4 text-bo-info-dark" />
                       <div>
                         <div className="font-medium">
-                          {event.estimatedAttendance.toLocaleString()} expected
+                          {t('events.expectedCount', { count: event.estimatedAttendance.toLocaleString() })}
                         </div>
-                        <div className="text-xs text-bo-neutral-500">Attendance</div>
+                        <div className="text-xs text-bo-neutral-500">{t('events.attendanceLabel')}</div>
                       </div>
                     </div>
                   )}
@@ -191,12 +191,12 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
                     <TrendingUp className="h-4 w-4 text-green-600" />
                     <div>
                       <div className="font-medium text-green-600">+{event.footfallImpact.toFixed(1)}%</div>
-                      <div className="text-xs text-bo-neutral-500">Footfall impact</div>
+                      <div className="text-xs text-bo-neutral-500">{t('events.footfallImpactLabel')}</div>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-2 text-xs text-bo-neutral-500">Source: {event.source}</div>
+                <div className="mt-2 text-xs text-bo-neutral-500">{t('events.sourceLabel')} {event.source}</div>
               </div>
             ))}
           </div>
@@ -205,38 +205,39 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
         <div className="rounded-lg border border-bo-neutral-200/50 bg-white/50 p-6 text-center dark:bg-slate-800/50">
           <Calendar className="mx-auto mb-2 h-8 w-8 text-bo-neutral-400" />
           <div className="text-sm text-bo-neutral-600">
-            {expanded ? 'No upcoming events found' : 'No events in the next 2-6 hours'}
+            {expanded ? t('events.noUpcoming') : t('events.noEventsNextHours')}
           </div>
         </div>
       )}
 
       {eventsData && (
         <div className="mt-4 text-xs text-bo-neutral-500">
-          Updated: {new Date(eventsData.timestamp).toLocaleString('en-GB', {
-            day: 'numeric',
-            month: 'short',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-          })} · Showing events for next 30 days
+          {t('events.updatedShowingNext30', {
+            date: new Date(eventsData.timestamp).toLocaleString('en-GB', {
+              day: 'numeric',
+              month: 'short',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+            }),
+          })}
         </div>
       )}
 
       {expanded && (
         <div className="mt-6 space-y-4 border-t border-bo-neutral-200/50 pt-4">
-          <h4 className="font-semibold text-bo-neutral-950">Event Impact Analysis</h4>
+          <h4 className="font-semibold text-bo-neutral-950">{t('events.impactAnalysis')}</h4>
           <div className="text-sm text-bo-neutral-700">
-            Events at nearby venues drive significant footfall increases. Large concerts and sports events can
-            increase mall visits by 10-60%, with peak impact occurring 2-4 hours before event start time.
+            {t('events.impactDescription')}
           </div>
 
           <div className="rounded-md bg-muted/50 p-3">
-            <div className="text-sm font-medium text-bo-neutral-950">Impact Calculation Model</div>
+            <div className="text-sm font-medium text-bo-neutral-950">{t('events.impactModel')}</div>
             <div className="mt-2 space-y-1 text-xs text-bo-neutral-600">
-              <div>• Event attendance size (larger = higher impact)</div>
-              <div>• Distance from mall (closer = higher impact)</div>
-              <div>• Event category (concerts & sports have highest impact)</div>
-              <div>• Time until event (2-4h window has peak impact)</div>
+              <div>• {t('events.impactFactor1')}</div>
+              <div>• {t('events.impactFactor2')}</div>
+              <div>• {t('events.impactFactor3')}</div>
+              <div>• {t('events.impactFactor4')}</div>
             </div>
           </div>
         </div>

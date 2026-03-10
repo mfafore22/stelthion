@@ -142,8 +142,8 @@ export function MallTopBar({
       {/* Left: Stelthion Logo */}
       <div className="flex items-center gap-4">
         <Image
-          src="/assets/brand/stelthion/Stelthion_synexis_brand.png"
-          alt="Stelthion Synexis"
+          src="/logo.png"
+          alt="Stelthion"
           width={140}
           height={40}
           className="object-contain"

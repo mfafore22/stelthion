@@ -29,6 +29,7 @@ export interface TenantConfig {
   mallId: string; // Primary mall ID this tenant manages
   companyName: string; // Display name of the company
   mallDisplayName: string; // Display name of the primary mall
+  email?: string; // Registered email address for 2FA OTP delivery
   isMultiProperty?: boolean; // Whether this tenant manages multiple properties
   properties?: string[]; // List of all mall IDs this tenant can access (for multi-property)
 }
@@ -129,6 +130,7 @@ export function loadTenantConfig(): TenantConfig[] {
       mallId: 'ideapark',
       companyName: 'Koy Ideapark Oy',
       mallDisplayName: 'Ideapark Lempaala',
+      email: process.env.IDEAPARK_EMAIL,
       isMultiProperty: false,
       properties: ['ideapark'],
     },

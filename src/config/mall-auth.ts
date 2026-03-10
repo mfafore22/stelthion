@@ -12,6 +12,7 @@ export interface MallPropertyAuth {
   mallId: string; // Authorized mall property ID
   companyName: string; // Display name of the company
   mallDisplayName: string; // Display name of the mall
+  email?: string; // Registered email address for 2FA OTP delivery
   isMultiProperty?: boolean; // Whether tenant manages multiple properties
   properties?: string[]; // List of all property IDs this tenant can access
 }
@@ -62,6 +63,7 @@ function getMallProperties(): Record<string, MallPropertyAuth> {
       mallId: tenant.mallId,
       companyName: tenant.companyName,
       mallDisplayName: tenant.mallDisplayName,
+      email: tenant.email,
       isMultiProperty: tenant.isMultiProperty,
       properties: tenant.properties,
     };
@@ -87,16 +89,15 @@ export async function validatePropertyManager(
   userId: string,
   password: string
 ): Promise<MallPropertyAuth | null> {
-  const property = MALL_PROPERTIES[userId];
+  // Re-load on each call to avoid module-load-time env timing issues
+  const properties = getMallProperties();
+  const property = properties[userId];
   if (!property) {
     return null;
   }
 
   // ⚠️ DEMO MODE: Accept 'demo' as password for customer demonstrations
   if (DEMO_MODE && password === DEMO_PASSWORD) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.warn(`⚠️ DEMO MODE: User ${userId} authenticated with demo password`);
-    }
     return property;
   }
 
