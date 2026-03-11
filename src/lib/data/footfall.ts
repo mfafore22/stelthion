@@ -1,8 +1,16 @@
 /**
  * Footfall estimation model — Ideapark Lempäälä
  *
- * Based on hourly traffic distribution calibrated to Ideapark's opening hours
- * and annual visitor volume (~3.8M visits/year).
+ * Calibrated to ~5M annual visits (Ideapark Lempäälä, publicly reported figure).
+ *
+ * Methodology:
+ *   5,000,000 visits / 360 operating days = ~13,900 avg daily visitors
+ *   Peak Saturday ~1.30× average = ~18,100 visitors/day
+ *   Peak hour (15:00–16:00) draws ~12% of daily traffic = ~2,170 arrivals/hr
+ *   Average dwell time ~1.8 hrs → peak simultaneous weekday = ~3,900
+ *   Weekend peak with 1.30× multiplier applied at render time = ~5,070
+ *
+ * Replace PEAK_VISITORS and HOURLY_PATTERN with real sensor data when available.
  */
 
 export interface FootfallEstimate {
@@ -18,18 +26,25 @@ export interface CurrentFootfall {
   dwellTimeMinutes: number;
 }
 
-/** Hourly traffic pattern (index = hour 0–23), normalised to peak = 1.0 */
+/**
+ * Hourly traffic pattern (index = hour 0–23), normalised to peak = 1.0.
+ * Ideapark opens 10:00–21:00 Mon–Sat, 12:00–18:00 Sun.
+ * Pattern reflects a typical weekday; weekend multiplier applied at call site.
+ */
 const HOURLY_PATTERN = [
-  0, 0, 0, 0, 0, 0, 0, 0, 0,   // 00–08 closed
-  0.10,                           // 09 pre-open / staff
-  0.40, 0.62, 0.80, 0.88,        // 10–13 morning ramp
-  0.97, 1.00, 0.98, 0.93,        // 14–17 afternoon peak
-  0.78, 0.55, 0.25, 0.08,        // 18–21 evening decline
-  0, 0,                           // 22–23 closed
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  // 00–09 closed
+  0.08,                             // 10 doors open / slow start
+  0.32, 0.58, 0.74,                 // 11–13 late-morning ramp
+  0.88, 0.96, 1.00, 0.97,          // 14–17 afternoon peak (15:00 = peak)
+  0.82, 0.60, 0.28, 0.10,          // 18–21 evening decline
+  0, 0,                             // 22–23 closed
 ];
 
-/** Peak simultaneous occupancy for a typical weekday */
-const PEAK_VISITORS = 4_820;
+/**
+ * Peak simultaneous occupancy on a typical weekday.
+ * Derived from 5M annual visits, 360 operating days, 1.8-hr avg dwell time.
+ */
+const PEAK_VISITORS = 3_900;
 
 /**
  * Estimate current visitor count based on time of day.

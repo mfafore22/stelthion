@@ -32,70 +32,14 @@ import type { EventsData } from '@/lib/types/events';
 import { getCurrentFootfall } from '@/lib/data/footfall';
 import { useTranslation } from 'react-i18next';
 
-/**
- * Generate realistic time-aware footfall for a mall
- * Based on operating hours and typical shopping patterns
- */
-function generateRealisticFootfall(_mallId: string, date: Date = new Date()): number {
-  const hour = date.getHours();
-  const dayOfWeek = date.getDay(); // 0 = Sunday, 6 = Saturday
-
-  // Mall operating hours: 9:00-21:00 Mon-Sat, 10:00-20:00 Sun
-  const isClosed = (dayOfWeek === 0 && (hour < 10 || hour >= 20)) ||
-                   (dayOfWeek !== 0 && (hour < 9 || hour >= 21));
-
-  // Ideapark peak simultaneous occupancy (7.5M annual visitors, lower density format)
-  const basePeak = 12000;
-
-  // If closed, only security/cleaning staff (very minimal)
-  if (isClosed) {
-    return Math.floor(Math.random() * 30 + 10); // 10-40 people
-  }
-
-  // Hourly traffic patterns (percentage of peak capacity)
-  const hourlyPatterns: Record<number, number> = {
-    9: 0.15,   // Opening - slow start
-    10: 0.22,  // Building up
-    11: 0.45,  // Late morning rush
-    12: 0.68,  // Lunch peak
-    13: 0.72,  // Lunch continuation
-    14: 0.52,  // Post-lunch dip
-    15: 0.58,  // Afternoon moderate
-    16: 0.75,  // After work/school starts
-    17: 0.92,  // Evening peak begins
-    18: 1.00,  // Peak hour
-    19: 0.85,  // Still busy
-    20: 0.42,  // Winding down
-    21: 0.18,  // Closing (if open)
-  };
-
-  const baseUtilization = hourlyPatterns[hour] || 0.3;
-
-  // Weekend adjustments
-  let dayMultiplier = 1.0;
-  if (dayOfWeek === 6) { // Saturday - busiest day
-    dayMultiplier = 1.25;
-  } else if (dayOfWeek === 0) { // Sunday - moderate
-    dayMultiplier = 1.10;
-  } else if (dayOfWeek === 5) { // Friday - busy evening
-    dayMultiplier = 1.08;
-  }
-
-  // Calculate current footfall
-  const calculatedFootfall = Math.round(basePeak * baseUtilization * dayMultiplier);
-
-  // Add small random variance (+/- 5%)
-  const variance = 0.95 + Math.random() * 0.10;
-
-  return Math.round(calculatedFootfall * variance);
-}
-
 // Base performance metrics for Ideapark Lempäälä
+// Visitor numbers calibrated to ~5M annual visits (publicly reported figure).
+// Replace with live API values when sensor feed is available.
 const BASE_METRICS: Record<string, any> = {
   ideapark: {
     deltaVsPlan: 8.7,
     weatherImpact: 3.2,
-    dwellTime: 47,
+    dwellTime: 47,      // minutes — typical for a destination mall of this size
     dwellDelta: 12,
     conversionRate: 23.4,
     conversionDelta: 5.2,
@@ -132,7 +76,7 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
     // Use BASE_METRICS for the mall
     const baseMetrics = BASE_METRICS[mallId] || BASE_METRICS.ideapark;
     return {
-      currentVisitors: generateRealisticFootfall(mallId),
+      currentVisitors: getCurrentFootfall().currentVisitors,
       ...baseMetrics,
       alerts: [],
     };
@@ -149,13 +93,9 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
 
   // Generate time-aware performance metrics
   const performance = React.useMemo(() => {
-    // For other malls, use the generated footfall
-    const now = new Date();
     const baseMetrics = BASE_METRICS[mallId] || BASE_METRICS.ideapark;
-    const currentVisitors = generateRealisticFootfall(mallId, now);
-
     return {
-      currentVisitors,
+      currentVisitors: getCurrentFootfall().currentVisitors,
       ...baseMetrics,
     };
   }, [mallId, basePerformance]);
@@ -362,7 +302,7 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
         />
         <MallKPICard
           label={t('detail.topCategory')}
-          value={summary.top_categories[0]?.category || 'N/A'}
+          value={summary.top_categories[0]?.category ? t(`tenants.categoryNames.${summary.top_categories[0].category}`, { defaultValue: summary.top_categories[0].category }) : 'N/A'}
           delta={`${summary.top_categories[0]?.count || 0} ${t('detail.shops')} (${summary.top_categories[0]?.percentage.toFixed(1) || 0}%)`}
           accentColor={identity.colors.secondary}
         />
