@@ -487,7 +487,27 @@
       "moderate": "{{description}} – kävijämäärien odotetaan kasvavan",
       "outdoor": "Erinomainen ulkoilmasää voi vähentää kauppakeskuskäyntejä",
       "stable": "{{description}} – vakaat kävijämäärät odotettavissa"
-    }
+    },
+    "condition": {
+      "Cloudy": "Pilvinen",
+      "Clear": "Selkeä taivas",
+      "Rain": "Kevyt sade",
+      "Snow": "Kevyt lumisade",
+      "Optimal conditions": "Optimaaliset olosuhteet"
+    },
+    "season": {
+      "spring": "Kevät",
+      "summer": "Kesä",
+      "autumn": "Syksy",
+      "winter": "Talvi"
+    },
+    "timeOfDay": {
+      "morning": "Aamu",
+      "afternoon": "Iltapäivä",
+      "evening": "Ilta",
+      "night": "Yö"
+    },
+    "dataSource": "Lähde: {{source}}"
   },
   "footfall": {
     "chartTitle": "Tämänhetkinen vs ennustettu kävijämäärä (tänään)",

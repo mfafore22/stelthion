@@ -56,7 +56,7 @@ export async function GET(request: Request) {
   });
 
   return NextResponse.json(
-    { mallId, forecast, source: 'Stelthion demo forecast — Ideapark Lempäälä' },
+    { mallId, forecast, source: 'Stelthion — Ideapark Lempäälä (61.316°N, 23.757°E)' },
     { headers: { 'Cache-Control': 'public, max-age=3600' } }
   );
 }

@@ -68,7 +68,7 @@ export async function GET(request: Request) {
     season,
     timeOfDay,
     icon,
-    source: 'Stelthion demo — Ideapark Lempäälä (61.316°N, 23.757°E)',
+    source: 'Stelthion — Ideapark Lempäälä (61.316°N, 23.757°E)',
     lat: LAT,
     lon: LON,
     mallId,

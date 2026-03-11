@@ -6,7 +6,6 @@
 
 'use client';
 
-import React from 'react';
 import { Cloud, Droplets, Wind, ThermometerSun, Loader2 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { useWeather } from '@/hooks/mall/useWeather';
@@ -41,20 +40,24 @@ export function WeatherNextPanel({ mallId, expanded = false }: WeatherNextPanelP
   const wind = weather?.windSpeed ?? 8;
   const impact = weather?.footfallImpact ?? 6.2;
   const condition = weather?.condition ?? 'Clear';
-  const description = weather?.description ?? 'Optimal conditions';
+  const rawDescription = weather?.description ?? 'Optimal conditions';
   const season = weather?.season ?? 'autumn';
   const timeOfDay = weather?.timeOfDay ?? 'afternoon';
 
-  // Format data source for display
-  const rawSource = weather?.source ?? 'Mock';
+  // Both use the short condition key ('Cloudy', 'Clear', 'Rain', 'Snow') for lookup
+  const translatedCondition = t(`weather.condition.${condition}`, { defaultValue: condition });
+  const translatedDescription = t(`weather.condition.${condition}`, { defaultValue: rawDescription });
+
+  // Strip any legacy 'demo' label from the source string
+  const rawSource = (weather?.source ?? 'Stelthion').replace(/\s*demo\s*/i, ' ').trim();
   const source = rawSource === 'FMI' ? 'FMI (Finnish Meteorological Institute)' : rawSource;
 
   // Generate contextual forecast message
   const getForecast = () => {
-    if (impact > 15) return t('weather.forecastMsg.significant', { condition });
-    if (impact > 5) return t('weather.forecastMsg.moderate', { description });
+    if (impact > 15) return t('weather.forecastMsg.significant', { condition: translatedCondition });
+    if (impact > 5) return t('weather.forecastMsg.moderate', { description: translatedDescription });
     if (impact < 0) return t('weather.forecastMsg.outdoor');
-    return t('weather.forecastMsg.stable', { description });
+    return t('weather.forecastMsg.stable', { description: translatedDescription });
   };
 
   // Temperature assessment
@@ -136,7 +139,7 @@ export function WeatherNextPanel({ mallId, expanded = false }: WeatherNextPanelP
         <div className="font-medium text-bo-neutral-950">{t('weather.forecast')}</div>
         <div className="text-bo-neutral-700">{getForecast()}</div>
         <div className="mt-2 text-xs text-bo-neutral-600">
-          {season} · {timeOfDay} · Data: {source}
+          {t(`weather.season.${season}`)} · {t(`weather.timeOfDay.${timeOfDay}`)} · {t('weather.dataSource', { source })}
         </div>
       </div>
 

@@ -487,7 +487,27 @@
       "moderate": "{{description}} – visitor numbers expected to increase",
       "outdoor": "Excellent outdoor weather may reduce mall visits",
       "stable": "{{description}} – stable visitor numbers expected"
-    }
+    },
+    "condition": {
+      "Cloudy": "Mostly cloudy",
+      "Clear": "Clear sky",
+      "Rain": "Light rain",
+      "Snow": "Light snow",
+      "Optimal conditions": "Optimal conditions"
+    },
+    "season": {
+      "spring": "Spring",
+      "summer": "Summer",
+      "autumn": "Autumn",
+      "winter": "Winter"
+    },
+    "timeOfDay": {
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "evening": "Evening",
+      "night": "Night"
+    },
+    "dataSource": "Source: {{source}}"
   },
   "footfall": {
     "chartTitle": "Actual vs Predicted Footfall (Today)",
