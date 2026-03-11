@@ -6,8 +6,10 @@
 'use client';
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { MallCard } from './ui/MallCard';
 import { Train, Bus, TramFront, Gauge, Clock, AlertCircle } from 'lucide-react';
+import { VacancyGradientBar } from '@/components/ui/VacancyGradientBar';
 import type { HSLAccessibility, NysseAccessibility, VRConnections, LiveDepartures } from '@/lib/types/transport';
 
 interface TransportAccessibilityKPIProps {
@@ -18,6 +20,8 @@ interface TransportAccessibilityKPIProps {
 }
 
 export function TransportAccessibilityKPI({ hslData, nysseData, vrData, liveDepartures }: TransportAccessibilityKPIProps) {
+  const { t, i18n } = useTranslation('mall');
+  const locale = i18n.language === 'fi' ? 'fi-FI' : 'en-GB';
   // Use either HSL (Helsinki) or Nysse (Tampere) data
   const transportData = hslData || nysseData;
   if (!transportData) {
@@ -43,28 +47,29 @@ export function TransportAccessibilityKPI({ hslData, nysseData, vrData, liveDepa
         <div className="flex items-start justify-between">
           <div>
             <h3 className="text-lg font-semibold text-bo-neutral-950 mb-1 tracking-tight">
-              Transport Accessibility
+              {t('transport.accessibility')}
             </h3>
             <p className="text-sm text-bo-neutral-600">
-              Public transit connections and mobility
+              {t('transport.publicTransitConnections')}
             </p>
           </div>
           <div className={`rounded-lg p-3 border ${getScoreBg(transportData.accessibilityScore)}`}>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 mb-2">
               <Gauge className={`h-5 w-5 ${getScoreColor(transportData.accessibilityScore)}`} />
               <div>
                 <div className={`text-2xl font-bold ${getScoreColor(transportData.accessibilityScore)}`}>
                   {transportData.accessibilityScore}
                 </div>
-                <div className="text-xs text-bo-neutral-600">Score</div>
+                <div className="text-xs text-bo-neutral-600">{t('transport.score')}</div>
               </div>
             </div>
+            <VacancyGradientBar percentage={transportData.accessibilityScore} height="5px" />
           </div>
         </div>
 
         {/* Public Transit Share */}
         <div className="rounded-lg bg-bo-info-light/50 p-4 border border-bo-info/15">
-          <div className="text-sm text-bo-neutral-600 mb-1">Visitors Arriving by Public Transit</div>
+          <div className="text-sm text-bo-neutral-600 mb-1">{t('transport.arrivingByPublicTransit')}</div>
           <div className="text-3xl font-bold text-bo-info-dark">
             {transportData.publicTransitShare}%
           </div>
@@ -81,7 +86,7 @@ export function TransportAccessibilityKPI({ hslData, nysseData, vrData, liveDepa
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-bo-neutral-950">
               <Train className="h-5 w-5 text-bo-primary-600" />
-              <h4 className="font-semibold">Commuter Rail Hub</h4>
+              <h4 className="font-semibold">{t('transport.commuterRailHub')}</h4>
             </div>
             <div className="bo-transport-info rounded-lg p-4">
               <div className="text-sm text-bo-neutral-700 mb-2">
@@ -98,7 +103,7 @@ export function TransportAccessibilityKPI({ hslData, nysseData, vrData, liveDepa
                 ))}
               </div>
               <div className="text-xs text-bo-neutral-600">
-                <strong>{transportData.commuterTrains.frequency}</strong> trains/hour peak · Connections to{' '}
+                <strong>{transportData.commuterTrains.frequency}</strong> {t('transport.trainsPerHourPeak', { count: transportData.commuterTrains.frequency })} · {t('transport.connectionsTo')}{' '}
                 {transportData.commuterTrains.connections.slice(0, 3).join(', ')}
                 {transportData.commuterTrains.connections.length > 3 && ', ...'}
               </div>
@@ -112,10 +117,10 @@ export function TransportAccessibilityKPI({ hslData, nysseData, vrData, liveDepa
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-bo-neutral-950">
                 <Clock className="h-5 w-5 text-bo-primary-600" />
-                <h4 className="font-semibold">Local Commuter Trains</h4>
+                <h4 className="font-semibold">{t('transport.localCommuterTrains')}</h4>
               </div>
               <div className="text-xs text-bo-neutral-500">
-                Updated {new Date(liveDepartures.lastUpdated).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
+                {t('transport.updatedAt', { time: new Date(liveDepartures.lastUpdated).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' }) })}
               </div>
             </div>
             <div className="space-y-1.5 max-h-64 overflow-y-auto">
@@ -141,7 +146,7 @@ export function TransportAccessibilityKPI({ hslData, nysseData, vrData, liveDepa
                           </div>
                           {departure.platform && (
                             <div className="text-xs text-bo-neutral-600">
-                              Track {departure.platform}
+                              {t('transport.track', { number: departure.platform })}
                             </div>
                           )}
                         </div>
@@ -178,7 +183,7 @@ export function TransportAccessibilityKPI({ hslData, nysseData, vrData, liveDepa
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-bo-neutral-950">
               <Bus className="h-5 w-5 text-bo-accent-600" />
-              <h4 className="font-semibold">Public Transportation (next 15 min)</h4>
+              <h4 className="font-semibold">{t('transport.publicTransportNext15')}</h4>
             </div>
             <div className="space-y-1.5">
               {/* Combine and sort buses and trams by scheduled time */}
@@ -232,8 +237,8 @@ export function TransportAccessibilityKPI({ hslData, nysseData, vrData, liveDepa
               })}
             </div>
             <div className="text-xs text-bo-neutral-600">
-              {transportData.buses.stopsWithin500m} stops within 500m
-              {liveDepartures.trams && liveDepartures.trams.length > 0 && ` · ${liveDepartures.trams.length} tram departures`}
+              {t('transport.stopsWithin500m', { count: transportData.buses.stopsWithin500m })}
+              {liveDepartures.trams && liveDepartures.trams.length > 0 && ` · ${t('transport.tramDeparturesCount', { count: liveDepartures.trams.length })}`}
             </div>
           </div>
         )}
@@ -243,7 +248,7 @@ export function TransportAccessibilityKPI({ hslData, nysseData, vrData, liveDepa
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-bo-neutral-950">
               <TramFront className="h-5 w-5 text-bo-success-dark" />
-              <h4 className="font-semibold">Tram Lines</h4>
+              <h4 className="font-semibold">{t('transport.tramLines')}</h4>
             </div>
             <div className="rounded-lg bg-bo-glass-subtle p-3 border border-bo-neutral-200/30">
               <div className="flex flex-wrap gap-1 mb-2">
@@ -257,7 +262,7 @@ export function TransportAccessibilityKPI({ hslData, nysseData, vrData, liveDepa
                 ))}
               </div>
               <div className="text-xs text-bo-neutral-600">
-                {transportData.trams.nearestStop} · {transportData.trams.walkingMinutes} min walk
+                {transportData.trams.nearestStop} · {t('transport.minWalk', { minutes: transportData.trams.walkingMinutes })}
               </div>
             </div>
           </div>
@@ -269,10 +274,10 @@ export function TransportAccessibilityKPI({ hslData, nysseData, vrData, liveDepa
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-bo-neutral-950">
                 <Train className="h-5 w-5 text-bo-info-dark" />
-                <h4 className="font-semibold">VR Long Distance Trains</h4>
+                <h4 className="font-semibold">{t('transport.vrLongDistance')}</h4>
               </div>
               <div className="text-xs text-bo-neutral-500">
-                Updated {new Date(liveDepartures.lastUpdated).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
+                {t('transport.updatedAt', { time: new Date(liveDepartures.lastUpdated).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' }) })}
               </div>
             </div>
             <div className="space-y-1.5 max-h-64 overflow-y-auto">
@@ -298,7 +303,7 @@ export function TransportAccessibilityKPI({ hslData, nysseData, vrData, liveDepa
                           </div>
                           {departure.platform && (
                             <div className="text-xs text-bo-neutral-600">
-                              Track {departure.platform}
+                              {t('transport.track', { number: departure.platform })}
                             </div>
                           )}
                         </div>
@@ -329,7 +334,7 @@ export function TransportAccessibilityKPI({ hslData, nysseData, vrData, liveDepa
             </div>
             {vrData && (
               <div className="text-xs text-bo-neutral-600">
-                ~{vrData.estimatedDailyTourists} daily visitors from intercity travel
+                {t('transport.dailyVisitorsIntercity', { count: vrData.estimatedDailyTourists })}
               </div>
             )}
           </div>
@@ -340,11 +345,11 @@ export function TransportAccessibilityKPI({ hslData, nysseData, vrData, liveDepa
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-bo-neutral-950">
               <Train className="h-5 w-5 text-bo-info-dark" />
-              <h4 className="font-semibold">VR Long Distance Trains</h4>
+              <h4 className="font-semibold">{t('transport.vrLongDistance')}</h4>
             </div>
             <div className="bo-transport-info rounded-lg p-3">
               <div className="text-sm text-bo-neutral-700 mb-2">
-                <strong>{vrData.nearestStation}</strong> station
+                <strong>{vrData.nearestStation}</strong> {t('transport.stationSuffix')}
               </div>
               <div className="grid grid-cols-2 gap-2 text-xs">
                 {vrData.connections.slice(0, 4).map((conn) => (
@@ -354,7 +359,7 @@ export function TransportAccessibilityKPI({ hslData, nysseData, vrData, liveDepa
                 ))}
               </div>
               <div className="mt-2 text-xs text-bo-neutral-600">
-                ~{vrData.estimatedDailyTourists} daily visitors from intercity travel
+                {t('transport.dailyVisitorsIntercity', { count: vrData.estimatedDailyTourists })}
               </div>
             </div>
           </div>

@@ -245,39 +245,33 @@ export const ideaparkCatchmentDemographics: CatchmentDemographics = {
 };
 
 /**
- * Parking Data
- * Ideapark has large free surface parking (~3500 spaces).
- * No time limits or fees during mall opening hours.
+ * Parking Data — Ideapark Lempäälä
+ *
+ * One large free outdoor surface lot (~3,000 spaces). No parking levels.
+ * Source: lempaala.ideapark.fi/en/info-2/
+ *
+ * Zones:
+ *   Main lot (A/B/C)  — max 3-hour restriction near the building
+ *   Outer arc (A/D ends) — max 30-minute drop-off bays
+ *   Outer perimeter — unrestricted, unmonitored
+ *
+ * EV charging: 57 spots total (40× 22 kW basic + 17× 150 kW fast charge)
  */
 export const ideaparkParkingData: ParkingData = {
   mallId: 'ideapark',
 
   levels: [
     {
-      id: 'P1',
-      capacity: 1800,
-      currentOccupancy: 420,
+      id: 'Outdoor Lot',
+      capacity: 3000,
+      currentOccupancy: 675,
       monthlyContracts: 0,
-      evChargingSpots: 48,
-    },
-    {
-      id: 'P2',
-      capacity: 1200,
-      currentOccupancy: 280,
-      monthlyContracts: 0,
-      evChargingSpots: 32,
-    },
-    {
-      id: 'P3-Covered',
-      capacity: 500,
-      currentOccupancy: 95,
-      monthlyContracts: 40,
-      evChargingSpots: 20,
+      evChargingSpots: 57,   // 40× 22 kW basic + 17× 150 kW fast charge
     },
   ],
 
-  totalCapacity: 3500,
-  publicSpaces: 3460,
+  totalCapacity: 3000,
+  publicSpaces: 3000,
   currentUtilization: 23.0,
 
   pricing: {

@@ -6,6 +6,7 @@
 'use client';
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { MallCard } from './ui/MallCard';
 import { Car, ParkingSquare, Zap, Euro, TrendingUp } from 'lucide-react';
 import type { ParkingData } from '@/lib/types/transport';
@@ -16,6 +17,7 @@ interface ParkingStatusKPIProps {
 }
 
 export function ParkingStatusKPI({ parkingData }: ParkingStatusKPIProps) {
+  const { t } = useTranslation('mall');
   // Calculate total occupied and available
   const totalOccupied = parkingData.levels.reduce((sum, level) => sum + level.currentOccupancy, 0);
   const totalAvailable = parkingData.totalCapacity - totalOccupied;
@@ -55,10 +57,10 @@ export function ParkingStatusKPI({ parkingData }: ParkingStatusKPIProps) {
         <div className="flex items-start justify-between">
           <div>
             <h3 className="text-lg font-semibold text-bo-neutral-950 mb-1 tracking-tight">
-              Parking Status
+              {t('parking.status')}
             </h3>
             <p className="text-sm text-bo-neutral-600">
-              {parkingData.totalCapacity} total spaces across {parkingData.levels.length} levels
+              {t('parking.outdoorSurfaceLotFree', { count: parkingData.totalCapacity })}
             </p>
           </div>
           <div className={`rounded-lg p-3 border ${getUtilizationBg(utilizationPercent)}`}>
@@ -68,7 +70,7 @@ export function ParkingStatusKPI({ parkingData }: ParkingStatusKPIProps) {
                 <div className={`text-2xl font-bold ${getUtilizationColor(utilizationPercent)}`}>
                   {utilizationPercent.toFixed(0)}%
                 </div>
-                <div className="text-xs text-bo-neutral-600">Full</div>
+                <div className="text-xs text-bo-neutral-600">{t('parking.full')}</div>
               </div>
             </div>
             <VacancyGradientBar percentage={utilizationPercent} height="5px" />
@@ -79,20 +81,20 @@ export function ParkingStatusKPI({ parkingData }: ParkingStatusKPIProps) {
         <div className="rounded-lg bg-bo-primary-50/50 p-4 border border-bo-primary-200/30">
           <div className="flex items-center gap-2 mb-2">
             <Car className="h-5 w-5 text-bo-primary-600" />
-            <span className="text-sm font-medium text-bo-neutral-600">Available Now</span>
+            <span className="text-sm font-medium text-bo-neutral-600">{t('parking.availableNow')}</span>
           </div>
           <div className="text-3xl font-bold text-bo-primary-700">
             {totalAvailable.toLocaleString()}
           </div>
           <div className="text-xs text-bo-neutral-600 mt-1 mb-3">
-            {totalOccupied.toLocaleString()} occupied · {parkingData.publicSpaces.toLocaleString()} public spaces
+            {t('parking.occupiedPublic', { occupied: totalOccupied.toLocaleString(), public: parkingData.publicSpaces.toLocaleString() })}
           </div>
           <VacancyGradientBar percentage={utilizationPercent} height="5px" />
         </div>
 
         {/* Parking Levels Breakdown */}
         <div className="space-y-3">
-          <h4 className="font-semibold text-bo-neutral-950 text-sm">Availability by Level</h4>
+          <h4 className="font-semibold text-bo-neutral-950 text-sm">{t('parking.availabilityByZone')}</h4>
           <div className="space-y-2">
             {parkingData.levels.map((level) => {
               const available = level.capacity - level.currentOccupancy;
@@ -112,14 +114,14 @@ export function ParkingStatusKPI({ parkingData }: ParkingStatusKPIProps) {
                     </div>
                     <div className="text-right">
                       <div className="text-sm font-bold text-bo-primary-700">
-                        {available} <span className="text-xs text-bo-neutral-600">free</span>
+                        {available} <span className="text-xs text-bo-neutral-600">{t('parking.spacesAvailable')}</span>
                       </div>
                     </div>
                   </div>
                   <VacancyGradientBar percentage={utilization} height="8px" className="mb-1" />
                   <div className="flex justify-between text-xs text-bo-neutral-600">
                     <span>{level.currentOccupancy} / {level.capacity}</span>
-                    <span>{utilization.toFixed(0)}% utilized</span>
+                    <span>{t('parking.percentUtilized', { percent: utilization.toFixed(0) })}</span>
                   </div>
                   {level.id === 'P5' && (
                     <div className="mt-2 text-xs text-bo-neutral-600 italic">
@@ -137,20 +139,20 @@ export function ParkingStatusKPI({ parkingData }: ParkingStatusKPIProps) {
           <div className="rounded-lg bg-bo-warning-light/50 p-3 border border-bo-warning/15">
             <div className="flex items-center gap-2 mb-2">
               <Zap className="h-4 w-4 text-bo-warning-dark" />
-              <span className="text-xs font-medium text-bo-neutral-600">EV Charging</span>
+              <span className="text-xs font-medium text-bo-neutral-600">{t('parking.evCharging')}</span>
             </div>
             <div className="text-xl font-bold text-bo-warning-dark">{totalEVSpots}</div>
-            <div className="text-xs text-bo-neutral-600">charging points</div>
+            <div className="text-xs text-bo-neutral-600">{t('parking.chargingPoints')}</div>
           </div>
           <div className="rounded-lg bg-bo-accent-100/50 p-3 border border-bo-accent-300/30">
             <div className="flex items-center gap-2 mb-2">
               <TrendingUp className="h-4 w-4 text-bo-accent-700" />
-              <span className="text-xs font-medium text-bo-neutral-600">Contracts</span>
+              <span className="text-xs font-medium text-bo-neutral-600">{t('parking.monthly')}</span>
             </div>
             <div className="text-xl font-bold text-bo-accent-700">
               {parkingData.levels.reduce((sum, l) => sum + l.monthlyContracts, 0)}
             </div>
-            <div className="text-xs text-bo-neutral-600">monthly spaces</div>
+            <div className="text-xs text-bo-neutral-600">{t('parking.monthlySpaces')}</div>
           </div>
         </div>
 
@@ -158,40 +160,40 @@ export function ParkingStatusKPI({ parkingData }: ParkingStatusKPIProps) {
         <div className="rounded-lg bg-bo-info-light/50 p-4 border border-bo-info/15">
           <div className="flex items-center gap-2 mb-3">
             <Euro className="h-4 w-4 text-bo-info-dark" />
-            <span className="text-sm font-medium text-bo-neutral-700">Pricing</span>
+            <span className="text-sm font-medium text-bo-neutral-700">{t('parking.pricingHeader')}</span>
           </div>
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <div className="text-xs text-bo-neutral-600">Hourly</div>
+              <div className="text-xs text-bo-neutral-600">{t('parking.hourly')}</div>
               <div className="text-lg font-bold text-bo-info-dark">
                 €{parkingData.pricing.hourlyRate.toFixed(2)}
               </div>
             </div>
             <div>
-              <div className="text-xs text-bo-neutral-600">Daily Max</div>
+              <div className="text-xs text-bo-neutral-600">{t('parking.dailyMax')}</div>
               <div className="text-lg font-bold text-bo-info-dark">
                 €{parkingData.pricing.dailyMax.toFixed(0)}
               </div>
             </div>
             <div>
-              <div className="text-xs text-bo-neutral-600">Monthly</div>
+              <div className="text-xs text-bo-neutral-600">{t('parking.monthly')}</div>
               <div className="text-lg font-bold text-bo-info-dark">
                 €{parkingData.pricing.monthlyContract}
               </div>
             </div>
           </div>
           <div className="mt-2 text-xs text-bo-neutral-600">
-            First hour FREE · Payment: Card, EasyPark, ParkMan, Autopay
+            {t('parking.paymentInfo')}
           </div>
         </div>
 
         {/* Visitor Transport Mode */}
         <div className="rounded-lg bg-bo-glass-subtle p-4 border border-bo-neutral-200/30">
-          <div className="text-sm font-medium text-bo-neutral-700 mb-3">Visitor Arrival Modes</div>
+          <div className="text-sm font-medium text-bo-neutral-700 mb-3">{t('parking.visitorArrivalModes')}</div>
           <div className="space-y-2">
             <div>
               <div className="flex justify-between items-center mb-1">
-                <span className="text-xs text-bo-neutral-600">Car</span>
+                <span className="text-xs text-bo-neutral-600">{t('parking.car')}</span>
                 <span className="text-xs font-medium text-bo-neutral-950">
                   {parkingData.carArrivalShare}%
                 </span>
@@ -205,7 +207,7 @@ export function ParkingStatusKPI({ parkingData }: ParkingStatusKPIProps) {
             </div>
             <div>
               <div className="flex justify-between items-center mb-1">
-                <span className="text-xs text-bo-neutral-600">Public Transit / Walking</span>
+                <span className="text-xs text-bo-neutral-600">{t('parking.publicTransitWalking')}</span>
                 <span className="text-xs font-medium text-bo-neutral-950">
                   {100 - parkingData.carArrivalShare}%
                 </span>

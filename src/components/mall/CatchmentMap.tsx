@@ -6,6 +6,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import type { CatchmentDemographics } from '@/lib/types/transport';
@@ -26,6 +27,7 @@ const MALL_CENTERS: Record<string, [number, number]> = {
 };
 
 export function CatchmentMap({ demographics, selectedZone, onZoneSelect, onPostalCodeClick, mallId, mallName }: CatchmentMapProps) {
+  const { t } = useTranslation('mall');
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
@@ -408,7 +410,7 @@ export function CatchmentMap({ demographics, selectedZone, onZoneSelect, onPosta
         <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-sm rounded-lg px-4 py-2 shadow-lg border border-bo-neutral-200">
           <div className="flex items-center gap-2 text-sm text-bo-neutral-700">
             <div className="animate-spin h-4 w-4 border-2 border-bo-primary-600 border-t-transparent rounded-full" />
-            <span>Loading postal code boundaries...</span>
+            <span>{t('analytics.loadingBoundaries')}</span>
           </div>
         </div>
       )}
@@ -475,7 +477,7 @@ export function CatchmentMap({ demographics, selectedZone, onZoneSelect, onPosta
               <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
               </svg>
-              <span>Click any postal code area for details</span>
+              <span>{t('analytics.clickForDetails')}</span>
             </div>
           </div>
         )}

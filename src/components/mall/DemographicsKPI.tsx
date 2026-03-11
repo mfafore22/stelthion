@@ -6,8 +6,10 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MallCard } from './ui/MallCard';
 import { Users, Briefcase, TrendingUp, MapPin, Database, Home, ChevronRight } from 'lucide-react';
+import { VacancyGradientBar } from '@/components/ui/VacancyGradientBar';
 import type { CatchmentDemographics } from '@/lib/types/transport';
 import { HouseholdDataModal } from './HouseholdDataModal';
 import { getHouseholdData } from '@/lib/data/household';
@@ -17,6 +19,7 @@ interface DemographicsKPIProps {
 }
 
 export function DemographicsKPI({ demographics }: DemographicsKPIProps) {
+  const { t } = useTranslation('mall');
   const [isHouseholdModalOpen, setIsHouseholdModalOpen] = useState(false);
   const householdData = getHouseholdData();
   // Format numbers
@@ -65,7 +68,7 @@ export function DemographicsKPI({ demographics }: DemographicsKPIProps) {
         <div className="flex items-start justify-between">
           <div>
             <h3 className="text-lg font-semibold text-bo-neutral-950 mb-2 tracking-tight">
-              Catchment Demographics
+              {t('demographics.catchmentDemographics')}
             </h3>
             <span
               className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${profileColors[demographics.primaryProfile]}`}
@@ -76,18 +79,16 @@ export function DemographicsKPI({ demographics }: DemographicsKPIProps) {
             </span>
           </div>
           <div className={`rounded-lg p-3 border ${getSpendingBg(demographics.spendingPotential)}`}>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 mb-2">
               <TrendingUp className={`h-5 w-5 ${getSpendingColor(demographics.spendingPotential)}`} />
               <div>
                 <div className={`text-2xl font-bold ${getSpendingColor(demographics.spendingPotential)}`}>
                   {demographics.spendingPotential}
                 </div>
-                <div className="text-xs text-bo-neutral-600">Spending Index</div>
+                <div className="text-xs text-bo-neutral-600">{t('demographics.spendingIndex')}</div>
               </div>
             </div>
-            <div className="text-xs text-bo-neutral-600 mt-2">
-              0-100 scale based on income
-            </div>
+            <VacancyGradientBar percentage={demographics.spendingPotential} height="5px" />
           </div>
         </div>
 
@@ -95,17 +96,17 @@ export function DemographicsKPI({ demographics }: DemographicsKPIProps) {
         <div className="rounded-lg bg-bo-primary-50/50 p-4 border border-bo-primary-200/30">
           <div className="flex items-center gap-2 mb-2">
             <Users className="h-5 w-5 text-bo-primary-600" />
-            <span className="text-sm font-medium text-bo-neutral-600">Total Catchment Population</span>
+            <span className="text-sm font-medium text-bo-neutral-600">{t('demographics.totalCatchmentPopulation')}</span>
           </div>
           <div className="text-3xl font-bold text-bo-primary-700">
             {formatNumber(totalPopulation)}
           </div>
           <div className="text-xs text-bo-neutral-600 mt-1">
-            Across {demographics.zones.length} drive-time zones
+            {t('demographics.acrossZones', { count: demographics.zones.length })}
           </div>
           <div className="flex items-center gap-1 text-xs text-bo-neutral-500 mt-2">
             <Database className="h-3 w-3" />
-            <span>Source: Statistics Finland Census 2024</span>
+            <span>{t('demographics.sourceStatsCensus')}</span>
           </div>
         </div>
 
@@ -113,19 +114,19 @@ export function DemographicsKPI({ demographics }: DemographicsKPIProps) {
         <div className="space-y-3">
           <div className="flex items-center gap-2 text-bo-neutral-950">
             <MapPin className="h-5 w-5 text-bo-accent-600" />
-            <h4 className="font-semibold">Primary Zone ({primaryZone.driveTimeMinutes}-min drive)</h4>
+            <h4 className="font-semibold">{t('demographics.primaryZone', { minutes: primaryZone.driveTimeMinutes })}</h4>
           </div>
 
           {/* Age Distribution */}
           <div className="rounded-lg bg-bo-glass-subtle p-4 border border-bo-neutral-200/30">
-            <div className="text-sm font-medium text-bo-neutral-700 mb-3">Age Distribution</div>
+            <div className="text-sm font-medium text-bo-neutral-700 mb-3">{t('demographics.ageDistribution')}</div>
             <div className="space-y-2">
               {Object.entries(primaryZone.population.ageGroups).map(([ageGroup, count]) => {
                 const percentage = (count / primaryZone.population.total) * 100;
                 return (
                   <div key={ageGroup}>
                     <div className="flex justify-between items-center mb-1">
-                      <span className="text-xs text-bo-neutral-600">{ageGroup} years</span>
+                      <span className="text-xs text-bo-neutral-600">{t('demographics.yearsGroup', { group: ageGroup })}</span>
                       <span className="text-xs font-medium text-bo-neutral-950">
                         {formatNumber(count)} ({percentage.toFixed(0)}%)
                       </span>
@@ -142,29 +143,29 @@ export function DemographicsKPI({ demographics }: DemographicsKPIProps) {
             </div>
             <div className="flex items-center gap-1 text-xs text-bo-neutral-500 mt-3 pt-3 border-t border-bo-neutral-200/30">
               <Database className="h-3 w-3" />
-              <span>Source: Statistics Finland Population Register 2024</span>
+              <span>{t('demographics.sourceStatsPopulation')}</span>
             </div>
           </div>
 
           {/* Income Metrics */}
           <div className="rounded-lg bg-bo-success-light/50 p-4 border border-bo-success/15">
-            <div className="text-sm font-medium text-bo-neutral-700 mb-3">Income Profile</div>
+            <div className="text-sm font-medium text-bo-neutral-700 mb-3">{t('demographics.incomeProfile')}</div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <div className="text-xs text-bo-neutral-600 mb-1">Median Household</div>
+                <div className="text-xs text-bo-neutral-600 mb-1">{t('demographics.medianHousehold')}</div>
                 <div className="text-lg font-bold text-bo-success-dark">
                   {formatCurrency(primaryZone.income.medianHouseholdIncome)}
                 </div>
               </div>
               <div>
-                <div className="text-xs text-bo-neutral-600 mb-1">Avg Disposable</div>
+                <div className="text-xs text-bo-neutral-600 mb-1">{t('demographics.avgDisposable')}</div>
                 <div className="text-lg font-bold text-bo-success-dark">
                   {formatCurrency(primaryZone.income.averageDisposableIncome)}
                 </div>
               </div>
             </div>
             <div className="mt-3 pt-3 border-t border-bo-success/15">
-              <div className="text-xs text-bo-neutral-600">High Income (&gt;€60k)</div>
+              <div className="text-xs text-bo-neutral-600">{t('demographics.highIncome')}</div>
               <div className="flex items-center gap-2 mt-1">
                 <div className="flex-1 h-2 bg-bo-neutral-200 rounded-full overflow-hidden">
                   <div
@@ -179,7 +180,7 @@ export function DemographicsKPI({ demographics }: DemographicsKPIProps) {
             </div>
             <div className="flex items-center gap-1 text-xs text-bo-neutral-500 mt-3 pt-3 border-t border-bo-success/15">
               <Database className="h-3 w-3" />
-              <span>Source: Statistics Finland Income Distribution 2023</span>
+              <span>{t('demographics.sourceStatsIncome')}</span>
             </div>
           </div>
 
@@ -187,35 +188,35 @@ export function DemographicsKPI({ demographics }: DemographicsKPIProps) {
           <div className="rounded-lg bg-bo-info-light/50 p-4 border border-bo-info/15">
             <div className="flex items-center gap-2 mb-3">
               <Briefcase className="h-4 w-4 text-bo-info-dark" />
-              <div className="text-sm font-medium text-bo-neutral-700">Employment</div>
+              <div className="text-sm font-medium text-bo-neutral-700">{t('demographics.employmentHeader')}</div>
             </div>
             <div className="grid grid-cols-2 gap-3 mb-3">
               <div>
-                <div className="text-xs text-bo-neutral-600">Employment Rate</div>
+                <div className="text-xs text-bo-neutral-600">{t('demographics.employmentRate')}</div>
                 <div className="text-xl font-bold text-bo-info-dark">
                   {primaryZone.employment.employmentRate}%
                 </div>
               </div>
               <div>
-                <div className="text-xs text-bo-neutral-600">Students</div>
+                <div className="text-xs text-bo-neutral-600">{t('demographics.students')}</div>
                 <div className="text-xl font-bold text-bo-info-dark">
                   {formatNumber(primaryZone.employment.students)}
                 </div>
               </div>
             </div>
             <div className="text-xs text-bo-neutral-600">
-              <strong>Top Sectors:</strong> {primaryZone.employment.topSectors.slice(0, 3).join(', ')}
+              <strong>{t('demographics.topSectors')}</strong> {primaryZone.employment.topSectors.slice(0, 3).join(', ')}
             </div>
             <div className="flex items-center gap-1 text-xs text-bo-neutral-500 mt-3 pt-3 border-t border-bo-info/15">
               <Database className="h-3 w-3" />
-              <span>Source: Statistics Finland Employment Statistics Q3 2024</span>
+              <span>{t('demographics.sourceStatsEmployment')}</span>
             </div>
           </div>
         </div>
 
         {/* Drive-Time Zones Summary */}
         <div className="space-y-3">
-          <h4 className="font-semibold text-bo-neutral-950 text-sm">All Catchment Zones</h4>
+          <h4 className="font-semibold text-bo-neutral-950 text-sm">{t('demographics.allCatchmentZones')}</h4>
           <div className="space-y-2">
             {demographics.zones.map((zone) => (
               <div
@@ -225,17 +226,17 @@ export function DemographicsKPI({ demographics }: DemographicsKPIProps) {
                 <div className="flex justify-between items-center">
                   <div>
                     <div className="text-sm font-medium text-bo-neutral-950">
-                      {zone.driveTimeMinutes}-min drive
+                      {t('demographics.minDrive', { minutes: zone.driveTimeMinutes })}
                     </div>
                     <div className="text-xs text-bo-neutral-600">
-                      {zone.postalCodes.length} postal codes · {formatNumber(zone.population.households)} households
+                      {t('demographics.postalCodesHouseholds', { codes: zone.postalCodes.length, households: formatNumber(zone.population.households) })}
                     </div>
                   </div>
                   <div className="text-right">
                     <div className="text-lg font-bold text-bo-primary-700">
                       {formatNumber(zone.population.total)}
                     </div>
-                    <div className="text-xs text-bo-neutral-600">residents</div>
+                    <div className="text-xs text-bo-neutral-600">{t('demographics.residents')}</div>
                   </div>
                 </div>
               </div>
@@ -243,7 +244,7 @@ export function DemographicsKPI({ demographics }: DemographicsKPIProps) {
           </div>
           <div className="flex items-center gap-1 text-xs text-bo-neutral-500 mt-3">
             <Database className="h-3 w-3" />
-            <span>Source: Statistics Finland + OpenStreetMap drive-time analysis</span>
+            <span>{t('demographics.sourceCatchmentAnalysis')}</span>
           </div>
         </div>
 
@@ -259,10 +260,10 @@ export function DemographicsKPI({ demographics }: DemographicsKPIProps) {
               </div>
               <div className="text-left">
                 <div className="text-sm font-semibold text-bo-neutral-950 mb-0.5">
-                  Detailed Household Statistics
+                  {t('demographics.detailedHouseholdStats')}
                 </div>
                 <div className="text-xs text-bo-neutral-600">
-                  View household size, ownership, and dwelling types by area
+                  {t('demographics.householdStatsDesc')}
                 </div>
               </div>
             </div>
@@ -271,7 +272,7 @@ export function DemographicsKPI({ demographics }: DemographicsKPIProps) {
                 <div className="text-lg font-bold text-bo-info-dark">
                   {formatNumber(householdData.summary.totalHouseholds)}
                 </div>
-                <div className="text-xs text-bo-neutral-600">households</div>
+                <div className="text-xs text-bo-neutral-600">{t('demographics.householdsUnit')}</div>
               </div>
               <ChevronRight className="h-5 w-5 text-bo-info-dark group-hover:translate-x-1 transition-transform" />
             </div>

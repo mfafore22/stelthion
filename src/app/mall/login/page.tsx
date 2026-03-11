@@ -167,7 +167,7 @@ export default function MallLoginPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="flex justify-center mb-6">
-            <Image src="/logo.png" alt="Stelthion" width={200} height={64} priority />
+            <Image src="/stelthion-brandmark.png" alt="Stelthion" width={96} height={96} priority />
           </div>
           <p className="mt-2 text-sm text-gray-600">
             {step === 'credentials' ? t('login.subtitle') : t('login.otp.title')}

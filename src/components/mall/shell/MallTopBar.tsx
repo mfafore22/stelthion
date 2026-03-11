@@ -1,20 +1,18 @@
 /**
- * Mall Portfolio Top Bar
+ * Mall Top Bar
  *
- * 72px header with temporal controls and data view toggles
+ * Fixed 80px header with temporal controls and export.
  * Features:
- * - Page title (dynamic based on route)
+ * - Stelthion brandmark
  * - Date/time pickers for temporal navigation
- * - Actual vs Predicted data toggle
+ * - AI concierge toggle
+ * - Language selector
+ * - User profile / logout
  * - Export dropdown (PDF, CSV, Excel)
- *
- * Adapted from DOH Airport TopBar for mall-specific use case
  */
 
 'use client';
 
-import React, { useState } from 'react';
-import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import {
   Download,
@@ -22,7 +20,6 @@ import {
   Sheet,
   FileSpreadsheet,
   LogOut,
-  User,
   Building2,
   Sparkles,
 } from 'lucide-react';
@@ -40,83 +37,30 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useTranslation } from 'react-i18next';
 
-export type DataView = 'actual' | 'predicted';
-
 export interface MallTopBarProps {
-  /**
-   * Current date for data view (ISO 8601 format)
-   * @default Current date
-   */
   selectedDate?: string;
-  /**
-   * Current time for data view (HH:MM format)
-   * @default Current time
-   */
   selectedTime?: string;
-  /**
-   * Current data view mode
-   * @default 'actual'
-   */
-  dataView?: DataView;
-  /**
-   * Callback when date changes
-   */
   onDateChange?: (date: string) => void;
-  /**
-   * Callback when time changes
-   */
   onTimeChange?: (time: string) => void;
-  /**
-   * Callback when data view toggles
-   */
-  onDataViewChange?: (view: DataView) => void;
-  /**
-   * Callback when export is triggered
-   */
   onExport?: (format: 'pdf' | 'csv' | 'excel') => void;
-  /**
-   * Optional custom page title (overrides pathname-based title)
-   */
-  pageTitle?: string;
-  /**
-   * Optional className for custom styling
-   */
   className?: string;
 }
 
 export function MallTopBar({
   selectedDate,
   selectedTime,
-  dataView = 'actual',
   onDateChange,
   onTimeChange,
-  onDataViewChange,
   onExport,
-  pageTitle,
   className,
 }: MallTopBarProps) {
-  const pathname = usePathname();
   const { user, logout } = useSession();
   const concierge = useConcierge();
   const { t } = useTranslation('mall');
 
-  const PAGE_TITLES: Record<string, string> = {
-    '/mall/portfolio': t('navigation.portfolio.label'),
-    '/mall/properties': t('navigation.properties.label'),
-    '/mall/campaigns': t('navigation.campaigns.label'),
-    '/mall/analytics': t('navigation.analytics.label'),
-  };
-
-  // Get current date and time if not provided
   const now = new Date();
-  const defaultDate = now.toISOString().split('T')[0]; // YYYY-MM-DD
-  const defaultTime = now.toTimeString().slice(0, 5); // HH:MM
-
-  const currentDate = selectedDate || defaultDate;
-  const currentTime = selectedTime || defaultTime;
-
-  // Determine page title from pathname
-  const title = pageTitle || PAGE_TITLES[pathname || ''] || t('navigation.portfolio.label');
+  const currentDate = selectedDate || now.toISOString().split('T')[0];
+  const currentTime = selectedTime || now.toTimeString().slice(0, 5);
 
   const handleExport = (format: 'pdf' | 'csv' | 'excel') => {
     if (onExport) {
@@ -124,10 +68,6 @@ export function MallTopBar({
     } else {
       console.log(`Export as ${format}`);
     }
-  };
-
-  const handleLogout = async () => {
-    await logout();
   };
 
   return (
@@ -139,13 +79,13 @@ export function MallTopBar({
         className
       )}
     >
-      {/* Left: Stelthion Logo */}
-      <div className="flex items-center gap-4">
+      {/* Left: Stelthion Brandmark */}
+      <div className="flex items-center">
         <Image
-          src="/logo.png"
+          src="/stelthion-brandmark.png"
           alt="Stelthion"
-          width={140}
-          height={40}
+          width={44}
+          height={44}
           className="object-contain"
           priority
         />
@@ -153,7 +93,6 @@ export function MallTopBar({
 
       {/* Center: Temporal Controls */}
       <div className="flex items-center gap-3">
-        {/* Date Picker */}
         <input
           type="date"
           value={currentDate}
@@ -166,8 +105,6 @@ export function MallTopBar({
           )}
           aria-label={t('topbar.dateLabel')}
         />
-
-        {/* Time Picker */}
         <input
           type="time"
           value={currentTime}
@@ -241,7 +178,7 @@ export function MallTopBar({
               </DropdownMenuLabel>
               <DropdownMenuSeparator className="bg-bo-neutral-200 my-2" />
               <DropdownMenuItem
-                onClick={handleLogout}
+                onClick={() => logout()}
                 className="flex items-center gap-3 cursor-pointer px-3 py-2.5 rounded-md hover:bg-red-50 transition-colors text-red-600"
               >
                 <LogOut className="h-4 w-4" />

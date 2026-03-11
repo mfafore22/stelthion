@@ -5,10 +5,10 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white gap-10">
       <Image
-        src="/logo.png"
+        src="/stelthion-brandmark.png"
         alt="Stelthion"
-        width={220}
-        height={70}
+        width={120}
+        height={120}
         priority
       />
 
