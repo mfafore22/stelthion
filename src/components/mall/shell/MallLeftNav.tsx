@@ -38,6 +38,7 @@ import {
 export interface MallNavItem {
   id: string;
   label: string;
+  labelOverride?: string;
   icon: React.ElementType;
   route: string;
   description?: string;
@@ -125,31 +126,32 @@ export function MallLeftNav({
   const navItems = React.useMemo(() => {
     if (!user) return NAV_ITEMS;
 
-    // Replace routes with user-specific mall routes
-    return NAV_ITEMS.map(item => {
-      if (item.id === 'portfolio') {
-        // Multi-property tenants go to tenant portfolio
-        // Generate tenant slug dynamically from company name
-        const tenantSlug = user.companyName.toLowerCase().replace(/\s+/g, '-');
+    const tenantSlug = user.companyName.toLowerCase().replace(/\s+/g, '-');
 
-        if (user.isMultiProperty) {
-          return {
-            ...item,
-            route: `/tenant/${tenantSlug}/portfolio`,
-            description: `Portfolio Overview - ${user.companyName}`,
-          };
-        } else {
-          // Single-property operators: Portfolio goes directly to their mall detail page
-          return {
-            ...item,
-            route: `/mall/${user.mallId}`,
-            description: `${user.mallDisplayName} Overview`,
-          };
+    return NAV_ITEMS
+      // Hide Properties for single-property operators — they only have one mall
+      .filter(item => item.id !== 'properties' || user.isMultiProperty)
+      .map(item => {
+        if (item.id === 'portfolio') {
+          if (user.isMultiProperty) {
+            return {
+              ...item,
+              route: `/tenant/${tenantSlug}/portfolio`,
+              description: `Portfolio Overview - ${user.companyName}`,
+            };
+          } else {
+            // Single-property: first icon becomes the mall home, use Building2
+            return {
+              ...item,
+              icon: Building2,
+              labelOverride: user.mallDisplayName,
+              route: `/mall/${user.mallId}`,
+              description: user.mallDisplayName,
+            };
+          }
         }
-      }
-      // Properties page already filters by user
-      return item;
-    });
+        return item;
+      });
   }, [user]);
 
   // Determine active item from pathname
@@ -203,10 +205,10 @@ export function MallLeftNav({
                 className="nav-tooltip rounded-lg px-3 py-2"
               >
                 <div className="text-sm font-semibold text-white tracking-tight">
-                  {t(`mall:navigation.${item.id}.label`)}
+                  {item.labelOverride ?? t(`mall:navigation.${item.id}.label`)}
                 </div>
                 <div className="text-xs text-gray-300 mt-1 leading-relaxed">
-                  {t(`mall:navigation.${item.id}.description`)}
+                  {item.description ?? t(`mall:navigation.${item.id}.description`)}
                 </div>
               </TooltipContent>
             </Tooltip>
