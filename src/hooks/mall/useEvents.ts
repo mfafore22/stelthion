@@ -12,6 +12,7 @@
 'use client';
 
 import useSWR from 'swr';
+import { calcAdditionalVisitors, type EventCategory } from '@/lib/events/footfallImpact';
 
 export interface EventVenue {
   id: string;
@@ -33,6 +34,7 @@ export interface Event {
   ticketsAvailable: boolean;
   estimatedAttendance?: number;
   source: string;
+  imageUrl?: string;
   venue: {
     id: string;
     name: string;
@@ -67,30 +69,43 @@ export function useEvents(mallId: string, hours: number = 24) {
     }
   );
 
+  // Build venue lookup by name so each event gets the correct distanceKm / walkingMinutes
+  const venueByName = new Map<string, any>(
+    (data?.venues || []).map((v: any) => [v.name, v])
+  );
+
   // Transform new API format to old format for backward compatibility
   const transformedData = data ? {
     mallId: data.mallId,
     venues: data.venues || [],
-    events: data.upcomingEvents?.map((event: any) => ({
-      id: event.id,
-      venueId: event.venue,
-      venueName: event.venue,
-      title: event.title,
-      description: event.description,
-      category: event.category,
-      startTime: `${event.startDate}T${event.startTime || '00:00'}:00`,
-      endTime: event.endTime ? `${event.startDate}T${event.endTime}:00` : undefined,
-      ticketsAvailable: !!event.ticketUrl,
-      estimatedAttendance: event.expectedAttendance,
-      source: data.dataSource,
-      venue: {
-        id: event.venue,
-        name: event.venue,
-        distanceKm: 0,
-        walkingMinutes: 0,
-      },
-      footfallImpact: event.expectedAttendance ? Math.min(event.expectedAttendance / 1000, 15) : 5,
-    })) || [],
+    events: data.upcomingEvents?.map((event: any) => {
+      const venueInfo = venueByName.get(event.venue);
+      return {
+        id: event.id,
+        venueId: event.venue,
+        venueName: event.venue,
+        title: event.title,
+        description: event.description,
+        category: event.category,
+        startTime: `${event.startDate}T${event.startTime || '00:00'}:00`,
+        endTime: event.endTime ? `${event.startDate}T${event.endTime}:00` : undefined,
+        ticketsAvailable: !!event.ticketUrl,
+        estimatedAttendance: event.expectedAttendance,
+        source: data.dataSource,
+        imageUrl: event.imageUrl ?? venueInfo?.imageUrl,
+        venue: {
+          id: venueInfo?.id ?? event.venue,
+          name: event.venue,
+          distanceKm: venueInfo?.distanceKm ?? 0,
+          walkingMinutes: venueInfo?.walkingMinutes ?? 0,
+        },
+        footfallImpact: calcAdditionalVisitors(
+          event.expectedAttendance ?? 0,
+          venueInfo?.distanceKm ?? 0,
+          (event.category as EventCategory) ?? 'other',
+        ),
+      };
+    }) || [],
     count: data.upcomingEvents?.length || 0,
     lookaheadHours: hours,
     timestamp: data.lastUpdated || new Date().toISOString(),
@@ -117,7 +132,7 @@ export function useUpcomingEvents(mallId: string) {
   const twoHoursFromNow = now + 2 * 60 * 60 * 1000;
   const sixHoursFromNow = now + 6 * 60 * 60 * 1000;
 
-  const upcomingEvents = events.filter((event) => {
+  const upcomingEvents = events.filter((event: Event) => {
     const eventTime = new Date(event.startTime).getTime();
     return eventTime >= twoHoursFromNow && eventTime <= sixHoursFromNow;
   });

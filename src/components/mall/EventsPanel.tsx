@@ -6,7 +6,7 @@
 
 'use client';
 
-import React from 'react';
+import Image from 'next/image';
 import { Calendar, MapPin, Users, Clock, RefreshCw, Ticket, TrendingUp } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -19,7 +19,7 @@ interface EventsPanelProps {
 }
 
 export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
-  const { t } = useTranslation('mall');
+  const { t, i18n } = useTranslation('mall');
   const { eventsData, events: rawEvents, venues: rawVenues, isLoading, isError, refresh } = useEvents(mallId, expanded ? 168 : 24);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const events = rawEvents as any[];
@@ -60,9 +60,14 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
     }
   };
 
+  const locale = i18n.language === 'fi' ? 'fi-FI' : 'en-GB';
+
   const formatTime = (isoString: string) => {
-    const date = new Date(isoString);
-    return date.toLocaleTimeString('en-FI', { hour: '2-digit', minute: '2-digit' });
+    return new Date(isoString).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
+  };
+
+  const formatDate = (isoString: string) => {
+    return new Date(isoString).toLocaleDateString(locale, { weekday: 'short', day: 'numeric', month: 'short' });
   };
 
   const formatHoursUntil = (isoString: string) => {
@@ -136,67 +141,98 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
             {displayEvents.map((event) => (
               <div
                 key={event.id}
-                className="rounded-lg border border-bo-neutral-200/50 bg-gradient-to-r from-blue-50 to-white p-4 dark:from-slate-800 dark:to-slate-900"
+                className="overflow-hidden rounded-lg border border-bo-neutral-200/50 bg-gradient-to-r from-blue-50 to-white dark:from-slate-800 dark:to-slate-900"
               >
-                <div className="mb-2 flex items-start justify-between">
-                  <div className="flex items-start gap-2">
-                    <span className="text-2xl">{getCategoryIcon(event.category)}</span>
-                    <div>
-                      <div className="font-semibold text-bo-neutral-950">{event.title}</div>
-                      <div className="text-sm text-bo-neutral-600">{event.venueName}</div>
+                {event.imageUrl && (
+                  <div className="relative h-28 w-full">
+                    <Image
+                      src={event.imageUrl}
+                      alt={event.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 480px"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    <div className="absolute bottom-2 left-3 right-3">
+                      <div className="text-sm font-semibold text-white leading-tight">{event.title}</div>
+                      <div className="text-xs text-white/80">{event.venueName}</div>
                     </div>
                   </div>
-                  {event.ticketsAvailable && (
-                    <span className="flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700 dark:bg-green-900 dark:text-green-200">
-                      <Ticket className="h-3 w-3" />
-                      {t('events.ticketsAvailable')}
-                    </span>
-                  )}
-                </div>
-
-                {event.description && (
-                  <div className="mb-2 text-sm text-bo-neutral-600">{event.description}</div>
                 )}
-
-                <div className="grid grid-cols-2 gap-3 text-sm">
-                  <div className="flex items-center gap-2 text-bo-neutral-700">
-                    <Clock className="h-4 w-4 text-bo-info-dark" />
-                    <div>
-                      <div className="font-medium">{formatTime(event.startTime)}</div>
-                      <div className="text-xs text-bo-neutral-500">{formatHoursUntil(event.startTime)}</div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 text-bo-neutral-700">
-                    <MapPin className="h-4 w-4 text-bo-info-dark" />
-                    <div>
-                      <div className="font-medium">{t('events.awayKm', { km: event.venue.distanceKm })}</div>
-                      <div className="text-xs text-bo-neutral-500">{t('events.minWalk', { min: event.venue.walkingMinutes })}</div>
-                    </div>
-                  </div>
-
-                  {event.estimatedAttendance && (
-                    <div className="flex items-center gap-2 text-bo-neutral-700">
-                      <Users className="h-4 w-4 text-bo-info-dark" />
-                      <div>
-                        <div className="font-medium">
-                          {t('events.expectedCount', { count: event.estimatedAttendance.toLocaleString() })}
+                <div className="p-4">
+                  {/* Header — hidden when image already shows title in overlay */}
+                  {!event.imageUrl && (
+                    <div className="mb-2 flex items-start justify-between">
+                      <div className="flex items-start gap-2">
+                        <span className="text-2xl">{getCategoryIcon(event.category)}</span>
+                        <div>
+                          <div className="font-semibold text-bo-neutral-950">{event.title}</div>
+                          <div className="text-sm text-bo-neutral-600">{event.venueName}</div>
                         </div>
-                        <div className="text-xs text-bo-neutral-500">{t('events.attendanceLabel')}</div>
+                      </div>
+                      {event.ticketsAvailable && (
+                        <span className="flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700 dark:bg-green-900 dark:text-green-200">
+                          <Ticket className="h-3 w-3" />
+                          {t('events.ticketsAvailable')}
+                        </span>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Tickets badge for image cards (header is in overlay) */}
+                  {event.imageUrl && event.ticketsAvailable && (
+                    <div className="mb-2 flex justify-end">
+                      <span className="flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700 dark:bg-green-900 dark:text-green-200">
+                        <Ticket className="h-3 w-3" />
+                        {t('events.ticketsAvailable')}
+                      </span>
+                    </div>
+                  )}
+
+                  {event.description && (
+                    <div className="mb-2 text-sm text-bo-neutral-600">{event.description}</div>
+                  )}
+
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div className="flex items-center gap-2 text-bo-neutral-700">
+                      <Clock className="h-4 w-4 text-bo-info-dark" />
+                      <div>
+                        <div className="font-medium">{formatDate(event.startTime)}</div>
+                        <div className="text-xs text-bo-neutral-500">{formatTime(event.startTime)} · {formatHoursUntil(event.startTime)}</div>
                       </div>
                     </div>
-                  )}
 
-                  <div className="flex items-center gap-2 text-bo-neutral-700">
-                    <TrendingUp className="h-4 w-4 text-green-600" />
-                    <div>
-                      <div className="font-medium text-green-600">+{event.footfallImpact.toFixed(1)}%</div>
-                      <div className="text-xs text-bo-neutral-500">{t('events.footfallImpactLabel')}</div>
+                    <div className="flex items-center gap-2 text-bo-neutral-700">
+                      <MapPin className="h-4 w-4 text-bo-info-dark" />
+                      <div>
+                        <div className="font-medium">{t('events.awayKm', { km: event.venue.distanceKm })}</div>
+                        <div className="text-xs text-bo-neutral-500">{t('events.minWalk', { min: event.venue.walkingMinutes })}</div>
+                      </div>
+                    </div>
+
+                    {event.estimatedAttendance && (
+                      <div className="flex items-center gap-2 text-bo-neutral-700">
+                        <Users className="h-4 w-4 text-bo-info-dark" />
+                        <div>
+                          <div className="font-medium">
+                            {t('events.expectedCount', { count: event.estimatedAttendance.toLocaleString() })}
+                          </div>
+                          <div className="text-xs text-bo-neutral-500">{t('events.attendanceLabel')}</div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-2 text-bo-neutral-700">
+                      <TrendingUp className="h-4 w-4 text-green-600" />
+                      <div>
+                        <div className="font-medium text-green-600">+{event.footfallImpact} {t('events.visitorsUnit')}</div>
+                        <div className="text-xs text-bo-neutral-500">{t('events.footfallImpactLabel')}</div>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="mt-2 text-xs text-bo-neutral-500">{t('events.sourceLabel')} {event.source}</div>
+                  <div className="mt-2 text-xs text-bo-neutral-500">{t('events.sourceLabel')} {event.source}</div>
+                </div>
               </div>
             ))}
           </div>

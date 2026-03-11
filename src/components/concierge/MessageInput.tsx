@@ -60,7 +60,7 @@ export function MessageInput({
       {/* Attachment button (disabled for now) */}
       <button
         disabled
-        className="p-2 text-gray-500 hover:text-gray-400 transition-colors disabled:opacity-50"
+        className="p-2 text-bo-neutral-400 transition-colors disabled:opacity-40"
         title="Attachments (coming soon)"
       >
         <Paperclip className="w-5 h-5" />
@@ -76,7 +76,7 @@ export function MessageInput({
           placeholder={placeholder}
           disabled={disabled}
           rows={1}
-          className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-gray-100 placeholder-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full px-4 py-3 bg-bo-neutral-50 border border-bo-neutral-300 rounded-lg text-bo-neutral-950 placeholder-bo-neutral-400 resize-none focus:outline-none focus:ring-2 focus:ring-bo-primary-600 focus:ring-opacity-20 focus:border-bo-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           style={{ minHeight: '48px', maxHeight: '200px' }}
         />
       </div>
@@ -84,7 +84,7 @@ export function MessageInput({
       {/* Voice button (disabled for now) */}
       <button
         disabled
-        className="p-2 text-gray-500 hover:text-gray-400 transition-colors disabled:opacity-50"
+        className="p-2 text-bo-neutral-400 transition-colors disabled:opacity-40"
         title="Voice input (coming soon)"
       >
         <Mic className="w-5 h-5" />
@@ -94,7 +94,7 @@ export function MessageInput({
       {onStop && disabled ? (
         <button
           onClick={onStop}
-          className="p-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors flex items-center gap-2"
+          className="p-3 bg-bo-neutral-950 hover:bg-bo-neutral-900 text-bo-neutral-50 rounded-lg transition-colors"
           title="Stop generating"
         >
           <Square className="w-5 h-5" />
@@ -103,7 +103,7 @@ export function MessageInput({
         <button
           onClick={handleSend}
           disabled={disabled || !message.trim()}
-          className="p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          className="p-3 bg-bo-neutral-950 hover:bg-bo-neutral-900 text-bo-neutral-50 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           title="Send message (Enter)"
         >
           <Send className="w-5 h-5" />

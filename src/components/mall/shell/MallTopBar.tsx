@@ -131,11 +131,10 @@ export function MallTopBar({
                 ? 'bg-blue-600 text-white border-blue-700 shadow-lg shadow-blue-600/30'
                 : 'bg-bo-neutral-100 text-bo-neutral-900 border-bo-neutral-200 hover:bg-bo-neutral-200 hover:border-bo-neutral-300'
             )}
-            aria-label="Toggle AI Assistant"
-            title="Ask Stelthion"
+            aria-label={t('topbar.concierge')}
           >
             <Sparkles className="h-4 w-4" />
-            <span className="text-sm font-medium">Ask Stelthion</span>
+            <span className="text-sm font-medium">{t('topbar.concierge')}</span>
             {concierge.state?.conversations?.length > 0 && !concierge.state?.panelOpen && (
               <span className="ml-1 bg-blue-600 text-white text-xs rounded-full px-2 py-0.5">
                 {concierge.state.conversations.length}

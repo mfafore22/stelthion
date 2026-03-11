@@ -17,13 +17,12 @@ i18n
       en: { mall: enMall },
       fi: { mall: fiMall },
     },
-    lng: 'en',
     fallbackLng: 'en',
     defaultNS: 'mall',
     ns: ['mall'],
     interpolation: { escapeValue: false },
     detection: {
-      order: ['localStorage', 'navigator'],
+      order: ['localStorage'],   // never auto-detect from browser locale
       caches: ['localStorage'],
       lookupLocalStorage: 'stelthion-language',
     },

@@ -53,7 +53,7 @@ export function ConciergePanel({ className = '' }: ConciergePanelProps) {
       animate={{ x: 0 }}
       exit={{ x: -300 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className={`fixed left-0 top-0 bottom-0 bg-gray-950 border-r border-gray-800 shadow-2xl z-50 ${className}`}
+      className={`fixed left-0 top-0 bottom-0 bg-bo-neutral-50 border-r border-bo-neutral-200 shadow-bo-xl z-50 ${className}`}
       style={{ width: `${preferences.panelWidth}px` }}
     >
       {/* Sparkle overlay */}
@@ -76,10 +76,10 @@ function MinimizedPanel() {
     <motion.div
       initial={{ x: -60 }}
       animate={{ x: 0 }}
-      className="fixed left-0 top-20 bg-gray-900 border border-gray-800 rounded-r-lg shadow-lg p-3 z-50 cursor-pointer hover:bg-gray-800 transition-colors"
+      className="fixed left-0 top-20 bg-bo-neutral-50 border border-bo-neutral-200 rounded-r-lg shadow-bo-md p-3 z-50 cursor-pointer hover:bg-bo-neutral-100 transition-colors"
       onClick={openPanel}
     >
-      <MessageSquare className="w-6 h-6 text-gray-400" />
+      <MessageSquare className="w-6 h-6 text-bo-neutral-600" />
       {state.conversations.length > 0 && (
         <div className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
           {state.conversations.length}

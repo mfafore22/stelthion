@@ -13,8 +13,7 @@
 
 'use client';
 
-import React, { useState } from 'react';
-import Image from 'next/image';
+import React from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import {
@@ -39,61 +38,19 @@ export interface MallNavItem {
   id: string;
   label: string;
   labelOverride?: string;
+  descriptionOverride?: string;
   icon: React.ElementType;
   route: string;
-  description?: string;
 }
 
 const NAV_ITEMS: MallNavItem[] = [
-  {
-    id: 'portfolio',
-    label: 'Portfolio',
-    icon: LayoutGrid,
-    route: '/mall/portfolio',
-    description: 'Multi-Property KPI Overview',
-  },
-  {
-    id: 'properties',
-    label: 'Properties',
-    icon: Building2,
-    route: '/mall/properties',
-    description: 'Individual mall detail pages',
-  },
-  {
-    id: 'campaigns',
-    label: 'Campaigns',
-    icon: Megaphone,
-    route: '/mall/campaigns',
-    description: 'Marketing campaign tracking',
-  },
-  {
-    id: 'analytics',
-    label: 'Analytics',
-    icon: BarChart3,
-    route: '/mall/analytics',
-    description: 'Reports and insights',
-  },
-  {
-    id: 'scenarios',
-    label: 'Scenarios',
-    icon: TrendingUpDown,
-    route: '/mall/scenarios',
-    description: 'What-if scenario calculator',
-  },
-  {
-    id: 'assistants',
-    label: 'Assistants',
-    icon: HandPlatter,
-    route: '/mall/assistants',
-    description: 'AI agents for mall operations',
-  },
-  {
-    id: 'shoppermind',
-    label: 'ShopperMind',
-    icon: Brain,
-    route: '/mall/shoppermind',
-    description: 'Trends and Predictions',
-  },
+  { id: 'portfolio',    label: 'Portfolio',    icon: LayoutGrid,    route: '/mall/portfolio' },
+  { id: 'properties',  label: 'Properties',   icon: Building2,     route: '/mall/properties' },
+  { id: 'campaigns',   label: 'Campaigns',    icon: Megaphone,     route: '/mall/campaigns' },
+  { id: 'analytics',   label: 'Analytics',    icon: BarChart3,     route: '/mall/analytics' },
+  { id: 'scenarios',   label: 'Scenarios',    icon: TrendingUpDown, route: '/mall/scenarios' },
+  { id: 'assistants',  label: 'Assistants',   icon: HandPlatter,   route: '/mall/assistants' },
+  { id: 'shoppermind', label: 'ShopperMind',  icon: Brain,         route: '/mall/shoppermind' },
 ];
 
 export interface MallLeftNavProps {
@@ -137,7 +94,6 @@ export function MallLeftNav({
             return {
               ...item,
               route: `/tenant/${tenantSlug}/portfolio`,
-              description: `Portfolio Overview - ${user.companyName}`,
             };
           } else {
             // Single-property: first icon becomes the mall home, use Building2
@@ -145,8 +101,8 @@ export function MallLeftNav({
               ...item,
               icon: Building2,
               labelOverride: user.mallDisplayName,
+              descriptionOverride: user.mallDisplayName,
               route: `/mall/${user.mallId}`,
-              description: user.mallDisplayName,
             };
           }
         }
@@ -208,7 +164,7 @@ export function MallLeftNav({
                   {item.labelOverride ?? t(`mall:navigation.${item.id}.label`)}
                 </div>
                 <div className="text-xs text-gray-300 mt-1 leading-relaxed">
-                  {item.description ?? t(`mall:navigation.${item.id}.description`)}
+                  {item.descriptionOverride ?? t(`mall:navigation.${item.id}.description`)}
                 </div>
               </TooltipContent>
             </Tooltip>
