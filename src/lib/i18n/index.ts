@@ -17,6 +17,7 @@ i18n
       en: { mall: enMall },
       fi: { mall: fiMall },
     },
+    lng: 'en',
     fallbackLng: 'en',
     defaultNS: 'mall',
     ns: ['mall'],

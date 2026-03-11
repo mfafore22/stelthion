@@ -95,7 +95,7 @@ export function ConciergeProvider({
   children,
   tenantId,
   userId,
-  wsUrl = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3001/concierge',
+  wsUrl = process.env.NEXT_PUBLIC_WS_URL,
 }: ConciergeProviderProps) {
   // UI State
   const [state, setState] = useState<ConciergeUIState>({
@@ -108,16 +108,19 @@ export function ConciergeProvider({
     error: null,
   });
 
-  // Preferences (load from localStorage)
-  const [preferences, setPreferences] = useState<ConciergePreferences>(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('concierge_preferences');
-      if (stored) {
-        return { ...DEFAULT_PREFERENCES, ...JSON.parse(stored) };
+  // Preferences — always start from defaults to avoid SSR/client hydration mismatch,
+  // then merge stored values after mount
+  const [preferences, setPreferences] = useState<ConciergePreferences>(DEFAULT_PREFERENCES);
+  useEffect(() => {
+    const stored = localStorage.getItem('concierge_preferences');
+    if (stored) {
+      try {
+        setPreferences((prev) => ({ ...prev, ...JSON.parse(stored) }));
+      } catch {
+        // ignore malformed stored value
       }
     }
-    return DEFAULT_PREFERENCES;
-  });
+  }, []);
 
   // Active conversation data
   const [activeConversation, setActiveConversation] = useState<Conversation | null>(null);
@@ -246,14 +249,14 @@ export function ConciergeProvider({
 
   const createConversation = useCallback(
     (agentRole?: AgentRole, customAgentId?: string) => {
-      const conversationId = `conv-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      const conversationId = `conv-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
 
       const newConversation: Conversation = {
         id: conversationId,
         title: 'New Conversation',
         tenantId,
         userId,
-        agentRole: agentRole || preferences.defaultAgent,
+        agentRole: agentRole ?? (preferences.defaultAgent as AgentRole),
         messages: [],
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -287,7 +290,7 @@ export function ConciergeProvider({
         const suggestion = router.route(content);
 
         setAgentSuggestion(suggestion);
-        createConversation(suggestion.agentRole);
+        createConversation(suggestion.agentRole as AgentRole);
       }
 
       // Add user message to UI immediately
