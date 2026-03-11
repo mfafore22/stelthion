@@ -14,7 +14,8 @@ export const authConfig = {
       const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
       const isOnMall = nextUrl.pathname.startsWith('/mall') || nextUrl.pathname.startsWith('/tenant');
       const isOnLogin = nextUrl.pathname === '/login';
-      if (isOnLogin || isOnMall) {
+      const isApiRoute = nextUrl.pathname.startsWith('/api');
+      if (isOnLogin || isOnMall || isApiRoute) {
         return true; // always accessible
       } else if (isOnDashboard) {
         if (isLoggedIn) return true;

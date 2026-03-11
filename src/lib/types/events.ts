@@ -19,6 +19,7 @@ export interface VenueEvent {
 }
 
 export interface VenueInfo {
+  id: string;
   name: string;
   distanceKm: number;
   walkingMinutes: number;

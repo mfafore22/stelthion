@@ -14,6 +14,7 @@ import type { EventsData, VenueInfo, VenueEvent } from '@/lib/types/events';
 
 const ideaparkVenues: VenueInfo[] = [
   {
+    id: 'nokia-arena',
     name: 'Nokia Arena',
     distanceKm: 22,
     walkingMinutes: 0,
@@ -21,6 +22,7 @@ const ideaparkVenues: VenueInfo[] = [
     imageUrl: 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=800&h=400&fit=crop',
   },
   {
+    id: 'tampere-talo',
     name: 'Tampere-talo',
     distanceKm: 22,
     walkingMinutes: 0,
@@ -28,6 +30,7 @@ const ideaparkVenues: VenueInfo[] = [
     imageUrl: 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=800&h=400&fit=crop',
   },
   {
+    id: 'tampere-messu',
     name: 'Tampereen Messu ja Urheilu',
     distanceKm: 21,
     walkingMinutes: 0,
