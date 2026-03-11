@@ -464,7 +464,7 @@
     "footfallImpact": "Footfall Impact:",
     "forecast": "Forecast",
     "historicalCorrelation": "Historical Weather Correlation",
-    "correlationText": "Analysis shows a strong positive correlation (r=0.68) between comfort index and visitor numbers in autumn. Current conditions are optimal for mall visits.",
+    "correlationText": "Analysis shows a strong positive correlation (r=0.68) between comfort index and visitor numbers in {{season}}. Current conditions are optimal for mall visits.",
     "temp": {
       "cold": "cold",
       "cool": "cool",

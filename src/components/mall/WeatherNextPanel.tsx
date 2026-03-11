@@ -146,7 +146,7 @@ export function WeatherNextPanel({ mallId, expanded = false }: WeatherNextPanelP
       {expanded && (
         <div className="mt-6 space-y-4">
           <h4 className="font-semibold text-bo-neutral-950">{t('weather.historicalCorrelation')}</h4>
-          <div className="text-sm text-bo-neutral-700">{t('weather.correlationText')}</div>
+          <div className="text-sm text-bo-neutral-700">{t('weather.correlationText', { season: t(`weather.season.${season}`) })}</div>
         </div>
       )}
     </Card>

@@ -464,7 +464,7 @@
     "footfallImpact": "Kävijävaikutus:",
     "forecast": "Ennuste",
     "historicalCorrelation": "Historiallinen sääkorrelaatio",
-    "correlationText": "Analyysi osoittaa vahvan positiivisen korrelaation (r=0,68) mukavuusindeksin ja kävijämäärien välillä syysaikaan. Nykyiset olosuhteet ovat optimaaliset kauppakeskuskäynneille.",
+    "correlationText": "Analyysi osoittaa vahvan positiivisen korrelaation (r=0,68) mukavuusindeksin ja kävijämäärien välillä ({{season}}). Nykyiset olosuhteet ovat optimaaliset kauppakeskuskäynneille.",
     "temp": {
       "cold": "kylmä",
       "cool": "viileä",
