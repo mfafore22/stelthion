@@ -1,9 +1,40 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --radius: 0.625rem;
+  --background: #F8F6F3;
+  --foreground: #1A1A1A;
+  --card: rgba(255, 255, 255, 0.75);
+  --card-foreground: #1A1A1A;
+  --popover: rgba(255, 255, 255, 1);
+  --popover-foreground: #1A1A1A;
+  --primary: #6B7B86;
+  --primary-foreground: #FFFFFF;
+  --secondary: #D4D5D6;
+  --secondary-foreground: #2A2A2A;
+  --muted: #F0EFED;
+  --muted-foreground: #5A5A5A;
+  --accent: #4A5A7A;
+  --accent-foreground: #FFFFFF;
+  --destructive: #C85A54;
+  --destructive-foreground: #FFFFFF;
+  --border: rgba(212, 213, 214, 0.4);
+  --input: rgba(212, 213, 214, 0.4);
+  --ring: #8B9BA6;
+  --chart-1: #6B7B86;
+  --chart-2: #5B8571;
+  --chart-3: #B89872;
+  --chart-4: #9C9C9C;
+  --chart-5: #3A4A6A;
+  --sidebar: #F8F6F3;
+  --sidebar-foreground: #1A1A1A;
+  --sidebar-primary: #6B7B86;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F0EFED;
+  --sidebar-accent-foreground: #1A1A1A;
+  --sidebar-border: rgba(212, 213, 214, 0.4);
+  --sidebar-ring: #8B9BA6;
 }
 
 @theme inline {
@@ -11,17 +42,304 @@
   --color-foreground: var(--foreground);
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  /* bo-neutral — warm greys */
+  --color-bo-neutral-50: #F8F6F3;
+  --color-bo-neutral-100: #F0EFED;
+  --color-bo-neutral-200: #E0DDD9;
+  --color-bo-neutral-300: #C4C1BD;
+  --color-bo-neutral-400: #9C9896;
+  --color-bo-neutral-500: #7A7674;
+  --color-bo-neutral-600: #5A5A5A;
+  --color-bo-neutral-700: #3D3B39;
+  --color-bo-neutral-800: #2A2A28;
+  --color-bo-neutral-900: #1E1E1C;
+  --color-bo-neutral-950: #1A1A1A;
+
+  /* bo-primary — steel blue-grey */
+  --color-bo-primary-50: #F0F3F5;
+  --color-bo-primary-100: #E0E8EC;
+  --color-bo-primary-200: #C0CDD5;
+  --color-bo-primary-300: #96AEBB;
+  --color-bo-primary-400: #8B9BA6;
+  --color-bo-primary-500: #6B7B86;
+  --color-bo-primary-600: #5A6A75;
+  --color-bo-primary-700: #4A5A64;
+  --color-bo-primary-800: #3A4A54;
+
+  /* bo-accent — dark slate blue */
+  --color-bo-accent-50: #EEF0F5;
+  --color-bo-accent-100: #D8DCE8;
+  --color-bo-accent-200: #B0BACF;
+  --color-bo-accent-300: #8093B4;
+  --color-bo-accent-600: #4A5A7A;
+  --color-bo-accent-700: #3A4A6A;
+
+  /* bo-info */
+  --color-bo-info-100: #D8DCE8;
+  --color-bo-info-300: #8093B4;
+  --color-bo-info-400: #6B7FA0;
+  --color-bo-info-dark: #4A5A7A;
+  --color-bo-info-light: #EEF0F5;
+
+  /* bo-success */
+  --color-bo-success-dark: #5B8571;
+  --color-bo-success-light: #E8F0ED;
+
+  /* bo-warning */
+  --color-bo-warning-dark: #B89872;
+  --color-bo-warning-light: #F5EDE0;
+
+  /* bo-error */
+  --color-bo-error-dark: #C85A54;
+  --color-bo-error-light: #F9E8E8;
+
+  /* bo-beige */
+  --color-bo-beige-100: #FAF7F2;
+  --color-bo-beige-200: #F2EBE0;
+  --color-bo-beige-300: #E8DCCA;
+  --color-bo-beige-800: #8B7B6A;
+
+  /* mall-neutral — same palette as bo-neutral for map/input components */
+  --color-mall-neutral-50: #F8F6F3;
+  --color-mall-neutral-100: #F0EFED;
+  --color-mall-neutral-200: #E0DDD9;
+  --color-mall-neutral-300: #C4C1BD;
+  --color-mall-neutral-400: #9C9896;
+  --color-mall-neutral-500: #7A7674;
+  --color-mall-neutral-600: #5A5A5A;
+
+  /* Border radius */
+  --radius-mall-lg: 1rem;
+
+  /* Shadows */
+  --shadow-bo-sm: 0 1px 3px rgba(26, 26, 26, 0.08), 0 1px 2px rgba(26, 26, 26, 0.04);
+  --shadow-bo-md: 0 4px 8px rgba(26, 26, 26, 0.10), 0 2px 4px rgba(26, 26, 26, 0.06);
+  --shadow-bo-lg: 0 8px 16px rgba(26, 26, 26, 0.12), 0 4px 8px rgba(26, 26, 26, 0.06);
+  --shadow-bo-xl: 0 20px 40px rgba(26, 26, 26, 0.16), 0 8px 16px rgba(26, 26, 26, 0.08);
+  --shadow-bo-glass: 0 4px 24px rgba(107, 123, 134, 0.12), 0 1px 4px rgba(107, 123, 134, 0.08);
+  --shadow-bo-glass-strong: 0 8px 32px rgba(107, 123, 134, 0.18), 0 2px 8px rgba(107, 123, 134, 0.10);
+  --shadow-bo-aluminum-top: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  --shadow-bo-aluminum-bottom: 0 2px 4px rgba(26, 26, 26, 0.12);
+
+  /* Easing functions */
+  --ease-bo-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bo-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-bo-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    border-color: var(--border);
+    outline-color: var(--ring);
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+@layer utilities {
+  /* Glass morphism */
+  .bg-glass {
+    background: rgba(248, 246, 243, 0.85);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+  }
+  .bg-glass-dark {
+    background: rgba(26, 26, 26, 0.85);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+  }
+  .bg-bo-glass {
+    background: rgba(248, 246, 243, 0.65);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .bg-bo-glass-subtle {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .bg-bo-glass-strong {
+    background: rgba(240, 239, 237, 0.75);
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+  .bg-bo-glass-primary {
+    background: rgba(139, 155, 166, 0.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+  .bg-bo-gradient-muted {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(74, 90, 122, 0.14) 100%);
+  }
+  .bg-bo-corner-glow {
+    position: relative;
+  }
+  .bg-bo-corner-glow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle at top right, rgba(139, 155, 166, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .bg-aluminum-surface {
+    background: linear-gradient(135deg, #D4D5D6 0%, #C8C9CA 100%);
+  }
+  .bg-beige-gradient {
+    background: linear-gradient(180deg, #FAF7F2 0%, #F2EBE0 100%);
+  }
+  .text-shadow-soft {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Page themes */
+  .bo-theme-page {
+    background: #F8F6F3;
+    color: #1A1A1A;
+  }
+  .mall-theme-page {
+    background: #f8f9fa;
+    color: #1e293b;
+  }
+
+  /* Interactions */
+  .hover-lift {
+    transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .hover-lift:hover {
+    transform: translateY(-2px);
+  }
+  .active-press:active {
+    transform: translateY(0);
+    transition-duration: 100ms;
+  }
+
+  /* Nav tooltip */
+  .nav-tooltip {
+    background: rgba(26, 26, 26, 0.85) !important;
+    color: #FFFFFF !important;
+    border-color: rgba(60, 60, 60, 0.7) !important;
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+  .nav-tooltip::before {
+    background: rgba(26, 26, 26, 0.85);
+  }
+
+  /* Tab triggers */
+  .bo-tab-trigger {
+    background: rgba(255, 255, 255, 0.45) !important;
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    border: 1px solid rgba(107, 123, 134, 0.15) !important;
+    transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+    position: relative;
+    color: #1A1A1A !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    box-shadow: none !important;
+  }
+  .bo-tab-trigger:hover {
+    background: rgba(255, 255, 255, 0.60) !important;
+    border-color: rgba(107, 123, 134, 0.25) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(107, 123, 134, 0.1) !important;
+  }
+  .bo-tab-trigger[data-state="active"] {
+    background: rgba(107, 123, 134, 0.15) !important;
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border-color: rgba(107, 123, 134, 0.4) !important;
+    box-shadow: 0 3px 6px rgba(107, 123, 134, 0.15), inset 0 1px 2px rgba(107, 123, 134, 0.1) !important;
+    color: #1A1A1A !important;
+    font-weight: 600;
+  }
+  .bo-tab-trigger[data-state="active"]::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #6B7B86 0%, #8B9BA6 100%);
+    border-radius: 0 0 0.5rem 0.5rem;
+  }
+
+  /* Interactive box */
+  .bo-interactive-box {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    border: 1px solid rgba(107, 123, 134, 0.15);
+    transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .bo-interactive-box:hover {
+    background: rgba(255, 255, 255, 0.65);
+    border-color: rgba(107, 123, 134, 0.25);
+    box-shadow: 0 4px 8px rgba(107, 123, 134, 0.12);
+    transform: translateY(-1px);
+  }
+  .bo-interactive-box:active {
+    transform: translateY(0);
+    transition-duration: 100ms;
+  }
+
+  /* Transport badges */
+  .bo-transport-code {
+    background: rgba(107, 123, 134, 0.85);
+    color: #FFFFFF;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(107, 123, 134, 0.3);
+    font-weight: 600;
+    transition: all 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .bo-transport-code:hover {
+    background: rgba(107, 123, 134, 0.95);
+    border-color: rgba(107, 123, 134, 0.5);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  }
+  .bo-transport-info {
+    background: rgba(240, 239, 237, 0.75);
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    border: 1px solid rgba(107, 123, 134, 0.12);
+  }
+
+  /* Mall map marker */
+  .mall-map-marker {
+    width: 12px;
+    height: 12px;
+    background: #6B7B86;
+    border: 2px solid #FFFFFF;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+  }
+
+  /* Leaflet popup overrides */
+  .leaflet-popup-content-wrapper {
+    background: rgba(6, 16, 36, 0.85);
+    color: #e5e7eb;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(100, 116, 139, 0.55);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
+  }
+  .leaflet-popup-tip {
+    background: rgba(6, 16, 36, 0.85);
+    border: 1px solid rgba(100, 116, 139, 0.55);
+  }
 }
