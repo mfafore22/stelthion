@@ -1,123 +1,172 @@
-# Stelthion Dashboard
+# Stelthion Mall Intelligence Platform
 
-A Next.js dashboard application with role-based access control, multi-language support, and customer separation.
+A Next.js mall operator dashboard delivering real-time KPIs, footfall analytics, event impact modelling, and an AI Concierge — initially deployed for Ideapark Lempäälä.
 
 ## Tech Stack
 
-- Next.js 14 (App Router)
-- TypeScript
-- Tailwind CSS
-- Prisma (ORM)
-- PostgreSQL (Database)
+- **Next.js 15** (App Router, standalone output)
+- **TypeScript**
+- **Tailwind CSS** with custom `bo-*` design tokens
+- **Prisma** + **PostgreSQL** (main SaaS dashboard)
+- **SWR** (data fetching with caching)
+- **react-i18next** (EN/FI, localStorage-persisted)
+- **Recharts** (KPI charts)
+- **Mapbox GL** (catchment & postal code maps)
+- **Framer Motion** (panel animations)
+- **Three.js** (3D mall model viewer)
 
 ## Project Structure
+
 ```
 src/
   app/
-    (auth)/                 # Auth pages (login, register, etc.)
-    api/                    # API routes
-    dashboard/              # Protected dashboard pages
+    mall/[mallId]/          # Mall operator dashboard (7-tab PropertyDetail)
+    mall/login/             # Mall auth (userId + OTP 2FA)
+    mall/portfolio/         # Multi-property KPI overview
+    tenant/[tenantId]/      # Multi-property tenant routing
+    dashboard/              # Main SaaS admin dashboard (NextAuth)
+    api/                    # API routes (mall data, auth, weather, events)
   components/
-    dashboard/              # Dashboard-specific components
-    ui/                     # Reusable UI components
-  context/                  # React context providers
-  lib/                      # Utility functions
-  types/                    # TypeScript types
+    mall/                   # Mall UI — KPI cards, charts, maps, panels
+    mall/shell/             # MallTopBar, MallLeftNav, MallConciergeWrapper
+    mall/ui/                # MallKPICard, MallBadge, MallButton, etc.
+    mall/scenarios/         # Scenario planner and results modal
+    concierge/              # Stelthion Concierge panel + conversation UI
+    ui/                     # Shared UI primitives (Radix-based)
+  contexts/
+    SessionContext.tsx      # Mall operator session (cookie-based)
+  hooks/mall/               # useEvents, useMallData, useWeather
+  lib/
+    auth/                   # OTP store, rate limiter, session
+    data/                   # Ideapark footfall, events, transport, zones
+    events/                 # Gravity-based footfall impact model
+    i18n/                   # i18next config, hooks, formatters
+    mall/                   # Mall identity, database helpers, logos
+    weather/                # Weather utils and footfall correlation
+  services/concierge/       # WebSocket client, agent router, types
+  locales/
+    en/mall.json            # English translations
+    fi/mall.json            # Finnish translations
+  config/
+    mall-auth.ts            # Mall credential config
+    tenant-registry.ts      # Tenant-to-mall routing registry
 ```
 
 ## Features
 
-### Completed
+### Mall Operator Dashboard (`/mall/[mallId]`)
+- **Overview** — live KPIs: visitors, revenue, occupancy, weather
+- **Performance** — footfall charts, floor heatmap, zone analytics
+- **Location** — catchment map, postal code demographics, household data, transport accessibility
+- **Tenants** — tenant mix chart, performance table, vacancy bar
+- **Events** — upcoming events with venue distances, banner images, gravity-based footfall impact model
+- **Weather** — current conditions, 5-day forecast, seasonal footfall correlation
+- **Campaigns** — active campaign cards with ROI tracking
 
-- Dashboard layout with sidebar and header
-- Icon-based navigation
-- Real-time date and time display
-- Multi-language support (ENG, FIN)
-- Role-based sidebar filtering
-- Responsive design
+### Authentication
+- Mall login: `userId` + bcrypt password + OTP 2FA (email)
+- Cookie-based session with rate limiting and audit logging
+- Main SaaS dashboard: email/password via NextAuth + PostgreSQL
 
-### In Progress
+### Stelthion Concierge
+- Slide-in AI panel with 6 specialised agents (Sales, Footfall, Events, Parking, Trends, General)
+- WebSocket streaming when `NEXT_PUBLIC_CONCIERGE_WS_URL` is set
+- Full EN/FI i18n, bo-neutral UI theme
 
-- Database setup (Prisma)
-- User authentication
-- Role-based access control (ADMIN, MANAGER, USER)
-- Customer separation by customer ID
-- Two-factor authentication
-- User management (CRUD)
+### Internationalisation
+- English (default) and Finnish
+- Language preference persisted to `localStorage` (`stelthion-language`)
+- Locale-aware date/time/number formatting throughout
 
 ## Getting Started
 
 ### Prerequisites
 
 - Node.js 18+
-- PostgreSQL (or MySQL/SQLite)
+- PostgreSQL (for main dashboard)
 
 ### Installation
 
-1. Clone the repository
 ```bash
-git clone https://github.com/YOUR_USERNAME/stelthion.git
+git clone https://github.com/mfafore22/stelthion.git
 cd stelthion
-```
-
-2. Install dependencies
-```bash
 npm install
 ```
 
-3. Set up environment variables
+### Environment Variables
+
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` with your database URL:
-```
-DATABASE_URL="postgresql://user:password@localhost:5432/stelthion"
-```
+| Variable | Description |
+|----------|-------------|
+| `DATABASE_URL` | PostgreSQL connection string |
+| `NEXTAUTH_SECRET` | Secret for NextAuth session encryption |
+| `NEXTAUTH_URL` | Application URL (e.g. `http://localhost:3000`) |
+| `IDEAPARK_PASSWORD_HASH` | bcrypt hash for mall operator password (use `\$` to escape `$`) |
+| `OTP_SECRET` | Secret key for OTP generation |
+| `EMAIL_FROM` | Sender address for OTP emails |
+| `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` | SMTP config for OTP delivery |
+| `NEXT_PUBLIC_MAPBOX_TOKEN` | Mapbox GL public token for catchment maps |
+| `NEXT_PUBLIC_CONCIERGE_WS_URL` | WebSocket URL for AI Concierge (optional) |
 
-4. Set up database
+### Database Setup (main dashboard only)
+
 ```bash
 npx prisma db push
 npx prisma generate
-```
-
-5. Run development server
-```bash
 npm run dev
 ```
 
-Open http://localhost:3000
+### Development
 
-## User Roles
+```bash
+npm run dev        # Start dev server on http://localhost:3000
+npm run build      # Production build
+npm run start      # Start production server
+npm test           # Run Jest test suite
+```
 
-| Role | Permissions |
-|------|-------------|
-| ADMIN | Full access, manage users |
-| MANAGER | View all data, limited management |
-| USER | Basic access |
+### Mall Operator Login (local demo)
+
+```
+URL:      http://localhost:3000/mall/login
+userId:   KoyIdeaparkOy
+password: ideapark2024
+mallId:   ideapark
+```
 
 ## API Routes
 
+### Mall Data
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | /api/auth/login | User login |
-| POST | /api/auth/register | User registration |
-| POST | /api/auth/logout | User logout |
-| GET | /api/auth/me | Get current user |
-| GET | /api/users | List users (admin only) |
-| POST | /api/users | Create user (admin only) |
-| GET | /api/users/[id] | Get user by ID |
-| PUT | /api/users/[id] | Update user |
-| DELETE | /api/users/[id] | Delete user |
+| GET | `/api/mall/[mallId]` | Mall KPIs and metadata |
+| GET | `/api/events/[mallId]` | Upcoming events with venue data |
+| GET | `/api/weather/current` | Current weather conditions |
+| GET | `/api/weather/forecast` | 5-day forecast |
+| GET | `/api/parking/[mallId]` | Parking occupancy |
+| GET | `/api/transport/[mallId]` | Transport accessibility data |
+| GET | `/api/demographics/[mallId]` | Postal code demographics |
 
-## Environment Variables
+### Mall Auth
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/mall/auth/login` | userId + password → OTP sent |
+| POST | `/api/mall/auth/verify-otp` | OTP → session cookie |
+| GET | `/api/mall/auth/session` | Current session info |
 
-| Variable | Description |
-|----------|-------------|
-| DATABASE_URL | Database connection string |
-| NEXTAUTH_SECRET | Secret for session encryption |
-| NEXTAUTH_URL | Application URL |
+## Deployment
+
+The app is configured for standalone Next.js output (`output: 'standalone'` in `next.config.ts`), suitable for Docker or any Node.js host.
+
+```dockerfile
+# See dockerfile in repo root
+docker build -t stelthion .
+docker run -p 3000:3000 --env-file .env stelthion
+```
 
 ## License
 
-Private - All rights reserved
+Private — All rights reserved
