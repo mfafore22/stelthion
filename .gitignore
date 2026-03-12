@@ -4,3 +4,6 @@ out
 .env
 .vercel
 .env.local
+# OS & build artefacts
+.DS_Store
+tsconfig.tsbuildinfo
