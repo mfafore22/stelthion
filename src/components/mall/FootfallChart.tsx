@@ -68,17 +68,17 @@ export function FootfallChart({ mallId, showPredicted = false }: FootfallChartPr
             }}
           />
           <Legend wrapperStyle={{ fontSize: '13px' }} />
-          <Line type="monotone" dataKey="actual" stroke="#8B9BA6" strokeWidth={2} name={t('footfall.actual')} />
+          <Line type="monotone" dataKey="actual" stroke="#328d2e" strokeWidth={2} name={t('footfall.actual')} />
           {/* Always show Predicted line since chart title says "Actual vs Predicted" */}
           <Line
             type="monotone"
             dataKey="predicted"
-            stroke="#BCBCBC"
+            stroke="#7cb928"
             strokeWidth={2}
             strokeDasharray="5 5"
             name={t('footfall.predicted')}
           />
-          <Line type="monotone" dataKey="weatherBoost" stroke="#7BA591" strokeWidth={1} name={t('footfall.weatherImpact')} />
+          <Line type="monotone" dataKey="weatherBoost" stroke="#214990" strokeWidth={1} name={t('footfall.weatherImpact')} />
         </LineChart>
       </ResponsiveContainer>
     </Card>

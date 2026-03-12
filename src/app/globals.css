@@ -9,32 +9,32 @@
   --card-foreground: #1A1A1A;
   --popover: rgba(255, 255, 255, 1);
   --popover-foreground: #1A1A1A;
-  --primary: #6B7B86;
+  --primary: #328d2e;
   --primary-foreground: #FFFFFF;
   --secondary: #D4D5D6;
   --secondary-foreground: #2A2A2A;
   --muted: #F0EFED;
   --muted-foreground: #5A5A5A;
-  --accent: #4A5A7A;
+  --accent: #214990;
   --accent-foreground: #FFFFFF;
-  --destructive: #C85A54;
+  --destructive: #f04e54;
   --destructive-foreground: #FFFFFF;
   --border: rgba(212, 213, 214, 0.4);
   --input: rgba(212, 213, 214, 0.4);
-  --ring: #8B9BA6;
-  --chart-1: #6B7B86;
-  --chart-2: #5B8571;
-  --chart-3: #B89872;
+  --ring: #4AA844;
+  --chart-1: #328d2e;
+  --chart-2: #7cb928;
+  --chart-3: #f7966b;
   --chart-4: #9C9C9C;
-  --chart-5: #3A4A6A;
+  --chart-5: #214990;
   --sidebar: #F8F6F3;
   --sidebar-foreground: #1A1A1A;
-  --sidebar-primary: #6B7B86;
+  --sidebar-primary: #328d2e;
   --sidebar-primary-foreground: #FFFFFF;
   --sidebar-accent: #F0EFED;
   --sidebar-accent-foreground: #1A1A1A;
   --sidebar-border: rgba(212, 213, 214, 0.4);
-  --sidebar-ring: #8B9BA6;
+  --sidebar-ring: #4AA844;
 }
 
 @theme inline {
@@ -56,43 +56,43 @@
   --color-bo-neutral-900: #1E1E1C;
   --color-bo-neutral-950: #1A1A1A;
 
-  /* bo-primary — steel blue-grey */
-  --color-bo-primary-50: #F0F3F5;
-  --color-bo-primary-100: #E0E8EC;
-  --color-bo-primary-200: #C0CDD5;
-  --color-bo-primary-300: #96AEBB;
-  --color-bo-primary-400: #8B9BA6;
-  --color-bo-primary-500: #6B7B86;
-  --color-bo-primary-600: #5A6A75;
-  --color-bo-primary-700: #4A5A64;
-  --color-bo-primary-800: #3A4A54;
+  /* bo-primary — Ideapark forest green */
+  --color-bo-primary-50: #EEF7ED;
+  --color-bo-primary-100: #D4EDD2;
+  --color-bo-primary-200: #A8D9A4;
+  --color-bo-primary-300: #6DC36A;
+  --color-bo-primary-400: #4AA844;
+  --color-bo-primary-500: #328d2e;
+  --color-bo-primary-600: #277324;
+  --color-bo-primary-700: #1d591b;
+  --color-bo-primary-800: #143f13;
 
-  /* bo-accent — dark slate blue */
-  --color-bo-accent-50: #EEF0F5;
-  --color-bo-accent-100: #D8DCE8;
-  --color-bo-accent-200: #B0BACF;
-  --color-bo-accent-300: #8093B4;
-  --color-bo-accent-600: #4A5A7A;
-  --color-bo-accent-700: #3A4A6A;
+  /* bo-accent — Ideapark navy blue */
+  --color-bo-accent-50: #EEF2F9;
+  --color-bo-accent-100: #D4DDEF;
+  --color-bo-accent-200: #A3B8DD;
+  --color-bo-accent-300: #6b8fd4;
+  --color-bo-accent-600: #214990;
+  --color-bo-accent-700: #183570;
 
-  /* bo-info */
-  --color-bo-info-100: #D8DCE8;
-  --color-bo-info-300: #8093B4;
-  --color-bo-info-400: #6B7FA0;
-  --color-bo-info-dark: #4A5A7A;
-  --color-bo-info-light: #EEF0F5;
+  /* bo-info — navy tints (aligned with accent) */
+  --color-bo-info-100: #D4DDEF;
+  --color-bo-info-300: #6b8fd4;
+  --color-bo-info-400: #2d5cb8;
+  --color-bo-info-dark: #214990;
+  --color-bo-info-light: #EEF2F9;
 
-  /* bo-success */
-  --color-bo-success-dark: #5B8571;
-  --color-bo-success-light: #E8F0ED;
+  /* bo-success — lime green (Ideapark secondary) */
+  --color-bo-success-dark: #5a8a1e;
+  --color-bo-success-light: #eef6d6;
 
-  /* bo-warning */
-  --color-bo-warning-dark: #B89872;
-  --color-bo-warning-light: #F5EDE0;
+  /* bo-warning — Ideapark warm orange */
+  --color-bo-warning-dark: #d4633a;
+  --color-bo-warning-light: #fdeee6;
 
-  /* bo-error */
-  --color-bo-error-dark: #C85A54;
-  --color-bo-error-light: #F9E8E8;
+  /* bo-error — Ideapark coral red */
+  --color-bo-error-dark: #f04e54;
+  --color-bo-error-light: #fee2e3;
 
   /* bo-beige */
   --color-bo-beige-100: #FAF7F2;
@@ -117,8 +117,8 @@
   --shadow-bo-md: 0 4px 8px rgba(26, 26, 26, 0.10), 0 2px 4px rgba(26, 26, 26, 0.06);
   --shadow-bo-lg: 0 8px 16px rgba(26, 26, 26, 0.12), 0 4px 8px rgba(26, 26, 26, 0.06);
   --shadow-bo-xl: 0 20px 40px rgba(26, 26, 26, 0.16), 0 8px 16px rgba(26, 26, 26, 0.08);
-  --shadow-bo-glass: 0 4px 24px rgba(107, 123, 134, 0.12), 0 1px 4px rgba(107, 123, 134, 0.08);
-  --shadow-bo-glass-strong: 0 8px 32px rgba(107, 123, 134, 0.18), 0 2px 8px rgba(107, 123, 134, 0.10);
+  --shadow-bo-glass: 0 4px 24px rgba(50, 141, 46, 0.10), 0 1px 4px rgba(50, 141, 46, 0.06);
+  --shadow-bo-glass-strong: 0 8px 32px rgba(50, 141, 46, 0.14), 0 2px 8px rgba(50, 141, 46, 0.08);
   --shadow-bo-aluminum-top: inset 0 1px 0 rgba(255, 255, 255, 0.6);
   --shadow-bo-aluminum-bottom: 0 2px 4px rgba(26, 26, 26, 0.12);
 
@@ -171,12 +171,12 @@
     border: 1px solid rgba(255, 255, 255, 0.15);
   }
   .bg-bo-glass-primary {
-    background: rgba(139, 155, 166, 0.08);
+    background: rgba(50, 141, 46, 0.07);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
   }
   .bg-bo-gradient-muted {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(74, 90, 122, 0.14) 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(33, 73, 144, 0.12) 100%);
   }
   .bg-bo-corner-glow {
     position: relative;
@@ -188,7 +188,7 @@
     right: 0;
     width: 200px;
     height: 200px;
-    background: radial-gradient(circle at top right, rgba(139, 155, 166, 0.08) 0%, transparent 70%);
+    background: radial-gradient(circle at top right, rgba(50, 141, 46, 0.07) 0%, transparent 70%);
     pointer-events: none;
   }
   .bg-aluminum-surface {
@@ -243,7 +243,7 @@
     background: rgba(255, 255, 255, 0.45) !important;
     backdrop-filter: blur(12px) saturate(120%);
     -webkit-backdrop-filter: blur(12px) saturate(120%);
-    border: 1px solid rgba(107, 123, 134, 0.15) !important;
+    border: 1px solid rgba(50, 141, 46, 0.15) !important;
     transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1) !important;
     position: relative;
     color: #1A1A1A !important;
@@ -254,16 +254,16 @@
   }
   .bo-tab-trigger:hover {
     background: rgba(255, 255, 255, 0.60) !important;
-    border-color: rgba(107, 123, 134, 0.25) !important;
+    border-color: rgba(50, 141, 46, 0.25) !important;
     transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(107, 123, 134, 0.1) !important;
+    box-shadow: 0 2px 4px rgba(50, 141, 46, 0.1) !important;
   }
   .bo-tab-trigger[data-state="active"] {
-    background: rgba(107, 123, 134, 0.15) !important;
+    background: rgba(50, 141, 46, 0.10) !important;
     backdrop-filter: blur(16px) saturate(140%);
     -webkit-backdrop-filter: blur(16px) saturate(140%);
-    border-color: rgba(107, 123, 134, 0.4) !important;
-    box-shadow: 0 3px 6px rgba(107, 123, 134, 0.15), inset 0 1px 2px rgba(107, 123, 134, 0.1) !important;
+    border-color: rgba(50, 141, 46, 0.35) !important;
+    box-shadow: 0 3px 6px rgba(50, 141, 46, 0.12), inset 0 1px 2px rgba(50, 141, 46, 0.08) !important;
     color: #1A1A1A !important;
     font-weight: 600;
   }
@@ -274,7 +274,7 @@
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, #6B7B86 0%, #8B9BA6 100%);
+    background: linear-gradient(90deg, #328d2e 0%, #7cb928 100%);
     border-radius: 0 0 0.5rem 0.5rem;
   }
 
@@ -283,13 +283,13 @@
     background: rgba(255, 255, 255, 0.55);
     backdrop-filter: blur(12px) saturate(120%);
     -webkit-backdrop-filter: blur(12px) saturate(120%);
-    border: 1px solid rgba(107, 123, 134, 0.15);
+    border: 1px solid rgba(50, 141, 46, 0.15);
     transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   .bo-interactive-box:hover {
     background: rgba(255, 255, 255, 0.65);
-    border-color: rgba(107, 123, 134, 0.25);
-    box-shadow: 0 4px 8px rgba(107, 123, 134, 0.12);
+    border-color: rgba(50, 141, 46, 0.25);
+    box-shadow: 0 4px 8px rgba(50, 141, 46, 0.10);
     transform: translateY(-1px);
   }
   .bo-interactive-box:active {
@@ -299,17 +299,17 @@
 
   /* Transport badges */
   .bo-transport-code {
-    background: rgba(107, 123, 134, 0.85);
+    background: rgba(33, 73, 144, 0.85);
     color: #FFFFFF;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(107, 123, 134, 0.3);
+    border: 1px solid rgba(33, 73, 144, 0.3);
     font-weight: 600;
     transition: all 150ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   .bo-transport-code:hover {
-    background: rgba(107, 123, 134, 0.95);
-    border-color: rgba(107, 123, 134, 0.5);
+    background: rgba(33, 73, 144, 0.95);
+    border-color: rgba(33, 73, 144, 0.5);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
   }
   .bo-transport-info {
@@ -323,7 +323,7 @@
   .mall-map-marker {
     width: 12px;
     height: 12px;
-    background: #6B7B86;
+    background: #328d2e;
     border: 2px solid #FFFFFF;
     border-radius: 50%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);

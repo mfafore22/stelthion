@@ -84,8 +84,8 @@ export function MallTopBar({
         <Image
           src="/stelthion-brandmark.png"
           alt="Stelthion"
-          width={44}
-          height={44}
+          width={88}
+          height={88}
           className="object-contain"
           priority
         />
@@ -128,15 +128,15 @@ export function MallTopBar({
             className={cn(
               'flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all duration-200',
               concierge.state?.panelOpen
-                ? 'bg-blue-600 text-white border-blue-700 shadow-lg shadow-blue-600/30'
-                : 'bg-bo-neutral-100 text-bo-neutral-900 border-bo-neutral-200 hover:bg-bo-neutral-200 hover:border-bo-neutral-300'
+                ? 'bg-bo-primary-500 text-white border-bo-primary-600 shadow-lg shadow-bo-primary-500/30'
+                : 'bg-bo-neutral-100 text-bo-neutral-900 border-bo-neutral-200 hover:bg-bo-primary-50 hover:border-bo-primary-300 hover:text-bo-primary-700'
             )}
             aria-label={t('topbar.concierge')}
           >
             <Sparkles className="h-4 w-4" />
             <span className="text-sm font-medium">{t('topbar.concierge')}</span>
             {concierge.state?.conversations?.length > 0 && !concierge.state?.panelOpen && (
-              <span className="ml-1 bg-blue-600 text-white text-xs rounded-full px-2 py-0.5">
+              <span className="ml-1 bg-bo-primary-500 text-white text-xs rounded-full px-2 py-0.5">
                 {concierge.state.conversations.length}
               </span>
             )}
