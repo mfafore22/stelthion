@@ -121,7 +121,7 @@ function ToolExecutionItem({ execution, index }: { execution: ToolExecution; ind
           )}
 
           {/* Result summary */}
-          {execution.status === 'complete' && execution.result && (
+          {execution.status === 'complete' && execution.result != null && (
             <div className="mt-1 text-xs text-green-400">
               └─ {getResultSummary(execution.result)}
             </div>
@@ -140,7 +140,7 @@ function ToolExecutionItem({ execution, index }: { execution: ToolExecution; ind
           )}
 
           {/* Details toggle */}
-          {(execution.params || execution.result) && (
+          {(!!execution.params || execution.result != null) && (
             <button
               onClick={() => setShowDetails(!showDetails)}
               className="mt-2 text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1"
@@ -171,7 +171,7 @@ function ToolExecutionItem({ execution, index }: { execution: ToolExecution; ind
                 </div>
               )}
 
-              {execution.result && (
+              {execution.result != null && (
                 <div className="bg-gray-950/50 rounded p-2">
                   <div className="text-xs text-gray-400 mb-1">Result:</div>
                   <pre className="text-xs text-gray-300 overflow-x-auto max-h-40">

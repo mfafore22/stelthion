@@ -48,10 +48,12 @@ export function MessageInput({
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
 
-    // Auto-resize textarea
+    // Auto-resize textarea; show scrollbar only when capped at max height
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 200)}px`;
+      const newHeight = Math.min(textareaRef.current.scrollHeight, 200);
+      textareaRef.current.style.height = `${newHeight}px`;
+      textareaRef.current.style.overflowY = newHeight >= 200 ? 'auto' : 'hidden';
     }
   };
 
@@ -77,7 +79,7 @@ export function MessageInput({
           disabled={disabled}
           rows={1}
           className="w-full px-4 py-3 bg-bo-neutral-50 border border-bo-neutral-300 rounded-lg text-bo-neutral-950 placeholder-bo-neutral-400 resize-none focus:outline-none focus:ring-2 focus:ring-bo-primary-600 focus:ring-opacity-20 focus:border-bo-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{ minHeight: '48px', maxHeight: '200px' }}
+          style={{ minHeight: '48px', maxHeight: '200px', overflowY: 'hidden' }}
         />
       </div>
 

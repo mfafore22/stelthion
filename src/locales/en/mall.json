@@ -567,6 +567,7 @@
     "askAnything": "Ask me anything...",
     "typeMessage": "Type your message...",
     "agentLabel": "Agent",
+    "noBackendStub": "This is a UI preview — the AI backend is not yet connected. Once the Concierge service is configured, I will respond in real time.",
     "select": "Select",
     "bestFor": "Best for:",
     "agents": {

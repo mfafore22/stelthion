@@ -23,6 +23,7 @@ import {
   createWebSocketClient,
 } from '@/services/concierge/websocket-client';
 import { getAgentRouter } from '@/services/concierge/agent-router';
+import i18n from '@/lib/i18n';
 
 /**
  * Context value type
@@ -134,6 +135,8 @@ export function ConciergeProvider({
 
   // Initialize WebSocket client
   useEffect(() => {
+    if (!wsUrl) return;
+
     const client = createWebSocketClient(wsUrl, {
       onConnectionChange: (state) => {
         setConnectionState(state);
@@ -253,7 +256,7 @@ export function ConciergeProvider({
 
       const newConversation: Conversation = {
         id: conversationId,
-        title: 'New Conversation',
+        title: i18n.t('concierge.newConversation'),
         tenantId,
         userId,
         agentRole: agentRole ?? (preferences.defaultAgent as AgentRole),
@@ -312,10 +315,28 @@ export function ConciergeProvider({
         };
       });
 
-      // Send via WebSocket
-      wsClient?.sendMessage(activeConversation!.id, content);
+      // Send via WebSocket if connected; otherwise show a stub reply
+      if (connectionState === WSConnectionState.CONNECTED) {
+        wsClient?.sendMessage(activeConversation!.id, content);
+      } else {
+        const convId = activeConversation?.id ?? 'conv-stub';
+        setTimeout(() => {
+          const stubMessage: ConversationMessage = {
+            id: `msg-stub-${Date.now()}`,
+            conversationId: convId,
+            sender: 'agent',
+            content: i18n.t('concierge.noBackendStub'),
+            timestamp: new Date(),
+            status: 'sent',
+          };
+          setActiveConversation((prev) => {
+            if (!prev) return prev;
+            return { ...prev, messages: [...prev.messages, stubMessage] };
+          });
+        }, 800);
+      }
     },
-    [activeConversation, wsClient, createConversation]
+    [activeConversation, wsClient, connectionState, createConversation]
   );
 
   const stopStreaming = useCallback(() => {
