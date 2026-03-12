@@ -18,10 +18,10 @@ export default function Home() {
       {/* Logo centered */}
       <div className="flex-1 flex items-center justify-center">
         <Image
-          src="/logo.png"
+          src="/stelthion-brandmark.png"
           alt="Stelthion"
-          width={200}
-          height={200}
+          width={160}
+          height={160}
           priority
         />
       </div>
