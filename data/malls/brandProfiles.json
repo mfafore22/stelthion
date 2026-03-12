@@ -2,7 +2,7 @@
   "profiles": {
     "ideapark": {
       "name": "Ideapark Lempäälä",
-      "logo": "/logo.png",
+      "logo": "/ideapark-logo.png",
       "colors": {
         "primary": "#328d2e",
         "secondary": "#7cb928",
@@ -23,7 +23,7 @@
   },
   "fallback": {
     "name": "Ideapark Lempäälä",
-    "logo": "/logo.png",
+    "logo": "/ideapark-logo.png",
     "colors": {
       "primary": "#328d2e",
       "secondary": "#7cb928",

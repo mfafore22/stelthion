@@ -84,8 +84,8 @@ export function MallTopBar({
         <Image
           src="/stelthion-brandmark.png"
           alt="Stelthion"
-          width={88}
-          height={88}
+          width={176}
+          height={176}
           className="object-contain"
           priority
         />

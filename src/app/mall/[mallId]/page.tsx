@@ -9,7 +9,6 @@ import { PropertyDetail } from '@/components/mall/PropertyDetail';
 export default function MallDetailPage() {
   const { mallId } = useParams<{ mallId: string }>();
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
-  const [dataView, setDataView] = useState<'actual' | 'predicted'>('actual');
 
   return (
     <>
@@ -18,8 +17,6 @@ export default function MallDetailPage() {
       <MallTopBar
         selectedDate={selectedDate}
         onDateChange={setSelectedDate}
-        dataView={dataView}
-        onDataViewChange={setDataView}
       />
 
       {/* Main content — offset by fixed shell dimensions (nav: 80px left, topbar: 80px top) */}

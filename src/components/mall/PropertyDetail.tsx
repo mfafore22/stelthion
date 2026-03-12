@@ -259,36 +259,47 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
           background: `linear-gradient(135deg, ${identity.gradient.from} 0%, ${identity.gradient.to} 100%)`,
         }}
       >
-        <div className="relative z-10 flex items-center gap-5">
-          <div className="flex gap-2.5">
-            <div
-              className="w-3 h-3 rounded-full shadow-bo-sm"
-              style={{ backgroundColor: identity.colors.accent }}
-            />
-            <div
-              className="w-3 h-3 rounded-full shadow-bo-sm"
-              style={{ backgroundColor: 'rgba(255,255,255,0.6)' }}
-            />
-            <div
-              className="w-3 h-3 rounded-full shadow-bo-sm"
-              style={{ backgroundColor: 'rgba(255,255,255,0.4)' }}
-            />
+        <div className="relative z-10 flex items-center justify-between w-full">
+          <div className="flex items-center gap-5">
+            <div className="flex gap-2.5">
+              <div
+                className="w-3 h-3 rounded-full shadow-bo-sm"
+                style={{ backgroundColor: identity.colors.accent }}
+              />
+              <div
+                className="w-3 h-3 rounded-full shadow-bo-sm"
+                style={{ backgroundColor: 'rgba(255,255,255,0.6)' }}
+              />
+              <div
+                className="w-3 h-3 rounded-full shadow-bo-sm"
+                style={{ backgroundColor: 'rgba(255,255,255,0.4)' }}
+              />
+            </div>
+            <h2
+              className="text-2xl font-bold tracking-tight"
+              style={{ color: identity.primaryTextColor }}
+            >
+              {summary.mall_name}
+            </h2>
+            <span
+              className="text-sm px-4 py-1.5 rounded-md font-medium tracking-wide"
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.2)',
+                color: identity.primaryTextColor,
+              }}
+            >
+              {summary.city}
+            </span>
           </div>
-          <h2
-            className="text-2xl font-bold tracking-tight"
-            style={{ color: identity.primaryTextColor }}
-          >
-            {summary.mall_name}
-          </h2>
-          <span
-            className="text-sm px-4 py-1.5 rounded-md font-medium tracking-wide"
-            style={{
-              backgroundColor: 'rgba(255,255,255,0.2)',
-              color: identity.primaryTextColor,
-            }}
-          >
-            {summary.city}
-          </span>
+          {/* Customer logo — right end of the identity banner */}
+          {identity.logo && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={identity.logo}
+              alt={identity.name}
+              style={{ height: '52px', width: 'auto', filter: 'brightness(0) invert(1)', opacity: 0.92 }}
+            />
+          )}
         </div>
       </div>
 
