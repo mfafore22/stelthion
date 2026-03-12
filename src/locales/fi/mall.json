@@ -567,6 +567,7 @@
     "askAnything": "Kysy mitä tahansa...",
     "typeMessage": "Kirjoita viestisi...",
     "agentLabel": "Agentti",
+    "noBackendStub": "Tämä on käyttöliittymäesikatselu — AI-taustapalvelu ei ole vielä yhteydessä. Kun Concierge-palvelu on konfiguroitu, vastaan reaaliajassa.",
     "select": "Valitse",
     "bestFor": "Parhaiten soveltuu:",
     "agents": {
