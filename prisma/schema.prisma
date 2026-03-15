@@ -12,6 +12,7 @@ model Customer {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   users     User[]
+  stats     Stats?
 }
 
 model User {
@@ -27,6 +28,22 @@ model User {
   updatedAt        DateTime @updatedAt
   customer         Customer @relation(fields: [customerId], references: [id])
 }
+
+model Stats {
+  id              String   @id @default(cuid())
+  customerId      String   @unique
+  totalUnits      Int      @default(0)
+  topCategory     String   @default("N/A")
+  foodBeverage    Float    @default(0)
+  fashionRetail   Float    @default(0)
+  currentVisitors Int      @default(0)
+  dwellTime       Int      @default(0)
+  conversionRate  Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  customer        Customer @relation(fields: [customerId], references: [id])
+}
+
 
 enum Role {
   ADMIN
