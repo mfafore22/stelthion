@@ -4,9 +4,7 @@ import { PrismaPg } from '@prisma/adapter-pg'
 import { Pool } from 'pg'
 import bcrypt from 'bcrypt'
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL })
-const adapter = new PrismaPg(pool)
-const prisma = new PrismaClient({ adapter })
+const prisma = new PrismaClient()
 
 async function main() {
   // Company 1: Acme Inc
