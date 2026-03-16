@@ -169,7 +169,7 @@ export async function GET() {
     }
 
     const { getPropertyAuth } = await import('@/config/mall-auth');
-    const property = getPropertyAuth(sessionData.userId);
+    const property = await getPropertyAuth(sessionData.userId);
 
     return NextResponse.json({
       authenticated: true,
