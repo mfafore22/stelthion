@@ -533,12 +533,9 @@ export default function TenantPortfolioPage() {
       <MallTopBar
         selectedDate={selectedDate}
         selectedTime={selectedTime}
-        dataView={dataView}
         onDateChange={setSelectedDate}
         onTimeChange={setSelectedTime}
-        onDataViewChange={setDataView}
         onExport={handleExport}
-        pageTitle="Portfolio-yleiskatsaus"
       />
 
       {/* Main Content */}
