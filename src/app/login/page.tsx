@@ -1,27 +1,35 @@
-import Image from 'next/image';
-import Link from 'next/link';
+import { Suspense } from "react"
+import LoginForm from "@/app/ui/login-form";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white gap-10">
-      <Image
-        src="/stelthion-brandmark.png"
-        alt="Stelthion"
-        width={120}
-        height={120}
-        priority
-      />
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white px-4">
 
-      <p className="text-sm font-medium tracking-widest uppercase text-gray-400">
+      {/* Branded logo animation */}
+      <div className="w-full max-w-3xl h-72 mb-2">
+        <iframe
+          src="/stelthion-animation/index.html"
+          className="w-full h-full border-0"
+          title="Stelthion"
+          style={{ background: "white", overflow: "hidden" }}
+        />
+      </div>
+
+      {/* Tagline */}
+      <p
+        className="mb-8 text-sm font-medium tracking-widest uppercase text-gray-500"
+        style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}
+      >
         Property Manager Access
       </p>
 
-      <Link
-        href="/mall/login"
-        className="px-8 py-3 bg-gray-950 text-white text-sm font-semibold rounded-lg hover:bg-gray-800 transition-colors"
-      >
-        Login
-      </Link>
+      {/* Login form */}
+      <div className="w-full max-w-md">
+        <Suspense fallback={<div>Loading...</div>}>
+          <LoginForm />
+        </Suspense>
+      </div>
+
     </div>
-  );
+  )
 }

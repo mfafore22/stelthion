@@ -1,1 +1,0 @@
-export const STELTHION_WHATIF_VERSION = '1.0.0';

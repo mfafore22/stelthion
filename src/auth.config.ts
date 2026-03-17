@@ -12,16 +12,11 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
-      const isOnMall = nextUrl.pathname.startsWith('/mall') || nextUrl.pathname.startsWith('/tenant');
-      const isOnLogin = nextUrl.pathname === '/login';
-      const isApiRoute = nextUrl.pathname.startsWith('/api');
-      if (isOnLogin || isOnMall || isApiRoute) {
-        return true; // always accessible
-      } else if (isOnDashboard) {
+      if (isOnDashboard) {
         if (isLoggedIn) return true;
         return false; // Redirect unauthenticated users to login page
       } else if (isLoggedIn) {
-        return Response.redirect(new URL('/mall/login', nextUrl));
+        return Response.redirect(new URL('/dashboard', nextUrl));
       }
       return true;
     },
