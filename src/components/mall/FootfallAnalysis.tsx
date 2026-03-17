@@ -8,6 +8,7 @@
 
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import Image from 'next/image';
+import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import {
@@ -19,6 +20,12 @@ import {
   type ZoneVisitorData,
 } from '@/lib/data/ideaparkZones';
 import { ZoneStoreList } from './ZoneStoreList';
+import {
+  GROUND_FLOOR_STORES,
+  GROUND_FLOOR_ENTRANCES,
+  type StorePosition,
+} from '@/lib/data/ideaparkStorePositions';
+import { usePublishedFloorplan } from '@/hooks/usePublishedFloorplan';
 
 interface FootfallAnalysisProps {
   mallId: string;
@@ -37,14 +44,110 @@ const MIN_HOUR = 10;
 const MAX_HOUR = 21;
 
 export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
+  const { t } = useTranslation('mall');
   const now = new Date();
   const [floor, setFloor] = useState<Floor>('ground');
   const [hour, setHour] = useState<number>(now.getHours() >= 10 && now.getHours() <= 21 ? now.getHours() : 14);
   const [playing, setPlaying] = useState(false);
   const [selectedZone, setSelectedZone] = useState<IdeaparkZone | null>(null);
   const [hoveredZone, setHoveredZone] = useState<string | null>(null);
+  const [hoveredStore, setHoveredStore] = useState<StorePosition | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const playRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // ── Zoom & pan state ──────────────────────────────────────────────────
+  const MIN_ZOOM = 1;
+  const MAX_ZOOM = 4;
+  const ZOOM_STEP = 0.25;
+  const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const isPanning = useRef(false);
+  const panStart = useRef({ x: 0, y: 0 });
+  const panOrigin = useRef({ x: 0, y: 0 });
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+
+  const clampPan = useCallback((x: number, y: number, z: number) => {
+    if (z <= 1) return { x: 0, y: 0 };
+    const maxX = ((z - 1) / (2 * z)) * 100;
+    const maxY = ((z - 1) / (2 * z)) * 100;
+    return {
+      x: Math.max(-maxX, Math.min(maxX, x)),
+      y: Math.max(-maxY, Math.min(maxY, y)),
+    };
+  }, []);
+
+  const zoomTo = useCallback((newZoom: number) => {
+    const z = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, newZoom));
+    setZoom(z);
+    setPan((p) => clampPan(p.x, p.y, z));
+  }, [clampPan]);
+
+  // Reset zoom when floor changes
+  useEffect(() => { setZoom(1); setPan({ x: 0, y: 0 }); }, [floor]);
+
+  // Wheel / trackpad zoom — non-passive listeners so preventDefault stops page scroll
+  useEffect(() => {
+    const el = mapContainerRef.current;
+    if (!el) return;
+
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const delta = -e.deltaY * 0.005;
+      setZoom((prev) => {
+        const next = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, prev + delta));
+        setPan((p) => clampPan(p.x, p.y, next));
+        return next;
+      });
+    };
+
+    // Safari trackpad pinch fires gesture events instead of / alongside wheel
+    const onGesture = (e: Event) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const ge = e as Event & { scale: number };
+      if (e.type === 'gesturechange' && ge.scale != null) {
+        setZoom((prev) => {
+          const next = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, prev * ge.scale));
+          setPan((p) => clampPan(p.x, p.y, next));
+          return next;
+        });
+      }
+    };
+
+    el.addEventListener('wheel', onWheel, { passive: false });
+    el.addEventListener('gesturestart', onGesture, { passive: false } as EventListenerOptions);
+    el.addEventListener('gesturechange', onGesture, { passive: false } as EventListenerOptions);
+    el.addEventListener('gestureend', onGesture, { passive: false } as EventListenerOptions);
+
+    return () => {
+      el.removeEventListener('wheel', onWheel);
+      el.removeEventListener('gesturestart', onGesture);
+      el.removeEventListener('gesturechange', onGesture);
+      el.removeEventListener('gestureend', onGesture);
+    };
+  }, [clampPan]);
+
+  // Pan via mouse drag (only when zoomed in)
+  const handlePointerDown = useCallback((e: React.PointerEvent) => {
+    if (zoom <= 1) return;
+    isPanning.current = true;
+    panStart.current = { x: e.clientX, y: e.clientY };
+    panOrigin.current = { ...pan };
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+  }, [zoom, pan]);
+
+  const handlePointerMove = useCallback((e: React.PointerEvent) => {
+    if (!isPanning.current || !mapContainerRef.current) return;
+    const rect = mapContainerRef.current.getBoundingClientRect();
+    const dx = ((e.clientX - panStart.current.x) / rect.width) * 100;
+    const dy = ((e.clientY - panStart.current.y) / rect.height) * 100;
+    setPan(clampPan(panOrigin.current.x + dx, panOrigin.current.y + dy, zoom));
+  }, [zoom, clampPan]);
+
+  const handlePointerUp = useCallback(() => {
+    isPanning.current = false;
+  }, []);
 
   // Auto-advance hour when playing
   useEffect(() => {
@@ -61,12 +164,26 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
 
   const dayOfWeek = now.getDay();
 
+  // Prefer published floorplan data from DB; fall back to static imports
+  const published = usePublishedFloorplan(mallId);
+
   const getVisitorData = useCallback(
     (zone: IdeaparkZone): ZoneVisitorData => getZoneVisitors(zone, hour, dayOfWeek),
     [hour, dayOfWeek]
   );
 
-  const activeZones = floor === 'upper' ? IDEAPARK_UPPER_ZONES : IDEAPARK_ZONES;
+  // When any published data exists for a floor, use it for both zones AND stores
+  // (even if stores is empty) so we don't mix published zones with stale static stores.
+  const hasPublishedGround = published.groundZones !== null;
+  const hasPublishedUpper = published.upperZones !== null;
+
+  const activeZones = floor === 'upper'
+    ? (published.upperZones ?? IDEAPARK_UPPER_ZONES)
+    : (published.groundZones ?? IDEAPARK_ZONES);
+
+  const activeStores = floor === 'ground'
+    ? (hasPublishedGround ? (published.groundStores ?? []) : GROUND_FLOOR_STORES)
+    : (hasPublishedUpper ? (published.upperStores ?? []) : []);
 
   const totalVisitors = activeZones.reduce(
     (sum, z) => sum + getVisitorData(z).visitors,
@@ -94,7 +211,7 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
                   : 'text-bo-neutral-500 hover:text-bo-neutral-700'
               )}
             >
-              {f === 'ground' ? 'Pohjakerros' : 'Yläkerta'}
+              {f === 'ground' ? t('heatmap.groundFloor') : t('heatmap.upperFloor')}
             </button>
           ))}
         </div>
@@ -205,7 +322,45 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
       </div>
 
       {/* ── Floor plan + SVG overlay ────────────────────────────────────────── */}
-      <div className="relative w-full" style={{ paddingBottom: floor === 'upper' ? '45.3%' : '46.8%' }}>
+      <div
+        ref={mapContainerRef}
+        className="relative w-full overflow-hidden"
+        style={{ paddingBottom: floor === 'upper' ? '45.3%' : '46.8%', cursor: zoom > 1 ? 'grab' : 'default', touchAction: 'none' }}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+      >
+        {/* Zoom controls */}
+        <div className="absolute top-2 left-2 z-30 flex flex-col gap-1">
+          <button
+            onClick={() => zoomTo(zoom + ZOOM_STEP)}
+            disabled={zoom >= MAX_ZOOM}
+            className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/90 border border-bo-neutral-200 shadow-bo-sm text-bo-neutral-700 hover:bg-bo-neutral-50 disabled:opacity-30 transition-all duration-300 backdrop-blur-sm text-base font-semibold"
+            aria-label="Zoom in"
+          >+</button>
+          <button
+            onClick={() => zoomTo(zoom - ZOOM_STEP)}
+            disabled={zoom <= MIN_ZOOM}
+            className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/90 border border-bo-neutral-200 shadow-bo-sm text-bo-neutral-700 hover:bg-bo-neutral-50 disabled:opacity-30 transition-all duration-300 backdrop-blur-sm text-base font-semibold"
+            aria-label="Zoom out"
+          >−</button>
+          {zoom > 1 && (
+            <button
+              onClick={() => { setZoom(1); setPan({ x: 0, y: 0 }); }}
+              className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/90 border border-bo-neutral-200 shadow-bo-sm text-bo-neutral-700 hover:bg-bo-neutral-50 transition-all duration-300 backdrop-blur-sm text-[10px] font-semibold"
+              aria-label="Reset zoom"
+            >1:1</button>
+          )}
+        </div>
+
+        <div
+          className="absolute inset-0 origin-center"
+          style={{
+            transform: `scale(${zoom}) translate(${pan.x}%, ${pan.y}%)`,
+            transition: isPanning.current ? 'none' : 'transform 0.25s ease-out',
+          }}
+        >
           {/* Floor plan image */}
           <Image
             src={floor === 'upper'
@@ -217,6 +372,7 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
             fill
             className="object-contain"
             priority
+            draggable={false}
           />
 
           {/* SVG heatmap overlay */}
@@ -254,7 +410,7 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
                     x={zone.labelX}
                     y={zone.labelY - 6}
                     textAnchor="middle"
-                    fontSize="9"
+                    fontSize="13"
                     fontWeight="600"
                     fill="#1e293b"
                     fillOpacity={0.85}
@@ -264,9 +420,9 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
                   </text>
                   <text
                     x={zone.labelX}
-                    y={zone.labelY + 7}
+                    y={zone.labelY + 12}
                     textAnchor="middle"
-                    fontSize="8.5"
+                    fontSize="12"
                     fill="#1e293b"
                     fillOpacity={0.7}
                     style={{ pointerEvents: 'none', userSelect: 'none' }}
@@ -276,7 +432,113 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
                 </g>
               );
             })}
+
+            {/* ── Per-store pin buttons (ground floor only) ───────────────── */}
+            {activeStores.map((store) => {
+              const cx = store.x + store.w / 2;
+              const cy = store.y + store.h / 2;
+              const zone = activeZones.find((z) => z.id === store.zoneId);
+              const isHov = hoveredStore?.slug === store.slug;
+              const color = zone ? getHeatColor(getVisitorData(zone).visitors, zone.capacity) : '#64748b';
+
+              return (
+                <g
+                  key={store.slug}
+                  style={{ pointerEvents: 'all', cursor: 'pointer' }}
+                  onClick={() => { if (zone) setSelectedZone(selectedZone?.id === zone.id ? null : zone); }}
+                  onMouseEnter={() => setHoveredStore(store)}
+                  onMouseLeave={() => setHoveredStore(null)}
+                >
+                  {/* Outer ring */}
+                  <circle cx={cx} cy={cy} r={isHov ? 8 : 6}
+                    fill={color} fillOpacity={isHov ? 0.9 : 0.75}
+                    stroke="white" strokeWidth={1.5}
+                    style={{ transition: 'r 0.1s, fill-opacity 0.1s' }} />
+                  {/* Inner dot */}
+                  <circle cx={cx} cy={cy} r={2} fill="white" fillOpacity={0.95}
+                    style={{ pointerEvents: 'none' }} />
+                  {/* Label below pin */}
+                  <text x={cx} y={cy + 14} textAnchor="middle"
+                    fontSize="7.5" fontWeight={isHov ? '700' : '500'}
+                    fill="#1e293b" fillOpacity={isHov ? 1 : 0.7}
+                    style={{ pointerEvents: 'none', userSelect: 'none' }}>
+                    {store.name}
+                  </text>
+                </g>
+              );
+            })}
+
+            {/* ── Zone-level buttons: Tapahtumatori + Ravintolamaailma (static only) */}
+            {floor === 'ground' && !hasPublishedGround && (() => {
+              const zoneBtns = [
+                { zoneId: 'center-hub', cx: 640, cy: 415, label: 'Tapahtumatori' },
+                { zoneId: 'food-court', cx: 360, cy: 430, label: 'Ravintolamaailma' },
+              ];
+              return zoneBtns.map(({ zoneId, cx, cy, label }) => {
+                const zone = activeZones.find((z) => z.id === zoneId);
+                const isHov = hoveredZone === `btn-${zoneId}`;
+                const color = zone ? getHeatColor(getVisitorData(zone).visitors, zone.capacity) : '#64748b';
+                return (
+                  <g key={`btn-${zoneId}`}
+                    style={{ pointerEvents: 'all', cursor: 'pointer' }}
+                    onClick={() => { if (zone) setSelectedZone(selectedZone?.id === zone.id ? null : zone); }}
+                    onMouseEnter={() => setHoveredZone(`btn-${zoneId}`)}
+                    onMouseLeave={() => setHoveredZone(null)}
+                  >
+                    <circle cx={cx} cy={cy} r={isHov ? 10 : 8}
+                      fill={color} fillOpacity={isHov ? 0.95 : 0.8}
+                      stroke="white" strokeWidth={2}
+                      style={{ transition: 'r 0.1s' }} />
+                    <circle cx={cx} cy={cy} r={3} fill="white" fillOpacity={0.95}
+                      style={{ pointerEvents: 'none' }} />
+                    <text x={cx} y={cy + 16} textAnchor="middle"
+                      fontSize="8" fontWeight="600"
+                      fill="#1e293b" fillOpacity={0.85}
+                      style={{ pointerEvents: 'none', userSelect: 'none' }}>
+                      {label}
+                    </text>
+                  </g>
+                );
+              });
+            })()}
+
+            {/* ── Entrance pins (ground floor only, hidden when published data exists) */}
+            {floor === 'ground' && !hasPublishedGround && GROUND_FLOOR_ENTRANCES.map((e) => (
+              <g key={e.id} style={{ pointerEvents: 'none' }}>
+                <circle cx={e.x} cy={e.y} r={6}
+                  fill="#0ea5e9" fillOpacity={0.9} stroke="white" strokeWidth={1.5} />
+                {/* Up-arrow indicator */}
+                <polygon
+                  points={`${e.x},${e.y - 4} ${e.x - 3},${e.y + 2} ${e.x + 3},${e.y + 2}`}
+                  fill="white" fillOpacity={0.95} />
+                <text x={e.x} y={e.y + 17} textAnchor="middle"
+                  fontSize="7.5" fontWeight="600" fill="#0ea5e9" fillOpacity={0.95}
+                  style={{ userSelect: 'none' }}>
+                  {e.labelFi}
+                </text>
+              </g>
+            ))}
+
+            {/* ── Hovered store tooltip ────────────────────────────────────── */}
+            {floor === 'ground' && hoveredStore && (() => {
+              const cx = hoveredStore.x + hoveredStore.w / 2;
+              const cy = hoveredStore.y + hoveredStore.h / 2;
+              const tw = Math.max(hoveredStore.name.length * 6.2, 50);
+              const tx = Math.min(Math.max(cx - tw / 2, 4), 1504 - tw - 4);
+              const ty = cy - 18;
+              return (
+                <g style={{ pointerEvents: 'none' }}>
+                  <rect x={tx - 4} y={ty - 11} width={tw + 8} height={16} rx={3}
+                    fill="#1e293b" fillOpacity={0.9} />
+                  <text x={tx + tw / 2} y={ty} textAnchor="middle"
+                    fontSize="9.5" fontWeight="600" fill="white">
+                    {hoveredStore.name}
+                  </text>
+                </g>
+              );
+            })()}
           </svg>
+        </div>{/* end zoom transform wrapper */}
 
           {/* Zone popup */}
           {selectedZone && (() => {
@@ -304,21 +566,21 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
                     <span className="font-semibold text-bo-neutral-900">{data.visitors.toLocaleString('fi-FI')}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-bo-neutral-500">vs suunnitelma</span>
+                    <span className="text-bo-neutral-500">{t('heatmap.vsPlan')}</span>
                     <span className={cn('font-semibold', data.delta >= 0 ? 'text-green-600' : 'text-red-500')}>
                       {data.delta >= 0 ? '+' : ''}{data.delta}%
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-bo-neutral-500">Tiheys</span>
+                    <span className="text-bo-neutral-500">{t('heatmap.density')}</span>
                     <span className="font-semibold text-bo-neutral-900">{data.density} /m²</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-bo-neutral-500">Pinta-ala</span>
+                    <span className="text-bo-neutral-500">{t('heatmap.area')}</span>
                     <span className="font-semibold text-bo-neutral-900">{selectedZone.area_sqm.toLocaleString('fi-FI')} m²</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-bo-neutral-500">Ennuste</span>
+                    <span className="text-bo-neutral-500">{t('heatmap.forecast')}</span>
                     <span className="font-medium text-bo-neutral-600">{data.predicted.toLocaleString('fi-FI')}</span>
                   </div>
                 </div>
@@ -338,13 +600,13 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
 
       {/* ── Legend ─────────────────────────────────────────────────────────── */}
       <div className="flex items-center gap-4 px-4 py-3 border-t border-bo-neutral-100 bg-bo-neutral-50/50">
-        <span className="text-xs text-bo-neutral-400 font-medium shrink-0">Tiheys</span>
+        <span className="text-xs text-bo-neutral-400 font-medium shrink-0">{t('heatmap.density')}</span>
         {[
-          { color: '#3b82f6', label: 'Hiljainen' },
-          { color: '#22c55e', label: 'Kohtalainen' },
-          { color: '#eab308', label: 'Vilkas' },
-          { color: '#f97316', label: 'Erittäin vilkas' },
-          { color: '#ef4444', label: 'Täynnä' },
+          { color: '#3b82f6', label: t('heatmap.quiet') },
+          { color: '#22c55e', label: t('heatmap.moderate') },
+          { color: '#eab308', label: t('heatmap.busy') },
+          { color: '#f97316', label: t('heatmap.veryBusy') },
+          { color: '#ef4444', label: t('heatmap.full') },
         ].map(({ color, label }) => (
           <div key={label} className="flex items-center gap-1.5">
             <span className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: color, opacity: 0.72 }} />
@@ -352,7 +614,7 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
           </div>
         ))}
         <div className="ml-auto text-xs text-bo-neutral-400">
-          {selectedZone ? null : 'Klikkaa aluetta nähdäksesi liikkeet'}
+          {selectedZone ? null : t('heatmap.clickZoneToSeeStores')}
         </div>
       </div>
     </Card>
