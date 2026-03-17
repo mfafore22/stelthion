@@ -85,17 +85,6 @@ export async function signup(
             role: 'ADMIN',
           },
         },
-        stats: {
-          create: {
-            totalUnits: 0,
-            topCategory: 'N/A',
-            foodBeverage: 0,
-            fashionRetail: 0,
-            currentVisitors: 0,
-            dwellTime: 0,
-            conversionRate: 0,
-          },
-        },
       },
     })
   } catch (error) {

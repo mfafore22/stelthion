@@ -93,19 +93,19 @@ export const DAY_MULTIPLIERS: Record<number, number> = {
 // Detached Auto Arena:           x: 1220–1455, y: 490–615
 //
 export const IDEAPARK_ZONES: IdeaparkZone[] = [
-  // ── Upper section — 6 zones ──────────────────────────────────────────────
+  // ── Upper section — 7 zones ──────────────────────────────────────────────
   {
     id: 'west-anchor',
     name: 'West Anchor',
     nameFi: 'Läntinen ankkuri',
     category: 'Anchor',
     area_sqm: 15000,
-    // K-Citymarket, Prisma, Alko — large big-box block at far left
-    svgPoints: '105,155 340,155 340,355 105,355',
+    // Citymarket — large big-box block at far left
+    svgPoints: '52,110 215,110 215,355 52,355',
     capacity: 7500,
     baseVisitors: 374,
-    labelX: 222,
-    labelY: 255,
+    labelX: 133,
+    labelY: 232,
     locationPrefixes: [1],
   },
   {
@@ -114,12 +114,12 @@ export const IDEAPARK_ZONES: IdeaparkZone[] = [
     nameFi: 'Läntinen galleria',
     category: 'Fashion',
     area_sqm: 7000,
-    // Fashion & beauty stores — left-centre gallery block
-    svgPoints: '345,155 540,155 540,355 345,355',
+    // Prisma Ideapark, Budget Sport
+    svgPoints: '215,110 432,110 432,355 215,355',
     capacity: 3500,
     baseVisitors: 175,
-    labelX: 442,
-    labelY: 255,
+    labelX: 323,
+    labelY: 232,
     locationPrefixes: [2, 9],
   },
   {
@@ -128,12 +128,12 @@ export const IDEAPARK_ZONES: IdeaparkZone[] = [
     nameFi: 'Keskusgalleria',
     category: 'Fashion',
     area_sqm: 8000,
-    // Main gallery corridor — H&M, Stadium, Flying Tiger, Zizzi belt
-    svgPoints: '545,155 760,155 760,355 545,355',
+    // Bläk Boks, Halonen
+    svgPoints: '432,90 750,90 750,355 432,355',
     capacity: 4000,
     baseVisitors: 200,
-    labelX: 652,
-    labelY: 255,
+    labelX: 591,
+    labelY: 222,
     locationPrefixes: [6, 10],
   },
   {
@@ -142,12 +142,12 @@ export const IDEAPARK_ZONES: IdeaparkZone[] = [
     nameFi: 'Itäinen galleria',
     category: 'Fashion',
     area_sqm: 7000,
-    // East fashion corridor — Jack & Jones, Cubus, Tommy Hilfiger belt
-    svgPoints: '765,155 990,155 990,355 765,355',
+    // Clas Ohlson, FIDA Second Hand, JYSK, Kekäle
+    svgPoints: '750,90 1008,90 1008,355 750,355',
     capacity: 3500,
     baseVisitors: 175,
-    labelX: 877,
-    labelY: 255,
+    labelX: 879,
+    labelY: 222,
     locationPrefixes: [5, 11],
   },
   {
@@ -156,27 +156,45 @@ export const IDEAPARK_ZONES: IdeaparkZone[] = [
     nameFi: 'Itäinen ankkuri',
     category: 'Anchor',
     area_sqm: 10000,
-    // Halonen, Clas Ohlson, JYSK, Intersport — east anchor block
-    svgPoints: '995,155 1130,155 1130,355 995,355',
+    // Minimani — traced from floor plan walls:
+    // left x=974 (y=114→371), top y=114 (x=974→1078),
+    // right x=1078 (shared with Autoareena left wall), bottom y=371.
+    svgPoints: '974,114 1078,114 1078,371 974,371',
     capacity: 5000,
     baseVisitors: 250,
-    labelX: 1062,
-    labelY: 255,
+    labelX: 1026,
+    labelY: 243,
     locationPrefixes: [4],
   },
   {
-    id: 'entertainment',
-    name: 'Entertainment',
-    nameFi: 'Viihdekeskus',
-    category: 'Entertainment',
-    area_sqm: 8000,
-    // Blåk Boks, Salibandymuseo, Kulttuurikeskus PiiPoo, Juvesport
-    svgPoints: '1135,155 1195,155 1195,355 1135,355',
-    capacity: 4000,
-    baseVisitors: 199,
-    labelX: 1165,
-    labelY: 255,
-    locationPrefixes: [3],
+    id: 'autoareena',
+    name: 'Ideapark Autoareena',
+    nameFi: 'Ideapark Autoareena',
+    category: 'Auto',
+    area_sqm: 14000,
+    // Ideapark Autoareena — large automotive retail block, upper-right
+    // Left wall: x=1078 (y=115→393), top inner face: y=115, right: x=1379 (y=115→155),
+    // outer diagonal: (1379,155)→(1209,393), bottom: y=393 (x=1078→1209).
+    svgPoints: '1078,115 1379,115 1379,155 1209,393 1078,393',
+    capacity: 2000,
+    baseVisitors: 140,
+    labelX: 1230,
+    labelY: 250,
+    locationPrefixes: [3, 12],
+  },
+  {
+    id: 'east-strip',
+    name: 'East Strip',
+    nameFi: 'Itäinen kaistale',
+    category: 'Fashion',
+    area_sqm: 4500,
+    // Tommy Hilfiger, Intersport Ideapark, Guess — right-side corridor
+    svgPoints: '960,280 1200,280 1200,430 960,430',
+    capacity: 2250,
+    baseVisitors: 112,
+    labelX: 1080,
+    labelY: 355,
+    locationPrefixes: [],
   },
   // ── Lower arc section — 4 zones ──────────────────────────────────────────
   {
@@ -185,27 +203,30 @@ export const IDEAPARK_ZONES: IdeaparkZone[] = [
     nameFi: 'Läntinen käytävä',
     category: 'Fashion',
     area_sqm: 9000,
-    // Left arc concourse — outer curved stores + inner walkway
-    // Arc points (right→left): x=430→y=583, x=300→y=517, x=200→y=445
-    svgPoints: '105,355 430,355 430,583 400,570 300,517 200,445 105,355',
+    // Kauppahuone Riveri, New Yorker, Only, Sinsay, Apteekki, Finlayson,
+    // Stadium, Luhta Brand Store, H&M
+    // Arc: x=105→y=355, x=200→y=445, x=300→y=517, x=430→y=583
+    svgPoints: '52,355 430,355 430,583 400,570 300,517 200,445 105,390 52,355',
     capacity: 4500,
     baseVisitors: 225,
-    labelX: 255,
-    labelY: 460,
+    labelX: 240,
+    labelY: 475,
     locationPrefixes: [],
   },
   {
     id: 'center-hub',
-    name: 'Central Hub',
-    nameFi: 'Keskuskeskus',
+    name: 'Event Square',
+    nameFi: 'Tapahtumatori',
     category: 'Mixed',
     area_sqm: 5500,
-    // Central pedestrian spine + kiosk units — Burger King, Kappahl, GANT belt
-    svgPoints: '430,355 810,355 810,440 430,440',
+    // Juve Sport, Marc O'Polo, Cafe Deliss, Seoul Good, Suomen Kultajousi,
+    // CHANGE Lingerie, Ståhlberg Home Bakery, Flying Tiger, Subway, & Burgers, VileThai
+    // Central element (info desk) at approx x:640, y:420 — label placed below it
+    svgPoints: '430,355 820,355 820,440 430,440',
     capacity: 2750,
     baseVisitors: 138,
-    labelX: 620,
-    labelY: 397,
+    labelX: 640,
+    labelY: 458,
     locationPrefixes: [8],
   },
   {
@@ -214,13 +235,15 @@ export const IDEAPARK_ZONES: IdeaparkZone[] = [
     nameFi: 'Ravintolamaailma',
     category: 'F&B',
     area_sqm: 6500,
-    // Deep arc centre — Friends & Brgrs, Pizza Hut, Subway, Bistro Hovikokki
-    // Outer arc at x=430→y=583, x=500→y=606, x=645→y=625, x=800→y=603
-    svgPoints: '430,440 810,440 810,603 700,621 645,625 500,606 430,583',
+    // Ståhlberg Home Bakery, Subway, & Burgers, VileThai, Kotipizza, Cafe Deliss,
+    // HESBURGER, Burger King, RAX PizzaBuffet — restaurant corridor left + outer arc centre
+    // Left side covers the inline restaurant units (x:295–430) top to bottom of arc,
+    // right side covers the food arc (x:430–820, y:440–625). Tapahtumatori renders on top.
+    svgPoints: '295,355 430,355 430,440 820,440 820,603 700,621 645,625 500,606 430,583 295,500',
     capacity: 3250,
     baseVisitors: 163,
-    labelX: 620,
-    labelY: 555,
+    labelX: 555,
+    labelY: 415,
     locationPrefixes: [7],
   },
   {
@@ -229,29 +252,15 @@ export const IDEAPARK_ZONES: IdeaparkZone[] = [
     nameFi: 'Itäinen käytävä',
     category: 'Mixed',
     area_sqm: 9000,
-    // Right arc concourse — expansion wing stores + outer curved stores
-    // Arc points: x=810→y=603, x=900→y=566, x=1000→y=511, x=1100→y=437, x=1185→y=360
-    svgPoints: '810,355 1185,355 1100,437 1000,511 900,566 810,603',
+    // KAPPAHL, Pentik, My Bag, Gant, Cropp, Bik Bok, Dressmann, Lindex,
+    // Marimekko Outlet, Unikulma, iittala outlet
+    // Arc: x=820→y=603, x=900→y=566, x=1000→y=511, x=1100→y=437, x=1185→y=360
+    svgPoints: '820,355 1185,355 1100,437 1000,511 900,566 820,603',
     capacity: 4500,
     baseVisitors: 225,
     labelX: 1000,
-    labelY: 465,
+    labelY: 472,
     locationPrefixes: [20],
-  },
-  // ── Detached building ─────────────────────────────────────────────────────
-  {
-    id: 'auto-arena',
-    name: 'Auto Arena',
-    nameFi: 'Automaailma',
-    category: 'Auto',
-    area_sqm: 15000,
-    // Separate building — Kamux, K-Auto, SAKA, Rinta-Joupin, Autoklinikka
-    svgPoints: '1220,490 1455,490 1455,615 1220,615',
-    capacity: 1500,
-    baseVisitors: 167,
-    labelX: 1337,
-    labelY: 552,
-    locationPrefixes: [12],
   },
 ];
 

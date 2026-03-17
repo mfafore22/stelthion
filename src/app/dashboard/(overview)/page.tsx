@@ -1,6 +1,5 @@
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
-import prisma from '@/app/lib/prisma'
 import { StatCard } from '@/app/ui/dashboard/stat-card'
 import { MetricCard } from '@/app/ui/dashboard/metric-card'
 import { Tabs } from '@/app/ui/dashboard/tabs'
@@ -13,28 +12,18 @@ export default async function DashboardPage() {
     redirect('/login')
   }
 
-  const customerId = session.user.customerId
   const role = session.user.role
 
-  // Fetch company stats
-  let stats = await prisma.stats.findUnique({
-    where: { customerId }
-  })
-
-  // If no stats exist, create default
-  if (!stats) {
-    stats = await prisma.stats.create({
-      data: {
-        customerId,
-        totalUnits: 0,
-        topCategory: 'N/A',
-        foodBeverage: 0,
-        fashionRetail: 0,
-        currentVisitors: 0,
-        dwellTime: 0,
-        conversionRate: 0,
-      }
-    })
+  // Stats model not yet in schema — use stub defaults
+  const stats = {
+    totalUnits: 0,
+    topCategory: 'N/A',
+    foodBeverage: 0,
+    fashionRetail: 0,
+    currentVisitors: 0,
+    dwellTime: 0,
+    conversionRate: 0,
+    updatedAt: new Date(),
   }
 
   return (
