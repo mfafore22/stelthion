@@ -1,0 +1,163 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  users     User[]
+}
+
+model User {
+  id               String   @id @default(cuid())
+  email            String   @unique
+  password         String
+  name             String
+  role             Role     @default(USER)
+  customerId       String
+  twoFactorEnabled Boolean  @default(false)
+  twoFactorSecret  String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  customer         Customer @relation(fields: [customerId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  USER
+}
+
+// ─── Admin: Floor Plan & Video Analysis ─────────────────────────────────────
+
+model FloorplanZone {
+  id           String           @id @default(cuid())
+  mallId       String
+  floor        String           // 'ground' | 'upper'
+  zoneId       String           // semantic ID, e.g. 'west-anchor'
+  name         String
+  nameFi       String
+  category     String
+  svgPoints    String           // polygon points string
+  labelX       Float
+  labelY       Float
+  capacity     Int
+  areaSqm      Int
+  baseVisitors Int              @default(0) // hourly baseline for footfall simulation
+  publishedAt  DateTime?        // null = draft, set = live
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  stores       FloorplanStore[]
+  cameras      Camera[]
+
+  @@unique([mallId, floor, zoneId])
+}
+
+model FloorplanStore {
+  id          String        @id @default(cuid())
+  mallId      String
+  floor       String
+  name        String
+  slug        String
+  zone        FloorplanZone @relation(fields: [zoneDbId], references: [id])
+  zoneDbId    String
+  x           Float
+  y           Float
+  w           Float
+  h           Float
+  publishedAt DateTime?     // null = draft, set = live
+  updatedAt   DateTime      @updatedAt
+}
+
+model Camera {
+  id        String         @id @default(cuid())
+  mallId    String
+  floor     String
+  label     String
+  x         Float
+  y         Float
+  angleDeg  Float?
+  fovDeg    Float?
+  rangeM    Float?
+  streamUrl String?
+  zone      FloorplanZone? @relation(fields: [zoneDbId], references: [id])
+  zoneDbId  String?
+  active    Boolean        @default(true)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  jobs      AnalysisJob[]
+}
+
+model AnalysisJob {
+  id          String           @id @default(cuid())
+  mallId      String
+  camera      Camera           @relation(fields: [cameraId], references: [id])
+  cameraId    String
+  footageDate DateTime
+  startTime   String
+  endTime     String
+  journeyCount     Int
+  originZoneId     String?
+  destinationZoneId String?
+  status      JobStatus        @default(PENDING)
+  requestedBy String
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  results     AnalysisResult[]
+  journeys    JourneySession[]
+}
+
+enum JobStatus {
+  PENDING
+  PROCESSING
+  COMPLETE
+  FAILED
+}
+
+model AnalysisResult {
+  id        String      @id @default(cuid())
+  job       AnalysisJob @relation(fields: [jobId], references: [id])
+  jobId     String
+  zoneId    String
+  hour      Int
+  count     Int
+  density   Float
+  createdAt DateTime    @default(now())
+}
+
+model JourneySession {
+  id              String        @id @default(cuid())
+  job             AnalysisJob   @relation(fields: [jobId], references: [id])
+  jobId           String
+  taggedCount     Int
+  recognizedCount Int
+  paths           JourneyPath[]
+  createdAt       DateTime      @default(now())
+}
+
+model JourneyPath {
+  id           String         @id @default(cuid())
+  session      JourneySession @relation(fields: [sessionId], references: [id])
+  sessionId    String
+  zoneSequence String
+  timestamps   String
+}
+
+// ─── Floorplan backup snapshots ──────────────────────────────────────────────
+
+model FloorplanSnapshot {
+  id        String   @id @default(cuid())
+  mallId    String
+  floor     String
+  data      String   // JSON: { zones, stores, cameras }
+  reason    String   // e.g. 'pre-save', 'manual-backup'
+  createdAt DateTime @default(now())
+
+  @@index([mallId, floor, createdAt])
+}
