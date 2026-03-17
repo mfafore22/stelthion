@@ -1,0 +1,30 @@
+'use client';
+
+import { useState } from 'react';
+import { useParams } from 'next/navigation';
+import { MallTopBar } from '@/components/mall/shell/MallTopBar';
+import { MallLeftNav } from '@/components/mall/shell/MallLeftNav';
+import { PropertyDetail } from '@/components/mall/PropertyDetail';
+
+export default function MallDetailPage() {
+  const { mallId } = useParams<{ mallId: string }>();
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+
+  return (
+    <>
+      {/* Fixed shell — positioned absolutely, not in flow */}
+      <MallLeftNav />
+      <MallTopBar
+        selectedDate={selectedDate}
+        onDateChange={setSelectedDate}
+      />
+
+      {/* Main content — offset by fixed shell dimensions (nav: 80px left, topbar: 80px top) */}
+      <main className="ml-[80px] mt-[80px] h-[calc(100vh-80px)] overflow-auto bg-[#F8F6F3]">
+        <div className="p-8 max-w-[1600px] mx-auto">
+          <PropertyDetail mallId={mallId} />
+        </div>
+      </main>
+    </>
+  );
+}
