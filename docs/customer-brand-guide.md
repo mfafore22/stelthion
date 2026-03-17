@@ -6,7 +6,7 @@ How to reflect a customer's brand identity in the Stelthion Mall Intelligence Pl
 
 ## Principles
 
-1. **Stelthion identity stays fixed.** The brandmark (`/stelthion-brandmark.png`) in the top-left of the TopBar is always present and never replaced. The platform is *powered by Stelthion*; the customer brand colours the experience.
+1. **Stelthion identity stays fixed.** The brandmark (`/stelthion-brandmark.png`) appears in both the mall TopBar and the admin AdminHeader — always present, never replaced. The platform is *powered by Stelthion*; the customer brand colours the mall experience while the admin uses a fixed navy (`bo-accent`) palette.
 2. **One CSS file, full cascade.** All colour changes live in `src/app/globals.css`. Token classes (`bo-primary-*`, `bo-accent-*`, etc.) are used throughout the component tree — updating the tokens is sufficient for the vast majority of the UI.
 3. **Minimum touch-points.** Three files need updating per customer onboarding: `globals.css`, `brandProfiles.json`, and optionally the chart component if it contains hardcoded hex values.
 
@@ -192,11 +192,59 @@ These use semantic Tailwind colours (green-500, blue-500, etc.) and generally do
 | Element | Reason |
 |---|---|
 | `bo-neutral-*` scale | Neutral foundation — customer-independent, ensures readable body text and surfaces at all times |
-| `/stelthion-brandmark.png` in TopBar | Platform identity — always present, always in position |
+| `/stelthion-brandmark.png` in TopBar & AdminHeader | Platform identity — always present in both mall and admin, never replaced |
 | `/logo.png` Stelthion wordmark | Platform identity |
 | `--background` (`#F8F6F3`) | Warm off-white page background — works with all brand palettes |
 | Glass morphism base colours | Transparent — they pick up the brand tint automatically via `bo-primary` changes |
 | Typography — Inter font | Platform font, consistent across tenants |
+
+---
+
+## Admin Area
+
+The admin tool (`/admin/*`) shares the same design system as the mall dashboard but uses **navy (`bo-accent-600`)** as its primary action colour to visually distinguish it from the green-primary mall side. Both sides feel like parts of the same product.
+
+### Admin Token Usage
+
+| Role | Token | Example |
+|---|---|---|
+| Primary action colour | `bo-accent-600` | Save button, active sidebar link, active tool, active floor tab |
+| Action hover | `bo-accent-700` | Button hover states |
+| Action tint | `bo-accent-50` | Light badge backgrounds |
+| Surface | `bo-neutral-50` | Cards, panels, toolbar, header, sidebar |
+| Page background | `bo-neutral-100` | Admin layout wrapper |
+| Borders | `bo-neutral-200` | Dividers, card borders, panel borders |
+| Input borders | `bo-neutral-300` | Form field borders |
+| Input focus | `focus:ring-bo-accent-600/20 + focus:border-bo-accent-600` | All text inputs, selects, textareas |
+| Semantic status | `bo-warning-*`, `bo-success-*`, `bo-error-*`, `bo-info-*` | Job status badges, toggle labels |
+
+### Admin Protected Elements
+
+| Element | Rule |
+|---|---|
+| `/stelthion-brandmark.png` in AdminHeader | Platform identity — always present, never replaced |
+| `bo-neutral-*` scale | Same neutral foundation as mall side — never customer-branded |
+| `bo-accent-600` as admin primary | Distinguishes admin from mall; do not swap to `bo-primary-*` |
+| Inter font, `tracking-wide` headings | Consistent typography across admin and mall |
+| `shadow-bo-sm` on cards/toolbar | Depth system matches mall side |
+| `rounded-xl` cards, `rounded-lg` inputs/buttons | Border radius convention matches mall side |
+| `transition-all duration-300` | Animation timing matches mall side |
+
+### Admin Components
+
+| Component | Key Classes |
+|---|---|
+| `AdminHeader` | `h-20 bg-bo-neutral-50 border-bo-neutral-200 shadow-bo-sm` — brandmark (128×128) + "Admin" title + language selector |
+| `AdminSidebar` | `w-56 bg-bo-neutral-50` — active link: `bg-bo-accent-600 text-white shadow-bo-md -translate-y-0.5` |
+| `FloorplanEditor` toolbar | `bg-bo-neutral-50 border-bo-neutral-200 shadow-bo-sm` — Save: `bg-bo-accent-600`, secondary buttons: `bg-bo-neutral-100` |
+| `ToolPalette` | Active: `bg-bo-accent-600 text-white shadow-bo-sm`, inactive: `text-bo-neutral-500` |
+| `PropertiesPanel` | `w-72 bg-bo-neutral-50 border-bo-neutral-200` — input focus rings use `bo-accent-600` |
+| Dashboard cards | `bg-bo-neutral-50 rounded-xl shadow-bo-sm` — icons: `text-bo-accent-600` |
+| Jobs/Results tables | `bg-bo-neutral-50 rounded-xl shadow-bo-sm` — semantic status badges with borders |
+
+### Admin Onboarding Rule
+
+When onboarding a new customer brand, the admin area requires **no changes**. The admin uses `bo-accent-*` (navy) and `bo-neutral-*` tokens which are customer-independent. Only the mall-facing side (`/mall/*`) reflects the customer's brand palette via `bo-primary-*` tokens.
 
 ---
 
