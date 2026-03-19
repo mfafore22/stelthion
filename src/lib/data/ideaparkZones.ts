@@ -424,9 +424,9 @@ export function getZoneVisitors(
  */
 export function getHeatColor(visitors: number, capacity: number): string {
   const ratio = capacity > 0 ? visitors / capacity : 0;
-  if (ratio < 0.15) return '#3b82f6'; // blue   — very quiet
-  if (ratio < 0.30) return '#22c55e'; // green  — moderate
-  if (ratio < 0.50) return '#eab308'; // yellow — busy
-  if (ratio < 0.70) return '#f97316'; // orange — very busy
-  return '#ef4444';                   // red    — crowded
+  if (ratio < 0.15) return '#A8D9A4'; // sage green  — very quiet  (bo-heat-low)
+  if (ratio < 0.30) return '#4AA844'; // mid green   — moderate    (bo-heat-mid-low)
+  if (ratio < 0.50) return '#E8B931'; // warm amber  — busy        (bo-heat-mid)
+  if (ratio < 0.70) return '#E87B3A'; // tangerine   — very busy   (bo-heat-high)
+  return '#D94E53';                   // muted coral — crowded     (bo-heat-max)
 }

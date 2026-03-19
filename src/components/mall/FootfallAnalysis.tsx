@@ -350,7 +350,7 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
           {zoom > 1 && (
             <button
               onClick={() => { setZoom(1); setPan({ x: 0, y: 0 }); }}
-              className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/90 border border-bo-neutral-200 shadow-bo-sm text-bo-neutral-700 hover:bg-bo-neutral-50 transition-all duration-300 backdrop-blur-sm text-[10px] font-semibold"
+              className="w-8 h-8 flex items-center justify-center rounded-lg bg-bo-glass border border-bo-primary-200/40 shadow-bo-glass text-bo-primary-700 hover:bg-bo-primary-50 transition-all duration-300 backdrop-blur-sm text-[10px] font-semibold"
               aria-label="Reset zoom"
             >1:1</button>
           )}
@@ -385,6 +385,9 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
             preserveAspectRatio="xMidYMid meet"
             style={{ pointerEvents: 'none' }}
           >
+            {/* Subtle green wash behind the floor plan */}
+            <rect width="100%" height="100%" fill="var(--color-bo-primary-50)" fillOpacity={0.35} />
+
             {activeZones.map((zone) => {
               const data = getVisitorData(zone);
               const color = getHeatColor(data.visitors, zone.capacity);
@@ -402,9 +405,9 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
                   <polygon
                     points={zone.svgPoints}
                     fill={color}
-                    fillOpacity={isSelected ? 0.72 : isHovered ? 0.62 : 0.42}
-                    stroke={isSelected ? '#1e293b' : isHovered ? '#475569' : 'white'}
-                    strokeWidth={isSelected ? 2 : 1.5}
+                    fillOpacity={isSelected ? 0.78 : isHovered ? 0.68 : 0.48}
+                    stroke={isSelected ? 'var(--color-bo-primary-800)' : isHovered ? 'var(--color-bo-primary-700)' : 'rgba(255,255,255,0.6)'}
+                    strokeWidth={isSelected ? 2.5 : isHovered ? 2 : 1}
                     style={{ transition: 'fill-opacity 0.15s, stroke 0.15s' }}
                   />
                 </g>
@@ -428,9 +431,9 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
                   onMouseLeave={() => setHoveredStore(null)}
                 >
                   {/* Outer ring */}
-                  <circle cx={cx} cy={cy} r={isHov ? 8 : 6}
+                  <circle cx={cx} cy={cy} r={isHov ? 9 : 6}
                     fill={color} fillOpacity={isHov ? 0.9 : 0.75}
-                    stroke="white" strokeWidth={1.5}
+                    stroke="rgba(255,255,255,0.7)" strokeWidth={1}
                     style={{ transition: 'r 0.1s, fill-opacity 0.1s' }} />
                   {/* Inner dot */}
                   <circle cx={cx} cy={cy} r={2} fill="white" fillOpacity={0.95}
@@ -477,13 +480,13 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
             {floor === 'ground' && !hasPublishedGround && GROUND_FLOOR_ENTRANCES.map((e) => (
               <g key={e.id} style={{ pointerEvents: 'none' }}>
                 <circle cx={e.x} cy={e.y} r={6}
-                  fill="#0ea5e9" fillOpacity={0.9} stroke="white" strokeWidth={1.5} />
+                  fill="var(--color-bo-accent-600)" fillOpacity={0.9} stroke="white" strokeWidth={1.5} />
                 {/* Up-arrow indicator */}
                 <polygon
                   points={`${e.x},${e.y - 4} ${e.x - 3},${e.y + 2} ${e.x + 3},${e.y + 2}`}
                   fill="white" fillOpacity={0.95} />
                 <text x={e.x} y={e.y + 17} textAnchor="middle"
-                  fontSize="7.5" fontWeight="600" fill="#0ea5e9" fillOpacity={0.95}
+                  fontSize="7.5" fontWeight="600" fill="var(--color-bo-accent-600)" fillOpacity={0.95}
                   style={{ userSelect: 'none' }}>
                   {e.labelFi}
                 </text>
@@ -505,7 +508,7 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
                   transform={`translate(${zone.labelX}, ${zone.labelY - 30}) scale(${s}) translate(${-zone.labelX}, ${-(zone.labelY - 30)})`}>
                   <rect x={zone.labelX - tw / 2 - 10} y={zone.labelY - 30 - pillH / 2}
                     width={tw + 20} height={pillH} rx={8}
-                    fill="#1e293b" fillOpacity={0.92} />
+                    fill="var(--color-bo-neutral-950)" fillOpacity={0.88} />
                   <text x={zone.labelX} y={zone.labelY - 30 + 8} textAnchor="middle"
                     fontSize={fs} fontWeight="600" fill="white">
                     {label}
@@ -528,7 +531,7 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
                   transform={`translate(${cx}, ${tipY}) scale(${s}) translate(${-cx}, ${-tipY})`}>
                   <rect x={cx - tw / 2 - 8} y={tipY - pillH / 2}
                     width={tw + 16} height={pillH} rx={7}
-                    fill="#1e293b" fillOpacity={0.92} />
+                    fill="var(--color-bo-neutral-950)" fillOpacity={0.88} />
                   <text x={cx} y={tipY + 7} textAnchor="middle"
                     fontSize={fs} fontWeight="600" fill="white">
                     {hoveredStore.name}
@@ -601,11 +604,11 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
       <div className="flex items-center gap-4 px-4 py-3 border-t border-bo-primary-100/40 bg-bo-glass-primary">
         <span className="text-xs text-bo-neutral-400 font-medium shrink-0">{t('heatmap.density')}</span>
         {[
-          { color: '#3b82f6', label: t('heatmap.quiet') },
-          { color: '#22c55e', label: t('heatmap.moderate') },
-          { color: '#eab308', label: t('heatmap.busy') },
-          { color: '#f97316', label: t('heatmap.veryBusy') },
-          { color: '#ef4444', label: t('heatmap.full') },
+          { color: '#A8D9A4', label: t('heatmap.quiet') },
+          { color: '#4AA844', label: t('heatmap.moderate') },
+          { color: '#E8B931', label: t('heatmap.busy') },
+          { color: '#E87B3A', label: t('heatmap.veryBusy') },
+          { color: '#D94E53', label: t('heatmap.full') },
         ].map(({ color, label }) => (
           <div key={label} className="flex items-center gap-1.5">
             <span className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: color, opacity: 0.72 }} />

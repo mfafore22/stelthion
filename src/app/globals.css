@@ -114,6 +114,13 @@
   --color-bo-error-dark: #f04e54;
   --color-bo-error-light: #fee2e3;
 
+  /* bo-heat — floorplan thermal scale (green → amber → coral) */
+  --color-bo-heat-low: #A8D9A4;    /* sage green = bo-primary-200 */
+  --color-bo-heat-mid-low: #4AA844; /* mid green = bo-primary-400 */
+  --color-bo-heat-mid: #E8B931;     /* warm amber */
+  --color-bo-heat-high: #E87B3A;    /* tangerine */
+  --color-bo-heat-max: #D94E53;     /* muted coral */
+
   /* bo-beige */
   --color-bo-beige-100: #FAF7F2;
   --color-bo-beige-200: #F2EBE0;
