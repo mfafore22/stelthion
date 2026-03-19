@@ -43,6 +43,7 @@ const HOURS = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
 const MIN_HOUR = 10;
 const MAX_HOUR = 21;
 
+
 export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
   const { t } = useTranslation('mall');
   const now = new Date();
@@ -194,12 +195,13 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
     day: '2-digit', month: 'short', year: 'numeric',
   });
 
+
   return (
-    <Card className="p-0 overflow-hidden border-bo-neutral-200/40 shadow-bo-glass rounded-xl bg-white">
+    <Card className="p-0 overflow-hidden bg-bo-glass rounded-xl shadow-bo-glass-strong border-2 border-bo-neutral-300/60 backdrop-blur-xl">
       {/* ── Header bar ─────────────────────────────────────────────────────── */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-bo-neutral-100">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-bo-primary-100/60 bg-bo-glass-primary">
         {/* Floor selector */}
-        <div className="flex items-center gap-1 bg-bo-neutral-100 rounded-lg p-1">
+        <div className="flex items-center gap-1 bg-bo-primary-50/60 rounded-lg p-1">
           {(['ground', 'upper'] as Floor[]).map((f) => (
             <button
               key={f}
@@ -207,7 +209,7 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
               className={cn(
                 'px-3 py-1 text-xs font-medium rounded-md transition-all',
                 floor === f
-                  ? 'bg-white shadow text-bo-neutral-900'
+                  ? 'bg-white shadow-sm text-bo-primary-800 ring-1 ring-bo-primary-200/50'
                   : 'text-bo-neutral-500 hover:text-bo-neutral-700'
               )}
             >
@@ -221,23 +223,23 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
           <span className="text-xs text-bo-neutral-500 font-medium">
             {dateLabel} · {HOUR_LABELS[hour]}
           </span>
-          <div className="flex items-center gap-1.5 bg-bo-neutral-50 border border-bo-neutral-200 rounded-lg px-3 py-1">
+          <div className="flex items-center gap-1.5 bg-bo-primary-50 border border-bo-primary-200/60 rounded-lg px-3 py-1 shadow-sm">
             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-            <span className="text-xs font-semibold text-bo-neutral-800">
-              {totalVisitors.toLocaleString()} visitors
+            <span className="text-xs font-semibold text-bo-primary-800">
+              {totalVisitors.toLocaleString()} {t('footfall.visitors', 'visitors')}
             </span>
           </div>
         </div>
       </div>
 
       {/* ── Time slider ────────────────────────────────────────────────────── */}
-      <div className="px-4 pt-3 pb-5 border-b border-bo-neutral-100 bg-bo-neutral-50/50">
+      <div className="px-4 pt-3 pb-5 border-b border-bo-primary-100/40 bg-bo-primary-50/30">
         <div className="flex items-center gap-3">
           {/* Play / Pause button */}
           <button
             onClick={() => setPlaying((p) => !p)}
-            className="shrink-0 w-7 h-7 flex items-center justify-center rounded border border-bo-neutral-200 bg-white text-bo-neutral-600 hover:bg-bo-neutral-50 transition-colors"
-            aria-label={playing ? 'Pause' : 'Play'}
+            className="shrink-0 w-7 h-7 flex items-center justify-center rounded-lg border border-bo-primary-200/60 bg-bo-primary-50 text-bo-primary-700 hover:bg-bo-primary-100 hover:text-bo-primary-800 transition-colors shadow-sm"
+            aria-label={playing ? t('footfall.pause', 'Pause') : t('footfall.play', 'Play')}
           >
             {playing ? (
               // Pause icon: two vertical bars
@@ -256,10 +258,10 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
           {/* Custom tick-mark slider */}
           <div className="flex-1 relative" style={{ paddingBottom: '18px' }}>
             {/* Track background */}
-            <div className="relative h-1.5 rounded-full bg-bo-neutral-200 mx-2">
+            <div className="relative h-1.5 rounded-full bg-bo-primary-100 mx-2">
               {/* Filled portion */}
               <div
-                className="absolute inset-y-0 left-0 rounded-full bg-bo-neutral-800 transition-all"
+                className="absolute inset-y-0 left-0 rounded-full bg-bo-primary-600 transition-all"
                 style={{ width: `${((hour - MIN_HOUR) / (MAX_HOUR - MIN_HOUR)) * 100}%` }}
               />
               {/* Hidden range input for interaction */}
@@ -279,7 +281,7 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
               />
               {/* Thumb */}
               <div
-                className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-bo-neutral-900 border-2 border-white shadow pointer-events-none transition-all"
+                className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-bo-primary-700 border-2 border-white shadow-md ring-2 ring-bo-primary-300/40 pointer-events-none transition-all"
                 style={{ left: `${((hour - MIN_HOUR) / (MAX_HOUR - MIN_HOUR)) * 100}%` }}
               />
             </div>
@@ -297,13 +299,13 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
                     <div
                       className={cn(
                         'w-px h-1.5 rounded-full',
-                        h <= hour ? 'bg-bo-neutral-700' : 'bg-bo-neutral-300'
+                        h <= hour ? 'bg-bo-primary-600' : 'bg-bo-neutral-300'
                       )}
                     />
                     <span
                       className={cn(
                         'text-[9px] leading-none font-medium tabular-nums',
-                        h === hour ? 'text-bo-neutral-900 font-semibold' : 'text-bo-neutral-400'
+                        h === hour ? 'text-bo-primary-800 font-semibold' : 'text-bo-neutral-400'
                       )}
                     >
                       {h}
@@ -315,7 +317,7 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
           </div>
 
           {/* Current time badge */}
-          <span className="shrink-0 text-xs font-semibold text-bo-neutral-700 bg-white border border-bo-neutral-200 rounded px-2 py-0.5 w-14 text-center">
+          <span className="shrink-0 text-xs font-semibold text-bo-primary-800 bg-bo-primary-50/80 border border-bo-primary-200/50 rounded-md px-2 py-0.5 w-14 text-center">
             {HOUR_LABELS[hour]}
           </span>
         </div>
@@ -336,13 +338,13 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
           <button
             onClick={() => zoomTo(zoom + ZOOM_STEP)}
             disabled={zoom >= MAX_ZOOM}
-            className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/90 border border-bo-neutral-200 shadow-bo-sm text-bo-neutral-700 hover:bg-bo-neutral-50 disabled:opacity-30 transition-all duration-300 backdrop-blur-sm text-base font-semibold"
+            className="w-8 h-8 flex items-center justify-center rounded-lg bg-bo-glass border border-bo-primary-200/40 shadow-bo-glass text-bo-primary-700 hover:bg-bo-primary-50 disabled:opacity-50 transition-all duration-300 backdrop-blur-sm text-base font-semibold"
             aria-label="Zoom in"
           >+</button>
           <button
             onClick={() => zoomTo(zoom - ZOOM_STEP)}
             disabled={zoom <= MIN_ZOOM}
-            className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/90 border border-bo-neutral-200 shadow-bo-sm text-bo-neutral-700 hover:bg-bo-neutral-50 disabled:opacity-30 transition-all duration-300 backdrop-blur-sm text-base font-semibold"
+            className="w-8 h-8 flex items-center justify-center rounded-lg bg-bo-glass border border-bo-primary-200/40 shadow-bo-glass text-bo-primary-700 hover:bg-bo-primary-50 disabled:opacity-50 transition-all duration-300 backdrop-blur-sm text-base font-semibold"
             aria-label="Zoom out"
           >−</button>
           {zoom > 1 && (
@@ -405,35 +407,11 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
                     strokeWidth={isSelected ? 2 : 1.5}
                     style={{ transition: 'fill-opacity 0.15s, stroke 0.15s' }}
                   />
-                  {/* Zone label */}
-                  <text
-                    x={zone.labelX}
-                    y={zone.labelY - 6}
-                    textAnchor="middle"
-                    fontSize="13"
-                    fontWeight="600"
-                    fill="#1e293b"
-                    fillOpacity={0.85}
-                    style={{ pointerEvents: 'none', userSelect: 'none' }}
-                  >
-                    {zone.nameFi}
-                  </text>
-                  <text
-                    x={zone.labelX}
-                    y={zone.labelY + 12}
-                    textAnchor="middle"
-                    fontSize="12"
-                    fill="#1e293b"
-                    fillOpacity={0.7}
-                    style={{ pointerEvents: 'none', userSelect: 'none' }}
-                  >
-                    {data.visitors.toLocaleString()}
-                  </text>
                 </g>
               );
             })}
 
-            {/* ── Per-store pin buttons (ground floor only) ───────────────── */}
+            {/* ── Per-store pin dots (labels shown on hover only) ─────────── */}
             {activeStores.map((store) => {
               const cx = store.x + store.w / 2;
               const cy = store.y + store.h / 2;
@@ -457,13 +435,6 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
                   {/* Inner dot */}
                   <circle cx={cx} cy={cy} r={2} fill="white" fillOpacity={0.95}
                     style={{ pointerEvents: 'none' }} />
-                  {/* Label below pin */}
-                  <text x={cx} y={cy + 14} textAnchor="middle"
-                    fontSize="7.5" fontWeight={isHov ? '700' : '500'}
-                    fill="#1e293b" fillOpacity={isHov ? 1 : 0.7}
-                    style={{ pointerEvents: 'none', userSelect: 'none' }}>
-                    {store.name}
-                  </text>
                 </g>
               );
             })}
@@ -471,8 +442,8 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
             {/* ── Zone-level buttons: Tapahtumatori + Ravintolamaailma (static only) */}
             {floor === 'ground' && !hasPublishedGround && (() => {
               const zoneBtns = [
-                { zoneId: 'center-hub', cx: 640, cy: 415, label: 'Tapahtumatori' },
-                { zoneId: 'food-court', cx: 360, cy: 430, label: 'Ravintolamaailma' },
+                { zoneId: 'center-hub', cx: 640, cy: 415, label: t('footfall.zones.centerHub', 'Tapahtumatori') },
+                { zoneId: 'food-court', cx: 360, cy: 430, label: t('footfall.zones.foodCourt', 'Ravintolamaailma') },
               ];
               return zoneBtns.map(({ zoneId, cx, cy, label }) => {
                 const zone = activeZones.find((z) => z.id === zoneId);
@@ -519,19 +490,47 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
               </g>
             ))}
 
-            {/* ── Hovered store tooltip ────────────────────────────────────── */}
-            {floor === 'ground' && hoveredStore && (() => {
+            {/* ── Hovered zone tooltip (zoom-compensated) ─────────────────── */}
+            {hoveredZone && !hoveredZone.startsWith('btn-') && (() => {
+              const zone = activeZones.find((z) => z.id === hoveredZone);
+              if (!zone) return null;
+              const data = getVisitorData(zone);
+              const label = `${zone.nameFi} · ${data.visitors.toLocaleString()}`;
+              const s = 1 / zoom; // inverse scale so tooltip stays readable at any zoom
+              const fs = 22;
+              const tw = Math.max(label.length * fs * 0.58, 140);
+              const pillH = 34;
+              return (
+                <g style={{ pointerEvents: 'none' }}
+                  transform={`translate(${zone.labelX}, ${zone.labelY - 30}) scale(${s}) translate(${-zone.labelX}, ${-(zone.labelY - 30)})`}>
+                  <rect x={zone.labelX - tw / 2 - 10} y={zone.labelY - 30 - pillH / 2}
+                    width={tw + 20} height={pillH} rx={8}
+                    fill="#1e293b" fillOpacity={0.92} />
+                  <text x={zone.labelX} y={zone.labelY - 30 + 8} textAnchor="middle"
+                    fontSize={fs} fontWeight="600" fill="white">
+                    {label}
+                  </text>
+                </g>
+              );
+            })()}
+
+            {/* ── Hovered store tooltip (zoom-compensated) ────────────────── */}
+            {hoveredStore && (() => {
               const cx = hoveredStore.x + hoveredStore.w / 2;
               const cy = hoveredStore.y + hoveredStore.h / 2;
-              const tw = Math.max(hoveredStore.name.length * 6.2, 50);
-              const tx = Math.min(Math.max(cx - tw / 2, 4), 1504 - tw - 4);
-              const ty = cy - 18;
+              const s = 1 / zoom;
+              const fs = 20;
+              const tw = Math.max(hoveredStore.name.length * fs * 0.56, 90);
+              const pillH = 30;
+              const tipY = cy - 26;
               return (
-                <g style={{ pointerEvents: 'none' }}>
-                  <rect x={tx - 4} y={ty - 11} width={tw + 8} height={16} rx={3}
-                    fill="#1e293b" fillOpacity={0.9} />
-                  <text x={tx + tw / 2} y={ty} textAnchor="middle"
-                    fontSize="9.5" fontWeight="600" fill="white">
+                <g style={{ pointerEvents: 'none' }}
+                  transform={`translate(${cx}, ${tipY}) scale(${s}) translate(${-cx}, ${-tipY})`}>
+                  <rect x={cx - tw / 2 - 8} y={tipY - pillH / 2}
+                    width={tw + 16} height={pillH} rx={7}
+                    fill="#1e293b" fillOpacity={0.92} />
+                  <text x={cx} y={tipY + 7} textAnchor="middle"
+                    fontSize={fs} fontWeight="600" fill="white">
                     {hoveredStore.name}
                   </text>
                 </g>
@@ -545,11 +544,11 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
             const data = getVisitorData(selectedZone);
             return (
               <div
-                className="absolute z-20 bg-white rounded-xl shadow-lg border border-bo-neutral-200 p-4 w-52"
+                className="absolute z-20 bg-bo-glass rounded-xl shadow-bo-glass-strong border-2 border-bo-neutral-300/60 backdrop-blur-xl p-4 w-52"
                 style={{ top: '8px', right: '8px' }}
               >
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-semibold text-bo-neutral-800">{selectedZone.nameFi}</span>
+                  <span className="text-xs font-semibold text-bo-primary-800">{selectedZone.nameFi}</span>
                   <button
                     onClick={() => setSelectedZone(null)}
                     className="text-bo-neutral-300 hover:text-bo-neutral-500 transition-colors ml-2 shrink-0"
@@ -562,8 +561,8 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
                 </div>
                 <div className="space-y-1.5 text-xs">
                   <div className="flex justify-between">
-                    <span className="text-bo-neutral-500">Kävijät</span>
-                    <span className="font-semibold text-bo-neutral-900">{data.visitors.toLocaleString('fi-FI')}</span>
+                    <span className="text-bo-neutral-500">{t('footfall.visitors', 'Visitors')}</span>
+                    <span className="font-semibold text-bo-neutral-900">{data.visitors.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-bo-neutral-500">{t('heatmap.vsPlan')}</span>
@@ -599,7 +598,7 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
       )}
 
       {/* ── Legend ─────────────────────────────────────────────────────────── */}
-      <div className="flex items-center gap-4 px-4 py-3 border-t border-bo-neutral-100 bg-bo-neutral-50/50">
+      <div className="flex items-center gap-4 px-4 py-3 border-t border-bo-primary-100/40 bg-bo-glass-primary">
         <span className="text-xs text-bo-neutral-400 font-medium shrink-0">{t('heatmap.density')}</span>
         {[
           { color: '#3b82f6', label: t('heatmap.quiet') },
