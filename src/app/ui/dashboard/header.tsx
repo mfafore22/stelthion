@@ -4,34 +4,35 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { Calendar, Search, Download, HelpCircle, LogOut } from 'lucide-react'
 import { logout } from '@/app/lib/action'
+import { useLocale } from '@/app/lib/locale-provider'
+import { LOCALE_SHORT ,LOCALES, type Locale} from '@/app/lib/locale'
 
 export function Header() {
   const [currentDate, setCurrentDate] = useState('')
   const [currentTime, setCurrentTime] = useState('')
-  const [language, setLanguage] = useState('ENG')
+  const { locale, setLocale, t } = useLocale()
 
   useEffect(() => {
     const updateDateTime = () => {
       const now = new Date()
-      
+
       const date = now.toLocaleDateString('fi-FI', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric'
       }).replace(/\//g, '.')
-      
+
       const time = now.toLocaleTimeString('fi-FI', {
         hour: '2-digit',
         minute: '2-digit'
       })
-      
+
       setCurrentDate(date)
       setCurrentTime(time)
     }
 
     updateDateTime()
     const interval = setInterval(updateDateTime, 1000)
-
     return () => clearInterval(interval)
   }, [])
 
@@ -62,35 +63,37 @@ export function Header() {
       <div className="flex items-center gap-4">
         <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
           <Search size={16} />
-          <span>Ask Stelthion</span>
+          <span>{t('header_ask_stelthion')}</span>
         </button>
-        
-        <select 
-          value={language}
-          onChange={(e) => setLanguage(e.target.value)}
+
+        <select
+          value={locale}
+          onChange={(e) => setLocale(e.target.value as Locale)}
           className="text-sm text-gray-600 bg-white border border-gray-200 rounded-md px-2 py-1 outline-none cursor-pointer hover:border-gray-300"
         >
-          <option value="ENG">ENG</option>
-          <option value="FIN">FIN</option>
+          {(Object.keys(LOCALE_SHORT) as Locale[]).map((loc) => (
+            <option key={loc} value={loc}>
+              {LOCALE_SHORT[loc]}
+            </option>
+          ))}
         </select>
 
         <div className="w-px h-6 bg-gray-200" />
 
         <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
           <Download size={16} />
-          <span>Export</span>
+          <span>{t('header_export')}</span>
         </button>
 
         <div className="w-px h-6 bg-gray-200" />
 
-        {/* Logout Button */}
         <form action={logout}>
-          <button 
+          <button
             type="submit"
             className="flex items-center gap-2 text-sm text-red-600 hover:text-red-800"
           >
             <LogOut size={16} />
-            <span>Logout</span>
+            <span>{t('header_logout')}</span>
           </button>
         </form>
       </div>

@@ -3,33 +3,22 @@ import LoginForm from "@/app/ui/login-form";
 
 export default function LoginPage() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white px-4">
-
-      {/* Branded logo animation */}
-      <div className="w-full max-w-3xl h-72 mb-2">
-        <iframe
-          src="/stelthion-animation/index.html"
-          className="w-full h-full border-0"
-          title="Stelthion"
-          style={{ background: "white", overflow: "hidden" }}
-        />
-      </div>
-
-      {/* Tagline */}
-      <p
-        className="mb-8 text-sm font-medium tracking-widest uppercase text-gray-500"
-        style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}
-      >
-        Property Manager Access
-      </p>
-
-      {/* Login form */}
-      <div className="w-full max-w-md">
-        <Suspense fallback={<div>Loading...</div>}>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[#fafafa]">
+      <div className="w-full max-w-md px-4">
+        <Suspense fallback={
+          <div className="w-full max-w-md mx-auto bg-white rounded-2xl shadow-sm border border-gray-100 px-10 py-10 animate-pulse">
+            <div className="h-8 bg-gray-100 rounded w-32 mx-auto mb-4" />
+            <div className="h-4 bg-gray-100 rounded w-48 mx-auto mb-8" />
+            <div className="space-y-4">
+              <div className="h-10 bg-gray-100 rounded" />
+              <div className="h-10 bg-gray-100 rounded" />
+              <div className="h-10 bg-gray-100 rounded" />
+            </div>
+          </div>
+        }>
           <LoginForm />
         </Suspense>
       </div>
-
     </div>
   )
 }

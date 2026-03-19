@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  users     User[]
+  malls     Mall[]
+}
+
+model User {
+  id               String   @id @default(cuid())
+  email            String   @unique
+  password         String
+  name             String
+  role             Role     @default(USER)
+  customerId       String
+  twoFactorEnabled Boolean  @default(false)
+  twoFactorSecret  String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  customer         Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+}
+
+model Mall {
+  id         String         @id @default(cuid())
+  name       String
+  city       String
+  address    String?
+  totalShops Int            @default(0)
+  status     MallStatus     @default(LIVE)
+  customerId String
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  customer   Customer       @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  stats      MallStats?
+  branding   MallBranding?
+  categories MallCategory[]
+}
+
+model MallStats {
+  id              String   @id @default(cuid())
+  mallId          String   @unique
+  currentVisitors Int      @default(0)
+  annualVisitors  Int      @default(0)
+  annualSales     Float    @default(0)
+  dwellTime       Int      @default(0)
+  conversionRate  Float    @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  mall            Mall     @relation(fields: [mallId], references: [id], onDelete: Cascade)
+}
+
+model MallBranding {
+  id              String   @id @default(cuid())
+  mallId          String   @unique
+  logo            String?
+  primaryColor    String   @default("#1e40af")
+  secondaryColor  String   @default("#3b82f6")
+  accentColor     String   @default("#60a5fa")
+  backgroundColor String   @default("#F8F6F3")
+  warningColor    String   @default("#f7966b")
+  errorColor      String   @default("#f04e54")
+  gradientFrom    String   @default("#264d21")
+  gradientTo      String   @default("#1a3a15")
+  fontFamily      String   @default("Inter, sans-serif")
+  headingWeight   Int      @default(700)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  mall            Mall     @relation(fields: [mallId], references: [id], onDelete: Cascade)
+}
+
+model MallCategory {
+  id         String @id @default(cuid())
+  mallId     String
+  name       String
+  shopCount  Int    @default(0)
+  percentage Float  @default(0)
+  mall       Mall   @relation(fields: [mallId], references: [id], onDelete: Cascade)
+
+  @@unique([mallId, name])
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  USER
+}
+
+enum MallStatus {
+  LIVE
+  BETA
+  ALPHA
+  PLANNED
+}

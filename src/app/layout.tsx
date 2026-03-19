@@ -1,5 +1,5 @@
 import '@/app/globals.css';
-import Link from "next/link";
+import { LocaleProvider } from './lib/locale-provider';
 
 export default function RootLayout({
   children,
@@ -8,7 +8,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <LocaleProvider>
+          {children}
+        </LocaleProvider>
+      </body>
     </html>
   );
 }

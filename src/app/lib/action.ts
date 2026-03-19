@@ -53,14 +53,12 @@ export async function signup(
     return null
   }
 
-  // Run validations
   const matchError = checkPasswordMatch(password, confirmPassword)
   if (matchError) return matchError
 
   const lengthError = checkPasswordLength(password)
   if (lengthError) return lengthError
 
-  // Check if email exists
   const existingUser = await prisma.user.findUnique({
     where: { email },
   })
@@ -69,10 +67,8 @@ export async function signup(
     return 'Email already registered.'
   }
 
-  // Hash password
   const hashedPassword = await bcrypt.hash(password, 10)
 
-  // Create customer and user
   try {
     await prisma.customer.create({
       data: {
@@ -85,17 +81,6 @@ export async function signup(
             role: 'ADMIN',
           },
         },
-        stats: {
-          create: {
-            totalUnits: 0,
-            topCategory: 'N/A',
-            foodBeverage: 0,
-            fashionRetail: 0,
-            currentVisitors: 0,
-            dwellTime: 0,
-            conversionRate: 0,
-          },
-        },
       },
     })
   } catch (error) {
@@ -106,8 +91,6 @@ export async function signup(
   redirect('/login?registered=true')
 }
 
-
 export async function logout() {
   await signOut({ redirectTo: '/login' });
 }
-
