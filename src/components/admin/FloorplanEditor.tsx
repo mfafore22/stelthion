@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ToolPalette, type Tool } from './ToolPalette';
 import { PropertiesPanel } from './PropertiesPanel';
 import { Save, Undo2, Download, ZoomIn, ZoomOut, Maximize, Eye, EyeOff, Globe, RotateCcw } from 'lucide-react';
+import { getPolygonBbox, estimateTextWidth } from '@/lib/utils/labelDecollision';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -525,44 +526,98 @@ export function FloorplanEditor({
     URL.revokeObjectURL(url);
   }, [zones, floor]);
 
-  // ── Label placement helper ─────────────────────────────────────────
-  // Estimate if text fits inside a polygon's bounding box.
-  // Returns { fits, bbox } where bbox is { minX, minY, maxX, maxY }.
-  const getZoneBbox = useCallback((svgPoints: string) => {
-    const coords = svgPoints
-      .trim()
-      .split(/\s+/)
-      .map((p) => {
-        const [x, y] = p.split(',').map(Number);
-        return { x, y };
-      });
-    if (coords.length === 0) return { minX: 0, minY: 0, maxX: 0, maxY: 0, w: 0, h: 0 };
-    const minX = Math.min(...coords.map((c) => c.x));
-    const maxX = Math.max(...coords.map((c) => c.x));
-    const minY = Math.min(...coords.map((c) => c.y));
-    const maxY = Math.max(...coords.map((c) => c.y));
-    return { minX, minY, maxX, maxY, w: maxX - minX, h: maxY - minY };
-  }, []);
+  // ── Margin callout labels for zones ─────────────────────────────────
+  // Places zone labels along top/bottom margins with leader lines to centroids.
+  // Store labels are hover-only (no permanent text on the map).
 
-  // Approximate text width: ~6.5px per character at fontSize 11
-  const CHAR_WIDTH = 6.5;
-  const LABEL_HEIGHT = 14;
+  interface MarginLabel {
+    zoneIndex: number;
+    text: string;
+    anchorX: number;
+    anchorY: number;
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+  }
+
+  const [hoveredStore, setHoveredStore] = useState<number | null>(null);
+
+  const marginLabels = useMemo((): MarginLabel[] => {
+    if (!showLabels) return [];
+
+    const margin = 10;
+    const labelH = 16;
+    const labelGap = 6;
+    const rowGap = 4;
+    const fontSize = 10;
+    const padding = 24;
+    const midY = baseH / 2;
+    const maxRowW = baseW - margin * 2;
+
+    // Build label list with centroid info
+    const raw = zones.map((zone, i) => {
+      const bbox = getPolygonBbox(zone.svgPoints);
+      const cx = bbox.minX + bbox.w / 2;
+      const cy = bbox.minY + bbox.h / 2;
+      const text = zone.nameFi || zone.name;
+      const tw = estimateTextWidth(text, fontSize) + padding;
+      return { zoneIndex: i, text, anchorX: cx, anchorY: cy, w: tw, h: labelH, x: 0, y: 0, isTop: cy < midY };
+    });
+
+    // Split into top-margin and bottom-margin groups
+    const topLabels = raw.filter((l) => l.isTop).sort((a, b) => a.anchorX - b.anchorX);
+    const bottomLabels = raw.filter((l) => !l.isTop).sort((a, b) => a.anchorX - b.anchorX);
+
+    // Flow-layout helper: wraps labels into rows, returns row assignments
+    function flowLayout(labels: typeof raw, startY: number, direction: 1 | -1) {
+      // Break into rows that fit within maxRowW
+      const rows: (typeof raw)[] = [[]];
+      let rowW = 0;
+      for (const l of labels) {
+        if (rowW > 0 && rowW + labelGap + l.w > maxRowW) {
+          rows.push([]);
+          rowW = 0;
+        }
+        rows[rows.length - 1].push(l);
+        rowW += (rowW > 0 ? labelGap : 0) + l.w;
+      }
+
+      // Position each row — center horizontally, stack vertically
+      for (let r = 0; r < rows.length; r++) {
+        const row = rows[r];
+        const totalW = row.reduce((s, l) => s + l.w, 0) + (row.length - 1) * labelGap;
+        let x = Math.max(margin, (baseW - totalW) / 2);
+        const y = startY + direction * r * (labelH + rowGap);
+        for (const l of row) {
+          l.x = x;
+          l.y = y;
+          x += l.w + labelGap;
+        }
+      }
+    }
+
+    // Top labels: first row at y=margin, additional rows go downward
+    flowLayout(topLabels, margin, 1);
+
+    // Bottom labels: first row at bottom edge, additional rows go upward
+    flowLayout(bottomLabels, baseH - margin - labelH, -1);
+
+    return raw;
+  }, [zones, showLabels, baseW, baseH]);
 
   // ── Render ──────────────────────────────────────────────────────────
 
   return (
-    <div className="flex h-full">
-      {/* Left toolbar */}
-      <ToolPalette tool={tool} onToolChange={setTool} />
-
-      {/* SVG canvas */}
-      <div className="flex-1 flex flex-col bg-bo-neutral-200 overflow-hidden">
-        {/* Toolbar ribbon */}
-        <div className="flex items-center gap-2 p-2 bg-bo-neutral-50 border-b border-bo-neutral-200 shadow-bo-sm shrink-0">
+    <div className="flex flex-col h-full">
+      {/* Top toolbar ribbon — tools + actions */}
+      <div className="flex items-center gap-2 p-2 bg-bo-neutral-50 border-b border-bo-neutral-200 shadow-bo-sm shrink-0">
+        {/* Drawing tools */}
+        <ToolPalette tool={tool} onToolChange={setTool} />
           <button
             onClick={handleSave}
             disabled={!dirty || saving}
-            className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg bg-bo-accent-600 text-white disabled:opacity-40 hover:bg-bo-accent-700 hover:shadow-bo-md hover:-translate-y-0.5 transition-all duration-300"
+            className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg bg-bo-neutral-950 text-bo-neutral-50 disabled:opacity-60 hover:bg-bo-neutral-900 hover:shadow-bo-lg hover:-translate-y-0.5 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
           >
             <Save className="w-3.5 h-3.5" />
             {saving ? t('editor.saving') : t('editor.save')}
@@ -570,7 +625,7 @@ export function FloorplanEditor({
           <button
             onClick={handleUndo}
             disabled={drawingPoints.length === 0 && undoStack.length === 0}
-            className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg bg-bo-neutral-100 text-bo-neutral-700 hover:bg-bo-neutral-200 disabled:opacity-40 transition-all duration-300"
+            className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg bg-bo-neutral-100 text-bo-neutral-700 hover:bg-bo-neutral-200 disabled:opacity-60 transition-all duration-300"
             title={t('editor.undoHint')}
           >
             <Undo2 className="w-3.5 h-3.5" />
@@ -586,7 +641,7 @@ export function FloorplanEditor({
           <button
             onClick={handlePublish}
             disabled={dirty || publishing || !savedSincePublish}
-            className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg bg-bo-accent-600 text-white disabled:opacity-40 hover:bg-bo-accent-700 hover:shadow-bo-md hover:-translate-y-0.5 transition-all duration-300"
+            className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg bg-bo-neutral-950 text-bo-neutral-50 disabled:opacity-60 hover:bg-bo-neutral-900 hover:shadow-bo-lg hover:-translate-y-0.5 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
             title={t('editor.publishHint')}
           >
             <Globe className="w-3.5 h-3.5" />
@@ -632,7 +687,7 @@ export function FloorplanEditor({
                       key={s.id}
                       onClick={() => handleRestore(s.id)}
                       disabled={restoring}
-                      className="w-full text-left px-3 py-2 text-xs hover:bg-bo-neutral-100 border-b border-bo-neutral-100 last:border-0 transition-colors disabled:opacity-40"
+                      className="w-full text-left px-3 py-2 text-xs hover:bg-bo-neutral-100 border-b border-bo-neutral-100 last:border-0 transition-colors disabled:opacity-60"
                     >
                       <span className="font-medium text-bo-neutral-950">
                         {new Date(s.createdAt).toLocaleString('fi-FI')}
@@ -645,33 +700,8 @@ export function FloorplanEditor({
             )}
           </div>
 
-          {/* Zoom controls */}
-          <div className="flex items-center gap-1 ml-auto border-l border-bo-neutral-200 pl-2">
-            <button
-              onClick={handleZoomIn}
-              className="flex items-center gap-1 px-2 py-1.5 text-xs font-medium rounded-lg bg-bo-neutral-100 text-bo-neutral-700 hover:bg-bo-neutral-200 transition-all duration-300"
-              title="Zoom in (Ctrl+scroll)"
-            >
-              <ZoomIn className="w-3.5 h-3.5" />
-            </button>
-            <span className="text-xs text-bo-neutral-500 w-10 text-center font-mono">{Math.round(zoom * 100)}%</span>
-            <button
-              onClick={handleZoomOut}
-              disabled={zoom <= 1}
-              className="flex items-center gap-1 px-2 py-1.5 text-xs font-medium rounded-lg bg-bo-neutral-100 text-bo-neutral-700 hover:bg-bo-neutral-200 disabled:opacity-40 transition-all duration-300"
-              title="Zoom out (Ctrl+scroll)"
-            >
-              <ZoomOut className="w-3.5 h-3.5" />
-            </button>
-            <button
-              onClick={handleZoomReset}
-              disabled={zoom === 1}
-              className="flex items-center gap-1 px-2 py-1.5 text-xs font-medium rounded-lg bg-bo-neutral-100 text-bo-neutral-700 hover:bg-bo-neutral-200 disabled:opacity-40 transition-all duration-300"
-              title="Reset zoom"
-            >
-              <Maximize className="w-3.5 h-3.5" />
-            </button>
-          </div>
+          {/* Spacer to push delete button right */}
+          <div className="ml-auto" />
 
           {selected && (
             <button
@@ -709,8 +739,38 @@ export function FloorplanEditor({
           </div>
         )}
 
+      {/* Canvas + Properties Panel row */}
+      <div className="flex flex-1 min-h-0 bg-bo-neutral-200 overflow-hidden">
         {/* Floor plan SVG */}
-        <div ref={containerRef} className="flex-1 overflow-hidden min-h-0">
+        <div ref={containerRef} className="flex-1 overflow-hidden min-h-0 relative">
+
+          {/* Floating zoom controls — bottom-right of canvas */}
+          <div className="absolute bottom-4 right-4 z-10 flex items-center gap-1 bg-white/90 backdrop-blur-sm rounded-lg px-2 py-1.5 shadow-bo-md border border-bo-neutral-200">
+            <button
+              onClick={handleZoomIn}
+              className="w-7 h-7 flex items-center justify-center rounded-md text-bo-neutral-700 hover:bg-bo-neutral-100 transition-all duration-200"
+              title="Zoom in (Ctrl+scroll)"
+            >
+              <ZoomIn className="w-4 h-4" />
+            </button>
+            <span className="text-xs text-bo-neutral-500 w-10 text-center font-mono">{Math.round(zoom * 100)}%</span>
+            <button
+              onClick={handleZoomOut}
+              disabled={zoom <= 1}
+              className="w-7 h-7 flex items-center justify-center rounded-md text-bo-neutral-700 hover:bg-bo-neutral-100 disabled:opacity-40 transition-all duration-200"
+              title="Zoom out (Ctrl+scroll)"
+            >
+              <ZoomOut className="w-4 h-4" />
+            </button>
+            <button
+              onClick={handleZoomReset}
+              disabled={zoom === 1}
+              className="w-7 h-7 flex items-center justify-center rounded-md text-bo-neutral-700 hover:bg-bo-neutral-100 disabled:opacity-40 transition-all duration-200"
+              title="Reset zoom"
+            >
+              <Maximize className="w-4 h-4" />
+            </button>
+          </div>
         <svg
           ref={svgRef}
           viewBox={zoomedViewBox}
@@ -761,13 +821,7 @@ export function FloorplanEditor({
           {/* Zone polygons */}
           {zones.map((zone, i) => {
             const isSelected = selected?.type === 'zone' && selected.index === i;
-            const bbox = getZoneBbox(zone.svgPoints);
-            const labelText = zone.nameFi || zone.name;
-            const textWidth = labelText.length * CHAR_WIDTH;
-            const fitsInside = textWidth < bbox.w - 8 && LABEL_HEIGHT < bbox.h - 4;
-            // If label doesn't fit, place it above the zone with a leader line
-            const labelX = fitsInside ? zone.labelX : bbox.minX + bbox.w / 2;
-            const labelY = fitsInside ? zone.labelY : bbox.minY - 18;
+            const bbox = getPolygonBbox(zone.svgPoints);
             const cx = bbox.minX + bbox.w / 2;
             const cy = bbox.minY + bbox.h / 2;
             return (
@@ -786,50 +840,24 @@ export function FloorplanEditor({
                     }
                   }}
                 />
-                {/* Zone label (hidden when showLabels is off) */}
+                {/* Zone number badge (small circled number inside zone) */}
                 {showLabels && (
                   <>
-                    {/* Leader line from label to zone centroid when label is outside */}
-                    {!fitsInside && (
-                      <line
-                        x1={labelX}
-                        y1={labelY + 4}
-                        x2={cx}
-                        y2={cy}
-                        stroke="var(--color-bo-neutral-600)"
-                        strokeWidth={0.8}
-                        strokeDasharray="3,2"
-                        strokeOpacity={0.6}
-                        style={{ pointerEvents: 'none' }}
-                      />
-                    )}
-                    {/* Label background for readability when outside */}
-                    {!fitsInside && (
-                      <rect
-                        x={labelX - textWidth / 2 - 4}
-                        y={labelY - 10}
-                        width={textWidth + 8}
-                        height={16}
-                        rx={3}
-                        fill="white"
-                        fillOpacity={0.9}
-                        stroke="var(--color-bo-neutral-600)"
-                        strokeWidth={0.5}
-                        strokeOpacity={0.4}
-                        style={{ pointerEvents: 'none' }}
-                      />
-                    )}
+                    <circle
+                      cx={cx} cy={cy} r={8}
+                      fill={isSelected ? 'var(--color-bo-accent-600)' : 'var(--color-bo-neutral-800)'}
+                      fillOpacity={isSelected ? 0.95 : 0.7}
+                      stroke="white" strokeWidth={1.5}
+                      style={{ pointerEvents: 'none' }}
+                    />
                     <text
-                      x={labelX}
-                      y={labelY}
+                      x={cx} y={cy + 3.5}
                       textAnchor="middle"
-                      fontSize="11"
-                      fontWeight="600"
-                      fill="var(--color-bo-neutral-950)"
-                      fillOpacity={0.85}
+                      fontSize="8" fontWeight="700"
+                      fill="white"
                       style={{ pointerEvents: 'none', userSelect: 'none' }}
                     >
-                      {labelText}
+                      {i + 1}
                     </text>
                   </>
                 )}
@@ -840,10 +868,6 @@ export function FloorplanEditor({
           {/* Store rectangles */}
           {stores.map((store, i) => {
             const isSelected = selected?.type === 'store' && selected.index === i;
-            const storeTextWidth = store.name.length * 4.5; // ~4.5px per char at fontSize 7
-            const storeFits = storeTextWidth < store.w - 4 && 10 < store.h - 2;
-            const storeLabelX = storeFits ? store.x + store.w / 2 : store.x + store.w / 2;
-            const storeLabelY = storeFits ? store.y + store.h / 2 + 3 : store.y - 10;
             const storeCx = store.x + store.w / 2;
             const storeCy = store.y + store.h / 2;
             return (
@@ -853,11 +877,11 @@ export function FloorplanEditor({
                   y={store.y}
                   width={store.w}
                   height={store.h}
-                  fill={isSelected ? 'var(--color-bo-accent-600)' : 'var(--color-bo-neutral-400)'}
-                  fillOpacity={isSelected ? 0.35 : 0.15}
-                  stroke={isSelected ? 'var(--color-bo-accent-600)' : 'var(--color-bo-neutral-400)'}
-                  strokeWidth={isSelected ? 2 : 0.5}
-                  strokeDasharray={isSelected ? '' : '3,2'}
+                  fill={isSelected ? 'var(--color-bo-accent-600)' : hoveredStore === i ? 'var(--color-bo-neutral-500)' : 'var(--color-bo-neutral-400)'}
+                  fillOpacity={isSelected ? 0.35 : hoveredStore === i ? 0.25 : 0.15}
+                  stroke={isSelected ? 'var(--color-bo-accent-600)' : hoveredStore === i ? 'var(--color-bo-neutral-600)' : 'var(--color-bo-neutral-400)'}
+                  strokeWidth={isSelected ? 2 : hoveredStore === i ? 1 : 0.5}
+                  strokeDasharray={isSelected || hoveredStore === i ? '' : '3,2'}
                   style={{ cursor: 'pointer' }}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -865,48 +889,29 @@ export function FloorplanEditor({
                       setSelected({ type: 'store', index: i });
                     }
                   }}
+                  onMouseEnter={() => setHoveredStore(i)}
+                  onMouseLeave={() => setHoveredStore(null)}
                 />
-                {/* Store label (hidden when showLabels is off) */}
-                {showLabels && (
+                {/* Store name tooltip on hover */}
+                {(hoveredStore === i || isSelected) && (
                   <>
-                    {/* Leader line when store label is outside */}
-                    {!storeFits && (
-                      <line
-                        x1={storeLabelX}
-                        y1={storeLabelY + 3}
-                        x2={storeCx}
-                        y2={storeCy}
-                        stroke="var(--color-bo-neutral-500)"
-                        strokeWidth={0.6}
-                        strokeDasharray="2,2"
-                        strokeOpacity={0.5}
-                        style={{ pointerEvents: 'none' }}
-                      />
-                    )}
-                    {/* Label background when outside */}
-                    {!storeFits && (
-                      <rect
-                        x={storeLabelX - storeTextWidth / 2 - 3}
-                        y={storeLabelY - 7}
-                        width={storeTextWidth + 6}
-                        height={11}
-                        rx={2}
-                        fill="white"
-                        fillOpacity={0.9}
-                        stroke="var(--color-bo-neutral-400)"
-                        strokeWidth={0.4}
-                        strokeOpacity={0.4}
-                        style={{ pointerEvents: 'none' }}
-                      />
-                    )}
+                    <rect
+                      x={storeCx - estimateTextWidth(store.name, 7) / 2 - 4}
+                      y={store.y - 14}
+                      width={estimateTextWidth(store.name, 7) + 8}
+                      height={12}
+                      rx={3}
+                      fill={isSelected ? 'var(--color-bo-accent-600)' : 'var(--color-bo-neutral-900)'}
+                      fillOpacity={0.92}
+                      style={{ pointerEvents: 'none' }}
+                    />
                     <text
-                      x={storeLabelX}
-                      y={storeLabelY}
+                      x={storeCx}
+                      y={store.y - 5.5}
                       textAnchor="middle"
                       fontSize="7"
-                      fontWeight="500"
-                      fill="var(--color-bo-neutral-950)"
-                      fillOpacity={0.7}
+                      fontWeight={isSelected ? '700' : '500'}
+                      fill="white"
                       style={{ pointerEvents: 'none', userSelect: 'none' }}
                     >
                       {store.name}
@@ -1054,20 +1059,85 @@ export function FloorplanEditor({
               strokeDasharray="5,3"
             />
           )}
+
+          {/* ── Margin callout labels for zones (top layer) ─────────── */}
+          {marginLabels.map((ml) => {
+            const zone = zones[ml.zoneIndex];
+            if (!zone) return null;
+            const isSelected = selected?.type === 'zone' && selected.index === ml.zoneIndex;
+            const pillCx = ml.x + ml.w / 2;
+            const pillCy = ml.y + ml.h / 2;
+            return (
+              <g key={`margin-label-${ml.zoneIndex}`}>
+                {/* Leader line from margin label to zone centroid */}
+                <line
+                  x1={pillCx}
+                  y1={ml.y < baseH / 2 ? ml.y + ml.h : ml.y}
+                  x2={ml.anchorX}
+                  y2={ml.anchorY}
+                  stroke={isSelected ? 'var(--color-bo-accent-600)' : 'var(--color-bo-neutral-500)'}
+                  strokeWidth={isSelected ? 1.2 : 0.8}
+                  strokeOpacity={isSelected ? 0.85 : 0.45}
+                  strokeDasharray="4,3"
+                  style={{ pointerEvents: 'none' }}
+                />
+                {/* Small dot at zone centroid end */}
+                <circle
+                  cx={ml.anchorX} cy={ml.anchorY} r={2}
+                  fill={isSelected ? 'var(--color-bo-accent-600)' : 'var(--color-bo-neutral-500)'}
+                  fillOpacity={isSelected ? 0.85 : 0.5}
+                  style={{ pointerEvents: 'none' }}
+                />
+                {/* Label pill background */}
+                <rect
+                  x={ml.x}
+                  y={ml.y}
+                  width={ml.w}
+                  height={ml.h}
+                  rx={4}
+                  fill={isSelected ? 'var(--color-bo-accent-600)' : 'white'}
+                  fillOpacity={0.95}
+                  stroke={isSelected ? 'var(--color-bo-accent-600)' : 'var(--color-bo-neutral-400)'}
+                  strokeWidth={isSelected ? 1.2 : 0.7}
+                  style={{ cursor: 'pointer' }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelected({ type: 'zone', index: ml.zoneIndex });
+                  }}
+                />
+                {/* Zone number + name text */}
+                <text
+                  x={ml.x + ml.w / 2}
+                  y={ml.y + ml.h / 2 + 3.5}
+                  textAnchor="middle"
+                  fontSize="10"
+                  fontWeight="600"
+                  fill={isSelected ? 'white' : 'var(--color-bo-neutral-800)'}
+                  style={{ cursor: 'pointer', userSelect: 'none' }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelected({ type: 'zone', index: ml.zoneIndex });
+                  }}
+                >
+                  {ml.zoneIndex + 1}. {ml.text}
+                </text>
+              </g>
+            );
+          })}
         </svg>
         </div>
-      </div>
 
-      {/* Right properties panel */}
-      <PropertiesPanel
-        selected={selected}
-        zones={zones}
-        stores={stores}
-        cameras={cameras}
-        onUpdateZone={updateZone}
-        onUpdateStore={updateStore}
-        onUpdateCamera={updateCamera}
-      />
+        {/* Right properties panel */}
+        <PropertiesPanel
+          selected={selected}
+          zones={zones}
+          stores={stores}
+          cameras={cameras}
+          onUpdateZone={updateZone}
+          onUpdateStore={updateStore}
+          onUpdateCamera={updateCamera}
+        />
+      </div>
     </div>
   );
 }
