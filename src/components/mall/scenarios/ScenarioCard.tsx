@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { LucideIcon } from 'lucide-react';
+import { SwirlLoader } from '@/components/ui/SwirlLoader';
 import { cn } from '@/lib/utils';
 import { calculateWeatherShock } from '@/lib/scenarios/weatherShock';
 import { ScenarioResultsModal, ScenarioResult } from './ScenarioResultsModal';
@@ -156,7 +157,7 @@ export function ScenarioCard({
         >
           {isCalculating ? (
             <>
-              <div className="animate-spin h-4 w-4 border-2 border-bo-neutral-400 border-t-transparent rounded-full mr-2" />
+              <SwirlLoader size="sm" className="mr-2" />
               Calculating...
             </>
           ) : (

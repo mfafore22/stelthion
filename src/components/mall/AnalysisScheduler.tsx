@@ -113,7 +113,7 @@ export function AnalysisScheduler({ mallId }: { mallId: string }) {
               <select
                 value={cameraId}
                 onChange={(e) => setCameraId(e.target.value)}
-                className="w-full text-sm border border-bo-neutral-200 rounded-lg px-3 py-2"
+                className="w-full text-sm border border-bo-neutral-200 rounded-lg px-3 py-2 bg-white text-bo-neutral-950"
               >
                 {cameras.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -134,7 +134,7 @@ export function AnalysisScheduler({ mallId }: { mallId: string }) {
                 onChange={(e) => setDate(e.target.value)}
                 max={new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0]}
                 required
-                className="w-full text-sm border border-bo-neutral-200 rounded-lg px-3 py-2"
+                className="w-full text-sm border border-bo-neutral-200 rounded-lg px-3 py-2 bg-white text-bo-neutral-950"
               />
             </div>
 
@@ -147,7 +147,7 @@ export function AnalysisScheduler({ mallId }: { mallId: string }) {
                 <select
                   value={startTime}
                   onChange={(e) => setStartTime(e.target.value)}
-                  className="flex-1 text-sm border border-bo-neutral-200 rounded-lg px-2 py-2"
+                  className="flex-1 text-sm border border-bo-neutral-200 rounded-lg px-2 py-2 bg-white text-bo-neutral-950"
                 >
                   {TIME_SLOTS.map((t) => (
                     <option key={t} value={t}>{t}</option>
@@ -157,7 +157,7 @@ export function AnalysisScheduler({ mallId }: { mallId: string }) {
                 <select
                   value={endTime}
                   onChange={(e) => setEndTime(e.target.value)}
-                  className="flex-1 text-sm border border-bo-neutral-200 rounded-lg px-2 py-2"
+                  className="flex-1 text-sm border border-bo-neutral-200 rounded-lg px-2 py-2 bg-white text-bo-neutral-950"
                 >
                   {TIME_SLOTS.map((t) => (
                     <option key={t} value={t}>{t}</option>
@@ -193,7 +193,7 @@ export function AnalysisScheduler({ mallId }: { mallId: string }) {
           <button
             type="submit"
             disabled={submitting || !cameraId || !date}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-bo-primary-500 text-white hover:bg-bo-primary-600 disabled:opacity-40 transition-all duration-300"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-bo-primary-500 text-white hover:bg-bo-primary-600 disabled:opacity-60 transition-all duration-300"
           >
             <Send className="w-4 h-4" />
             {submitting ? t('videoAnalysis.submitting') : t('videoAnalysis.scheduleAnalysis')}

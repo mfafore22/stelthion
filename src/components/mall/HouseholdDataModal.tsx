@@ -125,7 +125,7 @@ export function HouseholdDataModal({ data, isOpen, onClose }: HouseholdDataModal
                   setSearchTerm(e.target.value);
                   setCurrentPage(1); // Reset to first page on search
                 }}
-                className="w-full pl-10 pr-4 py-2 rounded-lg border border-bo-neutral-300 bg-white/50 text-bo-neutral-950 placeholder-bo-neutral-500 focus:outline-none focus:ring-2 focus:ring-bo-primary-400"
+                className="w-full pl-10 pr-4 py-2 rounded-lg border border-bo-neutral-300 bg-white/85 text-bo-neutral-950 placeholder-bo-neutral-500 focus:outline-none focus:ring-2 focus:ring-bo-primary-400"
               />
             </div>
             <button
@@ -227,14 +227,14 @@ export function HouseholdDataModal({ data, isOpen, onClose }: HouseholdDataModal
               <button
                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className="px-4 py-2 rounded-lg bg-white/50 text-bo-neutral-700 hover:bg-white/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+                className="px-4 py-2 rounded-lg bg-white/85 text-bo-neutral-700 hover:bg-white/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
               >
                 {t('householdModal.previous')}
               </button>
               <button
                 onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
-                className="px-4 py-2 rounded-lg bg-white/50 text-bo-neutral-700 hover:bg-white/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+                className="px-4 py-2 rounded-lg bg-white/85 text-bo-neutral-700 hover:bg-white/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
               >
                 {t('householdModal.next')}
               </button>

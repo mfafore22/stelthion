@@ -45,7 +45,7 @@ export function TopCategoriesTable({ categories, limit = 10 }: TopCategoriesTabl
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white/40 divide-y divide-bo-neutral-200/30">
+          <tbody className="bg-white/80 divide-y divide-bo-neutral-200/30">
             {displayCategories.map((category, index) => (
               <tr key={category.category} className="hover:bg-bo-glass-subtle/50 transition-colors">
                 <td className="px-4 py-3 text-sm text-bo-neutral-950">

@@ -197,7 +197,7 @@ export function JourneyPlanner({ mallId }: { mallId: string }) {
                 setCameraId('');
                 if (destinationZoneId === e.target.value) setDestinationZoneId('');
               }}
-              className="w-full text-sm border border-bo-neutral-200 rounded-lg px-3 py-2"
+              className="w-full text-sm border border-bo-neutral-200 rounded-lg px-3 py-2 bg-white text-bo-neutral-950"
             >
               <option value="">{t('journeyPlanner.selectZone')}</option>
               {allZones.map((z) => (
@@ -217,7 +217,7 @@ export function JourneyPlanner({ mallId }: { mallId: string }) {
               <select
                 value={cameraId}
                 onChange={(e) => setCameraId(e.target.value)}
-                className="w-full text-sm border border-bo-neutral-200 rounded-lg px-3 py-2"
+                className="w-full text-sm border border-bo-neutral-200 rounded-lg px-3 py-2 bg-white text-bo-neutral-950"
                 disabled={!originZoneId}
               >
                 <option value="">{t('journeyPlanner.selectCamera')}</option>
@@ -236,7 +236,7 @@ export function JourneyPlanner({ mallId }: { mallId: string }) {
             <select
               value={destinationZoneId}
               onChange={(e) => setDestinationZoneId(e.target.value)}
-              className="w-full text-sm border border-bo-neutral-200 rounded-lg px-3 py-2"
+              className="w-full text-sm border border-bo-neutral-200 rounded-lg px-3 py-2 bg-white text-bo-neutral-950"
               disabled={!originZoneId}
             >
               <option value="">{t('journeyPlanner.selectZone')}</option>
@@ -259,7 +259,7 @@ export function JourneyPlanner({ mallId }: { mallId: string }) {
               onChange={(e) => setDate(e.target.value)}
               max={new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0]}
               required
-              className="w-full text-sm border border-bo-neutral-200 rounded-lg px-3 py-2"
+              className="w-full text-sm border border-bo-neutral-200 rounded-lg px-3 py-2 bg-white text-bo-neutral-950"
             />
           </div>
 
@@ -271,7 +271,7 @@ export function JourneyPlanner({ mallId }: { mallId: string }) {
               <select
                 value={startTime}
                 onChange={(e) => setStartTime(e.target.value)}
-                className="flex-1 text-sm border border-bo-neutral-200 rounded-lg px-2 py-2"
+                className="flex-1 text-sm border border-bo-neutral-200 rounded-lg px-2 py-2 bg-white text-bo-neutral-950"
               >
                 {TIME_SLOTS.map((slot) => (
                   <option key={slot} value={slot}>{slot}</option>
@@ -281,7 +281,7 @@ export function JourneyPlanner({ mallId }: { mallId: string }) {
               <select
                 value={endTime}
                 onChange={(e) => setEndTime(e.target.value)}
-                className="flex-1 text-sm border border-bo-neutral-200 rounded-lg px-2 py-2"
+                className="flex-1 text-sm border border-bo-neutral-200 rounded-lg px-2 py-2 bg-white text-bo-neutral-950"
               >
                 {TIME_SLOTS.map((slot) => (
                   <option key={slot} value={slot}>{slot}</option>
@@ -319,7 +319,7 @@ export function JourneyPlanner({ mallId }: { mallId: string }) {
         <button
           type="submit"
           disabled={submitting || !originZoneId || !destinationZoneId || !cameraId || !date}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-bo-primary-500 text-white hover:bg-bo-primary-600 disabled:opacity-40 transition-all duration-300"
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-bo-primary-500 text-white hover:bg-bo-primary-600 disabled:opacity-60 transition-all duration-300"
         >
           <Send className="w-4 h-4" />
           {submitting ? t('journeyPlanner.scheduling') : t('journeyPlanner.schedule')}
@@ -339,7 +339,7 @@ export function JourneyPlanner({ mallId }: { mallId: string }) {
               <select
                 value={selectedJobId ?? ''}
                 onChange={(e) => setSelectedJobId(e.target.value || null)}
-                className="w-full text-sm border border-bo-neutral-200 rounded-lg px-3 py-2 appearance-none"
+                className="w-full text-sm border border-bo-neutral-200 rounded-lg px-3 py-2 bg-white text-bo-neutral-950 appearance-none"
               >
                 <option value="">{t('journeyPlanner.chooseJob')}</option>
                 {jobs.map((j) => (

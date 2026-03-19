@@ -6,8 +6,9 @@
 
 'use client';
 
-import { Cloud, Droplets, Wind, ThermometerSun, Loader2 } from 'lucide-react';
+import { Cloud, Droplets, Wind, ThermometerSun } from 'lucide-react';
 import { Card } from '@/components/ui/card';
+import { SwirlLoader } from '@/components/ui/SwirlLoader';
 import { useWeather } from '@/hooks/mall/useWeather';
 import { useTranslation } from 'react-i18next';
 
@@ -26,7 +27,7 @@ export function WeatherNextPanel({ mallId, expanded = false }: WeatherNextPanelP
     return (
       <Card className="p-6 bg-bo-glass border-bo-neutral-200/30 shadow-bo-glass">
         <div className="flex items-center justify-center h-48">
-          <Loader2 className="h-6 w-6 animate-spin text-bo-primary-600" />
+          <SwirlLoader size="md" />
           <span className="ml-2 text-sm text-bo-neutral-600">{t('weather.loading')}</span>
         </div>
       </Card>

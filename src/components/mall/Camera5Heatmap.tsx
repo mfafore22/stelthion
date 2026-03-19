@@ -13,6 +13,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { SwirlLoader } from '@/components/ui/SwirlLoader';
 import { useMallIdentity } from '@/hooks/mall/useMallIdentity';
 import { Play, Pause, SkipBack, SkipForward } from 'lucide-react';
 
@@ -177,7 +178,7 @@ export function Camera5Heatmap({
       <Card className="p-6">
         <div className="flex items-center justify-center" style={{ height }}>
           <div className="text-center">
-            <div className="mb-3 h-12 w-12 animate-spin rounded-full border-4 border-gray-200 border-t-blue-600 mx-auto"></div>
+            <div className="mb-3 mx-auto flex justify-center"><SwirlLoader size="lg" /></div>
             <p className="text-sm text-muted-foreground">Loading heatmap data...</p>
           </div>
         </div>

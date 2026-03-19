@@ -62,7 +62,7 @@ export function MessageInput({
       {/* Attachment button (disabled for now) */}
       <button
         disabled
-        className="p-2 text-bo-neutral-400 transition-colors disabled:opacity-40"
+        className="p-2 text-bo-neutral-400 transition-colors disabled:opacity-60"
         title="Attachments (coming soon)"
       >
         <Paperclip className="w-5 h-5" />
@@ -86,7 +86,7 @@ export function MessageInput({
       {/* Voice button (disabled for now) */}
       <button
         disabled
-        className="p-2 text-bo-neutral-400 transition-colors disabled:opacity-40"
+        className="p-2 text-bo-neutral-400 transition-colors disabled:opacity-60"
         title="Voice input (coming soon)"
       >
         <Mic className="w-5 h-5" />
@@ -105,7 +105,7 @@ export function MessageInput({
         <button
           onClick={handleSend}
           disabled={disabled || !message.trim()}
-          className="p-3 bg-bo-neutral-950 hover:bg-bo-neutral-900 text-bo-neutral-50 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          className="p-3 bg-bo-neutral-950 hover:bg-bo-neutral-900 text-bo-neutral-50 rounded-lg transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           title="Send message (Enter)"
         >
           <Send className="w-5 h-5" />

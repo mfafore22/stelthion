@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useEffect } from 'react';
+import { SwirlLoader } from '@/components/ui/SwirlLoader';
 
 export type UserRole = 'ADMIN' | 'OPS' | 'VIEWER' | 'AGENT_SERVICE';
 
@@ -202,7 +203,7 @@ export function withPermission(permission: string) {
         return (
           <div className="flex items-center justify-center p-8">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
+              <div className="mx-auto mb-2 flex justify-center"><SwirlLoader size="lg" /></div>
               <p className="text-sm text-muted-foreground">Checking permissions...</p>
             </div>
           </div>

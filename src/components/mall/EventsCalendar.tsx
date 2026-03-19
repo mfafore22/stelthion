@@ -91,7 +91,7 @@ export function EventsCalendar({ eventsData }: EventsCalendarProps) {
               <button
                 key={`${venue.name}-${index}`}
                 onClick={() => setSelectedVenue(selectedVenue === venue.name ? null : venue.name)}
-                className={`rounded-lg overflow-hidden relative bg-white/50 backdrop-blur-sm border-2 transition-all shadow-sm hover:shadow-md min-h-[140px] text-left w-full ${
+                className={`rounded-lg overflow-hidden relative bg-white/85 backdrop-blur-md border-2 transition-all shadow-sm hover:shadow-md min-h-[140px] text-left w-full ${
                   selectedVenue === venue.name
                     ? 'border-bo-primary-600 ring-2 ring-bo-primary-300'
                     : 'border-bo-neutral-300/50 hover:border-bo-primary-400'
@@ -151,7 +151,7 @@ export function EventsCalendar({ eventsData }: EventsCalendarProps) {
         <div className="space-y-6">
           {sortedDates.map((date) => (
             <div key={date}>
-              <div className="sticky top-0 bg-bo-glass-strong/95 backdrop-blur-sm rounded-lg px-4 py-2 mb-3 border border-bo-primary-200/30 shadow-sm z-10">
+              <div className="sticky top-0 bg-bo-glass-strong backdrop-blur-md rounded-lg px-4 py-2 mb-3 border border-bo-primary-200/30 shadow-sm z-10">
                 <div className="text-sm font-semibold text-bo-primary-700">{formatDate(date)}</div>
                 <div className="text-xs text-bo-neutral-600">
                   {new Date(date).toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric' })}

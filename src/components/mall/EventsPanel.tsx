@@ -8,6 +8,7 @@
 
 import Image from 'next/image';
 import { Calendar, MapPin, Users, Clock, RefreshCw, Ticket, TrendingUp } from 'lucide-react';
+import { SwirlLoader } from '@/components/ui/SwirlLoader';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useEvents } from '@/hooks/mall/useEvents';
@@ -30,7 +31,7 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
     return (
       <Card className="p-6 bg-bo-glass border-bo-neutral-200/30 shadow-bo-glass">
         <div className="flex items-center justify-center py-8">
-          <RefreshCw className="h-6 w-6 animate-spin text-bo-primary-600" />
+          <SwirlLoader size="md" />
           <span className="ml-2 text-sm text-bo-neutral-600">{t('events.loadingData')}</span>
         </div>
       </Card>
@@ -112,7 +113,7 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
           {venues.slice(0, expanded ? 10 : 3).map((venue) => (
             <div
               key={venue.id}
-              className="flex items-start justify-between rounded-lg border border-bo-neutral-200/50 bg-white/50 p-3 dark:bg-slate-800/50"
+              className="flex items-start justify-between rounded-lg border border-bo-neutral-200/50 bg-white/80 p-3 dark:bg-slate-800/50"
             >
               <div className="flex items-start gap-2">
                 <MapPin className="mt-0.5 h-4 w-4 text-bo-info-dark" />
@@ -238,7 +239,7 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
           </div>
         </div>
       ) : (
-        <div className="rounded-lg border border-bo-neutral-200/50 bg-white/50 p-6 text-center dark:bg-slate-800/50">
+        <div className="rounded-lg border border-bo-neutral-200/50 bg-white/80 p-6 text-center dark:bg-slate-800/50">
           <Calendar className="mx-auto mb-2 h-8 w-8 text-bo-neutral-400" />
           <div className="text-sm text-bo-neutral-600">
             {expanded ? t('events.noUpcoming') : t('events.noEventsNextHours')}

@@ -23,6 +23,7 @@
     "viewAll": "View All",
     "viewHeatmap": "View Heatmap",
     "hideHeatmap": "Hide Heatmap",
+    "viewProperty": "View property details",
     "propertyOperator": "Property operator",
     "multiPropertyOperator": "Multi-property operator",
     "shoppingCenters": "{{count}} shopping center",
@@ -549,7 +550,14 @@
     "chartTitle": "Actual vs Predicted Footfall (Today)",
     "actual": "Actual",
     "predicted": "Predicted",
-    "weatherImpact": "Weather Impact"
+    "weatherImpact": "Weather Impact",
+    "visitors": "Visitors",
+    "pause": "Pause",
+    "play": "Play",
+    "zones": {
+      "centerHub": "Event Square",
+      "foodCourt": "Food Court"
+    }
   },
   "topbar": {
     "concierge": "Stelthion Concierge",
@@ -675,7 +683,8 @@
       "label": "ShopperMind",
       "description": "Trends and Predictions"
     },
-    "managementCompany": "Management Company"
+    "managementCompany": "Management Company",
+    "comingSoon": "Coming Soon"
   },
   "videoAnalysis": {
     "scheduleTitle": "Schedule Video Analysis",

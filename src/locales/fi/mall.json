@@ -22,6 +22,7 @@
     "viewAll": "Näytä kaikki",
     "viewHeatmap": "Näytä lämpökartta",
     "hideHeatmap": "Piilota lämpökartta",
+    "viewProperty": "Näytä kiinteistön tiedot",
     "propertyOperator": "Kiinteistöoperaattori",
     "multiPropertyOperator": "Usean kiinteistön operaattori",
     "shoppingCenters": "{{count}} kauppakeskus",
@@ -549,7 +550,14 @@
     "chartTitle": "Tämänhetkinen vs ennustettu kävijämäärä (tänään)",
     "actual": "Toteutunut",
     "predicted": "Ennustettu",
-    "weatherImpact": "Säävaikutus"
+    "weatherImpact": "Säävaikutus",
+    "visitors": "Kävijät",
+    "pause": "Tauko",
+    "play": "Toista",
+    "zones": {
+      "centerHub": "Tapahtumatori",
+      "foodCourt": "Ravintolamaailma"
+    }
   },
   "topbar": {
     "concierge": "Stelthion Concierge",
@@ -675,7 +683,8 @@
       "label": "ShopperMind",
       "description": "Trendit ja ennusteet"
     },
-    "managementCompany": "Kiinteistönhallintayhtiö"
+    "managementCompany": "Kiinteistönhallintayhtiö",
+    "comingSoon": "Tulossa pian"
   },
   "videoAnalysis": {
     "scheduleTitle": "Ajoita videoanalyysi",

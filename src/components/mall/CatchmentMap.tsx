@@ -8,6 +8,7 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import mapboxgl from 'mapbox-gl';
+import { SwirlLoader } from '@/components/ui/SwirlLoader';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import type { CatchmentDemographics } from '@/lib/types/transport';
 import { fetchPostalCodeBoundaries, type PostalCodeBoundary } from '@/lib/services/postalCodeBoundaries';
@@ -409,7 +410,7 @@ export function CatchmentMap({ demographics, selectedZone, onZoneSelect, onPosta
       {loadingBoundaries && (
         <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-sm rounded-lg px-4 py-2 shadow-lg border border-bo-neutral-200">
           <div className="flex items-center gap-2 text-sm text-bo-neutral-700">
-            <div className="animate-spin h-4 w-4 border-2 border-bo-primary-600 border-t-transparent rounded-full" />
+            <SwirlLoader size="sm" />
             <span>{t('analytics.loadingBoundaries')}</span>
           </div>
         </div>
