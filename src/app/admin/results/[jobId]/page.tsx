@@ -258,7 +258,7 @@ function HourTabs({ hours, results }: { hours: number[]; results: AnalysisResult
             onClick={() => setActiveHour(h)}
             className={`px-3 py-1 text-xs rounded-lg transition-all duration-300 ${
               activeHour === h
-                ? 'bg-bo-accent-600 text-white shadow-bo-sm'
+                ? 'bg-bo-neutral-950 text-bo-neutral-50 shadow-bo-md'
                 : 'bg-bo-neutral-100 text-bo-neutral-600 hover:bg-bo-neutral-200'
             }`}
           >
