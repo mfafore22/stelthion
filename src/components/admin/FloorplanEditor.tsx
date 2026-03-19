@@ -15,6 +15,8 @@ export interface ZoneData {
   name: string;
   nameFi: string;
   category: string;
+  subcategory?: string;
+  drawShape?: 'polygon' | 'rect';
   svgPoints: string;
   labelX: number;
   labelY: number;
@@ -22,18 +24,6 @@ export interface ZoneData {
   areaSqm: number;
   baseVisitors: number;
   publishedAt?: string | null;
-}
-
-export interface StoreData {
-  id?: string;
-  name: string;
-  slug: string;
-  zoneId: string; // FK to zone's zoneId
-  zoneDbId?: string;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
 }
 
 export interface CameraData {
@@ -51,7 +41,6 @@ export interface CameraData {
 
 type SelectedElement =
   | { type: 'zone'; index: number }
-  | { type: 'store'; index: number }
   | { type: 'camera'; index: number }
   | null;
 
@@ -61,7 +50,6 @@ interface FloorplanEditorProps {
   viewBox: string;
   floorplanSrc: string;
   initialZones: ZoneData[];
-  initialStores: StoreData[];
   initialCameras: CameraData[];
 }
 
@@ -73,12 +61,10 @@ export function FloorplanEditor({
   viewBox,
   floorplanSrc,
   initialZones,
-  initialStores,
   initialCameras,
 }: FloorplanEditorProps) {
   const { t } = useTranslation('admin');
   const [zones, setZones] = useState<ZoneData[]>(initialZones);
-  const [stores, setStores] = useState<StoreData[]>(initialStores);
   const [cameras, setCameras] = useState<CameraData[]>(initialCameras);
   const [tool, setTool] = useState<Tool>('select');
   const [selected, setSelected] = useState<SelectedElement>(null);
@@ -146,10 +132,8 @@ export function FloorplanEditor({
   // Undo history
   type UndoAction =
     | { type: 'add-zone' }
-    | { type: 'add-store' }
     | { type: 'add-camera' }
     | { type: 'delete-zone'; data: ZoneData; index: number }
-    | { type: 'delete-store'; data: StoreData; index: number }
     | { type: 'delete-camera'; data: CameraData; index: number };
   const [undoStack, setUndoStack] = useState<UndoAction[]>([]);
 
@@ -170,14 +154,10 @@ export function FloorplanEditor({
 
     if (last.type === 'add-zone') {
       setZones((prev) => prev.slice(0, -1));
-    } else if (last.type === 'add-store') {
-      setStores((prev) => prev.slice(0, -1));
     } else if (last.type === 'add-camera') {
       setCameras((prev) => prev.slice(0, -1));
     } else if (last.type === 'delete-zone') {
       setZones((prev) => { const next = [...prev]; next.splice(last.index, 0, last.data); return next; });
-    } else if (last.type === 'delete-store') {
-      setStores((prev) => { const next = [...prev]; next.splice(last.index, 0, last.data); return next; });
     } else if (last.type === 'delete-camera') {
       setCameras((prev) => { const next = [...prev]; next.splice(last.index, 0, last.data); return next; });
     }
@@ -284,7 +264,7 @@ export function FloorplanEditor({
 
   const handleSvgMouseDown = useCallback(
     (e: React.MouseEvent<SVGSVGElement>) => {
-      if (tool === 'store') {
+      if (tool === 'rect') {
         const pt = toSvg(e);
         setDragStart(pt);
         setDragCurrent(pt);
@@ -295,7 +275,7 @@ export function FloorplanEditor({
 
   const handleSvgMouseMove = useCallback(
     (e: React.MouseEvent<SVGSVGElement>) => {
-      if (tool === 'store' && dragStart) {
+      if (tool === 'rect' && dragStart) {
         setDragCurrent(toSvg(e));
       }
       // Track cursor for drawing guides
@@ -309,31 +289,36 @@ export function FloorplanEditor({
   );
 
   const handleSvgMouseUp = useCallback(() => {
-    if (tool === 'store' && dragStart && dragCurrent) {
+    if (tool === 'rect' && dragStart && dragCurrent) {
       const x = Math.min(dragStart.x, dragCurrent.x);
       const y = Math.min(dragStart.y, dragCurrent.y);
       const w = Math.abs(dragCurrent.x - dragStart.x);
       const h = Math.abs(dragCurrent.y - dragStart.y);
       const minSize = 5 / zoom;
       if (w > minSize && h > minSize) {
-        const newStore: StoreData = {
-          name: 'New Store',
-          slug: `store-${Date.now()}`,
-          zoneId: zones[0]?.zoneId ?? '',
-          x,
-          y,
-          w,
-          h,
+        const svgPoints = `${x},${y} ${x + w},${y} ${x + w},${y + h} ${x},${y + h}`;
+        const newZone: ZoneData = {
+          zoneId: `zone-${Date.now()}`,
+          name: 'New Zone',
+          nameFi: 'Uusi alue',
+          category: 'Store',
+          drawShape: 'rect',
+          svgPoints,
+          labelX: Math.round(x + w / 2),
+          labelY: Math.round(y + h / 2),
+          capacity: 0,
+          areaSqm: 0,
+          baseVisitors: 0,
         };
-        setStores((prev) => [...prev, newStore]);
-        setSelected({ type: 'store', index: stores.length });
-        pushUndo({ type: 'add-store' });
+        setZones((prev) => [...prev, newZone]);
+        setSelected({ type: 'zone', index: zones.length });
+        pushUndo({ type: 'add-zone' });
         markDirty();
       }
       setDragStart(null);
       setDragCurrent(null);
     }
-  }, [tool, dragStart, dragCurrent, zones, stores.length, markDirty]);
+  }, [tool, dragStart, dragCurrent, zones.length, markDirty]);
 
   // ── Keyboard: Enter to close polygon, Escape to cancel ──────────────
   useEffect(() => {
@@ -387,9 +372,6 @@ export function FloorplanEditor({
     if (deleteConfirm.type === 'zone') {
       pushUndo({ type: 'delete-zone', data: zones[deleteConfirm.index], index: deleteConfirm.index });
       setZones((prev) => prev.filter((_, i) => i !== deleteConfirm.index));
-    } else if (deleteConfirm.type === 'store') {
-      pushUndo({ type: 'delete-store', data: stores[deleteConfirm.index], index: deleteConfirm.index });
-      setStores((prev) => prev.filter((_, i) => i !== deleteConfirm.index));
     } else if (deleteConfirm.type === 'camera') {
       pushUndo({ type: 'delete-camera', data: cameras[deleteConfirm.index], index: deleteConfirm.index });
       setCameras((prev) => prev.filter((_, i) => i !== deleteConfirm.index));
@@ -397,16 +379,14 @@ export function FloorplanEditor({
     setSelected(null);
     setDeleteConfirm(null);
     markDirty();
-  }, [deleteConfirm, zones, stores, cameras, markDirty, pushUndo]);
+  }, [deleteConfirm, zones, cameras, markDirty, pushUndo]);
 
   const handleDeleteCancel = useCallback(() => setDeleteConfirm(null), []);
 
   const deleteItemName = deleteConfirm
     ? deleteConfirm.type === 'zone'
       ? zones[deleteConfirm.index]?.name ?? ''
-      : deleteConfirm.type === 'store'
-        ? stores[deleteConfirm.index]?.name ?? ''
-        : cameras[deleteConfirm.index]?.label ?? ''
+      : cameras[deleteConfirm.index]?.label ?? ''
     : '';
 
   // ── Save ────────────────────────────────────────────────────────────
@@ -416,7 +396,7 @@ export function FloorplanEditor({
       const res = await fetch(`/api/admin/floorplan/${mallId}/save`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ floor, zones, stores, cameras }),
+        body: JSON.stringify({ floor, zones, cameras }),
       });
       const data = await res.json();
       if (!data.ok) throw new Error('Save failed');
@@ -428,7 +408,7 @@ export function FloorplanEditor({
     } finally {
       setSaving(false);
     }
-  }, [mallId, floor, zones, stores, cameras]);
+  }, [mallId, floor, zones, cameras]);
 
   // ── Publish (make live) ───────────────────────────────────────────────
   const handlePublish = useCallback(async () => {
@@ -493,14 +473,6 @@ export function FloorplanEditor({
     [markDirty],
   );
 
-  const updateStore = useCallback(
-    (index: number, patch: Partial<StoreData>) => {
-      setStores((prev) => prev.map((s, i) => (i === index ? { ...s, ...patch } : s)));
-      markDirty();
-    },
-    [markDirty],
-  );
-
   const updateCamera = useCallback(
     (index: number, patch: Partial<CameraData>) => {
       setCameras((prev) => prev.map((c, i) => (i === index ? { ...c, ...patch } : c)));
@@ -528,7 +500,6 @@ export function FloorplanEditor({
 
   // ── Margin callout labels for zones ─────────────────────────────────
   // Places zone labels along top/bottom margins with leader lines to centroids.
-  // Store labels are hover-only (no permanent text on the map).
 
   interface MarginLabel {
     zoneIndex: number;
@@ -541,7 +512,6 @@ export function FloorplanEditor({
     h: number;
   }
 
-  const [hoveredStore, setHoveredStore] = useState<number | null>(null);
 
   const marginLabels = useMemo((): MarginLabel[] => {
     if (!showLabels) return [];
@@ -777,7 +747,7 @@ export function FloorplanEditor({
           preserveAspectRatio="xMidYMin meet"
           className="w-full h-full"
           style={{
-            cursor: isPanning ? 'grabbing' : tool === 'zone' ? 'crosshair' : tool === 'store' ? 'crosshair' : tool === 'camera' ? 'cell' : zoom > 1 ? 'grab' : 'default',
+            cursor: isPanning ? 'grabbing' : tool === 'zone' ? 'crosshair' : tool === 'rect' ? 'crosshair' : tool === 'camera' ? 'cell' : zoom > 1 ? 'grab' : 'default',
           }}
           onClick={handleSvgClick}
           onMouseDown={(e) => {
@@ -858,63 +828,6 @@ export function FloorplanEditor({
                       style={{ pointerEvents: 'none', userSelect: 'none' }}
                     >
                       {i + 1}
-                    </text>
-                  </>
-                )}
-              </g>
-            );
-          })}
-
-          {/* Store rectangles */}
-          {stores.map((store, i) => {
-            const isSelected = selected?.type === 'store' && selected.index === i;
-            const storeCx = store.x + store.w / 2;
-            const storeCy = store.y + store.h / 2;
-            return (
-              <g key={`store-${i}`}>
-                <rect
-                  x={store.x}
-                  y={store.y}
-                  width={store.w}
-                  height={store.h}
-                  fill={isSelected ? 'var(--color-bo-accent-600)' : hoveredStore === i ? 'var(--color-bo-neutral-500)' : 'var(--color-bo-neutral-400)'}
-                  fillOpacity={isSelected ? 0.35 : hoveredStore === i ? 0.25 : 0.15}
-                  stroke={isSelected ? 'var(--color-bo-accent-600)' : hoveredStore === i ? 'var(--color-bo-neutral-600)' : 'var(--color-bo-neutral-400)'}
-                  strokeWidth={isSelected ? 2 : hoveredStore === i ? 1 : 0.5}
-                  strokeDasharray={isSelected || hoveredStore === i ? '' : '3,2'}
-                  style={{ cursor: 'pointer' }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (tool === 'select' || tool === 'erase') {
-                      setSelected({ type: 'store', index: i });
-                    }
-                  }}
-                  onMouseEnter={() => setHoveredStore(i)}
-                  onMouseLeave={() => setHoveredStore(null)}
-                />
-                {/* Store name tooltip on hover */}
-                {(hoveredStore === i || isSelected) && (
-                  <>
-                    <rect
-                      x={storeCx - estimateTextWidth(store.name, 7) / 2 - 4}
-                      y={store.y - 14}
-                      width={estimateTextWidth(store.name, 7) + 8}
-                      height={12}
-                      rx={3}
-                      fill={isSelected ? 'var(--color-bo-accent-600)' : 'var(--color-bo-neutral-900)'}
-                      fillOpacity={0.92}
-                      style={{ pointerEvents: 'none' }}
-                    />
-                    <text
-                      x={storeCx}
-                      y={store.y - 5.5}
-                      textAnchor="middle"
-                      fontSize="7"
-                      fontWeight={isSelected ? '700' : '500'}
-                      fill="white"
-                      style={{ pointerEvents: 'none', userSelect: 'none' }}
-                    >
-                      {store.name}
                     </text>
                   </>
                 )}
@@ -1045,8 +958,8 @@ export function FloorplanEditor({
             </g>
           )}
 
-          {/* Drawing in progress: store rectangle */}
-          {tool === 'store' && dragStart && dragCurrent && (
+          {/* Drawing in progress: rectangle zone */}
+          {tool === 'rect' && dragStart && dragCurrent && (
             <rect
               x={Math.min(dragStart.x, dragCurrent.x)}
               y={Math.min(dragStart.y, dragCurrent.y)}
@@ -1131,10 +1044,8 @@ export function FloorplanEditor({
         <PropertiesPanel
           selected={selected}
           zones={zones}
-          stores={stores}
           cameras={cameras}
           onUpdateZone={updateZone}
-          onUpdateStore={updateStore}
           onUpdateCamera={updateCamera}
         />
       </div>

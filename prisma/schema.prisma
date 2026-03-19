@@ -56,7 +56,6 @@ model Mall {
   branding   MallBranding?
   categories MallCategory[]
   zones      FloorplanZone[]
-  stores     FloorplanStore[]
   cameras    Camera[]
   jobs       AnalysisJob[]
   snapshots  FloorplanSnapshot[]
@@ -124,8 +123,10 @@ model FloorplanZone {
   zoneId       String           // semantic ID, e.g. 'west-anchor'
   name         String
   nameFi       String
-  category     String
-  svgPoints    String           // polygon points string
+  category     String           // spatial type: Store, Hallway, Toilet, Stairs, Entrance, Service, Storage, Restaurant, Entertainment, Anchor, Mixed
+  subcategory  String?          // retail subcategory (when category = 'Store'), e.g. 'Kahvilat & ravintolat'
+  drawShape    String           @default("polygon") // 'polygon' | 'rect'
+  svgPoints    String           // polygon points string (rect stored as 4-point polygon)
   labelX       Float
   labelY       Float
   capacity     Int
@@ -136,28 +137,9 @@ model FloorplanZone {
   updatedAt    DateTime         @updatedAt
 
   mall         Mall             @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
-  stores       FloorplanStore[]
   cameras      Camera[]
 
   @@unique([mallId, floor, zoneId])
-}
-
-model FloorplanStore {
-  id          String        @id @default(cuid())
-  mallId      String                             // = Mall.mallId slug
-  floor       String
-  name        String
-  slug        String
-  zoneDbId    String
-  x           Float
-  y           Float
-  w           Float
-  h           Float
-  publishedAt DateTime?
-  updatedAt   DateTime      @updatedAt
-
-  mall        Mall          @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
-  zone        FloorplanZone @relation(fields: [zoneDbId], references: [id], onDelete: Cascade)
 }
 
 model Camera {
@@ -247,7 +229,7 @@ model FloorplanSnapshot {
   id        String   @id @default(cuid())
   mallId    String                        // = Mall.mallId slug
   floor     String
-  data      String   // JSON: { zones, stores, cameras }
+  data      String   // JSON: { zones, cameras } (legacy snapshots may contain 'stores')
   reason    String   // e.g. 'pre-save', 'manual-backup'
   createdAt DateTime @default(now())
 

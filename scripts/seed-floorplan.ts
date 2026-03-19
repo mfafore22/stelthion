@@ -1,5 +1,5 @@
 /**
- * Seed script: restore Ideapark zones and stores from static data into the database.
+ * Seed script: restore Ideapark zones from static data into the database.
  * Usage: npx tsx scripts/seed-floorplan.ts
  */
 import { PrismaClient } from '@prisma/client';
@@ -15,8 +15,7 @@ const prisma = new PrismaClient({ adapter });
 const MALL_ID = 'ideapark';
 
 async function seedFloor(floor: string, zones: typeof IDEAPARK_ZONES) {
-  // Delete existing data for this floor
-  await prisma.floorplanStore.deleteMany({ where: { mallId: MALL_ID, floor } });
+  // Delete existing data for this floor (cameras first for FK safety)
   await prisma.camera.deleteMany({ where: { mallId: MALL_ID, floor } });
   await prisma.floorplanZone.deleteMany({ where: { mallId: MALL_ID, floor } });
 
@@ -43,37 +42,35 @@ async function seedFloor(floor: string, zones: typeof IDEAPARK_ZONES) {
   console.log(`  ${floor}: ${zones.length} zones created`);
 }
 
-async function seedStores(floor: string, stores: typeof GROUND_FLOOR_STORES) {
-  // Look up zone DB IDs
-  const dbZones = await prisma.floorplanZone.findMany({
-    where: { mallId: MALL_ID, floor },
-    select: { id: true, zoneId: true },
-  });
-  const zoneMap = new Map(dbZones.map((z) => [z.zoneId, z.id]));
-
+/** Convert legacy store positions into zone records with drawShape: 'rect' */
+async function seedStoresAsZones(floor: string, stores: typeof GROUND_FLOOR_STORES) {
   let count = 0;
   for (const s of stores) {
-    const zoneDbId = zoneMap.get(s.zoneId);
-    if (!zoneDbId) {
-      console.warn(`  Skipping store "${s.name}" — no zone "${s.zoneId}"`);
-      continue;
-    }
-    await prisma.floorplanStore.create({
+    // Convert rect (x, y, w, h) to 4-point polygon
+    const x2 = s.x + s.w;
+    const y2 = s.y + s.h;
+    const svgPoints = `${s.x},${s.y} ${x2},${s.y} ${x2},${y2} ${s.x},${y2}`;
+
+    await prisma.floorplanZone.create({
       data: {
         mallId: MALL_ID,
         floor,
+        zoneId: `store-${s.slug}`,
         name: s.name,
-        slug: s.slug,
-        zoneDbId,
-        x: s.x,
-        y: s.y,
-        w: s.w,
-        h: s.h,
+        nameFi: s.name,
+        category: 'Store',
+        drawShape: 'rect',
+        svgPoints,
+        labelX: s.x + s.w / 2,
+        labelY: s.y + s.h / 2,
+        capacity: 0,
+        areaSqm: 0,
+        baseVisitors: 0,
       },
     });
     count++;
   }
-  console.log(`  ${floor}: ${count} stores created`);
+  console.log(`  ${floor}: ${count} stores seeded as zones (drawShape: rect)`);
 }
 
 async function main() {
@@ -81,8 +78,7 @@ async function main() {
 
   await seedFloor('ground', IDEAPARK_ZONES);
   await seedFloor('upper', IDEAPARK_UPPER_ZONES);
-  await seedStores('ground', GROUND_FLOOR_STORES);
-  // No upper floor stores in static data yet
+  await seedStoresAsZones('ground', GROUND_FLOOR_STORES);
 
   console.log('Done!');
 }

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import '@/lib/i18n';
-import { FloorplanEditor, type ZoneData, type StoreData, type CameraData } from '@/components/admin/FloorplanEditor';
+import { FloorplanEditor, type ZoneData, type CameraData } from '@/components/admin/FloorplanEditor';
 
 const FLOOR_CONFIG: Record<string, { viewBox: string; src: string }> = {
   ground: { viewBox: '0 0 1504 704', src: '/assets/malls/ideapark/floorplan-ground.png' },
@@ -16,7 +16,6 @@ export default function FloorplanPage() {
   const { t } = useTranslation('admin');
   const [floor, setFloor] = useState<'ground' | 'upper'>('ground');
   const [zones, setZones] = useState<ZoneData[]>([]);
-  const [stores, setStores] = useState<StoreData[]>([]);
   const [cameras, setCameras] = useState<CameraData[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -24,11 +23,9 @@ export default function FloorplanPage() {
     setLoading(true);
     Promise.all([
       fetch(`/api/admin/floorplan/${mallId}/zones?floor=${floor}`).then((r) => r.json()),
-      fetch(`/api/admin/floorplan/${mallId}/stores?floor=${floor}`).then((r) => r.json()),
       fetch(`/api/admin/floorplan/${mallId}/cameras?floor=${floor}`).then((r) => r.json()),
-    ]).then(([z, s, c]) => {
+    ]).then(([z, c]) => {
       setZones(z);
-      setStores(s);
       setCameras(c);
       setLoading(false);
     });
@@ -70,7 +67,6 @@ export default function FloorplanPage() {
             viewBox={cfg.viewBox}
             floorplanSrc={cfg.src}
             initialZones={zones}
-            initialStores={stores}
             initialCameras={cameras}
           />
         </div>

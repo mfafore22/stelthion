@@ -15,10 +15,5 @@ export async function POST(
     data: { publishedAt: now },
   });
 
-  await prisma.floorplanStore.updateMany({
-    where: { mallId, floor },
-    data: { publishedAt: now },
-  });
-
   return NextResponse.json({ ok: true, publishedAt: now.toISOString() });
 }

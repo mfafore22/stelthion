@@ -23,16 +23,43 @@ export async function GET(
     },
   });
 
-  // Include counts from each snapshot's data for the list UI
-  const list = snapshots.map((s) => {
-    return {
-      id: s.id,
-      reason: s.reason,
-      createdAt: s.createdAt,
-    };
-  });
+  const list = snapshots.map((s) => ({
+    id: s.id,
+    reason: s.reason,
+    createdAt: s.createdAt,
+  }));
 
   return NextResponse.json(list);
+}
+
+/**
+ * Helper: convert legacy store snapshot data to zone format
+ */
+interface LegacyStore {
+  id: string; mallId: string; floor: string; name: string; slug: string;
+  zoneDbId: string; x: number; y: number; w: number; h: number;
+  publishedAt?: string | null;
+}
+
+function convertLegacyStores(stores: LegacyStore[]) {
+  return stores.map((s) => ({
+    id: s.id,
+    mallId: s.mallId,
+    floor: s.floor,
+    zoneId: `store-${s.slug}`,
+    name: s.name,
+    nameFi: s.name,
+    category: 'Store',
+    subcategory: null,
+    drawShape: 'rect',
+    svgPoints: `${s.x},${s.y} ${s.x + s.w},${s.y} ${s.x + s.w},${s.y + s.h} ${s.x},${s.y + s.h}`,
+    labelX: Math.round(s.x + s.w / 2),
+    labelY: Math.round(s.y + s.h / 2),
+    capacity: 0,
+    areaSqm: 0,
+    baseVisitors: 0,
+    publishedAt: s.publishedAt ?? null,
+  }));
 }
 
 /**
@@ -54,18 +81,23 @@ export async function POST(
     return NextResponse.json({ error: 'Snapshot not found' }, { status: 404 });
   }
 
-  const { zones, stores, cameras } = JSON.parse(snapshot.data);
+  const parsed = JSON.parse(snapshot.data);
+  // Handle legacy snapshots that contain a 'stores' array
+  let zones = parsed.zones ?? [];
+  if (parsed.stores?.length) {
+    zones = [...zones, ...convertLegacyStores(parsed.stores)];
+  }
+  const cameras = parsed.cameras ?? [];
 
   // Snapshot current state before restoring (so restore itself is reversible)
   await createFloorplanSnapshot(prisma, mallId, snapshot.floor, 'pre-restore');
 
   // Restore within a transaction
   await prisma.$transaction(async (tx) => {
-    await tx.floorplanStore.deleteMany({ where: { mallId, floor: snapshot.floor } });
     await tx.camera.deleteMany({ where: { mallId, floor: snapshot.floor } });
     await tx.floorplanZone.deleteMany({ where: { mallId, floor: snapshot.floor } });
 
-    // Recreate zones (with original IDs so store FK references work)
+    // Recreate zones
     for (const z of zones) {
       await tx.floorplanZone.create({
         data: {
@@ -76,6 +108,8 @@ export async function POST(
           name: z.name,
           nameFi: z.nameFi,
           category: z.category,
+          subcategory: z.subcategory ?? null,
+          drawShape: z.drawShape ?? 'polygon',
           svgPoints: z.svgPoints,
           labelX: z.labelX,
           labelY: z.labelY,
@@ -83,25 +117,6 @@ export async function POST(
           areaSqm: z.areaSqm,
           baseVisitors: z.baseVisitors ?? 0,
           publishedAt: z.publishedAt ? new Date(z.publishedAt) : null,
-        },
-      });
-    }
-
-    // Recreate stores
-    for (const s of stores) {
-      await tx.floorplanStore.create({
-        data: {
-          id: s.id,
-          mallId: s.mallId,
-          floor: s.floor,
-          name: s.name,
-          slug: s.slug,
-          zoneDbId: s.zoneDbId,
-          x: s.x,
-          y: s.y,
-          w: s.w,
-          h: s.h,
-          publishedAt: s.publishedAt ? new Date(s.publishedAt) : null,
         },
       });
     }
@@ -131,7 +146,6 @@ export async function POST(
     ok: true,
     restored: {
       zones: zones.length,
-      stores: stores.length,
       cameras: cameras.length,
     },
   });

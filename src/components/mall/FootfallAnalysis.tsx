@@ -21,9 +21,7 @@ import {
 } from '@/lib/data/ideaparkZones';
 import { ZoneStoreList } from './ZoneStoreList';
 import {
-  GROUND_FLOOR_STORES,
   GROUND_FLOOR_ENTRANCES,
-  type StorePosition,
 } from '@/lib/data/ideaparkStorePositions';
 import { usePublishedFloorplan } from '@/hooks/usePublishedFloorplan';
 
@@ -52,7 +50,6 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
   const [playing, setPlaying] = useState(false);
   const [selectedZone, setSelectedZone] = useState<IdeaparkZone | null>(null);
   const [hoveredZone, setHoveredZone] = useState<string | null>(null);
-  const [hoveredStore, setHoveredStore] = useState<StorePosition | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const playRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -176,15 +173,9 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
   // When any published data exists for a floor, use it for both zones AND stores
   // (even if stores is empty) so we don't mix published zones with stale static stores.
   const hasPublishedGround = published.groundZones !== null;
-  const hasPublishedUpper = published.upperZones !== null;
-
   const activeZones = floor === 'upper'
     ? (published.upperZones ?? IDEAPARK_UPPER_ZONES)
     : (published.groundZones ?? IDEAPARK_ZONES);
-
-  const activeStores = floor === 'ground'
-    ? (hasPublishedGround ? (published.groundStores ?? []) : GROUND_FLOOR_STORES)
-    : (hasPublishedUpper ? (published.upperStores ?? []) : []);
 
   const totalVisitors = activeZones.reduce(
     (sum, z) => sum + getVisitorData(z).visitors,
@@ -414,34 +405,6 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
               );
             })}
 
-            {/* ── Per-store pin dots (labels shown on hover only) ─────────── */}
-            {activeStores.map((store) => {
-              const cx = store.x + store.w / 2;
-              const cy = store.y + store.h / 2;
-              const zone = activeZones.find((z) => z.id === store.zoneId);
-              const isHov = hoveredStore?.slug === store.slug;
-              const color = zone ? getHeatColor(getVisitorData(zone).visitors, zone.capacity) : '#64748b';
-
-              return (
-                <g
-                  key={store.slug}
-                  style={{ pointerEvents: 'all', cursor: 'pointer' }}
-                  onClick={() => { if (zone) setSelectedZone(selectedZone?.id === zone.id ? null : zone); }}
-                  onMouseEnter={() => setHoveredStore(store)}
-                  onMouseLeave={() => setHoveredStore(null)}
-                >
-                  {/* Outer ring */}
-                  <circle cx={cx} cy={cy} r={isHov ? 9 : 6}
-                    fill={color} fillOpacity={isHov ? 0.9 : 0.75}
-                    stroke="rgba(255,255,255,0.7)" strokeWidth={1}
-                    style={{ transition: 'r 0.1s, fill-opacity 0.1s' }} />
-                  {/* Inner dot */}
-                  <circle cx={cx} cy={cy} r={2} fill="white" fillOpacity={0.95}
-                    style={{ pointerEvents: 'none' }} />
-                </g>
-              );
-            })}
-
             {/* ── Zone-level buttons: Tapahtumatori + Ravintolamaailma (static only) */}
             {floor === 'ground' && !hasPublishedGround && (() => {
               const zoneBtns = [
@@ -517,28 +480,6 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
               );
             })()}
 
-            {/* ── Hovered store tooltip (zoom-compensated) ────────────────── */}
-            {hoveredStore && (() => {
-              const cx = hoveredStore.x + hoveredStore.w / 2;
-              const cy = hoveredStore.y + hoveredStore.h / 2;
-              const s = 1 / zoom;
-              const fs = 20;
-              const tw = Math.max(hoveredStore.name.length * fs * 0.56, 90);
-              const pillH = 30;
-              const tipY = cy - 26;
-              return (
-                <g style={{ pointerEvents: 'none' }}
-                  transform={`translate(${cx}, ${tipY}) scale(${s}) translate(${-cx}, ${-tipY})`}>
-                  <rect x={cx - tw / 2 - 8} y={tipY - pillH / 2}
-                    width={tw + 16} height={pillH} rx={7}
-                    fill="var(--color-bo-neutral-950)" fillOpacity={0.88} />
-                  <text x={cx} y={tipY + 7} textAnchor="middle"
-                    fontSize={fs} fontWeight="600" fill="white">
-                    {hoveredStore.name}
-                  </text>
-                </g>
-              );
-            })()}
           </svg>
         </div>{/* end zoom transform wrapper */}
 

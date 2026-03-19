@@ -9,12 +9,12 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-export type Tool = 'select' | 'zone' | 'store' | 'camera' | 'erase';
+export type Tool = 'select' | 'zone' | 'rect' | 'camera' | 'erase';
 
 const TOOLS: { id: Tool; labelKey: string; icon: React.ElementType; hintKey: string }[] = [
   { id: 'select', labelKey: 'tools.select', icon: MousePointer2, hintKey: 'tools.selectHint' },
   { id: 'zone', labelKey: 'tools.zone', icon: Pentagon, hintKey: 'tools.zoneHint' },
-  { id: 'store', labelKey: 'tools.store', icon: RectangleHorizontal, hintKey: 'tools.storeHint' },
+  { id: 'rect', labelKey: 'tools.rect', icon: RectangleHorizontal, hintKey: 'tools.rectHint' },
   { id: 'camera', labelKey: 'tools.camera', icon: Video, hintKey: 'tools.cameraHint' },
   { id: 'erase', labelKey: 'tools.erase', icon: Eraser, hintKey: 'tools.eraseHint' },
 ];

@@ -1,26 +1,30 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
-import type { ZoneData, StoreData, CameraData } from './FloorplanEditor';
+import type { ZoneData, CameraData } from './FloorplanEditor';
 
 type SelectedElement =
   | { type: 'zone'; index: number }
-  | { type: 'store'; index: number }
   | { type: 'camera'; index: number }
   | null;
 
 interface PropertiesPanelProps {
   selected: SelectedElement;
   zones: ZoneData[];
-  stores: StoreData[];
   cameras: CameraData[];
   onUpdateZone: (i: number, patch: Partial<ZoneData>) => void;
-  onUpdateStore: (i: number, patch: Partial<StoreData>) => void;
   onUpdateCamera: (i: number, patch: Partial<CameraData>) => void;
 }
 
-// Zone-level categories (floor plan zoning)
+// Spatial zone categories
 const ZONE_CATEGORIES = [
+  'Store', 'Hallway', 'Toilet', 'Stairs', 'Entrance',
+  'Service', 'Storage', 'Restaurant', 'Entertainment',
+  'Anchor', 'Mixed',
+];
+
+// Retail subcategories (shown when category === 'Store')
+const STORE_SUBCATEGORIES = [
   'Aikuisten muoti',
   'Kahvilat & ravintolat',
   'Kauneus & terveys',
@@ -32,8 +36,6 @@ const ZONE_CATEGORIES = [
   'Päivittäistavarat & tekniikka',
   'Aikuisten jalkineet',
   'Urheilu & harrastukset',
-  'Anchor',
-  'Mixed',
 ];
 
 const INPUT_CLS = 'w-full text-sm bg-bo-neutral-50 border border-bo-neutral-300 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-bo-accent-600/20 focus:border-bo-accent-600 transition-all duration-300 outline-none';
@@ -44,10 +46,8 @@ const HEADING_CLS = 'text-sm font-semibold text-bo-neutral-950 tracking-wide';
 export function PropertiesPanel({
   selected,
   zones,
-  stores,
   cameras,
   onUpdateZone,
-  onUpdateStore,
   onUpdateCamera,
 }: PropertiesPanelProps) {
   const { t } = useTranslation('admin');
@@ -65,11 +65,27 @@ export function PropertiesPanel({
     if (!zone) return null;
     return (
       <div className={`${PANEL_CLS} space-y-3 overflow-y-auto`}>
-        <h3 className={HEADING_CLS}>{t('properties.zoneProperties')}</h3>
+        <div className="flex items-center justify-between">
+          <h3 className={HEADING_CLS}>{t('properties.zoneProperties')}</h3>
+          {zone.drawShape && (
+            <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-bo-neutral-200 text-bo-neutral-600 uppercase tracking-wider">
+              {zone.drawShape}
+            </span>
+          )}
+        </div>
         <Field label={t('properties.zoneId')} value={zone.zoneId} onChange={(v) => onUpdateZone(selected.index, { zoneId: v })} />
         <Field label={t('properties.nameEn')} value={zone.name} onChange={(v) => onUpdateZone(selected.index, { name: v })} />
         <Field label={t('properties.nameFi')} value={zone.nameFi} onChange={(v) => onUpdateZone(selected.index, { nameFi: v })} />
-        <SelectField label={t('properties.category')} value={zone.category} options={ZONE_CATEGORIES} onChange={(v) => onUpdateZone(selected.index, { category: v })} />
+        <SelectField label={t('properties.category')} value={zone.category} options={ZONE_CATEGORIES} onChange={(v) => onUpdateZone(selected.index, { category: v, subcategory: v === 'Store' ? zone.subcategory : undefined })} />
+        {zone.category === 'Store' && (
+          <SelectField
+            label={t('properties.subcategory', 'Subcategory')}
+            value={zone.subcategory ?? ''}
+            options={STORE_SUBCATEGORIES}
+            onChange={(v) => onUpdateZone(selected.index, { subcategory: v || undefined })}
+            allowEmpty
+          />
+        )}
         <NumberField label={t('properties.capacity')} value={zone.capacity} onChange={(v) => onUpdateZone(selected.index, { capacity: v })} />
         <NumberField label={t('properties.areaSqm')} value={zone.areaSqm} onChange={(v) => onUpdateZone(selected.index, { areaSqm: v })} />
         <NumberField label={t('properties.baseVisitors')} value={zone.baseVisitors} onChange={(v) => onUpdateZone(selected.index, { baseVisitors: v })} />
@@ -82,30 +98,6 @@ export function PropertiesPanel({
             value={zone.svgPoints}
             onChange={(e) => onUpdateZone(selected.index, { svgPoints: e.target.value })}
           />
-        </div>
-      </div>
-    );
-  }
-
-  if (selected.type === 'store') {
-    const store = stores[selected.index];
-    if (!store) return null;
-    return (
-      <div className={`${PANEL_CLS} space-y-3 overflow-y-auto`}>
-        <h3 className={HEADING_CLS}>{t('properties.storeProperties')}</h3>
-        <Field label={t('properties.name')} value={store.name} onChange={(v) => onUpdateStore(selected.index, { name: v })} />
-        <Field label={t('properties.slug')} value={store.slug} onChange={(v) => onUpdateStore(selected.index, { slug: v })} />
-        <SelectField
-          label={t('tools.zone')}
-          value={store.zoneId}
-          options={zones.map((z) => z.zoneId)}
-          onChange={(v) => onUpdateStore(selected.index, { zoneId: v })}
-        />
-        <div className="grid grid-cols-2 gap-2">
-          <NumberField label={t('properties.x')} value={store.x} onChange={(v) => onUpdateStore(selected.index, { x: v })} />
-          <NumberField label={t('properties.y')} value={store.y} onChange={(v) => onUpdateStore(selected.index, { y: v })} />
-          <NumberField label={t('properties.width')} value={store.w} onChange={(v) => onUpdateStore(selected.index, { w: v })} />
-          <NumberField label={t('properties.height')} value={store.h} onChange={(v) => onUpdateStore(selected.index, { h: v })} />
         </div>
       </div>
     );
@@ -170,7 +162,7 @@ function NumberField({ label, value, onChange }: { label: string; value: number;
   );
 }
 
-function SelectField({ label, value, options, onChange }: { label: string; value: string; options: string[]; onChange: (v: string) => void }) {
+function SelectField({ label, value, options, onChange, allowEmpty }: { label: string; value: string; options: string[]; onChange: (v: string) => void; allowEmpty?: boolean }) {
   return (
     <div>
       <label className={LABEL_CLS}>{label}</label>
@@ -179,6 +171,7 @@ function SelectField({ label, value, options, onChange }: { label: string; value
         value={value}
         onChange={(e) => onChange(e.target.value)}
       >
+        {allowEmpty && <option value="">—</option>}
         {options.map((o) => (
           <option key={o} value={o}>{o}</option>
         ))}

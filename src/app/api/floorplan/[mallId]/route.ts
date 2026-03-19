@@ -10,18 +10,17 @@ export async function GET(
 
   const zones = await prisma.floorplanZone.findMany({
     where: { mallId, floor, publishedAt: { not: null } },
-    include: {
-      stores: { where: { publishedAt: { not: null } } },
-    },
     orderBy: { zoneId: 'asc' },
   });
 
-  // Map to IdeaparkZone / StorePosition shapes expected by FootfallAnalysis
+  // Map to IdeaparkZone shape expected by FootfallAnalysis
   const mappedZones = zones.map((z) => ({
     id: z.zoneId,
     name: z.name,
     nameFi: z.nameFi,
     category: z.category,
+    subcategory: z.subcategory,
+    drawShape: z.drawShape,
     area_sqm: z.areaSqm,
     svgPoints: z.svgPoints,
     capacity: z.capacity,
@@ -31,21 +30,8 @@ export async function GET(
     locationPrefixes: [] as number[],
   }));
 
-  const mappedStores = zones.flatMap((z) =>
-    z.stores.map((s) => ({
-      name: s.name,
-      slug: s.slug,
-      zoneId: z.zoneId,
-      x: s.x,
-      y: s.y,
-      w: s.w,
-      h: s.h,
-    })),
-  );
-
   return NextResponse.json({
     zones: mappedZones,
-    stores: mappedStores,
     entrances: [],
   });
 }

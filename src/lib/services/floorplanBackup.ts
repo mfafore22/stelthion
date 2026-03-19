@@ -7,7 +7,7 @@ import type { PrismaClient } from '@prisma/client';
 const MAX_SNAPSHOTS = 20;
 
 /**
- * Save a full snapshot of zones, stores, and cameras for a given mall+floor.
+ * Save a full snapshot of zones and cameras for a given mall+floor.
  * Call this BEFORE any deleteMany/create cycle.
  */
 export async function createFloorplanSnapshot(
@@ -16,14 +16,13 @@ export async function createFloorplanSnapshot(
   floor: string,
   reason = 'pre-save',
 ) {
-  const [zones, stores, cameras] = await Promise.all([
+  const [zones, cameras] = await Promise.all([
     prisma.floorplanZone.findMany({ where: { mallId, floor } }),
-    prisma.floorplanStore.findMany({ where: { mallId, floor } }),
     prisma.camera.findMany({ where: { mallId, floor } }),
   ]);
 
   // Only snapshot if there's actual data to preserve
-  if (zones.length === 0 && stores.length === 0 && cameras.length === 0) {
+  if (zones.length === 0 && cameras.length === 0) {
     return null;
   }
 
@@ -32,7 +31,7 @@ export async function createFloorplanSnapshot(
       mallId,
       floor,
       reason,
-      data: JSON.stringify({ zones, stores, cameras }),
+      data: JSON.stringify({ zones, cameras }),
     },
   });
 

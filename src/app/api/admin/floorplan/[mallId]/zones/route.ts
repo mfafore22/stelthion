@@ -20,6 +20,8 @@ export async function GET(
       name: z.name,
       nameFi: z.nameFi,
       category: z.category,
+      subcategory: z.subcategory,
+      drawShape: z.drawShape,
       svgPoints: z.svgPoints,
       labelX: z.labelX,
       labelY: z.labelY,

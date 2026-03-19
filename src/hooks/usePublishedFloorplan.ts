@@ -1,18 +1,14 @@
 import useSWR from 'swr';
 import type { IdeaparkZone } from '@/lib/data/ideaparkZones';
-import type { StorePosition } from '@/lib/data/ideaparkStorePositions';
 
 interface FloorplanResponse {
   zones: IdeaparkZone[];
-  stores: StorePosition[];
   entrances: unknown[];
 }
 
 interface PublishedFloorplan {
   groundZones: IdeaparkZone[] | null;
   upperZones: IdeaparkZone[] | null;
-  groundStores: StorePosition[] | null;
-  upperStores: StorePosition[] | null;
   loading: boolean;
 }
 
@@ -34,8 +30,6 @@ export function usePublishedFloorplan(mallId: string): PublishedFloorplan {
   return {
     groundZones: ground?.zones?.length ? ground.zones : null,
     upperZones: upper?.zones?.length ? upper.zones : null,
-    groundStores: ground?.stores?.length ? ground.stores : null,
-    upperStores: upper?.stores?.length ? upper.stores : null,
     loading: loadingGround || loadingUpper,
   };
 }
