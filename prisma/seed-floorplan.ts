@@ -7,7 +7,7 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL })
 const adapter = new PrismaPg(pool)
 const prisma = new PrismaClient({ adapter })
 
-const MALL_ID = 'ideapark'
+const MALL_ID = 'ideapark' // must match Mall.mallId (semantic slug)
 
 // Inline zone data (from ideaparkZones.ts) to avoid TS import issues in seed
 const GROUND_ZONES = [
