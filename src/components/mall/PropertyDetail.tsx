@@ -261,16 +261,16 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
                 style={{ backgroundColor: 'rgba(255,255,255,0.4)' }}
               />
             </div>
-            <h2
-              className="text-2xl font-bold tracking-tight"
+            <h1
+              className="text-2xl font-semibold tracking-tight"
               style={{ color: identity.primaryTextColor }}
             >
               {summary.mall_name}
-            </h2>
+            </h1>
             <span
               className="text-sm px-4 py-1.5 rounded-md font-medium tracking-wide"
               style={{
-                backgroundColor: 'rgba(255,255,255,0.2)',
+                backgroundColor: 'rgba(255,255,255,0.35)',
                 color: identity.primaryTextColor,
               }}
             >

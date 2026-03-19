@@ -36,16 +36,18 @@ export function Header() {
   }, [])
 
   return (
-    <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6">
-      {/* Left - Logo/Brand */}
-      <div className="flex items-center">
+    <header className="h-[80px] bg-white border-b border-gray-200 flex items-center justify-between px-8">
+      {/* Left - Logo/Brand + Admin Tool label */}
+      <div className="flex items-center gap-3">
         <Image
           src="/stelthion-brandmark.png"
           alt="Stelthion"
-          width={120}
-          height={40}
+          width={220}
+          height={60}
           className="object-contain"
         />
+        <div className="w-px h-8 bg-gray-300" />
+        <span className="text-sm font-semibold text-gray-600 tracking-wide">Admin Tool</span>
       </div>
 
       {/* Center - Date & Time */}

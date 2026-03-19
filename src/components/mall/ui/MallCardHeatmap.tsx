@@ -39,6 +39,18 @@ const getHeatColor = (density: number): string => {
 };
 
 /**
+ * Get contrasting text color for a hex background
+ * Uses relative luminance to determine if white or dark text is more readable
+ */
+const getContrastText = (hex: string): string => {
+  const r = parseInt(hex.slice(1, 3), 16) / 255;
+  const g = parseInt(hex.slice(3, 5), 16) / 255;
+  const b = parseInt(hex.slice(5, 7), 16) / 255;
+  const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+  return luminance > 0.55 ? '#1e293b' : '#ffffff';
+};
+
+/**
  * Check if timestamp is recent (within 5 minutes) for "Live" badge
  */
 const isRecentTimestamp = (timestamp: string): boolean => {
@@ -149,7 +161,10 @@ export function MallCardHeatmap({
               >
                 {/* Tooltip on hover */}
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <span className="text-[10px] font-bold text-white drop-shadow-lg">
+                  <span
+                    className="text-[10px] font-bold drop-shadow-lg"
+                    style={{ color: getContrastText(color) }}
+                  >
                     {zone.count || Math.round(zone.density_per_sqm * 10)}
                   </span>
                 </div>
@@ -173,7 +188,7 @@ export function MallCardHeatmap({
             style={{
               backgroundColor: isRecentTimestamp(data.timestamp)
                 ? colors.accent
-                : 'rgba(0, 0, 0, 0.6)',
+                : 'rgba(0, 0, 0, 0.8)',
             }}
           >
             {isRecentTimestamp(data.timestamp) ? 'Live' : formatTimestamp(data.timestamp)}

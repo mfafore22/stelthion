@@ -10,7 +10,7 @@
 'use client';
 
 import React from 'react';
-import { Loader2 } from 'lucide-react';
+import { SwirlLoader } from '@/components/ui/SwirlLoader';
 import { cn } from '@/lib/utils';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'success' | 'danger' | 'ghost';
@@ -120,7 +120,7 @@ export const MallButton = React.forwardRef<HTMLButtonElement, MallButtonProps>(
           // Base styles
           'inline-flex items-center justify-center gap-3',
           'font-medium rounded-lg',
-          'disabled:cursor-not-allowed disabled:opacity-40',
+          'disabled:cursor-not-allowed disabled:opacity-60',
           'active:translate-y-0 active:duration-100',
           // Variant styles
           variantStyles[variant],
@@ -133,7 +133,7 @@ export const MallButton = React.forwardRef<HTMLButtonElement, MallButtonProps>(
         )}
         {...props}
       >
-        {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+        {loading && <SwirlLoader size="sm" />}
         {!loading && icon && <span className="flex-shrink-0">{icon}</span>}
         {children && <span>{children}</span>}
       </button>

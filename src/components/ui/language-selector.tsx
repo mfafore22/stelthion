@@ -85,7 +85,7 @@ export function LanguageSelector({
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[200px] bg-white border border-neutral-200 shadow-lg">
+      <DropdownMenuContent align="end" className="w-[200px] bg-white text-neutral-900 border border-neutral-200 shadow-lg">
         <DropdownMenuLabel className="flex items-center gap-2">
           <Globe className="h-4 w-4" />
           Language

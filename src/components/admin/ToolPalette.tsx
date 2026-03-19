@@ -2,6 +2,12 @@
 
 import { useTranslation } from 'react-i18next';
 import { MousePointer2, Pentagon, RectangleHorizontal, Video, Eraser } from 'lucide-react';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 export type Tool = 'select' | 'zone' | 'store' | 'camera' | 'erase';
 
@@ -22,24 +28,41 @@ export function ToolPalette({ tool, onToolChange }: ToolPaletteProps) {
   const { t } = useTranslation('admin');
 
   return (
-    <div className="w-14 border-r border-bo-neutral-200 bg-bo-neutral-50 flex flex-col items-center py-3 gap-1">
-      {TOOLS.map((item) => {
-        const active = tool === item.id;
-        return (
-          <button
-            key={item.id}
-            onClick={() => onToolChange(item.id)}
-            title={`${t(item.labelKey)}: ${t(item.hintKey)}`}
-            className={`w-10 h-10 flex items-center justify-center rounded-lg transition-all duration-300 ${
-              active
-                ? 'bg-bo-accent-600 text-white shadow-bo-sm'
-                : 'text-bo-neutral-500 hover:bg-bo-neutral-100 hover:text-bo-neutral-950'
-            }`}
-          >
-            <item.icon className="w-4.5 h-4.5" />
-          </button>
-        );
-      })}
-    </div>
+    <TooltipProvider delayDuration={200}>
+      <div className="flex items-center gap-1 border-r border-bo-neutral-300 pr-3 mr-1">
+        {TOOLS.map((item) => {
+          const active = tool === item.id;
+          return (
+            <Tooltip key={item.id}>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => onToolChange(item.id)}
+                  className={`w-8 h-8 flex items-center justify-center rounded-lg transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bo-primary-600 focus-visible:ring-opacity-20
+                    ${active
+                      ? 'bg-bo-neutral-950 text-bo-neutral-50 shadow-bo-md -translate-y-0.5'
+                      : 'text-bo-neutral-500 hover:bg-bo-neutral-100 hover:text-bo-neutral-950'
+                    }`}
+                  aria-label={t(item.labelKey)}
+                >
+                  <item.icon className="w-4 h-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent
+                side="bottom"
+                className="nav-tooltip rounded-lg px-3 py-2"
+              >
+                <div className="text-sm font-semibold text-white tracking-tight">
+                  {t(item.labelKey)}
+                </div>
+                <div className="text-xs text-gray-300 mt-0.5 leading-relaxed">
+                  {t(item.hintKey)}
+                </div>
+              </TooltipContent>
+            </Tooltip>
+          );
+        })}
+      </div>
+    </TooltipProvider>
   );
 }

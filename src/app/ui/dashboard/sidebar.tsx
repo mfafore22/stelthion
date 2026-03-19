@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import {
   LayoutGrid,
@@ -28,7 +29,18 @@ export function Sidebar() {
   const pathname = usePathname()
 
   return (
-    <aside className="w-16 bg-white border-r border-gray-200 flex flex-col items-center py-6">
+    <aside className="w-[80px] bg-white border-r border-gray-200 flex flex-col items-center">
+      {/* Swirl logo — same position as mall side */}
+      <div className="h-[80px] w-full flex items-center justify-center shrink-0">
+        <Image
+          src="/stelthion-swirl-v2.png"
+          alt="Stelthion"
+          width={26}
+          height={26}
+          className="object-contain"
+          priority
+        />
+      </div>
       <nav className="flex-1 flex flex-col gap-2">
         {navItems.map((item) => {
           const isActive = pathname === item.href

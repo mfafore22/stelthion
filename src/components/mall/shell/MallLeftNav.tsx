@@ -14,6 +14,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import {
@@ -41,6 +42,7 @@ export interface MallNavItem {
   descriptionOverride?: string;
   icon: React.ElementType;
   route: string;
+  disabled?: boolean;
 }
 
 const NAV_ITEMS: MallNavItem[] = [
@@ -79,34 +81,44 @@ export function MallLeftNav({
   const { user } = useSession();
   const { t } = useTranslation();
 
+  // Active nav items — only Portfolio and Properties are functional at this stage
+  const ACTIVE_NAV_IDS = new Set(['portfolio', 'properties']);
+
   // Generate tenant-specific navigation items
   const navItems = React.useMemo(() => {
-    if (!user) return NAV_ITEMS;
+    if (!user) return NAV_ITEMS.map(item => ({
+      ...item,
+      disabled: !ACTIVE_NAV_IDS.has(item.id),
+    }));
 
     const tenantSlug = user.companyName.toLowerCase().replace(/\s+/g, '-');
 
     return NAV_ITEMS
-      // Hide Properties for single-property operators — they only have one mall
-      .filter(item => item.id !== 'properties' || user.isMultiProperty)
       .map(item => {
+        const disabled = !ACTIVE_NAV_IDS.has(item.id);
+
         if (item.id === 'portfolio') {
           if (user.isMultiProperty) {
             return {
               ...item,
               route: `/tenant/${tenantSlug}/portfolio`,
+              disabled,
             };
-          } else {
-            // Single-property: first icon becomes the mall home, use Building2
+          }
+          return { ...item, route: '/mall/portfolio', disabled };
+        }
+
+        if (item.id === 'properties') {
+          if (!user.isMultiProperty) {
             return {
               ...item,
-              icon: Building2,
-              labelOverride: user.mallDisplayName,
-              descriptionOverride: user.mallDisplayName,
-              route: `/mall/${user.mallId}`,
+              route: '/mall/properties',
+              disabled,
             };
           }
         }
-        return item;
+
+        return { ...item, disabled };
       });
   }, [user]);
 
@@ -116,6 +128,7 @@ export function MallLeftNav({
   )?.id || 'portfolio';
 
   const handleNavClick = (item: MallNavItem) => {
+    if (item.disabled) return;
     if (onNavigate) {
       onNavigate(item.id);
     }
@@ -126,14 +139,27 @@ export function MallLeftNav({
     <TooltipProvider delayDuration={200}>
       <nav
         className={cn(
-          'fixed left-0 top-[80px] h-[calc(100vh-80px)] w-[80px]',
-          'bg-bo-neutral-50 flex flex-col items-center py-6 gap-3 z-40',
+          'fixed left-0 top-0 h-screen w-[80px]',
+          'bg-bo-neutral-50 flex flex-col items-center z-40',
           'border-r border-bo-neutral-200 shadow-bo-sm',
           className
         )}
         aria-label="Mall portfolio navigation"
       >
+        {/* Swirl logo — vertically centered in the 80px top bar row */}
+        <div className="h-[80px] w-full flex items-center justify-center shrink-0">
+          <Image
+            src="/stelthion-swirl-v2.png"
+            alt="Stelthion"
+            width={26}
+            height={26}
+            className="object-contain"
+            priority
+          />
+        </div>
+
         {/* Navigation Items */}
+        <div className="flex flex-col items-center gap-3 py-3">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeItemId === item.id;
@@ -147,11 +173,13 @@ export function MallLeftNav({
                     'w-14 h-14 rounded-xl flex items-center justify-center',
                     'transition-all duration-300 ease-bo-out-expo',
                     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bo-primary-600 focus-visible:ring-opacity-20',
-                    isActive && 'bg-bo-neutral-950 text-bo-neutral-50 shadow-bo-md -translate-y-0.5',
-                    !isActive && 'text-bo-neutral-600 hover:bg-bo-neutral-100 hover:text-bo-neutral-950'
+                    item.disabled && 'text-bo-neutral-400 cursor-not-allowed opacity-60',
+                    !item.disabled && isActive && 'bg-bo-neutral-950 text-bo-neutral-50 shadow-bo-md -translate-y-0.5',
+                    !item.disabled && !isActive && 'text-bo-neutral-600 hover:bg-bo-neutral-100 hover:text-bo-neutral-950'
                   )}
                   aria-label={item.label}
                   aria-current={isActive ? 'page' : undefined}
+                  aria-disabled={item.disabled || undefined}
                 >
                   <Icon className="h-6 w-6" />
                 </button>
@@ -164,7 +192,9 @@ export function MallLeftNav({
                   {item.labelOverride ?? t(`mall:navigation.${item.id}.label`)}
                 </div>
                 <div className="text-xs text-gray-300 mt-1 leading-relaxed">
-                  {item.descriptionOverride ?? t(`mall:navigation.${item.id}.description`)}
+                  {item.disabled
+                    ? t('navigation.comingSoon', 'Coming Soon')
+                    : (item.descriptionOverride ?? t(`mall:navigation.${item.id}.description`))}
                 </div>
               </TooltipContent>
             </Tooltip>
@@ -194,6 +224,7 @@ export function MallLeftNav({
             </Tooltip>
           </div>
         )}
+        </div>
       </nav>
     </TooltipProvider>
   );

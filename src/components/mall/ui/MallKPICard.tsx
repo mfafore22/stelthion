@@ -150,7 +150,7 @@ export const MallKPICard = React.forwardRef<HTMLDivElement, MallKPICardProps>(
         style={
           useCustomColor
             ? {
-                background: `rgba(248, 246, 243, 0.65)`,
+                background: `rgba(248, 246, 243, 0.88)`,
                 backdropFilter: 'blur(18px)',
                 WebkitBackdropFilter: 'blur(18px)',
                 borderColor: `${accentColor}40`,

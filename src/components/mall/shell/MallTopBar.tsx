@@ -79,13 +79,13 @@ export function MallTopBar({
         className
       )}
     >
-      {/* Left: Stelthion Brandmark */}
+      {/* Left: Stelthion text brandmark */}
       <div className="flex items-center">
         <Image
           src="/stelthion-brandmark.png"
           alt="Stelthion"
-          width={176}
-          height={176}
+          width={220}
+          height={60}
           className="object-contain"
           priority
         />

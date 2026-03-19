@@ -25,7 +25,7 @@ export function Drawer({
         />
         <DialogPrimitive.Content
           className={cn(
-            "fixed bg-[#0b1320]/85 backdrop-blur-sm text-white shadow-lg transition-all border border-slate-700",
+            "fixed bg-[#0b1320]/95 backdrop-blur-md text-white shadow-lg transition-all border border-slate-700",
             side === "right" && "top-0 right-0 h-full w-[400px] data-[state=open]:animate-slide-in-from-right data-[state=closed]:animate-slide-out-to-right",
             side === "left" &&
               "top-0 left-0 h-full w-[400px] data-[state=open]:animate-slide-in-from-left data-[state=closed]:animate-slide-out-to-left"
