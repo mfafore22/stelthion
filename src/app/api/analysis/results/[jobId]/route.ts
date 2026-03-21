@@ -11,7 +11,8 @@ export async function GET(
     where: { id: jobId },
     include: {
       camera: { select: { label: true, floor: true } },
-      results: { orderBy: { hour: 'asc' } },
+      secondaryCamera: { select: { label: true, floor: true } },
+      results: { orderBy: [{ hour: 'asc' }, { zoneId: 'asc' }] },
     },
   });
 

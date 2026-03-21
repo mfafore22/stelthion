@@ -27,6 +27,15 @@ export default function PortfolioPage() {
     return MALLS[user.mallId] ?? null;
   }, [user?.mallId]);
 
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace('/mall/login');
+    } else if (!loading && user?.isMultiProperty) {
+      const tenantSlug = user.companyName.toLowerCase().replace(/\s+/g, '-');
+      router.replace(`/tenant/${tenantSlug}/portfolio`);
+    }
+  }, [loading, user, router]);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-[#F8F6F3]">
@@ -36,15 +45,6 @@ export default function PortfolioPage() {
       </div>
     );
   }
-
-  useEffect(() => {
-    if (!loading && !user) {
-      router.replace('/mall/login');
-    } else if (!loading && user?.isMultiProperty) {
-      const tenantSlug = user.companyName.toLowerCase().replace(/\s+/g, '-');
-      router.replace(`/tenant/${tenantSlug}/portfolio`);
-    }
-  }, [loading, user, router]);
 
   if (!user || user.isMultiProperty) {
     return null;

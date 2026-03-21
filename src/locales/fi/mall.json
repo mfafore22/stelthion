@@ -687,59 +687,82 @@
     "comingSoon": "Tulossa pian"
   },
   "videoAnalysis": {
-    "scheduleTitle": "Ajoita videoanalyysi",
-    "noCameras": "Ei kameroita vielä. Ota yhteyttä ylläpitäjään kameroiden asentamiseksi.",
-    "camera": "Kamera",
-    "date": "Päivämäärä",
-    "timeRange": "Aikaväli",
-    "tagTrack": "Merkitse ja seuraa",
-    "submitting": "Lähetetään...",
-    "scheduleAnalysis": "Ajoita analyysi",
-    "recentJobs": "Viimeisimmät työt",
-    "resultsTitle": "Analyysitulokset",
-    "noCompleteJobs": "Ei valmistuneita analyysitöitä vielä.",
-    "selectJob": "Valitse valmistunut työ",
-    "chooseJob": "Valitse työ...",
-    "zone": "Alue",
-    "visitors": "Kävijät",
-    "densityPm2": "Tiheys (hlö/m²)",
-    "noZoneResults": "Ei aluekohtaisia tuloksia saatavilla tälle työlle.",
-    "totalVisitorsAt": "Kävijöitä yhteensä klo {{hour}}:00 — {{count}}",
-    "journeysTitle": "Kävijäreitit",
-    "noJourneyJobs": "Ei valmistuneita reittiseurantatöitä. Ajoita analyysi vähintään 1 merkityllä kävijällä.",
-    "selectJourneyJob": "Valitse työ reittiseurannalla",
-    "chooseJobPlaceholder": "Valitse työ...",
-    "tagged": "Merkityt",
-    "reIdentified": "Uudelleentunnistetut",
-    "recognitionRate": "Tunnistusaste",
-    "movementPaths": "Kulkureitit",
-    "noMovementPaths": "Ei tallennettuja kulkureittejä tälle istunnolle.",
-    "loadingJourneys": "Ladataan reittitietoja...",
-    "noJourneyData": "Ei reittitietoja saatavilla tälle työlle."
-  },
-  "journeyPlanner": {
-    "title": "Reittisuunnittelija",
-    "originZone": "Lähtöalue",
-    "originCamera": "Lähtökamera",
-    "destination": "Kohdealue",
-    "selectZone": "Valitse alue...",
-    "selectCamera": "Valitse kamera...",
-    "date": "Päivämäärä",
-    "timeRange": "Aikaväli",
-    "journeyCount": "Seurattava henkilömäärä",
-    "journeyCountDisclaimer": "Voit valita seurattavan henkilömäärän ja halutun ajankohdan. Järjestelmä valitsee seurattavat henkilöt sattumanvaraisesti ja raportoi käytetyt reitit. Ikää, kasvoja, sukupuolta, kävelytyyliä tai muita yksilöiviä tunnistetietoja ei käsitellä. (EU:n GDPR-asetus).",
-    "schedule": "Ajoita reittianalyysi",
-    "scheduling": "Ajoitetaan...",
-    "recentJobs": "Reittisuunnittelijan tulokset",
-    "selectJob": "Valitse valmistunut työ",
-    "chooseJob": "Valitse työ...",
-    "reached": "{{count}} / {{total}} seuratusta kävijästä saavutti alueen {{zone}}",
-    "notReached": "Yksikään seurattu kävijä ei saavuttanut aluetta {{zone}}",
-    "intermediateZones": "Reitin varrella vieraillut alueet",
-    "zone": "Alue",
-    "visitCount": "Kävijät",
-    "paths": "Yksittäiset reitit",
-    "noJobs": "Ei reittisuunnittelutöitä vielä. Valitse lähtö- ja kohdealue aloittaaksesi.",
-    "noCameras": "Ei kameroita tässä alueessa."
+    "title": "Kävijäanalyysi",
+    "unified": {
+      "title": "Kävijäanalyysi",
+      "subtitle": "Valitse kameroita ja alueita kartalta kävijävirran analysoimiseksi",
+      "mapHint": "Napauta kameroita tai alueita pohjakartalta analyysin rakentamiseksi",
+      "emptySelection": "Valitse kameroita tai alueita aloittaaksesi",
+      "emptySelectionHint": "Napauta kameraa kävijöiden laskemiseksi, kahta kameraa virtauksen seuraamiseksi tai alueita reittien kartoittamiseksi",
+      "clearAll": "Tyhjennä kaikki"
+    },
+    "modes": {
+      "zoneCount": "Aluelaskenta",
+      "abTracking": "A → B -seuranta",
+      "journeyMap": "Reittikartta"
+    },
+    "modesDescription": {
+      "zoneCount": "Laske kävijät kameranäkymässä",
+      "abTracking": "Seuraa kävijöitä kahden pisteen välillä",
+      "journeyMap": "Kartoita kävijöiden reitit alueiden läpi"
+    },
+    "config": {
+      "camera": "Kamera",
+      "cameraA": "Kamera A",
+      "cameraB": "Kamera B",
+      "selectCamera": "Valitse kamera...",
+      "date": "Päivämäärä",
+      "timeRange": "Aikaväli",
+      "sampleSize": "Otoskoko",
+      "selectZones": "Valitse alueet",
+      "minZonesRequired": "Valitse vähintään 2 aluetta kartalta"
+    },
+    "actions": {
+      "submitting": "Ajoitetaan...",
+      "runCount": "Laske kävijät",
+      "runTracking": "Seuraa virtausta",
+      "mapJourneys": "Kartoita reitit"
+    },
+    "results": {
+      "totalVisitors": "Kävijöitä yhteensä",
+      "hourlyBreakdown": "Tuntikohtainen erittely",
+      "visitors": "Kävijät",
+      "noResults": "Ei tuloksia saatavilla tälle työlle.",
+      "entryCount": "Havaittu pisteessä A",
+      "matchedCount": "Nähty pisteessä B",
+      "matchRate": "Vastaavuusaste",
+      "avgTimeGap": "Keskim. aikaero",
+      "medianGap": "Mediaani",
+      "shortest": "Lyhin",
+      "longest": "Pisin",
+      "timeGapDistribution": "Aikaerojakauma",
+      "tagged": "Merkityt",
+      "reIdentified": "Uudelleentunnistetut",
+      "mostCommonPath": "Yleisin reitti",
+      "zoneFrequency": "Aluevierailutiheys",
+      "zone": "Alue",
+      "visits": "Vierailut",
+      "share": "Osuus",
+      "journeyPaths": "Yksittäiset reitit"
+    },
+    "history": {
+      "title": "Analyysihistoria",
+      "status": {
+        "pending": "Odottaa",
+        "processing": "Käsitellään",
+        "complete": "Valmis",
+        "failed": "Epäonnistui"
+      }
+    },
+    "gdpr": {
+      "title": "Tietosuoja ja GDPR-vaatimustenmukaisuus",
+      "description": "Kaikki seuranta on täysin anonyymiä. Järjestelmä tunnistaa henkilöt ainoastaan ulkoisen olemuksen perusteella — kasvojentunnistusta, biometrisiä tietoja, ikää, sukupuolta tai muita henkilötietoja ei käsitellä tai tallenneta. EU:n GDPR-asetuksen mukainen."
+    },
+    "future": {
+      "llmAnalysis": "Tekoälynäkemykset",
+      "llmDescription": "Tekoälypohjaisia oivalluksia kävijäkaavoista ja käyttäytymisestä",
+      "visitorCounters": "Kävijälaskurien integrointi",
+      "counterDescription": "Vertaa ja ekstrapoloi kävijälaskuritietojen kanssa"
+    }
   }
 }

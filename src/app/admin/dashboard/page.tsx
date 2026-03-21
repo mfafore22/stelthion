@@ -2,9 +2,8 @@ import prisma from '@/app/lib/prisma';
 import { AdminDashboardClient } from './client';
 
 export default async function AdminDashboard() {
-  const [zoneCount, storeCount, cameraCount, jobCounts] = await Promise.all([
+  const [zoneCount, cameraCount, jobCounts] = await Promise.all([
     prisma.floorplanZone.count(),
-    prisma.floorplanStore.count(),
     prisma.camera.count(),
     prisma.analysisJob.groupBy({ by: ['status'], _count: true }),
   ]);
@@ -16,7 +15,6 @@ export default async function AdminDashboard() {
   return (
     <AdminDashboardClient
       zoneCount={zoneCount}
-      storeCount={storeCount}
       cameraCount={cameraCount}
       pending={pending}
       processing={processing}

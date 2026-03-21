@@ -73,12 +73,12 @@ enum MallStatus {
 
 model MallStats {
   id              String   @id @default(cuid())
-  mallId          String   @unique          // = Mall.mallId slug
+  mallId          String   @unique
   currentVisitors Int      @default(0)
   annualVisitors  Int      @default(0)
   annualSales     Float    @default(0)
-  dwellTime       Int      @default(0)     // minutes
-  conversionRate  Float    @default(0)     // 0–1
+  dwellTime       Int      @default(0)
+  conversionRate  Float    @default(0)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   mall            Mall     @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
@@ -86,7 +86,7 @@ model MallStats {
 
 model MallBranding {
   id              String   @id @default(cuid())
-  mallId          String   @unique          // = Mall.mallId slug
+  mallId          String   @unique
   logo            String?
   primaryColor    String   @default("#1e40af")
   secondaryColor  String   @default("#3b82f6")
@@ -105,7 +105,7 @@ model MallBranding {
 
 model MallCategory {
   id         String @id @default(cuid())
-  mallId     String                         // = Mall.mallId slug
+  mallId     String
   name       String
   shopCount  Int    @default(0)
   percentage Float  @default(0)
@@ -118,15 +118,15 @@ model MallCategory {
 
 model FloorplanZone {
   id           String           @id @default(cuid())
-  mallId       String                        // = Mall.mallId slug
-  floor        String           // 'ground' | 'upper'
-  zoneId       String           // semantic ID, e.g. 'west-anchor'
+  mallId       String
+  floor        String
+  zoneId       String
   name         String
   nameFi       String
-  category     String           // spatial type: Store, Hallway, Toilet, Stairs, Entrance, Service, Storage, Restaurant, Entertainment, Anchor, Mixed
-  subcategory  String?          // retail subcategory (when category = 'Store'), e.g. 'Kahvilat & ravintolat'
-  drawShape    String           @default("polygon") // 'polygon' | 'rect'
-  svgPoints    String           // polygon points string (rect stored as 4-point polygon)
+  category     String
+  subcategory  String?
+  drawShape    String           @default("polygon")
+  svgPoints    String
   labelX       Float
   labelY       Float
   capacity     Int
@@ -144,7 +144,7 @@ model FloorplanZone {
 
 model Camera {
   id        String         @id @default(cuid())
-  mallId    String                              // = Mall.mallId slug
+  mallId    String
   floor     String
   label     String
   x         Float
@@ -160,28 +160,39 @@ model Camera {
 
   mall      Mall           @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
   zone      FloorplanZone? @relation(fields: [zoneDbId], references: [id])
-  jobs      AnalysisJob[]
+  jobs      AnalysisJob[]  @relation("PrimaryCamera")
+  jobsSecondary AnalysisJob[] @relation("SecondaryCamera")
 }
 
 model AnalysisJob {
   id                String           @id @default(cuid())
-  mallId            String                               // = Mall.mallId slug
-  cameraId          String
+  mallId            String
+  mode              AnalysisMode     @default(ZONE_COUNT)
+  cameraId          String?
+  secondaryCameraId String?
   footageDate       DateTime
   startTime         String
   endTime           String
-  journeyCount      Int
+  journeyCount      Int              @default(0)
   originZoneId      String?
   destinationZoneId String?
+  selectedZoneIds   String?          // JSON: ["zone1","zone2",...] for JOURNEY_MAP mode
   status            JobStatus        @default(PENDING)
   requestedBy       String
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
 
   mall              Mall             @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
-  camera            Camera           @relation(fields: [cameraId], references: [id])
+  camera            Camera?          @relation("PrimaryCamera", fields: [cameraId], references: [id])
+  secondaryCamera   Camera?          @relation("SecondaryCamera", fields: [secondaryCameraId], references: [id])
   results           AnalysisResult[]
   journeys          JourneySession[]
+}
+
+enum AnalysisMode {
+  ZONE_COUNT
+  AB_TRACKING
+  JOURNEY_MAP
 }
 
 enum JobStatus {
@@ -227,10 +238,10 @@ model JourneyPath {
 
 model FloorplanSnapshot {
   id        String   @id @default(cuid())
-  mallId    String                        // = Mall.mallId slug
+  mallId    String
   floor     String
-  data      String   // JSON: { zones, cameras } (legacy snapshots may contain 'stores')
-  reason    String   // e.g. 'pre-save', 'manual-backup'
+  data      String
+  reason    String
   createdAt DateTime @default(now())
 
   mall      Mall     @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
@@ -242,14 +253,14 @@ model FloorplanSnapshot {
 
 model FootfallReading {
   id        String   @id @default(cuid())
-  mallId    String                        // = Mall.mallId slug
-  zoneId    String   // semantic zone ID
+  mallId    String
+  zoneId    String
   floor     String
   date      DateTime @db.Date
-  hour      Int      // 0–23
+  hour      Int
   visitors  Int      @default(0)
-  dwellSec  Int?     // average dwell time in seconds
-  source    String   @default("sensor") // 'sensor' | 'camera' | 'manual'
+  dwellSec  Int?
+  source    String   @default("sensor")
   createdAt DateTime @default(now())
 
   mall      Mall     @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
@@ -262,16 +273,16 @@ model FootfallReading {
 
 model HouseholdStat {
   id             String   @id @default(cuid())
-  mallId         String                        // = Mall.mallId slug
+  mallId         String
   postalCode     String
   municipality   String?
   population     Int      @default(0)
   households     Int      @default(0)
-  avgIncome      Float?   // €/year
+  avgIncome      Float?
   medianAge      Float?
-  distanceKm     Float?   // distance from mall
-  driveTimeMin   Float?   // drive time to mall
-  year           Int      // data year, e.g. 2024
+  distanceKm     Float?
+  driveTimeMin   Float?
+  year           Int
   createdAt      DateTime @default(now())
 
   mall           Mall     @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
@@ -284,7 +295,7 @@ model HouseholdStat {
 
 model MallEvent {
   id          String        @id @default(cuid())
-  mallId      String                             // = Mall.mallId slug
+  mallId      String
   title       String
   titleFi     String?
   description String?
@@ -292,7 +303,7 @@ model MallEvent {
   startDate   DateTime
   endDate     DateTime?
   allDay      Boolean       @default(false)
-  location    String?       // e.g. 'Tapahtumatori', zone name
+  location    String?
   organizer   String?
   imageUrl    String?
   published   Boolean       @default(false)

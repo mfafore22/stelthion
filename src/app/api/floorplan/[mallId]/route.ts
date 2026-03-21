@@ -8,10 +8,16 @@ export async function GET(
   const { mallId } = await params;
   const floor = new URL(req.url).searchParams.get('floor') ?? 'ground';
 
-  const zones = await prisma.floorplanZone.findMany({
-    where: { mallId, floor, publishedAt: { not: null } },
-    orderBy: { zoneId: 'asc' },
-  });
+  const [zones, cameras] = await Promise.all([
+    prisma.floorplanZone.findMany({
+      where: { mallId, floor, publishedAt: { not: null } },
+      orderBy: { zoneId: 'asc' },
+    }),
+    prisma.camera.findMany({
+      where: { mallId, floor, active: true },
+      orderBy: { label: 'asc' },
+    }),
+  ]);
 
   // Map to IdeaparkZone shape expected by FootfallAnalysis
   const mappedZones = zones.map((z) => ({
@@ -30,8 +36,20 @@ export async function GET(
     locationPrefixes: [] as number[],
   }));
 
+  const mappedCameras = cameras.map((c) => ({
+    id: c.id,
+    label: c.label,
+    x: c.x,
+    y: c.y,
+    angleDeg: c.angleDeg,
+    fovDeg: c.fovDeg,
+    rangeM: c.rangeM,
+    active: c.active,
+  }));
+
   return NextResponse.json({
     zones: mappedZones,
+    cameras: mappedCameras,
     entrances: [],
   });
 }

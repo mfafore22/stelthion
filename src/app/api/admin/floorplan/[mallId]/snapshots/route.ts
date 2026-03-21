@@ -92,61 +92,66 @@ export async function POST(
   // Snapshot current state before restoring (so restore itself is reversible)
   await createFloorplanSnapshot(prisma, mallId, snapshot.floor, 'pre-restore');
 
-  // Restore within a transaction
-  await prisma.$transaction(async (tx) => {
-    await tx.camera.deleteMany({ where: { mallId, floor: snapshot.floor } });
-    await tx.floorplanZone.deleteMany({ where: { mallId, floor: snapshot.floor } });
+  try {
+    // Restore within a transaction
+    await prisma.$transaction(async (tx) => {
+      await tx.camera.deleteMany({ where: { mallId, floor: snapshot.floor } });
+      await tx.floorplanZone.deleteMany({ where: { mallId, floor: snapshot.floor } });
 
-    // Recreate zones
-    for (const z of zones) {
-      await tx.floorplanZone.create({
-        data: {
-          id: z.id,
-          mallId: z.mallId,
-          floor: z.floor,
-          zoneId: z.zoneId,
-          name: z.name,
-          nameFi: z.nameFi,
-          category: z.category,
-          subcategory: z.subcategory ?? null,
-          drawShape: z.drawShape ?? 'polygon',
-          svgPoints: z.svgPoints,
-          labelX: z.labelX,
-          labelY: z.labelY,
-          capacity: z.capacity,
-          areaSqm: z.areaSqm,
-          baseVisitors: z.baseVisitors ?? 0,
-          publishedAt: z.publishedAt ? new Date(z.publishedAt) : null,
-        },
-      });
-    }
+      // Recreate zones (new IDs — old IDs may conflict)
+      for (const z of zones) {
+        await tx.floorplanZone.create({
+          data: {
+            mallId: z.mallId ?? mallId,
+            floor: z.floor ?? snapshot.floor,
+            zoneId: z.zoneId,
+            name: z.name,
+            nameFi: z.nameFi,
+            category: z.category,
+            subcategory: z.subcategory ?? null,
+            drawShape: z.drawShape ?? 'polygon',
+            svgPoints: z.svgPoints,
+            labelX: z.labelX,
+            labelY: z.labelY,
+            capacity: z.capacity,
+            areaSqm: z.areaSqm,
+            baseVisitors: z.baseVisitors ?? 0,
+            publishedAt: z.publishedAt ? new Date(z.publishedAt) : null,
+          },
+        });
+      }
 
-    // Recreate cameras
-    for (const c of cameras) {
-      await tx.camera.create({
-        data: {
-          id: c.id,
-          mallId: c.mallId,
-          floor: c.floor,
-          label: c.label,
-          x: c.x,
-          y: c.y,
-          angleDeg: c.angleDeg,
-          fovDeg: c.fovDeg,
-          rangeM: c.rangeM,
-          streamUrl: c.streamUrl,
-          zoneDbId: c.zoneDbId,
-          active: c.active,
-        },
-      });
-    }
-  });
+      // Recreate cameras (new IDs, no zoneDbId link since zone IDs changed)
+      for (const c of cameras) {
+        await tx.camera.create({
+          data: {
+            mallId: c.mallId ?? mallId,
+            floor: c.floor ?? snapshot.floor,
+            label: c.label,
+            x: c.x,
+            y: c.y,
+            angleDeg: c.angleDeg ?? null,
+            fovDeg: c.fovDeg ?? null,
+            rangeM: c.rangeM ?? null,
+            streamUrl: c.streamUrl ?? null,
+            active: c.active ?? true,
+          },
+        });
+      }
+    });
 
-  return NextResponse.json({
-    ok: true,
-    restored: {
-      zones: zones.length,
-      cameras: cameras.length,
-    },
-  });
+    return NextResponse.json({
+      ok: true,
+      restored: {
+        zones: zones.length,
+        cameras: cameras.length,
+      },
+    });
+  } catch (error) {
+    console.error('Snapshot restore error:', error);
+    return NextResponse.json(
+      { ok: false, error: error instanceof Error ? error.message : 'Restore failed' },
+      { status: 500 },
+    );
+  }
 }

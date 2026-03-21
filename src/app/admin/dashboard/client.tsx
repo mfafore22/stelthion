@@ -7,23 +7,21 @@ import { Map, ClipboardList } from 'lucide-react';
 
 interface Props {
   zoneCount: number;
-  storeCount: number;
   cameraCount: number;
   pending: number;
   processing: number;
   complete: number;
 }
 
-export function AdminDashboardClient({ zoneCount, storeCount, cameraCount, pending, processing, complete }: Props) {
+export function AdminDashboardClient({ zoneCount, cameraCount, pending, processing, complete }: Props) {
   const { t } = useTranslation('admin');
 
   return (
     <div className="p-6 max-w-4xl">
       <h2 className="text-xl font-bold text-bo-neutral-950 tracking-wide mb-6">{t('dashboard.title')}</h2>
 
-      <div className="grid grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-2 gap-4 mb-8">
         <Card label={t('dashboard.zones')} value={zoneCount} />
-        <Card label={t('dashboard.stores')} value={storeCount} />
         <Card label={t('dashboard.cameras')} value={cameraCount} />
       </div>
 

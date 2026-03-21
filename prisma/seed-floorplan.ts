@@ -114,21 +114,22 @@ async function main() {
 
   console.log(`  Zones seeded: ${Object.keys(zoneDbIds).length}`)
 
-  // Delete existing stores for this mall, then re-create
-  await prisma.floorplanStore.deleteMany({ where: { mallId: MALL_ID } })
-
+  // Seed stores as zones with drawShape: 'rect'
+  let storeZoneCount = 0
   for (const s of GROUND_STORES) {
-    const zoneDbId = zoneDbIds[s.zoneId]
-    if (!zoneDbId) {
-      console.warn(`  Skipping store "${s.name}" — zone "${s.zoneId}" not found`)
-      continue
-    }
-    await prisma.floorplanStore.create({
-      data: { mallId: MALL_ID, floor: 'ground', name: s.name, slug: s.slug, zoneDbId, x: s.x, y: s.y, w: s.w, h: s.h },
+    const x2 = s.x + s.w
+    const y2 = s.y + s.h
+    const svgPoints = `${s.x},${s.y} ${x2},${s.y} ${x2},${y2} ${s.x},${y2}`
+
+    await prisma.floorplanZone.upsert({
+      where: { mallId_floor_zoneId: { mallId: MALL_ID, floor: 'ground', zoneId: `store-${s.slug}` } },
+      update: { name: s.name, svgPoints, labelX: s.x + s.w / 2, labelY: s.y + s.h / 2, drawShape: 'rect', category: 'Store' },
+      create: { mallId: MALL_ID, floor: 'ground', zoneId: `store-${s.slug}`, name: s.name, nameFi: s.name, category: 'Store', drawShape: 'rect', svgPoints, labelX: s.x + s.w / 2, labelY: s.y + s.h / 2, capacity: 0, areaSqm: 0 },
     })
+    storeZoneCount++
   }
 
-  console.log(`  Stores seeded: ${GROUND_STORES.length}`)
+  console.log(`  Store zones seeded: ${storeZoneCount}`)
   console.log('Done.')
 }
 

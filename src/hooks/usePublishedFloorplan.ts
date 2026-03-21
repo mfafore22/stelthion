@@ -1,14 +1,28 @@
 import useSWR from 'swr';
 import type { IdeaparkZone } from '@/lib/data/ideaparkZones';
 
+export interface PublishedCamera {
+  id: string;
+  label: string;
+  x: number;
+  y: number;
+  angleDeg: number | null;
+  fovDeg: number | null;
+  rangeM: number | null;
+  active: boolean;
+}
+
 interface FloorplanResponse {
   zones: IdeaparkZone[];
+  cameras?: PublishedCamera[];
   entrances: unknown[];
 }
 
 interface PublishedFloorplan {
   groundZones: IdeaparkZone[] | null;
   upperZones: IdeaparkZone[] | null;
+  groundCameras: PublishedCamera[];
+  upperCameras: PublishedCamera[];
   loading: boolean;
 }
 
@@ -30,6 +44,8 @@ export function usePublishedFloorplan(mallId: string): PublishedFloorplan {
   return {
     groundZones: ground?.zones?.length ? ground.zones : null,
     upperZones: upper?.zones?.length ? upper.zones : null,
+    groundCameras: ground?.cameras ?? [],
+    upperCameras: upper?.cameras ?? [],
     loading: loadingGround || loadingUpper,
   };
 }

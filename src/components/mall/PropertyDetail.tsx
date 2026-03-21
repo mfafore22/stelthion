@@ -10,7 +10,7 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PropertyKPIs } from './PropertyKPIs';
 import { FootfallChart } from './FootfallChart';
-import { FootfallAnalysis } from './FootfallAnalysis';
+
 import { WeatherNextPanel } from './WeatherNextPanel';
 import { EventsPanel } from './EventsPanel';
 import { CampaignCard } from './CampaignCard';
@@ -31,10 +31,7 @@ import type { HSLAccessibility, NysseAccessibility, VRConnections, CatchmentDemo
 import type { EventsData } from '@/lib/types/events';
 import { getCurrentFootfall } from '@/lib/data/footfall';
 import { useTranslation } from 'react-i18next';
-import { AnalysisScheduler } from './AnalysisScheduler';
-import { AnalysisResults } from './AnalysisResults';
-import { JourneyResults } from './JourneyResults';
-import { JourneyPlanner } from './JourneyPlanner';
+import { VideoAnalysis } from './video-analysis/VideoAnalysis';
 
 // Baseline deltas — static until real sensor comparison is available.
 const BASE_DELTAS = {
@@ -50,7 +47,6 @@ interface PropertyDetailProps {
 export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetailProps) {
   const { t } = useTranslation('mall');
   const [activeTab, setActiveTab] = useState('overview');
-  const [footfallView, setFootfallView] = useState<'chart' | 'analysis'>('chart');
   const { data: mallData, loading, error } = useMallDetail(mallId);
   const identity = useMallIdentity(mallId);
 
@@ -326,7 +322,7 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
           <TabsTrigger value="tenants">{t('tabs.tenants')}</TabsTrigger>
           <TabsTrigger value="events">{t('tabs.events')}</TabsTrigger>
           <TabsTrigger value="weather">{t('tabs.weather')}</TabsTrigger>
-          <TabsTrigger value="campaigns">{t('tabs.campaigns')}</TabsTrigger>
+          <TabsTrigger value="campaigns" disabled className="opacity-40 cursor-not-allowed">{t('tabs.campaigns')}</TabsTrigger>
           <TabsTrigger value="analysis">{t('tabs.analysis', 'Video Analysis')}</TabsTrigger>
         </TabsList>
 
@@ -382,42 +378,10 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
 
             {/* Right Columns: Charts & Insights */}
             <div className="col-span-2 space-y-4">
-              {/* Footfall view toggle — Footfall Analysis only available for Ideapark */}
-              {mallId === 'ideapark' && (
-                <div className="flex items-center gap-1 p-1 bg-bo-neutral-100 rounded-lg w-fit">
-                  <button
-                    onClick={() => setFootfallView('chart')}
-                    className={
-                      footfallView === 'chart'
-                        ? 'px-3 py-1.5 text-sm font-medium rounded-md bg-white shadow text-bo-neutral-900 transition-all'
-                        : 'px-3 py-1.5 text-sm font-medium rounded-md text-bo-neutral-500 hover:text-bo-neutral-700 transition-all'
-                    }
-                  >
-                    {t('detail.footfallChart')}
-                  </button>
-                  <button
-                    onClick={() => setFootfallView('analysis')}
-                    className={
-                      footfallView === 'analysis'
-                        ? 'px-3 py-1.5 text-sm font-medium rounded-md bg-white shadow text-bo-neutral-900 transition-all'
-                        : 'px-3 py-1.5 text-sm font-medium rounded-md text-bo-neutral-500 hover:text-bo-neutral-700 transition-all'
-                    }
-                  >
-                    {t('detail.footfallAnalysis')}
-                  </button>
-                </div>
-              )}
-
-              {footfallView === 'analysis' && mallId === 'ideapark' ? (
-                <FootfallAnalysis mallId={mallId} />
-              ) : (
-                <>
-                  <FootfallChart mallId={mallId} showPredicted={showPredicted} />
-                  <WeatherNextPanel mallId={mallId} />
-                  <EventsPanel mallId={mallId} />
-                  <CampaignCard mallId={mallId} />
-                </>
-              )}
+              <FootfallChart mallId={mallId} showPredicted={showPredicted} />
+              <WeatherNextPanel mallId={mallId} />
+              <EventsPanel mallId={mallId} />
+              <CampaignCard mallId={mallId} />
             </div>
           </div>
 
@@ -512,11 +476,8 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
           <CampaignCard mallId={mallId} expanded />
         </TabsContent>
 
-        <TabsContent value="analysis" className="space-y-8">
-          <AnalysisScheduler mallId={mallId} />
-          <AnalysisResults mallId={mallId} />
-          <JourneyResults mallId={mallId} />
-          <JourneyPlanner mallId={mallId} />
+        <TabsContent value="analysis">
+          <VideoAnalysis mallId={mallId} />
         </TabsContent>
       </Tabs>
     </div>

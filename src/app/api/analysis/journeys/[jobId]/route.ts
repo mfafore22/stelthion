@@ -9,21 +9,27 @@ export async function GET(
 
   const job = await prisma.analysisJob.findUnique({
     where: { id: jobId },
-    select: { originZoneId: true, destinationZoneId: true },
+    select: {
+      originZoneId: true,
+      destinationZoneId: true,
+      selectedZoneIds: true,
+      mode: true,
+      journeys: {
+        include: { paths: true },
+        orderBy: { createdAt: 'desc' },
+      },
+    },
   });
 
-  const sessions = await prisma.journeySession.findMany({
-    where: { jobId },
-    include: { paths: true },
-  });
-
-  if (sessions.length === 0) {
-    return NextResponse.json({ error: 'No journey data for this job' }, { status: 404 });
+  if (!job) {
+    return NextResponse.json({ error: 'Job not found' }, { status: 404 });
   }
 
   return NextResponse.json({
-    sessions,
-    originZoneId: job?.originZoneId ?? null,
-    destinationZoneId: job?.destinationZoneId ?? null,
+    sessions: job.journeys,
+    originZoneId: job.originZoneId,
+    destinationZoneId: job.destinationZoneId,
+    selectedZoneIds: job.selectedZoneIds ? JSON.parse(job.selectedZoneIds) : [],
+    mode: job.mode,
   });
 }

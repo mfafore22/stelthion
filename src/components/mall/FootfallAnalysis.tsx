@@ -23,10 +23,16 @@ import { ZoneStoreList } from './ZoneStoreList';
 import {
   GROUND_FLOOR_ENTRANCES,
 } from '@/lib/data/ideaparkStorePositions';
-import { usePublishedFloorplan } from '@/hooks/usePublishedFloorplan';
+import { usePublishedFloorplan, type PublishedCamera } from '@/hooks/usePublishedFloorplan';
 
 interface FootfallAnalysisProps {
   mallId: string;
+  /** When true, cameras and zones become clickable for analysis job selection */
+  selectionMode?: boolean;
+  selectedCameraIds?: string[];
+  selectedZoneIds?: string[];
+  onToggleCamera?: (id: string) => void;
+  onToggleZone?: (id: string) => void;
 }
 
 type Floor = 'ground' | 'upper';
@@ -42,7 +48,14 @@ const MIN_HOUR = 10;
 const MAX_HOUR = 21;
 
 
-export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
+export function FootfallAnalysis({
+  mallId,
+  selectionMode = false,
+  selectedCameraIds = [],
+  selectedZoneIds = [],
+  onToggleCamera,
+  onToggleZone,
+}: FootfallAnalysisProps) {
   const { t } = useTranslation('mall');
   const now = new Date();
   const [floor, setFloor] = useState<Floor>('ground');
@@ -164,6 +177,7 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
 
   // Prefer published floorplan data from DB; fall back to static imports
   const published = usePublishedFloorplan(mallId);
+  const activeCameras = floor === 'upper' ? published.upperCameras : published.groundCameras;
 
   const getVisitorData = useCallback(
     (zone: IdeaparkZone): ZoneVisitorData => getZoneVisitors(zone, hour, dayOfWeek),
@@ -383,24 +397,43 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
               const data = getVisitorData(zone);
               const color = getHeatColor(data.visitors, zone.capacity);
               const isHovered = hoveredZone === zone.id;
-              const isSelected = selectedZone?.id === zone.id;
+              const isZoneSelected = selectionMode && selectedZoneIds.includes(zone.id);
+              const isStatsSelected = !selectionMode && selectedZone?.id === zone.id;
 
               return (
                 <g
                   key={zone.id}
                   style={{ pointerEvents: 'all', cursor: 'pointer' }}
-                  onClick={() => setSelectedZone(isSelected ? null : zone)}
+                  onClick={() => {
+                    if (selectionMode && onToggleZone) {
+                      onToggleZone(zone.id);
+                    } else {
+                      setSelectedZone(isStatsSelected ? null : zone);
+                    }
+                  }}
                   onMouseEnter={() => setHoveredZone(zone.id)}
                   onMouseLeave={() => setHoveredZone(null)}
                 >
                   <polygon
                     points={zone.svgPoints}
                     fill={color}
-                    fillOpacity={isSelected ? 0.78 : isHovered ? 0.68 : 0.48}
-                    stroke={isSelected ? 'var(--color-bo-primary-800)' : isHovered ? 'var(--color-bo-primary-700)' : 'rgba(255,255,255,0.6)'}
-                    strokeWidth={isSelected ? 2.5 : isHovered ? 2 : 1}
+                    fillOpacity={isZoneSelected ? 0.65 : isStatsSelected ? 0.78 : isHovered ? 0.68 : 0.48}
+                    stroke={
+                      isZoneSelected ? 'var(--color-bo-primary-600)'
+                      : isStatsSelected ? 'var(--color-bo-primary-800)'
+                      : isHovered ? 'var(--color-bo-primary-700)'
+                      : 'rgba(255,255,255,0.6)'
+                    }
+                    strokeWidth={isZoneSelected ? 2.5 : isStatsSelected ? 2.5 : isHovered ? 2 : 1}
                     style={{ transition: 'fill-opacity 0.15s, stroke 0.15s' }}
                   />
+                  {/* Selection checkmark overlay */}
+                  {isZoneSelected && (
+                    <g transform={`translate(${zone.labelX - 8}, ${zone.labelY - 8})`} style={{ pointerEvents: 'none' }}>
+                      <circle cx="8" cy="8" r="10" fill="rgba(50,141,46,0.85)" />
+                      <path d="M5 8l2 2 4-4" stroke="white" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                    </g>
+                  )}
                 </g>
               );
             })}
@@ -456,6 +489,68 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
               </g>
             ))}
 
+            {/* ── Camera pins ──────────────────────────────────────────────── */}
+            {activeCameras.map((cam) => {
+              const isCamSelected = selectionMode && selectedCameraIds.includes(cam.id);
+              const camSelIndex = selectedCameraIds.indexOf(cam.id);
+              return (
+                <g
+                  key={cam.id}
+                  style={{ pointerEvents: selectionMode ? 'all' : 'none', cursor: selectionMode ? 'pointer' : 'default' }}
+                  onClick={selectionMode && onToggleCamera ? () => onToggleCamera(cam.id) : undefined}
+                >
+                  {/* Pulsing ring when selected in selection mode */}
+                  {isCamSelected && (
+                    <circle cx={cam.x} cy={cam.y} r="14" fill="none"
+                      stroke="var(--color-bo-accent-600, #214990)" strokeWidth="1.5" strokeOpacity={0.5}>
+                      <animate attributeName="r" values="10;16;10" dur="2s" repeatCount="indefinite" />
+                      <animate attributeName="stroke-opacity" values="0.6;0.1;0.6" dur="2s" repeatCount="indefinite" />
+                    </circle>
+                  )}
+                  {/* Pin body */}
+                  <circle cx={cam.x} cy={cam.y} r={isCamSelected ? 8 : 5}
+                    fill="var(--color-bo-accent-600, #3b82f6)"
+                    fillOpacity={isCamSelected ? 1 : 0.9}
+                    stroke="white" strokeWidth={isCamSelected ? 2.5 : 1.5}
+                    className="transition-all duration-200" />
+                  {/* Index badge when selected */}
+                  {isCamSelected && camSelIndex >= 0 ? (
+                    <text x={cam.x} y={cam.y + 4} textAnchor="middle"
+                      fontSize="9" fontWeight="700" fill="white"
+                      style={{ pointerEvents: 'none', userSelect: 'none' }}>
+                      {String.fromCharCode(65 + camSelIndex)}
+                    </text>
+                  ) : (
+                    <circle cx={cam.x} cy={cam.y} r={2} fill="white" fillOpacity={0.9}
+                      style={{ pointerEvents: 'none' }} />
+                  )}
+                  {/* Label */}
+                  <text x={cam.x} y={cam.y + (isCamSelected ? 18 : 14)} textAnchor="middle"
+                    fontSize={isCamSelected ? '8' : '6.5'} fontWeight="600"
+                    fill="var(--color-bo-accent-700, #2563eb)" fillOpacity={0.85}
+                    style={{ userSelect: 'none', pointerEvents: 'none' }}>
+                    {cam.label}
+                  </text>
+                </g>
+              );
+            })}
+
+            {/* ── Connection line between 2 selected cameras (selection mode) ── */}
+            {selectionMode && (() => {
+              const selectedOnFloor = activeCameras.filter((c) => selectedCameraIds.includes(c.id));
+              if (selectedOnFloor.length !== 2) return null;
+              return (
+                <line
+                  x1={selectedOnFloor[0].x} y1={selectedOnFloor[0].y}
+                  x2={selectedOnFloor[1].x} y2={selectedOnFloor[1].y}
+                  stroke="var(--color-bo-accent-600, #214990)"
+                  strokeWidth="2" strokeDasharray="6 4" strokeOpacity={0.7}
+                  style={{ pointerEvents: 'none' }}>
+                  <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="1.5s" repeatCount="indefinite" />
+                </line>
+              );
+            })()}
+
             {/* ── Hovered zone tooltip (zoom-compensated) ─────────────────── */}
             {hoveredZone && !hoveredZone.startsWith('btn-') && (() => {
               const zone = activeZones.find((z) => z.id === hoveredZone);
@@ -483,8 +578,8 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
           </svg>
         </div>{/* end zoom transform wrapper */}
 
-          {/* Zone popup */}
-          {selectedZone && (() => {
+          {/* Zone popup (hidden in selection mode) */}
+          {!selectionMode && selectedZone && (() => {
             const data = getVisitorData(selectedZone);
             return (
               <div
@@ -532,8 +627,8 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
           })()}
         </div>
 
-      {/* ── Zone store list ─────────────────────────────────────────────────── */}
-      {selectedZone && (
+      {/* ── Zone store list (hidden in selection mode) ───────────────────── */}
+      {!selectionMode && selectedZone && (
         <ZoneStoreList
           zoneId={selectedZone.id}
           zoneName={selectedZone.nameFi}
@@ -557,7 +652,9 @@ export function FootfallAnalysis({ mallId }: FootfallAnalysisProps) {
           </div>
         ))}
         <div className="ml-auto text-xs text-bo-neutral-400">
-          {selectedZone ? null : t('heatmap.clickZoneToSeeStores')}
+          {selectionMode
+            ? t('videoAnalysis.unified.mapHint')
+            : selectedZone ? null : t('heatmap.clickZoneToSeeStores')}
         </div>
       </div>
     </Card>

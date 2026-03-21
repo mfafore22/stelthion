@@ -399,12 +399,18 @@ export function FloorplanEditor({
         body: JSON.stringify({ floor, zones, cameras }),
       });
       const data = await res.json();
-      if (!data.ok) throw new Error('Save failed');
+      if (!res.ok || !data.ok) {
+        const msg = data?.error ?? `Save failed (${res.status})`;
+        alert(msg);
+        console.error('Save refused:', msg);
+        return;
+      }
       setDirty(false);
-      setPublishedAt(data.publishedAt ?? null); // preserve live status if server kept it
+      setPublishedAt(data.publishedAt ?? null);
       setSavedSincePublish(true);
     } catch (err) {
       console.error('Save failed:', err);
+      alert('Save failed — check console for details.');
     } finally {
       setSaving(false);
     }
@@ -804,8 +810,8 @@ export function FloorplanEditor({
                   strokeWidth={isSelected ? 2 : 1}
                   style={{ cursor: 'pointer' }}
                   onClick={(e) => {
-                    e.stopPropagation();
                     if (tool === 'select' || tool === 'erase') {
+                      e.stopPropagation();
                       setSelected({ type: 'zone', index: i });
                     }
                   }}
@@ -843,8 +849,8 @@ export function FloorplanEditor({
                 key={`cam-${i}`}
                 style={{ cursor: 'pointer' }}
                 onClick={(e) => {
-                  e.stopPropagation();
                   if (tool === 'select' || tool === 'erase') {
+                    e.stopPropagation();
                     setSelected({ type: 'camera', index: i });
                   }
                 }}
