@@ -6,6 +6,8 @@ datasource db {
   provider = "postgresql"
 }
 
+// ─── Tenant / Auth ──────────────────────────────────────────────────────────
+
 model Customer {
   id        String   @id @default(cuid())
   name      String
@@ -35,9 +37,11 @@ enum Role {
   USER
 }
 
+// ─── Mall ───────────────────────────────────────────────────────────────────
+
 model Mall {
   id         String     @id @default(cuid())
-  mallId     String     @unique
+  mallId     String     @unique          // semantic slug, e.g. 'ideapark'
   name       String
   city       String
   address    String?
@@ -110,6 +114,8 @@ model MallCategory {
   @@unique([mallId, name])
 }
 
+// ─── Floor Plan & Video Analysis ────────────────────────────────────────────
+
 model FloorplanZone {
   id           String           @id @default(cuid())
   mallId       String
@@ -170,7 +176,7 @@ model AnalysisJob {
   journeyCount      Int              @default(0)
   originZoneId      String?
   destinationZoneId String?
-  selectedZoneIds   String?
+  selectedZoneIds   String?          // JSON: ["zone1","zone2",...] for JOURNEY_MAP mode
   status            JobStatus        @default(PENDING)
   requestedBy       String
   createdAt         DateTime         @default(now())
@@ -228,6 +234,8 @@ model JourneyPath {
   session      JourneySession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 }
 
+// ─── Floorplan backup snapshots ─────────────────────────────────────────────
+
 model FloorplanSnapshot {
   id        String   @id @default(cuid())
   mallId    String
@@ -240,6 +248,8 @@ model FloorplanSnapshot {
 
   @@index([mallId, floor, createdAt])
 }
+
+// ─── Footfall (future — sensor / camera count data) ─────────────────────────
 
 model FootfallReading {
   id        String   @id @default(cuid())
@@ -258,6 +268,8 @@ model FootfallReading {
   @@unique([mallId, zoneId, floor, date, hour])
   @@index([mallId, date])
 }
+
+// ─── Household / Catchment (future — demographic data) ──────────────────────
 
 model HouseholdStat {
   id             String   @id @default(cuid())
@@ -278,6 +290,8 @@ model HouseholdStat {
   @@unique([mallId, postalCode, year])
   @@index([mallId, year])
 }
+
+// ─── Events & Campaigns (future) ────────────────────────────────────────────
 
 model MallEvent {
   id          String        @id @default(cuid())
