@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
+  provider = "postgresql"
 }
 
 model Customer {
@@ -29,20 +29,42 @@ model User {
   customer         Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
 }
 
+enum Role {
+  ADMIN
+  MANAGER
+  USER
+}
+
 model Mall {
-  id         String         @id @default(cuid())
+  id         String     @id @default(cuid())
+  mallId     String     @unique
   name       String
   city       String
   address    String?
-  totalShops Int            @default(0)
-  status     MallStatus     @default(LIVE)
+  totalShops Int        @default(0)
+  status     MallStatus @default(LIVE)
   customerId String
-  createdAt  DateTime       @default(now())
-  updatedAt  DateTime       @updatedAt
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
   customer   Customer       @relation(fields: [customerId], references: [id], onDelete: Cascade)
   stats      MallStats?
   branding   MallBranding?
   categories MallCategory[]
+  zones      FloorplanZone[]
+  cameras    Camera[]
+  jobs       AnalysisJob[]
+  snapshots  FloorplanSnapshot[]
+  footfall   FootfallReading[]
+  household  HouseholdStat[]
+  events     MallEvent[]
+}
+
+enum MallStatus {
+  LIVE
+  BETA
+  ALPHA
+  PLANNED
 }
 
 model MallStats {
@@ -55,7 +77,7 @@ model MallStats {
   conversionRate  Float    @default(0)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  mall            Mall     @relation(fields: [mallId], references: [id], onDelete: Cascade)
+  mall            Mall     @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
 }
 
 model MallBranding {
@@ -74,7 +96,7 @@ model MallBranding {
   headingWeight   Int      @default(700)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  mall            Mall     @relation(fields: [mallId], references: [id], onDelete: Cascade)
+  mall            Mall     @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
 }
 
 model MallCategory {
@@ -83,20 +105,207 @@ model MallCategory {
   name       String
   shopCount  Int    @default(0)
   percentage Float  @default(0)
-  mall       Mall   @relation(fields: [mallId], references: [id], onDelete: Cascade)
+  mall       Mall   @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
 
   @@unique([mallId, name])
 }
 
-enum Role {
-  ADMIN
-  MANAGER
-  USER
+model FloorplanZone {
+  id           String           @id @default(cuid())
+  mallId       String
+  floor        String
+  zoneId       String
+  name         String
+  nameFi       String
+  category     String
+  subcategory  String?
+  drawShape    String           @default("polygon")
+  svgPoints    String
+  labelX       Float
+  labelY       Float
+  capacity     Int
+  areaSqm      Int
+  baseVisitors Int              @default(0)
+  publishedAt  DateTime?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  mall         Mall             @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
+  cameras      Camera[]
+
+  @@unique([mallId, floor, zoneId])
 }
 
-enum MallStatus {
-  LIVE
-  BETA
-  ALPHA
-  PLANNED
+model Camera {
+  id        String         @id @default(cuid())
+  mallId    String
+  floor     String
+  label     String
+  x         Float
+  y         Float
+  angleDeg  Float?
+  fovDeg    Float?
+  rangeM    Float?
+  streamUrl String?
+  zoneDbId  String?
+  active    Boolean        @default(true)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  mall      Mall           @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
+  zone      FloorplanZone? @relation(fields: [zoneDbId], references: [id])
+  jobs      AnalysisJob[]  @relation("PrimaryCamera")
+  jobsSecondary AnalysisJob[] @relation("SecondaryCamera")
+}
+
+model AnalysisJob {
+  id                String           @id @default(cuid())
+  mallId            String
+  mode              AnalysisMode     @default(ZONE_COUNT)
+  cameraId          String?
+  secondaryCameraId String?
+  footageDate       DateTime
+  startTime         String
+  endTime           String
+  journeyCount      Int              @default(0)
+  originZoneId      String?
+  destinationZoneId String?
+  selectedZoneIds   String?
+  status            JobStatus        @default(PENDING)
+  requestedBy       String
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  mall              Mall             @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
+  camera            Camera?          @relation("PrimaryCamera", fields: [cameraId], references: [id])
+  secondaryCamera   Camera?          @relation("SecondaryCamera", fields: [secondaryCameraId], references: [id])
+  results           AnalysisResult[]
+  journeys          JourneySession[]
+}
+
+enum AnalysisMode {
+  ZONE_COUNT
+  AB_TRACKING
+  JOURNEY_MAP
+}
+
+enum JobStatus {
+  PENDING
+  PROCESSING
+  COMPLETE
+  FAILED
+}
+
+model AnalysisResult {
+  id        String      @id @default(cuid())
+  jobId     String
+  zoneId    String
+  hour      Int
+  count     Int
+  density   Float
+  createdAt DateTime    @default(now())
+
+  job       AnalysisJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+}
+
+model JourneySession {
+  id              String        @id @default(cuid())
+  jobId           String
+  taggedCount     Int
+  recognizedCount Int
+  createdAt       DateTime      @default(now())
+
+  job             AnalysisJob   @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  paths           JourneyPath[]
+}
+
+model JourneyPath {
+  id           String         @id @default(cuid())
+  sessionId    String
+  zoneSequence String
+  timestamps   String
+
+  session      JourneySession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+}
+
+model FloorplanSnapshot {
+  id        String   @id @default(cuid())
+  mallId    String
+  floor     String
+  data      String
+  reason    String
+  createdAt DateTime @default(now())
+
+  mall      Mall     @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
+
+  @@index([mallId, floor, createdAt])
+}
+
+model FootfallReading {
+  id        String   @id @default(cuid())
+  mallId    String
+  zoneId    String
+  floor     String
+  date      DateTime @db.Date
+  hour      Int
+  visitors  Int      @default(0)
+  dwellSec  Int?
+  source    String   @default("sensor")
+  createdAt DateTime @default(now())
+
+  mall      Mall     @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
+
+  @@unique([mallId, zoneId, floor, date, hour])
+  @@index([mallId, date])
+}
+
+model HouseholdStat {
+  id             String   @id @default(cuid())
+  mallId         String
+  postalCode     String
+  municipality   String?
+  population     Int      @default(0)
+  households     Int      @default(0)
+  avgIncome      Float?
+  medianAge      Float?
+  distanceKm     Float?
+  driveTimeMin   Float?
+  year           Int
+  createdAt      DateTime @default(now())
+
+  mall           Mall     @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
+
+  @@unique([mallId, postalCode, year])
+  @@index([mallId, year])
+}
+
+model MallEvent {
+  id          String        @id @default(cuid())
+  mallId      String
+  title       String
+  titleFi     String?
+  description String?
+  category    EventCategory @default(OTHER)
+  startDate   DateTime
+  endDate     DateTime?
+  allDay      Boolean       @default(false)
+  location    String?
+  organizer   String?
+  imageUrl    String?
+  published   Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  mall        Mall          @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
+
+  @@index([mallId, startDate])
+}
+
+enum EventCategory {
+  SALE
+  ENTERTAINMENT
+  COMMUNITY
+  SEASONAL
+  TENANT
+  OTHER
 }
