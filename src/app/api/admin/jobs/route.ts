@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
+import { auth } from '@/auth';
 
 export async function GET() {
+  const session = await auth();
+  if (!session?.user || session.user.role !== 'ADMIN') {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const jobs = await prisma.analysisJob.findMany({
     include: { camera: true },
     orderBy: { createdAt: 'desc' },
@@ -12,6 +18,11 @@ export async function GET() {
 }
 
 export async function PATCH(req: NextRequest) {
+  const session = await auth();
+  if (!session?.user || session.user.role !== 'ADMIN') {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const { id, status } = await req.json();
 
   if (!id || !['PENDING', 'PROCESSING', 'COMPLETE', 'FAILED'].includes(status)) {

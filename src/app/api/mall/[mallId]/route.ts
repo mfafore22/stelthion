@@ -1,10 +1,5 @@
-/**
- * GET /api/mall/[mallId]
- * Returns mall detail data for a specific mall.
- * Currently serves static Ideapark Lempäälä data.
- */
-
 import { NextRequest, NextResponse } from 'next/server';
+import prisma from '@/app/lib/prisma';
 
 const IDEAPARK_DATA = {
   id: 'ideapark',
@@ -58,7 +53,7 @@ const IDEAPARK_DATA = {
       'Upper Level': 75,
     },
   },
-  shops: null, // detailed shop list not loaded in summary view
+  shops: null,
 };
 
 export async function GET(
@@ -67,12 +62,65 @@ export async function GET(
 ) {
   const { mallId } = await params;
 
-  if (mallId !== 'ideapark') {
-    return NextResponse.json(
-      { success: false, error: `Mall '${mallId}' not found` },
-      { status: 404 }
-    );
+  // Try static data first (ideapark)
+  if (mallId === 'ideapark') {
+    return NextResponse.json({ success: true, data: IDEAPARK_DATA });
   }
 
-  return NextResponse.json({ success: true, data: IDEAPARK_DATA });
+  // Try database for other malls
+  const mall = await prisma.mall.findUnique({
+    where: { mallId },
+    include: {
+      stats: true,
+      branding: true,
+      categories: true,
+    },
+  });
+
+  if (mall) {
+    return NextResponse.json({
+      success: true,
+      data: {
+        id: mall.mallId,
+        summary: {
+          mall_name: mall.name,
+          city: mall.city,
+          total_shops: mall.totalShops,
+          collection_date: mall.createdAt.toISOString().split('T')[0],
+          data_source: 'Database',
+          shops_by_retailer_type: {},
+          shops_by_category: {},
+          retailer_type_percentages: {},
+          top_categories: mall.categories.map((c) => ({
+            category: c.name,
+            count: c.shopCount,
+            percentage: c.percentage,
+          })),
+          shops_by_floor: {},
+        },
+        shops: null,
+      },
+    });
+  }
+
+  // Return empty placeholder instead of 404
+  return NextResponse.json({
+    success: true,
+    data: {
+      id: mallId,
+      summary: {
+        mall_name: mallId.charAt(0).toUpperCase() + mallId.slice(1),
+        city: 'Unknown',
+        total_shops: 0,
+        collection_date: new Date().toISOString().split('T')[0],
+        data_source: 'Pending setup',
+        shops_by_retailer_type: {},
+        shops_by_category: {},
+        retailer_type_percentages: {},
+        top_categories: [],
+        shops_by_floor: {},
+      },
+      shops: null,
+    },
+  });
 }

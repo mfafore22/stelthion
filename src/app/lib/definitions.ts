@@ -10,6 +10,7 @@ declare module 'next-auth' {
       customerId: string
       customerName: string
     }
+    twoFactorVerified?: boolean
   }
 
   interface User {

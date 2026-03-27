@@ -10,7 +10,6 @@
  */
 
 import 'dotenv/config'
-import { Pool } from 'pg'
 import { PrismaClient } from '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
 
@@ -272,8 +271,8 @@ export async function seedAnalysis(prisma: PrismaClient) {
 // ── CLI entrypoint ──────────────────────────────────────────────────────────
 
 if (require.main === module || process.argv[1]?.endsWith('seed-analysis.ts')) {
-  const pool = new Pool({ connectionString: process.env.DATABASE_URL })
-  const adapter = new PrismaPg(pool)
+  
+  const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL })
   const prisma = new PrismaClient({ adapter })
 
   console.log('Seeding video analysis demo data…')
@@ -281,12 +280,14 @@ if (require.main === module || process.argv[1]?.endsWith('seed-analysis.ts')) {
     .then(async () => {
       console.log('Done.')
       await prisma.$disconnect()
-      pool.end()
+      
     })
     .catch(async (e) => {
       console.error('Seed failed:', e)
       await prisma.$disconnect()
-      pool.end()
+      
       process.exit(1)
     })
-}
+  
+
+  }

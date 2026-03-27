@@ -1,18 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { signIn } from 'next-auth/react';
-import { Lock, Mail, AlertCircle } from 'lucide-react';
+import { Lock, AlertCircle, User } from 'lucide-react';
 
 export default function LoginPage() {
-  const [showAdminLogin, setShowAdminLogin] = useState(false);
+  const [mode, setMode] = useState<'choose' | 'admin' | 'mall'>('choose');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleAdminLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -30,7 +29,13 @@ export default function LoginPage() {
         return;
       }
 
-      window.location.replace('/admin/dashboard');
+      if (mode === 'mall') {
+        sessionStorage.setItem('login-destination', 'mall');
+      } else {
+        sessionStorage.setItem('login-destination', 'admin');
+      }
+
+      window.location.replace('/two-factor');
     } catch {
       setError('Login failed. Please try again.');
       setLoading(false);
@@ -38,101 +43,114 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white px-4">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[#fafafa]">
+      <div className="w-full max-w-md px-4">
+        <div className="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] border border-gray-100 px-10 py-10">
 
-      {!showAdminLogin ? (
-        <>
-          <p className="text-sm font-medium tracking-widest uppercase text-gray-400">
-            Property Manager Access
-          </p>
-
-          <div className="flex flex-col gap-4 items-center">
-            <Link
-              href="/mall/login"
-              className="px-8 py-3 bg-gray-950 text-white text-sm font-semibold rounded-lg hover:bg-gray-800 transition-colors w-56 text-center"
-            >
-              Mall Login
-            </Link>
-
-            <button
-              onClick={() => setShowAdminLogin(true)}
-              className="px-8 py-3 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors w-56 text-center"
-            >
-              Admin Login
-            </button>
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900" style={{ fontFamily: "'Georgia', serif" }}>
+              stelthion
+            </h1>
+            <p className="text-sm text-gray-400 -mt-0.5 tracking-wide">
+              Synexis<span className="text-[10px] align-super">™</span>
+            </p>
           </div>
-        </>
-      ) : (
-        <div className="w-full max-w-sm">
-          <p className="text-sm font-medium tracking-widest uppercase text-gray-400 text-center mb-6">
-            Admin Access
-          </p>
 
-          {error && (
-            <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 flex items-start gap-2">
-              <AlertCircle className="h-4 w-4 text-red-600 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-red-800">{error}</p>
-            </div>
+          {mode === 'choose' && (
+            <>
+              <p className="text-center text-sm text-gray-500 mb-8 font-medium">
+                Property Manager Secure Login
+              </p>
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={() => setMode('mall')}
+                  className="w-full py-2.5 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-all"
+                >
+                  Mall Login
+                </button>
+                <button
+                  onClick={() => setMode('admin')}
+                  className="w-full py-2.5 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-all"
+                >
+                  Admin Login
+                </button>
+              </div>
+            </>
           )}
 
-          <form onSubmit={handleAdminLogin} className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                <Mail className="inline h-4 w-4 mr-1" />
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent outline-none transition-all bg-white"
-                placeholder="admin@stelthion.com"
-                required
-                disabled={loading}
-                autoComplete="email"
-              />
-            </div>
+          {(mode === 'admin' || mode === 'mall') && (
+            <>
+              <p className="text-center text-sm text-gray-500 mb-8 font-medium">
+                {mode === 'admin' ? 'Admin Access' : 'Mall Property Access'}
+              </p>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                <Lock className="inline h-4 w-4 mr-1" />
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent outline-none transition-all bg-white"
-                placeholder="••••••••"
-                required
-                disabled={loading}
-                autoComplete="current-password"
-              />
-            </div>
+              {error && (
+                <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2 mb-5">
+                  <AlertCircle size={14} />
+                  {error}
+                </div>
+              )}
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 px-4 rounded-lg bg-gray-950 text-white font-semibold hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? 'Signing in...' : 'Sign In'}
-            </button>
-          </form>
+              <form onSubmit={handleLogin} className="space-y-5">
+                <div>
+                  <label htmlFor="email" className="flex items-center gap-1.5 text-sm text-gray-600 mb-1.5">
+                    <User size={14} className="text-gray-400" />
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    required
+                    disabled={loading}
+                    autoComplete="email"
+                    className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-300 transition-all disabled:opacity-50"
+                  />
+                </div>
 
-          <button
-            onClick={() => { setShowAdminLogin(false); setError(''); }}
-            className="w-full mt-4 py-2 text-sm text-gray-500 hover:text-gray-800 transition-colors text-center"
-          >
-            ← Back
-          </button>
+                <div>
+                  <label htmlFor="password" className="flex items-center gap-1.5 text-sm text-gray-600 mb-1.5">
+                    <Lock size={14} className="text-gray-400" />
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    id="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter your password"
+                    required
+                    disabled={loading}
+                    autoComplete="current-password"
+                    className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-300 transition-all disabled:opacity-50"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-2.5 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading ? 'Signing in...' : 'Sign In'}
+                </button>
+              </form>
+
+              <button
+                onClick={() => { setMode('choose'); setError(''); setEmail(''); setPassword(''); }}
+                className="w-full mt-4 text-sm text-gray-500 hover:text-gray-800 transition-colors text-center"
+              >
+                ← Back
+              </button>
+            </>
+          )}
+
+          <p className="text-center text-xs text-gray-400 mt-8">
+            Secure access for authorized personnel only
+          </p>
         </div>
-      )}
-
-      <p className="mt-8 text-xs text-gray-400">
-        Secure access for authorized personnel only
-      </p>
+      </div>
     </div>
-  )
+  );
 }

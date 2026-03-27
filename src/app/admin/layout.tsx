@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+import prisma from '../lib/prisma';
 import { auth } from '@/auth';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import { AdminHeader } from '@/components/admin/AdminHeader';
@@ -19,6 +20,15 @@ export default async function AdminLayout({
     redirect('/login');
   }
 
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { twoFactorVerifiedAt: true },
+  });
+
+  if (!user?.twoFactorVerifiedAt) {
+    redirect('/two-factor');
+  }
+
   const identity = getMallIdentity('ideapark');
   const textColor = getContrastTextColor(identity.colors.primary);
 
@@ -27,7 +37,6 @@ export default async function AdminLayout({
       <AdminSidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <AdminHeader />
-        {/* Ideapark brand identity banner */}
         <div
           className="px-6 py-4 shrink-0"
           style={{

@@ -2,7 +2,8 @@
 
 import React, { useEffect } from 'react';
 import i18n from '@/lib/i18n';
-import { SessionProvider } from '@/contexts/SessionContext';
+import { SessionProvider as NextAuthSessionProvider } from 'next-auth/react';
+import {SessionProvider} from '@/contexts/SessionContext';
 import { MallConciergeWrapper } from '@/components/mall/shell/MallConciergeWrapper';
 
 interface MallLayoutProps {
@@ -10,7 +11,6 @@ interface MallLayoutProps {
 }
 
 export default function MallLayout({ children }: MallLayoutProps) {
-  // Restore saved language after hydration — runs client-only, avoids SSR mismatch
   useEffect(() => {
     const saved = localStorage.getItem('stelthion-language');
     if (saved && saved !== i18n.language) {
@@ -19,10 +19,12 @@ export default function MallLayout({ children }: MallLayoutProps) {
   }, []);
 
   return (
-    <SessionProvider>
-      <MallConciergeWrapper>
-        {children}
-      </MallConciergeWrapper>
-    </SessionProvider>
+    <NextAuthSessionProvider>
+      <SessionProvider>
+        <MallConciergeWrapper>
+          {children}
+        </MallConciergeWrapper>
+      </SessionProvider>
+    </NextAuthSessionProvider>
   );
 }

@@ -4,30 +4,10 @@ export const authConfig = {
   pages: {
     signIn: '/login',
   },
-  providers: [
-    // added later in auth.ts since it requires bcrypt which is only compatible with Node.js
-    // while this file is also used in non-Node.js environments
-  ],
+  providers: [],
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
-      const isOnAdmin = nextUrl.pathname.startsWith('/admin');
-      const isOnMall = nextUrl.pathname.startsWith('/mall') || nextUrl.pathname.startsWith('/tenant');
-      const isOnLogin = nextUrl.pathname === '/login';
-      const isApiRoute = nextUrl.pathname.startsWith('/api');
-      if (isOnLogin && isLoggedIn) {
-        return Response.redirect(new URL('/admin/dashboard', nextUrl));
-      }
-      if (isOnLogin || isOnMall || isApiRoute) {
-        return true; // always accessible
-      } else if (isOnDashboard || isOnAdmin) {
-        if (isLoggedIn) return true;
-        return false; // Redirect unauthenticated users to login page
-      } else if (isLoggedIn) {
-        return Response.redirect(new URL('/admin/dashboard', nextUrl));
-      }
-      return true;
+      return true
     },
   },
 } satisfies NextAuthConfig;

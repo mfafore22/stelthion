@@ -1,128 +1,102 @@
-import 'dotenv/config'
-import { PrismaClient } from '@prisma/client'
+import "dotenv/config"
 import { PrismaPg } from '@prisma/adapter-pg'
-import { Pool } from 'pg'
+import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcrypt'
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL })
-const adapter = new PrismaPg(pool)
+const adapter = new PrismaPg({
+  connectionString: process.env.DIRECT_URL || process.env.DATABASE_URL!,
+})
 const prisma = new PrismaClient({ adapter })
 
 async function main() {
-  console.log('Seeding Ideapark Lempäälä (single-tenant)…')
+  console.log('Seeding database...')
 
-  const hashedPassword = await bcrypt.hash('admin123', 10)
+  // Clear existing data (in reverse dependency order)
+  await prisma.mallCategory.deleteMany()
+  await prisma.mallBranding.deleteMany()
+  await prisma.mallStats.deleteMany()
+  await prisma.mall.deleteMany()
+  await prisma.emailOtp.deleteMany()
+  await prisma.user.deleteMany()
+  await prisma.customer.deleteMany()
 
-  // ── Customer ────────────────────────────────────────────────────────────
-  const customer = await prisma.customer.upsert({
-    where: { id: 'ideapark' },
-    update: { name: 'Koy Ideapark Lempäälä' },
-    create: {
+  const hashedPassword = await bcrypt.hash('ideapark2024', 10)
+
+  // ── KOY IDEAPARK AB ─────────────────────────────────────
+  const ideapark = await prisma.customer.create({
+    data: {
       id: 'ideapark',
-      name: 'Koy Ideapark Lempäälä',
+      name: 'Koy Ideapark Ab',
     },
   })
 
-  // ── Admin user ──────────────────────────────────────────────────────────
-  await prisma.user.upsert({
-    where: { email: 'admin@ideapark.fi' },
-    update: { password: hashedPassword, name: 'Ideapark Admin', role: 'ADMIN', customerId: customer.id },
-    create: {
-      email: 'admin@ideapark.fi',
-      password: hashedPassword,
-      name: 'Ideapark Admin',
-      role: 'ADMIN',
-      customerId: customer.id,
-    },
-  })
+  const users = [
+    { email: 'admin@ideapark.fi', name: 'KoyIdeaparkOy', role: 'ADMIN' as const },
+    { email: 'faforemichael001@gmail.com', name: 'Michael Fafore', role: 'ADMIN' as const },
+    { email: 'kimmoisbjornssund@pm.me', name: 'Kimmo Isbjörnssund', role: 'ADMIN' as const },
+  ]
 
-  // ── Mall ────────────────────────────────────────────────────────────────
-  const mall = await prisma.mall.upsert({
-    where: { mallId: 'ideapark' },
-    update: { name: 'Ideapark Lempäälä', city: 'Lempäälä', address: 'Ideaparkinkatu 4, 37570 Lempäälä', totalShops: 85, customerId: customer.id },
-    create: {
+  for (const u of users) {
+    await prisma.user.upsert({
+      where: { email: u.email },
+      update: {},
+      create: {
+        email: u.email,
+        password: hashedPassword,
+        name: u.name,
+        role: u.role,
+        customerId: ideapark.id,
+      },
+    })
+    console.log(`  User: ${u.email} (${u.role})`)
+  }
+
+  await prisma.mall.create({
+    data: {
       mallId: 'ideapark',
       name: 'Ideapark Lempäälä',
       city: 'Lempäälä',
-      address: 'Ideaparkinkatu 4, 37570 Lempäälä',
-      totalShops: 85,
+      totalShops: 200,
       status: 'LIVE',
-      customerId: customer.id,
+      customerId: ideapark.id,
+      stats: {
+        create: {
+          currentVisitors: 3900,
+          annualVisitors: 5000000,
+          annualSales: 180000000,
+          dwellTime: 108,
+          conversionRate: 23.4,
+        },
+      },
+      branding: {
+        create: {
+          primaryColor: '#328d2e',
+          secondaryColor: '#7cb928',
+          accentColor: '#214990',
+          gradientFrom: '#264d21',
+          gradientTo: '#1a3a15',
+        },
+      },
+      categories: {
+        create: [
+          { name: 'Fashion', shopCount: 60, percentage: 30 },
+          { name: 'Food & Beverage', shopCount: 40, percentage: 20 },
+          { name: 'Auto', shopCount: 20, percentage: 10 },
+          { name: 'Sports', shopCount: 30, percentage: 15 },
+          { name: 'Home & Living', shopCount: 25, percentage: 12.5 },
+          { name: 'Services', shopCount: 25, percentage: 12.5 },
+        ],
+      },
     },
   })
+  console.log('Ideapark: 1 mall seeded')
 
-  // ── MallStats ───────────────────────────────────────────────────────────
-  await prisma.mallStats.upsert({
-    where: { mallId: mall.mallId },
-    update: {},
-    create: {
-      mallId: mall.mallId,
-      currentVisitors: 0,
-      annualVisitors: 5400000,
-      annualSales: 180000000,
-      dwellTime: 72,
-      conversionRate: 0.34,
-    },
-  })
-
-  // ── MallBranding ────────────────────────────────────────────────────────
-  await prisma.mallBranding.upsert({
-    where: { mallId: mall.mallId },
-    update: {},
-    create: {
-      mallId: mall.mallId,
-      primaryColor: '#264d21',
-      secondaryColor: '#3d7a36',
-      accentColor: '#60a5fa',
-      backgroundColor: '#F8F6F3',
-      gradientFrom: '#264d21',
-      gradientTo: '#1a3a15',
-    },
-  })
-
-  // ── MallCategories ──────────────────────────────────────────────────────
-  const categories = [
-    { name: 'Fashion & Clothing', shopCount: 28, percentage: 32.9 },
-    { name: 'Food & Beverage', shopCount: 14, percentage: 16.5 },
-    { name: 'Home & Living', shopCount: 10, percentage: 11.8 },
-    { name: 'Sports & Outdoor', shopCount: 8, percentage: 9.4 },
-    { name: 'Beauty & Health', shopCount: 6, percentage: 7.1 },
-    { name: 'Electronics', shopCount: 4, percentage: 4.7 },
-    { name: 'Grocery & Anchor', shopCount: 5, percentage: 5.9 },
-    { name: 'Services', shopCount: 6, percentage: 7.1 },
-    { name: 'Auto', shopCount: 1, percentage: 1.2 },
-    { name: 'Entertainment', shopCount: 3, percentage: 3.5 },
-  ]
-
-  for (const cat of categories) {
-    await prisma.mallCategory.upsert({
-      where: { mallId_name: { mallId: mall.mallId, name: cat.name } },
-      update: { shopCount: cat.shopCount, percentage: cat.percentage },
-      create: { mallId: mall.mallId, name: cat.name, shopCount: cat.shopCount, percentage: cat.percentage },
-    })
-  }
-
-  // ── Clean up other customers (if any exist from previous seeds) ─────────
-  const others = await prisma.customer.findMany({ where: { id: { not: 'ideapark' } } })
-  if (others.length > 0) {
-    console.log(`  Removing ${others.length} non-Ideapark customer(s)…`)
-    // Delete users first (FK), then customers
-    await prisma.user.deleteMany({ where: { customerId: { not: 'ideapark' } } })
-    await prisma.customer.deleteMany({ where: { id: { not: 'ideapark' } } })
-  }
-
-  console.log('Seeded:')
-  console.log(`  Customer: ${customer.name}`)
-  console.log(`  Mall: ${mall.name} (${mall.mallId})`)
-  console.log(`  Categories: ${categories.length}`)
-  console.log(`  Login: admin@ideapark.fi / admin123`)
-  console.log('Done.')
+  console.log('Seeding complete!')
 }
 
 main()
-  .then(async () => { await prisma.$disconnect() })
-  .catch(async (e) => {
+  .catch((e) => {
     console.error(e)
-    await prisma.$disconnect()
     process.exit(1)
   })
+  .finally(() => prisma.$disconnect())

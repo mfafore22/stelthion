@@ -7,7 +7,7 @@ import { ArrowLeft, Users, TrendingUp, Clock, ShoppingBag, BarChart3 } from 'luc
 export default async function MallDetailPage({
   params,
 }: {
-  params: { mallId: string }
+  params: Promise<{ mallId: string }>
 }) {
   const session = await auth()
   if (!session?.user?.customerId) redirect('/login')
@@ -15,7 +15,7 @@ export default async function MallDetailPage({
   const { mallId } = await params
 
   const mall = await prisma.mall.findUnique({
-    where: { id: mallId },
+    where: { mallId },
     include: {
       stats: true,
       branding: true,
@@ -32,7 +32,6 @@ export default async function MallDetailPage({
 
   return (
     <div>
-      {/* Back link */}
       <Link
         href="/dashboard"
         className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 mb-6"
@@ -41,7 +40,6 @@ export default async function MallDetailPage({
         Back to portfolio
       </Link>
 
-      {/* Mall header */}
       <div
         className="rounded-xl p-6 mb-8"
         style={{
@@ -63,7 +61,6 @@ export default async function MallDetailPage({
         </div>
       </div>
 
-      {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
         <div className="bg-white rounded-xl border border-gray-200 p-4">
           <div className="flex items-center gap-2 mb-2">
@@ -116,7 +113,6 @@ export default async function MallDetailPage({
         </div>
       </div>
 
-      {/* Categories */}
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Shop Categories</h2>
         <div className="space-y-3">

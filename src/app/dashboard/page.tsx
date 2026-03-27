@@ -8,6 +8,15 @@ export default async function DashboardPage() {
   const session = await auth()
   if (!session?.user?.customerId) redirect('/login')
 
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { twoFactorVerifiedAt: true },
+  })
+
+  if (!user?.twoFactorVerifiedAt) {
+    redirect('/two-factor')
+  }
+
   const customer = await prisma.customer.findUnique({
     where: { id: session.user.customerId },
     include: {
@@ -29,7 +38,6 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      {/* Company header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">{customer.name} Portfolio</h1>
         <p className="text-sm text-gray-500 mt-1">
@@ -37,7 +45,6 @@ export default async function DashboardPage() {
         </p>
       </div>
 
-      {/* Summary KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div className="bg-white rounded-xl border border-gray-200 p-5">
           <div className="flex items-center gap-3 mb-2">
@@ -70,16 +77,14 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      {/* Mall grid */}
       <h2 className="text-lg font-semibold text-gray-900 mb-4">Properties</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {customer.malls.map((mall) => (
           <Link
-            key={mall.id}
-            href={`/dashboard/${mall.id}`}
+            key={mall.mallId}
+            href={`/dashboard/${mall.mallId}`}
             className="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
           >
-            {/* Gradient header */}
             <div
               className="h-24 flex items-end p-4"
               style={{
@@ -92,7 +97,6 @@ export default async function DashboardPage() {
               </div>
             </div>
 
-            {/* Stats */}
             <div className="p-4 space-y-3">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-500 flex items-center gap-1.5">
@@ -102,7 +106,6 @@ export default async function DashboardPage() {
                   {(mall.stats?.currentVisitors ?? 0).toLocaleString()}
                 </span>
               </div>
-
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-500 flex items-center gap-1.5">
                   <TrendingUp size={14} /> Annual sales
@@ -111,7 +114,6 @@ export default async function DashboardPage() {
                   €{((mall.stats?.annualSales ?? 0) / 1_000_000).toFixed(0)}M
                 </span>
               </div>
-
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-500 flex items-center gap-1.5">
                   <Clock size={14} /> Dwell time
@@ -120,15 +122,12 @@ export default async function DashboardPage() {
                   {mall.stats?.dwellTime ?? 0} min
                 </span>
               </div>
-
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-500 flex items-center gap-1.5">
                   <ShoppingBag size={14} /> Shops
                 </span>
                 <span className="font-medium text-gray-900">{mall.totalShops}</span>
               </div>
-
-              {/* Status badge */}
               <div className="pt-2 border-t border-gray-100">
                 <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
                   mall.status === 'LIVE'

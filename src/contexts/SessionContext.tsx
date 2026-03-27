@@ -1,89 +1,88 @@
-/**
- * Session Context
- * Provides authenticated user session data to client components
- */
-
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useSession as useNextAuthSession } from 'next-auth/react';
 
-export interface SessionUser {
+interface MallUser {
   userId: string;
+  email: string;
   mallId: string;
   companyName: string;
-  mallDisplayName: string;
-  isMultiProperty?: boolean; // Whether tenant manages multiple properties
-  properties?: string[]; // List of all property IDs this tenant can access
+  isMultiProperty: boolean;
+  properties: string[];
+  mallDisplayName?: string;
 }
 
-interface SessionContextValue {
-  user: SessionUser | null;
-  csrfToken: string | null;
+interface SessionContextType {
+  user: MallUser | null;
   loading: boolean;
-  logout: () => Promise<void>;
-  refresh: () => Promise<void>;
+  logout: () => void;
 }
 
-const SessionContext = createContext<SessionContextValue | undefined>(undefined);
+const SessionContext = createContext<SessionContextType>({
+  user: null,
+  loading: true,
+  logout: () => {},
+});
 
 export function SessionProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<SessionUser | null>(null);
-  const [csrfToken, setCsrfToken] = useState<string | null>(null);
+  const { data: session, status } = useNextAuthSession();
+  const [mallUser, setMallUser] = useState<MallUser | null>(null);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
-
-  const fetchSession = async () => {
-    try {
-      const response = await fetch('/api/mall/auth/session');
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data.user);
-        setCsrfToken(data.csrfToken || null);
-      } else {
-        setUser(null);
-        setCsrfToken(null);
-      }
-    } catch (error) {
-      console.error('Failed to fetch session:', error);
-      setUser(null);
-      setCsrfToken(null);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const logout = async () => {
-    try {
-      await fetch('/api/mall/auth/logout', { method: 'POST' });
-      setUser(null);
-      setCsrfToken(null);
-      router.push('/mall/login');
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
-  };
-
-  const refresh = async () => {
-    setLoading(true);
-    await fetchSession();
-  };
 
   useEffect(() => {
-    fetchSession();
-  }, []);
+    if (status === 'loading') return;
+
+    if (!session?.user) {
+      setMallUser(null);
+      setLoading(false);
+      return;
+    }
+
+    const customerId = (session.user as any).customerId;
+    if (!customerId) {
+      setMallUser(null);
+      setLoading(false);
+      return;
+    }
+
+    fetch(`/api/customers/${customerId}`)
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch customer');
+        return res.json();
+      })
+      .then((customer) => {
+        const malls = customer.malls || [];
+        const properties = malls.map((m: any) => m.mallId);
+
+        setMallUser({
+          userId: session.user.id || '',
+          email: session.user.email || '',
+          mallId: properties[0] || '',
+          companyName: customer.name || '',
+          isMultiProperty: properties.length > 1,
+          properties,
+          mallDisplayName: customer.name || session.user.email || '',
+        });
+        setLoading(false);
+      })
+      .catch(() => {
+        setMallUser(null);
+        setLoading(false);
+      });
+  }, [session, status]);
+
+  const logout = () => {
+    window.location.replace('/login');
+  };
 
   return (
-    <SessionContext.Provider value={{ user, csrfToken, loading, logout, refresh }}>
+    <SessionContext.Provider value={{ user: mallUser, loading, logout }}>
       {children}
     </SessionContext.Provider>
   );
 }
 
 export function useSession() {
-  const context = useContext(SessionContext);
-  if (context === undefined) {
-    throw new Error('useSession must be used within a SessionProvider');
-  }
-  return context;
+  return useContext(SessionContext);
 }

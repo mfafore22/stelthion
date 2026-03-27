@@ -1,12 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/app/lib/prisma'
+import { auth } from '@/auth'
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const session = await auth()
+  if (!session?.user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const { id } = await params
+
+  if (session.user.customerId !== id) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
   try {
-    const { id } = await params
     const customer = await prisma.customer.findUnique({
       where: { id },
       include: {
@@ -15,9 +26,9 @@ export async function GET(
             stats: true,
             branding: true,
             categories: true,
-          }
-        }
-      }
+          },
+        },
+      },
     })
 
     if (!customer) {
@@ -25,7 +36,7 @@ export async function GET(
     }
 
     return NextResponse.json(customer)
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
 }

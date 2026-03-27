@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from '@/lib/i18n/hooks';
 import '@/lib/i18n';
 import { LayoutDashboard, Map, ClipboardList, Route } from 'lucide-react';
 import {
@@ -27,7 +27,7 @@ export function AdminSidebar() {
   return (
     <TooltipProvider delayDuration={200}>
       <aside className="w-[80px] border-r border-bo-neutral-200 bg-bo-neutral-50 flex flex-col items-center shadow-bo-sm">
-        {/* Swirl logo — same size and position as mall left nav */}
+        {/* Swirl logo */}
         <div className="h-[80px] w-full flex items-center justify-center shrink-0">
           <Image
             src="/stelthion-swirl-v2.png"
@@ -39,7 +39,7 @@ export function AdminSidebar() {
           />
         </div>
 
-        {/* Navigation Items — icon-only rail matching mall MallLeftNav */}
+        {/* Navigation Items */}
         <nav className="flex flex-col items-center gap-3 py-3">
           {NAV_ITEMS.map((item) => {
             const active = pathname.startsWith(item.href);

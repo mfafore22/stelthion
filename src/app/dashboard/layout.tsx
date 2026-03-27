@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
-import { auth, signOut } from '@/auth';
+import { auth } from '@/auth';
+import prisma from '@/app/lib/prisma';
 import { Sidebar } from '@/app/ui/dashboard/sidebar';
 import { Header } from '../ui/dashboard/header';
 
@@ -12,6 +13,14 @@ export default async function DashboardLayout({
 
   if (!session) {
     redirect('/login');
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { twoFactorVerifiedAt: true },
+  })
+  if (!user?.twoFactorVerifiedAt) {
+    redirect('/two-factor');
   }
 
   return (
