@@ -158,11 +158,19 @@ export interface CatchmentDemographics {
   // Aggregate profile
   primaryProfile: 'urban-professional' | 'family-suburban' | 'suburban-families' | 'student' | 'mixed';
   spendingPotential: number; // Index 0-100
+
+  // Data source attribution strings (displayed verbatim in UI)
+  sources?: {
+    population?: string;   // e.g. "Statistics Finland StatFin/vaerak 2024 preliminary + 2025 Q1 est."
+    income?: string;       // e.g. "Statistics Finland StatFin/tjkt 2023 final"
+    employment?: string;   // e.g. "Statistics Finland StatFin/tyolli 2024 annual"
+    catchment?: string;    // e.g. "Drive-time catchment analysis, 2025"
+  };
 }
 
 /**
  * Parking Integration
- * Realistic Tripla parking data
+ * Mall parking integration data
  */
 export interface ParkingData {
   mallId: string;
@@ -175,7 +183,7 @@ export interface ParkingData {
     evChargingSpots: number;
   }>;
 
-  totalCapacity: number;      // ~1800 for Tripla
+  totalCapacity: number;
   publicSpaces: number;       // Total - monthly contracts
   currentUtilization: number; // %
 

@@ -6,7 +6,7 @@
 
 'use client';
 
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/card';
@@ -24,6 +24,16 @@ import {
   GROUND_FLOOR_ENTRANCES,
 } from '@/lib/data/ideaparkStorePositions';
 import { usePublishedFloorplan, type PublishedCamera } from '@/hooks/usePublishedFloorplan';
+import { decollidLabels, getPolygonBbox, type LabelInput } from '@/lib/utils/labelDecollision';
+
+/** Data snapshot exposed via ref for report export */
+export interface FootfallReportData {
+  floor: 'ground' | 'upper';
+  hour: number;
+  dayOfWeek: number;
+  zones: { zone: import('@/lib/data/ideaparkZones').IdeaparkZone; visitors: import('@/lib/data/ideaparkZones').ZoneVisitorData }[];
+  floorplanElement: HTMLElement | null;
+}
 
 interface FootfallAnalysisProps {
   mallId: string;
@@ -33,6 +43,14 @@ interface FootfallAnalysisProps {
   selectedZoneIds?: string[];
   onToggleCamera?: (id: string) => void;
   onToggleZone?: (id: string) => void;
+  /** Called when the user switches floor */
+  onFloorChange?: (floor: 'ground' | 'upper') => void;
+  /** Render prop for injecting an SVG overlay (e.g. flow arrows) on top of the floorplan */
+  overlayContent?: (floor: 'ground' | 'upper') => React.ReactNode;
+  /** Ref that receives current state snapshot for report export */
+  reportDataRef?: React.RefObject<FootfallReportData | null>;
+  /** Hide the density colour legend at the bottom (e.g. when used inside analysis modes) */
+  hideDensityLegend?: boolean;
 }
 
 type Floor = 'ground' | 'upper';
@@ -55,6 +73,10 @@ export function FootfallAnalysis({
   selectedZoneIds = [],
   onToggleCamera,
   onToggleZone,
+  onFloorChange,
+  overlayContent,
+  reportDataRef,
+  hideDensityLegend = false,
 }: FootfallAnalysisProps) {
   const { t } = useTranslation('mall');
   const now = new Date();
@@ -184,12 +206,50 @@ export function FootfallAnalysis({
     [hour, dayOfWeek]
   );
 
-  // When any published data exists for a floor, use it for both zones AND stores
-  // (even if stores is empty) so we don't mix published zones with stale static stores.
+  // Once the API has responded, always use its data (even if empty).
+  // Only fall back to static data while still loading.
   const hasPublishedGround = published.groundZones !== null;
   const activeZones = floor === 'upper'
-    ? (published.upperZones ?? IDEAPARK_UPPER_ZONES)
-    : (published.groundZones ?? IDEAPARK_ZONES);
+    ? (published.upperZones !== null ? published.upperZones : IDEAPARK_UPPER_ZONES)
+    : (published.groundZones !== null ? published.groundZones : IDEAPARK_ZONES);
+
+  // De-collide zone/store name labels so they don't overlap
+  const viewBox = floor === 'upper' ? { w: 1518, h: 688 } : { w: 1504, h: 704 };
+  const decollidedLabels = useMemo(() => {
+    if (activeZones.length === 0) return [];
+    const allInputs: LabelInput[] = activeZones.map((z) => {
+      const bbox = getPolygonBbox(z.svgPoints);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const isStore = (z as any).drawShape === 'rect' || (z as any).category === 'Store';
+      const fontSize = isStore ? 7 : 13;
+      const tw = (z.nameFi ?? z.name).length * fontSize * 0.55;
+      return {
+        id: z.id,
+        anchorX: z.labelX,
+        anchorY: z.labelY,
+        text: z.nameFi ?? z.name,
+        tier: isStore ? 'store' as const : 'zone' as const,
+        fontSize,
+        fitsInside: tw < bbox.w * 0.85 && fontSize + 4 < bbox.h,
+        shapeBounds: { minX: bbox.minX, minY: bbox.minY, w: bbox.w, h: bbox.h },
+      };
+    });
+
+    // Zoom-dependent visibility: zones always, stores only when zoomed in
+    const visibleInputs = allInputs.filter((lbl) => {
+      if (lbl.tier === 'zone') return true;
+      if (zoom < 1.5) return false;
+      // Only show store labels within the visible viewport
+      const vpCx = viewBox.w / 2 - (pan.x / 100) * (viewBox.w / 2);
+      const vpCy = viewBox.h / 2 - (pan.y / 100) * (viewBox.h / 2);
+      const vpHalfW = viewBox.w / (2 * zoom);
+      const vpHalfH = viewBox.h / (2 * zoom);
+      return lbl.anchorX >= vpCx - vpHalfW && lbl.anchorX <= vpCx + vpHalfW
+          && lbl.anchorY >= vpCy - vpHalfH && lbl.anchorY <= vpCy + vpHalfH;
+    });
+
+    return decollidLabels(visibleInputs, { viewBoxWidth: viewBox.w, viewBoxHeight: viewBox.h });
+  }, [activeZones, floor, viewBox.w, viewBox.h, zoom, pan.x, pan.y]);
 
   const totalVisitors = activeZones.reduce(
     (sum, z) => sum + getVisitorData(z).visitors,
@@ -200,6 +260,17 @@ export function FootfallAnalysis({
     day: '2-digit', month: 'short', year: 'numeric',
   });
 
+  // Sync current state to reportDataRef for export
+  useEffect(() => {
+    if (!reportDataRef) return;
+    reportDataRef.current = {
+      floor,
+      hour,
+      dayOfWeek,
+      zones: activeZones.map((z) => ({ zone: z, visitors: getVisitorData(z) })),
+      floorplanElement: mapContainerRef.current,
+    };
+  }, [reportDataRef, floor, hour, dayOfWeek, activeZones, getVisitorData]);
 
   return (
     <Card className="p-0 overflow-hidden bg-bo-glass rounded-xl shadow-bo-glass-strong border-2 border-bo-neutral-300/60 backdrop-blur-xl">
@@ -210,7 +281,7 @@ export function FootfallAnalysis({
           {(['ground', 'upper'] as Floor[]).map((f) => (
             <button
               key={f}
-              onClick={() => { setFloor(f); setSelectedZone(null); }}
+              onClick={() => { setFloor(f); setSelectedZone(null); onFloorChange?.(f); }}
               className={cn(
                 'px-3 py-1 text-xs font-medium rounded-md transition-all',
                 floor === f
@@ -438,6 +509,51 @@ export function FootfallAnalysis({
               );
             })}
 
+            {/* ── De-collided zone & store name labels ────────────────────── */}
+            {decollidedLabels.map((lbl) => {
+              const zone = activeZones.find((z) => z.id === lbl.id);
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              const isStore = (zone as any)?.drawShape === 'rect' || (zone as any)?.category === 'Store';
+              return (
+                <g key={`lbl-${lbl.id}`} style={{ pointerEvents: 'none' }} opacity={isStore ? Math.min(1, (zoom - 1.3) / 0.4) : 1}>
+                  {/* Leader line from displaced label to anchor */}
+                  {lbl.displaced && (
+                    lbl.leaderWaypoint ? (
+                      <polyline
+                        points={`${lbl.x + lbl.w / 2},${lbl.y + lbl.h / 2} ${lbl.leaderWaypoint[0]},${lbl.leaderWaypoint[1]} ${lbl.anchorX},${lbl.anchorY}`}
+                        stroke="var(--color-bo-neutral-400)" strokeWidth={0.5} fill="none" strokeDasharray="2,2" />
+                    ) : (
+                      <line
+                        x1={lbl.x + lbl.w / 2} y1={lbl.y + lbl.h / 2}
+                        x2={lbl.anchorX} y2={lbl.anchorY}
+                        stroke="var(--color-bo-neutral-400)" strokeWidth={0.5} strokeDasharray="2,2" />
+                    )
+                  )}
+                  {/* Pill background */}
+                  <rect
+                    x={lbl.x} y={lbl.y}
+                    width={lbl.w} height={lbl.h}
+                    rx={lbl.h / 2}
+                    fill={isStore ? 'rgba(255,255,255,0.85)' : 'rgba(50,141,46,0.12)'}
+                    stroke={isStore ? 'rgba(0,0,0,0.08)' : 'rgba(50,141,46,0.25)'}
+                    strokeWidth={0.5}
+                  />
+                  {/* Label text */}
+                  <text
+                    x={lbl.x + lbl.w / 2} y={lbl.y + lbl.h / 2 + (isStore ? 3 : 4.5)}
+                    textAnchor="middle"
+                    fontSize={isStore ? 7 : 13}
+                    fontWeight={isStore ? 500 : 600}
+                    fill={isStore ? 'var(--color-bo-neutral-700)' : 'var(--color-bo-primary-800)'}
+                    fillOpacity={isStore ? 0.8 : 0.95}
+                    style={{ userSelect: 'none' }}
+                  >
+                    {lbl.displayText}
+                  </text>
+                </g>
+              );
+            })}
+
             {/* ── Zone-level buttons: Tapahtumatori + Ravintolamaailma (static only) */}
             {floor === 'ground' && !hasPublishedGround && (() => {
               const zoneBtns = [
@@ -493,6 +609,13 @@ export function FootfallAnalysis({
             {activeCameras.map((cam) => {
               const isCamSelected = selectionMode && selectedCameraIds.includes(cam.id);
               const camSelIndex = selectedCameraIds.indexOf(cam.id);
+              const isCounter = (cam.deviceType ?? 'camera') === 'counter';
+              const pinColor = isCounter
+                ? 'var(--color-bo-primary-600, #328d2e)'
+                : 'var(--color-bo-accent-600, #3b82f6)';
+              const labelColor = isCounter
+                ? 'var(--color-bo-primary-700, #266b23)'
+                : 'var(--color-bo-accent-700, #2563eb)';
               return (
                 <g
                   key={cam.id}
@@ -502,17 +625,30 @@ export function FootfallAnalysis({
                   {/* Pulsing ring when selected in selection mode */}
                   {isCamSelected && (
                     <circle cx={cam.x} cy={cam.y} r="14" fill="none"
-                      stroke="var(--color-bo-accent-600, #214990)" strokeWidth="1.5" strokeOpacity={0.5}>
+                      stroke={pinColor} strokeWidth="1.5" strokeOpacity={0.5}>
                       <animate attributeName="r" values="10;16;10" dur="2s" repeatCount="indefinite" />
                       <animate attributeName="stroke-opacity" values="0.6;0.1;0.6" dur="2s" repeatCount="indefinite" />
                     </circle>
                   )}
-                  {/* Pin body */}
-                  <circle cx={cam.x} cy={cam.y} r={isCamSelected ? 8 : 5}
-                    fill="var(--color-bo-accent-600, #3b82f6)"
-                    fillOpacity={isCamSelected ? 1 : 0.9}
-                    stroke="white" strokeWidth={isCamSelected ? 2.5 : 1.5}
-                    className="transition-all duration-200" />
+                  {/* Pin body — rounded square for counters, circle for cameras */}
+                  {isCounter ? (
+                    <rect
+                      x={cam.x - (isCamSelected ? 8 : 5)}
+                      y={cam.y - (isCamSelected ? 8 : 5)}
+                      width={(isCamSelected ? 8 : 5) * 2}
+                      height={(isCamSelected ? 8 : 5) * 2}
+                      rx={2}
+                      fill={pinColor}
+                      fillOpacity={isCamSelected ? 1 : 0.9}
+                      stroke="white" strokeWidth={isCamSelected ? 2.5 : 1.5}
+                      className="transition-all duration-200" />
+                  ) : (
+                    <circle cx={cam.x} cy={cam.y} r={isCamSelected ? 8 : 5}
+                      fill={pinColor}
+                      fillOpacity={isCamSelected ? 1 : 0.9}
+                      stroke="white" strokeWidth={isCamSelected ? 2.5 : 1.5}
+                      className="transition-all duration-200" />
+                  )}
                   {/* Index badge when selected */}
                   {isCamSelected && camSelIndex >= 0 ? (
                     <text x={cam.x} y={cam.y + 4} textAnchor="middle"
@@ -521,13 +657,19 @@ export function FootfallAnalysis({
                       {String.fromCharCode(65 + camSelIndex)}
                     </text>
                   ) : (
-                    <circle cx={cam.x} cy={cam.y} r={2} fill="white" fillOpacity={0.9}
-                      style={{ pointerEvents: 'none' }} />
+                    isCounter ? (
+                      <text x={cam.x} y={cam.y + 3} textAnchor="middle"
+                        fontSize="7" fontWeight="700" fill="white"
+                        style={{ pointerEvents: 'none' }}>V</text>
+                    ) : (
+                      <circle cx={cam.x} cy={cam.y} r={2} fill="white" fillOpacity={0.9}
+                        style={{ pointerEvents: 'none' }} />
+                    )
                   )}
                   {/* Label */}
                   <text x={cam.x} y={cam.y + (isCamSelected ? 18 : 14)} textAnchor="middle"
                     fontSize={isCamSelected ? '8' : '6.5'} fontWeight="600"
-                    fill="var(--color-bo-accent-700, #2563eb)" fillOpacity={0.85}
+                    fill={labelColor} fillOpacity={0.85}
                     style={{ userSelect: 'none', pointerEvents: 'none' }}>
                     {cam.label}
                   </text>
@@ -576,6 +718,10 @@ export function FootfallAnalysis({
             })()}
 
           </svg>
+
+          {/* External overlay (e.g. flow arrows) */}
+          {overlayContent?.(floor)}
+
         </div>{/* end zoom transform wrapper */}
 
           {/* Zone popup (hidden in selection mode) */}
@@ -637,26 +783,28 @@ export function FootfallAnalysis({
       )}
 
       {/* ── Legend ─────────────────────────────────────────────────────────── */}
-      <div className="flex items-center gap-4 px-4 py-3 border-t border-bo-primary-100/40 bg-bo-glass-primary">
-        <span className="text-xs text-bo-neutral-400 font-medium shrink-0">{t('heatmap.density')}</span>
-        {[
-          { color: '#A8D9A4', label: t('heatmap.quiet') },
-          { color: '#4AA844', label: t('heatmap.moderate') },
-          { color: '#E8B931', label: t('heatmap.busy') },
-          { color: '#E87B3A', label: t('heatmap.veryBusy') },
-          { color: '#D94E53', label: t('heatmap.full') },
-        ].map(({ color, label }) => (
-          <div key={label} className="flex items-center gap-1.5">
-            <span className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: color, opacity: 0.72 }} />
-            <span className="text-xs text-bo-neutral-500">{label}</span>
+      {!hideDensityLegend && (
+        <div className="flex items-center gap-4 px-4 py-3 border-t border-bo-primary-100/40 bg-bo-glass-primary">
+          <span className="text-xs text-bo-neutral-400 font-medium shrink-0">{t('heatmap.density')}</span>
+          {[
+            { color: '#A8D9A4', label: t('heatmap.quiet') },
+            { color: '#4AA844', label: t('heatmap.moderate') },
+            { color: '#E8B931', label: t('heatmap.busy') },
+            { color: '#E87B3A', label: t('heatmap.veryBusy') },
+            { color: '#D94E53', label: t('heatmap.full') },
+          ].map(({ color, label }) => (
+            <div key={label} className="flex items-center gap-1.5">
+              <span className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: color, opacity: 0.72 }} />
+              <span className="text-xs text-bo-neutral-500">{label}</span>
+            </div>
+          ))}
+          <div className="ml-auto text-xs text-bo-neutral-400">
+            {selectionMode
+              ? t('videoAnalysis.unified.mapHint')
+              : selectedZone ? null : t('heatmap.clickZoneToSeeStores')}
           </div>
-        ))}
-        <div className="ml-auto text-xs text-bo-neutral-400">
-          {selectionMode
-            ? t('videoAnalysis.unified.mapHint')
-            : selectedZone ? null : t('heatmap.clickZoneToSeeStores')}
         </div>
-      </div>
+      )}
     </Card>
   );
 }

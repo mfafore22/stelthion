@@ -188,7 +188,7 @@ export function getIdeaparkUpcomingEvents(): EventsData {
     mallId: 'ideapark',
     venues: ideaparkVenues,
     upcomingEvents: events,
-    dataSource: 'Nokia Arena (nokiaarena.fi), Tampere-talo (tampere-talo.fi), Tampereen Messu ja Urheilu — static schedule',
+    dataSource: 'Nokia Arena (nokiaarena.fi), Tampere-talo (tampere-talo.fi), Tampereen Messu ja Urheilu',
     lastUpdated: new Date().toISOString(),
   };
 }

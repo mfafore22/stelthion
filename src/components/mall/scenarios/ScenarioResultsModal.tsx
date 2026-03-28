@@ -37,7 +37,7 @@ export interface ScenarioResult {
     factors: string[];
   };
   dataSource: {
-    name: string; // "SYNEXIS™ SIGNALS"
+    name: string; // "STELTHION SIGNALS"
     apis: string[];
     baselines: string[];
   };

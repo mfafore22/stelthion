@@ -6,9 +6,8 @@
 
 'use client';
 
-import { Cloud, Droplets, Wind, ThermometerSun } from 'lucide-react';
+import { Cloud, Droplets, Wind, ThermometerSun, Loader2 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
-import { SwirlLoader } from '@/components/ui/SwirlLoader';
 import { useWeather } from '@/hooks/mall/useWeather';
 import { useTranslation } from 'react-i18next';
 
@@ -27,7 +26,7 @@ export function WeatherNextPanel({ mallId, expanded = false }: WeatherNextPanelP
     return (
       <Card className="p-6 bg-bo-glass border-bo-neutral-200/30 shadow-bo-glass">
         <div className="flex items-center justify-center h-48">
-          <SwirlLoader size="md" />
+          <Loader2 className="h-6 w-6 animate-spin text-bo-primary-600" />
           <span className="ml-2 text-sm text-bo-neutral-600">{t('weather.loading')}</span>
         </div>
       </Card>
@@ -53,28 +52,38 @@ export function WeatherNextPanel({ mallId, expanded = false }: WeatherNextPanelP
   const rawSource = (weather?.source ?? 'Stelthion').replace(/\s*demo\s*/i, ' ').trim();
   const source = rawSource === 'FMI' ? 'FMI (Finnish Meteorological Institute)' : rawSource;
 
+  // Weather context classification
+  const isDaytime = timeOfDay !== 'night';
+  const isNiceOutdoors = temp >= 15 && precip < 0.3 && isDaytime;
+  const isColdOrDark = temp < 0 || !isDaytime;
+  // Middle ground: cool but daytime, not harsh (e.g. 5°C clear spring afternoon)
+  const isNormalCool = !isNiceOutdoors && !isColdOrDark;
+
   // Generate contextual forecast message
   const getForecast = () => {
     if (impact > 15) return t('weather.forecastMsg.significant', { condition: translatedCondition });
     if (impact > 5) return t('weather.forecastMsg.moderate', { description: translatedDescription });
-    if (impact < 0) return t('weather.forecastMsg.outdoor');
+    if (impact < 0 && isNiceOutdoors) return t('weather.forecastMsg.outdoor');
+    if (impact < 0 && isColdOrDark) return t('weather.forecastMsg.coldQuiet');
     return t('weather.forecastMsg.stable', { description: translatedDescription });
   };
 
   // Temperature assessment
   const getTempAssessment = () => {
+    if (temp < -10) return t('weather.temp.freezing');
     if (temp < 0) return t('weather.temp.cold');
-    if (temp < 15) return t('weather.temp.cool');
+    if (temp < 10) return t('weather.temp.cool');
     if (temp <= 22) return t('weather.temp.optimal');
     if (temp <= 28) return t('weather.temp.warm');
     return t('weather.temp.hot');
   };
 
-  // Comfort level
+  // Comfort level — context-aware labels
   const getComfortLabel = () => {
-    if (comfort > 0.7) return t('weather.comfort.high');
-    if (comfort > 0.4) return t('weather.comfort.moderate');
-    return t('weather.comfort.low');
+    if (comfort < 0.4) return t('weather.comfort.favourable');
+    if (comfort < 0.7) return t('weather.comfort.moderate');
+    if (isNiceOutdoors) return t('weather.comfort.outdoorPreference');
+    return t('weather.comfort.calm');
   };
 
   return (
@@ -132,7 +141,7 @@ export function WeatherNextPanel({ mallId, expanded = false }: WeatherNextPanelP
           </span>
         </div>
         <div className="mt-2 text-sm text-bo-neutral-600">
-          {impact > 15 ? t('weather.impact.indoor') : impact > 0 ? t('weather.impact.mild') : t('weather.impact.outdoor')}
+          {impact > 15 ? t('weather.impact.indoor') : impact > 0 ? t('weather.impact.mild') : isNiceOutdoors ? t('weather.impact.outdoor') : isColdOrDark ? t('weather.impact.quiet') : t('weather.impact.normal')}
         </div>
       </div>
 

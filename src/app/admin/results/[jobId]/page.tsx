@@ -6,7 +6,10 @@ import Link from 'next/link';
 import useSWR from 'swr';
 import { useTranslation } from 'react-i18next';
 import '@/lib/i18n';
-import { ArrowLeft, ArrowRight, BarChart3, Route, Clock, Video } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BarChart3, Route, Clock, Video, Store } from 'lucide-react';
+import { StoreBehaviorResult } from '@/components/mall/video-analysis/StoreBehaviorResult';
+import { InsightPanel } from '@/components/mall/video-analysis/InsightPanel';
+import type { StoreBehavior } from '@/components/mall/video-analysis/types';
 
 interface AnalysisResult {
   zoneId: string;
@@ -23,15 +26,19 @@ interface Camera {
 interface JobDetail {
   id: string;
   mallId: string;
+  mode: string;
   camera: Camera;
   footageDate: string;
   startTime: string;
   endTime: string;
   journeyCount: number;
   status: string;
+  progress: number;
+  errorMessage: string | null;
   requestedBy: string;
   createdAt: string;
   results: AnalysisResult[];
+  behaviors: StoreBehavior[];
 }
 
 interface JourneyPath {
@@ -94,9 +101,11 @@ export default function AdminResultsPage() {
   }
 
   const results = job.results ?? [];
+  const behaviors = job.behaviors ?? [];
   const hours = [...new Set(results.map((r) => r.hour))].sort((a, b) => a - b);
   const session = sessions?.[0];
   const paths = session?.paths ?? [];
+  const isStoreBehavior = job.mode === 'STORE_BEHAVIOR';
 
   return (
     <div className="p-6 max-w-5xl space-y-6">
@@ -117,10 +126,29 @@ export default function AdminResultsPage() {
               {new Date(job.footageDate).toLocaleDateString()} &middot; {job.startTime}–{job.endTime} &middot; {t('results.floor', { floor: job.camera.floor })}
             </p>
           </div>
-          <span className={`px-3 py-1 rounded-full text-xs font-medium ${STATUS_COLORS[job.status] ?? ''}`}>
-            {job.status}
-          </span>
+          <div className="flex flex-col items-end gap-1.5">
+            <span className={`px-3 py-1 rounded-full text-xs font-medium ${STATUS_COLORS[job.status] ?? ''}`}>
+              {job.status}
+            </span>
+            {job.status === 'PROCESSING' && job.progress > 0 && (
+              <div className="flex items-center gap-2">
+                <div className="w-24 h-1.5 bg-bo-neutral-200 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-bo-accent-600 rounded-full transition-all duration-500"
+                    style={{ width: `${job.progress}%` }}
+                  />
+                </div>
+                <span className="text-[10px] text-bo-neutral-500 tabular-nums">{job.progress}%</span>
+              </div>
+            )}
+          </div>
         </div>
+
+        {job.errorMessage && (
+          <div className="mb-4 px-3 py-2 rounded-lg bg-bo-error-light border border-bo-error-dark/20 text-sm text-bo-error-dark">
+            {job.errorMessage}
+          </div>
+        )}
 
         <div className="grid grid-cols-4 gap-4">
           <InfoCard label={t('results.mall')} value={job.mallId} />
@@ -130,28 +158,44 @@ export default function AdminResultsPage() {
         </div>
       </div>
 
-      {/* Zone-level results */}
-      <div className="bg-bo-neutral-50 border border-bo-neutral-200 rounded-xl p-5 shadow-bo-sm">
-        <div className="flex items-center gap-2 mb-4">
-          <BarChart3 className="w-5 h-5 text-bo-accent-600" />
-          <h3 className="text-base font-semibold text-bo-neutral-950">{t('results.zoneVisitorCounts')}</h3>
+      {/* Store behavior results */}
+      {isStoreBehavior && (
+        <div className="bg-bo-neutral-50 border border-bo-neutral-200 rounded-xl p-5 shadow-bo-sm">
+          <div className="flex items-center gap-2 mb-4">
+            <Store className="w-5 h-5 text-emerald-600" />
+            <h3 className="text-base font-semibold text-bo-neutral-950">{t('dashboard.stores', 'Store Behavior')}</h3>
+          </div>
+          <StoreBehaviorResult
+            behaviors={behaviors}
+            dateStr={new Date(job.footageDate).toLocaleDateString()}
+            timeRange={`${job.startTime}–${job.endTime}`}
+          />
         </div>
+      )}
 
-        {results.length === 0 ? (
-          <p className="text-sm text-bo-neutral-500">
-            {job.status === 'COMPLETE'
-              ? t('results.noResults')
-              : t('results.resultsPending')}
-          </p>
-        ) : (
-          <>
-            {/* Hour tabs */}
-            {hours.length > 0 && (
-              <HourTabs hours={hours} results={results} />
-            )}
-          </>
-        )}
-      </div>
+      {/* Zone-level results (shown for non-STORE_BEHAVIOR modes, or always if results exist) */}
+      {!isStoreBehavior && (
+        <div className="bg-bo-neutral-50 border border-bo-neutral-200 rounded-xl p-5 shadow-bo-sm">
+          <div className="flex items-center gap-2 mb-4">
+            <BarChart3 className="w-5 h-5 text-bo-accent-600" />
+            <h3 className="text-base font-semibold text-bo-neutral-950">{t('results.zoneVisitorCounts')}</h3>
+          </div>
+
+          {results.length === 0 ? (
+            <p className="text-sm text-bo-neutral-500">
+              {job.status === 'COMPLETE'
+                ? t('results.noResults')
+                : t('results.resultsPending')}
+            </p>
+          ) : (
+            <>
+              {hours.length > 0 && (
+                <HourTabs hours={hours} results={results} />
+              )}
+            </>
+          )}
+        </div>
+      )}
 
       {/* Journey tracking */}
       {job.journeyCount > 0 && (
@@ -235,6 +279,13 @@ export default function AdminResultsPage() {
               )}
             </>
           )}
+        </div>
+      )}
+
+      {/* AI Insights — shown for all completed jobs */}
+      {job.status === 'COMPLETE' && (
+        <div className="bg-bo-neutral-50 border border-bo-neutral-200 rounded-xl p-5 shadow-bo-sm">
+          <InsightPanel jobId={job.id} />
         </div>
       )}
     </div>

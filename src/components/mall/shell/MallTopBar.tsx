@@ -14,6 +14,7 @@
 'use client';
 
 import Image from 'next/image';
+import React, { useState, useEffect } from 'react';
 import {
   Download,
   FileText,
@@ -22,9 +23,11 @@ import {
   LogOut,
   Building2,
   Sparkles,
+  Calendar,
+  Clock,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useSession } from '@/contexts/SessionContext';
+import { useSession, signOut } from 'next-auth/react';
 import { CompactLanguageSelector } from '@/components/ui/language-selector';
 import { useConcierge } from '@/components/concierge/ConciergeContext';
 import {
@@ -38,29 +41,33 @@ import {
 import { useTranslation } from 'react-i18next';
 
 export interface MallTopBarProps {
-  selectedDate?: string;
-  selectedTime?: string;
-  onDateChange?: (date: string) => void;
-  onTimeChange?: (time: string) => void;
   onExport?: (format: 'pdf' | 'csv' | 'excel') => void;
+  selectedDate?: string;
+  onDateChange?: (date: string) => void;
   className?: string;
 }
 
 export function MallTopBar({
-  selectedDate,
-  selectedTime,
-  onDateChange,
-  onTimeChange,
   onExport,
+  selectedDate,
+  onDateChange,
   className,
 }: MallTopBarProps) {
-  const { user, logout } = useSession();
+  const { data: session } = useSession();
+  const user = session?.user;
+  const logout = () => signOut({ callbackUrl: '/mall/login' });
   const concierge = useConcierge();
-  const { t } = useTranslation('mall');
+  const { t, i18n } = useTranslation('mall');
+  const [now, setNow] = useState(new Date());
 
-  const now = new Date();
-  const currentDate = selectedDate || now.toISOString().split('T')[0];
-  const currentTime = selectedTime || now.toTimeString().slice(0, 5);
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 60_000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const locale = i18n.language === 'fi' ? 'fi-FI' : i18n.language === 'sv' ? 'sv-SE' : 'en-GB';
+  const displayDate = now.toLocaleDateString(locale, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+  const displayTime = now.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
 
   const handleExport = (format: 'pdf' | 'csv' | 'excel') => {
     if (onExport) {
@@ -91,32 +98,17 @@ export function MallTopBar({
         />
       </div>
 
-      {/* Center: Temporal Controls */}
-      <div className="flex items-center gap-3">
-        <input
-          type="date"
-          value={currentDate}
-          onChange={(e) => onDateChange?.(e.target.value)}
-          className={cn(
-            'px-4 py-2.5 rounded-lg border border-bo-neutral-300',
-            'text-sm text-bo-neutral-900 bg-bo-neutral-50',
-            'focus:outline-none focus:ring-2 focus:ring-bo-primary-600 focus:ring-opacity-20 focus:border-bo-primary-600',
-            'hover:border-bo-neutral-400 transition-all duration-200 ease-bo-out'
-          )}
-          aria-label={t('topbar.dateLabel')}
-        />
-        <input
-          type="time"
-          value={currentTime}
-          onChange={(e) => onTimeChange?.(e.target.value)}
-          className={cn(
-            'px-4 py-2.5 rounded-lg border border-bo-neutral-300',
-            'text-sm text-bo-neutral-900 bg-bo-neutral-50',
-            'focus:outline-none focus:ring-2 focus:ring-bo-primary-600 focus:ring-opacity-20 focus:border-bo-primary-600',
-            'hover:border-bo-neutral-400 transition-all duration-200 ease-bo-out'
-          )}
-          aria-label={t('topbar.timeLabel')}
-        />
+      {/* Center: Live Date & Time */}
+      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 text-sm text-bo-neutral-700">
+          <Calendar className="h-4 w-4 text-bo-neutral-500" />
+          <span className="font-medium">{displayDate}</span>
+        </div>
+        <div className="h-4 w-px bg-bo-neutral-300" />
+        <div className="flex items-center gap-2 text-sm text-bo-neutral-700">
+          <Clock className="h-4 w-4 text-bo-neutral-500" />
+          <span className="font-medium tabular-nums">{displayTime}</span>
+        </div>
       </div>
 
       {/* Right: Actions */}
@@ -161,7 +153,7 @@ export function MallTopBar({
                 aria-label={t('topbar.userMenu')}
               >
                 <Building2 className="h-4 w-4" />
-                <span className="max-w-[150px] truncate">{user.companyName}</span>
+                <span className="max-w-[150px] truncate">{user.customerName}</span>
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -170,9 +162,9 @@ export function MallTopBar({
             >
               <DropdownMenuLabel className="px-3 py-2">
                 <div className="flex flex-col gap-1">
-                  <p className="text-sm font-semibold text-bo-neutral-950">{user.companyName}</p>
-                  <p className="text-xs text-bo-neutral-600">{user.mallDisplayName}</p>
-                  <p className="text-xs text-bo-neutral-500 mt-1">{t('topbar.userId')} {user.userId}</p>
+                  <p className="text-sm font-semibold text-bo-neutral-950">{user.customerName}</p>
+                  <p className="text-xs text-bo-neutral-600">{user.name}</p>
+                  <p className="text-xs text-bo-neutral-500 mt-1">{t('topbar.userId')} {user.email}</p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator className="bg-bo-neutral-200 my-2" />

@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
-import { auth } from '@/auth';
+import { requireAdmin } from '@/lib/admin-auth';
 
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ mallId: string }> },
 ) {
-  const session = await auth();
-  if (!session?.user || session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  const guard = await requireAdmin();
+  if ('error' in guard) return guard.error;
 
   const { mallId } = await params;
   const { floor } = await req.json();

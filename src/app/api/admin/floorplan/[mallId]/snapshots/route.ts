@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
-import { auth } from '@/auth';
 import { createFloorplanSnapshot } from '@/lib/services/floorplanBackup';
+import { requireAdmin } from '@/lib/admin-auth';
 
+/**
+ * GET — list recent snapshots for a mall+floor
+ */
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ mallId: string }> },
 ) {
-  const session = await auth();
-  if (!session?.user || session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  const guard = await requireAdmin();
+  if ('error' in guard) return guard.error;
 
   const { mallId } = await params;
   const floor = new URL(req.url).searchParams.get('floor') ?? 'ground';
@@ -35,6 +36,9 @@ export async function GET(
   return NextResponse.json(list);
 }
 
+/**
+ * Helper: convert legacy store snapshot data to zone format
+ */
 interface LegacyStore {
   id: string; mallId: string; floor: string; name: string; slug: string;
   zoneDbId: string; x: number; y: number; w: number; h: number;
@@ -62,14 +66,16 @@ function convertLegacyStores(stores: LegacyStore[]) {
   }));
 }
 
+/**
+ * POST — restore a snapshot by ID
+ * Body: { snapshotId: string }
+ */
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ mallId: string }> },
 ) {
-  const session = await auth();
-  if (!session?.user || session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  const guard = await requireAdmin();
+  if ('error' in guard) return guard.error;
 
   const { mallId } = await params;
   const { snapshotId } = await req.json();
@@ -83,19 +89,23 @@ export async function POST(
   }
 
   const parsed = JSON.parse(snapshot.data);
+  // Handle legacy snapshots that contain a 'stores' array
   let zones = parsed.zones ?? [];
   if (parsed.stores?.length) {
     zones = [...zones, ...convertLegacyStores(parsed.stores)];
   }
   const cameras = parsed.cameras ?? [];
 
+  // Snapshot current state before restoring (so restore itself is reversible)
   await createFloorplanSnapshot(prisma, mallId, snapshot.floor, 'pre-restore');
 
   try {
+    // Restore within a transaction
     await prisma.$transaction(async (tx) => {
       await tx.camera.deleteMany({ where: { mallId, floor: snapshot.floor } });
       await tx.floorplanZone.deleteMany({ where: { mallId, floor: snapshot.floor } });
 
+      // Recreate zones (new IDs — old IDs may conflict)
       for (const z of zones) {
         await tx.floorplanZone.create({
           data: {
@@ -118,6 +128,7 @@ export async function POST(
         });
       }
 
+      // Recreate cameras (new IDs, no zoneDbId link since zone IDs changed)
       for (const c of cameras) {
         await tx.camera.create({
           data: {

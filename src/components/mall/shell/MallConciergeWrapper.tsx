@@ -6,7 +6,7 @@
 'use client';
 
 import React from 'react';
-import { useSession } from '@/contexts/SessionContext';
+import { useSession } from 'next-auth/react';
 import { ConciergeProvider, ConciergePanel } from '@/components/concierge';
 
 interface MallConciergeWrapperProps {
@@ -14,14 +14,16 @@ interface MallConciergeWrapperProps {
 }
 
 export function MallConciergeWrapper({ children }: MallConciergeWrapperProps) {
-  const { user, loading } = useSession();
+  const { data: session, status } = useSession();
+  const user = session?.user;
+  const loading = status === 'loading';
 
   // Always provide ConciergeProvider to avoid context errors
   // But only render the panel when authenticated
   return (
     <ConciergeProvider
-      tenantId={user?.mallId || 'default'}
-      userId={user?.userId || 'anonymous'}
+      tenantId={user?.customerId || 'default'}
+      userId={user?.id || 'anonymous'}
       wsUrl={process.env.NEXT_PUBLIC_CONCIERGE_WS_URL}
     >
       {/* Only show Concierge panel when authenticated */}

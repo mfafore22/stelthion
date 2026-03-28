@@ -65,7 +65,7 @@ export function LanguageSelector({
           variant="ghost"
           size={variant === 'compact' || variant === 'icon-only' ? 'sm' : 'default'}
           className={cn(
-            'gap-2',
+            'gap-2 hover:bg-bo-primary-50 hover:text-bo-primary-800 focus-visible:ring-bo-primary-400/40 focus-visible:border-bo-primary-400 data-[state=open]:bg-bo-primary-50 data-[state=open]:text-bo-primary-800',
             variant === 'icon-only' && 'px-2',
             className
           )}

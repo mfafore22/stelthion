@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
-import { auth } from '@/auth';
+import { requireAdmin } from '@/lib/admin-auth';
 
 export async function GET() {
-  const session = await auth();
-  if (!session?.user || session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  const guard = await requireAdmin();
+  if ('error' in guard) return guard.error;
 
   const jobs = await prisma.analysisJob.findMany({
     include: { camera: true },
@@ -18,10 +16,8 @@ export async function GET() {
 }
 
 export async function PATCH(req: NextRequest) {
-  const session = await auth();
-  if (!session?.user || session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  const guard2 = await requireAdmin();
+  if ('error' in guard2) return guard2.error;
 
   const { id, status } = await req.json();
 

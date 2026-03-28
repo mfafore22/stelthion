@@ -1,3 +1,8 @@
+/**
+ * Operator Logo Mapping
+ * Maps company/operator names to their logo file paths
+ */
+
 export function getOperatorLogo(companyName: string): string | null {
   const normalizedName = companyName.toLowerCase().trim();
 
@@ -9,6 +14,9 @@ export function getOperatorLogo(companyName: string): string | null {
   return logoMap[normalizedName] || null;
 }
 
+/**
+ * Get operator logo with fallback to first letter
+ */
 export function getOperatorLogoOrFallback(companyName: string): {
   type: 'image' | 'letter';
   value: string;

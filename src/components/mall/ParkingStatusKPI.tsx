@@ -107,7 +107,7 @@ export function ParkingStatusKPI({ parkingData }: ParkingStatusKPIProps) {
                 >
                   <div className="flex justify-between items-center mb-2">
                     <div className="flex items-center gap-2">
-                      <div className="text-sm font-bold text-bo-neutral-950">{level.id}</div>
+                      <div className="text-sm font-bold text-bo-neutral-950">{t(`parking.levelName.${level.id}`, level.id)}</div>
                       {level.evChargingSpots > 0 && (
                         <Zap className="h-3 w-3 text-bo-warning-dark" />
                       )}
@@ -125,7 +125,7 @@ export function ParkingStatusKPI({ parkingData }: ParkingStatusKPIProps) {
                   </div>
                   {level.id === 'P5' && (
                     <div className="mt-2 text-xs text-bo-neutral-600 italic">
-                      * Designated for tower residents + mall personnel
+                      * {t('parking.p5Designation', 'Designated for tower residents + mall personnel')}
                     </div>
                   )}
                 </div>

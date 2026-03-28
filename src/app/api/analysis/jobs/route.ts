@@ -1,15 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
+import { auth } from '@/auth';
 
 const VALID_JOURNEY_COUNTS = [1, 5, 10, 15, 20];
 const VALID_MODES = ['ZONE_COUNT', 'AB_TRACKING', 'JOURNEY_MAP', 'STORE_BEHAVIOR'] as const;
 
 export async function GET(req: NextRequest) {
+  const session = await auth()
+  if (!session?.user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   const { searchParams } = new URL(req.url);
   const mallId = searchParams.get('mallId');
   const status = searchParams.get('status');
   const mode = searchParams.get('mode');
-  const type = searchParams.get('type');
+  const type = searchParams.get('type'); // backward compat
 
   const where: Record<string, unknown> = {};
   if (mallId) where.mallId = mallId;
@@ -31,6 +37,11 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const session = await auth()
+  if (!session?.user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   const body = await req.json();
   const {
     mallId, mode = 'ZONE_COUNT', cameraId, secondaryCameraId,
@@ -46,6 +57,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid mode' }, { status: 400 });
   }
 
+  // Mode-specific validation
   if (mode === 'ZONE_COUNT') {
     if (!cameraId) {
       return NextResponse.json({ error: 'cameraId required for ZONE_COUNT' }, { status: 400 });
@@ -73,6 +85,7 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  // Verify cameras exist
   if (cameraId) {
     const camera = await prisma.camera.findUnique({ where: { id: cameraId } });
     if (!camera) return NextResponse.json({ error: 'Camera not found' }, { status: 404 });

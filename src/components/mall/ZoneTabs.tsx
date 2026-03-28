@@ -7,6 +7,7 @@
 'use client';
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { MallCard } from './ui/MallCard';
 import { Users, Euro, Briefcase, Home, MapPin } from 'lucide-react';
 import type { CatchmentDemographics } from '@/lib/types/transport';
@@ -18,6 +19,7 @@ interface ZoneTabsProps {
 }
 
 export function ZoneTabs({ demographics, selectedZone, onZoneSelect }: ZoneTabsProps) {
+  const { t } = useTranslation('mall');
   const formatNumber = (num: number) => {
     if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
     if (num >= 1000) return `${(num / 1000).toFixed(1)}k`;
@@ -286,8 +288,8 @@ export function ZoneTabs({ demographics, selectedZone, onZoneSelect }: ZoneTabsP
         {/* Data Source Attribution */}
         <div className="pt-4 border-t border-bo-neutral-200 mt-6">
           <p className="text-xs text-bo-neutral-500 leading-relaxed">
-            Demographics data: Statistics Finland (Tilastokeskus)<br />
-            Postal boundaries: Statistics Finland WFS API
+            {t('demographics.sourceAttribution', 'Demographics data: Statistics Finland (Tilastokeskus)')}<br />
+            {t('demographics.sourceBoundaries', 'Postal boundaries: Statistics Finland WFS API')}
           </p>
         </div>
       </div>

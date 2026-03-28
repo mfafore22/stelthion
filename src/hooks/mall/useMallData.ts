@@ -1,86 +1,49 @@
 /**
  * Custom hooks for fetching mall data from API
+ * Interfaces match the Prisma schema shape returned by /api/mall/[mallId]
  */
 
 import { useEffect, useState } from 'react';
 
-export interface MallSummary {
-  id: string;
-  mall_name: string;
-  city: string;
-  total_shops: number;
-  retailer_type_percentages: Record<string, number>;
-  top_categories: Array<{
-    category: string;
-    count: number;
-    percentage: number;
-  }>;
+export interface MallCategory {
+  name: string;
+  shopCount: number;
+  percentage: number;
+}
+
+export interface MallStats {
+  currentVisitors: number;
+  annualVisitors: number;
+  annualSales: number;
+  dwellTime: number;
+  conversionRate: number;
+}
+
+export interface MallBranding {
+  primaryColor: string;
+  secondaryColor: string;
+  accentColor: string;
+  gradientFrom: string;
+  gradientTo: string;
 }
 
 export interface MallDetail {
-  id: string;
-  summary: {
-    mall_name: string;
-    city: string;
-    total_shops: number;
-    shops_by_retailer_type: Record<string, number>;
-    shops_by_category: Record<string, number>;
-    retailer_type_percentages: Record<string, number>;
-    top_categories: Array<{
-      category: string;
-      count: number;
-      percentage: number;
-    }>;
-    shops_by_floor?: Record<string, number>;
-    collection_date: string;
-    data_source: string;
-  };
-  shops: any[] | null;
+  mallId: string;
+  name: string;
+  city: string;
+  totalShops: number;
+  status: string;
+  customerId: string;
+  categories: MallCategory[];
+  stats: MallStats | null;
+  branding: MallBranding | null;
+  updatedAt: string;
 }
 
 interface FetchState<T> {
   data: T | null;
   loading: boolean;
   error: string | null;
-}
-
-/**
- * Hook to fetch list of all malls
- */
-export function useMalls() {
-  const [state, setState] = useState<FetchState<MallSummary[]>>({
-    data: null,
-    loading: true,
-    error: null,
-  });
-
-  useEffect(() => {
-    const fetchMalls = async () => {
-      try {
-        setState(prev => ({ ...prev, loading: true, error: null }));
-        const response = await fetch('/api/mall');
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch malls: ${response.statusText}`);
-        }
-
-        const result = await response.json();
-
-        if (!result.success) {
-          throw new Error(result.error || 'Failed to fetch malls');
-        }
-
-        setState({ data: result.data, loading: false, error: null });
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-        setState({ data: null, loading: false, error: errorMessage });
-      }
-    };
-
-    fetchMalls();
-  }, []);
-
-  return state;
 }
 
 /**
@@ -110,11 +73,11 @@ export function useMallDetail(mallId: string | null) {
 
         const result = await response.json();
 
-        if (!result.success) {
-          throw new Error(result.error || `Failed to fetch mall ${mallId}`);
+        if (result.error) {
+          throw new Error(result.error);
         }
 
-        setState({ data: result.data, loading: false, error: null });
+        setState({ data: result, loading: false, error: null });
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Unknown error';
         setState({ data: null, loading: false, error: errorMessage });

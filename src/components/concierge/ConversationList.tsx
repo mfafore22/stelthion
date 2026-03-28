@@ -12,12 +12,13 @@ import { useConcierge } from './ConciergeContext';
 import { AgentSelectionModal } from './AgentSelectionModal';
 import { Plus, X, Minimize2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-import { useSession } from '@/contexts/SessionContext';
+import { useSession } from 'next-auth/react';
 import { useTranslation } from 'react-i18next';
 
 export function ConversationList() {
   const { state, conversations, loadConversation, closePanel, minimizePanel } = useConcierge();
-  const { user } = useSession();
+  const { data: session } = useSession();
+  const user = session?.user;
   const { t } = useTranslation('mall');
   const [showAgentSelection, setShowAgentSelection] = useState(false);
 
@@ -103,8 +104,8 @@ export function ConversationList() {
       {/* Footer — tenant from session, no hardcoded names */}
       {user && (
         <div className="border-t border-bo-neutral-200 px-4 py-3 text-xs text-bo-neutral-500 bg-white">
-          <div className="font-medium text-bo-neutral-700">{user.mallDisplayName}</div>
-          <div className="mt-0.5 text-bo-neutral-400">{user.userId}</div>
+          <div className="font-medium text-bo-neutral-700">{user.customerName}</div>
+          <div className="mt-0.5 text-bo-neutral-400">{user.email}</div>
         </div>
       )}
 

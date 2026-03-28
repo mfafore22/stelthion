@@ -33,10 +33,10 @@
     "currentVisitors": "Aktuella besökare",
     "retailUnits": "Butiker",
     "topCategory": "Största kategori",
-    "synexisSignals": "Synexis™ Signaler",
+    "synexisSignals": "Stelthion Signaler",
     "liveInsights": "Realtidsinsikter",
     "mallStatus": "Köpcentrumstatus",
-    "statusLive": "LIVE (Stelthion Synexis™ aktiv)",
+    "statusLive": "LIVE (Stelthion aktiv)",
     "statusAlpha": "ALFA (Testfas)",
     "statusBeta": "BETA (Begränsad utrullning)",
     "statusPlanned": "PLANERAD (Integration pågår)",
@@ -217,7 +217,15 @@
     "paymentInfo": "Gratis · Betalning: Kort, EasyPark, ParkMan, Autopay",
     "visitorArrivalModes": "Besökarnas ankomstmedel",
     "car": "Bil",
-    "publicTransitWalking": "Kollektivtrafik / Promenad"
+    "publicTransitWalking": "Kollektivtrafik / Promenad",
+    "p5Designation": "Reserverat för tornboende + köpcentrumpersonal",
+    "levelName": {
+      "Outdoor Lot": "Utomhusparkering"
+    }
+  },
+  "map": {
+    "unavailable": "Karta ej tillgänglig",
+    "addToken": "Lägg till NEXT_PUBLIC_MAPBOX_TOKEN för att visa upptagningsområdeskarta"
   },
   "demographics": {
     "title": "Demografi",
@@ -236,29 +244,30 @@
     "spendingScale": "Skala 0–100 baserad på inkomst",
     "totalCatchmentPopulation": "Total befolkning i upptagningsområdet",
     "acrossZones": "Över {{count}} restidszoner",
-    "sourceStatsCensus": "Källa: Statistikcentralen 2024",
     "primaryZone": "Primärzon ({{minutes}} min bilresa)",
     "ageDistribution": "Åldersfördelning",
     "yearsGroup": "{{group}} år",
-    "sourceStatsPopulation": "Källa: Statistikcentralen Befolkningsregister 2024",
     "incomeProfile": "Inkomstprofil",
     "medianHousehold": "Medianhushåll",
     "avgDisposable": "Genomsn. disponibel",
     "highIncome": "Höginkomst (>60 000 €)",
-    "sourceStatsIncome": "Källa: Statistikcentralen Inkomstfördelning 2023",
     "employmentHeader": "Sysselsättning",
     "employmentRate": "Sysselsättningsgrad",
     "students": "Studenter",
     "topSectors": "Största sektorer:",
-    "sourceStatsEmployment": "Källa: Statistikcentralen Sysselsättningsstatistik Q3 2024",
     "allCatchmentZones": "Alla upptagningszoner",
     "minDrive": "{{minutes}} min bilresa",
     "postalCodesHouseholds": "{{codes}} postnummer · {{households}} hushåll",
     "residents": "invånare",
-    "sourceCatchmentAnalysis": "Källa: Statistikcentralen + OpenStreetMap restidsanalys",
+    "sourcePopulation": "Statistikcentralen · Befolkningsregister (StatFin/vaerak)",
+    "sourceIncome": "Statistikcentralen · Inkomstfördelningsstatistik (StatFin/tjkt)",
+    "sourceEmployment": "Statistikcentralen · Sysselsättningsstatistik (StatFin/tyolli)",
+    "sourceCatchment": "Restidsanalys · Statistikcentralen",
     "detailedHouseholdStats": "Detaljerad hushållsstatistik",
     "householdStatsDesc": "Visa hushållsstorlek, ägande och boendetyper per område",
-    "householdsUnit": "hushåll"
+    "householdsUnit": "hushåll",
+    "sourceAttribution": "Demografisk data: Statistikcentralen (Tilastokeskus)",
+    "sourceBoundaries": "Postnummergränser: Statistikcentralen WFS API"
   },
   "householdModal": {
     "title": "Hushållsstatistik per område",
@@ -324,6 +333,39 @@
     "vrLongDistance": "VR Fjärrtåg",
     "dailyVisitorsIntercity": "~{{count}} dagliga besökare från fjärrtrafik",
     "stationSuffix": "station"
+  },
+  "flowQuery": {
+    "title": "Flödesanalys",
+    "selectZone": "Välj zon",
+    "searchZone": "Sök zoner...",
+    "noResults": "Inga resultat",
+    "clearSelection": "Rensa val",
+    "stepOrigin": "Startzon",
+    "stepDirection": "Riktning",
+    "stepDestination": "Slutzon",
+    "originPlaceholder": "Klicka zon på kartan eller välj…",
+    "destinationPlaceholder": "Klicka andra zon eller välj…",
+    "destinationOptionalHint": "Valfritt — lämna tom för att se alla destinationer från startzonen",
+    "outbound": "Avgående",
+    "inbound": "Ankommande",
+    "between": "Mellan",
+    "analyze": "Analysera flöde",
+    "analyzeRoute": "Analysera rutt",
+    "analyzing": "Analyserar…",
+    "stepTime": "Tidsperiod",
+    "date": "Datum",
+    "timeRange": "Tidsintervall",
+    "reset": "Rensa",
+    "newQuery": "Ny analys",
+    "visitorsTotal": "besökare totalt",
+    "sourceBreakdown": "Källor",
+    "destinationBreakdown": "Destinationer",
+    "flowActive": "Flöde aktivt",
+    "originLabel": "Startzon",
+    "flowDirection": "Flödesriktning",
+    "arrowThickness": "Pilens tjocklek = antal besökare",
+    "selectOriginHint": "Välj en startzon till vänster för att starta en flödesanalys",
+    "clickHint": "Klicka en zon på planritningen för att ange startzon"
   },
   "heatmap": {
     "title": "Värmekarta",
@@ -392,7 +434,7 @@
     "title": "Assistenter",
     "description": "AI-assistenter för fastighetsförvaltning",
     "comingSoon": "AI-assistentintegration",
-    "integrationDescription": "AI-assistenter använder din fastighets isolerade data för att producera fastighetsspecifika simuleringar och prognoser. Med dem kan du testa effekten av dina valda åtgärder eller förbereda dig för situationer. Stelthion Synexis™-modeller ger bredare insikter och alternativ till simuleringar och prognoser.",
+    "integrationDescription": "AI-assistenter använder din fastighets isolerade data för att producera fastighetsspecifika simuleringar och prognoser. Med dem kan du testa effekten av dina valda åtgärder eller förbereda dig för situationer. Stelthion-modeller ger bredare insikter och alternativ till simuleringar och prognoser.",
     "tryScenarios": "Prova scenariokalkylator nu"
   },
   "shoppermind": {
@@ -405,7 +447,7 @@
     "latestCampaign": "Senaste kampanjen",
     "visitorImpact": "Besökarpåverkan",
     "revenueImpact": "Omsättningspåverkan",
-    "mlConfidence": "Stelthion Synexis™ Attribueringssäkerhet",
+    "mlConfidence": "Stelthion Attribueringssäkerhet",
     "channels": "Kanaler",
     "viewCampaignLog": "Visa kampanjlogg",
     "runSimilarScenario": "Kör liknande scenario",
@@ -494,6 +536,7 @@
     "historicalCorrelation": "Historisk väderkorrelation",
     "correlationText": "Analysen visar en stark positiv korrelation (r=0,68) mellan komfortindex och besökarantal under {{season}}. Nuvarande förhållanden är optimala för köpcentrumbesök.",
     "temp": {
+      "freezing": "iskallt",
       "cold": "kallt",
       "cool": "svalt",
       "optimal": "optimalt",
@@ -503,17 +546,23 @@
     "comfort": {
       "high": "Hög",
       "moderate": "Måttlig",
-      "low": "Låg"
+      "low": "Låg",
+      "favourable": "Gynnsamt för besök",
+      "calm": "Lugna förhållanden",
+      "outdoorPreference": "Utomhuspreferens"
     },
     "impact": {
       "indoor": "🌧️ Vädret driver besökare inomhus",
       "mild": "☀️ Måttlig väderpåverkan på besökarantalet",
-      "outdoor": "🌤️ Optimala utomhusförhållanden"
+      "outdoor": "🌤️ Bra utomhusväder — besökare kan föredra att vara ute",
+      "quiet": "🌙 Lugn period — lägre besökarantal förväntas",
+      "normal": "🌥️ Typiska förhållanden — normalt besöksmönster"
     },
     "forecastMsg": {
       "significant": "{{condition}} – betydande inomhustrafik på grund av vädret",
       "moderate": "{{description}} – besökarantalet förväntas öka",
-      "outdoor": "Utmärkt utomhusväder kan minska köpcentrumbesöken",
+      "outdoor": "Bra utomhusförhållanden kan locka besökare till parker och uteserveringar",
+      "coldQuiet": "Kallt eller mörkt väder — lugnare period för köpcentret",
       "stable": "{{description}} – stabilt besökarantal förväntas"
     },
     "condition": {
@@ -690,12 +739,15 @@
     "modes": {
       "zoneCount": "Områdesräkning",
       "abTracking": "A → B-flöde",
-      "journeyMap": "Resekarta"
+      "journeyMap": "Resekarta",
+      "storeBehavior": "Butiksbeteende"
     },
     "modesDescription": {
-      "zoneCount": "Räkna besökare i kameravyn",
+      "zoneCount": "Räkna besökarantalet per område med hjälp av kameror. All behandling är helt anonym, inga individer identifieras. Resultaten är numeriska heltal i enlighet med GDPR.",
       "abTracking": "Spåra besökare mellan två punkter",
-      "journeyMap": "Kartlägg besökarvägar genom zoner"
+      "journeyMap": "Identifiera trender i besökarnas rörelser mellan olika zoner. Spårningen är anonym och producerar enbart numerisk data. Ingen biometrisk identifiering används. (GDPR-kompatibelt).",
+      "flowQuery": "Beställ numeriska besökarflödesanalyser mellan två butiker eller områden. Systemet räknar antalet besökare mellan startpunkten och destinationen under vald dag och timme. Data är anonym. (GDPR-kompatibelt).",
+      "storeBehavior": "Analysera förbipassering, stopp och inträdesbeteende"
     },
     "config": {
       "camera": "Kamera",
@@ -749,11 +801,39 @@
       "title": "Integritet & GDPR-efterlevnad",
       "description": "All spårning är helt anonym. Systemet identifierar individer enbart genom visuellt utseende — ingen ansiktsigenkänning, biometrisk data, ålder, kön eller annan personligt identifierbar information bearbetas eller lagras. I enlighet med EU:s GDPR-förordning."
     },
+    "storeBehavior": {
+      "walkBy": "Förbipassering",
+      "stop": "Stopp",
+      "enter": "Inträde",
+      "hourlyBreakdown": "Timfördelning",
+      "byStore": "Per butik",
+      "store": "Butik",
+      "conversionRate": "Konvertering"
+    },
+    "insights": {
+      "title": "AI-insikter",
+      "generate": "Generera insikter",
+      "generating": "Genererar...",
+      "recommendations": "Rekommendationer",
+      "noInsights": "Inga insikter ännu. Klicka på \"Generera insikter\" för att analysera detta jobbs resultat.",
+      "previousCount": "{{count}} tidigare insikter"
+    },
     "future": {
       "llmAnalysis": "AI-drivna insikter",
       "llmDescription": "AI-drivna insikter om besökarmönster och beteende",
       "visitorCounters": "Integration av besökarräknare",
       "counterDescription": "Jämför och extrapolera med besökarräknardata"
     }
+  },
+  "export": {
+    "generating": "Genererar rapport…",
+    "downloaded": "Rapport nedladdad",
+    "reportTitle": "Besökarflödesanalysrapport",
+    "generatedBy": "Genererad av Stelthion Analytics Platform",
+    "zoneTable": "Zonbesökssammanfattning",
+    "flowTable": "Flödesanalysresultat",
+    "coverSubtitle": "Våning: {{floor}} · Klockan: {{hour}}:00",
+    "executiveSummary": "Sammanfattning",
+    "keyHighlights": "Viktiga observationer"
   }
 }

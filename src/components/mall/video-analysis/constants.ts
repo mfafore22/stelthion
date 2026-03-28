@@ -1,4 +1,4 @@
-import { Eye, ArrowRightLeft, Route } from 'lucide-react';
+import { Eye, ArrowRightLeft, Route, Store, GitBranch } from 'lucide-react';
 import type { AnalysisMode } from './types';
 
 export const TIME_SLOTS = Array.from({ length: 27 }, (_, i) => {
@@ -34,5 +34,17 @@ export const MODE_META: Record<AnalysisMode, { icon: typeof Eye; labelKey: strin
     labelKey: 'videoAnalysis.modes.journeyMap',
     descKey: 'videoAnalysis.modesDescription.journeyMap',
     color: 'bg-bo-beige-200 text-bo-beige-800',
+  },
+  STORE_BEHAVIOR: {
+    icon: Store,
+    labelKey: 'videoAnalysis.modes.storeBehavior',
+    descKey: 'videoAnalysis.modesDescription.storeBehavior',
+    color: 'bg-emerald-50 text-emerald-700',
+  },
+  FLOW_QUERY: {
+    icon: GitBranch,
+    labelKey: 'videoAnalysis.modes.flowQuery',
+    descKey: 'videoAnalysis.modesDescription.flowQuery',
+    color: 'bg-indigo-50 text-indigo-700',
   },
 };

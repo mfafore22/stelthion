@@ -1,0 +1,63 @@
+# Camera Configuration for Ideapark Lempäälä
+# Maps camera DB IDs to RTSP stream URLs and processing parameters
+
+cameras:
+  # Entrance A — dual Pelco cameras (narrow FOV)
+  - db_id: ""                    # Fill with Camera.id from Stelthion DB
+    label: "Entrance A - Left"
+    rtsp_url: "rtsp://192.168.1.10/stream1"
+    role: entrance
+    floor: ground
+    model: "Pelco IXE32 Sarix"
+    processing:
+      default_fps: 10            # Continuous for entrance tracking
+      snapshot_interval_sec: null # null = continuous mode
+
+  - db_id: ""
+    label: "Entrance A - Right"
+    rtsp_url: "rtsp://192.168.1.11/stream1"
+    role: entrance
+    floor: ground
+    model: "Pelco IXE32 Sarix"
+    processing:
+      default_fps: 10
+      snapshot_interval_sec: null
+
+  # Upper floor — 180° panoramic at escalator landing
+  - db_id: ""
+    label: "Upper Floor Panoramic"
+    rtsp_url: "rtsp://192.168.1.20/stream1"
+    role: panoramic
+    floor: upper
+    model: "Hikvision DS-2CD2387G2P-LSU/SL"
+    processing:
+      default_fps: 10
+      snapshot_interval_sec: null
+    # Direction classification zones (pixel coordinates in camera view)
+    direction_zones:
+      easyfit_bridge:
+        polygon: []              # Fill after camera calibration
+      other_areas:
+        polygon: []
+
+  # Corridor to EasyFit — narrow FOV Pelco
+  - db_id: ""
+    label: "EasyFit Corridor"
+    rtsp_url: "rtsp://192.168.1.21/stream1"
+    role: zone
+    floor: upper
+    model: "Pelco IXE32 Sarix"
+    processing:
+      default_fps: 10
+      snapshot_interval_sec: null
+    # EasyFit gym entrance boundary (pixel coordinates)
+    gym_entrance_polygon: []     # Fill after camera calibration
+
+# Physical visitor counters
+counters:
+  - device_id: "entrance-a-counter"
+    protocol: http               # http | mqtt | csv
+    endpoint: "http://192.168.1.100/api/count"
+    poll_interval_sec: 300       # 5 minutes
+    zone_id: "entrance-a"
+    floor: ground

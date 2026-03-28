@@ -32,10 +32,10 @@
     "currentVisitors": "Nykyiset kävijät",
     "retailUnits": "Liiketilat",
     "topCategory": "Pääkategoria",
-    "synexisSignals": "Synexis™ Signaalit",
+    "synexisSignals": "Stelthion Signaalit",
     "liveInsights": "Reaaliaikaiset näkemykset",
     "mallStatus": "Kauppakeskuksen tila",
-    "statusLive": "LIVE (Stelthion Synexis™ aktiivinen)",
+    "statusLive": "LIVE (Stelthion aktiivinen)",
     "statusAlpha": "ALPHA (Testausvaihe)",
     "statusBeta": "BETA (Rajoitettu käyttöönotto)",
     "statusPlanned": "PLANNED (Integrointi odottaa)",
@@ -236,26 +236,25 @@
     "spendingScale": "0–100 asteikko tulojen perusteella",
     "totalCatchmentPopulation": "Vaikutusalueen kokonaisväestö",
     "acrossZones": "{{count}} ajomatka-alueella",
-    "sourceStatsCensus": "Lähde: Tilastokeskus, väestölaskenta 2024",
     "primaryZone": "Ensisijainen alue ({{minutes}} min ajo)",
     "ageDistribution": "Ikäjakauma",
     "yearsGroup": "{{group}} vuotta",
-    "sourceStatsPopulation": "Lähde: Tilastokeskus, väestörekisteri 2024",
     "incomeProfile": "Tuloprofiili",
     "medianHousehold": "Kotitalouden mediaani",
     "avgDisposable": "Keskim. käytettävissä olevat tulot",
     "highIncome": "Korkeatuloiset (>60 000 €)",
-    "sourceStatsIncome": "Lähde: Tilastokeskus, tulonjakotilasto 2023",
     "employmentHeader": "Työllisyys",
     "employmentRate": "Työllisyysaste",
     "students": "Opiskelijat",
     "topSectors": "Päätoimialat:",
-    "sourceStatsEmployment": "Lähde: Tilastokeskus, työvoimatutkimus Q3 2024",
     "allCatchmentZones": "Kaikki vaikutusalueet",
     "minDrive": "{{minutes}} min ajo",
     "postalCodesHouseholds": "{{codes}} postinumeroa · {{households}} kotitaloutta",
     "residents": "asukasta",
-    "sourceCatchmentAnalysis": "Lähde: Tilastokeskus + OpenStreetMap ajomatka-analyysi",
+    "sourcePopulation": "Tilastokeskus · Väestörekisteri (StatFin/vaerak)",
+    "sourceIncome": "Tilastokeskus · Tulonjakotilasto (StatFin/tjkt)",
+    "sourceEmployment": "Tilastokeskus · Työvoimatutkimus (StatFin/tyolli)",
+    "sourceCatchment": "Ajomatka-analyysi · Tilastokeskus",
     "detailedHouseholdStats": "Yksityiskohtaiset kotitaloustilastot",
     "householdStatsDesc": "Tarkastele kotitalouden kokoa, omistajuutta ja asumismuotoja alueittain",
     "householdsUnit": "kotitaloutta"
@@ -392,7 +391,7 @@
     "title": "Assistentit",
     "description": "AI Assistentit kiinteistönhallintaan",
     "comingSoon": "AI Assistentit integraatio",
-    "integrationDescription": "AI Assistentit käyttävät kiinteistösi eristettyä dataa tuottaakseen kiinteistökohtaisia simulaatioita ja ennusteita. Niiden avulla voit testata valitsemiesi toimenpiteiden vaikutusta tai varautua tilanteisiin. Stelthion Synexis™ -mallit tuovat simulaatioihin ja ennusteisiin laajempaa näkemystä ja vaihtoehtoja.",
+    "integrationDescription": "AI Assistentit käyttävät kiinteistösi eristettyä dataa tuottaakseen kiinteistökohtaisia simulaatioita ja ennusteita. Niiden avulla voit testata valitsemiesi toimenpiteiden vaikutusta tai varautua tilanteisiin. Stelthion -mallit tuovat simulaatioihin ja ennusteisiin laajempaa näkemystä ja vaihtoehtoja.",
     "tryScenarios": "Kokeile Skenaariolaskuria"
   },
   "shoppermind": {
@@ -405,7 +404,7 @@
     "latestCampaign": "Viimeisin kampanja",
     "visitorImpact": "Kävijävaikutus",
     "revenueImpact": "Tuottovaikutus",
-    "mlConfidence": "Stelthion Synexis™ attribuutiovarmuus",
+    "mlConfidence": "Stelthion attribuutiovarmuus",
     "channels": "Kanavat",
     "viewCampaignLog": "Näytä kampanjaloki",
     "runSimilarScenario": "Suorita vastaava skenaario",
@@ -437,7 +436,7 @@
     "events": "Tapahtumat",
     "weather": "Sää",
     "campaigns": "Kampanjat",
-    "analysis": "Videoanalyysi"
+    "analysis": "Kävijäanalyysi"
   },
   "detail": {
     "totalShops": "Liiketilat yhteensä",
@@ -686,6 +685,39 @@
     "managementCompany": "Kiinteistönhallintayhtiö",
     "comingSoon": "Tulossa pian"
   },
+  "flowQuery": {
+    "title": "Virtauskysely",
+    "selectZone": "Valitse alue",
+    "searchZone": "Hae aluetta...",
+    "noResults": "Ei tuloksia",
+    "clearSelection": "Tyhjennä valinta",
+    "stepOrigin": "Lähtöalue",
+    "stepDirection": "Suunta",
+    "stepDestination": "Kohdealue",
+    "originPlaceholder": "Klikkaa aluetta kartalla tai valitse…",
+    "destinationPlaceholder": "Klikkaa toista aluetta tai valitse…",
+    "destinationOptionalHint": "Valinnainen — jätä tyhjäksi nähdäksesi kaikki kohteet lähtöalueelta",
+    "outbound": "Lähtevä",
+    "inbound": "Saapuva",
+    "between": "Välillä",
+    "analyze": "Analysoi virtaus",
+    "analyzeRoute": "Analysoi reitti",
+    "analyzing": "Analysoidaan…",
+    "stepTime": "Aikajakso",
+    "date": "Päivämäärä",
+    "timeRange": "Aikaväli",
+    "reset": "Tyhjennä",
+    "newQuery": "Uusi kysely",
+    "visitorsTotal": "kävijää yhteensä",
+    "sourceBreakdown": "Lähteet",
+    "destinationBreakdown": "Kohteet",
+    "flowActive": "Virtaus aktiivinen",
+    "originLabel": "Lähtöalue",
+    "flowDirection": "Virtaussuunta",
+    "arrowThickness": "Nuolen paksuus = kävijämäärä",
+    "selectOriginHint": "Valitse lähtöalue vasemmalta aloittaaksesi virtauskyselyn",
+    "clickHint": "Klikkaa aluetta pohjakartalla asettaaksesi lähtöalueen"
+  },
   "videoAnalysis": {
     "title": "Kävijäanalyysi",
     "unified": {
@@ -698,13 +730,15 @@
     },
     "modes": {
       "zoneCount": "Aluelaskenta",
-      "abTracking": "A → B -seuranta",
-      "journeyMap": "Reittikartta"
+      "abTracking": "A → B -laskennat",
+      "journeyMap": "Reittikartta",
+      "flowQuery": "Virtausanalyysit"
     },
     "modesDescription": {
-      "zoneCount": "Laske kävijät kameranäkymässä",
-      "abTracking": "Seuraa kävijöitä kahden pisteen välillä",
-      "journeyMap": "Kartoita kävijöiden reitit alueiden läpi"
+      "zoneCount": "Laske kävijämäärät alueittain kameroiden avulla. Kaikki käsittely on täysin anonyymiä, yksittäisiä henkilöitä ei tunnisteta. Tulokset ovat numeerisia kokonaislukuja GDPR:n mukaisesti.",
+      "abTracking": "Laske kävijät kahden pisteen välillä",
+      "journeyMap": "Tunnista trendejä kävijöiden reiteissä eri alueiden välillä. Seuranta on anonyymiä ja tuottaa ainoastaan numeerista tietoa. Biometrista tunnistamista ei käytetä. (GDPR-yhteensopivuus).",
+      "flowQuery": "Tilaa numeerisia kävijävirtausanalyysejä kahden liikkeen tai alueen välillä. Järjestelmä laskee kävijöiden määrän lähtöpisteen ja kohdepisteen välillä valitun päivän ja tunnin aikana. Data on anonyymiä. (GDPR-yhteensopivuus)."
     },
     "config": {
       "camera": "Kamera",
@@ -764,5 +798,16 @@
       "visitorCounters": "Kävijälaskurien integrointi",
       "counterDescription": "Vertaa ja ekstrapoloi kävijälaskuritietojen kanssa"
     }
+  },
+  "export": {
+    "generating": "Luodaan raporttia…",
+    "downloaded": "Raportti ladattu",
+    "reportTitle": "Kävijävirta-analyysiraportti",
+    "generatedBy": "Luotu Stelthion Analytics -alustalla",
+    "zoneTable": "Alueen kävijäyhteenveto",
+    "flowTable": "Virtausanalyysin tulokset",
+    "coverSubtitle": "Kerros: {{floor}} · Klo: {{hour}}:00",
+    "executiveSummary": "Yhteenveto",
+    "keyHighlights": "Keskeiset havainnot"
   }
 }

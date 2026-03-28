@@ -3,6 +3,7 @@
  * Compact overview panel showing key catchment metrics
  */
 
+import { useTranslation } from 'react-i18next';
 import { MallCard } from './ui/MallCard';
 import { Users, TrendingUp, MapPin, Briefcase } from 'lucide-react';
 import type { CatchmentDemographics } from '@/lib/types/transport';
@@ -12,6 +13,7 @@ interface QuickStatsSidebarProps {
 }
 
 export function QuickStatsSidebar({ demographics }: QuickStatsSidebarProps) {
+  const { t } = useTranslation('mall');
   const totalPopulation = demographics.zones.reduce((sum, zone) => sum + zone.population.total, 0);
 
   const formatNumber = (num: number) => {
@@ -91,7 +93,7 @@ export function QuickStatsSidebar({ demographics }: QuickStatsSidebarProps) {
         {/* Data Source Attribution */}
         <div className="pt-4 border-t border-bo-neutral-200">
           <p className="text-xs text-bo-neutral-500 leading-relaxed">
-            Data source: Statistics Finland (Tilastokeskus)
+            {t('demographics.sourceAttribution', 'Demographics data: Statistics Finland (Tilastokeskus)')}
           </p>
         </div>
       </div>

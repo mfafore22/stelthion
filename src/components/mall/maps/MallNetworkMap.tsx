@@ -25,6 +25,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -149,6 +150,7 @@ export function MallNetworkMap({
   height = '400px',
   accessToken,
 }: MallNetworkMapProps) {
+  const { t } = useTranslation('mall');
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const markers = useRef<mapboxgl.Marker[]>([]);
@@ -175,12 +177,9 @@ export function MallNetworkMap({
               d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
             />
           </svg>
-          <p className="text-sm font-medium text-mall-neutral-600 mb-1">Map Unavailable</p>
+          <p className="text-sm font-medium text-mall-neutral-600 mb-1">{t('map.unavailable', 'Map Unavailable')}</p>
           <p className="text-xs text-mall-neutral-500 text-center px-4">
-            NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN is required
-          </p>
-          <p className="text-xs text-mall-neutral-400 text-center px-4 mt-2">
-            Set the environment variable to enable map features
+            {t('map.addToken', 'Add NEXT_PUBLIC_MAPBOX_TOKEN to display catchment map')}
           </p>
         </div>
       </div>

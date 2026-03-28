@@ -38,6 +38,7 @@ export async function GET(
 
   const mappedCameras = cameras.map((c) => ({
     id: c.id,
+    deviceType: c.deviceType,
     label: c.label,
     x: c.x,
     y: c.y,

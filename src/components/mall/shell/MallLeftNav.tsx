@@ -27,7 +27,7 @@ import {
   Brain,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useSession } from '@/contexts/SessionContext';
+import { useSession } from 'next-auth/react';
 import {
   Tooltip,
   TooltipContent,
@@ -78,7 +78,8 @@ export function MallLeftNav({
 }: MallLeftNavProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const { user } = useSession();
+  const { data: session } = useSession();
+  const user = session?.user;
   const { t } = useTranslation();
 
   // Active nav items — only Portfolio and Properties are functional at this stage
@@ -91,31 +92,22 @@ export function MallLeftNav({
       disabled: !ACTIVE_NAV_IDS.has(item.id),
     }));
 
-    const tenantSlug = user.companyName.toLowerCase().replace(/\s+/g, '-');
+    const mallId = user.customerId;
 
     return NAV_ITEMS
       .map(item => {
         const disabled = !ACTIVE_NAV_IDS.has(item.id);
 
         if (item.id === 'portfolio') {
-          if (user.isMultiProperty) {
-            return {
-              ...item,
-              route: `/tenant/${tenantSlug}/portfolio`,
-              disabled,
-            };
-          }
           return { ...item, route: '/mall/portfolio', disabled };
         }
 
         if (item.id === 'properties') {
-          if (!user.isMultiProperty) {
-            return {
-              ...item,
-              route: '/mall/properties',
-              disabled,
-            };
-          }
+          return {
+            ...item,
+            route: `/mall/${mallId}`,
+            disabled,
+          };
         }
 
         return { ...item, disabled };

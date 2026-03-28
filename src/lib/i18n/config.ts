@@ -25,7 +25,7 @@ export const SUPPORTED_LANGUAGES = [
 
 export type LanguageCode = typeof SUPPORTED_LANGUAGES[number]['code'];
 
-export const DEFAULT_LANGUAGE: LanguageCode = 'en';
+export const DEFAULT_LANGUAGE: LanguageCode = 'fi';
 
 export const FALLBACK_LANGUAGE: LanguageCode = 'en';
 

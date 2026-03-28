@@ -11,6 +11,7 @@ import fiMall from '@/locales/fi/mall.json';
 import svMall from '@/locales/sv/mall.json';
 import enAdmin from '@/locales/en/admin.json';
 import fiAdmin from '@/locales/fi/admin.json';
+import svAdmin from '@/locales/sv/admin.json';
 
 i18n
   .use(LanguageDetector)
@@ -19,9 +20,9 @@ i18n
     resources: {
       en: { mall: enMall, admin: enAdmin },
       fi: { mall: fiMall, admin: fiAdmin },
-      sv: { mall: svMall },
+      sv: { mall: svMall, admin: svAdmin },
     },
-    lng: 'en',
+    lng: 'fi',
     fallbackLng: 'en',
     defaultNS: 'mall',
     ns: ['mall', 'admin'],

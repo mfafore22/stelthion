@@ -12,10 +12,16 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { parseInfotauluResponse } from '@/lib/data/ideaparkStores';
+import { auth } from '@/auth';
 
 const INFOTAULU_URL = 'https://lempaala.ideapark.fi?infotaulu=1';
 
 export async function GET(request: NextRequest) {
+  const session = await auth()
+  if (!session?.user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   const { searchParams } = request.nextUrl;
   const zoneFilter = searchParams.get('zone');
 

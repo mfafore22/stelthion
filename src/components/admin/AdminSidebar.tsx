@@ -3,31 +3,46 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { useTranslation } from '@/lib/i18n/hooks';
+import { useTranslation } from 'react-i18next';
 import '@/lib/i18n';
-import { LayoutDashboard, Map, ClipboardList, Route } from 'lucide-react';
+import { LayoutDashboard, Map, ClipboardList, Route, Cpu, ChevronDown } from 'lucide-react';
+import useSWR from 'swr';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { useAdminMall } from '@/lib/hooks/useAdminMall';
 
-const NAV_ITEMS = [
-  { href: '/admin/dashboard', labelKey: 'sidebar.dashboard', icon: LayoutDashboard },
-  { href: '/admin/floorplan/ideapark', labelKey: 'sidebar.floorPlan', icon: Map },
-  { href: '/admin/jobs', labelKey: 'sidebar.analysisJobs', icon: ClipboardList },
-  { href: '/admin/results', labelKey: 'sidebar.resultsJourneys', icon: Route },
-];
+interface MallOption {
+  mallId: string;
+  name: string;
+  city: string;
+}
+
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 export function AdminSidebar() {
   const pathname = usePathname();
   const { t } = useTranslation('admin');
+  const { activeMallId, setActiveMallId } = useAdminMall();
+  const { data: malls } = useSWR<MallOption[]>('/api/admin/malls', fetcher);
+
+  const navItems = [
+    { href: '/admin/dashboard', labelKey: 'sidebar.dashboard', icon: LayoutDashboard },
+    { href: `/admin/floorplan/${activeMallId}`, labelKey: 'sidebar.floorPlan', icon: Map },
+    { href: '/admin/jobs', labelKey: 'sidebar.analysisJobs', icon: ClipboardList },
+    { href: '/admin/results', labelKey: 'sidebar.resultsJourneys', icon: Route },
+    { href: '/admin/edge', labelKey: 'sidebar.edgeDevices', icon: Cpu },
+  ];
+
+  const showMallSelector = malls && malls.length > 1;
 
   return (
     <TooltipProvider delayDuration={200}>
       <aside className="w-[80px] border-r border-bo-neutral-200 bg-bo-neutral-50 flex flex-col items-center shadow-bo-sm">
-        {/* Swirl logo */}
+        {/* Swirl logo — same size and position as mall left nav */}
         <div className="h-[80px] w-full flex items-center justify-center shrink-0">
           <Image
             src="/stelthion-swirl-v2.png"
@@ -39,9 +54,9 @@ export function AdminSidebar() {
           />
         </div>
 
-        {/* Navigation Items */}
+        {/* Navigation Items — icon-only rail matching mall MallLeftNav */}
         <nav className="flex flex-col items-center gap-3 py-3">
-          {NAV_ITEMS.map((item) => {
+          {navItems.map((item) => {
             const active = pathname.startsWith(item.href);
             return (
               <Tooltip key={item.href}>
@@ -75,6 +90,35 @@ export function AdminSidebar() {
             );
           })}
         </nav>
+
+        {/* Mall selector — only shown when multiple malls exist */}
+        {showMallSelector && (
+          <div className="mt-auto mb-4">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="relative">
+                  <select
+                    value={activeMallId}
+                    onChange={(e) => setActiveMallId(e.target.value)}
+                    className="w-14 h-14 rounded-xl bg-bo-neutral-100 text-bo-neutral-600 text-[10px] font-semibold uppercase tracking-wider text-center appearance-none cursor-pointer hover:bg-bo-neutral-200 transition-colors focus:outline-none focus:ring-2 focus:ring-bo-primary-600/20"
+                  >
+                    {malls.map((m) => (
+                      <option key={m.mallId} value={m.mallId}>
+                        {m.mallId.slice(0, 4).toUpperCase()}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="w-3 h-3 text-bo-neutral-400 absolute bottom-1.5 left-1/2 -translate-x-1/2 pointer-events-none" />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="nav-tooltip rounded-lg px-3 py-2">
+                <div className="text-sm font-semibold text-white tracking-tight">
+                  {malls.find((m) => m.mallId === activeMallId)?.name ?? activeMallId}
+                </div>
+              </TooltipContent>
+            </Tooltip>
+          </div>
+        )}
       </aside>
     </TooltipProvider>
   );

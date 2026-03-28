@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  edge-processor:
+    build: .
+    container_name: stelthion-edge
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - CLOUD_API_URL=${CLOUD_API_URL}
+      - EDGE_API_KEY=${EDGE_API_KEY}
+      - EDGE_ID=${EDGE_ID:-edge-ideapark-01}
+      - MALL_ID=${MALL_ID:-ideapark}
+      - OLLAMA_URL=http://ollama:11434
+    volumes:
+      - ./config:/app/config:ro
+      - edge-data:/app/data        # SQLite buffer for offline resilience
+    restart: unless-stopped
+    depends_on:
+      - ollama
+    networks:
+      - edge-net
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: stelthion-ollama
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - ollama-models:/root/.ollama
+    ports:
+      - "11434:11434"
+    restart: unless-stopped
+    networks:
+      - edge-net
+
+volumes:
+  edge-data:
+  ollama-models:
+
+networks:
+  edge-net:
+    driver: bridge

@@ -33,10 +33,10 @@
     "currentVisitors": "Current visitors",
     "retailUnits": "Retail Units",
     "topCategory": "Top Category",
-    "synexisSignals": "Synexis™ Signals",
+    "synexisSignals": "Stelthion Signals",
     "liveInsights": "Live Insights",
     "mallStatus": "Mall Status",
-    "statusLive": "LIVE (Stelthion Synexis™ active)",
+    "statusLive": "LIVE (Stelthion active)",
     "statusAlpha": "ALPHA (Testing phase)",
     "statusBeta": "BETA (Limited rollout)",
     "statusPlanned": "PLANNED (Integration pending)",
@@ -236,26 +236,25 @@
     "spendingScale": "0–100 scale based on income",
     "totalCatchmentPopulation": "Total Catchment Population",
     "acrossZones": "Across {{count}} drive-time zones",
-    "sourceStatsCensus": "Source: Statistics Finland Census 2024",
     "primaryZone": "Primary Zone ({{minutes}}-min drive)",
     "ageDistribution": "Age Distribution",
     "yearsGroup": "{{group}} years",
-    "sourceStatsPopulation": "Source: Statistics Finland Population Register 2024",
     "incomeProfile": "Income Profile",
     "medianHousehold": "Median Household",
     "avgDisposable": "Avg Disposable",
     "highIncome": "High Income (>€60k)",
-    "sourceStatsIncome": "Source: Statistics Finland Income Distribution 2023",
     "employmentHeader": "Employment",
     "employmentRate": "Employment Rate",
     "students": "Students",
     "topSectors": "Top Sectors:",
-    "sourceStatsEmployment": "Source: Statistics Finland Employment Statistics Q3 2024",
     "allCatchmentZones": "All Catchment Zones",
     "minDrive": "{{minutes}}-min drive",
     "postalCodesHouseholds": "{{codes}} postal codes · {{households}} households",
     "residents": "residents",
-    "sourceCatchmentAnalysis": "Source: Statistics Finland + OpenStreetMap drive-time analysis",
+    "sourcePopulation": "Statistics Finland · Population Register (StatFin/vaerak)",
+    "sourceIncome": "Statistics Finland · Income Distribution Statistics (StatFin/tjkt)",
+    "sourceEmployment": "Statistics Finland · Employment Statistics (StatFin/tyolli)",
+    "sourceCatchment": "Drive-time catchment analysis · Statistics Finland",
     "detailedHouseholdStats": "Detailed Household Statistics",
     "householdStatsDesc": "View household size, ownership, and dwelling types by area",
     "householdsUnit": "households"
@@ -392,7 +391,7 @@
     "title": "Assistants",
     "description": "AI Assistants for property operations",
     "comingSoon": "AI Assistants Integration",
-    "integrationDescription": "AI Assistants use your property's isolated data to produce property-specific simulations and forecasts. With them, you can test the impact of your chosen actions or prepare for situations. Stelthion Synexis™ models bring broader insights and alternatives to simulations and forecasts.",
+    "integrationDescription": "AI Assistants use your property's isolated data to produce property-specific simulations and forecasts. With them, you can test the impact of your chosen actions or prepare for situations. Stelthion models bring broader insights and alternatives to simulations and forecasts.",
     "tryScenarios": "Try Scenarios Calculator Now"
   },
   "shoppermind": {
@@ -405,7 +404,7 @@
     "latestCampaign": "Latest Campaign",
     "visitorImpact": "Visitor Impact",
     "revenueImpact": "Revenue Impact",
-    "mlConfidence": "Stelthion Synexis™ Attribution Confidence",
+    "mlConfidence": "Stelthion Attribution Confidence",
     "channels": "Channels",
     "viewCampaignLog": "View Campaign Log",
     "runSimilarScenario": "Run Similar Scenario",
@@ -437,7 +436,7 @@
     "events": "Events",
     "weather": "Weather",
     "campaigns": "Campaigns",
-    "analysis": "Video Analysis"
+    "analysis": "Visitor Intelligence"
   },
   "detail": {
     "totalShops": "Total Retail Units",
@@ -686,6 +685,39 @@
     "managementCompany": "Management Company",
     "comingSoon": "Coming Soon"
   },
+  "flowQuery": {
+    "title": "Flow Query",
+    "selectZone": "Select zone",
+    "searchZone": "Search zones...",
+    "noResults": "No results",
+    "clearSelection": "Clear selection",
+    "stepOrigin": "Start zone",
+    "stepDirection": "Direction",
+    "stepDestination": "End zone",
+    "originPlaceholder": "Click zone on map or select…",
+    "destinationPlaceholder": "Click second zone or select…",
+    "destinationOptionalHint": "Optional — leave empty to see all destinations from start zone",
+    "outbound": "Departing",
+    "inbound": "Arriving",
+    "between": "Between",
+    "analyze": "Analyse flow",
+    "analyzeRoute": "Analyse route",
+    "analyzing": "Analysing…",
+    "stepTime": "Time period",
+    "date": "Date",
+    "timeRange": "Time range",
+    "reset": "Clear",
+    "newQuery": "New query",
+    "visitorsTotal": "visitors total",
+    "sourceBreakdown": "Sources",
+    "destinationBreakdown": "Destinations",
+    "flowActive": "Flow active",
+    "originLabel": "Origin zone",
+    "flowDirection": "Flow direction",
+    "arrowThickness": "Arrow thickness = visitor count",
+    "selectOriginHint": "Select an origin zone on the left to start a flow query",
+    "clickHint": "Click a zone on the floorplan to set origin"
+  },
   "videoAnalysis": {
     "title": "Visitor Intelligence",
     "unified": {
@@ -698,13 +730,15 @@
     },
     "modes": {
       "zoneCount": "Area Count",
-      "abTracking": "A → B Flow",
-      "journeyMap": "Journey Map"
+      "abTracking": "A → B Counts",
+      "journeyMap": "Journey Map",
+      "flowQuery": "Flow Analysis"
     },
     "modesDescription": {
-      "zoneCount": "Count visitors in camera view",
-      "abTracking": "Track visitors between two points",
-      "journeyMap": "Map visitor paths across zones"
+      "zoneCount": "Count visitor numbers per area using cameras. All processing is fully anonymous, no individuals are identified. Results are numeric counts in accordance with GDPR.",
+      "abTracking": "Count visitors between two points",
+      "journeyMap": "Identify trends in visitor routes between different areas. Tracking is anonymous and produces numeric data only. No biometric identification is used. (GDPR compliant).",
+      "flowQuery": "Order numerical visitor flow analyses between two stores or areas. The system counts the number of visitors between the starting point and destination during the selected day and hour. Data is anonymous. (GDPR compliant)."
     },
     "config": {
       "camera": "Camera",
@@ -764,5 +798,16 @@
       "visitorCounters": "Visitor Counter Integration",
       "counterDescription": "Compare and extrapolate with visitor counter data"
     }
+  },
+  "export": {
+    "generating": "Generating report…",
+    "downloaded": "Report downloaded",
+    "reportTitle": "Visitor Flow Analysis Report",
+    "generatedBy": "Generated by Stelthion Analytics Platform",
+    "zoneTable": "Zone Visitor Summary",
+    "flowTable": "Flow Analysis Results",
+    "coverSubtitle": "Floor: {{floor}} · Hour: {{hour}}:00",
+    "executiveSummary": "Executive Summary",
+    "keyHighlights": "Key Highlights"
   }
 }

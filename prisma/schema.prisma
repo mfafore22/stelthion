@@ -172,8 +172,10 @@ model Camera {
   fovDeg           Float?
   rangeM           Float?
   streamUrl        String?
+  dataSourceUrl    String?
   zoneDbId         String?
   homographyMatrix String?
+  deviceType       String?
   active           Boolean   @default(true)
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt

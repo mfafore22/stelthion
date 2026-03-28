@@ -395,8 +395,8 @@ export function CatchmentMap({ demographics, selectedZone, onZoneSelect, onPosta
     return (
       <div className="flex h-[500px] w-full items-center justify-center bg-bo-neutral-100 text-bo-neutral-600 rounded-2xl border border-bo-neutral-200">
         <div className="text-center">
-          <p className="font-medium mb-2">Map Unavailable</p>
-          <p className="text-sm">Add NEXT_PUBLIC_MAPBOX_TOKEN to display catchment map</p>
+          <p className="font-medium mb-2">{t('map.unavailable', 'Map Unavailable')}</p>
+          <p className="text-sm">{t('map.addToken', 'Add NEXT_PUBLIC_MAPBOX_TOKEN to display catchment map')}</p>
         </div>
       </div>
     );

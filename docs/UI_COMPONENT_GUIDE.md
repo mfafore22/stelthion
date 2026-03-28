@@ -1,7 +1,7 @@
 # Stelthion UI Component Guide
 
 > **For:** Developer refactoring the codebase and migrating frontend data to databases.
-> **Generated:** 2026-03-17
+> **Updated:** 2026-03-28
 > **Codebase:** `/src/` (Next.js 16 App Router)
 
 ---
@@ -9,15 +9,22 @@
 ## Table of Contents
 
 1. [Application Layout Overview](#1-application-layout-overview)
-2. [Admin Panel — Floorplan Editor & Video Analysis](#2-admin-panel)
-3. [Mall Dashboard — Property Detail (7 Tabs)](#3-mall-dashboard)
+2. [Admin Panel — Floorplan Editor, Video Analysis & Edge Devices](#2-admin-panel)
+3. [Mall Dashboard — Property Detail (8 Tabs)](#3-mall-dashboard)
 4. [Footfall Heatmap — Interactive Zone Visualization](#4-footfall-heatmap)
-5. [Video Analysis Components](#5-video-analysis-components)
-6. [Navigation Shell (MallLeftNav + MallTopBar)](#6-navigation-shell)
-7. [Shared UI Library](#7-shared-ui-library)
-8. [Hooks & Services](#8-hooks--services)
-9. [Internationalization (i18n)](#9-internationalization)
-10. [File Path Reference](#10-file-path-reference)
+5. [Video Analysis Components (5 Modes)](#5-video-analysis-components)
+6. [Flow Query & Sankey Visualization](#6-flow-query--sankey-visualization)
+7. [Store Behavior Analysis](#7-store-behavior-analysis)
+8. [AI Insights Panel](#8-ai-insights-panel)
+9. [Edge Device Management](#9-edge-device-management)
+10. [PDF/CSV Export](#10-pdfcsv-export)
+11. [Navigation Shell (MallLeftNav + MallTopBar)](#11-navigation-shell)
+12. [Shared UI Library](#12-shared-ui-library)
+13. [Hooks & Services](#13-hooks--services)
+14. [Internationalization (i18n)](#14-internationalization)
+15. [Edge Ingestion API](#15-edge-ingestion-api)
+16. [Multi-Tenant Config & Audit](#16-multi-tenant-config--audit)
+17. [File Path Reference](#17-file-path-reference)
 
 ---
 
@@ -66,30 +73,39 @@ src/app/mall/[mallId]/page.tsx
 
 ## 2. Admin Panel
 
-The admin panel is a new feature for managing mall floorplans and running video
-analysis jobs. It lives entirely under `/admin/*` and requires ADMIN role.
+The admin panel manages mall floorplans, video analysis jobs, and edge devices.
+It lives entirely under `/admin/*` and requires ADMIN role.
 
 ### 2.1 Admin Sidebar (`src/components/admin/AdminSidebar.tsx`)
 
-Vertical navigation with 4 items:
+Vertical navigation with 5 items + mall selector:
 
 | Item | Route | Icon |
 |------|-------|------|
 | Dashboard | `/admin/dashboard` | LayoutDashboard |
-| Floorplan | `/admin/floorplan/ideapark` | Map |
+| Floorplan | `/admin/floorplan/{mallId}` | Map |
 | Analysis Jobs | `/admin/jobs` | ClipboardList |
 | Results & Journeys | `/admin/results` | Route |
+| **Edge Devices** | `/admin/edge` | Cpu |
 
+- Mall selector dropdown when multiple malls are available
 - Width: `w-56` with right border
 - Active state: accent-600 background, white text, slight upward translation
-- Header shows "Video Analysis" title with video icon
 
 ### 2.2 Admin Header (`src/components/admin/AdminHeader.tsx`)
 
 Simple 80px header bar:
 - Left: Stelthion brandmark + "Admin Video Analysis" title
-- Right: Compact language selector (EN/FI)
+- Right: Compact language selector (EN/FI/SV)
 - Restores language preference from localStorage on mount
+
+### 2.2a Admin Brand Banner (`src/components/admin/AdminBrandBanner.tsx`)
+
+Dynamic brand identity banner:
+- Fetches active mall info from `/api/admin/malls`
+- Gradient background from `getMallIdentity()` (brandProfiles.json)
+- Text color auto-calculated from contrast
+- Displays mall logo + name + city
 
 ### 2.3 Admin Dashboard (`src/app/admin/dashboard/`)
 
@@ -126,6 +142,7 @@ selected, moved, and edited.
 - Zone (Pentagon) — draw zone polygons
 - Store (RectangleHorizontal) — place store bounding boxes
 - Camera (Video) — place camera pins
+- **Counter** (Footprints) — place footfall counter devices
 - Erase (Eraser) — remove elements
 
 **Properties Panel** (`src/components/admin/PropertiesPanel.tsx`):
@@ -134,8 +151,9 @@ Context-sensitive form that changes based on what's selected:
 - **Zone selected:** zoneId, name (EN), nameFi (FI), category dropdown, capacity,
   area (sqm), baseVisitors, label position (x,y), SVG polygon points (textarea)
 - **Store selected:** name, slug, parent zone, bounding box (x, y, w, h)
-- **Camera selected:** label, position (x, y), angle (degrees), FOV (degrees),
-  range (meters), stream URL, active checkbox
+- **Camera/Counter selected:** deviceType (camera/counter), label, position (x, y),
+  angle (degrees), FOV (degrees), range (meters), stream URL, dataSourceUrl
+  (counter data endpoint), active checkbox
 
 **Data types used by the editor:**
 ```typescript
@@ -162,15 +180,17 @@ interface StoreData {
   w: number; h: number;  // Width and height
 }
 
-// Camera — pin on the floor plan
+// Camera or Counter — pin on the floor plan
 interface CameraData {
   label: string;
-  x: number; y: number;  // Position
-  angleDeg: number;       // Viewing angle (0-360)
-  fovDeg: number;         // Field of view (degrees)
-  rangeM: number;         // Detection range (meters)
-  streamUrl: string;      // RTSP/HLS stream URL
-  active: boolean;        // Whether camera is active
+  x: number; y: number;    // Position
+  deviceType?: string;      // "camera" | "counter" (nullable)
+  angleDeg: number;         // Viewing angle (0-360)
+  fovDeg: number;           // Field of view (degrees)
+  rangeM: number;           // Detection range (meters)
+  streamUrl: string;        // RTSP/HLS stream URL
+  dataSourceUrl?: string;   // URL/API endpoint for counter data ingestion
+  active: boolean;          // Whether device is active
 }
 ```
 
@@ -206,6 +226,17 @@ Displays detailed results for a single analysis job:
 3. **Journey tracking** (if journeyCount > 0):
    - Summary: tagged count, re-identified count, recognition rate
    - Movement paths: zone → zone → zone sequences with timestamps
+4. **Store Behavior** (if mode === STORE_BEHAVIOR):
+   - Walk-by / stop / enter metrics per store
+   - Aggregated bar chart visualization
+
+### 2.7 Edge Devices Page (`src/app/admin/edge/page.tsx`)
+
+Admin dashboard for monitoring edge device fleet:
+- Fetches device list from `/api/admin/edge/devices` (SWR, 30s refresh)
+- Status display: ONLINE (green Wifi), OFFLINE (gray WifiOff), ERROR (red AlertTriangle)
+- Shows: edgeId, mall, version, GPU info, last heartbeat, status badge
+- Device management actions (enable/disable)
 
 ---
 
@@ -299,50 +330,119 @@ See `getZoneVisitors()` in `src/lib/data/ideaparkZones.ts`.
 
 ---
 
-## 5. Video Analysis Components
+## 5. Video Analysis Components (3 User-Facing Modes)
 
-These four components appear in the "Video Analysis" tab of PropertyDetail.
+The video analysis system is orchestrated by `VideoAnalysis.tsx`
+(`src/components/mall/video-analysis/VideoAnalysis.tsx`). It renders a mode
+selector bar with 3 user-facing modes and conditionally shows sub-components.
 
-### 5.1 AnalysisScheduler (`src/components/mall/AnalysisScheduler.tsx`)
+### Mode Bar (3 modes visible to users)
 
-Form to create new video analysis jobs:
-- Select camera (from `/api/floorplan/{mallId}/cameras`)
-- Pick footage date, start/end time (30-min intervals)
-- Choose journey count (1, 5, 10, 15, 20 tracked individuals)
-- Submit → `POST /api/analysis/jobs`
-- Shows last 5 recent jobs with status badges below the form
-- Auto-refreshes job list every 15 seconds via SWR
+| Mode | Icon | Description |
+|------|------|-------------|
+| `ZONE_COUNT` | Eye | Zone footfall counter — single camera |
+| `JOURNEY_MAP` | Route | Multi-zone journey visualization |
+| `FLOW_QUERY` | GitBranch | Visitor flow analysis between zones |
 
-### 5.2 AnalysisResults (`src/components/mall/AnalysisResults.tsx`)
+**Hidden/auto-detected modes** (exist in type system but not in mode bar):
+- `AB_TRACKING` — auto-detected when 2 cameras selected (merged into flow query UX)
+- `STORE_BEHAVIOR` — used in results viewer only
 
-Viewer for completed job results:
-- Dropdown to select from completed jobs
-- Hourly tabs auto-detected from result data
-- Table: Zone ID | Visitor Count | Density (per m²)
-- Total visitors footer row
+Mode is auto-inferred from selection (`inferMode()` in types.ts):
+- 1 camera selected → ZONE_COUNT
+- 2 cameras → AB_TRACKING (auto)
+- 2+ zones → JOURNEY_MAP
+- Explicit FLOW_QUERY mode + 1+ zone → FLOW_QUERY
 
-### 5.3 JourneyPlanner (`src/components/mall/JourneyPlanner.tsx`)
+### Layout by mode
 
-Advanced journey analysis form:
-- Select origin zone, camera, destination zone from dropdowns
-- Zones come from published floorplan data (ground + upper)
-- Pick date, time range, journey count
-- Submit creates a job with `originZoneId` and `destinationZoneId`
-- Results show:
-  - Headline: "X of Y tracked visitors reached [destination]"
-  - Intermediate zones visited (ranked by frequency)
-  - Individual paths: Zone → Zone → Zone with color coding
+**ZONE_COUNT / JOURNEY_MAP:** Full-width floorplan with SelectionSummary,
+VideoAnalysisConfig form, results area, and JobHistory below.
 
-### 5.4 JourneyResults (`src/components/mall/JourneyResults.tsx`)
+**FLOW_QUERY:** 3-column grid — FlowQuerySidebar (1/3) + FootfallAnalysis
+with FlowSankeyOverlay (2/3). Zone clicks set origin/destination.
 
-Simpler journey viewer (no origin/destination selection):
-- Dropdown of completed jobs with journey data
-- 3 summary cards: tagged count, re-identified count, recognition rate
-- Movement paths list: numbered sequences of zones with arrows
+### 5.1 Sub-components
+
+- **SelectionSummary** — Shows selected cameras/zones with deselect buttons
+- **VideoAnalysisConfig** — Date/time/journey-count form, submit button
+- **ZoneCountResult** — Hourly visitor counts table for ZONE_COUNT jobs
+- **TrackingResult** — Camera A→B tracking stats for AB_TRACKING results
+- **JourneyMapResult** — Zone sequence paths for JOURNEY_MAP results
+- **JobHistory** — List of past jobs with status badges, click to view results
+
+### 5.2 FlowQuerySidebar (`src/components/mall/FlowQuerySidebar.tsx`)
+
+Flow analysis form panel with automatic direction inference:
+- **Props:** `mallId`, `origin`, `destination`, `onOriginChange`, `onDestinationChange`, `zones?`
+- Single zone selected → outbound flow; two zones → between-zones flow
+- Date/time range selector (default: today, 10:00–11:00, 30-min intervals)
+- Submits to `POST /api/flow-query/{mallId}`
+- Bilingual (EN/FI)
+
+### 5.3 FlowQueryResults (`src/components/mall/FlowQueryResults.tsx`)
+
+Displays narrative analysis + horizontal bar breakdown:
+- **Props:** `data: FlowQueryResponse`, `onReset`
+- Bilingual narrative; direction labels (outbound/inbound/between)
+- Horizontal bars with visitor counts (9-color palette)
+
+### 5.4 FlowSankeyOverlay (`src/components/mall/FlowSankeyOverlay.tsx`)
+
+SVG overlay drawing animated bezier flow arrows on the floorplan:
+- **Props:** `data: FlowQueryResponse`, `floor: 'ground' | 'upper'`
+- Quadratic bezier curves, animated pulse at origin
+- Stroke width proportional to visitor count
+
+### 5.5 ZoneStorePicker (`src/components/mall/ZoneStorePicker.tsx`)
+
+Searchable dropdown for zone/store selection:
+- **Props:** `value`, `onChange`, `exclude?`, `placeholder?`, `label?`, `zones?`
+- Grouped by floor; store selection resolves to parent zone
+- Falls back to static zone data if no external zones provided
+
+### 5.6 StoreBehaviorResult (`src/components/mall/video-analysis/StoreBehaviorResult.tsx`)
+
+Visualizes store behavioral metrics (results viewer only):
+- **Props:** `behaviors: StoreBehavior[]`, `dateStr`, `timeRange`
+- Aggregates by store: walkBy, stop, enter counts + rates
+- Horizontal bar chart (Recharts), animated via Framer Motion
+
+### 5.7 InsightPanel (`src/components/mall/video-analysis/InsightPanel.tsx`)
+
+LLM-generated insights display:
+- **Props:** `jobId: string`
+- Fetches/generates via `/api/analysis/insights/{jobId}`
+- Alert-level styling: critical (red), warning (amber), info (blue)
+- Source indicator: CPU-edge or Server
 
 ---
 
-## 6. Navigation Shell
+## 6. Edge Device Management
+
+### Edge Admin Page (`src/app/admin/edge/page.tsx`)
+
+Admin dashboard for monitoring edge device fleet:
+- Fetches from `/api/admin/edge/devices` (SWR, 30s refresh)
+- Status: ONLINE (green Wifi), OFFLINE (gray WifiOff), ERROR (red AlertTriangle)
+- Columns: edgeId, mall, version, GPU info, last heartbeat, status badge
+
+---
+
+## 7. PDF/CSV Export
+
+### reportGenerator (`src/lib/export/reportGenerator.ts`)
+
+Client-side report generation:
+- **PDF:** Branded Stelthion cover, floorplan screenshot (html2canvas), zone visitor
+  table, flow analysis narrative, LLM insights
+- **CSV:** Raw tabular data download
+- **Dependencies:** jsPDF, jspdf-autotable, html2canvas
+- Integrated into MallTopBar export dropdown
+
+---
+
+## 8. Navigation Shell
 
 ### MallLeftNav (`src/components/mall/shell/MallLeftNav.tsx`)
 
@@ -378,7 +478,7 @@ Fixed 80px horizontal header (offset 80px from left):
 
 ---
 
-## 7. Shared UI Library
+## 9. Shared UI Library
 
 All foundational UI primitives live in `src/components/ui/`:
 
@@ -395,7 +495,7 @@ All foundational UI primitives live in `src/components/ui/`:
 - `sparkline.tsx` — Inline trend chart
 - `variable-control.tsx` — Slider with label
 - `VacancyGradientBar.tsx` — Visual vacancy indicator
-- `language-selector.tsx` — EN/FI toggle (compact variant used in admin)
+- `language-selector.tsx` — EN/FI/SV toggle (compact variant used in admin)
 
 ### Mall-specific UI (`src/components/mall/ui/`):
 - `MallKPICard.tsx` — Styled KPI card with gradient, accent color, trend
@@ -413,17 +513,18 @@ All foundational UI primitives live in `src/components/ui/`:
 
 ---
 
-## 8. Hooks & Services
+## 10. Hooks & Services
 
 ### Custom hooks (`src/hooks/`):
 - `useAuth.tsx` — Authentication state management
 - `usePublishedFloorplan.ts` — Fetches published floorplan from DB (zones + stores for both floors), SWR with 5-min refresh, returns null if no DB data
+- `useWeather.ts` — Lightweight wrapper for weather + forecast data (10-min refresh)
 
 ### Mall hooks (`src/hooks/mall/`):
-- `useMallData.ts` — `useMalls()` for list, `useMallDetail(mallId)` for single mall
+- `useMallData.ts` — `useMallDetail(mallId)` for single mall detail
 - `useMallIdentity.ts` — Brand colors, gradient, typography from brandProfiles.json
 - `useEvents.ts` — Fetch events for a mall
-- `useWeather.ts` — Fetch weather data
+- `useWeather.ts` — Real-time weather with seasonal/time-of-day variations and foot traffic impact
 
 ### Services (`src/lib/services/`):
 - `floorplanBackup.ts` — Creates JSON snapshots of floorplan state before saves, auto-prunes to last 20 snapshots
@@ -444,19 +545,23 @@ complete data extraction with every value documented.**
 
 ---
 
-## 9. Internationalization
+## 11. Internationalization
 
 ### Setup: `src/lib/i18n/index.ts`
-- Languages: English (`en`) and Finnish (`fi`)
+- Languages: English (`en`), Finnish (`fi`), Swedish (`sv`)
+- Default language: Finnish (`fi`)
+- Fallback language: English (`en`)
 - Namespaces: `mall` and `admin`
-- Detection: `localStorage` → `navigator` → fallback `en`
-- Locale files: `src/locales/{lang}/{namespace}.json`
+- Detection: `localStorage` only (key: `stelthion-language`), no browser auto-detect
+- Config: `src/lib/i18n/config.ts` (16 supported languages, currency/locale maps)
 
 ### Locale files:
-- `src/locales/en/mall.json` — Mall dashboard strings (~200 keys)
+- `src/locales/en/mall.json` — English mall strings
 - `src/locales/fi/mall.json` — Finnish mall strings
-- `src/locales/en/admin.json` — Admin panel strings (~100 keys)
+- `src/locales/sv/mall.json` — Swedish mall strings
+- `src/locales/en/admin.json` — English admin strings
 - `src/locales/fi/admin.json` — Finnish admin strings
+- `src/locales/sv/admin.json` — Swedish admin strings
 
 ### Usage pattern:
 ```tsx
@@ -469,7 +574,48 @@ const { t } = useTranslation('admin');
 
 ---
 
-## 10. File Path Reference
+## 12. Edge Ingestion API
+
+Edge devices (GPU boxes in malls) push data to these endpoints:
+
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/api/edge/register` | POST | Bootstrap device with edgeId, mallId, apiKey |
+| `/api/edge/heartbeat` | POST | Keep-alive + status update |
+| `/api/edge/footfall` | POST | Visitor count readings with dwell time |
+| `/api/edge/behavior` | POST | Store behavior observations (walkBy, stop, enter) |
+| `/api/edge/results` | POST | Analysis results from edge processing |
+| `/api/edge/journeys` | POST | Journey session data |
+| `/api/edge/insights` | POST | LLM-generated insights with alert levels |
+| `/api/edge/alerts` | POST | Real-time alerts |
+| `/api/edge/jobs` | GET | Poll for pending jobs to process |
+
+All edge endpoints authenticate via API key hash stored in EdgeDevice model.
+
+---
+
+## 13. Multi-Tenant Config & Audit
+
+### Tenant Registry (`src/config/tenant-registry.ts`)
+- Dynamic multi-tenant configuration via `TENANTS_JSON` env var
+- Supports isolated tenants without code changes
+
+### Mall Auth (`src/config/mall-auth.ts`)
+- Secure mall property authentication with bcrypt hashing
+- DEMO_MODE fallback password support (must be removed before production)
+
+### Audit Logger (`src/lib/audit/logger.server.ts`)
+- Server-side audit logging for security events
+- Event types: AUTH, CROSS_TENANT_ACCESS, DATA_EXPORT, CONFIG_CHANGE, SESSION
+- Optional file persistence
+
+### Admin Auth Helper (`src/lib/admin-auth.ts`)
+- `requireAdmin()` — validates ADMIN role on protected API routes
+- Returns `{ user }` or `{ error: NextResponse }` pattern
+
+---
+
+## 14. File Path Reference
 
 ### Admin Panel
 ```
@@ -480,31 +626,38 @@ src/app/admin/dashboard/client.tsx                — Client: render stat cards
 src/app/admin/jobs/page.tsx                       — Server: fetch jobs
 src/app/admin/jobs/client.tsx                     — Client: render job table
 src/app/admin/floorplan/[mallId]/page.tsx         — Floorplan editor page
-src/app/admin/results/[jobId]/page.tsx            — Job results viewer
+src/app/admin/results/[jobId]/page.tsx            — Job results viewer (+ STORE_BEHAVIOR)
+src/app/admin/edge/page.tsx                       — Edge device management
 
-src/components/admin/FloorplanEditor.tsx           — Interactive SVG editor
-src/components/admin/AdminSidebar.tsx               — Left navigation
-src/components/admin/AdminHeader.tsx                — Top header
-src/components/admin/ToolPalette.tsx                — Drawing tool selector
-src/components/admin/PropertiesPanel.tsx            — Property editor panel
+src/components/admin/FloorplanEditor.tsx           — Interactive SVG editor (+ counter support)
+src/components/admin/AdminSidebar.tsx               — Left navigation (+ Edge Devices)
+src/components/admin/AdminHeader.tsx                — Top header (EN/FI/SV)
+src/components/admin/AdminBrandBanner.tsx           — Dynamic brand identity banner
+src/components/admin/ToolPalette.tsx                — Drawing tool selector (+ counter)
+src/components/admin/PropertiesPanel.tsx            — Property editor panel (+ deviceType, dataSourceUrl)
 ```
 
 ### Admin API Routes
 ```
 src/app/api/admin/floorplan/[mallId]/zones/route.ts     — CRUD zones
 src/app/api/admin/floorplan/[mallId]/stores/route.ts    — CRUD stores
-src/app/api/admin/floorplan/[mallId]/cameras/route.ts   — CRUD cameras
+src/app/api/admin/floorplan/[mallId]/cameras/route.ts   — GET + PATCH cameras (deviceType, dataSourceUrl)
 src/app/api/admin/floorplan/[mallId]/save/route.ts      — Atomic save (all)
 src/app/api/admin/floorplan/[mallId]/publish/route.ts   — Publish to live
 src/app/api/admin/floorplan/[mallId]/snapshots/route.ts — Backup snapshots
 src/app/api/admin/jobs/route.ts                         — List/update jobs
+src/app/api/admin/malls/route.ts                        — List all malls (admin selector)
+src/app/api/admin/edge/devices/route.ts                 — Edge device management
 ```
 
 ### Analysis API Routes
 ```
-src/app/api/analysis/jobs/route.ts                — Create/list analysis jobs
-src/app/api/analysis/results/[jobId]/route.ts     — Get job results
+src/app/api/analysis/jobs/route.ts                — Create/list analysis jobs (auth + STORE_BEHAVIOR)
+src/app/api/analysis/results/[jobId]/route.ts     — Get job results (+ behaviors)
 src/app/api/analysis/journeys/[jobId]/route.ts    — Get/create journey data
+src/app/api/analysis/insights/[jobId]/route.ts    — Get/generate AI insights
+src/app/api/flow-query/[mallId]/route.ts          — Flow analysis between zones
+src/app/api/report/narrative/route.ts             — LLM narrative generation (Ollama + fallback)
 ```
 
 ### Public Floorplan API
@@ -515,20 +668,29 @@ src/app/api/floorplan/[mallId]/cameras/route.ts   — Get published cameras
 
 ### Mall Dashboard
 ```
-src/app/mall/[mallId]/page.tsx                    — Mall detail page
+src/app/mall/[mallId]/page.tsx                    — Mall detail page (+ export)
 src/components/mall/PropertyDetail.tsx             — 8-tab main component
-src/components/mall/FootfallAnalysis.tsx            — Interactive heatmap
+src/components/mall/FootfallAnalysis.tsx            — Interactive heatmap (+ overlay support)
+src/components/mall/video-analysis/VideoAnalysis.tsx — Master orchestrator (3 UI modes)
+src/components/mall/video-analysis/constants.ts     — Mode metadata + time slots
+src/components/mall/video-analysis/types.ts         — Types + inferMode()
+src/components/mall/video-analysis/StoreBehaviorResult.tsx — Store metrics chart
+src/components/mall/video-analysis/InsightPanel.tsx — AI insights display
+src/components/mall/FlowQuerySidebar.tsx            — Flow analysis form
+src/components/mall/FlowQueryResults.tsx            — Flow narrative + bars
+src/components/mall/FlowSankeyOverlay.tsx           — SVG flow arrows on floorplan
+src/components/mall/ZoneStorePicker.tsx             — Zone/store dropdown
 src/components/mall/AnalysisScheduler.tsx           — Schedule analysis jobs
 src/components/mall/AnalysisResults.tsx             — View zone visitor counts
 src/components/mall/JourneyPlanner.tsx              — Journey origin→destination
 src/components/mall/JourneyResults.tsx              — Journey path viewer
 src/components/mall/shell/MallLeftNav.tsx           — Left icon navigation
-src/components/mall/shell/MallTopBar.tsx            — Top bar with controls
+src/components/mall/shell/MallTopBar.tsx            — Top bar (+ export dropdown)
 ```
 
 ### Data & Services
 ```
-src/lib/data/footfall.ts                          — Visitor estimation model
+src/lib/data/footfall.ts                          — Visitor estimation model (hour-based)
 src/lib/data/ideaparkZones.ts                     — Zone definitions + SVG
 src/lib/data/ideaparkStorePositions.ts            — Store bounding boxes
 src/lib/data/ideaparkStores.ts                    — CMS zone mapping
@@ -537,7 +699,17 @@ src/lib/data/ideaparkEvents.ts                    — Event schedule
 src/lib/data/household.ts                         — Household statistics
 src/lib/services/floorplanBackup.ts               — Snapshot service
 src/lib/services/postalCodeBoundaries.ts          — Postal code polygons
+src/lib/export/reportGenerator.ts                 — PDF/CSV export (jsPDF + html2canvas)
+src/lib/weather/utils.ts                          — Weather utility functions
+src/lib/weather/fmi.ts                            — Finnish Meteorological Institute integration
+src/lib/admin-auth.ts                             — requireAdmin() guard
+src/lib/audit/logger.server.ts                    — Audit logging
+src/config/tenant-registry.ts                     — Multi-tenant config
+src/config/mall-auth.ts                           — Mall property auth
 src/hooks/usePublishedFloorplan.ts                — Floorplan data hook
+src/hooks/useWeather.ts                           — Weather + forecast hook
+src/hooks/mall/useMallData.ts                     — useMallDetail(mallId) hook
+src/hooks/mall/useWeather.ts                      — Weather with foot traffic impact
 ```
 
 ### Database
@@ -555,7 +727,23 @@ prisma/migrations/20260316112227_add_journey_planner_fields/  — Origin/destina
 ```
 src/locales/en/mall.json                          — English mall strings
 src/locales/fi/mall.json                          — Finnish mall strings
+src/locales/sv/mall.json                          — Swedish mall strings
 src/locales/en/admin.json                         — English admin strings
 src/locales/fi/admin.json                         — Finnish admin strings
-src/lib/i18n/index.ts                             — i18n setup
+src/locales/sv/admin.json                         — Swedish admin strings
+src/lib/i18n/index.ts                             — i18n setup (default: fi)
+src/lib/i18n/config.ts                            — Language config (16 languages, currencies)
+```
+
+### Edge Ingestion API
+```
+src/app/api/edge/register/route.ts                — Device bootstrap
+src/app/api/edge/heartbeat/route.ts               — Keep-alive + status
+src/app/api/edge/footfall/route.ts                — Visitor count readings
+src/app/api/edge/behavior/route.ts                — Store behavior observations
+src/app/api/edge/results/route.ts                 — Analysis results from edge
+src/app/api/edge/journeys/route.ts                — Journey session data
+src/app/api/edge/insights/route.ts                — LLM-generated insights
+src/app/api/edge/alerts/route.ts                  — Real-time alerts
+src/app/api/edge/jobs/route.ts                    — Poll pending jobs
 ```

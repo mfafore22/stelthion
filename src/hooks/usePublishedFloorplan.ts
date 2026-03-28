@@ -3,6 +3,7 @@ import type { IdeaparkZone } from '@/lib/data/ideaparkZones';
 
 export interface PublishedCamera {
   id: string;
+  deviceType?: 'camera' | 'counter';
   label: string;
   x: number;
   y: number;
@@ -42,8 +43,11 @@ export function usePublishedFloorplan(mallId: string): PublishedFloorplan {
   );
 
   return {
-    groundZones: ground?.zones?.length ? ground.zones : null,
-    upperZones: upper?.zones?.length ? upper.zones : null,
+    // Return the array as-is once loaded (even if empty) so the consumer
+    // can distinguish "API returned 0 zones" from "still loading".
+    // null = not yet loaded, [] = loaded but empty.
+    groundZones: ground ? (ground.zones ?? []) : null,
+    upperZones: upper ? (upper.zones ?? []) : null,
     groundCameras: ground?.cameras ?? [],
     upperCameras: upper?.cameras ?? [],
     loading: loadingGround || loadingUpper,

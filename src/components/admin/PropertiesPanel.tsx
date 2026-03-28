@@ -16,6 +16,9 @@ interface PropertiesPanelProps {
   onUpdateCamera: (i: number, patch: Partial<CameraData>) => void;
 }
 
+// Camera role options
+const CAMERA_ROLES = ['entrance', 'zone', 'panoramic'];
+
 // Spatial zone categories
 const ZONE_CATEGORIES = [
   'Store', 'Hallway', 'Toilet', 'Stairs', 'Entrance',
@@ -106,18 +109,45 @@ export function PropertiesPanel({
   if (selected.type === 'camera') {
     const cam = cameras[selected.index];
     if (!cam) return null;
+    const isCounter = (cam.deviceType ?? 'camera') === 'counter';
     return (
       <div className={`${PANEL_CLS} space-y-3 overflow-y-auto`}>
-        <h3 className={HEADING_CLS}>{t('properties.cameraProperties')}</h3>
+        <div className="flex items-center justify-between">
+          <h3 className={HEADING_CLS}>
+            {isCounter ? t('properties.counterProperties') : t('properties.cameraProperties')}
+          </h3>
+          <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded uppercase tracking-wider ${
+            isCounter ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+          }`}>
+            {isCounter ? 'counter' : 'camera'}
+          </span>
+        </div>
         <Field label={t('properties.label')} value={cam.label} onChange={(v) => onUpdateCamera(selected.index, { label: v })} />
+        {!isCounter && (
+          <>
+            <Field label={t('properties.model', 'Model')} value={cam.model ?? ''} onChange={(v) => onUpdateCamera(selected.index, { model: v || undefined })} />
+            <div className="grid grid-cols-2 gap-2">
+              <Field label={t('properties.resolution', 'Resolution')} value={cam.resolution ?? ''} onChange={(v) => onUpdateCamera(selected.index, { resolution: v || undefined })} />
+              <SelectField label={t('properties.cameraRole', 'Role')} value={cam.cameraRole ?? ''} options={CAMERA_ROLES} onChange={(v) => onUpdateCamera(selected.index, { cameraRole: v || undefined })} allowEmpty />
+            </div>
+            <Field label={t('properties.lensInfo', 'Lens')} value={cam.lensInfo ?? ''} onChange={(v) => onUpdateCamera(selected.index, { lensInfo: v || undefined })} />
+          </>
+        )}
         <div className="grid grid-cols-2 gap-2">
           <NumberField label={t('properties.x')} value={cam.x} onChange={(v) => onUpdateCamera(selected.index, { x: v })} />
           <NumberField label={t('properties.y')} value={cam.y} onChange={(v) => onUpdateCamera(selected.index, { y: v })} />
         </div>
-        <NumberField label={t('properties.fovDeg')} value={cam.fovDeg ?? 0} onChange={(v) => onUpdateCamera(selected.index, { fovDeg: v })} />
-        <NumberField label={t('properties.rangeM')} value={cam.rangeM ?? 0} onChange={(v) => onUpdateCamera(selected.index, { rangeM: v })} />
-        <NumberField label={t('properties.angleDeg')} value={cam.angleDeg ?? 0} onChange={(v) => onUpdateCamera(selected.index, { angleDeg: v })} />
-        <Field label={t('properties.streamUrl')} value={cam.streamUrl ?? ''} onChange={(v) => onUpdateCamera(selected.index, { streamUrl: v || undefined })} />
+        {!isCounter && (
+          <>
+            <NumberField label={t('properties.fovDeg')} value={cam.fovDeg ?? 0} onChange={(v) => onUpdateCamera(selected.index, { fovDeg: v })} />
+            <NumberField label={t('properties.rangeM')} value={cam.rangeM ?? 0} onChange={(v) => onUpdateCamera(selected.index, { rangeM: v })} />
+            <NumberField label={t('properties.angleDeg')} value={cam.angleDeg ?? 0} onChange={(v) => onUpdateCamera(selected.index, { angleDeg: v })} />
+            <Field label={t('properties.streamUrl')} value={cam.streamUrl ?? ''} onChange={(v) => onUpdateCamera(selected.index, { streamUrl: v || undefined })} />
+          </>
+        )}
+        {isCounter && (
+          <Field label={t('properties.dataSourceUrl')} value={cam.dataSourceUrl ?? ''} onChange={(v) => onUpdateCamera(selected.index, { dataSourceUrl: v || undefined })} />
+        )}
         <label className="flex items-center gap-2 text-xs text-bo-neutral-700">
           <input
             type="checkbox"

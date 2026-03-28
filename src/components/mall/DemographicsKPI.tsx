@@ -106,7 +106,7 @@ export function DemographicsKPI({ demographics }: DemographicsKPIProps) {
           </div>
           <div className="flex items-center gap-1 text-xs text-bo-neutral-500 mt-2">
             <Database className="h-3 w-3" />
-            <span>{t('demographics.sourceStatsCensus')}</span>
+            <span>{demographics.sources?.population ?? t('demographics.sourcePopulation')}</span>
           </div>
         </div>
 
@@ -143,7 +143,7 @@ export function DemographicsKPI({ demographics }: DemographicsKPIProps) {
             </div>
             <div className="flex items-center gap-1 text-xs text-bo-neutral-500 mt-3 pt-3 border-t border-bo-neutral-200/30">
               <Database className="h-3 w-3" />
-              <span>{t('demographics.sourceStatsPopulation')}</span>
+              <span>{demographics.sources?.population ?? t('demographics.sourcePopulation')}</span>
             </div>
           </div>
 
@@ -180,7 +180,7 @@ export function DemographicsKPI({ demographics }: DemographicsKPIProps) {
             </div>
             <div className="flex items-center gap-1 text-xs text-bo-neutral-500 mt-3 pt-3 border-t border-bo-success/15">
               <Database className="h-3 w-3" />
-              <span>{t('demographics.sourceStatsIncome')}</span>
+              <span>{demographics.sources?.income ?? t('demographics.sourceIncome')}</span>
             </div>
           </div>
 
@@ -209,7 +209,7 @@ export function DemographicsKPI({ demographics }: DemographicsKPIProps) {
             </div>
             <div className="flex items-center gap-1 text-xs text-bo-neutral-500 mt-3 pt-3 border-t border-bo-info/15">
               <Database className="h-3 w-3" />
-              <span>{t('demographics.sourceStatsEmployment')}</span>
+              <span>{demographics.sources?.employment ?? t('demographics.sourceEmployment')}</span>
             </div>
           </div>
         </div>
@@ -244,7 +244,7 @@ export function DemographicsKPI({ demographics }: DemographicsKPIProps) {
           </div>
           <div className="flex items-center gap-1 text-xs text-bo-neutral-500 mt-3">
             <Database className="h-3 w-3" />
-            <span>{t('demographics.sourceCatchmentAnalysis')}</span>
+            <span>{demographics.sources?.catchment ?? t('demographics.sourceCatchment')}</span>
           </div>
         </div>
 

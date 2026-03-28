@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
-import { auth } from '@/auth';
+import { requireAdmin } from '@/lib/admin-auth';
 
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ mallId: string }> },
 ) {
-  const session = await auth();
-  if (!session?.user || session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  const guard = await requireAdmin();
+  if ('error' in guard) return guard.error;
 
   const { mallId } = await params;
   const floor = new URL(_req.url).searchParams.get('floor') ?? 'ground';
@@ -22,6 +20,7 @@ export async function GET(
   return NextResponse.json(
     cameras.map((c) => ({
       id: c.id,
+      deviceType: c.deviceType,
       label: c.label,
       x: c.x,
       y: c.y,
@@ -29,6 +28,7 @@ export async function GET(
       fovDeg: c.fovDeg,
       rangeM: c.rangeM,
       streamUrl: c.streamUrl,
+      dataSourceUrl: c.dataSourceUrl,
       zoneDbId: c.zoneDbId,
       active: c.active,
     })),

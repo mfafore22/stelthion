@@ -1,0 +1,27 @@
+# Stelthion Edge Service Configuration
+# Override with environment variables: CLOUD_API_URL, EDGE_API_KEY, etc.
+
+edge:
+  id: "edge-ideapark-01"
+  mall_id: "ideapark"
+
+cloud:
+  api_url: "https://app.stelthion.com"    # override via CLOUD_API_URL env var
+  api_key: ""                              # override via EDGE_API_KEY env var
+
+heartbeat:
+  interval_sec: 60
+
+job_poll:
+  interval_sec: 30
+
+ollama:
+  url: "http://localhost:11434"
+  model: "llama3.1:8b"
+
+buffer:
+  db_path: "/app/data/buffer.sqlite"
+
+gdpr:
+  # Appearance vectors are purged after job ends + this grace period
+  vector_ttl_minutes: 15

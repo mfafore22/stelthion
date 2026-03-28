@@ -7,7 +7,8 @@
     "dashboard": "Hallintapaneeli",
     "floorPlan": "Pohjapiirros",
     "analysisJobs": "Analyysityöt",
-    "resultsJourneys": "Tulokset ja reitit"
+    "resultsJourneys": "Tulokset ja reitit",
+    "edgeDevices": "Ääreislaitteet"
   },
   "dashboard": {
     "title": "Hallintapaneeli",
@@ -52,6 +53,7 @@
     "deleteType_zone": "alueen",
     "deleteType_rect": "suorakaidealueen",
     "deleteType_camera": "kameran",
+    "deleteType_counter": "kävijälaskurin",
     "cancel": "Peruuta",
     "confirmDelete": "Poista"
   },
@@ -64,6 +66,8 @@
     "rectHint": "Piirrä suorakaide vetämällä",
     "camera": "Kamera",
     "cameraHint": "Aseta kamera klikkaamalla",
+    "counter": "Kävijälaskuri",
+    "counterHint": "Aseta kävijälaskuri klikkaamalla",
     "erase": "Poista",
     "eraseHint": "Poista elementti klikkaamalla"
   },
@@ -82,11 +86,19 @@
     "svgPoints": "SVG-pisteet",
     "subcategory": "Alakategoria",
     "drawShape": "Muoto",
+    "counterProperties": "Kävijälaskurin ominaisuudet",
+    "dataSourceUrl": "Tietolähteen URL",
     "cameraProperties": "Kameran ominaisuudet",
     "label": "Nimi",
     "fovDeg": "Näkökenttä (astetta)",
     "rangeM": "Kantama (m)",
     "angleDeg": "Kulma (astetta)",
+    "model": "Malli",
+    "resolution": "Resoluutio",
+    "cameraRole": "Rooli",
+    "lensInfo": "Objektiivi",
+    "x": "X",
+    "y": "Y",
     "streamUrl": "Suoratoistourl",
     "active": "Aktiivinen"
   },
@@ -151,5 +163,18 @@
     "loadingJourneys": "Ladataan reittitietoja...",
     "noJourneyData": "Ei reittitietoja saatavilla tälle työlle.",
     "noMovementPaths": "Ei tallennettuja kulkureittejä tälle istunnolle."
+  },
+  "edge": {
+    "title": "Ääreislaitteet",
+    "loading": "Ladataan laitteita...",
+    "noDevices": "Ei rekisteröityjä ääreislaitteita. Ääreislaitteet rekisteröityvät automaattisesti ensimmäisellä käynnistyksellä.",
+    "mall": "Kauppakeskus",
+    "lastSeen": "Viimeksi nähty",
+    "status_online": "Online",
+    "status_offline": "Offline",
+    "status_error": "Virhe",
+    "forceOffline": "Pakota offline-tilaan",
+    "forceOnline": "Pakota online-tilaan",
+    "revoke": "Poista laite"
   }
 }
