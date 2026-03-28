@@ -13,10 +13,10 @@ import { FootfallChart } from './FootfallChart';
 
 import { WeatherNextPanel } from './WeatherNextPanel';
 import { EventsPanel } from './EventsPanel';
-import { CampaignCard } from './CampaignCard';
+// import { CampaignCard } from './CampaignCard'; // Campaigns feature deactivated
 import { TenantPerformanceTable } from './TenantPerformanceTable';
 import { AlertsStream } from './AlertsStream';
-import { ScenarioShortcuts } from './ScenarioShortcuts';
+// import { ScenarioShortcuts } from './ScenarioShortcuts'; // Scenarios feature deactivated
 import { TenantMixChart } from './TenantMixChart';
 import { TopCategoriesTable } from './TopCategoriesTable';
 import { TransportAccessibilityKPI } from './TransportAccessibilityKPI';
@@ -30,6 +30,7 @@ import { useMallIdentity } from '@/hooks/mall/useMallIdentity';
 import type { HSLAccessibility, NysseAccessibility, VRConnections, CatchmentDemographics, ParkingData, LiveDepartures } from '@/lib/types/transport';
 import type { EventsData } from '@/lib/types/events';
 import { getCurrentFootfall } from '@/lib/data/footfall';
+import { useCounterFootfall } from '@/hooks/mall/useCounterFootfall';
 import { useTranslation } from 'react-i18next';
 import { VideoAnalysis } from './video-analysis/VideoAnalysis';
 
@@ -44,11 +45,20 @@ interface PropertyDetailProps {
   showPredicted?: boolean;
 }
 
-export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetailProps) {
+export function PropertyDetail({ mallId: mallIdProp, showPredicted = false }: PropertyDetailProps) {
   const { t } = useTranslation('mall');
   const [activeTab, setActiveTab] = useState('overview');
-  const { data: mallData, loading, error } = useMallDetail(mallId);
+  const { data: mallData, loading, error } = useMallDetail(mallIdProp);
+  // In C2, mallIdProp is already the correct mallId slug from the session.
+  const mallId = mallIdProp;
   const identity = useMallIdentity(mallId);
+
+  // Real counter data (when available)
+  const {
+    hasRealData,
+    currentHourVisitors,
+    currentHourPrevYear,
+  } = useCounterFootfall(mallId);
 
   // Live footfall snapshot — refreshes every 5 minutes so KPIs track the clock
   const buildSnapshot = React.useCallback(() => {
@@ -71,7 +81,22 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
     return () => clearInterval(id);
   }, [buildSnapshot]);
 
-  const performance = basePerformance;
+  // When real counter data is available, override simulated values
+  const performance = React.useMemo(() => {
+    if (!hasRealData) return basePerformance;
+    const yoyDelta = currentHourPrevYear
+      ? ((currentHourVisitors - currentHourPrevYear) / currentHourPrevYear) * 100
+      : 0;
+    return {
+      ...basePerformance,
+      currentVisitors: currentHourVisitors,
+      deltaVsPlan: Math.round(yoyDelta * 10) / 10,
+      dwellTime: null as number | null,
+      dwellDelta: 0,
+      conversionRate: null as number | null,
+      conversionDelta: 0,
+    };
+  }, [hasRealData, currentHourVisitors, currentHourPrevYear, basePerformance]);
 
   // Transport, demographics, and parking data
   const [transportData, setTransportData] = useState<{ hsl?: HSLAccessibility; nysse?: NysseAccessibility; vr?: VRConnections } | null>(null);
@@ -230,7 +255,19 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
     );
   }
 
-  const { summary } = mallData;
+  // C2 field normalization: map API response shape to C1-compatible aliases
+  const categories = (mallData.summary?.top_categories || []).map(c => ({
+    name: c.category,
+    shopCount: c.count,
+    percentage: c.percentage,
+  }));
+  const mallName = mallData.summary?.mall_name || '';
+  const mallCity = mallData.summary?.city || '';
+  const totalShops = mallData.summary?.total_shops || 0;
+  const dataUpdated = mallData.summary?.collection_date || '';
+
+  const topCategory = categories[0];
+  const findCategory = (name: string) => categories.find(c => c.name === name);
 
   return (
     <div className="space-y-8">
@@ -261,7 +298,7 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
               className="text-2xl font-semibold tracking-tight"
               style={{ color: identity.primaryTextColor }}
             >
-              {summary.mall_name}
+              {mallName}
             </h1>
             <span
               className="text-sm px-4 py-1.5 rounded-md font-medium tracking-wide"
@@ -270,7 +307,7 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
                 color: identity.primaryTextColor,
               }}
             >
-              {summary.city}
+              {mallCity}
             </span>
           </div>
           {/* Customer logo — right end of the identity banner */}
@@ -289,26 +326,26 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
       <div className="grid grid-cols-4 gap-6">
         <MallKPICard
           label={t('detail.totalShops')}
-          value={summary.total_shops.toString()}
-          delta={`${t('detail.infoUpdated')} ${new Date(summary.collection_date).toLocaleDateString()}`}
+          value={totalShops.toString()}
+          delta={`${t('detail.infoUpdated')} ${dataUpdated ? new Date(dataUpdated).toLocaleDateString() : ''}`}
           accentColor={identity.colors.primary}
         />
         <MallKPICard
           label={t('detail.topCategory')}
-          value={summary.top_categories[0]?.category ? t(`tenants.categoryNames.${summary.top_categories[0].category}`, { defaultValue: summary.top_categories[0].category }) : 'N/A'}
-          delta={`${summary.top_categories[0]?.count || 0} ${t('detail.shops')} (${summary.top_categories[0]?.percentage.toFixed(1) || 0}%)`}
+          value={topCategory ? t(`tenants.categoryNames.${topCategory.name}`, { defaultValue: topCategory.name }) : 'N/A'}
+          delta={topCategory ? `${topCategory.shopCount} ${t('detail.shops')} (${topCategory.percentage.toFixed(1)}%)` : ''}
           accentColor={identity.colors.secondary}
         />
         <MallKPICard
           label={t('detail.foodBeverage')}
-          value={`${summary.retailer_type_percentages['Food and beverage']?.toFixed(1) || 0}%`}
-          delta={`${summary.shops_by_retailer_type['Food and beverage'] || 0} ${t('detail.shops')}`}
+          value={`${findCategory('Food & Beverage')?.percentage.toFixed(1) || 0}%`}
+          delta={`${findCategory('Food & Beverage')?.shopCount || 0} ${t('detail.shops')}`}
           accentColor={identity.colors.accent}
         />
         <MallKPICard
           label={t('detail.homeLiving')}
-          value={`${summary.retailer_type_percentages['Home and living']?.toFixed(1) || 0}%`}
-          delta={`${summary.shops_by_retailer_type['Home and living'] || 0} ${t('detail.shops')}`}
+          value={`${findCategory('Home & Living')?.percentage.toFixed(1) || 0}%`}
+          delta={`${findCategory('Home & Living')?.shopCount || 0} ${t('detail.shops')}`}
           accentColor={identity.colors.primary}
         />
       </div>
@@ -322,7 +359,7 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
           <TabsTrigger value="tenants">{t('tabs.tenants')}</TabsTrigger>
           <TabsTrigger value="events">{t('tabs.events')}</TabsTrigger>
           <TabsTrigger value="weather">{t('tabs.weather')}</TabsTrigger>
-          <TabsTrigger value="campaigns" disabled className="opacity-40 cursor-not-allowed">{t('tabs.campaigns')}</TabsTrigger>
+          {/* Campaigns tab hidden — feature deactivated */}
           <TabsTrigger value="analysis">{t('tabs.analysis', 'Video Analysis')}</TabsTrigger>
         </TabsList>
 
@@ -330,12 +367,12 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
           <div className="grid grid-cols-2 gap-6">
             {/* Tenant Mix Chart */}
             <TenantMixChart
-              retailerTypePercentages={summary.retailer_type_percentages}
-              totalShops={summary.total_shops}
+              retailerTypePercentages={Object.fromEntries(categories.map(c => [c.name, c.percentage]))}
+              totalShops={totalShops}
             />
 
             {/* Top Categories Table */}
-            <TopCategoriesTable categories={summary.top_categories} limit={10} />
+            <TopCategoriesTable categories={categories.map(c => ({ category: c.name, count: c.shopCount, percentage: c.percentage }))} limit={10} />
           </div>
 
           {/* Additional Info Card */}
@@ -343,16 +380,16 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
             <div className="grid grid-cols-3 gap-8 text-sm">
               <div>
                 <p className="text-bo-neutral-600 mb-2 uppercase tracking-wider text-xs font-medium">{t('detail.infoLocation')}</p>
-                <p className="text-bo-neutral-950 font-semibold tracking-tight">{summary.city}</p>
+                <p className="text-bo-neutral-950 font-semibold tracking-tight">{mallCity}</p>
               </div>
               <div>
                 <p className="text-bo-neutral-600 mb-2 uppercase tracking-wider text-xs font-medium">{t('detail.infoDataSource')}</p>
-                <p className="text-bo-neutral-950 font-semibold tracking-tight">{summary.data_source}</p>
+                <p className="text-bo-neutral-950 font-semibold tracking-tight">Stelthion</p>
               </div>
               <div>
                 <p className="text-bo-neutral-600 mb-2 uppercase tracking-wider text-xs font-medium">{t('detail.infoUpdated')}</p>
                 <p className="text-bo-neutral-950 font-semibold tracking-tight">
-                  {new Date(summary.collection_date).toLocaleDateString()}
+                  {dataUpdated ? new Date(dataUpdated).toLocaleDateString() : ''}
                 </p>
               </div>
             </div>
@@ -373,6 +410,7 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
                 conversionRate={performance.conversionRate}
                 conversionDelta={performance.conversionDelta}
                 alerts={alerts}
+                hasRealData={hasRealData}
               />
             </div>
 
@@ -381,7 +419,7 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
               <FootfallChart mallId={mallId} showPredicted={showPredicted} />
               <WeatherNextPanel mallId={mallId} />
               <EventsPanel mallId={mallId} />
-              <CampaignCard mallId={mallId} />
+              {/* CampaignCard hidden — campaigns feature deactivated */}
             </div>
           </div>
 
@@ -391,7 +429,7 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
           {/* Bottom Row: Alerts & Scenarios */}
           <div className="grid grid-cols-2 gap-8">
             <AlertsStream alerts={alerts} />
-            <ScenarioShortcuts mallId={mallId} />
+            {/* ScenarioShortcuts hidden — scenarios feature deactivated */}
           </div>
         </TabsContent>
 
@@ -429,7 +467,7 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
                   selectedZone={selectedZone}
                   onZoneSelect={setSelectedZone}
                   mallId={mallId}
-                  mallName={mallData?.summary?.mall_name || 'Ideapark Lempäälä'}
+                  mallName={mallName || 'Ideapark Lempäälä'}
                 />
               )}
 
@@ -446,10 +484,10 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
         <TabsContent value="tenants" className="space-y-8">
           <div className="grid grid-cols-2 gap-6">
             <TenantMixChart
-              retailerTypePercentages={summary.retailer_type_percentages}
-              totalShops={summary.total_shops}
+              retailerTypePercentages={Object.fromEntries(categories.map(c => [c.name, c.percentage]))}
+              totalShops={totalShops}
             />
-            <TopCategoriesTable categories={summary.top_categories} limit={15} />
+            <TopCategoriesTable categories={categories.map(c => ({ category: c.name, count: c.shopCount, percentage: c.percentage }))} limit={15} />
           </div>
           <TenantPerformanceTable mallId={mallId} expanded />
         </TabsContent>
@@ -472,13 +510,12 @@ export function PropertyDetail({ mallId, showPredicted = false }: PropertyDetail
           <EventsPanel mallId={mallId} expanded />
         </TabsContent>
 
-        <TabsContent value="campaigns">
-          <CampaignCard mallId={mallId} expanded />
-        </TabsContent>
+        {/* Campaigns tab content hidden — feature deactivated */}
 
         <TabsContent value="analysis">
           <VideoAnalysis mallId={mallId} />
         </TabsContent>
+
       </Tabs>
     </div>
   );

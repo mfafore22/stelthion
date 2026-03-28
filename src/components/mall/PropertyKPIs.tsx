@@ -16,11 +16,12 @@ interface PropertyKPIsProps {
   currentVisitors: number;
   deltaVsPlan: number;
   weatherImpact: number;
-  dwellTime: number;
+  dwellTime: number | null;
   dwellDelta: number;
-  conversionRate: number;
+  conversionRate: number | null;
   conversionDelta: number;
   alerts: any[];
+  hasRealData?: boolean;
 }
 
 export function PropertyKPIs({
@@ -32,6 +33,7 @@ export function PropertyKPIs({
   conversionRate,
   conversionDelta,
   alerts,
+  hasRealData,
 }: PropertyKPIsProps) {
   const { t } = useTranslation('mall');
   const formatNumber = (num: number) => {
@@ -55,31 +57,35 @@ export function PropertyKPIs({
       <MallKPICard
         label={t('kpi.currentVisitors')}
         value={formatNumber(currentVisitors)}
-        delta={`${formatPercent(deltaVsPlan)} ${t('kpi.vsPlan')}`}
+        delta={`${formatPercent(deltaVsPlan)} ${hasRealData ? t('kpi.vsLastYear', 'vs last year') : t('kpi.vsPlan')}`}
         deltaType={deltaVsPlan >= 0 ? 'positive' : 'negative'}
         accent="green"
         trendPercentage={deltaVsPlan}
       />
 
       {/* Dwell Time with gradient background */}
-      <MallKPICard
-        label={t('kpi.dwellTime')}
-        value={`${dwellTime} min`}
-        delta={`${formatPercent(dwellDelta)} ${t('kpi.vsBaseline')}`}
-        deltaType={dwellDelta >= 0 ? 'positive' : 'negative'}
-        accent="blue"
-        trendPercentage={dwellDelta}
-      />
+      <div className={cn(dwellTime == null && 'opacity-60')}>
+        <MallKPICard
+          label={t('kpi.dwellTime')}
+          value={dwellTime != null ? `${dwellTime} min` : '--'}
+          delta={dwellTime != null ? `${formatPercent(dwellDelta)} ${t('kpi.vsBaseline')}` : t('kpi.notAvailable', 'Not available')}
+          deltaType={dwellTime != null && dwellDelta >= 0 ? 'positive' : 'neutral'}
+          accent="blue"
+          trendPercentage={dwellTime != null ? dwellDelta : 0}
+        />
+      </div>
 
       {/* Conversion Rate with gradient background */}
-      <MallKPICard
-        label={t('kpi.conversionRate')}
-        value={`${conversionRate.toFixed(1)}%`}
-        delta={`${formatPercent(conversionDelta)} ${t('kpi.vsLastWeek')}`}
-        deltaType={conversionDelta >= 0 ? 'positive' : 'negative'}
-        accent="orange"
-        trendPercentage={conversionDelta}
-      />
+      <div className={cn(conversionRate == null && 'opacity-60')}>
+        <MallKPICard
+          label={t('kpi.conversionRate')}
+          value={conversionRate != null ? `${conversionRate.toFixed(1)}%` : '--'}
+          delta={conversionRate != null ? `${formatPercent(conversionDelta)} ${t('kpi.vsLastWeek')}` : t('kpi.notAvailable', 'Not available')}
+          deltaType={conversionRate != null && conversionDelta >= 0 ? 'positive' : 'neutral'}
+          accent="orange"
+          trendPercentage={conversionRate != null ? conversionDelta : 0}
+        />
+      </div>
 
       {/* Active Alerts - keeping old Card design as it has special alert list UI */}
       <Card className="p-4 bg-bo-glass border-2 border-bo-neutral-300/60 shadow-bo-glass-strong backdrop-blur-xl">

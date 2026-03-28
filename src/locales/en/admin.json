@@ -7,7 +7,9 @@
     "dashboard": "Dashboard",
     "floorPlan": "Floor Plan",
     "analysisJobs": "Analysis Jobs",
-    "resultsJourneys": "Results & Journeys"
+    "resultsJourneys": "Results & Journeys",
+    "edgeDevices": "Edge Devices",
+    "counterData": "Counter Data"
   },
   "dashboard": {
     "title": "Admin Dashboard",
@@ -52,6 +54,7 @@
     "deleteType_zone": "zone",
     "deleteType_rect": "rectangle zone",
     "deleteType_camera": "camera",
+    "deleteType_counter": "visitor counter",
     "cancel": "Cancel",
     "confirmDelete": "Delete"
   },
@@ -64,6 +67,8 @@
     "rectHint": "Click-drag to draw rectangle",
     "camera": "Camera",
     "cameraHint": "Click to place camera pin",
+    "counter": "Visitor Counter",
+    "counterHint": "Click to place visitor counter",
     "erase": "Erase",
     "eraseHint": "Click element to delete"
   },
@@ -82,6 +87,8 @@
     "svgPoints": "SVG Points",
     "subcategory": "Subcategory",
     "drawShape": "Shape",
+    "counterProperties": "Visitor Counter Properties",
+    "dataSourceUrl": "Data Source URL",
     "cameraProperties": "Camera Properties",
     "label": "Label",
     "fovDeg": "FOV (deg)",
@@ -151,5 +158,41 @@
     "loadingJourneys": "Loading journey data...",
     "noJourneyData": "No journey data available for this job.",
     "noMovementPaths": "No movement paths recorded for this session."
+  },
+  "edge": {
+    "title": "Edge Devices",
+    "loading": "Loading devices...",
+    "noDevices": "No edge devices registered yet. Edge units register automatically on first boot.",
+    "mall": "Mall",
+    "lastSeen": "Last seen",
+    "status_online": "Online",
+    "status_offline": "Offline",
+    "status_error": "Error",
+    "forceOffline": "Force offline",
+    "forceOnline": "Force online",
+    "revoke": "Revoke device"
+  },
+  "counters": {
+    "title": "Counter Data Management",
+    "dropHint": "Drag & drop an Excel file here, or click to browse",
+    "selectFile": "Select .xlsx file",
+    "uploading": "Uploading...",
+    "uploadSuccess": "Imported {{count}} readings for week {{week}}/{{year}} ({{granularity}})",
+    "countersFound": "{{count}} counters matched",
+    "warnings": "Warnings",
+    "uploadedWeeks": "Uploaded Weeks",
+    "loading": "Loading...",
+    "noData": "No counter data uploaded yet",
+    "week": "Week",
+    "year": "Year",
+    "granularity": "Type",
+    "totalVisitors": "Total Visitors",
+    "counterCount": "Counters",
+    "uploadedAt": "Uploaded",
+    "export": "Export CSV",
+    "delete": "Delete data",
+    "confirmDelete": "Confirm",
+    "cancelDelete": "Cancel",
+    "deleting": "Deleting..."
   }
 }

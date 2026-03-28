@@ -9,12 +9,19 @@ import React from 'react';
 import { useSession } from '@/contexts/SessionContext';
 import { ConciergeProvider, ConciergePanel } from '@/components/concierge';
 
+// Set to true to re-enable the Concierge AI feature
+const CONCIERGE_ENABLED = false;
+
 interface MallConciergeWrapperProps {
   children: React.ReactNode;
 }
 
 export function MallConciergeWrapper({ children }: MallConciergeWrapperProps) {
   const { user, loading } = useSession();
+
+  if (!CONCIERGE_ENABLED) {
+    return <>{children}</>;
+  }
 
   // Always provide ConciergeProvider to avoid context errors
   // But only render the panel when authenticated

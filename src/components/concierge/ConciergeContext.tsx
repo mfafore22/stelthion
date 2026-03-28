@@ -394,3 +394,10 @@ export function useConcierge() {
 
   return context;
 }
+
+/**
+ * Hook to use Concierge context safely (returns null when provider is not mounted)
+ */
+export function useConciergeOptional() {
+  return useContext(ConciergeContext);
+}

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from '@/lib/i18n/hooks';
 import '@/lib/i18n';
-import { LayoutDashboard, Map, ClipboardList, Route } from 'lucide-react';
+import { LayoutDashboard, Map, ClipboardList, Route, Cpu, BarChart3 } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
@@ -16,8 +16,10 @@ import {
 const NAV_ITEMS = [
   { href: '/admin/dashboard', labelKey: 'sidebar.dashboard', icon: LayoutDashboard },
   { href: '/admin/floorplan/ideapark', labelKey: 'sidebar.floorPlan', icon: Map },
+  { href: '/admin/counters', labelKey: 'sidebar.counterData', icon: BarChart3 },
   { href: '/admin/jobs', labelKey: 'sidebar.analysisJobs', icon: ClipboardList },
   { href: '/admin/results', labelKey: 'sidebar.resultsJourneys', icon: Route },
+  { href: '/admin/edge', labelKey: 'sidebar.edgeDevices', icon: Cpu },
 ];
 
 export function AdminSidebar() {

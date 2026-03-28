@@ -465,6 +465,8 @@
     "conversionRate": "Conversion Rate",
     "vsLastWeek": "vs last week",
     "activeAlerts": "Active Alerts",
+    "vsLastYear": "vs last year",
+    "notAvailable": "Not available",
     "allSystemsNormal": "All systems normal"
   },
   "alertsStream": {
@@ -550,6 +552,8 @@
     "chartTitle": "Actual vs Predicted Footfall (Today)",
     "actual": "Actual",
     "predicted": "Predicted",
+    "previousYear": "Previous Year",
+    "realData": "Real data",
     "weatherImpact": "Weather Impact",
     "visitors": "Visitors",
     "pause": "Pause",

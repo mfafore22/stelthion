@@ -10,6 +10,7 @@ export interface PublishedCamera {
   fovDeg: number | null;
   rangeM: number | null;
   active: boolean;
+  deviceType?: 'camera' | 'counter';
 }
 
 interface FloorplanResponse {

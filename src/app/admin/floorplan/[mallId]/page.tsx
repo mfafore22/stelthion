@@ -34,7 +34,7 @@ export default function FloorplanPage() {
   const cfg = FLOOR_CONFIG[floor];
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col" style={{ height: 'calc(100vh - 120px)' }}>
       {/* Floor toggle */}
       <div className="flex items-center gap-2 px-4 py-2 border-b border-bo-neutral-200 bg-bo-neutral-50">
         <span className="text-sm font-medium text-bo-neutral-700 mr-2">{t('floorplan.floor')}</span>
@@ -59,7 +59,7 @@ export default function FloorplanPage() {
           {t('floorplan.loading')}
         </div>
       ) : (
-        <div className="flex-1">
+        <div className="flex-1 h-full min-h-0">
           <FloorplanEditor
             key={floor}
             mallId={mallId}

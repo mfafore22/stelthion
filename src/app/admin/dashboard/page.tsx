@@ -8,9 +8,9 @@ export default async function AdminDashboard() {
     prisma.analysisJob.groupBy({ by: ['status'], _count: true }),
   ]);
 
-  const pending = jobCounts.find((j) => j.status === 'PENDING')?._count ?? 0;
-  const processing = jobCounts.find((j) => j.status === 'PROCESSING')?._count ?? 0;
-  const complete = jobCounts.find((j) => j.status === 'COMPLETE')?._count ?? 0;
+  const pending = jobCounts.find((j: { status: string }) => j.status === 'PENDING')?._count ?? 0;
+  const processing = jobCounts.find((j: { status: string }) => j.status === 'PROCESSING')?._count ?? 0;
+  const complete = jobCounts.find((j: { status: string }) => j.status === 'COMPLETE')?._count ?? 0;
 
   return (
     <AdminDashboardClient

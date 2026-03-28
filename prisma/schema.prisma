@@ -73,8 +73,10 @@ model Mall {
   cameras     Camera[]
   jobs        AnalysisJob[]
   snapshots   FloorplanSnapshot[]
-  footfall    FootfallReading[]
-  household   HouseholdStat[]
+  footfall        FootfallReading[]
+  counterReadings CounterReading[]
+  counterUploads  CounterUpload[]
+  household       HouseholdStat[]
   events      MallEvent[]
   edgeDevices EdgeDevice[]
 }
@@ -393,6 +395,50 @@ model MallEvent {
   mall Mall @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
 
   @@index([mallId, startDate])
+}
+
+model CounterReading {
+  id               String   @id @default(cuid())
+  mallId           String
+  counterLabel     String
+  floor            String
+  date             DateTime @db.Date
+  hour             Int      @default(-1)
+  weekNumber       Int
+  year             Int
+  visitors         Int      @default(0)
+  visitorsPrevYear Int?
+  visitorsYear2    Int?
+  visitorsYear3    Int?
+  granularity      String   @default("daily")
+  source           String   @default("excel")
+  uploadedAt       DateTime @default(now())
+  uploadId         String?
+
+  mall             Mall     @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
+  upload           CounterUpload? @relation(fields: [uploadId], references: [id], onDelete: SetNull)
+
+  @@unique([mallId, counterLabel, date, hour])
+  @@index([mallId, year, weekNumber])
+  @@index([mallId, counterLabel])
+  @@index([uploadId])
+}
+
+model CounterUpload {
+  id          String   @id @default(cuid())
+  mallId      String
+  fileName    String
+  weekNumber  Int
+  year        Int
+  granularity String
+  counters    Int      @default(0)
+  readings    Int      @default(0)
+  uploadedAt  DateTime @default(now())
+
+  mall        Mall     @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
+  counterReadings CounterReading[]
+
+  @@index([mallId])
 }
 
 enum EventCategory {

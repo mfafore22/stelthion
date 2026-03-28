@@ -7,7 +7,9 @@
     "dashboard": "Hallintapaneeli",
     "floorPlan": "Pohjapiirros",
     "analysisJobs": "Analyysityöt",
-    "resultsJourneys": "Tulokset ja reitit"
+    "resultsJourneys": "Tulokset ja reitit",
+    "edgeDevices": "Reunalaitteet",
+    "counterData": "Laskuridata"
   },
   "dashboard": {
     "title": "Hallintapaneeli",
@@ -52,6 +54,7 @@
     "deleteType_zone": "alueen",
     "deleteType_rect": "suorakaidealueen",
     "deleteType_camera": "kameran",
+    "deleteType_counter": "kävijälaskurin",
     "cancel": "Peruuta",
     "confirmDelete": "Poista"
   },
@@ -64,6 +67,8 @@
     "rectHint": "Piirrä suorakaide vetämällä",
     "camera": "Kamera",
     "cameraHint": "Aseta kamera klikkaamalla",
+    "counter": "Kävijälaskuri",
+    "counterHint": "Aseta kävijälaskuri klikkaamalla",
     "erase": "Poista",
     "eraseHint": "Poista elementti klikkaamalla"
   },
@@ -82,6 +87,8 @@
     "svgPoints": "SVG-pisteet",
     "subcategory": "Alakategoria",
     "drawShape": "Muoto",
+    "counterProperties": "Kävijälaskurin ominaisuudet",
+    "dataSourceUrl": "Datalähteen URL",
     "cameraProperties": "Kameran ominaisuudet",
     "label": "Nimi",
     "fovDeg": "Näkökenttä (astetta)",
@@ -151,5 +158,41 @@
     "loadingJourneys": "Ladataan reittitietoja...",
     "noJourneyData": "Ei reittitietoja saatavilla tälle työlle.",
     "noMovementPaths": "Ei tallennettuja kulkureittejä tälle istunnolle."
+  },
+  "edge": {
+    "title": "Reunalaitteet",
+    "loading": "Ladataan laitteita...",
+    "noDevices": "Ei rekisteröityjä reunalaitteita. Laitteet rekisteröityvät automaattisesti ensimmäisellä käynnistyksellä.",
+    "mall": "Kauppakeskus",
+    "lastSeen": "Viimeksi nähty",
+    "status_online": "Online",
+    "status_offline": "Offline",
+    "status_error": "Virhe",
+    "forceOffline": "Pakota offline",
+    "forceOnline": "Pakota online",
+    "revoke": "Poista laite"
+  },
+  "counters": {
+    "title": "Laskuridatan hallinta",
+    "dropHint": "Vedä ja pudota Excel-tiedosto tähän tai valitse selaamalla",
+    "selectFile": "Valitse .xlsx-tiedosto",
+    "uploading": "Ladataan...",
+    "uploadSuccess": "Tuotu {{count}} lukemaa viikolle {{week}}/{{year}} ({{granularity}})",
+    "countersFound": "{{count}} laskuria tunnistettu",
+    "warnings": "Varoitukset",
+    "uploadedWeeks": "Ladatut viikot",
+    "loading": "Ladataan...",
+    "noData": "Ei laskuridataa ladattuna",
+    "week": "Viikko",
+    "year": "Vuosi",
+    "granularity": "Tyyppi",
+    "totalVisitors": "Kävijöitä yhteensä",
+    "counterCount": "Laskurit",
+    "uploadedAt": "Ladattu",
+    "export": "Vie CSV",
+    "delete": "Poista data",
+    "confirmDelete": "Vahvista",
+    "cancelDelete": "Peruuta",
+    "deleting": "Poistetaan..."
   }
 }

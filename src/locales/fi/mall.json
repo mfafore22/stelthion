@@ -465,6 +465,8 @@
     "conversionRate": "Konversioaste",
     "vsLastWeek": "vs viime viikko",
     "activeAlerts": "Aktiiviset hälytykset",
+    "vsLastYear": "vs viime vuosi",
+    "notAvailable": "Ei saatavilla",
     "allSystemsNormal": "Kaikki järjestelmät toimivat normaalisti"
   },
   "alertsStream": {
@@ -550,6 +552,8 @@
     "chartTitle": "Tämänhetkinen vs ennustettu kävijämäärä (tänään)",
     "actual": "Toteutunut",
     "predicted": "Ennustettu",
+    "previousYear": "Edellinen vuosi",
+    "realData": "Oikea data",
     "weatherImpact": "Säävaikutus",
     "visitors": "Kävijät",
     "pause": "Tauko",

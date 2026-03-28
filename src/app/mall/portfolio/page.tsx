@@ -8,6 +8,7 @@ import { MallTopBar } from '@/components/mall/shell/MallTopBar';
 import { MallLeftNav } from '@/components/mall/shell/MallLeftNav';
 import { MallKPICard } from '@/components/mall/ui/MallKPICard';
 import { getCurrentFootfall } from '@/lib/data/footfall';
+import { useCounterFootfall } from '@/hooks/mall/useCounterFootfall';
 import { MALLS } from '@/lib/mall/mallDatabase';
 import { Building2, MapPin, Store, Users, ArrowRight } from 'lucide-react';
 import { useState } from 'react';
@@ -20,7 +21,13 @@ export default function PortfolioPage() {
     new Date().toISOString().split('T')[0]
   );
 
-  const footfall = useMemo(() => getCurrentFootfall(), []);
+  const simulated = useMemo(() => getCurrentFootfall(), []);
+
+  const {
+    hasRealData,
+    currentHourVisitors,
+    currentHourPrevYear,
+  } = useCounterFootfall(user?.mallId ?? '');
 
   const mall = useMemo(() => {
     if (!user?.mallId) return null;
@@ -73,30 +80,44 @@ export default function PortfolioPage() {
 
           {/* KPI Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <MallKPICard
-              label={t('kpi.currentVisitors', 'Current Visitors')}
-              value={formatNumber(footfall.currentVisitors)}
-              delta={`${formatPercent(footfall.vsPlanned)} ${t('kpi.vsPlan', 'vs plan')}`}
-              deltaType={footfall.vsPlanned >= 0 ? 'positive' : 'negative'}
-              accent="green"
-              trendPercentage={footfall.vsPlanned}
-            />
-            <MallKPICard
-              label={t('kpi.dwellTime', 'Dwell Time')}
-              value={`${footfall.dwellTimeMinutes} min`}
-              delta={`${formatPercent(3.5)} ${t('kpi.vsBaseline', 'vs baseline')}`}
-              deltaType="positive"
-              accent="blue"
-              trendPercentage={3.5}
-            />
-            <MallKPICard
-              label={t('kpi.conversionRate', 'Conversion Rate')}
-              value={`${footfall.conversionRate.toFixed(1)}%`}
-              delta={`${formatPercent(1.8)} ${t('kpi.vsLastWeek', 'vs last week')}`}
-              deltaType="positive"
-              accent="orange"
-              trendPercentage={1.8}
-            />
+            {(() => {
+              const visitors = hasRealData ? currentHourVisitors : simulated.currentVisitors;
+              const yoyDelta = hasRealData && currentHourPrevYear
+                ? ((currentHourVisitors - currentHourPrevYear) / currentHourPrevYear) * 100
+                : simulated.vsPlanned;
+              const deltaRounded = Math.round(yoyDelta * 10) / 10;
+              const deltaLabel = hasRealData ? t('kpi.vsLastYear', 'vs last year') : t('kpi.vsPlan', 'vs plan');
+              return (
+                <MallKPICard
+                  label={t('kpi.currentVisitors', 'Current Visitors')}
+                  value={formatNumber(visitors)}
+                  delta={`${formatPercent(deltaRounded)} ${deltaLabel}`}
+                  deltaType={deltaRounded >= 0 ? 'positive' : 'negative'}
+                  accent="green"
+                  trendPercentage={deltaRounded}
+                />
+              );
+            })()}
+            <div className={hasRealData ? 'opacity-60' : undefined}>
+              <MallKPICard
+                label={t('kpi.dwellTime', 'Dwell Time')}
+                value={hasRealData ? '--' : `${simulated.dwellTimeMinutes} min`}
+                delta={hasRealData ? t('kpi.notAvailable', 'Not available') : `${formatPercent(3.5)} ${t('kpi.vsBaseline', 'vs baseline')}`}
+                deltaType={hasRealData ? 'neutral' : 'positive'}
+                accent="blue"
+                trendPercentage={hasRealData ? 0 : 3.5}
+              />
+            </div>
+            <div className={hasRealData ? 'opacity-60' : undefined}>
+              <MallKPICard
+                label={t('kpi.conversionRate', 'Conversion Rate')}
+                value={hasRealData ? '--' : `${simulated.conversionRate.toFixed(1)}%`}
+                delta={hasRealData ? t('kpi.notAvailable', 'Not available') : `${formatPercent(1.8)} ${t('kpi.vsLastWeek', 'vs last week')}`}
+                deltaType={hasRealData ? 'neutral' : 'positive'}
+                accent="orange"
+                trendPercentage={hasRealData ? 0 : 1.8}
+              />
+            </div>
           </div>
 
           {/* Property Card */}

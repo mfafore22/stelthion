@@ -26,7 +26,7 @@ import {
 import { cn } from '@/lib/utils';
 import { useSession } from '@/contexts/SessionContext';
 import { CompactLanguageSelector } from '@/components/ui/language-selector';
-import { useConcierge } from '@/components/concierge/ConciergeContext';
+import { useConciergeOptional } from '@/components/concierge/ConciergeContext';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -55,7 +55,7 @@ export function MallTopBar({
   className,
 }: MallTopBarProps) {
   const { user, logout } = useSession();
-  const concierge = useConcierge();
+  const concierge = useConciergeOptional();
   const { t } = useTranslation('mall');
 
   const now = new Date();

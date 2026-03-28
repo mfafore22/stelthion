@@ -456,6 +456,8 @@
     "conversionRate": "Konverteringsgrad",
     "vsLastWeek": "mot förra veckan",
     "activeAlerts": "Aktiva larm",
+    "vsLastYear": "mot förra året",
+    "notAvailable": "Ej tillgänglig",
     "allSystemsNormal": "Alla system normala"
   },
   "alertsStream": {
@@ -541,6 +543,8 @@
     "chartTitle": "Verkligt vs prognostiserat besöksflöde (idag)",
     "actual": "Verkligt",
     "predicted": "Prognostiserat",
+    "previousYear": "Föregående år",
+    "realData": "Riktig data",
     "weatherImpact": "Väderpåverkan",
     "visitors": "Besökare",
     "pause": "Paus",
