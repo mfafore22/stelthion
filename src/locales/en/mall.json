@@ -250,6 +250,16 @@
     "employmentRate": "Employment Rate",
     "students": "Students",
     "topSectors": "Top Sectors:",
+    "sectors": {
+      "manufacturing": "Manufacturing",
+      "retail": "Retail",
+      "healthcare": "Healthcare",
+      "logistics": "Logistics",
+      "education": "Education",
+      "tech": "Tech",
+      "construction": "Construction",
+      "professionalServices": "Professional Services"
+    },
     "sourceStatsEmployment": "Source: Statistics Finland Employment Statistics Q3 2024",
     "allCatchmentZones": "All Catchment Zones",
     "minDrive": "{{minutes}}-min drive",

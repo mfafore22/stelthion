@@ -250,6 +250,16 @@
     "employmentRate": "Työllisyysaste",
     "students": "Opiskelijat",
     "topSectors": "Päätoimialat:",
+    "sectors": {
+      "manufacturing": "Teollisuus",
+      "retail": "Vähittäiskauppa",
+      "healthcare": "Terveydenhuolto",
+      "logistics": "Logistiikka",
+      "education": "Koulutus",
+      "tech": "Teknologia",
+      "construction": "Rakentaminen",
+      "professionalServices": "Asiantuntijapalvelut"
+    },
     "sourceStatsEmployment": "Lähde: Tilastokeskus, työvoimatutkimus Q3 2024",
     "allCatchmentZones": "Kaikki vaikutusalueet",
     "minDrive": "{{minutes}} min ajo",

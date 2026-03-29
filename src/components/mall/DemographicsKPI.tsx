@@ -205,7 +205,7 @@ export function DemographicsKPI({ demographics }: DemographicsKPIProps) {
               </div>
             </div>
             <div className="text-xs text-bo-neutral-600">
-              <strong>{t('demographics.topSectors')}</strong> {primaryZone.employment.topSectors.slice(0, 3).join(', ')}
+              <strong>{t('demographics.topSectors')}</strong> {primaryZone.employment.topSectors.slice(0, 3).map(s => t(`demographics.sectors.${s}`, s)).join(', ')}
             </div>
             <div className="flex items-center gap-1 text-xs text-bo-neutral-500 mt-3 pt-3 border-t border-bo-info/15">
               <Database className="h-3 w-3" />

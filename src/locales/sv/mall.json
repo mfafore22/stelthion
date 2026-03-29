@@ -250,6 +250,16 @@
     "employmentRate": "Sysselsättningsgrad",
     "students": "Studenter",
     "topSectors": "Största sektorer:",
+    "sectors": {
+      "manufacturing": "Tillverkning",
+      "retail": "Detaljhandel",
+      "healthcare": "Hälso- och sjukvård",
+      "logistics": "Logistik",
+      "education": "Utbildning",
+      "tech": "Teknik",
+      "construction": "Byggverksamhet",
+      "professionalServices": "Professionella tjänster"
+    },
     "sourceStatsEmployment": "Källa: Statistikcentralen Sysselsättningsstatistik Q3 2024",
     "allCatchmentZones": "Alla upptagningszoner",
     "minDrive": "{{minutes}} min bilresa",

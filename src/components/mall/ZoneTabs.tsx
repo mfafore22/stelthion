@@ -10,6 +10,7 @@ import React from 'react';
 import { MallCard } from './ui/MallCard';
 import { Users, Euro, Briefcase, Home, MapPin } from 'lucide-react';
 import type { CatchmentDemographics } from '@/lib/types/transport';
+import { useTranslation } from 'react-i18next';
 
 interface ZoneTabsProps {
   demographics: CatchmentDemographics;
@@ -18,6 +19,7 @@ interface ZoneTabsProps {
 }
 
 export function ZoneTabs({ demographics, selectedZone, onZoneSelect }: ZoneTabsProps) {
+  const { t } = useTranslation('mall');
   const formatNumber = (num: number) => {
     if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
     if (num >= 1000) return `${(num / 1000).toFixed(1)}k`;
@@ -251,14 +253,14 @@ export function ZoneTabs({ demographics, selectedZone, onZoneSelect }: ZoneTabsP
             </div>
           </div>
           <div className="pt-3 border-t border-bo-info/15">
-            <div className="text-xs text-bo-neutral-600 mb-1">Top Employment Sectors</div>
+            <div className="text-xs text-bo-neutral-600 mb-1">{t('demographics.topSectors')}</div>
             <div className="flex flex-wrap gap-2 mt-2">
               {activeZone.employment.topSectors.map((sector) => (
                 <span
                   key={sector}
                   className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-bo-info-100 text-bo-info-dark border border-bo-info-300"
                 >
-                  {sector}
+                  {t(`demographics.sectors.${sector}`, sector)}
                 </span>
               ))}
             </div>

@@ -150,7 +150,7 @@ export const ideaparkCatchmentDemographics: CatchmentDemographics = {
       employment: {
         employmentRate: 74,
         students: 820,
-        topSectors: ['Manufacturing', 'Retail', 'Healthcare', 'Education'],
+        topSectors: ['manufacturing', 'retail', 'healthcare', 'logistics', 'education'],
       },
     },
 
@@ -177,7 +177,7 @@ export const ideaparkCatchmentDemographics: CatchmentDemographics = {
       employment: {
         employmentRate: 76,
         students: 2350,
-        topSectors: ['Manufacturing', 'Logistics', 'Retail', 'Construction', 'Healthcare'],
+        topSectors: ['manufacturing', 'logistics', 'retail', 'construction', 'healthcare'],
       },
     },
 
@@ -204,7 +204,7 @@ export const ideaparkCatchmentDemographics: CatchmentDemographics = {
       employment: {
         employmentRate: 78,
         students: 7540,
-        topSectors: ['Tech', 'Manufacturing', 'Healthcare', 'Retail', 'Logistics'],
+        topSectors: ['tech', 'manufacturing', 'healthcare', 'retail', 'logistics'],
       },
     },
 
@@ -214,7 +214,7 @@ export const ideaparkCatchmentDemographics: CatchmentDemographics = {
       postalCodes: [
         '33100', '33200', '33300', '33400', '33500', '33700', '33710',
         '33720', '33730', '33800', '33820', '33840', '33850', '33870',
-        '33900', '37200', '37800',
+        '33900', '37200', '37600', '37630', '37800',
       ],
       population: {
         total: 215000,
@@ -235,7 +235,7 @@ export const ideaparkCatchmentDemographics: CatchmentDemographics = {
       employment: {
         employmentRate: 79,
         students: 38700,
-        topSectors: ['Tech', 'Healthcare', 'Education', 'Manufacturing', 'Professional services'],
+        topSectors: ['tech', 'healthcare', 'education', 'manufacturing', 'professionalServices'],
       },
     },
   ],
@@ -290,10 +290,10 @@ export const ideaparkParkingData: ParkingData = {
     { hour: 15, avgUtilization: 78 },
     { hour: 16, avgUtilization: 75 },
     { hour: 17, avgUtilization: 65 },
-    { hour: 18, avgUtilization: 52 },
-    { hour: 19, avgUtilization: 40 },
-    { hour: 20, avgUtilization: 25 },
-    { hour: 21, avgUtilization: 12 },
+    { hour: 18, avgUtilization: 26 },
+    { hour: 19, avgUtilization: 20 },
+    { hour: 20, avgUtilization: 13 },
+    { hour: 21, avgUtilization: 6 },
   ],
 
   carArrivalShare: 88,

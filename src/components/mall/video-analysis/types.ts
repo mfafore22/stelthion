@@ -81,6 +81,24 @@ export interface JourneyResponse {
 }
 
 // Unified selection state — drives mode detection
+export interface StoreBehavior {
+  zoneId: string;
+  hour: number;
+  walkBy: number;
+  stop: number;
+  enter: number;
+}
+
+export interface AnalysisInsight {
+  id: string;
+  jobId: string;
+  source: 'edge' | 'server';
+  summary: string;
+  recommendations: string | null;
+  alertLevel: 'info' | 'warning' | 'critical';
+  createdAt: string;
+}
+
 export interface AnalysisSelection {
   cameraIds: string[];
   zoneIds: string[];
