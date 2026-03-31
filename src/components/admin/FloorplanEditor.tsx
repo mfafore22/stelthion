@@ -28,13 +28,19 @@ export interface ZoneData {
 
 export interface CameraData {
   id?: string;
+  deviceType?: 'camera' | 'counter';
   label: string;
   x: number;
   y: number;
+  model?: string;
+  resolution?: string;
+  lensInfo?: string;
+  cameraRole?: string;
   angleDeg?: number;
   fovDeg?: number;
   rangeM?: number;
   streamUrl?: string;
+  dataSourceUrl?: string;
   zoneDbId?: string;
   active: boolean;
 }
@@ -91,6 +97,9 @@ export function FloorplanEditor({
   const [showLabels, setShowLabels] = useState(true);
   const [cursorSvg, setCursorSvg] = useState<{ x: number; y: number } | null>(null);
   const [panStart, setPanStart] = useState({ x: 0, y: 0 });
+  const [draggingCamera, setDraggingCamera] = useState<number | null>(null);
+  const [hoveredZoneIndex, setHoveredZoneIndex] = useState<number | null>(null);
+  const suppressClickRef = useRef(false);
 
   const zoomedViewBox = `${panOffset.x} ${panOffset.y} ${baseW / zoom} ${baseH / zoom}`;
 
@@ -107,26 +116,47 @@ export function FloorplanEditor({
     setPanOffset({ x: 0, y: 0 });
   }, []);
 
-  // Mouse wheel zoom
+  // Mouse wheel + trackpad pinch + Safari gesture zoom
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
+
     const onWheel = (e: WheelEvent) => {
-      if (e.ctrlKey || e.metaKey) {
-        e.preventDefault();
-        if (e.deltaY < 0) {
-          setZoom((z) => Math.min(z * 1.15, 8));
-        } else {
-          setZoom((z) => {
-            const next = Math.max(z / 1.15, 1);
-            if (next === 1) setPanOffset({ x: 0, y: 0 });
-            return next;
-          });
-        }
+      e.preventDefault();
+      e.stopPropagation();
+      const delta = -e.deltaY * 0.005;
+      setZoom((z) => {
+        const next = Math.max(Math.min(z + delta, 8), 1);
+        if (next === 1) setPanOffset({ x: 0, y: 0 });
+        return next;
+      });
+    };
+
+    // Safari trackpad pinch fires gesture events
+    const onGesture = (e: Event) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const ge = e as Event & { scale: number };
+      if (e.type === 'gesturechange' && ge.scale != null) {
+        setZoom((z) => {
+          const next = Math.max(Math.min(z * ge.scale, 8), 1);
+          if (next === 1) setPanOffset({ x: 0, y: 0 });
+          return next;
+        });
       }
     };
+
     el.addEventListener('wheel', onWheel, { passive: false });
-    return () => el.removeEventListener('wheel', onWheel);
+    el.addEventListener('gesturestart', onGesture, { passive: false } as EventListenerOptions);
+    el.addEventListener('gesturechange', onGesture, { passive: false } as EventListenerOptions);
+    el.addEventListener('gestureend', onGesture, { passive: false } as EventListenerOptions);
+
+    return () => {
+      el.removeEventListener('wheel', onWheel);
+      el.removeEventListener('gesturestart', onGesture);
+      el.removeEventListener('gesturechange', onGesture);
+      el.removeEventListener('gestureend', onGesture);
+    };
   }, []);
 
   // Undo history
@@ -244,9 +274,13 @@ export function FloorplanEditor({
           }
         }
         setDrawingPoints((prev) => [...prev, [x, y]]);
-      } else if (tool === 'camera') {
+      } else if (tool === 'camera' || tool === 'counter') {
+        const isCounter = tool === 'counter';
+        const typeLabel = isCounter ? 'Counter' : 'Camera';
+        const count = cameras.filter((c) => (c.deviceType ?? 'camera') === (isCounter ? 'counter' : 'camera')).length;
         const newCamera: CameraData = {
-          label: `Camera ${cameras.length + 1}`,
+          deviceType: isCounter ? 'counter' : 'camera',
+          label: `${typeLabel} ${count + 1}`,
           x,
           y,
           active: true,
@@ -256,6 +290,10 @@ export function FloorplanEditor({
         pushUndo({ type: 'add-camera' });
         markDirty();
       } else if (tool === 'select') {
+        if (suppressClickRef.current) {
+          suppressClickRef.current = false;
+          return;
+        }
         setSelected(null);
       }
     },
@@ -275,6 +313,14 @@ export function FloorplanEditor({
 
   const handleSvgMouseMove = useCallback(
     (e: React.MouseEvent<SVGSVGElement>) => {
+      // Camera dragging
+      if (draggingCamera !== null) {
+        const pt = toSvg(e);
+        setCameras((prev) =>
+          prev.map((c, i) => (i === draggingCamera ? { ...c, x: pt.x, y: pt.y } : c)),
+        );
+        return;
+      }
       if (tool === 'rect' && dragStart) {
         setDragCurrent(toSvg(e));
       }
@@ -285,10 +331,16 @@ export function FloorplanEditor({
         setCursorSvg({ x: snapped.x, y: snapped.y });
       }
     },
-    [tool, dragStart, drawingPoints.length, toSvg, snapToAxis],
+    [tool, dragStart, drawingPoints.length, toSvg, snapToAxis, draggingCamera],
   );
 
   const handleSvgMouseUp = useCallback(() => {
+    if (draggingCamera !== null) {
+      suppressClickRef.current = true;
+      setDraggingCamera(null);
+      markDirty();
+      return;
+    }
     if (tool === 'rect' && dragStart && dragCurrent) {
       const x = Math.min(dragStart.x, dragCurrent.x);
       const y = Math.min(dragStart.y, dragCurrent.y);
@@ -318,7 +370,7 @@ export function FloorplanEditor({
       setDragStart(null);
       setDragCurrent(null);
     }
-  }, [tool, dragStart, dragCurrent, zones.length, markDirty]);
+  }, [tool, dragStart, dragCurrent, zones.length, markDirty, draggingCamera]);
 
   // ── Keyboard: Enter to close polygon, Escape to cancel ──────────────
   useEffect(() => {
@@ -753,7 +805,8 @@ export function FloorplanEditor({
           preserveAspectRatio="xMidYMin meet"
           className="w-full h-full"
           style={{
-            cursor: isPanning ? 'grabbing' : tool === 'zone' ? 'crosshair' : tool === 'rect' ? 'crosshair' : tool === 'camera' ? 'cell' : zoom > 1 ? 'grab' : 'default',
+            cursor: isPanning ? 'grabbing' : tool === 'zone' ? 'crosshair' : tool === 'rect' ? 'crosshair' : (tool === 'camera' || tool === 'counter') ? 'cell' : zoom > 1 ? 'grab' : 'default',
+            touchAction: 'none',
           }}
           onClick={handleSvgClick}
           onMouseDown={(e) => {
@@ -790,6 +843,14 @@ export function FloorplanEditor({
             }
             handleSvgMouseUp();
           }}
+          onMouseLeave={() => {
+            if (draggingCamera !== null) {
+              suppressClickRef.current = true;
+              setDraggingCamera(null);
+              markDirty();
+            }
+            if (isPanning) setIsPanning(false);
+          }}
         >
           {/* Floor plan background */}
           <image href={floorplanSrc} x="0" y="0" width={baseW} height={baseH} />
@@ -808,13 +869,15 @@ export function FloorplanEditor({
                   fillOpacity={isSelected ? 0.4 : 0.2}
                   stroke={isSelected ? 'var(--color-bo-neutral-950)' : 'var(--color-bo-neutral-600)'}
                   strokeWidth={isSelected ? 2 : 1}
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: 'pointer', pointerEvents: (tool === 'select' || tool === 'erase') ? 'auto' : 'none' }}
                   onClick={(e) => {
                     if (tool === 'select' || tool === 'erase') {
                       e.stopPropagation();
                       setSelected({ type: 'zone', index: i });
                     }
                   }}
+                  onMouseEnter={() => setHoveredZoneIndex(i)}
+                  onMouseLeave={() => setHoveredZoneIndex((prev) => prev === i ? null : prev)}
                 />
                 {/* Zone number badge (small circled number inside zone) */}
                 {showLabels && (
@@ -841,29 +904,56 @@ export function FloorplanEditor({
             );
           })}
 
-          {/* Camera pins */}
+          {/* Camera / counter pins */}
           {cameras.map((cam, i) => {
             const isSelected = selected?.type === 'camera' && selected.index === i;
+            const isCounter = (cam.deviceType ?? 'camera') === 'counter';
+            const pinColor = cam.active
+              ? (isCounter ? 'var(--color-bo-info-dark)' : 'var(--color-bo-error-dark)')
+              : 'var(--color-bo-neutral-400)';
+            const pinLetter = isCounter ? 'V' : 'C';
+            const r = isSelected ? 10 : 7;
             return (
               <g
                 key={`cam-${i}`}
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: tool === 'select' ? 'grab' : 'pointer', pointerEvents: (tool === 'select' || tool === 'erase') ? 'auto' : 'none' }}
                 onClick={(e) => {
                   if (tool === 'select' || tool === 'erase') {
                     e.stopPropagation();
                     setSelected({ type: 'camera', index: i });
                   }
                 }}
+                onMouseDown={(e) => {
+                  if (tool === 'select') {
+                    e.stopPropagation();
+                    setDraggingCamera(i);
+                    setSelected({ type: 'camera', index: i });
+                  }
+                }}
               >
-                <circle
-                  cx={cam.x}
-                  cy={cam.y}
-                  r={isSelected ? 10 : 7}
-                  fill={cam.active ? 'var(--color-bo-error-dark)' : 'var(--color-bo-neutral-400)'}
-                  fillOpacity={0.85}
-                  stroke="white"
-                  strokeWidth={2}
-                />
+                {isCounter ? (
+                  <rect
+                    x={cam.x - r}
+                    y={cam.y - r}
+                    width={r * 2}
+                    height={r * 2}
+                    rx={3}
+                    fill={pinColor}
+                    fillOpacity={0.85}
+                    stroke="white"
+                    strokeWidth={2}
+                  />
+                ) : (
+                  <circle
+                    cx={cam.x}
+                    cy={cam.y}
+                    r={r}
+                    fill={pinColor}
+                    fillOpacity={0.85}
+                    stroke="white"
+                    strokeWidth={2}
+                  />
+                )}
                 <text
                   x={cam.x}
                   y={cam.y + 3}
@@ -873,7 +963,7 @@ export function FloorplanEditor({
                   fill="white"
                   style={{ pointerEvents: 'none' }}
                 >
-                  C
+                  {pinLetter}
                 </text>
                 {showLabels && (
                   <text

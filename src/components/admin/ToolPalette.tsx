@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
-import { MousePointer2, Pentagon, RectangleHorizontal, Video, Eraser } from 'lucide-react';
+import { MousePointer2, Pentagon, RectangleHorizontal, Video, Footprints, Eraser } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
@@ -9,13 +9,14 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-export type Tool = 'select' | 'zone' | 'rect' | 'camera' | 'erase';
+export type Tool = 'select' | 'zone' | 'rect' | 'camera' | 'counter' | 'erase';
 
 const TOOLS: { id: Tool; labelKey: string; icon: React.ElementType; hintKey: string }[] = [
   { id: 'select', labelKey: 'tools.select', icon: MousePointer2, hintKey: 'tools.selectHint' },
   { id: 'zone', labelKey: 'tools.zone', icon: Pentagon, hintKey: 'tools.zoneHint' },
   { id: 'rect', labelKey: 'tools.rect', icon: RectangleHorizontal, hintKey: 'tools.rectHint' },
   { id: 'camera', labelKey: 'tools.camera', icon: Video, hintKey: 'tools.cameraHint' },
+  { id: 'counter', labelKey: 'tools.counter', icon: Footprints, hintKey: 'tools.counterHint' },
   { id: 'erase', labelKey: 'tools.erase', icon: Eraser, hintKey: 'tools.eraseHint' },
 ];
 
