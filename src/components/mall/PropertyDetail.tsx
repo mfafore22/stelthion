@@ -58,6 +58,7 @@ export function PropertyDetail({ mallId: mallIdProp, showPredicted = false }: Pr
     hasRealData,
     currentHourVisitors,
     currentHourPrevYear,
+    estimateForHour,
   } = useCounterFootfall(mallId);
 
   // Live footfall snapshot — refreshes every 5 minutes so KPIs track the clock
@@ -81,22 +82,48 @@ export function PropertyDetail({ mallId: mallIdProp, showPredicted = false }: Pr
     return () => clearInterval(id);
   }, [buildSnapshot]);
 
-  // When real counter data is available, override simulated values
+  // Build visitor KPI from real data → profile estimate → null (no hardcoded fallback)
   const performance = React.useMemo(() => {
-    if (!hasRealData) return basePerformance;
-    const yoyDelta = currentHourPrevYear
-      ? ((currentHourVisitors - currentHourPrevYear) / currentHourPrevYear) * 100
-      : 0;
-    return {
+    const now = new Date();
+    const base = {
       ...basePerformance,
-      currentVisitors: currentHourVisitors,
-      deltaVsPlan: Math.round(yoyDelta * 10) / 10,
       dwellTime: null as number | null,
       dwellDelta: 0,
       conversionRate: null as number | null,
       conversionDelta: 0,
+      isEstimated: false,
     };
-  }, [hasRealData, currentHourVisitors, currentHourPrevYear, basePerformance]);
+
+    // Priority 1: exact counter data for current hour today
+    if (hasRealData && currentHourVisitors > 0) {
+      const yoyDelta = currentHourPrevYear
+        ? ((currentHourVisitors - currentHourPrevYear) / currentHourPrevYear) * 100
+        : null;
+      return {
+        ...base,
+        currentVisitors: currentHourVisitors as number | null,
+        deltaVsPlan: yoyDelta !== null ? Math.round(yoyDelta * 10) / 10 : null as number | null,
+        isEstimated: false,
+      };
+    }
+
+    // Priority 2: profile estimate for this weekday + hour
+    const est = estimateForHour(now.getDay(), now.getHours());
+    if (est.visitors > 0) {
+      const yoyDelta = est.prevYear
+        ? ((est.visitors - est.prevYear) / est.prevYear) * 100
+        : null;
+      return {
+        ...base,
+        currentVisitors: est.visitors as number | null,
+        deltaVsPlan: yoyDelta !== null ? Math.round(yoyDelta * 10) / 10 : null as number | null,
+        isEstimated: true,
+      };
+    }
+
+    // Priority 3: no data — show null (no fake numbers)
+    return { ...base, currentVisitors: null as number | null, deltaVsPlan: null as number | null, isEstimated: false };
+  }, [hasRealData, currentHourVisitors, currentHourPrevYear, estimateForHour, basePerformance]);
 
   // Transport, demographics, and parking data
   const [transportData, setTransportData] = useState<{ hsl?: HSLAccessibility; nysse?: NysseAccessibility; vr?: VRConnections } | null>(null);
@@ -411,6 +438,7 @@ export function PropertyDetail({ mallId: mallIdProp, showPredicted = false }: Pr
                 conversionDelta={performance.conversionDelta}
                 alerts={alerts}
                 hasRealData={hasRealData}
+                isEstimated={performance.isEstimated}
               />
             </div>
 
