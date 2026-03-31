@@ -25,15 +25,16 @@ export interface MallCoordinates {
 }
 
 /** Ideapark Lempäälä coordinates */
-export const MALL_COORDINATES: Record<string, MallCoordinates> = {
+export const MALL_COORDINATES: Record<string, MallCoordinates & { fmiPlace?: string }> = {
   ideapark: {
     lat: 61.316,
     lon: 23.757,
     timezone: 'Europe/Helsinki',
+    fmiPlace: 'Lempäälä',
   },
 };
 
-export function getMallCoordinates(mallId: string): MallCoordinates {
+export function getMallCoordinates(mallId: string): MallCoordinates & { fmiPlace?: string } {
   return MALL_COORDINATES[mallId] ?? MALL_COORDINATES.ideapark;
 }
 
@@ -85,30 +86,91 @@ export function calculateComfortIndex(
 
 /**
  * Estimate footfall impact (%) from weather conditions.
- * Positive = more visitors (bad weather drives indoor shopping).
- * Negative = fewer visitors (extreme conditions keep people home).
+ * Positive = more visitors, Negative = fewer visitors.
+ *
+ * Two-segment blended model for destination malls (Ideapark):
+ *   ~90% arrive by car  → weather affects "should I go out?" decision (low sensitivity)
+ *   ~10% walk/transit    → weather directly affects journey comfort (high sensitivity)
+ *
+ * totalImpact = (carImpact × 0.90) + (walkImpact × 0.10), clamped to [-15, +15]
  */
 export function calculateFootfallImpact(
   condition: string,
   temperatureC: number,
-  windSpeedKmh: number
+  windSpeedKmh: number,
+  precipitationMm: number = 0
 ): number {
   const cond = condition.toLowerCase();
+  const isSnow = cond.includes('snow') || cond.includes('sleet');
 
-  // Heavy rain/storm → strong indoor draw
-  if (cond.includes('thunderstorm') || cond.includes('heavy rain')) return 14;
-  // Light rain → moderate indoor draw
-  if (cond.includes('rain') || cond.includes('drizzle')) return 8;
-  // Snow → people prefer to stay home
-  if (cond.includes('snow') || cond.includes('blizzard')) return -10;
-  // Extreme cold (<-15°C) → stay home
-  if (temperatureC < -15) return -12;
-  // Very hot (>28°C) → indoor draw
-  if (temperatureC > 28) return 6;
-  // High wind → stay home
-  if (windSpeedKmh > 40) return -8;
-  // Clear/mild → outdoor preference, slight negative
-  if (cond.includes('clear') || cond.includes('sunny')) return -3;
+  // ── Car segment (90%) — decision-based, low sensitivity ──
 
-  return 0; // neutral
+  let carImpact = 0;
+
+  // Temperature: cold/unpleasant → prefer indoor mall; nice day → go outside
+  if (temperatureC < -20) carImpact += -4;
+  else if (temperatureC < -5) carImpact += 1;
+  else if (temperatureC < 5) carImpact += 2;
+  else if (temperatureC < 15) carImpact += 0;
+  else if (temperatureC < 22) carImpact += -2;
+  else if (temperatureC < 28) carImpact += 0;
+  else carImpact += 1; // > 28°C, heat drives to AC
+
+  // Sky condition
+  if (cond.includes('overcast')) carImpact += 1;
+  else if (cond.includes('cloudy') && !cond.includes('partly')) carImpact += 0.5;
+  else if (cond.includes('clear') || cond.includes('sunny')) carImpact += -1;
+
+  // Precipitation
+  if (isSnow && temperatureC < 1) {
+    carImpact += -2; // Bad roads
+  } else if (precipitationMm > 4) {
+    carImpact += 3; // Heavy rain — outdoor plans cancelled
+  } else if (precipitationMm > 1) {
+    carImpact += 2;
+  } else if (precipitationMm > 0.2) {
+    carImpact += 1;
+  }
+
+  // Extreme wind deters all trips
+  if (windSpeedKmh > 30) carImpact += -2;
+
+  // ── Walk/transit segment (10%) — exposure-based, high sensitivity ──
+
+  let walkImpact = 0;
+
+  // Temperature
+  if (temperatureC < -20) walkImpact += -40;
+  else if (temperatureC < -10) walkImpact += -15;
+  else if (temperatureC < 0) walkImpact += -5;
+  else if (temperatureC < 5) walkImpact += 5;
+  else if (temperatureC < 15) walkImpact += 0;
+  else if (temperatureC < 25) walkImpact += -5;
+  else walkImpact += 5; // > 25°C, want AC
+
+  // Wind chill — cold + wind makes walking miserable
+  if (windSpeedKmh > 25) {
+    walkImpact += -15; // Storm-level
+  } else if (windSpeedKmh > 15 && temperatureC < 5) {
+    walkImpact += -10; // Wind chill
+  }
+
+  // Precipitation
+  if (isSnow) {
+    walkImpact += -15;
+  } else if (precipitationMm > 4) {
+    walkImpact += -20; // Won't walk in downpour
+  } else if (precipitationMm > 1) {
+    walkImpact += -10;
+  } else if (precipitationMm > 0.2) {
+    walkImpact += 10; // Quick dash to shelter in mall
+  }
+
+  // Sky
+  if (cond.includes('overcast')) walkImpact += 5;
+  else if (cond.includes('clear') || cond.includes('sunny')) walkImpact += -5;
+
+  // ── Blend and clamp ──
+  const blended = carImpact * 0.9 + walkImpact * 0.1;
+  return Math.round(Math.max(-15, Math.min(15, blended)) * 10) / 10;
 }
