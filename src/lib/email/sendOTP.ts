@@ -6,7 +6,7 @@ export function maskEmail(email: string): string {
   return `${local[0]}${'*'.repeat(Math.min(local.length - 1, 5))}@${domain}`;
 }
 
-export async function generateAndSendOTP(email: string): Promise<void> {
+export async function generateAndSendOtp(email: string): Promise<void> {
   const code = Math.floor(100000 + Math.random() * 900000).toString();
   const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/auth'
 import prisma from '@/app/lib/prisma'
-import { verifyOTP } from '@/lib/email/sendOTP'
+import { verifyOTP } from '@/lib/email/sendOtp'
 
 export async function POST(req: Request) {
   const session = await auth()

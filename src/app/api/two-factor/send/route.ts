@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/auth'
 import prisma from '@/app/lib/prisma'
-import { generateAndSendOTP, maskEmail } from '@/lib/email/sendOTP'
+import { generateAndSendOtp, maskEmail } from '@/lib/email/sendOtp'
 
 export async function POST() {
   const session = await auth()
@@ -19,7 +19,7 @@ export async function POST() {
   }
 
   try {
-    await generateAndSendOTP(session.user.email)
+    await generateAndSendOtp(session.user.email)
 
     return NextResponse.json({
       success: true,

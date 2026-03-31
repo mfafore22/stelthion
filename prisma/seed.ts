@@ -31,7 +31,6 @@ async function main() {
   })
 
   const users = [
-    { email: 'admin@ideapark.fi', name: 'KoyIdeaparkOy', role: 'ADMIN' as const },
     { email: 'faforemichael001@gmail.com', name: 'Michael Fafore', role: 'ADMIN' as const },
     { email: 'kimmoisbjornssund@pm.me', name: 'Kimmo Isbjörnssund', role: 'ADMIN' as const },
   ]
