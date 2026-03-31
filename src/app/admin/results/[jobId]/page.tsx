@@ -6,7 +6,7 @@ import Link from 'next/link';
 import useSWR from 'swr';
 import { useTranslation } from 'react-i18next';
 import '@/lib/i18n';
-import { ArrowLeft, ArrowRight, BarChart3, Route, Clock, Video } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BarChart3, Route, Clock, Video, ShieldCheck } from 'lucide-react';
 
 interface AnalysisResult {
   zoneId: string;
@@ -23,6 +23,7 @@ interface Camera {
 interface JobDetail {
   id: string;
   mallId: string;
+  mode: string;
   camera: Camera;
   footageDate: string;
   startTime: string;
@@ -117,9 +118,20 @@ export default function AdminResultsPage() {
               {new Date(job.footageDate).toLocaleDateString()} &middot; {job.startTime}–{job.endTime} &middot; {t('results.floor', { floor: job.camera.floor })}
             </p>
           </div>
-          <span className={`px-3 py-1 rounded-full text-xs font-medium ${STATUS_COLORS[job.status] ?? ''}`}>
-            {job.status}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className={`px-3 py-1 rounded-full text-xs font-medium ${STATUS_COLORS[job.status] ?? ''}`}>
+              {job.status}
+            </span>
+            {job.status === 'COMPLETE' && ['AB_TRACKING', 'JOURNEY_MAP', 'FLOW_QUERY'].includes(job.mode) && (
+              <Link
+                href={`/admin/results/${job.id}/verify`}
+                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-emerald-700 bg-emerald-50 rounded-lg hover:bg-emerald-100 border border-emerald-200/50 transition-all duration-300"
+              >
+                <ShieldCheck className="w-3.5 h-3.5" />
+                {t('verification.verify', 'Verify Re-ID')}
+              </Link>
+            )}
+          </div>
         </div>
 
         <div className="grid grid-cols-4 gap-4">

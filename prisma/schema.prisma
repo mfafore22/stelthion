@@ -169,6 +169,7 @@ model Camera {
   model            String?
   resolution       String?
   lensInfo         String?
+  deviceType       String         @default("camera") // camera | counter
   cameraRole       String?
   angleDeg         Float?
   fovDeg           Float?
@@ -207,6 +208,8 @@ model AnalysisJob {
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt
 
+  sampleSize      Int              @default(10)
+
   mall            Mall             @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
   camera          Camera?          @relation("PrimaryCamera", fields: [cameraId], references: [id])
   secondaryCamera Camera?          @relation("SecondaryCamera", fields: [secondaryCameraId], references: [id])
@@ -214,6 +217,8 @@ model AnalysisJob {
   journeys        JourneySession[]
   behaviors       StoreBehavior[]
   insights        AnalysisInsight[]
+  snapshots       VerificationSnapshot[]
+  reviews         VerificationReview[]
 }
 
 enum AnalysisMode {
@@ -221,6 +226,7 @@ enum AnalysisMode {
   AB_TRACKING
   JOURNEY_MAP
   STORE_BEHAVIOR
+  FLOW_QUERY
 }
 
 enum JobStatus {
@@ -448,4 +454,37 @@ enum EventCategory {
   SEASONAL
   TENANT
   OTHER
+}
+
+// ─── Verification (Re-ID Quality Assurance) ────────────────────────────────
+
+model VerificationSnapshot {
+  id              String   @id @default(cuid())
+  jobId           String
+  anonymousTagId  String
+  cameraId        String
+  zoneId          String
+  capturedAt      DateTime
+  s3Key           String
+  colorSignature  String
+  sequenceIndex   Int
+  createdAt       DateTime @default(now())
+
+  job AnalysisJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId, anonymousTagId])
+}
+
+model VerificationReview {
+  id              String   @id @default(cuid())
+  jobId           String
+  anonymousTagId  String
+  reviewedBy      String
+  verdict         String
+  notes           String?
+  createdAt       DateTime @default(now())
+
+  job AnalysisJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, anonymousTagId, reviewedBy])
 }

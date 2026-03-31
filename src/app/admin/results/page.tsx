@@ -4,7 +4,7 @@ import Link from 'next/link';
 import useSWR from 'swr';
 import { useTranslation } from 'react-i18next';
 import '@/lib/i18n';
-import { Route, Eye, BarChart3, Store } from 'lucide-react';
+import { Route, Eye, BarChart3, Store, ShieldCheck, GitBranch } from 'lucide-react';
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
@@ -20,6 +20,7 @@ const MODE_ICONS: Record<string, React.ReactNode> = {
   AB_TRACKING: <Route className="w-3.5 h-3.5" />,
   JOURNEY_MAP: <Route className="w-3.5 h-3.5" />,
   STORE_BEHAVIOR: <Store className="w-3.5 h-3.5" />,
+  FLOW_QUERY: <GitBranch className="w-3.5 h-3.5" />,
 };
 
 interface Job {
@@ -45,6 +46,16 @@ export default function AdminResultsIndexPage() {
   const resultJobs = (jobs ?? []).filter(
     (j) => j.status === 'COMPLETE' || j.status === 'PROCESSING' || j.status === 'FAILED',
   );
+
+  const VERIFIABLE_MODES = ['AB_TRACKING', 'JOURNEY_MAP', 'FLOW_QUERY'];
+  const SEVENTY_TWO_HOURS = 72 * 60 * 60 * 1000;
+
+  function isVerifiable(job: Job) {
+    if (job.status !== 'COMPLETE') return false;
+    if (!VERIFIABLE_MODES.includes(job.mode)) return false;
+    const age = Date.now() - new Date(job.createdAt).getTime();
+    return age < SEVENTY_TWO_HOURS;
+  }
 
   return (
     <div className="p-6 max-w-5xl">
@@ -72,6 +83,7 @@ export default function AdminResultsIndexPage() {
                 <th className="text-left px-4 py-3 font-medium text-bo-neutral-600">{t('jobs.time')}</th>
                 <th className="text-left px-4 py-3 font-medium text-bo-neutral-600">{t('jobs.journey')}</th>
                 <th className="text-left px-4 py-3 font-medium text-bo-neutral-600">{t('jobs.status')}</th>
+                <th className="text-left px-4 py-3 font-medium text-bo-neutral-600">{t('results.verify', 'Verify')}</th>
                 <th className="text-right px-4 py-3 font-medium text-bo-neutral-600"></th>
               </tr>
             </thead>
@@ -93,6 +105,19 @@ export default function AdminResultsIndexPage() {
                     </span>
                     {job.status === 'PROCESSING' && job.progress > 0 && (
                       <span className="ml-2 text-[10px] text-bo-neutral-500 tabular-nums">{job.progress}%</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3">
+                    {isVerifiable(job) ? (
+                      <Link
+                        href={`/admin/results/${job.id}/verify`}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-emerald-700 bg-emerald-50 rounded-lg hover:bg-emerald-100 border border-emerald-200/50 transition-all duration-300"
+                      >
+                        <ShieldCheck className="w-3.5 h-3.5" />
+                        {t('results.verify', 'Verify')}
+                      </Link>
+                    ) : (
+                      <span className="text-[10px] text-bo-neutral-400">—</span>
                     )}
                   </td>
                   <td className="px-4 py-3 text-right">
