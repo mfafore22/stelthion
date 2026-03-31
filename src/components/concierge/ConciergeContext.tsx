@@ -208,23 +208,31 @@ export function ConciergeProvider({
     };
   }, [wsUrl]);
 
-  // Load conversations
+  // Load conversations (skip when no authenticated user)
   const refreshConversations = useCallback(async () => {
+    if (tenantId === 'default') {
+      setState((prev) => ({ ...prev, isLoading: false, conversations: [] }));
+      return;
+    }
+
     setState((prev) => ({ ...prev, isLoading: true }));
 
     try {
-      // TODO: API call to fetch conversations
       const response = await fetch(`/api/concierge/conversations?tenantId=${tenantId}`);
+      if (!response.ok) {
+        setState((prev) => ({ ...prev, isLoading: false, conversations: [] }));
+        return;
+      }
       const data = await response.json();
 
       setState((prev) => ({
         ...prev,
-        conversations: data.conversations,
+        conversations: data.conversations ?? [],
         isLoading: false,
       }));
     } catch (error) {
       console.error('Failed to load conversations:', error);
-      setState((prev) => ({ ...prev, isLoading: false }));
+      setState((prev) => ({ ...prev, isLoading: false, conversations: [] }));
     }
   }, [tenantId]);
 

@@ -139,7 +139,8 @@
     "reIdentified": "Återidentifierade",
     "recognitionRate": "Igenkänningsgrad",
     "movementPaths": "Rörelsemönster",
-    "noMovementPaths": "Inga rörelsemönster registrerade."
+    "noMovementPaths": "Inga rörelsemönster registrerade.",
+    "verify": "Verifiera"
   },
   "analysis": {
     "scheduleTitle": "Schemalägg videoanalys",
@@ -176,5 +177,25 @@
     "forceOffline": "Tvinga offline",
     "forceOnline": "Tvinga online",
     "revoke": "Återkalla enhet"
+  },
+  "verification": {
+    "title": "Re-ID-verifiering",
+    "verify": "Verifiera Re-ID",
+    "backToResults": "Tillbaka till resultat",
+    "loading": "Laddar...",
+    "loadFailed": "Kunde inte ladda verifieringsdata",
+    "progress": "Granskade",
+    "mode": "Läge",
+    "sampleSize": "Urvalsstorlek",
+    "individuals": "Individer",
+    "status": "Status",
+    "individual": "Individ",
+    "snapshots": "bilder",
+    "noSnapshots": "Inga verifieringsbilder tillgängliga för detta jobb. Bilderna skickas från edge-enheten efter jobbets slutförande.",
+    "match": "Samma person",
+    "mismatch": "Annan person",
+    "unsure": "Osäker",
+    "notesPlaceholder": "Valfria anteckningar...",
+    "saving": "Sparar..."
   }
 }
