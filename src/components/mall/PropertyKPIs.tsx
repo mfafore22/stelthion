@@ -13,8 +13,8 @@ import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 
 interface PropertyKPIsProps {
-  currentVisitors: number;
-  deltaVsPlan: number;
+  currentVisitors: number | null;
+  deltaVsPlan: number | null;
   weatherImpact: number;
   dwellTime: number | null;
   dwellDelta: number;
@@ -22,6 +22,7 @@ interface PropertyKPIsProps {
   conversionDelta: number;
   alerts: any[];
   hasRealData?: boolean;
+  isEstimated?: boolean;
 }
 
 export function PropertyKPIs({
@@ -34,10 +35,10 @@ export function PropertyKPIs({
   conversionDelta,
   alerts,
   hasRealData,
+  isEstimated,
 }: PropertyKPIsProps) {
   const { t } = useTranslation('mall');
   const formatNumber = (num: number) => {
-    // Format like portfolio page: 12.3k, 1.5M, etc.
     if (num >= 1000000) {
       return `${(num / 1000000).toFixed(1)}M`;
     }
@@ -51,16 +52,24 @@ export function PropertyKPIs({
     return `${num >= 0 ? '+' : ''}${num.toFixed(1)}%`;
   };
 
+  const visitorValue = currentVisitors != null
+    ? (isEstimated ? `~${formatNumber(currentVisitors)}` : formatNumber(currentVisitors))
+    : '--';
+
+  const deltaLabel = deltaVsPlan != null
+    ? `${formatPercent(deltaVsPlan)} ${isEstimated ? t('kpi.avgVsLastYear', 'avg vs last year') : t('kpi.vsLastYear', 'vs last year')}`
+    : '--';
+
   return (
     <>
       {/* Current visitors with gradient background */}
       <MallKPICard
         label={t('kpi.currentVisitors')}
-        value={formatNumber(currentVisitors)}
-        delta={`${formatPercent(deltaVsPlan)} ${hasRealData ? t('kpi.vsLastYear', 'vs last year') : t('kpi.vsPlan')}`}
-        deltaType={deltaVsPlan >= 0 ? 'positive' : 'negative'}
+        value={visitorValue}
+        delta={deltaLabel}
+        deltaType={deltaVsPlan != null && deltaVsPlan >= 0 ? 'positive' : 'negative'}
         accent="green"
-        trendPercentage={deltaVsPlan}
+        trendPercentage={deltaVsPlan ?? 0}
       />
 
       {/* Dwell Time with gradient background */}

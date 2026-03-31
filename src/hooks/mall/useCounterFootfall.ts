@@ -6,14 +6,13 @@ import useSWR from 'swr';
 /**
  * Hourly traffic curve (index = hour 0–23), normalised so peak = 1.0.
  * Used to distribute daily/weekly totals when no hourly data exists.
- * Copied from lib/data/footfall.ts to keep this hook self-contained.
  */
 const HOURLY_CURVE = [
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 00–09
   0.08, 0.32, 0.58, 0.74,         // 10–13
   0.88, 0.96, 1.00, 0.97,         // 14–17
   0.41, 0.30, 0.14, 0.05,         // 18–21
-  0, 0,                             // 22–23
+  0, 0,                            // 22–23
 ];
 const CURVE_SUM = HOURLY_CURVE.reduce((a, b) => a + b, 0);
 
@@ -52,6 +51,22 @@ interface CounterApiResponse {
   availableWeeks: { week: number; year: number }[];
 }
 
+// --- Types matching /api/counters/[mallId]/profile response ---
+
+interface ProfileHourlyEntry {
+  weekday: number;
+  hour: number;
+  avg: number;
+  avgPrevYear: number | null;
+}
+
+interface CounterProfileResponse {
+  dataAvailable: boolean;
+  peakHourlyVisitors: number;
+  hourlyProfile: ProfileHourlyEntry[];
+  weekdayDailyAvg: { weekday: number; avg: number; avgPrevYear: number | null }[];
+}
+
 export interface HourlyTotal {
   hour: number;
   visitors: number;
@@ -67,6 +82,7 @@ const fetcher = (url: string) =>
 export function useCounterFootfall(mallId: string) {
   const [selectedWeek, setSelectedWeek] = useState<{ week: number; year: number } | null>(null);
 
+  // Counter data SWR
   const swrKey = mallId
     ? selectedWeek
       ? `/api/counters/${mallId}?week=${selectedWeek.week}&year=${selectedWeek.year}`
@@ -75,8 +91,15 @@ export function useCounterFootfall(mallId: string) {
 
   const { data, isLoading } = useSWR<CounterApiResponse>(swrKey, fetcher, {
     revalidateOnFocus: false,
-    dedupingInterval: 60000,
+    dedupingInterval: 60_000,
   });
+
+  // Profile SWR — cached for 5 minutes, rarely changes
+  const { data: profile } = useSWR<CounterProfileResponse>(
+    mallId ? `/api/counters/${mallId}/profile` : null,
+    fetcher,
+    { revalidateOnFocus: false, dedupingInterval: 300_000 },
+  );
 
   // Auto-select first available week
   if (!selectedWeek && data?.availableWeeks?.length) {
@@ -84,7 +107,53 @@ export function useCounterFootfall(mallId: string) {
   }
 
   const hasRealData = !!data?.counters?.length;
+  const hasProfile = !!profile?.dataAvailable;
+  const profilePeak = profile?.peakHourlyVisitors ?? 0;
   const availableWeeks = data?.availableWeeks ?? [];
+
+  // --- Profile lookup maps ---
+
+  const profileHourlyMap = useMemo(() => {
+    if (!profile?.hourlyProfile?.length) return null;
+    const m = new Map<string, { avg: number; avgPrevYear: number | null }>();
+    for (const e of profile.hourlyProfile) {
+      m.set(`${e.weekday}:${e.hour}`, { avg: e.avg, avgPrevYear: e.avgPrevYear });
+    }
+    return m;
+  }, [profile]);
+
+  const profileDailyMap = useMemo(() => {
+    if (!profile?.weekdayDailyAvg?.length) return null;
+    const m = new Map<number, { avg: number; avgPrevYear: number | null }>();
+    for (const e of profile.weekdayDailyAvg) {
+      m.set(e.weekday, { avg: e.avg, avgPrevYear: e.avgPrevYear });
+    }
+    return m;
+  }, [profile]);
+
+  /**
+   * Returns historical average visitors for a given weekday + hour.
+   * Tries hourly profile first, falls back to daily avg distributed by HOURLY_CURVE.
+   */
+  const estimateForHour = useMemo(() => {
+    return (weekday: number, hour: number): { visitors: number; prevYear: number | null } => {
+      if (profileHourlyMap) {
+        const entry = profileHourlyMap.get(`${weekday}:${hour}`);
+        if (entry && entry.avg > 0) return { visitors: entry.avg, prevYear: entry.avgPrevYear };
+      }
+      if (profileDailyMap) {
+        const daily = profileDailyMap.get(weekday);
+        if (daily && daily.avg > 0) {
+          const fraction = HOURLY_CURVE[hour] / CURVE_SUM;
+          return {
+            visitors: Math.round(daily.avg * fraction),
+            prevYear: daily.avgPrevYear != null ? Math.round(daily.avgPrevYear * fraction) : null,
+          };
+        }
+      }
+      return { visitors: 0, prevYear: null };
+    };
+  }, [profileHourlyMap, profileDailyMap]);
 
   /**
    * Sum hourly totals across all counters for a given date string (YYYY-MM-DD).
@@ -101,7 +170,6 @@ export function useCounterFootfall(mallId: string) {
         if (!dayEntry) continue;
 
         if (dayEntry.hourlyData?.length) {
-          // Real hourly data
           for (const h of dayEntry.hourlyData) {
             const existing = hourMap.get(h.hour) ?? { visitors: 0, prevYear: null };
             existing.visitors += h.visitors;
@@ -111,7 +179,6 @@ export function useCounterFootfall(mallId: string) {
             hourMap.set(h.hour, existing);
           }
         } else {
-          // Distribute daily total using hourly curve
           const dailyTotal = dayEntry.visitors;
           const dailyPrev = dayEntry.visitorsPrevYear;
           for (let hr = 0; hr < 24; hr++) {
@@ -148,12 +215,10 @@ export function useCounterFootfall(mallId: string) {
 
   /**
    * Find the best matching date in counter data for "today" or a given weekday.
-   * Returns the date string or null.
    */
   const findDateForWeekday = useMemo(() => {
     if (!data?.counters?.length) return () => null as string | null;
 
-    // Collect all unique dates from counter data
     const allDates = new Set<string>();
     for (const c of data.counters) {
       for (const d of c.dailyData) {
@@ -166,17 +231,14 @@ export function useCounterFootfall(mallId: string) {
       const today = new Date();
       const todayStr = today.toISOString().split('T')[0];
 
-      // Exact date match first
       if (allDates.has(todayStr)) return todayStr;
 
-      // Match by weekday (0=Sun, 1=Mon, ... 6=Sat)
       const dayOfWeek = targetDay ?? today.getDay();
       for (const d of sortedDates) {
         const dt = new Date(d + 'T00:00:00');
         if (dt.getDay() === dayOfWeek) return d;
       }
 
-      // Fallback to most recent date
       return sortedDates[sortedDates.length - 1] ?? null;
     };
   }, [data]);
@@ -189,6 +251,18 @@ export function useCounterFootfall(mallId: string) {
   const currentHourData = todayDate ? getVisitorsForHour(todayDate, currentHour) : null;
   const currentHourVisitors = currentHourData?.visitors ?? 0;
   const currentHourPrevYear = currentHourData?.prevYear ?? null;
+
+  // isEstimated: true when today's exact date is not in the loaded counter data
+  // but profile data exists (so we can fall back to historical averages)
+  const isEstimated = useMemo(() => {
+    if (!hasProfile) return false;
+    if (!hasRealData) return true;
+    const todayStr = new Date().toISOString().split('T')[0];
+    for (const c of data!.counters) {
+      if (c.dailyData.some((d) => d.date === todayStr)) return false;
+    }
+    return true;
+  }, [hasProfile, hasRealData, data]);
 
   // Week total across all counters
   const weekTotal = useMemo(() => {
@@ -205,6 +279,9 @@ export function useCounterFootfall(mallId: string) {
   return {
     counterData: data ?? null,
     hasRealData,
+    hasProfile,
+    profilePeak,
+    isEstimated,
     isLoading,
     availableWeeks,
     selectedWeek,
@@ -212,6 +289,7 @@ export function useCounterFootfall(mallId: string) {
     hourlyTotalsForDate,
     getVisitorsForHour,
     findDateForWeekday,
+    estimateForHour,
     currentHourVisitors,
     currentHourPrevYear,
     weekTotal,
