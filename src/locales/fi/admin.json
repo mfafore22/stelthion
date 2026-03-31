@@ -95,7 +95,13 @@
     "rangeM": "Kantama (m)",
     "angleDeg": "Kulma (astetta)",
     "streamUrl": "Suoratoistourl",
-    "active": "Aktiivinen"
+    "active": "Aktiivinen",
+    "model": "Malli",
+    "resolution": "Resoluutio",
+    "cameraRole": "Rooli",
+    "lensInfo": "Objektiivi",
+    "x": "X",
+    "y": "Y"
   },
   "jobs": {
     "title": "Analyysityöt",
@@ -134,7 +140,8 @@
     "reIdentified": "Uudelleentunnistetut",
     "recognitionRate": "Tunnistusaste",
     "movementPaths": "Kulkureitit",
-    "noMovementPaths": "Ei tallennettuja kulkureittejä."
+    "noMovementPaths": "Ei tallennettuja kulkureittejä.",
+    "verify": "Varmista"
   },
   "analysis": {
     "scheduleTitle": "Ajoita videoanalyysi",
@@ -194,5 +201,25 @@
     "confirmDelete": "Vahvista",
     "cancelDelete": "Peruuta",
     "deleting": "Poistetaan..."
+  },
+  "verification": {
+    "title": "Re-ID-varmistus",
+    "verify": "Varmista Re-ID",
+    "backToResults": "Takaisin tuloksiin",
+    "loading": "Ladataan...",
+    "loadFailed": "Varmistustietojen lataaminen epäonnistui",
+    "progress": "Tarkistettu",
+    "mode": "Tila",
+    "sampleSize": "Otanta",
+    "individuals": "Yksilöt",
+    "status": "Tila",
+    "individual": "Yksilö",
+    "snapshots": "kuvaa",
+    "noSnapshots": "Tähän työhön ei ole saatavilla varmistuskuvia. Kuvat lähetetään reunalaitteelta työn valmistuttua.",
+    "match": "Sama henkilö",
+    "mismatch": "Eri henkilö",
+    "unsure": "Epävarma",
+    "notesPlaceholder": "Valinnaisia muistiinpanoja...",
+    "saving": "Tallennetaan..."
   }
 }

@@ -114,7 +114,15 @@
       "Health and beauty goods": "Hälso- och skönhetsprodukter",
       "Leisure and entertainment": "Fritid och underhållning",
       "Sports and outdoor": "Sport och friluftsliv",
-      "Technology and electronics": "Teknik och elektronik"
+      "Technology and electronics": "Teknik och elektronik",
+      "Fashion": "Mode",
+      "Food & Beverage": "Mat & Dryck",
+      "Auto": "Bil",
+      "Sports": "Sport",
+      "Home & Living": "Hem & Boende",
+      "Beauty & Health": "Skönhet & Hälsa",
+      "Children": "Barn",
+      "Daily Goods & Tech": "Dagligvaror & Teknik"
     }
   },
   "events": {
@@ -217,7 +225,11 @@
     "paymentInfo": "Gratis · Betalning: Kort, EasyPark, ParkMan, Autopay",
     "visitorArrivalModes": "Besökarnas ankomstmedel",
     "car": "Bil",
-    "publicTransitWalking": "Kollektivtrafik / Promenad"
+    "publicTransitWalking": "Kollektivtrafik / Promenad",
+    "p5Designation": "Reserverat för tornboende + köpcentrumpersonal",
+    "levelName": {
+      "Outdoor Lot": "Utomhusparkering"
+    }
   },
   "demographics": {
     "title": "Demografi",
@@ -268,7 +280,13 @@
     "sourceCatchmentAnalysis": "Källa: Statistikcentralen + OpenStreetMap restidsanalys",
     "detailedHouseholdStats": "Detaljerad hushållsstatistik",
     "householdStatsDesc": "Visa hushållsstorlek, ägande och boendetyper per område",
-    "householdsUnit": "hushåll"
+    "householdsUnit": "hushåll",
+    "sourcePopulation": "Statistikcentralen · Befolkningsregister (StatFin/vaerak)",
+    "sourceIncome": "Statistikcentralen · Inkomstfördelningsstatistik (StatFin/tjkt)",
+    "sourceEmployment": "Statistikcentralen · Sysselsättningsstatistik (StatFin/tyolli)",
+    "sourceCatchment": "Restidsanalys · Statistikcentralen",
+    "sourceAttribution": "Demografisk data: Statistikcentralen (Tilastokeskus)",
+    "sourceBoundaries": "Postnummergränser: Statistikcentralen WFS API"
   },
   "householdModal": {
     "title": "Hushållsstatistik per område",
@@ -468,7 +486,8 @@
     "activeAlerts": "Aktiva larm",
     "vsLastYear": "mot förra året",
     "notAvailable": "Ej tillgänglig",
-    "allSystemsNormal": "Alla system normala"
+    "allSystemsNormal": "Alla system normala",
+    "avgVsLastYear": "medel mot förra året"
   },
   "alertsStream": {
     "title": "Senaste larm",
@@ -510,23 +529,31 @@
       "cool": "svalt",
       "optimal": "optimalt",
       "warm": "varmt",
-      "hot": "hett"
+      "hot": "hett",
+      "freezing": "iskallt"
     },
     "comfort": {
       "high": "Hög",
       "moderate": "Måttlig",
-      "low": "Låg"
+      "low": "Låg",
+      "excellent": "Utmärkt för shopping",
+      "great": "Bra dag för köpcentret",
+      "good": "Bra shoppingväder",
+      "outdoors": "Fint utomhusväder — färre besökare förväntas"
     },
     "impact": {
       "indoor": "🌧️ Vädret driver besökare inomhus",
       "mild": "☀️ Måttlig väderpåverkan på besökarantalet",
-      "outdoor": "🌤️ Optimala utomhusförhållanden"
+      "outdoor": "🌤️ Optimala utomhusförhållanden",
+      "quiet": "🌙 Lugn period — lägre besökarantal förväntas",
+      "normal": "🌥️ Typiska förhållanden — normalt besöksmönster"
     },
     "forecastMsg": {
       "significant": "{{condition}} – betydande inomhustrafik på grund av vädret",
       "moderate": "{{description}} – besökarantalet förväntas öka",
       "outdoor": "Utmärkt utomhusväder kan minska köpcentrumbesöken",
-      "stable": "{{description}} – stabilt besökarantal förväntas"
+      "stable": "{{description}} – stabilt besökarantal förväntas",
+      "coldQuiet": "Kallt eller mörkt väder — lugnare period för köpcentret"
     },
     "condition": {
       "Cloudy": "Mestadels molnigt",
@@ -547,7 +574,8 @@
       "evening": "Kväll",
       "night": "Natt"
     },
-    "dataSource": "Källa: {{source}}"
+    "dataSource": "Källa: {{source}}",
+    "shoppingWeather": "Shoppingväder"
   },
   "footfall": {
     "chartTitle": "Verkligt vs prognostiserat besöksflöde (idag)",
@@ -562,7 +590,9 @@
     "zones": {
       "centerHub": "Evenemangstorget",
       "foodCourt": "Restaurangavdelningen"
-    }
+    },
+    "estimated": "Uppskattat",
+    "noData": "Ingen räknardata uppladdad ännu"
   },
   "topbar": {
     "concierge": "Stelthion Concierge",
@@ -704,12 +734,15 @@
     "modes": {
       "zoneCount": "Områdesräkning",
       "abTracking": "A → B-flöde",
-      "journeyMap": "Resekarta"
+      "journeyMap": "Resekarta",
+      "storeBehavior": "Butiksbeteende"
     },
     "modesDescription": {
       "zoneCount": "Räkna besökare i kameravyn",
       "abTracking": "Spåra besökare mellan två punkter",
-      "journeyMap": "Kartlägg besökarvägar genom zoner"
+      "journeyMap": "Kartlägg besökarvägar genom zoner",
+      "flowQuery": "Beställ numeriska besökarflödesanalyser mellan två butiker eller områden. Systemet räknar antalet besökare mellan startpunkten och destinationen under vald dag och timme. Data är anonym. (GDPR-kompatibelt).",
+      "storeBehavior": "Analysera förbipassering, stopp och inträdesbeteende"
     },
     "config": {
       "camera": "Kamera",
@@ -768,6 +801,77 @@
       "llmDescription": "AI-drivna insikter om besökarmönster och beteende",
       "visitorCounters": "Integration av besökarräknare",
       "counterDescription": "Jämför och extrapolera med besökarräknardata"
+    },
+    "storeBehavior": {
+      "walkBy": "Förbipassering",
+      "stop": "Stopp",
+      "enter": "Inträde",
+      "hourlyBreakdown": "Timfördelning",
+      "byStore": "Per butik",
+      "store": "Butik",
+      "conversionRate": "Konvertering"
+    },
+    "insights": {
+      "title": "AI-insikter",
+      "generate": "Generera insikter",
+      "generating": "Genererar...",
+      "recommendations": "Rekommendationer",
+      "noInsights": "Inga insikter ännu. Klicka på \"Generera insikter\" för att analysera detta jobbs resultat.",
+      "previousCount": "{{count}} tidigare insikter"
     }
+  },
+  "map": {
+    "unavailable": "Karta ej tillgänglig",
+    "addToken": "Lägg till NEXT_PUBLIC_MAPBOX_TOKEN för att visa upptagningsområdeskarta"
+  },
+  "flowQuery": {
+    "title": "Flödesanalys",
+    "selectZone": "Välj zon",
+    "searchZone": "Sök zoner...",
+    "noResults": "Inga resultat",
+    "clearSelection": "Rensa val",
+    "stepOrigin": "Startzon",
+    "stepDirection": "Riktning",
+    "stepDestination": "Slutzon",
+    "originPlaceholder": "Klicka zon på kartan eller välj…",
+    "destinationPlaceholder": "Klicka andra zon eller välj…",
+    "destinationOptionalHint": "Välj en slutzon på planritningen eller från listan",
+    "outbound": "Avgående",
+    "inbound": "Ankommande",
+    "between": "Mellan",
+    "analyze": "Analysera flöde",
+    "analyzeRoute": "Analysera rutt",
+    "analyzing": "Analyserar…",
+    "stepTime": "Tidsperiod",
+    "date": "Datum",
+    "timeRange": "Tidsintervall",
+    "reset": "Rensa",
+    "newQuery": "Ny analys",
+    "visitorsTotal": "besökare totalt",
+    "sourceBreakdown": "Källor",
+    "destinationBreakdown": "Destinationer",
+    "flowActive": "Flöde aktivt",
+    "originLabel": "Startzon",
+    "flowDirection": "Flödesriktning",
+    "arrowThickness": "Pilens tjocklek = antal besökare",
+    "selectOriginHint": "Välj en startzon till vänster för att starta en flödesanalys",
+    "clickHint": "Klicka en zon på planritningen för att ange startzon",
+    "startTime": "Starttid",
+    "duration": "Varaktighet",
+    "minutes": "min",
+    "endTimeComputed": "Sluttid",
+    "sampleSize": "Urvalsstorlek",
+    "trackedIndividuals": "anonymt spårade individer"
+  },
+  "export": {
+    "generating": "Genererar rapport…",
+    "downloaded": "Rapport nedladdad",
+    "reportTitle": "Besökarflödesanalysrapport",
+    "generatedBy": "Genererad av Stelthion Analytics Platform",
+    "zoneTable": "Zonbesökssammanfattning",
+    "flowTable": "Flödesanalysresultat",
+    "coverSubtitle": "Våning: {{floor}} · Klockan: {{hour}}:00",
+    "executiveSummary": "Sammanfattning",
+    "keyHighlights": "Viktiga observationer"
   }
 }

@@ -95,7 +95,13 @@
     "rangeM": "Range (m)",
     "angleDeg": "Angle (deg)",
     "streamUrl": "Stream URL",
-    "active": "Active"
+    "active": "Active",
+    "model": "Model",
+    "resolution": "Resolution",
+    "cameraRole": "Role",
+    "lensInfo": "Lens",
+    "x": "X",
+    "y": "Y"
   },
   "jobs": {
     "title": "Analysis Jobs",
@@ -134,7 +140,8 @@
     "reIdentified": "Re-identified",
     "recognitionRate": "Recognition Rate",
     "movementPaths": "Movement Paths",
-    "noMovementPaths": "No movement paths recorded."
+    "noMovementPaths": "No movement paths recorded.",
+    "verify": "Verify"
   },
   "analysis": {
     "scheduleTitle": "Schedule Video Analysis",
@@ -194,5 +201,25 @@
     "confirmDelete": "Confirm",
     "cancelDelete": "Cancel",
     "deleting": "Deleting..."
+  },
+  "verification": {
+    "title": "Re-ID Verification",
+    "verify": "Verify Re-ID",
+    "backToResults": "Back to results",
+    "loading": "Loading...",
+    "loadFailed": "Failed to load verification data",
+    "progress": "Reviewed",
+    "mode": "Mode",
+    "sampleSize": "Sample size",
+    "individuals": "Individuals",
+    "status": "Status",
+    "individual": "Individual",
+    "snapshots": "snapshots",
+    "noSnapshots": "No verification snapshots available for this job. Snapshots are pushed from the edge device after job completion.",
+    "match": "Match",
+    "mismatch": "Mismatch",
+    "unsure": "Unsure",
+    "notesPlaceholder": "Optional notes...",
+    "saving": "Saving..."
   }
 }
