@@ -14,18 +14,10 @@ async function main() {
   const hashedPassword = await bcrypt.hash('ideapark2024', 10)
 
   // ── KOY IDEAPARK AB ─────────────────────────────────────
-<<<<<<< HEAD
-  const ideapark = await prisma.customer.create({
-    data: {
-      id: 'koy-ideapark-ab',
-      name: 'Koy Ideapark Ab',
-    },
-=======
   const ideapark = await prisma.customer.upsert({
     where: { id: 'ideapark' },
     update: { name: 'Koy Ideapark Ab' },
     create: { id: 'ideapark', name: 'Koy Ideapark Ab' },
->>>>>>> origin/fix/safe-seed-counter-data
   })
 
   const users = [
@@ -63,40 +55,6 @@ async function main() {
       totalShops: 163,
       status: 'LIVE',
       customerId: ideapark.id,
-<<<<<<< HEAD
-      stats: {
-        create: {
-          currentVisitors: 3900,
-          annualVisitors: 5000000,
-          annualSales: 180000000,
-          dwellTime: 108,
-          conversionRate: 23.4,
-        },
-      },
-      branding: {
-        create: {
-          primaryColor: '#328d2e',
-          secondaryColor: '#7cb928',
-          accentColor: '#214990',
-          gradientFrom: '#264d21',
-          gradientTo: '#1a3a15',
-        },
-      },
-      categories: {
-        create: [
-          { name: 'Fashion', shopCount: 50, percentage: 21.5 },
-          { name: 'Food & Beverage', shopCount: 22, percentage: 13.5 },
-          { name: 'Auto', shopCount: 12, percentage: 7.4 },
-          { name: 'Sports', shopCount: 26, percentage: 16.0 },
-          { name: 'Home & Living', shopCount: 23, percentage: 14.1 },
-          { name: 'Services', shopCount: 34, percentage: 20.9 },
-          { name: 'Beauty & Health', shopCount: 17, percentage: 10.4 },
-          { name: 'Children', shopCount: 17, percentage: 10.4 },
-          { name: 'Daily Goods & Tech', shopCount: 9, percentage: 5.5 },
-        ],
-      },
-=======
->>>>>>> origin/fix/safe-seed-counter-data
     },
   })
 

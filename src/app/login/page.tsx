@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { Lock, AlertCircle, User } from 'lucide-react';
+import Image from 'next/image';
 
 export default function LoginPage() {
   const [mode, setMode] = useState<'choose' | 'admin' | 'mall'>('choose');
@@ -47,13 +48,15 @@ export default function LoginPage() {
       <div className="w-full max-w-md px-4">
         <div className="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] border border-gray-100 px-10 py-10">
 
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900" style={{ fontFamily: "'Georgia', serif" }}>
-              stelthion
-            </h1>
-            <p className="text-sm text-gray-400 -mt-0.5 tracking-wide">
-              Synexis<span className="text-[10px] align-super">™</span>
-            </p>
+          <div className="flex justify-center mb-8">
+            <Image
+              src="/stelthion-brandmark.png"
+              alt="Stelthion"
+              width={440}
+              height={120}
+              className="object-contain"
+              priority
+            />
           </div>
 
           {mode === 'choose' && (
