@@ -25,7 +25,7 @@ async function main() {
   // ── KOY IDEAPARK AB ─────────────────────────────────────
   const ideapark = await prisma.customer.create({
     data: {
-      id: 'ideapark',
+      id: 'koy-ideapark-ab',
       name: 'Koy Ideapark Ab',
     },
   })

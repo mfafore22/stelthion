@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import '@/lib/i18n';
-import { Map, ClipboardList } from 'lucide-react';
+import { Map, ClipboardList, UserPlus } from 'lucide-react';
 
 interface Props {
   zoneCount: number;
@@ -34,6 +34,7 @@ export function AdminDashboardClient({ zoneCount, cameraCount, pending, processi
       <div className="space-y-3">
         <QuickLink href="/admin/floorplan/ideapark" icon={Map} label={t('dashboard.editFloorPlan')} />
         <QuickLink href="/admin/jobs" icon={ClipboardList} label={t('dashboard.manageJobs')} />
+        <QuickLink href="/admin/users" icon={UserPlus} label="User Management" />
       </div>
     </div>
   );
