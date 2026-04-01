@@ -132,7 +132,7 @@ const INTENT_PATTERNS: Record<IntentType, RegExp[]> = {
 const ENTITY_PATTERNS: Record<EntityType, RegExp> = {
   [EntityType.DATE]: /\b(\d{1,2}[-/.]\d{1,2}[-/.]\d{2,4}|today|yesterday|tomorrow|tänään|eilen|huomenna)\b/gi,
   [EntityType.DATE_RANGE]: /\b(last|past|this|next|previous) (week|month|quarter|year|viikko|kuukausi|kvartaali|vuosi)\b/gi,
-  [EntityType.LOCATION]: /\b(tripla|sello|kaari|kamppi|itis|jumbo|floor \d+|kerros \d+|level \d+|taso \d+)\b/gi,
+  [EntityType.LOCATION]: /\b(ideapark|floor \d+|kerros \d+|level \d+|taso \d+)\b/gi,
   [EntityType.CATEGORY]: /\b(fashion|food|electronics|entertainment|muoti|ruoka|elektroniikka|viihde)\b/gi,
   [EntityType.METRIC]: /\b(revenue|sales|footfall|visitors|occupancy|liikevaihto|myynti|kävijät)\b/gi,
   [EntityType.TENANT]: /\b(tenant|vuokralainen|store|myymälä|shop|kauppa)\b/gi,
