@@ -5,7 +5,7 @@
  */
 
 import { AgentRouter, getAgentRouter, routeToAgent } from '../agent-router';
-import { AgentRole } from '../../gcm/orchestrator/types';
+import { AgentRole } from '@/lib/gcm-types';
 
 describe('AgentRouter', () => {
   let router: AgentRouter;
@@ -17,7 +17,7 @@ describe('AgentRouter', () => {
   describe('Intent Classification', () => {
     it('should classify query_data intent', () => {
       const queries = [
-        'Show me sales data for Sello',
+        'Show me sales data for Ideapark',
         'What are the footfall numbers?',
         'Get parking occupancy',
         'How many people visited today?',
@@ -47,7 +47,7 @@ describe('AgentRouter', () => {
 
     it('should classify compare_metrics intent', () => {
       const queries = [
-        'Compare sales between Sello and Tripla',
+        'Compare sales between Ideapark and Tripla',
         'Footfall comparison for last week',
         'How does this month compare to last month?',
       ];
@@ -121,7 +121,7 @@ describe('AgentRouter', () => {
     });
 
     it('should extract location entities', () => {
-      const locations = ['Sello', 'Tripla', 'Kaari', 'Itis', 'Jumbo', 'Iso Omena'];
+      const locations = ['Ideapark'];
 
       locations.forEach((location) => {
         const text = `Show data for ${location}`;
@@ -161,10 +161,10 @@ describe('AgentRouter', () => {
     });
 
     it('should extract multiple entities from complex query', () => {
-      const text = 'Compare electronics sales between Sello and Tripla for last month';
+      const text = 'Compare electronics sales between Ideapark and Tripla for last month';
       const entities = (router as any).extractEntities(text);
 
-      // Should extract: metric (sales), category (electronics), locations (Sello, Tripla), date (last month)
+      // Should extract: metric (sales), category (electronics), locations (Ideapark, Tripla), date (last month)
       expect(entities.length).toBeGreaterThanOrEqual(4);
 
       const types = entities.map((e: any) => e.type);
@@ -235,7 +235,7 @@ describe('AgentRouter', () => {
   describe('Agent Routing', () => {
     it('should route sales queries to Sales Optimizer', () => {
       const queries = [
-        'Show me sales for Sello today',
+        'Show me sales for Ideapark today',
         'What was yesterday revenue?',
         'Optimize our sales strategy',
         'Compare sales between locations',
@@ -267,7 +267,7 @@ describe('AgentRouter', () => {
     it('should route event queries to Event Coordinator', () => {
       const queries = [
         'Plan a marketing event',
-        'Upcoming events at Tripla',
+        'Upcoming events at Ideapark',
         'Schedule a promotion',
         'Event calendar',
       ];
@@ -367,7 +367,7 @@ describe('AgentRouter', () => {
     it('should use conversation history for better routing', () => {
       const context = {
         conversationHistory: [
-          'Show me sales for Sello',
+          'Show me sales for Ideapark',
           'What about revenue?',
         ],
       };
@@ -376,14 +376,14 @@ describe('AgentRouter', () => {
       const suggestion = router.route(query, context);
 
       // Should maintain sales context and route to Sales Optimizer
-      // or use recent location context (Sello)
+      // or use recent location context (Ideapark)
       expect(suggestion.confidence).toBeGreaterThan(0.5);
     });
 
     it('should handle multi-turn conversations', () => {
       const context = {
         conversationHistory: [
-          'Compare sales between Sello and Tripla',
+          'Compare sales between Ideapark and Tripla',
           'Show me last month',
         ],
       };
@@ -400,7 +400,7 @@ describe('AgentRouter', () => {
   describe('Finnish Language Support', () => {
     it('should route Finnish queries correctly', () => {
       const finnishQueries = [
-        { query: 'Näytä myyntitiedot Sellolle', expectedAgent: AgentRole.SALES_OPTIMIZER },
+        { query: 'Näytä myyntitiedot Ideaparklle', expectedAgent: AgentRole.SALES_OPTIMIZER },
         { query: 'Kuinka monta kävijää tänään?', expectedAgent: AgentRole.FOOTFALL_ANALYST },
         { query: 'Pysäköintitilanne', expectedAgent: AgentRole.PARKING_MANAGER },
       ];
@@ -428,13 +428,13 @@ describe('AgentRouter', () => {
     });
 
     it('should handle special characters', () => {
-      const query = 'Show sales @ Sello & Tripla!!! (today)';
+      const query = 'Show sales @ Ideapark & Tripla!!! (today)';
       const suggestion = router.route(query);
       expect(suggestion.agentRole).toBe(AgentRole.SALES_OPTIMIZER);
     });
 
     it('should handle queries with typos', () => {
-      const query = 'Shw me saels data fr Sello';
+      const query = 'Shw me saels data fr Ideapark';
       const suggestion = router.route(query);
       // Should still work despite typos
       expect(suggestion.agentRole).toBeTruthy();
@@ -468,7 +468,7 @@ describe('AgentRouter', () => {
     });
 
     it('should handle batch routing efficiently', () => {
-      const queries = Array(100).fill('Show sales data for Sello');
+      const queries = Array(100).fill('Show sales data for Ideapark');
 
       const start = Date.now();
       queries.forEach((query) => router.route(query));

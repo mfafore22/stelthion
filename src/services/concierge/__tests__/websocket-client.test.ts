@@ -265,7 +265,7 @@ describe('ConciergeWebSocketClient', () => {
         conversationId: 'conv-123',
         executionId: 'exec-789',
         toolName: 'get_sales_data',
-        params: { location_id: 'sello', date: '2025-11-18' },
+        params: { location_id: 'ideapark', date: '2025-11-18' },
         timestamp: new Date(),
       });
 

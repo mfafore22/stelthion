@@ -162,7 +162,7 @@ export interface CatchmentDemographics {
 
 /**
  * Parking Integration
- * Realistic Tripla parking data
+ * Parking data
  */
 export interface ParkingData {
   mallId: string;
@@ -175,7 +175,7 @@ export interface ParkingData {
     evChargingSpots: number;
   }>;
 
-  totalCapacity: number;      // ~1800 for Tripla
+  totalCapacity: number;
   publicSpaces: number;       // Total - monthly contracts
   currentUtilization: number; // %
 

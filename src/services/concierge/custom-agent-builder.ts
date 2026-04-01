@@ -398,7 +398,7 @@ Available tools: ${uniqueTools.join(', ')}
 Guidelines:
 - Always provide accurate, data-driven insights
 - Use tools extensively to retrieve and analyze data
-- Tailor your responses to the Finnish retail context (Tripla, Sello, Kaari, etc.)
+- Tailor your responses to the Finnish retail context (Ideapark, etc.)
 - Be aware of Finnish holidays and seasons (Vappu, Juhannus, Christmas, etc.)
 - Provide actionable recommendations
 - If you're uncertain, acknowledge it and suggest alternatives
