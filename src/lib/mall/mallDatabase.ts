@@ -65,7 +65,7 @@ export const MALLS: Record<string, MallProperty> = {
     annualVisitors: 7500000,
     annualSales: 450000000,
     gla: 91000,
-    stores: 200,
+    stores: 163,
   },
 };
 
