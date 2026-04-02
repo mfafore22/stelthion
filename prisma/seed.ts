@@ -24,17 +24,17 @@ async function main() {
     { email: 'faforemichael001@gmail.com', name: 'Michael Fafore', role: 'ADMIN' as const },
     { email: 'kimmoisbjornssund@pm.me', name: 'Kimmo Isbjörnssund', role: 'ADMIN' as const },
   ]
-
-  for (const u of users) {
+for (const u of users) {
     await prisma.user.upsert({
       where: { email: u.email },
-      update: {},
+      update: { passwordChangedAt: new Date() },
       create: {
         email: u.email,
         password: hashedPassword,
         name: u.name,
         role: u.role,
         customerId: ideapark.id,
+        passwordChangedAt: new Date(),
       },
     })
     console.log(`  User: ${u.email} (${u.role})`)

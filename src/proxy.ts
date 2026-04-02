@@ -20,6 +20,11 @@ export default auth((req) => {
     pathname === '/two-factor' ||
     pathname.startsWith('/api/two-factor')
 
+  const isChangePasswordRoute =
+    pathname === '/change-password' ||
+    pathname.startsWith('/api/changepassword') ||
+    pathname.startsWith('/api/account')
+
   const isStaticRoute =
     pathname.startsWith('/_next') ||
     pathname.startsWith('/assets') ||
@@ -29,15 +34,13 @@ export default auth((req) => {
 
   if (isStaticRoute) return NextResponse.next()
 
+  // Public routes — no redirect on /login, let signOut complete
   if (isPublicRoute) {
-    if (isLoggedIn && pathname === '/login') {
-      return NextResponse.redirect(new URL('/two-factor', nextUrl))
-    }
     return NextResponse.next()
   }
 
   if (!isLoggedIn) {
-    if (is2FARoute) {
+    if (is2FARoute || isChangePasswordRoute) {
       return NextResponse.redirect(new URL('/login', nextUrl))
     }
     if (pathname.startsWith('/api/weather') ||
@@ -58,6 +61,7 @@ export default auth((req) => {
   }
 
   if (is2FARoute) return NextResponse.next()
+  if (isChangePasswordRoute) return NextResponse.next()
 
   return NextResponse.next()
 })

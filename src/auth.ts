@@ -32,6 +32,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.customerId = (user as any).customerId
         token.customerName = user.customerName
         token.twoFactorVerified = false
+        token.passwordChangedAt = (user as any).passwordChangedAt || null
       }
 
       if (token.id && !token.twoFactorVerified) {
@@ -57,6 +58,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.role = token.role as string
         session.user.customerId = token.customerId as string
         session.user.customerName = token.customerName as string
+        ;(session.user as any).passwordChangeAt  = token.passwordChangedAt ?? null
         ;(session as any).twoFactorVerified = token.twoFactorVerified
       }
       return session
@@ -77,7 +79,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
           const passwordsMatch = await bcrypt.compare(password, user.password)
           if (passwordsMatch) {
-            // Reset 2FA verification on fresh login
             await prisma.user.update({
               where: { id: user.id },
               data: { twoFactorVerifiedAt: null },
@@ -90,6 +91,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               role: user.role,
               customerId: user.customerId,
               customerName: user.customer.name,
+              passwordChangedAt: user.passwordChangedAt?.toISOString() || null,
             }
           }
         }

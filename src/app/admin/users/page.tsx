@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { UserPlus, Users, Trash2, Mail, Check, AlertTriangle } from 'lucide-react';
+import { UserPlus, Users, Mail, Check, AlertTriangle } from 'lucide-react';
 
 interface UserEntry {
   id: string;
@@ -11,15 +11,8 @@ interface UserEntry {
   createdAt: string;
 }
 
-interface Customer {
-  mallId: string;
-  name: string;
-  city: string;
-}
-
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<UserEntry[]>([]);
-  const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<{ ok: boolean; message: string } | null>(null);
@@ -29,25 +22,20 @@ export default function AdminUsersPage() {
   const [customerId, setCustomerId] = useState('koy-ideapark-ab');
   const [role, setRole] = useState<'USER' | 'MANAGER' | 'ADMIN'>('USER');
 
-  // Fetch existing users
-  useEffect(() => {
-    fetch('/api/admin/users')
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) setUsers(data);
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
+  const fetchUsers = async () => {
+    try {
+      const res = await fetch('/api/admin/users');
+      const data = await res.json();
+      if (Array.isArray(data)) setUsers(data);
+    } catch {
+      // ignore
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  // Fetch customers for dropdown
   useEffect(() => {
-    fetch('/api/admin/malls')
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) setCustomers(data);
-      })
-      .catch(() => {});
+    fetchUsers();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -68,10 +56,7 @@ export default function AdminUsersPage() {
         setResult({ ok: true, message: `Welcome email sent to ${email}` });
         setEmail('');
         setName('');
-        // Refresh user list
-        const listRes = await fetch('/api/admin/users');
-        const listData = await listRes.json();
-        if (Array.isArray(listData)) setUsers(listData);
+        fetchUsers();
       } else {
         setResult({ ok: false, message: data.error || 'Failed to create user' });
       }

@@ -1,16 +1,3 @@
-/**
- * Mall Top Bar
- *
- * Fixed 80px header with temporal controls and export.
- * Features:
- * - Stelthion brandmark
- * - Date/time pickers for temporal navigation
- * - AI concierge toggle
- * - Language selector
- * - User profile / logout
- * - Export dropdown (PDF, CSV, Excel)
- */
-
 'use client';
 
 import Image from 'next/image';
@@ -25,6 +12,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSession } from '@/contexts/SessionContext';
+import { signOut } from 'next-auth/react';
 import { CompactLanguageSelector } from '@/components/ui/language-selector';
 import { useConciergeOptional } from '@/components/concierge/ConciergeContext';
 import {
@@ -54,7 +42,7 @@ export function MallTopBar({
   onExport,
   className,
 }: MallTopBarProps) {
-  const { user, logout } = useSession();
+  const { user } = useSession();
   const concierge = useConciergeOptional();
   const { t } = useTranslation('mall');
 
@@ -177,7 +165,7 @@ export function MallTopBar({
               </DropdownMenuLabel>
               <DropdownMenuSeparator className="bg-bo-neutral-200 my-2" />
               <DropdownMenuItem
-                onClick={() => logout()}
+                onClick={() => signOut({ callbackUrl: '/login' })}
                 className="flex items-center gap-3 cursor-pointer px-3 py-2.5 rounded-md hover:bg-red-50 transition-colors text-red-600"
               >
                 <LogOut className="h-4 w-4" />
