@@ -1,7 +1,6 @@
 /**
  * Seed script: restore Ideapark zones from static data into the database.
- * SAFE: uses upsert — will NOT delete existing admin-created data (cameras, custom zones).
- * Only inserts missing zones or updates existing ones from static definitions.
+ * Performs a clean wipe of existing zones before seeding.
  * Usage: npx tsx scripts/seed-floorplan.ts
  */
 import { PrismaClient } from '@prisma/client';
@@ -62,7 +61,6 @@ async function seedFloor(floor: string, zones: typeof IDEAPARK_ZONES) {
   console.log(`  ${floor}: ${created} zones created, ${updated} updated (${zones.length} total)`);
 }
 
-/** Convert legacy store positions into zone records with drawShape: 'rect' */
 async function seedStoresAsZones(floor: string, stores: typeof GROUND_FLOOR_STORES) {
   let created = 0;
   let updated = 0;
@@ -111,13 +109,17 @@ async function seedStoresAsZones(floor: string, stores: typeof GROUND_FLOOR_STOR
 }
 
 async function main() {
+  // Clean wipe — remove all existing zones to eliminate admin-drawn duplicates
+  const deleted = await prisma.floorplanZone.deleteMany({ where: { mallId: MALL_ID } });
+  console.log(`  Deleted ${deleted.count} existing zones (clean slate)`);
+
   // Safety check: warn if cameras exist (they won't be touched)
   const cameraCount = await prisma.camera.count({ where: { mallId: MALL_ID } });
   if (cameraCount > 0) {
     console.log(`  ⚠ ${cameraCount} cameras exist and will NOT be modified.`);
   }
 
-  console.log('Seeding Ideapark floorplan data (non-destructive upsert)...');
+  console.log('Seeding Ideapark floorplan data...');
 
   await seedFloor('ground', IDEAPARK_ZONES);
   await seedFloor('upper', IDEAPARK_UPPER_ZONES);
