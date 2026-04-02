@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
 
-const DEFAULT_MALL_ID = 'ideapark-lempaala';
+const DEFAULT_MALL_ID = 'ideapark';
 const STORAGE_KEY = 'stelthion-admin-mall';
 
 interface AdminMallContextValue {
@@ -18,8 +18,8 @@ const AdminMallContext = createContext<AdminMallContextValue>({
 function getStoredMallId(): string {
   if (typeof window === 'undefined') return DEFAULT_MALL_ID;
   const stored = localStorage.getItem(STORAGE_KEY);
-  // Migration: clear stale 'ideapark' value from before mallId rename
-  if (stored === 'ideapark') {
+  // Migration: clear stale 'ideapark-lempaala' value stored by older versions
+  if (stored === 'ideapark-lempaala') {
     localStorage.removeItem(STORAGE_KEY);
     return DEFAULT_MALL_ID;
   }

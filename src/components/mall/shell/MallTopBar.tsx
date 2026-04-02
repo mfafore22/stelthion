@@ -1,5 +1,6 @@
 'use client';
 
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import {
   Download,
@@ -9,6 +10,8 @@ import {
   LogOut,
   Building2,
   Sparkles,
+  Calendar,
+  Clock,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSession } from '@/contexts/SessionContext';
@@ -26,29 +29,27 @@ import {
 import { useTranslation } from 'react-i18next';
 
 export interface MallTopBarProps {
-  selectedDate?: string;
-  selectedTime?: string;
-  onDateChange?: (date: string) => void;
-  onTimeChange?: (time: string) => void;
   onExport?: (format: 'pdf' | 'csv' | 'excel') => void;
   className?: string;
 }
 
 export function MallTopBar({
-  selectedDate,
-  selectedTime,
-  onDateChange,
-  onTimeChange,
   onExport,
   className,
 }: MallTopBarProps) {
   const { user } = useSession();
   const concierge = useConciergeOptional();
-  const { t } = useTranslation('mall');
+  const { t, i18n } = useTranslation('mall');
 
-  const now = new Date();
-  const currentDate = selectedDate || now.toISOString().split('T')[0];
-  const currentTime = selectedTime || now.toTimeString().slice(0, 5);
+  const [now, setNow] = useState(new Date());
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 60_000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const locale = i18n.language === 'fi' ? 'fi-FI' : i18n.language === 'sv' ? 'sv-SE' : 'en-GB';
+  const displayDate = now.toLocaleDateString(locale, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+  const displayTime = now.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
 
   const handleExport = (format: 'pdf' | 'csv' | 'excel') => {
     if (onExport) {
@@ -62,8 +63,10 @@ export function MallTopBar({
     <header
       className={cn(
         'fixed top-0 left-[80px] right-0 h-[80px]',
-        'bg-glass border-b-[4px] border-bo-neutral-700/50',
-        'flex items-center justify-between px-8 z-40 shadow-bo-sm',
+        'bg-white/40 backdrop-blur-2xl saturate-150',
+        'border-t border-white/80 border-b border-bo-neutral-200/60',
+        'shadow-[0_4px_32px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.9)]',
+        'flex items-center justify-between px-8 z-40',
         className
       )}
     >
@@ -79,32 +82,17 @@ export function MallTopBar({
         />
       </div>
 
-      {/* Center: Temporal Controls */}
-      <div className="flex items-center gap-3">
-        <input
-          type="date"
-          value={currentDate}
-          onChange={(e) => onDateChange?.(e.target.value)}
-          className={cn(
-            'px-4 py-2.5 rounded-lg border border-bo-neutral-300',
-            'text-sm text-bo-neutral-900 bg-bo-neutral-50',
-            'focus:outline-none focus:ring-2 focus:ring-bo-primary-600 focus:ring-opacity-20 focus:border-bo-primary-600',
-            'hover:border-bo-neutral-400 transition-all duration-200 ease-bo-out'
-          )}
-          aria-label={t('topbar.dateLabel')}
-        />
-        <input
-          type="time"
-          value={currentTime}
-          onChange={(e) => onTimeChange?.(e.target.value)}
-          className={cn(
-            'px-4 py-2.5 rounded-lg border border-bo-neutral-300',
-            'text-sm text-bo-neutral-900 bg-bo-neutral-50',
-            'focus:outline-none focus:ring-2 focus:ring-bo-primary-600 focus:ring-opacity-20 focus:border-bo-primary-600',
-            'hover:border-bo-neutral-400 transition-all duration-200 ease-bo-out'
-          )}
-          aria-label={t('topbar.timeLabel')}
-        />
+      {/* Center: Live Date & Time */}
+      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 text-sm text-bo-neutral-700">
+          <Calendar className="h-4 w-4 text-bo-neutral-500" />
+          <span className="font-medium">{displayDate}</span>
+        </div>
+        <div className="h-4 w-px bg-bo-neutral-300" />
+        <div className="flex items-center gap-2 text-sm text-bo-neutral-700">
+          <Clock className="h-4 w-4 text-bo-neutral-500" />
+          <span className="font-medium tabular-nums">{displayTime}</span>
+        </div>
       </div>
 
       {/* Right: Actions */}

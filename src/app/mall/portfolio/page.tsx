@@ -11,15 +11,11 @@ import { getCurrentFootfall } from '@/lib/data/footfall';
 import { useCounterFootfall } from '@/hooks/mall/useCounterFootfall';
 import { MALLS } from '@/lib/mall/mallDatabase';
 import { Building2, MapPin, Store, Users, ArrowRight } from 'lucide-react';
-import { useState } from 'react';
 
 export default function PortfolioPage() {
   const { user, loading } = useSession();
   const { t } = useTranslation('mall');
   const router = useRouter();
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split('T')[0]
-  );
 
   const simulated = useMemo(() => getCurrentFootfall(), []);
 
@@ -69,7 +65,7 @@ export default function PortfolioPage() {
   return (
     <>
       <MallLeftNav />
-      <MallTopBar selectedDate={selectedDate} onDateChange={setSelectedDate} />
+      <MallTopBar />
 
       <main className="ml-[80px] mt-[80px] h-[calc(100vh-80px)] overflow-auto bg-[#F8F6F3]">
         <div className="p-8 max-w-[1600px] mx-auto">

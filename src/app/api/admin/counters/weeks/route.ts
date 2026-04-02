@@ -6,7 +6,7 @@ export async function GET(req: NextRequest) {
   const guard = await requireAdmin();
   if ('error' in guard) return guard.error;
 
-  const mallId = new URL(req.url).searchParams.get('mallId') ?? 'ideapark-lempaala';
+  const mallId = new URL(req.url).searchParams.get('mallId') ?? 'ideapark';
 
   try {
     // Return individual uploads so each document is visible
