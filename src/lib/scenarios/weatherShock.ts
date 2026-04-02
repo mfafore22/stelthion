@@ -35,7 +35,7 @@ export function calculateWeatherShock(
       factors: ['Historical weather data', 'Seasonal patterns', 'Local demographics'],
     },
     dataSource: {
-      name: 'SYNEXIS™ SIGNALS',
+      name: 'STELTHION SIGNALS',
       apis: ['FMI Open Data', 'Ideapark footfall sensors'],
       baselines: ['Q1–Q4 2024 Ideapark visitor data', 'Finnish retail weather index'],
     },

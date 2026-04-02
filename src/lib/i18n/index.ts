@@ -21,7 +21,7 @@ i18n
       fi: { mall: fiMall, admin: fiAdmin },
       sv: { mall: svMall },
     },
-    lng: 'en',
+    lng: 'fi',
     fallbackLng: 'en',
     defaultNS: 'mall',
     ns: ['mall', 'admin'],

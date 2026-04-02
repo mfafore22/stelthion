@@ -33,10 +33,10 @@
     "currentVisitors": "Current visitors",
     "retailUnits": "Retail Units",
     "topCategory": "Top Category",
-    "synexisSignals": "Synexis™ Signals",
+    "stelthionSignals": "Stelthion Signals",
     "liveInsights": "Live Insights",
     "mallStatus": "Mall Status",
-    "statusLive": "LIVE (Stelthion Synexis™ active)",
+    "statusLive": "LIVE (Stelthion active)",
     "statusAlpha": "ALPHA (Testing phase)",
     "statusBeta": "BETA (Limited rollout)",
     "statusPlanned": "PLANNED (Integration pending)",
@@ -114,7 +114,15 @@
       "Health and beauty goods": "Health and beauty goods",
       "Leisure and entertainment": "Leisure and entertainment",
       "Sports and outdoor": "Sports and outdoor",
-      "Technology and electronics": "Technology and electronics"
+      "Technology and electronics": "Technology and electronics",
+      "Fashion": "Fashion",
+      "Food & Beverage": "Food & Beverage",
+      "Auto": "Auto",
+      "Sports": "Sports",
+      "Home & Living": "Home & Living",
+      "Beauty & Health": "Beauty & Health",
+      "Children": "Children",
+      "Daily Goods & Tech": "Daily Goods & Tech"
     }
   },
   "events": {
@@ -268,7 +276,11 @@
     "sourceCatchmentAnalysis": "Source: Statistics Finland + OpenStreetMap drive-time analysis",
     "detailedHouseholdStats": "Detailed Household Statistics",
     "householdStatsDesc": "View household size, ownership, and dwelling types by area",
-    "householdsUnit": "households"
+    "householdsUnit": "households",
+    "sourcePopulation": "Statistics Finland · Population Register (StatFin/vaerak)",
+    "sourceIncome": "Statistics Finland · Income Distribution Statistics (StatFin/tjkt)",
+    "sourceEmployment": "Statistics Finland · Employment Statistics (StatFin/tyolli)",
+    "sourceCatchment": "Drive-time catchment analysis · Statistics Finland"
   },
   "householdModal": {
     "title": "Household Statistics by Area",
@@ -296,14 +308,11 @@
   "analytics": {
     "title": "Analytics",
     "catchmentAnalytics": "Catchment Analytics",
-    "zoneDemographics": "Zone Demographics",
+    "catchmentDescription": "Interactive demographic analysis of drive-time catchment zones for {{mallName}}",
     "postalCodeDetails": "Postal Code Details",
     "backToOverview": "Back to Overview",
-    "catchmentDescription": "Interactive demographic analysis of drive-time catchment zones for {{mallName}}",
-    "selectZonePrompt": "Select a drive-time zone to view detailed statistics, or click postal codes on the map",
-    "noCatchmentData": "Catchment Data Not Available",
-    "loadingBoundaries": "Loading postal code boundaries...",
-    "clickForDetails": "Click any postal code area for details"
+    "zoneDemographics": "Zone Demographics",
+    "selectZonePrompt": "Select a drive-time zone to view detailed statistics, or click postal codes on the map"
   },
   "transport": {
     "title": "Transport",
@@ -402,7 +411,7 @@
     "title": "Assistants",
     "description": "AI Assistants for property operations",
     "comingSoon": "AI Assistants Integration",
-    "integrationDescription": "AI Assistants use your property's isolated data to produce property-specific simulations and forecasts. With them, you can test the impact of your chosen actions or prepare for situations. Stelthion Synexis™ models bring broader insights and alternatives to simulations and forecasts.",
+    "integrationDescription": "AI Assistants use your property's isolated data to produce property-specific simulations and forecasts. With them, you can test the impact of your chosen actions or prepare for situations. Stelthion AI models bring broader insights and alternatives to simulations and forecasts.",
     "tryScenarios": "Try Scenarios Calculator Now"
   },
   "shoppermind": {
@@ -415,7 +424,7 @@
     "latestCampaign": "Latest Campaign",
     "visitorImpact": "Visitor Impact",
     "revenueImpact": "Revenue Impact",
-    "mlConfidence": "Stelthion Synexis™ Attribution Confidence",
+    "mlConfidence": "Stelthion Attribution Confidence",
     "channels": "Channels",
     "viewCampaignLog": "View Campaign Log",
     "runSimilarScenario": "Run Similar Scenario",
@@ -429,15 +438,6 @@
     "loading": "Loading properties...",
     "operator": "Operator",
     "noProperties": "No properties available for the selected operator in this demo."
-  },
-  "analytics": {
-    "title": "Analytics",
-    "catchmentAnalytics": "Catchment Analytics",
-    "catchmentDescription": "Interactive demographic analysis of drive-time catchment zones for {{mallName}}",
-    "postalCodeDetails": "Postal Code Details",
-    "backToOverview": "Back to Overview",
-    "zoneDemographics": "Zone Demographics",
-    "selectZonePrompt": "Select a drive-time zone to view detailed statistics, or click postal codes on the map"
   },
   "tabs": {
     "overview": "Overview",
@@ -477,7 +477,8 @@
     "activeAlerts": "Active Alerts",
     "vsLastYear": "vs last year",
     "notAvailable": "Not available",
-    "allSystemsNormal": "All systems normal"
+    "allSystemsNormal": "All systems normal",
+    "avgVsLastYear": "avg vs last year"
   },
   "alertsStream": {
     "title": "Recent Alerts",
@@ -524,12 +525,18 @@
     "comfort": {
       "high": "High",
       "moderate": "Moderate",
-      "low": "Low"
+      "low": "Low",
+      "excellent": "Excellent for shopping",
+      "great": "Great for mall visits",
+      "good": "Good for shopping",
+      "outdoors": "Nice outdoors — fewer visitors expected"
     },
     "impact": {
       "indoor": "🌧️ Weather drives visitors indoors",
       "mild": "☀️ Mild weather impact on visitor numbers",
-      "outdoor": "🌤️ Optimal outdoor conditions"
+      "outdoor": "🌤️ Optimal outdoor conditions",
+      "quiet": "❄️ Quiet period — fewer visitors expected",
+      "normal": "Normal visitor flow expected"
     },
     "forecastMsg": {
       "significant": "{{condition}} – significant indoor traffic due to weather",
@@ -542,7 +549,11 @@
       "Clear": "Clear sky",
       "Rain": "Light rain",
       "Snow": "Light snow",
-      "Optimal conditions": "Optimal conditions"
+      "Optimal conditions": "Optimal conditions",
+      "Partly Cloudy": "Partly cloudy",
+      "Overcast": "Overcast",
+      "Heavy Rain": "Heavy rain",
+      "Sleet": "Sleet"
     },
     "season": {
       "spring": "Spring",
@@ -556,7 +567,8 @@
       "evening": "Evening",
       "night": "Night"
     },
-    "dataSource": "Source: {{source}}"
+    "dataSource": "Source: {{source}}",
+    "shoppingWeather": "Shopping weather"
   },
   "footfall": {
     "chartTitle": "Actual vs Predicted Footfall (Today)",
@@ -571,7 +583,9 @@
     "zones": {
       "centerHub": "Event Square",
       "foodCourt": "Food Court"
-    }
+    },
+    "estimated": "Estimated",
+    "noData": "No counter data uploaded yet"
   },
   "topbar": {
     "concierge": "Stelthion Concierge",
@@ -713,12 +727,14 @@
     "modes": {
       "zoneCount": "Area Count",
       "abTracking": "A → B Flow",
-      "journeyMap": "Journey Map"
+      "journeyMap": "Journey Map",
+      "flowQuery": "Flow Analysis"
     },
     "modesDescription": {
       "zoneCount": "Count visitors in camera view",
       "abTracking": "Track visitors between two points",
-      "journeyMap": "Map visitor paths across zones"
+      "journeyMap": "Map visitor paths across zones",
+      "flowQuery": "Order numerical visitor flow analyses between two stores or areas. The system counts the number of visitors between the starting point and destination during the selected day and hour. Data is anonymous. (GDPR compliant)."
     },
     "config": {
       "camera": "Camera",
@@ -778,5 +794,55 @@
       "visitorCounters": "Visitor Counter Integration",
       "counterDescription": "Compare and extrapolate with visitor counter data"
     }
+  },
+  "flowQuery": {
+    "title": "Flow Query",
+    "selectZone": "Select zone",
+    "searchZone": "Search zones...",
+    "noResults": "No results",
+    "clearSelection": "Clear selection",
+    "stepOrigin": "Start zone",
+    "stepDirection": "Direction",
+    "stepDestination": "End zone",
+    "originPlaceholder": "Click zone on map or select…",
+    "destinationPlaceholder": "Click second zone or select…",
+    "destinationOptionalHint": "Select an end zone on the floorplan or from the list",
+    "outbound": "Departing",
+    "inbound": "Arriving",
+    "between": "Between",
+    "analyze": "Analyse flow",
+    "analyzeRoute": "Analyse route",
+    "analyzing": "Analysing…",
+    "stepTime": "Time period",
+    "date": "Date",
+    "timeRange": "Time range",
+    "reset": "Clear",
+    "newQuery": "New query",
+    "visitorsTotal": "visitors total",
+    "sourceBreakdown": "Sources",
+    "destinationBreakdown": "Destinations",
+    "flowActive": "Flow active",
+    "originLabel": "Origin zone",
+    "flowDirection": "Flow direction",
+    "arrowThickness": "Arrow thickness = visitor count",
+    "selectOriginHint": "Select an origin zone on the left to start a flow query",
+    "clickHint": "Click a zone on the floorplan to set origin",
+    "startTime": "Start time",
+    "duration": "Duration",
+    "minutes": "min",
+    "endTimeComputed": "End time",
+    "sampleSize": "Sample size",
+    "trackedIndividuals": "anonymously tracked individuals"
+  },
+  "export": {
+    "generating": "Generating report…",
+    "downloaded": "Report downloaded",
+    "reportTitle": "Visitor Flow Analysis Report",
+    "generatedBy": "Generated by Stelthion Analytics Platform",
+    "zoneTable": "Zone Visitor Summary",
+    "flowTable": "Flow Analysis Results",
+    "coverSubtitle": "Floor: {{floor}} · Hour: {{hour}}:00",
+    "executiveSummary": "Executive Summary",
+    "keyHighlights": "Key Highlights"
   }
 }

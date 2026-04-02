@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Image from 'next/image';
 import { useSession } from '@/contexts/SessionContext';
@@ -108,10 +108,6 @@ export default function TenantPortfolioPage() {
   const tenantId = params?.tenantId as string | undefined;
   const tenantName = tenantId ? TENANT_MAP[tenantId] : undefined;
 
-  const [selectedDate, setSelectedDate] = useState<string>(
-    new Date().toISOString().split('T')[0]
-  );
-
   // Redirect to login if not authenticated
   useEffect(() => {
     if (!sessionLoading && !user) {
@@ -177,10 +173,7 @@ export default function TenantPortfolioPage() {
         onNavigate={(itemId) => console.log(`Navigate to: ${itemId}`)}
       />
 
-      <MallTopBar
-        selectedDate={selectedDate}
-        onDateChange={setSelectedDate}
-      />
+      <MallTopBar />
 
       <main className="ml-[80px] mt-[80px] p-8">
         <div className="max-w-[1600px] mx-auto space-y-8">

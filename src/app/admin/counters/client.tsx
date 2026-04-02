@@ -39,7 +39,7 @@ export function CounterDataClient() {
   const [deleting, setDeleting] = useState<string | null>(null);
   const [deleteInProgress, setDeleteInProgress] = useState(false);
 
-  const mallId = 'ideapark-lempaala';
+  const mallId = 'ideapark';
 
   const fetchEntries = useCallback(async () => {
     try {

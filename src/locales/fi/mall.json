@@ -32,10 +32,10 @@
     "currentVisitors": "Nykyiset kävijät",
     "retailUnits": "Liiketilat",
     "topCategory": "Pääkategoria",
-    "synexisSignals": "Synexis™ Signaalit",
+    "stelthionSignals": "Stelthion Signaalit",
     "liveInsights": "Reaaliaikaiset näkemykset",
     "mallStatus": "Kauppakeskuksen tila",
-    "statusLive": "LIVE (Stelthion Synexis™ aktiivinen)",
+    "statusLive": "LIVE (Stelthion aktiivinen)",
     "statusAlpha": "ALPHA (Testausvaihe)",
     "statusBeta": "BETA (Rajoitettu käyttöönotto)",
     "statusPlanned": "PLANNED (Integrointi odottaa)",
@@ -114,7 +114,15 @@
       "Health and beauty goods": "Terveys- ja kauneustuotteet",
       "Leisure and entertainment": "Vapaa-aika ja viihde",
       "Sports and outdoor": "Urheilu ja ulkoilu",
-      "Technology and electronics": "Teknologia ja elektroniikka"
+      "Technology and electronics": "Teknologia ja elektroniikka",
+      "Fashion": "Muoti",
+      "Food & Beverage": "Ravintolat & Kahvilat",
+      "Auto": "Autoilu",
+      "Sports": "Urheilu",
+      "Home & Living": "Koti & Sisustus",
+      "Beauty & Health": "Kauneus & Terveys",
+      "Children": "Lapsille",
+      "Daily Goods & Tech": "Päivittäistavarat & Tekniikka"
     }
   },
   "events": {
@@ -268,7 +276,11 @@
     "sourceCatchmentAnalysis": "Lähde: Tilastokeskus + OpenStreetMap ajomatka-analyysi",
     "detailedHouseholdStats": "Yksityiskohtaiset kotitaloustilastot",
     "householdStatsDesc": "Tarkastele kotitalouden kokoa, omistajuutta ja asumismuotoja alueittain",
-    "householdsUnit": "kotitaloutta"
+    "householdsUnit": "kotitaloutta",
+    "sourcePopulation": "Tilastokeskus · Väestörekisteri (StatFin/vaerak)",
+    "sourceIncome": "Tilastokeskus · Tulonjakotilasto (StatFin/tjkt)",
+    "sourceEmployment": "Tilastokeskus · Työvoimatutkimus (StatFin/tyolli)",
+    "sourceCatchment": "Ajomatka-analyysi · Tilastokeskus"
   },
   "householdModal": {
     "title": "Kotitaloustilastot alueittain",
@@ -296,14 +308,11 @@
   "analytics": {
     "title": "Analytiikka",
     "catchmentAnalytics": "Vaikutusalueen analytiikka",
-    "zoneDemographics": "Alueiden väestötiedot",
+    "catchmentDescription": "Interaktiivinen väestöanalyysi ajomatka-alueilta kohteelle {{mallName}}",
     "postalCodeDetails": "Postinumeron tiedot",
     "backToOverview": "Takaisin yleiskatsaukseen",
-    "catchmentDescription": "Interaktiivinen väestöanalyysikäyttöaika-alueilta kohteelle {{mallName}}",
-    "selectZonePrompt": "Valitse ajomatka-alue nähdäksesi yksityiskohtaiset tilastot tai klikkaa postinumeroita kartalla",
-    "noCatchmentData": "Vaikutusalueen tietoja ei saatavilla",
-    "loadingBoundaries": "Ladataan postinumerorajoja...",
-    "clickForDetails": "Klikkaa postinumeroaluetta nähdäksesi tiedot"
+    "zoneDemographics": "Alueiden väestötiedot",
+    "selectZonePrompt": "Valitse ajomatka-alue nähdäksesi yksityiskohtaiset tilastot tai klikkaa postinumeroita kartalla"
   },
   "transport": {
     "title": "Liikenne",
@@ -402,7 +411,7 @@
     "title": "Assistentit",
     "description": "AI Assistentit kiinteistönhallintaan",
     "comingSoon": "AI Assistentit integraatio",
-    "integrationDescription": "AI Assistentit käyttävät kiinteistösi eristettyä dataa tuottaakseen kiinteistökohtaisia simulaatioita ja ennusteita. Niiden avulla voit testata valitsemiesi toimenpiteiden vaikutusta tai varautua tilanteisiin. Stelthion Synexis™ -mallit tuovat simulaatioihin ja ennusteisiin laajempaa näkemystä ja vaihtoehtoja.",
+    "integrationDescription": "AI Assistentit käyttävät kiinteistösi eristettyä dataa tuottaakseen kiinteistökohtaisia simulaatioita ja ennusteita. Niiden avulla voit testata valitsemiesi toimenpiteiden vaikutusta tai varautua tilanteisiin. Stelthion AI-mallit tuovat simulaatioihin ja ennusteisiin laajempaa näkemystä ja vaihtoehtoja.",
     "tryScenarios": "Kokeile Skenaariolaskuria"
   },
   "shoppermind": {
@@ -415,7 +424,7 @@
     "latestCampaign": "Viimeisin kampanja",
     "visitorImpact": "Kävijävaikutus",
     "revenueImpact": "Tuottovaikutus",
-    "mlConfidence": "Stelthion Synexis™ attribuutiovarmuus",
+    "mlConfidence": "Stelthion attribuutiovarmuus",
     "channels": "Kanavat",
     "viewCampaignLog": "Näytä kampanjaloki",
     "runSimilarScenario": "Suorita vastaava skenaario",
@@ -429,15 +438,6 @@
     "loading": "Ladataan kiinteistöjä...",
     "operator": "Operaattori",
     "noProperties": "Valitulle operaattorille ei ole saatavilla kiinteistöjä tässä demossa."
-  },
-  "analytics": {
-    "title": "Analytiikka",
-    "catchmentAnalytics": "Vaikutusalueen analytiikka",
-    "catchmentDescription": "Interaktiivinen väestöanalyysi ajomatka-alueilta kohteelle {{mallName}}",
-    "postalCodeDetails": "Postinumeron tiedot",
-    "backToOverview": "Takaisin yleiskatsaukseen",
-    "zoneDemographics": "Alueiden väestötiedot",
-    "selectZonePrompt": "Valitse ajomatka-alue nähdäksesi yksityiskohtaiset tilastot tai klikkaa postinumeroita kartalla"
   },
   "tabs": {
     "overview": "Yleiskatsaus",
@@ -477,7 +477,8 @@
     "activeAlerts": "Aktiiviset hälytykset",
     "vsLastYear": "vs viime vuosi",
     "notAvailable": "Ei saatavilla",
-    "allSystemsNormal": "Kaikki järjestelmät toimivat normaalisti"
+    "allSystemsNormal": "Kaikki järjestelmät toimivat normaalisti",
+    "avgVsLastYear": "ka vs viime vuosi"
   },
   "alertsStream": {
     "title": "Viimeisimmät hälytykset",
@@ -524,12 +525,18 @@
     "comfort": {
       "high": "Korkea",
       "moderate": "Kohtalainen",
-      "low": "Matala"
+      "low": "Matala",
+      "excellent": "Erinomainen ostossää",
+      "great": "Loistava kauppakeskuspäivä",
+      "good": "Hyvä ostossää",
+      "outdoors": "Kaunis ulkoilusää — vähemmän kävijöitä"
     },
     "impact": {
       "indoor": "🌧️ Sää ohjaa kävijöitä sisätiloihin",
       "mild": "☀️ Lievä säävaikutus kävijämääriin",
-      "outdoor": "🌤️ Optimaaliset ulko-olosuhteet"
+      "outdoor": "🌤️ Optimaaliset ulko-olosuhteet",
+      "quiet": "❄️ Hiljainen kausi — vähemmän kävijöitä odotettavissa",
+      "normal": "Normaali kävijävirta odotettavissa"
     },
     "forecastMsg": {
       "significant": "{{condition}} – merkittävää sisäliikennettä ulkosään vuoksi",
@@ -542,7 +549,11 @@
       "Clear": "Selkeä taivas",
       "Rain": "Kevyt sade",
       "Snow": "Kevyt lumisade",
-      "Optimal conditions": "Optimaaliset olosuhteet"
+      "Optimal conditions": "Optimaaliset olosuhteet",
+      "Partly Cloudy": "Puolipilvinen",
+      "Overcast": "Täysin pilvinen",
+      "Heavy Rain": "Rankka sade",
+      "Sleet": "Räntäsade"
     },
     "season": {
       "spring": "Kevät",
@@ -556,7 +567,8 @@
       "evening": "Ilta",
       "night": "Yö"
     },
-    "dataSource": "Lähde: {{source}}"
+    "dataSource": "Lähde: {{source}}",
+    "shoppingWeather": "Ostossää"
   },
   "footfall": {
     "chartTitle": "Tämänhetkinen vs ennustettu kävijämäärä (tänään)",
@@ -571,7 +583,9 @@
     "zones": {
       "centerHub": "Tapahtumatori",
       "foodCourt": "Ravintolamaailma"
-    }
+    },
+    "estimated": "Arvioitu",
+    "noData": "Laskuridataa ei vielä ladattu"
   },
   "topbar": {
     "concierge": "Stelthion Concierge",
@@ -713,12 +727,14 @@
     "modes": {
       "zoneCount": "Aluelaskenta",
       "abTracking": "A → B -seuranta",
-      "journeyMap": "Reittikartta"
+      "journeyMap": "Reittikartta",
+      "flowQuery": "Virtausanalyysit"
     },
     "modesDescription": {
       "zoneCount": "Laske kävijät kameranäkymässä",
       "abTracking": "Seuraa kävijöitä kahden pisteen välillä",
-      "journeyMap": "Kartoita kävijöiden reitit alueiden läpi"
+      "journeyMap": "Kartoita kävijöiden reitit alueiden läpi",
+      "flowQuery": "Tilaa numeerisia kävijävirtausanalyysejä kahden liikkeen tai alueen välillä. Järjestelmä laskee kävijöiden määrän lähtöpisteen ja kohdepisteen välillä valitun päivän ja tunnin aikana. Data on anonyymiä. (GDPR-yhteensopivuus)."
     },
     "config": {
       "camera": "Kamera",
@@ -778,5 +794,55 @@
       "visitorCounters": "Kävijälaskurien integrointi",
       "counterDescription": "Vertaa ja ekstrapoloi kävijälaskuritietojen kanssa"
     }
+  },
+  "flowQuery": {
+    "title": "Virtauskysely",
+    "selectZone": "Valitse alue",
+    "searchZone": "Hae aluetta...",
+    "noResults": "Ei tuloksia",
+    "clearSelection": "Tyhjennä valinta",
+    "stepOrigin": "Lähtöalue",
+    "stepDirection": "Suunta",
+    "stepDestination": "Kohdealue",
+    "originPlaceholder": "Klikkaa aluetta kartalla tai valitse…",
+    "destinationPlaceholder": "Klikkaa toista aluetta tai valitse…",
+    "destinationOptionalHint": "Valitse kohdealue pohjakartalta tai valikosta",
+    "outbound": "Lähtevä",
+    "inbound": "Saapuva",
+    "between": "Välillä",
+    "analyze": "Analysoi virtaus",
+    "analyzeRoute": "Analysoi reitti",
+    "analyzing": "Analysoidaan…",
+    "stepTime": "Aikajakso",
+    "date": "Päivämäärä",
+    "timeRange": "Aikaväli",
+    "reset": "Tyhjennä",
+    "newQuery": "Uusi kysely",
+    "visitorsTotal": "kävijää yhteensä",
+    "sourceBreakdown": "Lähteet",
+    "destinationBreakdown": "Kohteet",
+    "flowActive": "Virtaus aktiivinen",
+    "originLabel": "Lähtöalue",
+    "flowDirection": "Virtaussuunta",
+    "arrowThickness": "Nuolen paksuus = kävijämäärä",
+    "selectOriginHint": "Valitse lähtöalue vasemmalta aloittaaksesi virtauskyselyn",
+    "clickHint": "Klikkaa aluetta pohjakartalla asettaaksesi lähtöalueen",
+    "startTime": "Alkamisaika",
+    "duration": "Kesto",
+    "minutes": "min",
+    "endTimeComputed": "Päättymisaika",
+    "sampleSize": "Otanta",
+    "trackedIndividuals": "anonyymisti seurattua yksilöä"
+  },
+  "export": {
+    "generating": "Luodaan raporttia…",
+    "downloaded": "Raportti ladattu",
+    "reportTitle": "Kävijävirta-analyysiraportti",
+    "generatedBy": "Luotu Stelthion Analytics -alustalla",
+    "zoneTable": "Alueen kävijäyhteenveto",
+    "flowTable": "Virtausanalyysin tulokset",
+    "coverSubtitle": "Kerros: {{floor}} · Klo: {{hour}}:00",
+    "executiveSummary": "Yhteenveto",
+    "keyHighlights": "Keskeiset havainnot"
   }
 }
