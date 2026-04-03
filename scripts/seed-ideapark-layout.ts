@@ -13,13 +13,17 @@
  *   DATABASE_URL=<...> npx tsx scripts/seed-ideapark-layout.ts
  */
 
-import 'dotenv/config';
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 
-const adapter = new PrismaPg({
-  connectionString: process.env.DATABASE_URL ?? 'postgresql://kimmoi@localhost:5432/stelthion',
-});
+const dbUrl = process.env.DATABASE_URL;
+if (!dbUrl) {
+  console.error('ERROR: DATABASE_URL environment variable is not set.');
+  console.error('On the server, run: DATABASE_URL="<connection-string>" npx tsx scripts/seed-ideapark-layout.ts');
+  process.exit(1);
+}
+
+const adapter = new PrismaPg({ connectionString: dbUrl });
 const prisma = new PrismaClient({ adapter });
 
 const MALL_ID = 'ideapark';

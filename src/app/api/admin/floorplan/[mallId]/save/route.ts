@@ -51,10 +51,70 @@ export async function PUT(
     // Backup before save
     await createFloorplanSnapshot(prisma, mallId, floor, 'pre-save');
 
+<<<<<<< HEAD
     // Get existing published dates to preserve them
     const existingZones = await prisma.floorplanZone.findMany({
       where: { mallId, floor },
       select: { zoneId: true, publishedAt: true },
+=======
+    await prisma.$transaction(async (tx) => {
+      const existingZones = await tx.floorplanZone.findMany({
+        where: { mallId, floor },
+        select: { zoneId: true, publishedAt: true },
+      });
+      const zonePublishedMap = new Map(
+        existingZones.map((z) => [z.zoneId, z.publishedAt]),
+      );
+
+      await tx.camera.deleteMany({ where: { mallId, floor } });
+      await tx.floorplanZone.deleteMany({ where: { mallId, floor } });
+
+      for (const z of zones) {
+        await tx.floorplanZone.create({
+          data: {
+            mallId,
+            floor,
+            zoneId: z.zoneId,
+            name: z.name,
+            nameFi: z.nameFi,
+            category: z.category,
+            subcategory: z.subcategory ?? null,
+            drawShape: z.drawShape ?? 'polygon',
+            svgPoints: z.svgPoints,
+            labelX: z.labelX,
+            labelY: z.labelY,
+            capacity: z.capacity,
+            areaSqm: z.areaSqm,
+            baseVisitors: z.baseVisitors ?? 0,
+            publishedAt: zonePublishedMap.get(z.zoneId) ?? null,
+          },
+        });
+      }
+
+      for (const c of cameras) {
+        await tx.camera.create({
+          data: {
+            mallId,
+            floor,
+            label: c.label,
+            x: c.x,
+            y: c.y,
+            deviceType: c.deviceType ?? 'camera',
+            model: c.model ?? null,
+            resolution: c.resolution ?? null,
+            lensInfo: c.lensInfo ?? null,
+            cameraRole: c.cameraRole ?? null,
+            angleDeg: c.angleDeg ?? null,
+            fovDeg: c.fovDeg ?? null,
+            rangeM: c.rangeM ?? null,
+            streamUrl: c.streamUrl ?? null,
+            zoneDbId: c.zoneDbId ?? null,
+            homographyMatrix: c.homographyMatrix ?? null,
+            active: c.active ?? true,
+          },
+        });
+      }
+>>>>>>> origin/fix/c2-production-sync
     });
     const zonePublishedMap = new Map(
       existingZones.map((z) => [z.zoneId, z.publishedAt]),

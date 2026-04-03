@@ -33,8 +33,28 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Sheet has too few rows' }, { status: 400 });
     }
 
-    // --- Find the actual header rows (skip spacer rows) ---
-    // Look for the row containing counter names and the row with "wk." sub-headers
+    // --- Detect format: legacy weekly/daily vs ViaWeb monthly ("Vertical") ---
+    // Detection is content-based only — never relies on filename.
+    // ViaWeb monthly indicators:
+    //   1. Sheet named "Vertical"
+    //   2. Header row contains "ViaWeb" brand text
+    //   3. Date range line like "1 February 2026 - 28 February 2026"
+    //   4. Data rows use combined "Day, Mon D, HH:MM" format (date+time in one cell)
+    const hasVerticalSheet = workbook.SheetNames.includes('Vertical');
+    const hasViaWebHeader = rows.slice(0, 12).some((r) =>
+      str(r[0]).match(/ViaWeb/i) ||
+      str(r[0]).match(/^\d+\s+[A-Za-z]+\s+\d{4}\s*[-–]\s*\d+\s+[A-Za-z]+\s+\d{4}/)
+    );
+    const hasCombinedDateTimeRows = rows.slice(0, 30).some((r) =>
+      str(r[0]).match(/^(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun),\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2},\s+\d{1,2}:\d{2}$/i)
+    );
+    const isViaWebMonthly = hasVerticalSheet || hasViaWebHeader || hasCombinedDateTimeRows;
+
+    if (isViaWebMonthly) {
+      return await parseViaWebMonthly(rows, file.name, mallId, prisma);
+    }
+
+    // --- Legacy format: find counter header rows (week-based, "Counters as columns") ---
     let counterHeaderIdx = -1;
     let subHeaderIdx = -1;
     let reportDate: Date | null = null;
@@ -51,18 +71,15 @@ export async function POST(req: NextRequest) {
       // Find the sub-header row with "wk." or "vk." patterns
       const rowStr = rows[r].map(String).join(' ');
       if (rowStr.match(/(?:wk|vk)\.\d+\s+\d{4}/i) && subHeaderIdx === -1) {
-        // Check if previous row has counter names
         if (counterHeaderIdx === -1 && r > 0) {
           counterHeaderIdx = r - 1;
         }
         subHeaderIdx = r;
       }
 
-      // Also detect old format: counter names directly in first row with "wk." pattern
       if (counterHeaderIdx === -1 && r < 5) {
         const cellCount = rows[r].filter((c) => c != null && str(c).trim().length > 3).length;
         if (cellCount >= 3) {
-          // Could be counter header row if cells look like counter names (not spacers)
           const hasCounterName = rows[r].some(
             (c) => c != null && typeof c === 'string' && (c.includes('Sisäänkäynti') || c.includes('CityMarket') || c.includes('kerros') || c.includes('Huoltokäytävä')),
           );
@@ -73,7 +90,6 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // If no sub-header found, look for it based on counter header
     if (counterHeaderIdx >= 0 && subHeaderIdx === -1) {
       subHeaderIdx = counterHeaderIdx + 1;
     }
@@ -96,15 +112,14 @@ export async function POST(req: NextRequest) {
     }
 
     // --- Identify counter columns ---
-    // Detect column grouping: 3 cols (current, prev, delta) or 7 cols (current, prev1, d1, prev2, d2, prev3, d3)
     interface CounterCol {
       label: string;
-      cleanLabel: string; // without group suffix like "(Asiakasovet)"
+      cleanLabel: string;
       floor: string;
       colCurrent: number;
       colPrev1: number;
-      colPrev2: number; // -1 if not available
-      colPrev3: number; // -1 if not available
+      colPrev2: number;
+      colPrev3: number;
     }
 
     const counters: CounterCol[] = [];
@@ -113,26 +128,21 @@ export async function POST(req: NextRequest) {
       if (val == null) continue;
       const raw = str(val).trim();
       if (raw.length === 0 || raw === ' ') continue;
-      // Skip delta columns, year reference columns, "Totals"
-      if (raw.startsWith('∆') || raw.match(/^(?:wk|vk)\./i) || raw.match(/^\d{4}\*?$/) || raw.toLowerCase() === 'totals' || raw.toLowerCase() === 'date') continue;
+      if (raw.startsWith('∆') || raw.match(/^(?:wk|vk)\./i) || raw.match(/^\d{4}\*?$/) || raw.toLowerCase() === 'totals' || raw.toLowerCase() === 'total' || raw.toLowerCase() === 'date') continue;
 
       const label = raw;
-      // Remove group suffix like "(Asiakasovet)", "(Koko Ideapark)", "(2. kerroksen laskurit)"
       const cleanLabel = label.replace(/\s*\([^)]*\)\s*$/, '').trim();
       const floor = label.toLowerCase().includes('2. kerros') ? 'upper' : 'ground';
 
-      // Find the column range for this counter (until next counter name)
       let colEnd = c + 1;
       for (let nc = c + 1; nc < headerRow.length; nc++) {
         const nextVal = headerRow[nc];
         if (nextVal != null && str(nextVal).trim().length > 0 && !str(nextVal).startsWith('∆') && !str(nextVal).match(/^(?:wk|vk)\./i) && !str(nextVal).match(/^\d{4}\*?$/)) {
-          break; // next counter starts
+          break;
         }
         colEnd = nc + 1;
       }
 
-      // Scan sub-header columns to find year-over-year comparison columns
-      // Look for "wk.{sameWeek} {differentYear}" entries (YoY), skip "wk.{differentWeek} {sameYear}" (WoW)
       let colPrev1 = -1;
       let colPrev2 = -1;
       let colPrev3 = -1;
@@ -141,50 +151,37 @@ export async function POST(req: NextRequest) {
         const yoyColumns: { col: number; yr: number }[] = [];
         for (let sc = c; sc < colEnd; sc++) {
           const sub = str(subHeader[sc]).trim();
-          if (sub.startsWith('∆')) continue; // skip delta columns
+          if (sub.startsWith('∆')) continue;
           const m = sub.match(/(?:wk|vk)\.?\s*(\d+)\s+(\d{4})/i);
           if (!m) continue;
           const subWk = parseInt(m[1], 10);
           const subYr = parseInt(m[2], 10);
-          if (sc === c) continue; // skip the current-week column itself
-          // Same week number but different year = year-over-year comparison
+          if (sc === c) continue;
           if (subWk === weekNumber && subYr !== year) {
             yoyColumns.push({ col: sc, yr: subYr });
           }
         }
-        // Sort by year descending (most recent comparison year first)
         yoyColumns.sort((a, b) => b.yr - a.yr);
         if (yoyColumns.length >= 1) colPrev1 = yoyColumns[0].col;
         if (yoyColumns.length >= 2) colPrev2 = yoyColumns[1].col;
         if (yoyColumns.length >= 3) colPrev3 = yoyColumns[2].col;
       }
 
-      // Fallback for simple 3-column format (no sub-header week info)
       if (colPrev1 === -1 && colEnd - c >= 2) {
         colPrev1 = c + 1;
       }
 
-      counters.push({
-        label,
-        cleanLabel,
-        floor,
-        colCurrent: c,
-        colPrev1,
-        colPrev2,
-        colPrev3,
-      });
+      counters.push({ label, cleanLabel, floor, colCurrent: c, colPrev1, colPrev2, colPrev3 });
     }
 
     if (counters.length === 0) {
       return NextResponse.json({ error: 'No counter columns found in header' }, { status: 400 });
     }
 
-    // Build label resolver: use cleaned label as canonical name for the counter
     function resolveLabel(counter: CounterCol): string {
       return counter.cleanLabel || counter.label;
     }
 
-    // --- Detect granularity from data rows ---
     const dataRowStart = subHeaderIdx + 1;
     const warnings: string[] = [];
 
@@ -201,7 +198,6 @@ export async function POST(req: NextRequest) {
     }
     const readings: Reading[] = [];
 
-    // Check first few data cells to detect hourly vs daily vs weekly
     const hourRows: { rowIdx: number; hour: number }[] = [];
     const dateRows: { rowIdx: number; date: Date }[] = [];
 
@@ -210,16 +206,14 @@ export async function POST(req: NextRequest) {
       if (firstCell === '' || firstCell === ' ') continue;
       if (firstCell.toLowerCase().includes('total') || firstCell.toLowerCase().includes('yhteensä')) continue;
       if (firstCell.startsWith('∆') || firstCell.match(/^(?:wk|vk)\./i) || firstCell.match(/^\d{4}\*?$/)) continue;
-      if (firstCell.match(/^\d{2}:\d{2}\s*-\s*\d{2}:\d{2}/)) continue; // summary range like "00:00 - 00:00"
+      if (firstCell.match(/^\d{2}:\d{2}\s*-\s*\d{2}:\d{2}/)) continue;
 
-      // Try hour format: "HH:00" or "HH:MM"
       const hourMatch = firstCell.match(/^(\d{1,2}):00$/);
       if (hourMatch) {
         hourRows.push({ rowIdx: r, hour: parseInt(hourMatch[1], 10) });
         continue;
       }
 
-      // Try date format
       const parsed = parseFlexDate(firstCell, year);
       if (parsed) {
         dateRows.push({ rowIdx: r, date: parsed });
@@ -230,18 +224,13 @@ export async function POST(req: NextRequest) {
     if (hourRows.length >= 10) {
       detectedGranularity = 'hourly';
     } else if (dateRows.length >= 1) {
-      // Any date rows = daily (even 1 day of a partial week)
       detectedGranularity = 'daily';
     } else {
       detectedGranularity = 'weekly';
     }
 
-    // --- Parse based on granularity ---
-
     if (detectedGranularity === 'hourly') {
-      // Hourly: each row is an hour, date comes from report metadata
       const date = reportDate ?? getMonday(year, weekNumber);
-
       for (const { rowIdx, hour } of hourRows) {
         const row = rows[rowIdx];
         for (const counter of counters) {
@@ -251,17 +240,7 @@ export async function POST(req: NextRequest) {
           const prev2 = counter.colPrev2 >= 0 ? parseNum(row[counter.colPrev2]) : null;
           const prev3 = counter.colPrev3 >= 0 ? parseNum(row[counter.colPrev3]) : null;
           if (visitors === 0 && !prev1 && !prev2 && !prev3) continue;
-          readings.push({
-            counterLabel: label,
-            floor: counter.floor,
-            date,
-            hour,
-            visitors,
-            visitorsPrevYear: prev1,
-            visitorsYear2: prev2,
-            visitorsYear3: prev3,
-            granularity: 'hourly',
-          });
+          readings.push({ counterLabel: label, floor: counter.floor, date, hour, visitors, visitorsPrevYear: prev1, visitorsYear2: prev2, visitorsYear3: prev3, granularity: 'hourly' });
         }
       }
     } else if (detectedGranularity === 'daily') {
@@ -273,25 +252,13 @@ export async function POST(req: NextRequest) {
           const prev1 = counter.colPrev1 >= 0 ? parseNum(row[counter.colPrev1]) : null;
           const prev2 = counter.colPrev2 >= 0 ? parseNum(row[counter.colPrev2]) : null;
           const prev3 = counter.colPrev3 >= 0 ? parseNum(row[counter.colPrev3]) : null;
-          readings.push({
-            counterLabel: label,
-            floor: counter.floor,
-            date,
-            hour: -1,
-            visitors,
-            visitorsPrevYear: prev1,
-            visitorsYear2: prev2,
-            visitorsYear3: prev3,
-            granularity: 'daily',
-          });
+          readings.push({ counterLabel: label, floor: counter.floor, date, hour: -1, visitors, visitorsPrevYear: prev1, visitorsYear2: prev2, visitorsYear3: prev3, granularity: 'daily' });
         }
       }
     } else {
-      // Weekly totals
       const monday = getMonday(year, weekNumber);
       for (const counter of counters) {
         const label = resolveLabel(counter);
-
         let totalVisitors = 0;
         let totalPrev: number | null = null;
         let totalYear2: number | null = null;
@@ -321,46 +288,23 @@ export async function POST(req: NextRequest) {
         }
 
         if (totalVisitors > 0) {
-          readings.push({
-            counterLabel: label,
-            floor: counter.floor,
-            date: monday,
-            hour: -1,
-            visitors: totalVisitors,
-            visitorsPrevYear: totalPrev,
-            visitorsYear2: totalYear2,
-            visitorsYear3: totalYear3,
-            granularity: 'weekly',
-          });
+          readings.push({ counterLabel: label, floor: counter.floor, date: monday, hour: -1, visitors: totalVisitors, visitorsPrevYear: totalPrev, visitorsYear2: totalYear2, visitorsYear3: totalYear3, granularity: 'weekly' });
         }
       }
     }
 
     if (readings.length === 0) {
-      return NextResponse.json(
-        { ok: false, error: 'No valid readings found', warnings },
-        { status: 400 },
-      );
+      return NextResponse.json({ ok: false, error: 'No valid readings found', warnings }, { status: 400 });
     }
 
-    // --- Clean up stale data for the same counters in this week ---
-    // Delete existing readings that match these counter labels (including old
-    // label variants with group suffixes) so re-uploads don't create duplicates.
     const counterLabels = [...new Set(readings.map((r) => r.counterLabel))];
-    // Also collect full labels (with suffix) to clean up old-format entries
     const fullLabels = [...new Set(counters.map((c) => c.label))];
     const allLabels = [...new Set([...counterLabels, ...fullLabels])];
 
     await prisma.counterReading.deleteMany({
-      where: {
-        mallId,
-        weekNumber,
-        year,
-        counterLabel: { in: allLabels },
-      },
+      where: { mallId, weekNumber, year, counterLabel: { in: allLabels } },
     });
 
-    // --- Create upload record ---
     const upload = await prisma.counterUpload.create({
       data: {
         mallId,
@@ -373,41 +317,11 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // --- Upsert readings ---
     for (const r of readings) {
       await prisma.counterReading.upsert({
-        where: {
-          mallId_counterLabel_date_hour: {
-            mallId,
-            counterLabel: r.counterLabel,
-            date: r.date,
-            hour: r.hour,
-          },
-        },
-        update: {
-          visitors: r.visitors,
-          visitorsPrevYear: r.visitorsPrevYear,
-          visitorsYear2: r.visitorsYear2,
-          visitorsYear3: r.visitorsYear3,
-          granularity: r.granularity,
-          uploadedAt: new Date(),
-          uploadId: upload.id,
-        },
-        create: {
-          mallId,
-          counterLabel: r.counterLabel,
-          floor: r.floor,
-          date: r.date,
-          hour: r.hour,
-          weekNumber,
-          year,
-          visitors: r.visitors,
-          visitorsPrevYear: r.visitorsPrevYear,
-          visitorsYear2: r.visitorsYear2,
-          visitorsYear3: r.visitorsYear3,
-          granularity: r.granularity,
-          uploadId: upload.id,
-        },
+        where: { mallId_counterLabel_date_hour: { mallId, counterLabel: r.counterLabel, date: r.date, hour: r.hour } },
+        update: { visitors: r.visitors, visitorsPrevYear: r.visitorsPrevYear, visitorsYear2: r.visitorsYear2, visitorsYear3: r.visitorsYear3, granularity: r.granularity, uploadedAt: new Date(), uploadId: upload.id },
+        create: { mallId, counterLabel: r.counterLabel, floor: r.floor, date: r.date, hour: r.hour, weekNumber, year, visitors: r.visitors, visitorsPrevYear: r.visitorsPrevYear, visitorsYear2: r.visitorsYear2, visitorsYear3: r.visitorsYear3, granularity: r.granularity, uploadId: upload.id },
       });
     }
 
@@ -480,4 +394,172 @@ function getMonday(year: number, week: number): Date {
   const monday = new Date(jan4);
   monday.setDate(jan4.getDate() - dayOfWeek + 1 + (week - 1) * 7);
   return monday;
+}
+
+function getISOWeek(date: Date): { week: number; year: number } {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  const week = Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+  return { week, year: d.getUTCFullYear() };
+}
+
+// --- ViaWeb "Vertical" monthly export parser ---
+// Format: sheet named "Vertical", rows 7-8 = title/date range, row 15 = counter headers,
+// rows 16+ = "Day, Mon D, HH:MM" hourly data, final row = "Total" summary.
+async function parseViaWebMonthly(
+  rows: (string | number | null)[][],
+  fileName: string,
+  mallId: string,
+  db: typeof prisma,
+): Promise<NextResponse> {
+  const warnings: string[] = [];
+
+  // --- Extract date range from header (row 8: "1 February 2026 - 28 February 2026") ---
+  let fileYear = new Date().getFullYear();
+  for (let r = 0; r < Math.min(12, rows.length); r++) {
+    const cell = str(rows[r][0]);
+    const rangeMatch = cell.match(/(\d+)\s+\w+\s+(\d{4})\s*[-–]\s*\d+\s+\w+\s+(\d{4})/);
+    if (rangeMatch) {
+      fileYear = parseInt(rangeMatch[2], 10);
+      break;
+    }
+  }
+
+  // --- Find counter header row (contains counter names with "(Asiakasovet)" suffix) ---
+  let headerRowIdx = -1;
+  for (let r = 0; r < Math.min(20, rows.length); r++) {
+    const hasCounterName = rows[r].some(
+      (c) => c != null && typeof c === 'string' &&
+        (c.includes('Sisäänkäynti') || c.includes('CityMarket') || c.includes('kerros') || c.includes('Asiakasovet')),
+    );
+    if (hasCounterName) {
+      headerRowIdx = r;
+      break;
+    }
+  }
+  if (headerRowIdx === -1) {
+    return NextResponse.json({ error: 'ViaWeb: could not find counter header row' }, { status: 400 });
+  }
+
+  const headerRow = rows[headerRowIdx];
+
+  // --- Build counter list: skip col 0 (date/time), skip "Total" column ---
+  interface ViaCounter { label: string; cleanLabel: string; floor: string; col: number; }
+  const counters: ViaCounter[] = [];
+  for (let c = 1; c < headerRow.length; c++) {
+    const raw = str(headerRow[c]).trim();
+    if (!raw || raw.toLowerCase() === 'total') continue;
+    const cleanLabel = raw.replace(/\s*\([^)]*\)\s*$/, '').trim();
+    const floor = raw.toLowerCase().includes('2. kerros') ? 'upper' : 'ground';
+    counters.push({ label: raw, cleanLabel, floor, col: c });
+  }
+  if (counters.length === 0) {
+    return NextResponse.json({ error: 'ViaWeb: no counters found in header' }, { status: 400 });
+  }
+
+  // --- Parse data rows: "Day, Mon D, HH:MM" ---
+  // e.g. "Sun, Feb 1, 00:00"  →  date=2026-02-01, hour=0
+  const MONTHS: Record<string, number> = {
+    jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5,
+    jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11,
+  };
+
+  interface Reading {
+    counterLabel: string; floor: string; date: Date; hour: number;
+    visitors: number; visitorsPrevYear: null; visitorsYear2: null; visitorsYear3: null;
+    granularity: string; weekNumber: number; year: number;
+  }
+  const readings: Reading[] = [];
+
+  for (let r = headerRowIdx + 1; r < rows.length; r++) {
+    const cell = str(rows[r][0]).trim();
+    if (!cell) continue;
+    if (cell.toLowerCase().startsWith('total')) continue;
+
+    // Match "Day, Mon D, HH:MM"  (day number can be 1 or 2 digits)
+    const m = cell.match(
+      /^(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun),\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s+(\d{1,2}):(\d{2})$/i,
+    );
+    if (!m) continue;
+
+    const monthIdx = MONTHS[m[1].toLowerCase()];
+    const day = parseInt(m[2], 10);
+    const hour = parseInt(m[3], 10);
+    if (monthIdx === undefined) continue;
+
+    const date = new Date(fileYear, monthIdx, day);
+    const { week: weekNumber, year } = getISOWeek(date);
+
+    for (const counter of counters) {
+      const visitors = parseNum(rows[r][counter.col]);
+      if (visitors === 0) continue;
+      readings.push({
+        counterLabel: counter.cleanLabel,
+        floor: counter.floor,
+        date,
+        hour,
+        visitors,
+        visitorsPrevYear: null,
+        visitorsYear2: null,
+        visitorsYear3: null,
+        granularity: 'hourly',
+        weekNumber,
+        year,
+      });
+    }
+  }
+
+  if (readings.length === 0) {
+    return NextResponse.json({ ok: false, error: 'ViaWeb: no valid readings found', warnings }, { status: 400 });
+  }
+
+  // --- Delete existing readings for affected counter+date+hour combinations ---
+  const affectedLabels = [...new Set(readings.map((r) => r.counterLabel))];
+  const minDate = readings.reduce((min, r) => r.date < min ? r.date : min, readings[0].date);
+  const maxDate = readings.reduce((max, r) => r.date > max ? r.date : max, readings[0].date);
+
+  await db.counterReading.deleteMany({
+    where: {
+      mallId,
+      counterLabel: { in: affectedLabels },
+      date: { gte: minDate, lte: maxDate },
+    },
+  });
+
+  // --- Create upload record (weekNumber=0 signals monthly upload) ---
+  const upload = await db.counterUpload.create({
+    data: {
+      mallId,
+      fileName,
+      weekNumber: 0,
+      year: fileYear,
+      granularity: 'hourly',
+      counters: affectedLabels.length,
+      readings: readings.length,
+    },
+  });
+
+  // --- Upsert all readings ---
+  for (const r of readings) {
+    await db.counterReading.upsert({
+      where: { mallId_counterLabel_date_hour: { mallId, counterLabel: r.counterLabel, date: r.date, hour: r.hour } },
+      update: { visitors: r.visitors, visitorsPrevYear: null, visitorsYear2: null, visitorsYear3: null, granularity: 'hourly', uploadedAt: new Date(), uploadId: upload.id },
+      create: { mallId, counterLabel: r.counterLabel, floor: r.floor, date: r.date, hour: r.hour, weekNumber: r.weekNumber, year: r.year, visitors: r.visitors, visitorsPrevYear: null, visitorsYear2: null, visitorsYear3: null, granularity: 'hourly', uploadId: upload.id },
+    });
+  }
+
+  const weeksImported = [...new Set(readings.map((r) => `${r.year}-W${r.weekNumber}`))].sort();
+
+  return NextResponse.json({
+    ok: true,
+    format: 'viaweb-monthly',
+    imported: readings.length,
+    countersFound: affectedLabels.length,
+    year: fileYear,
+    weeksImported,
+    dateRange: { from: minDate.toISOString().slice(0, 10), to: maxDate.toISOString().slice(0, 10) },
+    uploadId: upload.id,
+    warnings,
+  });
 }
