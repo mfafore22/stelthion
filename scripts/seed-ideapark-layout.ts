@@ -12,7 +12,7 @@
  * Usage:
  *   DATABASE_URL=<...> npx tsx scripts/seed-ideapark-layout.ts
  */
-
+import 'dotenv/config';
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 
