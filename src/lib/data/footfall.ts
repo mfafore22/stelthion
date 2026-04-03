@@ -37,7 +37,7 @@ const HOURLY_PATTERN = [
   0.08,                             // 10 doors open / slow start
   0.32, 0.58, 0.74,                 // 11–13 late-morning ramp
   0.88, 0.96, 1.00, 0.97,          // 14–17 afternoon peak (15:00 = peak)
-  0.82, 0.60, 0.28, 0.10,          // 18–21 evening decline
+  0.41, 0.30, 0.14, 0.05,          // 18–21 evening decline (halved)
   0, 0,                             // 22–23 closed
 ];
 
@@ -50,56 +50,30 @@ const PEAK_VISITORS = 3_900;
 /**
  * Estimate current visitor count based on time of day.
  */
-export function estimateCurrentFootfall(date: Date = new Date()): FootfallEstimate {
+export function estimateCurrentFootfall(date: Date = new Date(), peak?: number): FootfallEstimate {
   const hour = date.getHours();
   const factor = HOURLY_PATTERN[hour] ?? 0;
-  const currentVisitors = Math.round(PEAK_VISITORS * factor);
+  const effectivePeak = peak ?? PEAK_VISITORS;
+  const currentVisitors = Math.round(effectivePeak * factor);
 
   return {
     currentVisitors,
-    peakEstimate: PEAK_VISITORS,
+    peakEstimate: effectivePeak,
     weatherBoost: 0,
   };
 }
 
 /**
- * Dwell-time curve by hour.
- * Off-peak visitors are destination shoppers who stay longer (~58 min at 10:00).
- * Peak-hour visitors include more quick errands (~42 min at 15:00).
- * Outside opening hours returns the daily average (47 min).
- */
-const DWELL_BY_HOUR: Record<number, number> = {
-  10: 58, 11: 54, 12: 50, 13: 47,
-  14: 44, 15: 42, 16: 43, 17: 45,
-  18: 48, 19: 52, 20: 55,
-};
-const DWELL_DEFAULT = 47;
-
-/**
- * Conversion-rate curve by hour (% of visitors who make a purchase).
- * Peaks mid-afternoon when intent-driven shoppers dominate (~26 %).
- * Lower during the lunch rush and opening/closing shoulders (~18–20 %).
- */
-const CONVERSION_BY_HOUR: Record<number, number> = {
-  10: 18.2, 11: 20.5, 12: 22.1, 13: 23.8,
-  14: 25.4, 15: 26.0, 16: 25.6, 17: 24.3,
-  18: 22.0, 19: 19.8, 20: 18.5,
-};
-const CONVERSION_DEFAULT = 23.4;
-
-/**
  * Get a live footfall snapshot (KPI values for dashboard display).
- * All values vary by current hour so the dashboard stays realistic.
  */
-export function getCurrentFootfall(date: Date = new Date()): CurrentFootfall {
-  const { currentVisitors } = estimateCurrentFootfall(date);
-  const hour = date.getHours();
+export function getCurrentFootfall(): CurrentFootfall {
+  const { currentVisitors } = estimateCurrentFootfall();
 
   return {
     currentVisitors,
     vsPlanned: 8.7,
     weatherBoost: 3.2,
-    dwellTimeMinutes: DWELL_BY_HOUR[hour] ?? DWELL_DEFAULT,
-    conversionRate: CONVERSION_BY_HOUR[hour] ?? CONVERSION_DEFAULT,
+    dwellTimeMinutes: 47,
+    conversionRate: 34.2,
   };
 }
