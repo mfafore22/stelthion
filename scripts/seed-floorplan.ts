@@ -3,6 +3,7 @@
  * Performs a clean wipe of existing zones before seeding.
  * Usage: npx tsx scripts/seed-floorplan.ts
  */
+import 'dotenv/config';// Ensure .env is loaded for DB connection
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { IDEAPARK_ZONES, IDEAPARK_UPPER_ZONES } from '../src/lib/data/ideaparkZones';
@@ -123,7 +124,7 @@ async function main() {
 
   await seedFloor('ground', IDEAPARK_ZONES);
   await seedFloor('upper', IDEAPARK_UPPER_ZONES);
-  await seedStoresAsZones('ground', GROUND_FLOOR_STORES);
+  //await seedStoresAsZones('ground', GROUND_FLOOR_STORES);
 
   console.log('Done!');
 }

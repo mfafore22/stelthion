@@ -262,9 +262,12 @@ export function FootfallAnalysis({
   // Use only published DB data — no static fallback.
   // Show empty floorplan while loading; avoids stale static zones conflicting with live data.
   const hasPublishedGround = published.groundZones !== null;
-  const activeZones = floor === 'upper'
+  const allZones = floor === 'upper'
     ? (published.upperZones ?? [])
     : (published.groundZones ?? []);
+
+  // Filter out store zones — they have capacity 0 and make the heat map look messy
+  const activeZones = allZones.filter((z: any) => z.category !== 'Store' && z.drawShape !== 'rect');
 
   // De-collide zone/store name labels so they don't overlap
   const viewBox = floor === 'upper' ? { w: 1518, h: 688 } : { w: 1504, h: 704 };
