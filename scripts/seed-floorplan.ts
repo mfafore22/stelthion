@@ -8,9 +8,13 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import { IDEAPARK_ZONES, IDEAPARK_UPPER_ZONES } from '../src/lib/data/ideaparkZones';
 import { GROUND_FLOOR_STORES } from '../src/lib/data/ideaparkStorePositions';
 
-const adapter = new PrismaPg({
-  connectionString: process.env.DATABASE_URL ?? 'postgresql://kimmoi@localhost:5432/stelthion',
-});
+const dbUrl = process.env.DATABASE_URL;
+if (!dbUrl) {
+  console.error('ERROR: DATABASE_URL environment variable is not set.');
+  process.exit(1);
+}
+
+const adapter = new PrismaPg({ connectionString: dbUrl });
 const prisma = new PrismaClient({ adapter });
 
 const MALL_ID = 'ideapark';
