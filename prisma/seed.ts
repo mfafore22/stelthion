@@ -9,7 +9,14 @@ const adapter = new PrismaPg({
 const prisma = new PrismaClient({ adapter })
 
 async function main() {
-  console.log('Seeding database (non-destructive upsert)...')
+  console.log('Seeding database (non-destructive)...')
+
+  // Check if already seeded
+  const existingIdeapark = await prisma.customer.findUnique({ where: { id: 'ideapark' } })
+  if (existingIdeapark) {
+    console.log('✅ Data already seeded — skipping. Use Supabase dashboard to edit data.')
+    return
+  }
 
   const hashedPassword = await bcrypt.hash('ideapark2024', 10)
 
@@ -24,10 +31,11 @@ async function main() {
     { email: 'faforemichael001@gmail.com', name: 'Michael Fafore', role: 'ADMIN' as const },
     { email: 'kimmoisbjornssund@pm.me', name: 'Kimmo Isbjörnssund', role: 'ADMIN' as const },
   ]
-for (const u of users) {
+
+  for (const u of users) {
     await prisma.user.upsert({
       where: { email: u.email },
-      update: { passwordChangedAt: new Date() },
+      update: {},
       create: {
         email: u.email,
         password: hashedPassword,
@@ -58,7 +66,7 @@ for (const u of users) {
     },
   })
 
-  // Upsert stats (one per mall)
+  // Upsert stats
   const existingStats = await prisma.mallStats.findFirst({ where: { mallId: 'ideapark' } })
   if (!existingStats) {
     await prisma.mallStats.create({
@@ -73,7 +81,7 @@ for (const u of users) {
     })
   }
 
-  // Upsert branding (one per mall)
+  // Upsert branding
   const existingBranding = await prisma.mallBranding.findFirst({ where: { mallId: 'ideapark' } })
   if (!existingBranding) {
     await prisma.mallBranding.create({
@@ -88,24 +96,32 @@ for (const u of users) {
     })
   }
 
-  // Upsert categories — replace with current data
-  await prisma.mallCategory.deleteMany({ where: { mallId: 'ideapark' } })
-  await prisma.mallCategory.createMany({
-    data: [
-      { mallId: 'ideapark', name: 'Fashion', shopCount: 50, percentage: 21.5 },
-      { mallId: 'ideapark', name: 'Food & Beverage', shopCount: 22, percentage: 13.5 },
-      { mallId: 'ideapark', name: 'Auto', shopCount: 12, percentage: 7.4 },
-      { mallId: 'ideapark', name: 'Sports', shopCount: 26, percentage: 16.0 },
-      { mallId: 'ideapark', name: 'Home & Living', shopCount: 23, percentage: 14.1 },
-      { mallId: 'ideapark', name: 'Services', shopCount: 34, percentage: 20.9 },
-      { mallId: 'ideapark', name: 'Beauty & Health', shopCount: 17, percentage: 10.4 },
-      { mallId: 'ideapark', name: 'Children', shopCount: 17, percentage: 10.4 },
-      { mallId: 'ideapark', name: 'Daily Goods & Tech', shopCount: 9, percentage: 5.5 },
-    ],
-  })
+  // Upsert categories
+  const categories = [
+    { mallId: 'ideapark', name: 'Fashion', shopCount: 50, percentage: 21.5 },
+    { mallId: 'ideapark', name: 'Food & Beverage', shopCount: 22, percentage: 13.5 },
+    { mallId: 'ideapark', name: 'Auto', shopCount: 12, percentage: 7.4 },
+    { mallId: 'ideapark', name: 'Sports', shopCount: 26, percentage: 16.0 },
+    { mallId: 'ideapark', name: 'Home & Living', shopCount: 23, percentage: 14.1 },
+    { mallId: 'ideapark', name: 'Services', shopCount: 34, percentage: 20.9 },
+    { mallId: 'ideapark', name: 'Beauty & Health', shopCount: 17, percentage: 10.4 },
+    { mallId: 'ideapark', name: 'Children', shopCount: 17, percentage: 10.4 },
+    { mallId: 'ideapark', name: 'Daily Goods & Tech', shopCount: 9, percentage: 5.5 },
+  ]
 
-  console.log('Ideapark: 1 mall seeded')
-  console.log('Seeding complete!')
+  for (const cat of categories) {
+    await prisma.mallCategory.upsert({
+      where: { mallId_name: { mallId: cat.mallId, name: cat.name } },
+      update: { shopCount: cat.shopCount, percentage: cat.percentage },
+      create: cat,
+    })
+  }
+
+  console.log('✅ Ideapark: 1 mall seeded')
+  console.log('🌱 Seeding complete!')
+  console.log('Logins:')
+  console.log('  faforemichael001@gmail.com / ideapark2024')
+  console.log('  kimmoisbjornssund@pm.me / ideapark2024')
 }
 
 main()

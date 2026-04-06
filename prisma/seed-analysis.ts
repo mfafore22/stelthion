@@ -1,19 +1,14 @@
 /**
  * Seed: Video Analysis demo data
- *
- * Inserts realistic analysis jobs + results so the Video Analysis UI
- * has data to display. Safe to run multiple times (idempotent via upsert).
+ * NON-DESTRUCTIVE: checks if demo data exists, skips if already seeded.
  *
  * Usage:
- *   npx tsx prisma/seed-analysis.ts          # run directly
- *   import { seedAnalysis } from './seed-analysis'  # call from another script
+ *   npx tsx prisma/seed-analysis.ts
  */
 
 import 'dotenv/config'
 import { PrismaClient } from '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
-
-// ── Helpers ─────────────────────────────────────────────────────────────────
 
 function cuid() {
   return `seed_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 9)}`
@@ -30,12 +25,19 @@ function pastDate(daysAgo: number) {
   return d
 }
 
-// ── Seed function (exported for external use) ───────────────────────────────
-
 export async function seedAnalysis(prisma: PrismaClient) {
   const MALL_ID = 'ideapark'
 
-  // Fetch real cameras and a selection of named zones from DB
+  // Check if already seeded
+  const existing = await prisma.analysisJob.findMany({
+    where: { requestedBy: 'demo-seed' },
+    select: { id: true },
+  })
+  if (existing.length > 0) {
+    console.log(`  ✅ Analysis demo data already exists (${existing.length} jobs) — skipping.`)
+    return
+  }
+
   const cameras = await prisma.camera.findMany({
     where: { mallId: MALL_ID, active: true },
     orderBy: { label: 'asc' },
@@ -45,7 +47,7 @@ export async function seedAnalysis(prisma: PrismaClient) {
     where: {
       mallId: MALL_ID,
       publishedAt: { not: null },
-      name: { not: 'New Zone' },  // only named zones
+      name: { not: 'New Zone' },
     },
     orderBy: { zoneId: 'asc' },
   })
@@ -60,17 +62,7 @@ export async function seedAnalysis(prisma: PrismaClient) {
 
   console.log(`  Found ${cameras.length} cameras, ${zones.length} named zones`)
 
-  // Clean previous seed data (idempotent)
-  const existing = await prisma.analysisJob.findMany({
-    where: { requestedBy: 'demo-seed' },
-    select: { id: true },
-  })
-  if (existing.length > 0) {
-    console.log(`  Cleaning ${existing.length} previous seed job(s)…`)
-    await prisma.analysisJob.deleteMany({ where: { requestedBy: 'demo-seed' } })
-  }
-
-  // ── Job 1: ZONE_COUNT (1 camera, completed 3 days ago) ────────────────────
+  // ── Job 1: ZONE_COUNT ─────────────────────────────────────────────────────
 
   const job1Id = cuid()
   const cam1 = cameras[0]
@@ -90,14 +82,13 @@ export async function seedAnalysis(prisma: PrismaClient) {
     },
   })
 
-  // Hourly visitor counts (realistic mall pattern: ramp up, lunch peak, afternoon plateau, evening taper)
   const hourlyCounts = [120, 185, 310, 480, 520, 445, 510, 490, 380, 220]
   for (let i = 0; i < hourlyCounts.length; i++) {
     await prisma.analysisResult.create({
       data: {
         id: cuid(),
         jobId: job1Id,
-        zoneId: cam1.id, // camera's coverage area
+        zoneId: cam1.id,
         hour: 9 + i,
         count: hourlyCounts[i],
         density: +(hourlyCounts[i] / 500).toFixed(2),
@@ -107,7 +98,7 @@ export async function seedAnalysis(prisma: PrismaClient) {
 
   console.log(`  ✓ Job 1: ZONE_COUNT — ${cam1.label}, ${hourlyCounts.reduce((a, b) => a + b, 0)} visitors`)
 
-  // ── Job 2: AB_TRACKING (2 cameras, completed 2 days ago) ──────────────────
+  // ── Job 2: AB_TRACKING ────────────────────────────────────────────────────
 
   if (cameras.length >= 2) {
     const job2Id = cuid()
@@ -130,7 +121,6 @@ export async function seedAnalysis(prisma: PrismaClient) {
       },
     })
 
-    // Journey session: 87 tagged at A, 34 re-identified at B
     const session2Id = cuid()
     await prisma.journeySession.create({
       data: {
@@ -141,13 +131,12 @@ export async function seedAnalysis(prisma: PrismaClient) {
       },
     })
 
-    // Generate realistic journey paths with time gaps
     const baseTime = new Date(pastDate(2))
     baseTime.setHours(10, 0, 0, 0)
 
     for (let p = 0; p < 10; p++) {
-      const entryTime = new Date(baseTime.getTime() + p * 35 * 60000) // ~35 min apart
-      const gapMinutes = randomBetween(4, 22) // transit time between cameras
+      const entryTime = new Date(baseTime.getTime() + p * 35 * 60000)
+      const gapMinutes = randomBetween(4, 22)
       const exitTime = new Date(entryTime.getTime() + gapMinutes * 60000)
 
       await prisma.journeyPath.create({
@@ -163,7 +152,7 @@ export async function seedAnalysis(prisma: PrismaClient) {
     console.log(`  ✓ Job 2: AB_TRACKING — ${camA.label} → ${camB.label}, 87 tagged / 34 matched`)
   }
 
-  // ── Job 3: JOURNEY_MAP (zones + cameras, completed 1 day ago) ─────────────
+  // ── Job 3: JOURNEY_MAP ────────────────────────────────────────────────────
 
   if (zones.length >= 3) {
     const job3Id = cuid()
@@ -197,12 +186,10 @@ export async function seedAnalysis(prisma: PrismaClient) {
       },
     })
 
-    // Generate 15 realistic journey paths through zones
     const baseTime = new Date(pastDate(1))
     baseTime.setHours(10, 0, 0, 0)
 
     for (let p = 0; p < 15; p++) {
-      // Each person visits 2-4 zones in random order
       const numStops = randomBetween(2, Math.min(4, selectedZones.length))
       const shuffled = [...selectedZoneIds].sort(() => Math.random() - 0.5)
       const visited = shuffled.slice(0, numStops)
@@ -226,7 +213,7 @@ export async function seedAnalysis(prisma: PrismaClient) {
     console.log(`  ✓ Job 3: JOURNEY_MAP — ${zoneNames}, 142 tagged / 58 matched, 15 paths`)
   }
 
-  // ── Job 4: ZONE_COUNT (pending — shows queue state) ───────────────────────
+  // ── Job 4: ZONE_COUNT (pending) ───────────────────────────────────────────
 
   await prisma.analysisJob.create({
     data: {
@@ -234,7 +221,7 @@ export async function seedAnalysis(prisma: PrismaClient) {
       mallId: MALL_ID,
       mode: 'ZONE_COUNT',
       cameraId: cameras[cameras.length - 1].id,
-      footageDate: pastDate(0), // today
+      footageDate: pastDate(0),
       startTime: '09:00',
       endTime: '21:00',
       journeyCount: 0,
@@ -245,7 +232,7 @@ export async function seedAnalysis(prisma: PrismaClient) {
 
   console.log(`  ✓ Job 4: ZONE_COUNT (PENDING) — queued for today`)
 
-  // ── Job 5: AB_TRACKING (processing — shows in-progress state) ─────────────
+  // ── Job 5: AB_TRACKING (processing) ───────────────────────────────────────
 
   if (cameras.length >= 2) {
     await prisma.analysisJob.create({
@@ -271,23 +258,18 @@ export async function seedAnalysis(prisma: PrismaClient) {
 // ── CLI entrypoint ──────────────────────────────────────────────────────────
 
 if (require.main === module || process.argv[1]?.endsWith('seed-analysis.ts')) {
-  
   const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL })
   const prisma = new PrismaClient({ adapter })
 
-  console.log('Seeding video analysis demo data…')
+  console.log('Seeding video analysis demo data (non-destructive)…')
   seedAnalysis(prisma)
     .then(async () => {
       console.log('Done.')
       await prisma.$disconnect()
-      
     })
     .catch(async (e) => {
       console.error('Seed failed:', e)
       await prisma.$disconnect()
-      
       process.exit(1)
     })
-  
-
-  }
+}
