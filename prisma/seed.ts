@@ -9,29 +9,25 @@ const adapter = new PrismaPg({
 const prisma = new PrismaClient({ adapter })
 
 async function main() {
-  console.log('Seeding database...')
+  console.log('Seeding database (non-destructive)...')
 
-  // Clear existing data (in reverse dependency order)
-  await prisma.mallCategory.deleteMany()
-  await prisma.mallBranding.deleteMany()
-  await prisma.mallStats.deleteMany()
-  await prisma.mall.deleteMany()
-  await prisma.emailOtp.deleteMany()
-  await prisma.user.deleteMany()
-  await prisma.customer.deleteMany()
+  // Check if already seeded
+  const existingIdeapark = await prisma.customer.findUnique({ where: { id: 'ideapark' } })
+  if (existingIdeapark) {
+    console.log('✅ Data already seeded — skipping. Use Supabase dashboard to edit data.')
+    return
+  }
 
   const hashedPassword = await bcrypt.hash('ideapark2024', 10)
 
   // ── KOY IDEAPARK AB ─────────────────────────────────────
-  const ideapark = await prisma.customer.create({
-    data: {
-      id: 'ideapark',
-      name: 'Koy Ideapark Ab',
-    },
+  const ideapark = await prisma.customer.upsert({
+    where: { id: 'ideapark' },
+    update: { name: 'Koy Ideapark Ab' },
+    create: { id: 'ideapark', name: 'Koy Ideapark Ab' },
   })
 
   const users = [
-    { email: 'admin@ideapark.fi', name: 'KoyIdeaparkOy', role: 'ADMIN' as const },
     { email: 'faforemichael001@gmail.com', name: 'Michael Fafore', role: 'ADMIN' as const },
     { email: 'kimmoisbjornssund@pm.me', name: 'Kimmo Isbjörnssund', role: 'ADMIN' as const },
   ]
@@ -51,47 +47,80 @@ async function main() {
     console.log(`  User: ${u.email} (${u.role})`)
   }
 
-  await prisma.mall.create({
-    data: {
+  // Upsert mall
+  await prisma.mall.upsert({
+    where: { mallId: 'ideapark' },
+    update: {
+      name: 'Ideapark Lempäälä',
+      city: 'Lempäälä',
+      totalShops: 163,
+    },
+    create: {
       mallId: 'ideapark',
       name: 'Ideapark Lempäälä',
       city: 'Lempäälä',
-      totalShops: 200,
+      totalShops: 163,
       status: 'LIVE',
       customerId: ideapark.id,
-      stats: {
-        create: {
-          currentVisitors: 3900,
-          annualVisitors: 5000000,
-          annualSales: 180000000,
-          dwellTime: 108,
-          conversionRate: 23.4,
-        },
-      },
-      branding: {
-        create: {
-          primaryColor: '#328d2e',
-          secondaryColor: '#7cb928',
-          accentColor: '#214990',
-          gradientFrom: '#264d21',
-          gradientTo: '#1a3a15',
-        },
-      },
-      categories: {
-        create: [
-          { name: 'Fashion', shopCount: 60, percentage: 30 },
-          { name: 'Food & Beverage', shopCount: 40, percentage: 20 },
-          { name: 'Auto', shopCount: 20, percentage: 10 },
-          { name: 'Sports', shopCount: 30, percentage: 15 },
-          { name: 'Home & Living', shopCount: 25, percentage: 12.5 },
-          { name: 'Services', shopCount: 25, percentage: 12.5 },
-        ],
-      },
     },
   })
-  console.log('Ideapark: 1 mall seeded')
 
-  console.log('Seeding complete!')
+  // Upsert stats
+  const existingStats = await prisma.mallStats.findFirst({ where: { mallId: 'ideapark' } })
+  if (!existingStats) {
+    await prisma.mallStats.create({
+      data: {
+        mallId: 'ideapark',
+        currentVisitors: 3900,
+        annualVisitors: 5000000,
+        annualSales: 180000000,
+        dwellTime: 108,
+        conversionRate: 23.4,
+      },
+    })
+  }
+
+  // Upsert branding
+  const existingBranding = await prisma.mallBranding.findFirst({ where: { mallId: 'ideapark' } })
+  if (!existingBranding) {
+    await prisma.mallBranding.create({
+      data: {
+        mallId: 'ideapark',
+        primaryColor: '#328d2e',
+        secondaryColor: '#7cb928',
+        accentColor: '#214990',
+        gradientFrom: '#264d21',
+        gradientTo: '#1a3a15',
+      },
+    })
+  }
+
+  // Upsert categories
+  const categories = [
+    { mallId: 'ideapark', name: 'Fashion', shopCount: 50, percentage: 21.5 },
+    { mallId: 'ideapark', name: 'Food & Beverage', shopCount: 22, percentage: 13.5 },
+    { mallId: 'ideapark', name: 'Auto', shopCount: 12, percentage: 7.4 },
+    { mallId: 'ideapark', name: 'Sports', shopCount: 26, percentage: 16.0 },
+    { mallId: 'ideapark', name: 'Home & Living', shopCount: 23, percentage: 14.1 },
+    { mallId: 'ideapark', name: 'Services', shopCount: 34, percentage: 20.9 },
+    { mallId: 'ideapark', name: 'Beauty & Health', shopCount: 17, percentage: 10.4 },
+    { mallId: 'ideapark', name: 'Children', shopCount: 17, percentage: 10.4 },
+    { mallId: 'ideapark', name: 'Daily Goods & Tech', shopCount: 9, percentage: 5.5 },
+  ]
+
+  for (const cat of categories) {
+    await prisma.mallCategory.upsert({
+      where: { mallId_name: { mallId: cat.mallId, name: cat.name } },
+      update: { shopCount: cat.shopCount, percentage: cat.percentage },
+      create: cat,
+    })
+  }
+
+  console.log('✅ Ideapark: 1 mall seeded')
+  console.log('🌱 Seeding complete!')
+  console.log('Logins:')
+  console.log('  faforemichael001@gmail.com / ideapark2024')
+  console.log('  kimmoisbjornssund@pm.me / ideapark2024')
 }
 
 main()

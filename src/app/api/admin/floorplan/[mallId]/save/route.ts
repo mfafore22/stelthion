@@ -50,64 +50,78 @@ export async function PUT(
 
     await createFloorplanSnapshot(prisma, mallId, floor, 'pre-save');
 
-    await prisma.$transaction(async (tx) => {
-      const existingZones = await tx.floorplanZone.findMany({
-        where: { mallId, floor },
-        select: { zoneId: true, publishedAt: true },
-      });
-      const zonePublishedMap = new Map(
-        existingZones.map((z) => [z.zoneId, z.publishedAt]),
-      );
-
-      await tx.camera.deleteMany({ where: { mallId, floor } });
-      await tx.floorplanZone.deleteMany({ where: { mallId, floor } });
-
-      for (const z of zones) {
-        await tx.floorplanZone.create({
-          data: {
-            mallId,
-            floor,
-            zoneId: z.zoneId,
-            name: z.name,
-            nameFi: z.nameFi,
-            category: z.category,
-            subcategory: z.subcategory ?? null,
-            drawShape: z.drawShape ?? 'polygon',
-            svgPoints: z.svgPoints,
-            labelX: z.labelX,
-            labelY: z.labelY,
-            capacity: z.capacity,
-            areaSqm: z.areaSqm,
-            baseVisitors: z.baseVisitors ?? 0,
-            publishedAt: zonePublishedMap.get(z.zoneId) ?? null,
-          },
-        });
-      }
-
-      for (const c of cameras) {
-        await tx.camera.create({
-          data: {
-            mallId,
-            floor,
-            label: c.label,
-            x: c.x,
-            y: c.y,
-            deviceType: c.deviceType ?? 'camera',
-            model: c.model ?? null,
-            resolution: c.resolution ?? null,
-            lensInfo: c.lensInfo ?? null,
-            cameraRole: c.cameraRole ?? null,
-            angleDeg: c.angleDeg ?? null,
-            fovDeg: c.fovDeg ?? null,
-            rangeM: c.rangeM ?? null,
-            streamUrl: c.streamUrl ?? null,
-            zoneDbId: c.zoneDbId ?? null,
-            homographyMatrix: c.homographyMatrix ?? null,
-            active: c.active ?? true,
-          },
-        });
-      }
+    const existingZones = await prisma.floorplanZone.findMany({
+      where: { mallId, floor },
+      select: { zoneId: true, publishedAt: true },
     });
+    const zonePublishedMap = new Map(
+      existingZones.map((z) => [z.zoneId, z.publishedAt]),
+    );
+    // If ANY existing zone was published, the floorplan is in "published" state.
+    // New/renamed zones must inherit that state — otherwise editing zone IDs
+    // silently unpublishes them from the /mall view.
+    const wasPublished = existingZones.some((z) => z.publishedAt !== null);
+    const latestPublishedAt = wasPublished
+      ? existingZones.reduce<Date | null>(
+          (max, z) =>
+            z.publishedAt && (!max || z.publishedAt > max) ? z.publishedAt : max,
+          null,
+        )
+      : null;
+
+    await prisma.camera.deleteMany({ where: { mallId, floor } });
+    await prisma.floorplanZone.deleteMany({ where: { mallId, floor } });
+
+    const BATCH_SIZE = 10;
+    for (let i = 0; i < zones.length; i += BATCH_SIZE) {
+      const batch = zones.slice(i, i + BATCH_SIZE);
+      await Promise.all(
+        batch.map((z: any) =>
+          prisma.floorplanZone.create({
+            data: {
+              mallId,
+              floor,
+              zoneId: z.zoneId,
+              name: z.name,
+              nameFi: z.nameFi,
+              category: z.category,
+              subcategory: z.subcategory ?? null,
+              drawShape: z.drawShape ?? 'polygon',
+              svgPoints: z.svgPoints,
+              labelX: z.labelX,
+              labelY: z.labelY,
+              capacity: z.capacity,
+              areaSqm: z.areaSqm,
+              baseVisitors: z.baseVisitors ?? 0,
+              publishedAt: zonePublishedMap.get(z.zoneId) ?? latestPublishedAt,
+            },
+          })
+        )
+      );
+    }
+
+    for (let i = 0; i < cameras.length; i += BATCH_SIZE) {
+      const batch = cameras.slice(i, i + BATCH_SIZE);
+      await Promise.all(
+        batch.map((c: any) =>
+          prisma.camera.create({
+            data: {
+              mallId,
+              floor,
+              label: c.label,
+              x: c.x,
+              y: c.y,
+              deviceType: c.deviceType ?? 'camera',
+              angleDeg: c.angleDeg ?? null,
+              fovDeg: c.fovDeg ?? null,
+              rangeM: c.rangeM ?? null,
+              streamUrl: c.streamUrl ?? null,
+              active: c.active ?? true,
+            },
+          })
+        )
+      );
+    }
 
     const firstPublished = await prisma.floorplanZone.findFirst({
       where: { mallId, floor, publishedAt: { not: null } },

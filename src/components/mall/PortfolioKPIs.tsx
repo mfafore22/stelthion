@@ -51,7 +51,7 @@ export function PortfolioKPIs({
         <div className={cn('mt-2 text-2xl font-bold', yoyDelta >= 0 ? 'text-green-600' : 'text-red-600')}>
           {formatPercent(yoyDelta)}
         </div>
-        <div className="mt-1 text-sm text-muted-foreground">vs 2024</div>
+        <div className="mt-1 text-sm text-muted-foreground">vs {new Date().getFullYear() - 1}</div>
       </Card>
 
       {/* Weather Impact */}

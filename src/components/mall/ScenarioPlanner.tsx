@@ -26,7 +26,7 @@ interface ScenarioResult {
 }
 
 const CAMPAIGN_PRESETS = [
-  { id: 'blackfriday', name: 'Black Friday 2025', uplift: 35 },
+  { id: 'blackfriday', name: 'Black Friday', uplift: 35 },
   { id: 'christmas', name: 'Christmas Shopping', uplift: 28 },
   { id: 'summer', name: 'Summer Sale', uplift: 18 },
   { id: 'easter', name: 'Easter Campaign', uplift: 12 },
