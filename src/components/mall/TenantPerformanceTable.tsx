@@ -96,7 +96,7 @@ export function TenantPerformanceTable({ mallId, expanded = false }: TenantPerfo
               <span className="text-bo-success-dark font-medium">+18% {t('tenants.vsPlan')}</span>
             </div>
             <div className="flex items-center justify-between rounded-lg bg-bo-glass-subtle p-2 border border-bo-neutral-200/30">
-              <span className="text-bo-neutral-700">Starbucks (Ravintolat)</span>
+              <span className="text-bo-neutral-700">Hesburger (Ravintolat)</span>
               <span className="text-bo-success-dark font-medium">+15% {t('tenants.vsPlan')}</span>
             </div>
             <div className="flex items-center justify-between rounded-lg bg-bo-glass-subtle p-2 border border-bo-neutral-200/30">

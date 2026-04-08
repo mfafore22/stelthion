@@ -77,7 +77,7 @@ export async function DELETE(req: NextRequest) {
   if ('error' in guard) return guard.error;
 
   const { searchParams } = new URL(req.url);
-  const mallId = searchParams.get('mallId') ?? 'ideapark-lempaala';
+  const mallId = searchParams.get('mallId') ?? 'ideapark';
   const uploadId = searchParams.get('uploadId');
   const week = parseInt(searchParams.get('week') ?? '', 10);
   const year = parseInt(searchParams.get('year') ?? '', 10);

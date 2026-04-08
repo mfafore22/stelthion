@@ -1,5 +1,5 @@
 export function validateProductionEnv(){
-    if (process.env.NODE_ENV === 'production') return;
+    if (process.env.NODE_ENV !== 'production') return;
 
     if(!process.env.AUTH_SECRET || process.env.AUTH_SECRET.length < 32){
          throw new Error('AUTH_SECRET must be a 32+ character random string');

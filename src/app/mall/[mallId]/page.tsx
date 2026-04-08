@@ -15,7 +15,7 @@ export default function MallDetailPage() {
       <MallTopBar />
 
       {/* Main content — offset by fixed shell dimensions (nav: 80px left, topbar: 80px top) */}
-      <main className="ml-[80px] mt-[80px] h-[calc(100vh-80px)] overflow-auto bg-[#F8F6F3]">
+      <main className="ml-[80px] h-screen overflow-auto pt-[80px] bg-[#F8F6F3]">
         <div className="p-8 max-w-[1600px] mx-auto">
           <PropertyDetail mallId={mallId} />
         </div>

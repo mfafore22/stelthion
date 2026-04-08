@@ -7,8 +7,9 @@ const IDEAPARK_DATA = {
     mall_name: 'Ideapark Lempäälä',
     city: 'Lempäälä',
     total_shops: 163,
-    collection_date: '2025-03-31',
-    data_source: 'Ideapark tenant registry 2025',
+    // Filled in at request time so the "Updated" label in /mall/properties is current.
+    collection_date: '',
+    data_source: 'Ideapark tenant registry',
     shops_by_retailer_type: {
       'Fashion': 50,
       'Food & Beverage': 22,
@@ -65,7 +66,14 @@ export async function GET(
 
   // Try static data first (ideapark)
   if (mallId === 'ideapark') {
-    return NextResponse.json({ success: true, data: IDEAPARK_DATA });
+    const data = {
+      ...IDEAPARK_DATA,
+      summary: {
+        ...IDEAPARK_DATA.summary,
+        collection_date: new Date().toISOString().split('T')[0],
+      },
+    };
+    return NextResponse.json({ success: true, data });
   }
 
   // Try database for other malls

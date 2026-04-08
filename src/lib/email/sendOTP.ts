@@ -43,7 +43,7 @@ export async function generateAndSendOTP(email: string): Promise<void> {
       return;
     }
 
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const code = crypto.randomInt(100000, 1000000).toString();
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
     await prisma.emailOtp.updateMany({

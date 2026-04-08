@@ -334,7 +334,7 @@ export function FloorHeatmap({ mallId, showPredicted = false, selectedTime = '14
                     </div>
                   </div>
                   <div className="mt-2 pt-2 border-t text-xs text-gray-600">
-                    Based on manual counts Nov 14-15, 2024
+                    Based on manual counts
                   </div>
                 </div>
               </>
