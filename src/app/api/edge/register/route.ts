@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
 import bcrypt from 'bcrypt';
+import { requireAdmin } from '@/lib/admin-auth';
 
 /**
  * POST /api/edge/register — Edge device registration.
- * Called once when the edge unit boots. Creates or updates the device record.
+ * Requires ADMIN session. Called from admin dashboard when provisioning edge units.
  * Body: { edgeId, mallId, apiKey, version?, gpuInfo?, cameras[] }
  */
 export async function POST(req: NextRequest) {
+  const guard = await requireAdmin();
+  if ('error' in guard) return guard.error;
+
   try {
     const { edgeId, mallId, apiKey, version, gpuInfo, cameras } = await req.json();
 

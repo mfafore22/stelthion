@@ -22,8 +22,8 @@ export function CampaignCard({ mallId, expanded = false }: CampaignCardProps) {
 
   // Mock campaign data
   const campaign = {
-    name: 'Syyskampanja 2025',
-    dateRange: '10.10.–20.10.2025',
+    name: 'Syyskampanja',
+    dateRange: '10.10.–20.10.',
     visitorUplift: 8.2,
     revenueImpact: 120000,
     confidence: 82,
@@ -101,7 +101,7 @@ export function CampaignCard({ mallId, expanded = false }: CampaignCardProps) {
           <h4 className="font-semibold text-bo-neutral-950">{t('campaigns.campaignHistory')}</h4>
           <div className="space-y-2 text-sm">
             <div className="flex items-center justify-between rounded-lg bg-bo-glass-subtle p-2 border border-bo-neutral-200/30">
-              <span className="text-bo-neutral-700">Kesäale 2025</span>
+              <span className="text-bo-neutral-700">Kesäale</span>
               <span className="text-bo-success-dark font-medium">+12.4% {t('campaigns.visitors')}</span>
             </div>
             <div className="flex items-center justify-between rounded-lg bg-bo-glass-subtle p-2 border border-bo-neutral-200/30">
@@ -109,7 +109,7 @@ export function CampaignCard({ mallId, expanded = false }: CampaignCardProps) {
               <span className="text-bo-success-dark font-medium">+9.8% {t('campaigns.visitors')}</span>
             </div>
             <div className="flex items-center justify-between rounded-lg bg-bo-glass-subtle p-2 border border-bo-neutral-200/30">
-              <span className="text-bo-neutral-700">Ystävänpäivä 2025</span>
+              <span className="text-bo-neutral-700">Ystävänpäivä</span>
               <span className="text-bo-success-dark font-medium">+6.2% {t('campaigns.visitors')}</span>
             </div>
           </div>

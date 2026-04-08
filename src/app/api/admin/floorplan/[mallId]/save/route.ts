@@ -57,6 +57,17 @@ export async function PUT(
     const zonePublishedMap = new Map(
       existingZones.map((z) => [z.zoneId, z.publishedAt]),
     );
+    // If ANY existing zone was published, the floorplan is in "published" state.
+    // New/renamed zones must inherit that state — otherwise editing zone IDs
+    // silently unpublishes them from the /mall view.
+    const wasPublished = existingZones.some((z) => z.publishedAt !== null);
+    const latestPublishedAt = wasPublished
+      ? existingZones.reduce<Date | null>(
+          (max, z) =>
+            z.publishedAt && (!max || z.publishedAt > max) ? z.publishedAt : max,
+          null,
+        )
+      : null;
 
     await prisma.camera.deleteMany({ where: { mallId, floor } });
     await prisma.floorplanZone.deleteMany({ where: { mallId, floor } });
@@ -82,7 +93,7 @@ export async function PUT(
               capacity: z.capacity,
               areaSqm: z.areaSqm,
               baseVisitors: z.baseVisitors ?? 0,
-              publishedAt: zonePublishedMap.get(z.zoneId) ?? null,
+              publishedAt: zonePublishedMap.get(z.zoneId) ?? latestPublishedAt,
             },
           })
         )
