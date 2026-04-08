@@ -42,7 +42,6 @@ async function main() {
         name: u.name,
         role: u.role,
         customerId: ideapark.id,
-        passwordChangedAt: new Date(),
       },
     })
     console.log(`  User: ${u.email} (${u.role})`)
