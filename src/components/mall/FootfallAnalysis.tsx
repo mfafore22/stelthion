@@ -267,7 +267,7 @@ export function FootfallAnalysis({
     : (published.groundZones ?? []);
 
   // Filter out store zones — they have capacity 0 and make the heat map look messy
-  const activeZones = allZones.filter((z: any) => z.category !== 'Store' && z.drawShape !== 'rect');
+  const activeZones = allZones;
 
   // De-collide zone/store name labels so they don't overlap
   const viewBox = floor === 'upper' ? { w: 1518, h: 688 } : { w: 1504, h: 704 };

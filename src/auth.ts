@@ -41,8 +41,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             where: { id: token.id as string },
             select: { twoFactorVerifiedAt: true },
           })
-
-          if (dbUser?.twoFactorVerifiedAt) {
+          if (!dbUser){
+            // User no longer exists in DB (e.g. after reseed)
+            return {} as any 
+          }
+          if (dbUser.twoFactorVerifiedAt) {
             token.twoFactorVerified = true
           }
         } catch {
