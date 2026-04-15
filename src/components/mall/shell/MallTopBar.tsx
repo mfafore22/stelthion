@@ -12,6 +12,7 @@ import {
   Sparkles,
   Calendar,
   Clock,
+  KeyRound,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSession } from '@/contexts/SessionContext';
@@ -152,6 +153,13 @@ export function MallTopBar({
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator className="bg-bo-neutral-200 my-2" />
+              <DropdownMenuItem
+                onClick={() => window.location.href = '/change-password'}
+                className="flex items-center gap-3 cursor-pointer px-3 py-2.5 rounded-md hover:bg-bo-neutral-100 transition-colors text-bo-neutral-700"
+              >
+                <KeyRound className="h-4 w-4" />
+                <span className="font-medium">{t('topbar.changePassword', 'Change Password')}</span>
+              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => signOut({ callbackUrl: '/login' })}
                 className="flex items-center gap-3 cursor-pointer px-3 py-2.5 rounded-md hover:bg-red-50 transition-colors text-red-600"
