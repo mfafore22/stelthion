@@ -493,3 +493,151 @@ model VerificationReview {
 
   @@unique([jobId, anonymousTagId, reviewedBy])
 }
+
+// ==========================================================================
+// ShopperMind — Global Signal & Phenomenon Engine
+// ==========================================================================
+
+enum SourceType {
+  RSS
+  GOOGLE_TRENDS
+  REDDIT
+  X
+  TIKTOK
+  TRADE_PUB
+  STATFIN
+  FRED
+}
+
+enum PhenomenonState {
+  EMERGING
+  ACCELERATING
+  STABLE
+  FADING
+  DORMANT
+}
+
+model SignalSource {
+  id          String      @id @default(cuid())
+  name        String
+  type        SourceType
+  url         String
+  country     String
+  language    String
+  weight      Float       @default(1.0)
+  active      Boolean     @default(true)
+  lastFetchAt DateTime?
+  nextFetchAt DateTime?
+  config      Json?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  signals     RawSignal[]
+  runs        IngestionRun[]
+
+  @@index([type, country, active])
+  @@index([nextFetchAt, active])
+}
+
+model RawSignal {
+  id           String       @id @default(cuid())
+  sourceId     String
+  externalId   String
+  title        String
+  summary      String?
+  url          String?
+  country      String
+  language     String
+  publishedAt  DateTime
+  ingestedAt   DateTime     @default(now())
+  embedding    Float[]
+  metadata     Json?
+  phenomenonId String?
+  source       SignalSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  phenomenon   Phenomenon?  @relation(fields: [phenomenonId], references: [id], onDelete: SetNull)
+
+  @@unique([sourceId, externalId])
+  @@index([country, publishedAt])
+  @@index([phenomenonId, publishedAt])
+}
+
+model Phenomenon {
+  id             String               @id @default(cuid())
+  label          String
+  description    String
+  primaryCountry String
+  categories     String[]
+  state          PhenomenonState      @default(EMERGING)
+  firstSeenAt    DateTime             @default(now())
+  lastSignalAt   DateTime             @default(now())
+  mergedInto     String?
+  keywords       String[]
+  centroid       Float[]
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+  signals        RawSignal[]
+  scores         PhenomenonScore[]
+  feedback       PhenomenonFeedback[]
+
+  @@index([primaryCountry, state, lastSignalAt])
+}
+
+model PhenomenonScore {
+  id              String     @id @default(cuid())
+  phenomenonId    String
+  country         String
+  date            DateTime   @db.Date
+  volume          Int
+  velocity        Float
+  acceleration    Float
+  noiseAdjusted   Float
+  sourceDiversity Float
+  compositeScore  Float
+  phenomenon      Phenomenon @relation(fields: [phenomenonId], references: [id], onDelete: Cascade)
+
+  @@unique([phenomenonId, country, date])
+  @@index([country, date, compositeScore])
+}
+
+model PhenomenonFeedback {
+  id           String     @id @default(cuid())
+  phenomenonId String
+  userId       String
+  verdict      String
+  note         String?
+  createdAt    DateTime   @default(now())
+  phenomenon   Phenomenon @relation(fields: [phenomenonId], references: [id], onDelete: Cascade)
+
+  @@index([phenomenonId])
+  @@index([userId, createdAt])
+}
+
+model SignalOfTheDay {
+  id            String   @id @default(cuid())
+  country       String
+  date          DateTime @db.Date
+  phenomenonIds String[]
+  narrative     String
+  publishedAt   DateTime @default(now())
+
+  @@unique([country, date])
+}
+
+model IngestionRun {
+  id             String       @id @default(cuid())
+  sourceId       String
+  startedAt      DateTime     @default(now())
+  finishedAt     DateTime?
+  status         String
+  signalsNew     Int          @default(0)
+  signalsSkipped Int          @default(0)
+  errorMsg       String?
+  source         SignalSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+  @@index([sourceId, startedAt])
+}
+
+model ShopperMindConfig {
+  country   String   @id
+  weights   Json
+  updatedAt DateTime @updatedAt
+}

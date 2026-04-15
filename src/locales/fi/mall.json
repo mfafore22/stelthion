@@ -416,7 +416,78 @@
   },
   "shoppermind": {
     "title": "ShopperMind",
-    "tagline": "Ennakointi jokaiseen kauppakeskukseen toimivilla ennusteilla"
+    "tagline": "Trendejä, ennusteita ja ilmiöitä kauppakeskusten toimintaan",
+    "country": {
+      "fi": "Suomi",
+      "ae": "UAE",
+      "global": "Globaali"
+    },
+    "state": {
+      "emerging": "Nouseva",
+      "accelerating": "Kiihtyvä",
+      "stable": "Vakaa",
+      "fading": "Hiipuva",
+      "dormant": "Lepäävä"
+    },
+    "filters": {
+      "minScore": "Min. pistemäärä",
+      "category": "Kategoria",
+      "search": "Hae ilmiöitä",
+      "allStates": "Kaikki tilat"
+    },
+    "feedback": {
+      "title": "Arvosi",
+      "relevant": "Relevantti",
+      "notRelevant": "Ei relevantti",
+      "noise": "Kohina",
+      "star": "Tärkeä"
+    },
+    "signalOfDay": {
+      "title": "Päivän signaali",
+      "share": "Jaa",
+      "copyLink": "Kopioi",
+      "copied": "Kopioitu"
+    },
+    "empty": "Suodattimet eivät tuota osumia vielä.",
+    "loading": "Analysoidaan signaaleja...",
+    "trajectory": "28 päivän kehitys",
+    "representativeSignals": "Esimerkkisignaalit",
+    "impact": {
+      "title": "Mitä tämä voi tarkoittaa kauppakeskukselle {{mallName}}",
+      "accelerating": "Ilmiön kiihtyminen näkyy todennäköisesti kävijämäärissä ja kysynnässä 2–6 viikon viiveellä. Kannattaa tarkistaa kyseisten kategorioiden vuokralaiset ja kampanjakalenteri.",
+      "emerging": "Varhainen signaali — ei vielä vaikuta operatiivisesti, mutta seurannassa. Hyvä hetki keskustella kategorian vuokralaisten kanssa.",
+      "stable": "Taustavoima, joka ei heilauta lukuja lähiaikoina. Pidä mielessä pitkän aikavälin suunnittelussa.",
+      "fading": "Hiipuva ilmiö — kategorian vuokralaisten myynti voi laskea. Varaudu ja etsi korvaavia konsepteja.",
+      "dormant": "Ei aktiivinen tällä hetkellä. Ei välittömiä toimenpiteitä."
+    },
+    "totalPhenomena": "{{count}} ilmiötä yhteensä",
+    "signalsCount": "{{count}} signaalia",
+    "sourcePrefix": "Lähde",
+    "phenomenonFallback": "Koostuu {{count}} signaalista kategoriassa {{category}}.",
+    "phenomenonFallbackNoCategory": "Koostuu {{count}} signaalista.",
+    "category": {
+      "fashion": "Muoti",
+      "grocery": "Päivittäistavara",
+      "f&b": "Ravintolat & kahvilat",
+      "health-beauty": "Terveys & kauneus",
+      "home": "Koti & sisustus",
+      "services": "Palvelut",
+      "leisure": "Vapaa-aika",
+      "retail-tenancy": "Liiketilat & vuokraus",
+      "footfall-driver": "Kävijämääräajuri",
+      "consumer-behaviour": "Kuluttajakäyttäytyminen",
+      "residential-sale": "Asuntokauppa",
+      "residential-rental": "Vuokra-asunnot",
+      "commercial-office": "Toimistotilat",
+      "commercial-retail": "Liiketilat (kaupallinen)",
+      "hospitality": "Hotellit & matkailu",
+      "tourism": "Matkailu",
+      "construction-pipeline": "Rakennushankkeet",
+      "short-term-rental": "Lyhytaikaisvuokraus",
+      "mixed-use": "Monikäyttöalueet",
+      "infrastructure": "Infrastruktuuri",
+      "investment-flows": "Sijoitusvirrat"
+    }
   },
   "campaigns": {
     "title": "Kampanjat",

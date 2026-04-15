@@ -425,7 +425,78 @@
   },
   "shoppermind": {
     "title": "ShopperMind",
-    "tagline": "Framförhållning för varje köpcentrum med handlingsbara prognoser"
+    "tagline": "Trender, prognoser och fenomen för köpcentrums verksamhet",
+    "country": {
+      "fi": "Finland",
+      "ae": "UAE",
+      "global": "Globalt"
+    },
+    "state": {
+      "emerging": "Framväxande",
+      "accelerating": "Accelererande",
+      "stable": "Stabil",
+      "fading": "Avtagande",
+      "dormant": "Vilande"
+    },
+    "filters": {
+      "minScore": "Min poäng",
+      "category": "Kategori",
+      "search": "Sök fenomen",
+      "allStates": "Alla tillstånd"
+    },
+    "feedback": {
+      "title": "Ditt omdöme",
+      "relevant": "Relevant",
+      "notRelevant": "Inte relevant",
+      "noise": "Brus",
+      "star": "Viktig"
+    },
+    "signalOfDay": {
+      "title": "Dagens signal",
+      "share": "Dela",
+      "copyLink": "Kopiera",
+      "copied": "Kopierat"
+    },
+    "empty": "Inga fenomen matchar dina filter ännu.",
+    "loading": "Analyserar signaler...",
+    "trajectory": "28-dagars utveckling",
+    "representativeSignals": "Representativa signaler",
+    "impact": {
+      "title": "Vad detta kan betyda för {{mallName}}",
+      "accelerating": "Ett accelererande fenomen syns vanligtvis i besöksantal och kategorispecifik efterfrågan inom 2–6 veckor. Se över hyresgäster i berörda kategorier och kommande kampanjer.",
+      "emerging": "Tidig signal — ingen operativ påverkan ännu, men värd att följa. Bra läge att diskutera med hyresgäster i den berörda kategorin.",
+      "stable": "En bakgrundskraft som inte rör närtidens siffror. Håll i åtanke vid långtidsplanering.",
+      "fading": "Avtagande fenomen — hyresgästernas försäljning i kategorin kan minska. Förbered och sök ersättningskoncept.",
+      "dormant": "Inaktivt just nu. Ingen omedelbar åtgärd behövs."
+    },
+    "totalPhenomena": "{{count}} fenomen totalt",
+    "signalsCount": "{{count}} signaler",
+    "sourcePrefix": "Källa",
+    "phenomenonFallback": "Baserat på {{count}} signaler i {{category}}.",
+    "phenomenonFallbackNoCategory": "Baserat på {{count}} signaler.",
+    "category": {
+      "fashion": "Mode",
+      "grocery": "Dagligvaror",
+      "f&b": "Restaurang & café",
+      "health-beauty": "Hälsa & skönhet",
+      "home": "Hem & inredning",
+      "services": "Tjänster",
+      "leisure": "Fritid",
+      "retail-tenancy": "Butikshyra",
+      "footfall-driver": "Besöksdrivare",
+      "consumer-behaviour": "Konsumentbeteende",
+      "residential-sale": "Bostadsförsäljning",
+      "residential-rental": "Hyresbostäder",
+      "commercial-office": "Kontorslokaler",
+      "commercial-retail": "Kommersiella butikslokaler",
+      "hospitality": "Hotell & besöksnäring",
+      "tourism": "Turism",
+      "construction-pipeline": "Byggprojekt",
+      "short-term-rental": "Korttidsuthyrning",
+      "mixed-use": "Blandad användning",
+      "infrastructure": "Infrastruktur",
+      "investment-flows": "Investeringsflöden"
+    }
   },
   "campaigns": {
     "title": "Kampanjer",

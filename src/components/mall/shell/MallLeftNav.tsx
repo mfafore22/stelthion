@@ -82,7 +82,7 @@ export function MallLeftNav({
   const { t } = useTranslation();
 
   // Active nav items — only Portfolio and Properties are functional at this stage
-  const ACTIVE_NAV_IDS = new Set(['portfolio', 'properties']);
+  const ACTIVE_NAV_IDS = new Set(['portfolio', 'properties', 'shoppermind']);
 
   // Generate tenant-specific navigation items
   const navItems = React.useMemo(() => {

@@ -416,7 +416,78 @@
   },
   "shoppermind": {
     "title": "ShopperMind",
-    "tagline": "Foresight for every mall with actionable forecasts"
+    "tagline": "Trends, forecasts and phenomena for shopping centre operations",
+    "country": {
+      "fi": "Finland",
+      "ae": "UAE",
+      "global": "Global"
+    },
+    "state": {
+      "emerging": "Emerging",
+      "accelerating": "Accelerating",
+      "stable": "Stable",
+      "fading": "Fading",
+      "dormant": "Dormant"
+    },
+    "filters": {
+      "minScore": "Min score",
+      "category": "Category",
+      "search": "Search phenomena",
+      "allStates": "All states"
+    },
+    "feedback": {
+      "title": "Your verdict",
+      "relevant": "Relevant",
+      "notRelevant": "Not relevant",
+      "noise": "Noise",
+      "star": "Star"
+    },
+    "signalOfDay": {
+      "title": "Signal of the Day",
+      "share": "Share",
+      "copyLink": "Copy",
+      "copied": "Copied"
+    },
+    "empty": "No phenomena match your filters yet.",
+    "loading": "Analysing signals...",
+    "trajectory": "28-day trajectory",
+    "representativeSignals": "Representative signals",
+    "impact": {
+      "title": "What this could mean for {{mallName}}",
+      "accelerating": "An accelerating phenomenon typically shows up in footfall and category demand within 2–6 weeks. Review tenants in the flagged categories and upcoming campaigns.",
+      "emerging": "Early signal — no operational impact yet, but worth tracking. A good moment to discuss with tenants in the affected categories.",
+      "stable": "A background force that won't move near-term numbers. Keep in mind for long-range planning.",
+      "fading": "Fading phenomenon — tenant sales in the category may decline. Prepare and look for replacement concepts.",
+      "dormant": "Currently inactive. No immediate action required."
+    },
+    "totalPhenomena": "{{count}} phenomena total",
+    "signalsCount": "{{count}} signals",
+    "sourcePrefix": "Source",
+    "phenomenonFallback": "Based on {{count}} signals in {{category}}.",
+    "phenomenonFallbackNoCategory": "Based on {{count}} signals.",
+    "category": {
+      "fashion": "Fashion",
+      "grocery": "Grocery",
+      "f&b": "Food & beverage",
+      "health-beauty": "Health & beauty",
+      "home": "Home & interiors",
+      "services": "Services",
+      "leisure": "Leisure",
+      "retail-tenancy": "Retail tenancy",
+      "footfall-driver": "Footfall driver",
+      "consumer-behaviour": "Consumer behaviour",
+      "residential-sale": "Residential sale",
+      "residential-rental": "Residential rental",
+      "commercial-office": "Commercial office",
+      "commercial-retail": "Commercial retail",
+      "hospitality": "Hospitality",
+      "tourism": "Tourism",
+      "construction-pipeline": "Construction pipeline",
+      "short-term-rental": "Short-term rental",
+      "mixed-use": "Mixed-use",
+      "infrastructure": "Infrastructure",
+      "investment-flows": "Investment flows"
+    }
   },
   "campaigns": {
     "title": "Campaigns",
