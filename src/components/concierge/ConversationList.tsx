@@ -103,8 +103,8 @@ export function ConversationList() {
       {/* Footer — tenant from session, no hardcoded names */}
       {user && (
         <div className="border-t border-bo-neutral-200 px-4 py-3 text-xs text-bo-neutral-500 bg-white">
-          <div className="font-medium text-bo-neutral-700">{user.mallDisplayName}</div>
-          <div className="mt-0.5 text-bo-neutral-400">{user.userId}</div>
+          <div className="font-medium text-bo-neutral-700">{user.companyName}</div>
+          <div className="mt-0.5 text-bo-neutral-400">{user.email}</div>
         </div>
       )}
 
@@ -133,8 +133,13 @@ interface ConversationCardProps {
 }
 
 function ConversationCard({ conversation, onClick }: ConversationCardProps) {
-  const timeAgo = formatDistanceToNow(new Date(conversation.lastMessageAt), { addSuffix: true });
+  const parsedDate = conversation.lastMessageAt ? new Date(conversation.lastMessageAt) : null;
+  const timeAgo =
+    parsedDate && !Number.isNaN(parsedDate.getTime())
+      ? formatDistanceToNow(parsedDate, { addSuffix: true })
+      : '';
 
+  const agentRole = conversation.agentRole ?? 'general-assistant';
   const agentIcon = {
     'sales-optimizer': '📊',
     'footfall-analyst': '🚶',
@@ -142,7 +147,7 @@ function ConversationCard({ conversation, onClick }: ConversationCardProps) {
     'parking-manager': '🅿️',
     'trend-analyst': '📈',
     'general-assistant': '🤖',
-  }[conversation.agentRole] || '🤖';
+  }[agentRole] || '🤖';
 
   return (
     <button
@@ -158,10 +163,10 @@ function ConversationCard({ conversation, onClick }: ConversationCardProps) {
       </div>
 
       <div className="text-xs text-bo-neutral-500 mb-2 capitalize">
-        {conversation.agentRole.replace(/-/g, ' ')}
+        {agentRole.replace(/-/g, ' ')}
       </div>
 
-      <p className="text-sm text-bo-neutral-600 line-clamp-2 mb-2">"{conversation.preview}"</p>
+      <p className="text-sm text-bo-neutral-600 line-clamp-2 mb-2">"{conversation.preview ?? ''}"</p>
 
       <div className="flex items-center gap-3 text-xs text-bo-neutral-400">
         <span>{conversation.messageCount} messages</span>

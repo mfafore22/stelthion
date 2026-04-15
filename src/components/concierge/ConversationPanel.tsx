@@ -1,7 +1,8 @@
 /**
  * Conversation Panel Component
  *
- * Main conversation view with messages and input
+ * Main conversation view with property greeting, messages,
+ * quick action chips, and specialist indicator.
  */
 
 'use client';
@@ -10,7 +11,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useConcierge } from './ConciergeContext';
 import { MessageBubble } from './MessageBubble';
 import { MessageInput } from './MessageInput';
-import { AgentSuggestionBanner } from './AgentSuggestionBanner';
+import { PropertyGreeting } from './PropertyGreeting';
+import { QuickActionChips } from './QuickActionChips';
+import { SpecialistIndicator } from './SpecialistIndicator';
 import { MoreVertical, Minimize2, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
@@ -26,6 +29,7 @@ export function ConversationPanel() {
     stopStreaming,
     closePanel,
     minimizePanel,
+    deleteActiveConversation,
   } = useConcierge();
   const { t } = useTranslation('mall');
 
@@ -40,39 +44,44 @@ export function ConversationPanel() {
     }
   }, [activeConversation?.messages, streamingMessage, preferences.autoScroll]);
 
-  // Handle scroll to show/hide scroll button
+  // Handle scroll
   const handleScroll = () => {
     if (!scrollContainerRef.current) return;
-
     const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
-    const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
-
-    setShowScrollButton(!isNearBottom);
+    setShowScrollButton(scrollHeight - scrollTop - clientHeight > 100);
   };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  if (!activeConversation) {
+  const hasMessages = activeConversation && activeConversation.messages.length > 0;
+
+  // Empty state: no active conversation or no messages
+  if (!activeConversation || !hasMessages) {
     return (
-      <div className="flex flex-col h-full bg-bo-neutral-50">
+      <div className="flex flex-col h-full">
         {/* Header */}
         <ConversationHeader
-          title={t('topbar.concierge')}
+          title={t('topbar.concierge', 'Concierge')}
           onMinimize={minimizePanel}
           onClose={closePanel}
+          onDelete={deleteActiveConversation}
         />
 
-        {/* Empty state */}
-        <div className="flex-1 flex items-center justify-center p-8">
-          <div className="text-center max-w-md">
-            <div className="text-6xl mb-4">💬</div>
-            <h3 className="text-xl font-semibold text-bo-neutral-900 mb-2">{t('concierge.startConversation')}</h3>
-            <p className="text-bo-neutral-500 mb-6">
-              {t('concierge.startConversationDesc')}
-            </p>
-            <MessageInput placeholder={t('concierge.askAnything')} onSend={sendMessage} />
+        {/* Property greeting */}
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <PropertyGreeting />
+        </div>
+
+        {/* Quick action chips + input */}
+        <div className="border-t border-bo-neutral-200/60">
+          <QuickActionChips onSend={sendMessage} disabled={state.isStreaming} />
+          <div className="px-4 pb-4">
+            <MessageInput
+              placeholder={t('concierge.askAnything', 'Ask anything...')}
+              onSend={sendMessage}
+            />
           </div>
         </div>
       </div>
@@ -80,19 +89,15 @@ export function ConversationPanel() {
   }
 
   return (
-    <div className="flex flex-col h-full bg-bo-neutral-50">
-      {/* Header */}
+    <div className="flex flex-col h-full">
+      {/* Header with specialist indicator */}
       <ConversationHeader
         title={activeConversation.title}
-        subtitle={`${t('concierge.agentLabel')}: ${t(`concierge.agents.${activeConversation.agentRole.replace(/-([a-z])/g, (_,c) => c.toUpperCase())}`)}`}
+        agentRole={agentSuggestion?.agentRole || activeConversation.agentRole}
         onMinimize={minimizePanel}
         onClose={closePanel}
+        onDelete={deleteActiveConversation}
       />
-
-      {/* Agent suggestion banner */}
-      {agentSuggestion && (
-        <AgentSuggestionBanner suggestion={agentSuggestion} />
-      )}
 
       {/* Messages */}
       <div
@@ -104,8 +109,8 @@ export function ConversationPanel() {
           <MessageBubble key={message.id} message={message} />
         ))}
 
-        {/* Streaming message */}
-        {state.isStreaming && streamingMessage && (
+        {/* Streaming message — show during tool execution even without text */}
+        {state.isStreaming && (
           <MessageBubble
             message={{
               id: 'streaming',
@@ -122,101 +127,112 @@ export function ConversationPanel() {
           />
         )}
 
+        {/* Error display */}
+        {state.error && !state.isStreaming && (
+          <div className="mx-2 px-3 py-2 rounded-lg bg-red-50 border border-red-200 text-sm text-red-700">
+            {state.error}
+          </div>
+        )}
+
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Scroll to bottom button */}
+      {/* Scroll to bottom */}
       {showScrollButton && (
         <button
           onClick={scrollToBottom}
-          className="absolute bottom-24 right-8 bg-bo-neutral-950 hover:bg-bo-neutral-900 text-bo-neutral-50 rounded-full p-2 shadow-bo-md transition-colors"
+          className="absolute bottom-32 right-6 bg-bo-neutral-950 hover:bg-bo-neutral-900 text-bo-neutral-50 rounded-full px-3 py-1.5 shadow-bo-md transition-colors text-xs"
         >
-          <span className="text-sm">↓ Scroll to bottom</span>
+          ↓
         </button>
       )}
 
-      {/* Input area */}
-      <div className="border-t border-bo-neutral-200 p-4">
-        <MessageInput
-          placeholder={t('concierge.typeMessage')}
-          onSend={sendMessage}
-          onStop={state.isStreaming ? stopStreaming : undefined}
-          disabled={state.isStreaming}
-        />
+      {/* Quick action chips + input */}
+      <div className="border-t border-bo-neutral-200/60">
+        <QuickActionChips onSend={sendMessage} disabled={state.isStreaming} />
+        <div className="px-4 pb-4">
+          <MessageInput
+            placeholder={t('concierge.typeMessage', 'Type a message...')}
+            onSend={sendMessage}
+            onStop={state.isStreaming ? stopStreaming : undefined}
+            disabled={state.isStreaming}
+          />
+        </div>
       </div>
     </div>
   );
 }
 
 /**
- * Conversation Header Component
+ * Conversation Header
  */
 interface ConversationHeaderProps {
   title: string;
   subtitle?: string;
+  agentRole?: string;
   onMinimize: () => void;
   onClose: () => void;
+  onDelete?: () => void | Promise<void>;
 }
 
-function ConversationHeader({ title, subtitle, onMinimize, onClose }: ConversationHeaderProps) {
+function ConversationHeader({ title, subtitle, agentRole, onMinimize, onClose, onDelete }: ConversationHeaderProps) {
   const [showMenu, setShowMenu] = useState(false);
+  const { t } = useTranslation('mall');
 
   return (
-    <div className="flex items-center justify-between px-4 py-3 border-b border-bo-neutral-200 bg-white">
+    <div className="flex items-center justify-between px-4 py-3 border-b border-bo-neutral-200/60 bg-white/60 backdrop-blur-sm">
       <div className="flex-1 min-w-0">
-        <h2 className="text-sm font-semibold text-bo-neutral-950 truncate">{title}</h2>
+        <div className="flex items-center gap-2">
+          <h2 className="text-sm font-semibold text-bo-neutral-950 truncate">{title}</h2>
+          <SpecialistIndicator agentRole={agentRole} />
+        </div>
         {subtitle && <p className="text-xs text-bo-neutral-500 truncate">{subtitle}</p>}
       </div>
 
-      <div className="flex items-center gap-2">
-        {/* Menu button */}
-        <div className="relative">
-          <button
-            onClick={() => setShowMenu(!showMenu)}
-            className="p-1 hover:bg-bo-neutral-100 rounded-md transition-colors"
-          >
-            <MoreVertical className="w-5 h-5 text-bo-neutral-500" />
-          </button>
-
-          {showMenu && (
-            <>
-              <div
-                className="fixed inset-0 z-10"
-                onClick={() => setShowMenu(false)}
-              />
-              <div className="absolute right-0 top-full mt-1 bg-white border border-bo-neutral-200 rounded-lg shadow-bo-lg py-1 z-20 min-w-[150px]">
-                <button className="w-full px-4 py-2 text-sm text-left text-bo-neutral-700 hover:bg-bo-neutral-50 transition-colors">
-                  Rename
-                </button>
-                <button className="w-full px-4 py-2 text-sm text-left text-bo-neutral-700 hover:bg-bo-neutral-50 transition-colors">
-                  Export
-                </button>
-                <button className="w-full px-4 py-2 text-sm text-left text-bo-neutral-700 hover:bg-bo-neutral-50 transition-colors">
-                  Switch Agent
-                </button>
-                <div className="border-t border-bo-neutral-200 my-1" />
-                <button className="w-full px-4 py-2 text-sm text-left text-red-600 hover:bg-red-50 transition-colors">
-                  Delete
-                </button>
-              </div>
-            </>
-          )}
-        </div>
-
-        {/* Minimize button */}
+      <div className="flex items-center gap-1">
         <button
-          onClick={onMinimize}
-          className="p-1 hover:bg-bo-neutral-100 rounded-md transition-colors"
+          onClick={() => setShowMenu(!showMenu)}
+          className="p-1.5 hover:bg-bo-neutral-100 rounded-md transition-colors"
         >
-          <Minimize2 className="w-5 h-5 text-bo-neutral-500" />
+          <MoreVertical className="w-4 h-4 text-bo-neutral-400" />
         </button>
 
-        {/* Close button */}
+        {showMenu && (
+          <>
+            <div className="fixed inset-0 z-10" onClick={() => setShowMenu(false)} />
+            <div className="absolute right-12 top-12 bg-white/95 backdrop-blur-md border border-bo-neutral-200 rounded-lg shadow-bo-lg py-1 z-20 min-w-[150px]">
+              <button className="w-full px-4 py-2 text-sm text-left text-bo-neutral-700 hover:bg-bo-neutral-50 transition-colors">
+                {t('concierge.menu.rename', 'Rename')}
+              </button>
+              <button className="w-full px-4 py-2 text-sm text-left text-bo-neutral-700 hover:bg-bo-neutral-50 transition-colors">
+                {t('concierge.menu.export', 'Export')}
+              </button>
+              <div className="border-t border-bo-neutral-200 my-1" />
+              <button
+                onClick={() => {
+                  setShowMenu(false);
+                  onDelete?.();
+                }}
+                className="w-full px-4 py-2 text-sm text-left text-red-600 hover:bg-red-50 transition-colors"
+              >
+                {t('concierge.menu.delete', 'Delete')}
+              </button>
+            </div>
+          </>
+        )}
+
+        <button
+          onClick={onMinimize}
+          className="p-1.5 hover:bg-bo-neutral-100 rounded-md transition-colors"
+        >
+          <Minimize2 className="w-4 h-4 text-bo-neutral-400" />
+        </button>
+
         <button
           onClick={onClose}
-          className="p-1 hover:bg-bo-neutral-100 rounded-md transition-colors"
+          className="p-1.5 hover:bg-bo-neutral-100 rounded-md transition-colors"
         >
-          <X className="w-5 h-5 text-bo-neutral-500" />
+          <X className="w-4 h-4 text-bo-neutral-400" />
         </button>
       </div>
     </div>

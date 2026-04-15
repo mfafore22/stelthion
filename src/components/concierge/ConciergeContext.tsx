@@ -1,12 +1,13 @@
 /**
  * Concierge Context
  *
- * Global state management for the Concierge UI
+ * Global state management for the Concierge UI.
+ * Uses HTTP SSE streaming instead of WebSocket.
  */
 
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import {
   Conversation,
   ConversationSummary,
@@ -15,34 +16,23 @@ import {
   ConciergePreferences,
   ToolExecution,
   AgentSuggestion,
+  DataAttachment,
 } from '@/services/concierge/types';
 import { AgentRole } from '@/lib/gcm-types';
-import {
-  ConciergeWebSocketClient,
-  WSConnectionState,
-  createWebSocketClient,
-} from '@/services/concierge/websocket-client';
 import { getAgentRouter } from '@/services/concierge/agent-router';
-import i18n from '@/lib/i18n';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Context value type
  */
 interface ConciergeContextValue {
-  // UI State
   state: ConciergeUIState;
   preferences: ConciergePreferences;
-
-  // Connection
-  connectionState: WSConnectionState;
-
-  // Active conversation
   activeConversation: Conversation | null;
   streamingMessage: string;
   activeToolExecutions: ToolExecution[];
   agentSuggestion: AgentSuggestion | null;
 
-  // Actions
   openPanel: () => void;
   closePanel: () => void;
   togglePanel: () => void;
@@ -52,53 +42,41 @@ interface ConciergeContextValue {
   loadConversation: (conversationId: string) => void;
   sendMessage: (content: string) => void;
   stopStreaming: () => void;
+  setActiveAgent: (agentRole: AgentRole) => void;
+  deleteActiveConversation: () => Promise<void>;
 
   updatePreferences: (prefs: Partial<ConciergePreferences>) => void;
-
-  // Conversations
   conversations: ConversationSummary[];
   refreshConversations: () => Promise<void>;
 }
 
-/**
- * Context
- */
 const ConciergeContext = createContext<ConciergeContextValue | null>(null);
 
-/**
- * Provider props
- */
 interface ConciergeProviderProps {
   children: React.ReactNode;
   tenantId: string;
   userId: string;
-  wsUrl?: string;
+  mallId: string;
 }
 
-/**
- * Default preferences
- */
 const DEFAULT_PREFERENCES: ConciergePreferences = {
   language: 'en',
-  theme: 'dark',
+  theme: 'light',
   defaultAgent: AgentRole.GENERAL_ASSISTANT,
   autoScroll: true,
   soundEnabled: false,
-  panelWidth: 300,
+  panelWidth: 420,
   showToolDetails: true,
   sessionSparkleShown: false,
 };
 
-/**
- * Concierge Provider
- */
 export function ConciergeProvider({
   children,
   tenantId,
   userId,
-  wsUrl = process.env.NEXT_PUBLIC_WS_URL,
+  mallId,
 }: ConciergeProviderProps) {
-  // UI State
+  const { t, i18n } = useTranslation('mall');
   const [state, setState] = useState<ConciergeUIState>({
     panelOpen: false,
     panelMinimized: false,
@@ -109,106 +87,23 @@ export function ConciergeProvider({
     error: null,
   });
 
-  // Preferences — always start from defaults to avoid SSR/client hydration mismatch,
-  // then merge stored values after mount
   const [preferences, setPreferences] = useState<ConciergePreferences>(DEFAULT_PREFERENCES);
   useEffect(() => {
     const stored = localStorage.getItem('concierge_preferences');
     if (stored) {
-      try {
-        setPreferences((prev) => ({ ...prev, ...JSON.parse(stored) }));
-      } catch {
-        // ignore malformed stored value
-      }
+      try { setPreferences((prev) => ({ ...prev, ...JSON.parse(stored) })); } catch { /* ignore */ }
     }
   }, []);
 
-  // Active conversation data
   const [activeConversation, setActiveConversation] = useState<Conversation | null>(null);
   const [streamingMessage, setStreamingMessage] = useState('');
   const [activeToolExecutions, setActiveToolExecutions] = useState<ToolExecution[]>([]);
   const [agentSuggestion, setAgentSuggestion] = useState<AgentSuggestion | null>(null);
 
-  // WebSocket
-  const [wsClient, setWsClient] = useState<ConciergeWebSocketClient | null>(null);
-  const [connectionState, setConnectionState] = useState<WSConnectionState>(WSConnectionState.DISCONNECTED);
+  // Abort controller for stopping streams
+  const abortRef = useRef<AbortController | null>(null);
 
-  // Initialize WebSocket client
-  useEffect(() => {
-    if (!wsUrl) return;
-
-    const client = createWebSocketClient(wsUrl, {
-      onConnectionChange: (state) => {
-        setConnectionState(state);
-      },
-
-      onMessageStart: (conversationId, messageId) => {
-        setState((prev) => ({ ...prev, isStreaming: true }));
-        setStreamingMessage('');
-      },
-
-      onMessageChunk: (conversationId, messageId, chunk, done) => {
-        setStreamingMessage((prev) => prev + chunk);
-
-        if (done) {
-          setState((prev) => ({ ...prev, isStreaming: false }));
-        }
-      },
-
-      onMessageComplete: (conversationId, message) => {
-        // Add message to conversation
-        setActiveConversation((prev) => {
-          if (!prev || prev.id !== conversationId) return prev;
-
-          return {
-            ...prev,
-            messages: [...prev.messages, message],
-            updatedAt: new Date(),
-          };
-        });
-
-        setStreamingMessage('');
-        setState((prev) => ({ ...prev, isStreaming: false }));
-      },
-
-      onMessageError: (conversationId, error) => {
-        setState((prev) => ({ ...prev, error, isStreaming: false }));
-      },
-
-      onToolStart: (conversationId, execution) => {
-        setActiveToolExecutions((prev) => [...prev, execution]);
-      },
-
-      onToolProgress: (conversationId, executionId, progress) => {
-        setActiveToolExecutions((prev) =>
-          prev.map((exec) => (exec.id === executionId ? { ...exec, progress } : exec))
-        );
-      },
-
-      onToolComplete: (conversationId, execution) => {
-        setActiveToolExecutions((prev) => prev.filter((exec) => exec.id !== execution.id));
-      },
-
-      onToolError: (conversationId, executionId, error) => {
-        setActiveToolExecutions((prev) =>
-          prev.map((exec) => (exec.id === executionId ? { ...exec, status: 'error', error } : exec))
-        );
-      },
-
-      onAgentSuggestion: (conversationId, suggestion) => {
-        setAgentSuggestion(suggestion);
-      },
-    });
-
-    client.connect();
-    setWsClient(client);
-
-    return () => {
-      client.disconnect();
-    };
-  }, [wsUrl]);
-
-  // Load conversations (skip when no authenticated user)
+  // Load conversations from API
   const refreshConversations = useCallback(async () => {
     if (tenantId === 'default') {
       setState((prev) => ({ ...prev, isLoading: false, conversations: [] }));
@@ -218,30 +113,25 @@ export function ConciergeProvider({
     setState((prev) => ({ ...prev, isLoading: true }));
 
     try {
-      const response = await fetch(`/api/concierge/conversations?tenantId=${tenantId}`);
+      const response = await fetch(`/api/concierge/conversations?mallId=${mallId}`);
       if (!response.ok) {
         setState((prev) => ({ ...prev, isLoading: false, conversations: [] }));
         return;
       }
       const data = await response.json();
-
       setState((prev) => ({
         ...prev,
-        conversations: data.conversations ?? [],
+        conversations: Array.isArray(data) ? data : [],
         isLoading: false,
       }));
-    } catch (error) {
-      console.error('Failed to load conversations:', error);
+    } catch {
       setState((prev) => ({ ...prev, isLoading: false, conversations: [] }));
     }
-  }, [tenantId]);
+  }, [tenantId, mallId]);
 
-  // Load conversations on mount
-  useEffect(() => {
-    refreshConversations();
-  }, [refreshConversations]);
+  useEffect(() => { refreshConversations(); }, [refreshConversations]);
 
-  // Actions
+  // Panel actions
   const openPanel = useCallback(() => {
     setState((prev) => ({ ...prev, panelOpen: true, panelMinimized: false }));
   }, []);
@@ -258,13 +148,14 @@ export function ConciergeProvider({
     setState((prev) => ({ ...prev, panelMinimized: !prev.panelMinimized }));
   }, []);
 
+  // Create conversation
   const createConversation = useCallback(
-    (agentRole?: AgentRole, customAgentId?: string) => {
+    (agentRole?: AgentRole) => {
       const conversationId = `conv-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
 
       const newConversation: Conversation = {
         id: conversationId,
-        title: i18n.t('concierge.newConversation'),
+        title: t('concierge.newConversation', 'New conversation'),
         tenantId,
         userId,
         agentRole: agentRole ?? (preferences.defaultAgent as AgentRole),
@@ -275,31 +166,59 @@ export function ConciergeProvider({
 
       setActiveConversation(newConversation);
       setState((prev) => ({ ...prev, activeConversationId: conversationId, panelOpen: true }));
-
-      // Notify WebSocket
-      wsClient?.createConversation(conversationId, agentRole, customAgentId);
     },
-    [tenantId, userId, preferences.defaultAgent, wsClient]
+    [tenantId, userId, preferences.defaultAgent]
   );
 
+  // Load conversation
   const loadConversation = useCallback(
-    (conversationId: string) => {
+    async (conversationId: string) => {
       setState((prev) => ({ ...prev, activeConversationId: conversationId, isLoading: true }));
 
-      // TODO: Load conversation from API
-      // For now, notify WebSocket
-      wsClient?.loadConversation(conversationId);
+      try {
+        const response = await fetch(`/api/concierge/conversations/${conversationId}`);
+        if (response.ok) {
+          const data = await response.json();
+          setActiveConversation({
+            id: data.id,
+            title: data.title,
+            tenantId,
+            userId,
+            agentRole: AgentRole.GENERAL_ASSISTANT,
+            messages: (data.messages || []).map((m: { id: string; sender: string; content: string; createdAt: string; agentRole?: string; toolCalls?: unknown; attachments?: unknown }) => ({
+              id: m.id,
+              conversationId: data.id,
+              sender: m.sender,
+              content: m.content,
+              timestamp: new Date(m.createdAt),
+              status: 'sent',
+              agentRole: m.agentRole,
+              toolExecutions: [],
+              dataAttachments: m.attachments ? (m.attachments as Array<{ type: string; title: string; data: unknown }>).map((a, i) => ({
+                id: `att-${i}`,
+                ...a,
+              })) : [],
+            })),
+            createdAt: new Date(data.createdAt),
+            updatedAt: new Date(data.updatedAt),
+          });
+        }
+      } catch {
+        // ignore
+      }
+
+      setState((prev) => ({ ...prev, isLoading: false }));
     },
-    [wsClient]
+    [tenantId, userId]
   );
 
+  // Send message via HTTP SSE
   const sendMessage = useCallback(
-    (content: string) => {
+    async (content: string) => {
+      // Auto-create conversation if none active
       if (!activeConversation) {
-        // Auto-route to best agent
         const router = getAgentRouter();
         const suggestion = router.route(content);
-
         setAgentSuggestion(suggestion);
         createConversation(suggestion.agentRole as AgentRole);
       }
@@ -307,61 +226,213 @@ export function ConciergeProvider({
       // Add user message to UI immediately
       const userMessage: ConversationMessage = {
         id: `msg-${Date.now()}`,
-        conversationId: activeConversation!.id,
+        conversationId: activeConversation?.id ?? 'pending',
         sender: 'user',
         content,
         timestamp: new Date(),
-        status: 'sending',
+        status: 'sent',
       };
 
       setActiveConversation((prev) => {
         if (!prev) return prev;
-        return {
-          ...prev,
-          messages: [...prev.messages, userMessage],
-          updatedAt: new Date(),
-        };
+        return { ...prev, messages: [...prev.messages, userMessage], updatedAt: new Date() };
       });
 
-      // Send via WebSocket if connected; otherwise show a stub reply
-      if (connectionState === WSConnectionState.CONNECTED) {
-        wsClient?.sendMessage(activeConversation!.id, content);
-      } else {
-        const convId = activeConversation?.id ?? 'conv-stub';
-        setTimeout(() => {
-          const stubMessage: ConversationMessage = {
-            id: `msg-stub-${Date.now()}`,
-            conversationId: convId,
+      // Stream via SSE
+      setState((prev) => ({ ...prev, isStreaming: true, error: null }));
+      setStreamingMessage('');
+      setActiveToolExecutions([]);
+
+      const controller = new AbortController();
+      abortRef.current = controller;
+
+      try {
+        const response = await fetch('/api/concierge/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            conversationId: activeConversation?.id?.startsWith('conv-') ? undefined : activeConversation?.id,
+            mallId,
+            message: content,
+            language: i18n.language || preferences.language || 'en',
+          }),
+          signal: controller.signal,
+        });
+
+        if (!response.ok || !response.body) {
+          const errText = await response.text().catch(() => '');
+          console.error('[Concierge] Chat request failed', response.status, errText);
+          setState((prev) => ({
+            ...prev,
+            isStreaming: false,
+            error: `Server error ${response.status}: ${errText.slice(0, 200) || 'unknown'}`,
+          }));
+          return;
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let fullContent = '';
+        const attachments: DataAttachment[] = [];
+        let convId = activeConversation?.id;
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+
+          for (const line of lines) {
+            if (!line.startsWith('data: ')) continue;
+            try {
+              const event = JSON.parse(line.slice(6));
+
+              switch (event.type) {
+                case 'conversation':
+                  convId = event.data?.conversationId;
+                  break;
+
+                case 'message_start':
+                  if (event.data?.agentRole) {
+                    setAgentSuggestion({
+                      agentRole: event.data.agentRole,
+                      confidence: 1,
+                      reasoning: '',
+                    } as AgentSuggestion);
+                  }
+                  break;
+
+                case 'message_chunk':
+                  fullContent += event.data?.text || '';
+                  setStreamingMessage((prev) => prev + (event.data?.text || ''));
+                  break;
+
+                case 'tool_start':
+                  setActiveToolExecutions((prev) => [
+                    ...prev,
+                    {
+                      id: event.data?.toolCallId,
+                      toolName: event.data?.toolName,
+                      status: 'running' as const,
+                      progress: 0,
+                      startedAt: new Date(),
+                    },
+                  ]);
+                  break;
+
+                case 'tool_complete': {
+                  const tcId = event.data?.toolCallId;
+                  setActiveToolExecutions((prev) =>
+                    prev.map((t) => t.id === tcId ? { ...t, status: 'complete' as const, progress: 100 } : t)
+                  );
+                  if (event.data?.attachment) {
+                    attachments.push({
+                      id: `att-${attachments.length}`,
+                      ...event.data.attachment,
+                    } as DataAttachment);
+                  }
+                  break;
+                }
+
+                case 'message_complete':
+                  fullContent = event.data?.content || fullContent;
+                  break;
+
+                case 'error':
+                  console.error('[Concierge] SSE error event', event.data);
+                  setState((prev) => ({ ...prev, error: event.data?.error || 'Unknown error' }));
+                  break;
+              }
+            } catch {
+              // skip malformed SSE lines
+            }
+          }
+        }
+
+        // Add agent message to conversation — always add one, even if content is empty,
+        // so the user sees the attachments or a fallback message
+        const hasContent = fullContent || attachments.length > 0;
+        if (hasContent) {
+          const agentMessage: ConversationMessage = {
+            id: `msg-agent-${Date.now()}`,
+            conversationId: convId || activeConversation?.id || 'unknown',
             sender: 'agent',
-            content: i18n.t('concierge.noBackendStub'),
+            content: fullContent || '',
             timestamp: new Date(),
             status: 'sent',
+            dataAttachments: attachments.length > 0 ? attachments : undefined,
           };
+
           setActiveConversation((prev) => {
             if (!prev) return prev;
-            return { ...prev, messages: [...prev.messages, stubMessage] };
+            return {
+              ...prev,
+              id: convId || prev.id,
+              messages: [...prev.messages, agentMessage],
+              updatedAt: new Date(),
+            };
           });
-        }, 800);
+        } else {
+          console.warn('[Concierge] Stream completed with no content or attachments');
+          setState((prev) => ({
+            ...prev,
+            error: prev.error || 'No response received from the assistant.',
+          }));
+        }
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') {
+          // User stopped streaming
+        } else {
+          setState((prev) => ({ ...prev, error: 'Connection failed' }));
+        }
+      } finally {
+        setState((prev) => ({ ...prev, isStreaming: false }));
+        setStreamingMessage('');
+        abortRef.current = null;
       }
     },
-    [activeConversation, wsClient, connectionState, createConversation]
+    [activeConversation, mallId, i18n.language, preferences.language, createConversation]
   );
 
   const stopStreaming = useCallback(() => {
-    if (activeConversation) {
-      wsClient?.stopMessage(activeConversation.id);
+    abortRef.current?.abort();
+    setState((prev) => ({ ...prev, isStreaming: false }));
+    setStreamingMessage('');
+  }, []);
+
+  const setActiveAgent = useCallback((agentRole: AgentRole) => {
+    setActiveConversation((prev) => (prev ? { ...prev, agentRole } : prev));
+    setAgentSuggestion({ agentRole, confidence: 1, reasoning: '' } as AgentSuggestion);
+  }, []);
+
+  const deleteActiveConversation = useCallback(async () => {
+    const convId = activeConversation?.id;
+    // If the conversation was persisted (not a client-only 'conv-...' id), archive on server
+    if (convId && !convId.startsWith('conv-')) {
+      try {
+        await fetch(`/api/concierge/conversations/${convId}`, { method: 'DELETE' });
+      } catch {
+        // ignore — still clear locally
+      }
     }
-  }, [activeConversation, wsClient]);
+    abortRef.current?.abort();
+    setActiveConversation(null);
+    setStreamingMessage('');
+    setActiveToolExecutions([]);
+    setAgentSuggestion(null);
+    setState((prev) => ({ ...prev, activeConversationId: null, isStreaming: false, error: null }));
+    await refreshConversations();
+  }, [activeConversation, refreshConversations]);
 
   const updatePreferences = useCallback((prefs: Partial<ConciergePreferences>) => {
     setPreferences((prev) => {
       const updated = { ...prev, ...prefs };
-
-      // Save to localStorage
       if (typeof window !== 'undefined') {
         localStorage.setItem('concierge_preferences', JSON.stringify(updated));
       }
-
       return updated;
     });
   }, []);
@@ -369,7 +440,6 @@ export function ConciergeProvider({
   const value: ConciergeContextValue = {
     state,
     preferences,
-    connectionState,
     activeConversation,
     streamingMessage,
     activeToolExecutions,
@@ -382,6 +452,8 @@ export function ConciergeProvider({
     loadConversation,
     sendMessage,
     stopStreaming,
+    setActiveAgent,
+    deleteActiveConversation,
     updatePreferences,
     conversations: state.conversations,
     refreshConversations,
@@ -390,22 +462,12 @@ export function ConciergeProvider({
   return <ConciergeContext.Provider value={value}>{children}</ConciergeContext.Provider>;
 }
 
-/**
- * Hook to use Concierge context
- */
 export function useConcierge() {
   const context = useContext(ConciergeContext);
-
-  if (!context) {
-    throw new Error('useConcierge must be used within ConciergeProvider');
-  }
-
+  if (!context) throw new Error('useConcierge must be used within ConciergeProvider');
   return context;
 }
 
-/**
- * Hook to use Concierge context safely (returns null when provider is not mounted)
- */
 export function useConciergeOptional() {
   return useContext(ConciergeContext);
 }

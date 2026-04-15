@@ -680,7 +680,92 @@
         "dataRetrieval": "Data retrieval",
         "flexibleAssistance": "Flexible assistance"
       }
-    }
+    },
+    "talkTo": "Hi! I'm the Ideapark assistant",
+    "greeting": {
+      "morning": "Good morning!",
+      "afternoon": "Good afternoon!",
+      "evening": "Good evening!",
+      "intro": "I'm {{propertyName}} — ask me anything about your property!"
+    },
+    "quickAction": {
+      "briefing": "Today's briefing",
+      "weather": "Weather outlook",
+      "footfall": "Expected footfall",
+      "events": "Upcoming events",
+      "parking": "Parking status",
+      "transport": "Transport updates",
+      "trends": "Trends",
+      "signalOfDay": "Signal of the day",
+      "zoneFlow": "Visitor flows",
+      "mallStats": "Key metrics"
+    },
+    "specialist": {
+      "weather": "Weather specialist",
+      "footfall": "Footfall analyst",
+      "events": "Event coordinator",
+      "parking": "Parking manager",
+      "trends": "Trend analyst",
+      "general": "Assistant"
+    },
+    "briefing": {
+      "title": "Daily Briefing",
+      "subscribe": "Subscribe to daily briefing",
+      "deliveryTime": "Delivery time",
+      "sections": {
+        "weather": "Weather",
+        "footfall": "Footfall",
+        "events": "Events",
+        "transport": "Transport",
+        "actions": "Actions"
+      }
+    },
+    "attachments": {
+      "weather": {
+        "currentTitle": "Current Weather",
+        "forecastTitle": "Weather Forecast",
+        "forecastFor": "Forecast {{date}}",
+        "conditions": {
+          "Clear": "Clear",
+          "Partly Cloudy": "Partly Cloudy",
+          "Cloudy": "Cloudy",
+          "Overcast": "Overcast",
+          "Rain": "Rain",
+          "Heavy Rain": "Heavy Rain",
+          "Snow": "Snow",
+          "Sleet": "Sleet"
+        }
+      },
+      "transport": {
+        "title": "Transport Departures",
+        "trains": "Trains",
+        "buses": "Buses"
+      },
+      "footfall": {
+        "weeklyTitle": "Weekly Footfall Profile",
+        "dayTitle": "{{day}} Footfall",
+        "currentHourTitle": "Current Hour"
+      },
+      "events": {
+        "title": "Upcoming Events"
+      },
+      "parking": {
+        "title": "Parking Status"
+      },
+      "trends": {
+        "title": "ShopperMind — Trends"
+      },
+      "weekdays": {
+        "0": "Sunday",
+        "1": "Monday",
+        "2": "Tuesday",
+        "3": "Wednesday",
+        "4": "Thursday",
+        "5": "Friday",
+        "6": "Saturday"
+      }
+    },
+    "switchAgent": "Switch specialist"
   },
   "navigation": {
     "portfolio": {

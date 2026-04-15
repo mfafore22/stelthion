@@ -34,7 +34,8 @@ model User {
   failedLoginAttempts  Int       @default(0)
   lockedUntil          DateTime?
   failedOtpAttempts    Int       @default(0)
-  otpLockedUntil       DateTime?     
+  otpLockedUntil       DateTime?
+  conciergeConversations ConciergeConversation[]
 }
 
 enum Role {
@@ -84,6 +85,7 @@ model Mall {
   household       HouseholdStat[]
   events      MallEvent[]
   edgeDevices EdgeDevice[]
+  conciergeConversations ConciergeConversation[]
 }
 
 enum MallStatus {
@@ -492,4 +494,70 @@ model VerificationReview {
   job AnalysisJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
 
   @@unique([jobId, anonymousTagId, reviewedBy])
+}
+
+// ==========================================================================
+// Concierge — Chat, Briefings, Conversations
+// ==========================================================================
+
+model ConciergeConversation {
+  id        String             @id @default(cuid())
+  mallId    String
+  userId    String
+  title     String             @default("New conversation")
+  status    ConversationStatus @default(ACTIVE)
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  mall     Mall               @relation(fields: [mallId], references: [mallId], onDelete: Cascade)
+  user     User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages ConciergeMessage[]
+
+  @@index([mallId, userId])
+  @@index([userId, updatedAt])
+}
+
+enum ConversationStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+model ConciergeMessage {
+  id             String   @id @default(cuid())
+  conversationId String
+  sender         String
+  content        String   @db.Text
+  agentRole      String?
+  toolCalls      Json?
+  attachments    Json?
+  createdAt      DateTime @default(now())
+
+  conversation ConciergeConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+}
+
+model ConciergeBriefing {
+  id        String    @id @default(cuid())
+  mallId    String
+  userId    String
+  content   Json
+  date      DateTime  @db.Date
+  sentAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@unique([mallId, userId, date])
+}
+
+model ConciergeBriefingSubscription {
+  id        String   @id @default(cuid())
+  mallId    String
+  userId    String
+  enabled   Boolean  @default(true)
+  timeUtc   String   @default("06:00")
+  sections  Json     @default("[\"weather\",\"footfall\",\"events\",\"transport\"]")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([mallId, userId])
 }
