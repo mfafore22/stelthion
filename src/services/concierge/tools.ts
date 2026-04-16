@@ -18,7 +18,6 @@ import {
   ideaparkCatchmentDemographics,
 } from '@/lib/data/ideaparkTransport';
 import prisma from '@/app/lib/prisma';
-import { getMarketProfile } from '@/services/shoppermind/markets';
 import { getCounterProfile, getLiveFootfall } from '@/lib/data/liveFootfall';
 import { tServer, weekdayName } from './tool-i18n';
 
@@ -381,9 +380,30 @@ async function getZoneFlow(params: Record<string, unknown>, _mallId: string): Pr
 }
 
 // ── ShopperMind: Trends & Phenomena ──────────────────────
+// Uses dynamic import so concierge compiles without the shoppermind module.
+// When both branches are merged, the real data path executes; otherwise
+// returns a "not yet available" message at runtime.
 
 async function getShopperMindTrends(params: Record<string, unknown>, mallId: string, language?: string): Promise<ToolResult> {
   const country = (params.country as string)?.toUpperCase() || resolveCountryFromMall(mallId);
+
+  let getMarketProfile: ((c: string) => { industryFocus?: string } | undefined) | undefined;
+  try {
+    // @ts-ignore — module only exists when shoppermind branch is merged
+    const mod = await import('@/services/shoppermind/markets');
+    getMarketProfile = mod.getMarketProfile;
+  } catch {
+    // ShopperMind module not deployed yet
+  }
+
+  const hasShopperMindTables = typeof (prisma as unknown as Record<string, unknown>).phenomenon === 'object';
+
+  if (!getMarketProfile || !hasShopperMindTables) {
+    return {
+      text: `[Source: Stelthion ShopperMind] The ShopperMind trend engine is not yet active for ${country}. It will be available once the ShopperMind module is deployed.`,
+    };
+  }
+
   const category = params.category as string | undefined;
   const query = params.query as string | undefined;
   const state = params.state as string | undefined;
@@ -392,12 +412,19 @@ async function getShopperMindTrends(params: Record<string, unknown>, mallId: str
   const profile = getMarketProfile(country);
   const industryLabel = profile?.industryFocus === 'property' ? 'property-industry' : 'retail';
 
-  const phenomena = await prisma.phenomenon.findMany({
+  const phenomenonModel = (prisma as unknown as Record<string, unknown>).phenomenon as {
+    findMany: (args: Record<string, unknown>) => Promise<Array<Record<string, unknown>>>;
+  };
+  const signalOfTheDayModel = (prisma as unknown as Record<string, unknown>).signalOfTheDay as {
+    findFirst: (args: Record<string, unknown>) => Promise<Record<string, unknown> | null>;
+  };
+
+  const phenomena = await phenomenonModel.findMany({
     where: {
       mergedInto: null,
       primaryCountry: country,
       ...(category ? { categories: { has: category } } : {}),
-      ...(state ? { state: state.toUpperCase() as import('@prisma/client').PhenomenonState } : {}),
+      ...(state ? { state: state.toUpperCase() } : {}),
     },
     include: {
       scores: { orderBy: { date: 'desc' }, take: 1 },
@@ -407,18 +434,21 @@ async function getShopperMindTrends(params: Record<string, unknown>, mallId: str
   });
 
   let results = phenomena
-    .filter((p) => p.scores.length > 0)
-    .map((p) => ({
-      id: p.id,
-      label: p.label,
-      description: p.description,
-      state: p.state,
-      categories: p.categories,
-      compositeScore: p.scores[0].compositeScore,
-      velocity: p.scores[0].velocity,
-      acceleration: p.scores[0].acceleration,
-      signalCount: p.scores[0].volume,
-    }))
+    .filter((p: Record<string, unknown>) => (p.scores as unknown[]).length > 0)
+    .map((p: Record<string, unknown>) => {
+      const score = (p.scores as Record<string, unknown>[])[0];
+      return {
+        id: p.id as string,
+        label: p.label as string,
+        description: p.description as string,
+        state: p.state as string,
+        categories: p.categories as string[],
+        compositeScore: score.compositeScore as number,
+        velocity: score.velocity as number,
+        acceleration: score.acceleration as number,
+        signalCount: score.volume as number,
+      };
+    })
     .sort((a, b) => b.compositeScore - a.compositeScore);
 
   if (query) {
@@ -433,8 +463,7 @@ async function getShopperMindTrends(params: Record<string, unknown>, mallId: str
 
   results = results.slice(0, limit);
 
-  // Also get latest Signal of the Day for context
-  const sotd = await prisma.signalOfTheDay.findFirst({
+  const sotd = await signalOfTheDayModel.findFirst({
     where: { country },
     orderBy: { date: 'desc' },
   });
@@ -455,7 +484,7 @@ async function getShopperMindTrends(params: Record<string, unknown>, mallId: str
     text += `Top phenomena:\n${lines.join('\n\n')}\n\n`;
   }
   if (sotd) {
-    text += `Today's Signal of the Day:\n${sotd.narrative}`;
+    text += `Today's Signal of the Day:\n${(sotd as Record<string, unknown>).narrative}`;
   }
 
   return {
@@ -463,7 +492,7 @@ async function getShopperMindTrends(params: Record<string, unknown>, mallId: str
     attachment: {
       type: 'shoppermind_trends',
       title: `${tServer(language, 'concierge.attachments.trends.title')} (${country})`,
-      data: { country, phenomena: results, signalOfTheDay: sotd?.narrative },
+      data: { country, phenomena: results, signalOfTheDay: (sotd as Record<string, unknown> | null)?.narrative },
     },
   };
 }
