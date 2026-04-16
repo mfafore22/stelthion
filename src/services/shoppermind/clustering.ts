@@ -1,5 +1,5 @@
 import prisma from '@/app/lib/prisma';
-import { getEmbeddingClient } from '@/services/concierge/llm-client';
+import { getEmbeddingClient } from './embedding';
 import { cosineSimilarity } from '@/lib/stats';
 import { labelPhenomenon } from './prompts';
 
