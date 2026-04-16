@@ -12,9 +12,11 @@
 import { PrismaClient, PhenomenonState } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 
-const adapter = new PrismaPg({
-  connectionString: process.env.DATABASE_URL ?? 'postgresql://kimmoi@localhost:5432/stelthion',
-});
+if (!process.env.DATABASE_URL) {
+  console.error('DATABASE_URL is not set. Export it before running this script.');
+  process.exit(1);
+}
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
 interface DemoPhenomenon {

@@ -1,4 +1,4 @@
-import { getLLMClient, type LLMMessage, type LLMStreamChunk } from '@/services/concierge/llm-client';
+import { getLLMClient, type LLMMessage, type LLMStreamChunk } from './llm';
 import { getMarketProfile } from './markets';
 import { inferCategories } from './relevance';
 

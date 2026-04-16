@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
 import { requireAdmin } from '@/lib/admin-auth';
-import { getEmbeddingClient } from '@/services/concierge/llm-client';
+import { getEmbeddingClient } from '@/services/shoppermind/embedding';
 import { cosineSimilarity } from '@/lib/stats';
 
 export async function GET(req: NextRequest) {
