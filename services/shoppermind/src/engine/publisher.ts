@@ -2,6 +2,8 @@ import { prisma } from '../db/prisma.js';
 import { loadMarket } from './registry/market-registry.js';
 import { generateNarrative } from './prompts.js';
 import { gate } from './gate/publish-gate.js';
+import { getFeedbackCounts } from './policy/feedback-aggregator.js';
+import { DEFAULT_POLICY } from './policy/default-policies.js';
 import type { MetricsSnapshot, Scope } from './policy/policy-types.js';
 
 export interface PublishSummary {
@@ -95,8 +97,14 @@ export async function runPublisher(marketId: string): Promise<PublishSummary> {
   let rejected = 0;
   let errors = 0;
 
+  const windowDays =
+    market.policy.feedbackSensitivity?.windowDays ??
+    DEFAULT_POLICY.feedbackSensitivity?.windowDays ??
+    30;
+
   for (const s of active) {
     try {
+      const feedback = await getFeedbackCounts(s.phenomenonId, marketId, windowDays);
       const snapshot: MetricsSnapshot = {
         date: today.toISOString(),
         marketId,
@@ -119,8 +127,8 @@ export async function runPublisher(marketId: string): Promise<PublishSummary> {
         culturalProximity: s.culturalProximity,
         linkBoost: s.linkBoost,
         compositeScore: s.compositeScore,
-        negativeFeedback: 0,
-        positiveFeedback: 0,
+        negativeFeedback: feedback.negative,
+        positiveFeedback: feedback.positive,
       };
 
       const result = await gate(snapshot, {

@@ -20,6 +20,17 @@ export const MarketProfileSchema = z.object({
   seedSources: z.array(SeedSourceSchema).default([]),
 });
 
+export const FeedbackSensitivitySchema = z.object({
+  // positive feedback lowers effective publish/review bars (easier to publish);
+  // negative feedback raises them (harder to publish). Caps clamp the shift so
+  // a review queue that's been sitting for months can't swing the gate wide open.
+  positivePerUnit: z.number().default(0.02),
+  negativePerUnit: z.number().default(0.03),
+  maxPositiveShift: z.number().min(0).default(0.08),
+  maxNegativeShift: z.number().min(0).default(0.1),
+  windowDays: z.number().int().positive().default(30),
+});
+
 export const MarketPolicySchema = z.object({
   version: z.literal(1),
   // thresholds keyed by `${type}:${axis}:${scope}`, e.g. "TREND:composite:COUNTRY"
@@ -38,6 +49,7 @@ export const MarketPolicySchema = z.object({
       CONCLUDED: z.number().default(0.2),
     })
     .default({ UPCOMING: -0.1, ACTIVE: 0, CONCLUDED: 0.2 }),
+  feedbackSensitivity: FeedbackSensitivitySchema.optional(),
 });
 
 export const MarketSchema = z.object({
@@ -60,3 +72,4 @@ export const MarketSchema = z.object({
 export type MarketConfig = z.infer<typeof MarketSchema>;
 export type MarketProfile = z.infer<typeof MarketProfileSchema>;
 export type MarketPolicy = z.infer<typeof MarketPolicySchema>;
+export type FeedbackSensitivity = z.infer<typeof FeedbackSensitivitySchema>;

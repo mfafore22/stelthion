@@ -69,6 +69,44 @@ describe('evaluate — per (type, scope) thresholds', () => {
     expect(result.reasons.join(' ')).toContain('strong_negative_feedback');
   });
 
+  it('positive feedback lowers the publish bar up to the cap', () => {
+    // TREND COUNTRY publish = 0.6; 3 positive × 0.02 = 0.06 shift → effective 0.54
+    const borderline = evaluate({
+      snapshot: snap({ compositeScore: 0.55, positiveFeedback: 3 }),
+      policy: DEFAULT_POLICY,
+    });
+    expect(borderline.decision).toBe('PUBLISH');
+    expect(borderline.reasons.join(' ')).toContain('feedback pos=3');
+
+    // Without feedback, same 0.55 would only review
+    const baseline = evaluate({
+      snapshot: snap({ compositeScore: 0.55 }),
+      policy: DEFAULT_POLICY,
+    });
+    expect(baseline.decision).toBe('REVIEW');
+  });
+
+  it('positive shift is capped so a single phenomenon cannot collapse the gate', () => {
+    // 100 × 0.02 = 2.0, capped at maxPositiveShift=0.08 → effective publish 0.52
+    const result = evaluate({
+      snapshot: snap({ compositeScore: 0.4, positiveFeedback: 100 }),
+      policy: DEFAULT_POLICY,
+    });
+    // 0.4 still < 0.52 (capped effective) → REVIEW, not PUBLISH
+    expect(result.decision).toBe('REVIEW');
+  });
+
+  it('mild negative feedback raises the bar without tripping hard-reject', () => {
+    // 2 negatives doesn't hit hard-reject (>=3), but raises bar by 0.06
+    const borderline = evaluate({
+      snapshot: snap({ compositeScore: 0.62, negativeFeedback: 2 }),
+      policy: DEFAULT_POLICY,
+    });
+    // Baseline 0.6 + 0.06 = 0.66; 0.62 < 0.66 → REVIEW
+    expect(borderline.decision).toBe('REVIEW');
+    expect(borderline.reasons.join(' ')).toContain('feedback pos=0 neg=2');
+  });
+
   it('falls back through market → default when market omits a tier', () => {
     const marketPolicy = {
       version: 1 as const,
