@@ -3,6 +3,7 @@ import sensible from '@fastify/sensible';
 import { env } from '../config/env.js';
 import { disconnectPrisma } from '../db/prisma.js';
 import { disconnectRedis } from '../db/redis.js';
+import { bullBoardRoutes } from './routes/internal/bull-board.js';
 import { healthRoutes } from './routes/internal/health.js';
 import { cronRoutes } from './routes/internal/cron.js';
 import { marketsRoutes } from './routes/v1/markets.js';
@@ -24,6 +25,9 @@ export async function buildServer() {
 
   await app.register(healthRoutes);
   await app.register(cronRoutes);
+  if (env().BULL_BOARD_ENABLED && env().NODE_ENV !== 'test') {
+    await app.register(bullBoardRoutes);
+  }
   await app.register(marketsRoutes);
   await app.register(phenomenaRoutes);
   await app.register(signalsRoutes);
