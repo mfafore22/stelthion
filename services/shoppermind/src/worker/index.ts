@@ -60,7 +60,7 @@ async function main(): Promise<void> {
   const coordinatorWorker = new Worker<CoordinatorJobData>(
     COORDINATOR_QUEUE,
     processCoordinatorJob,
-    { connection: redis(), concurrency: 1 },
+    { connection: redis(), concurrency: env().COORDINATOR_CONCURRENCY },
   );
   coordinatorWorker.on('failed', (job, err) => {
     log.error({ jobId: job?.id, err }, 'coordinator job failed');

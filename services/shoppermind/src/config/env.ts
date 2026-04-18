@@ -22,6 +22,11 @@ const Env = z.object({
     .transform((v) => v !== 'false'),
   RETENTION_SCORE_DAYS: z.coerce.number().int().positive().default(90),
   RETENTION_REVIEW_DAYS: z.coerce.number().int().positive().default(180),
+  COORDINATOR_CONCURRENCY: z.coerce.number().int().min(1).max(32).default(4),
+  BULL_BOARD_ENABLED: z
+    .string()
+    .default('true')
+    .transform((v) => v !== 'false'),
 });
 
 export type AppEnv = z.infer<typeof Env>;
