@@ -1,0 +1,268 @@
+// ShopperMind service schema. Owns its own database (shoppermind_db).
+// Never joined to the mall app's tables — coupling lives at the HTTP API only.
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/shoppermind-client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SourceType {
+  RSS
+  GOOGLE_TRENDS
+  REDDIT
+  X
+  TIKTOK
+  TRADE_PUB
+  STATFIN
+  FRED
+}
+
+enum PhenomenonState {
+  EMERGING
+  ACCELERATING
+  STABLE
+  FADING
+  DORMANT
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  EXPIRED
+}
+
+model Market {
+  id                    String   @id
+  country               String
+  region                String?
+  displayName           String
+  industryFocus         String
+  geoAnchorLat          Float?
+  geoAnchorLon          Float?
+  footTrafficSubs       String[]
+  culturalSubs          String[]
+  footTrafficAxisWeight Float    @default(0.5)
+  culturalAxisWeight    Float    @default(0.5)
+  profile               Json
+  policy                Json
+  active                Boolean  @default(true)
+  updatedAt             DateTime @updatedAt
+  createdAt             DateTime @default(now())
+
+  @@index([country, active])
+}
+
+model SignalSource {
+  id                         String         @id @default(cuid())
+  name                       String
+  type                       SourceType
+  url                        String
+  country                    String
+  language                   String
+  weight                     Float          @default(1.0)
+  active                     Boolean        @default(true)
+  marketId                   String?
+  defaultFootTrafficScope    String?
+  defaultCulturalScope       String?
+  lastFetchAt                DateTime?
+  nextFetchAt                DateTime?
+  config                     Json?
+  createdAt                  DateTime       @default(now())
+  updatedAt                  DateTime       @updatedAt
+  signals                    RawSignal[]
+  runs                       IngestionRun[]
+
+  @@index([type, country, active])
+  @@index([nextFetchAt, active])
+  @@index([marketId, active])
+}
+
+model RawSignal {
+  id                  String       @id @default(cuid())
+  sourceId            String
+  externalId          String
+  title               String
+  summary             String?
+  url                 String?
+  country             String
+  language            String
+  publishedAt         DateTime
+  ingestedAt          DateTime     @default(now())
+  embedding           Float[]
+  metadata            Json?
+  phenomenonId        String?
+  footTrafficScope    String?
+  footTrafficLocality String?
+  culturalScope       String?
+  culturalLocality    String?
+  geoLat              Float?
+  geoLon              Float?
+  source              SignalSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  phenomenon          Phenomenon?  @relation(fields: [phenomenonId], references: [id], onDelete: SetNull)
+
+  @@unique([sourceId, externalId])
+  @@index([country, publishedAt])
+  @@index([phenomenonId, publishedAt])
+  @@index([culturalScope, culturalLocality])
+}
+
+model Phenomenon {
+  id                  String               @id @default(cuid())
+  label               String
+  description         String
+  primaryCountry      String
+  categories          String[]
+  state               PhenomenonState      @default(EMERGING)
+  firstSeenAt         DateTime             @default(now())
+  lastSignalAt        DateTime             @default(now())
+  mergedInto          String?
+  keywords            String[]
+  centroid            Float[]
+  footTrafficScope    String?
+  footTrafficLocality String?
+  culturalScope       String?
+  culturalLocality    String?
+  phenomenonType      String?
+  eventStart          DateTime?
+  eventEnd            DateTime?
+  lifecycleState      String?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  signals             RawSignal[]
+  scores              PhenomenonScore[]
+  feedback            PhenomenonFeedback[]
+  reviewItems         ReviewItem[]
+  linksFrom           PhenomenonLink[]     @relation("LinkFrom")
+  linksTo             PhenomenonLink[]     @relation("LinkTo")
+
+  @@index([primaryCountry, state, lastSignalAt])
+  @@index([culturalScope, culturalLocality, state, lastSignalAt])
+  @@index([footTrafficScope, footTrafficLocality])
+  @@index([phenomenonType, lifecycleState, eventStart])
+}
+
+model PhenomenonScore {
+  id                   String     @id @default(cuid())
+  phenomenonId         String
+  marketId             String
+  country              String
+  date                 DateTime   @db.Date
+  volume               Int
+  velocity             Float
+  acceleration         Float
+  noiseAdjusted        Float
+  sourceDiversity      Float
+  compositeScore       Float
+  footTrafficScore     Float      @default(0)
+  culturalScore        Float      @default(0)
+  footTrafficProximity Float      @default(1.0)
+  culturalProximity    Float      @default(1.0)
+  linkBoost            Float      @default(0)
+  phenomenon           Phenomenon @relation(fields: [phenomenonId], references: [id], onDelete: Cascade)
+
+  @@unique([phenomenonId, marketId, date])
+  @@index([marketId, date, compositeScore])
+  @@index([country, date, compositeScore])
+}
+
+model PhenomenonFeedback {
+  id              String     @id @default(cuid())
+  phenomenonId    String
+  userId          String
+  marketId        String?
+  verdict         String
+  interactionKind String     @default("thumbs")
+  note            String?
+  createdAt       DateTime   @default(now())
+  phenomenon      Phenomenon @relation(fields: [phenomenonId], references: [id], onDelete: Cascade)
+
+  @@index([phenomenonId])
+  @@index([userId, createdAt])
+  @@index([marketId, createdAt])
+}
+
+model SignalOfTheDay {
+  id            String   @id @default(cuid())
+  marketId      String
+  country       String
+  date          DateTime @db.Date
+  phenomenonIds String[]
+  narrative     String
+  publishedAt   DateTime @default(now())
+
+  @@unique([marketId, date])
+  @@index([country, date])
+}
+
+model IngestionRun {
+  id             String       @id @default(cuid())
+  sourceId       String
+  marketId       String?
+  startedAt      DateTime     @default(now())
+  finishedAt     DateTime?
+  status         String
+  signalsNew     Int          @default(0)
+  signalsSkipped Int          @default(0)
+  errorMsg       String?
+  source         SignalSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+  @@index([sourceId, startedAt])
+  @@index([marketId, startedAt])
+}
+
+model ReviewItem {
+  id              String       @id @default(cuid())
+  marketId        String
+  phenomenonId    String
+  status          ReviewStatus @default(PENDING)
+  decision        String
+  reasons         String[]
+  metricsSnapshot Json
+  narrativeDraft  String?
+  createdAt       DateTime     @default(now())
+  resolvedAt      DateTime?
+  resolvedBy      String?
+  resolutionNote  String?
+  appliedAction   String?
+  ttlExpiresAt    DateTime?
+  phenomenon      Phenomenon   @relation(fields: [phenomenonId], references: [id], onDelete: Cascade)
+
+  @@index([marketId, status, createdAt])
+  @@index([phenomenonId])
+}
+
+model CoordinatorRun {
+  id         String    @id @default(cuid())
+  startedAt  DateTime  @default(now())
+  finishedAt DateTime?
+  status     String
+  marketIds  String[]
+  stages     String[]
+  summary    Json
+
+  @@index([startedAt])
+}
+
+model PhenomenonLink {
+  id               String     @id @default(cuid())
+  fromPhenomenonId String
+  toPhenomenonId   String
+  linkType         String
+  weight           Float
+  inferredBy       String
+  rationale        String?
+  createdAt        DateTime   @default(now())
+  supersededAt     DateTime?
+  from             Phenomenon @relation("LinkFrom", fields: [fromPhenomenonId], references: [id], onDelete: Cascade)
+  to               Phenomenon @relation("LinkTo", fields: [toPhenomenonId], references: [id], onDelete: Cascade)
+
+  @@unique([fromPhenomenonId, toPhenomenonId, linkType])
+  @@index([toPhenomenonId])
+  @@index([fromPhenomenonId])
+}
