@@ -12,6 +12,7 @@ import type {
   PhenomenonLinkRow,
   PhenomenonLinksResponse,
   PhenomenonStateValue,
+  ResonanceResponse,
   ReviewApproveResponse,
   ReviewListResponse,
   ReviewRejectResponse,
@@ -79,6 +80,22 @@ export class ShopperMindClient {
   getSignalOfTheDay(args: { marketId: string; date?: string }): Promise<SignalOfTheDayResponse> {
     return request<SignalOfTheDayResponse>(this.opts, 'GET', 'v1/signals-of-the-day', {
       query: { marketId: args.marketId, date: args.date },
+    });
+  }
+
+  getResonance(args: {
+    date?: string;
+    marketId?: string;
+    minMarkets?: number;
+    minCompositeScore?: number;
+  } = {}): Promise<ResonanceResponse> {
+    return request<ResonanceResponse>(this.opts, 'GET', 'v1/resonance', {
+      query: {
+        date: args.date,
+        marketId: args.marketId,
+        minMarkets: args.minMarkets,
+        minCompositeScore: args.minCompositeScore,
+      },
     });
   }
 
