@@ -2,6 +2,10 @@
   "name": "stelthion",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "packages/*",
+    "services/*"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
