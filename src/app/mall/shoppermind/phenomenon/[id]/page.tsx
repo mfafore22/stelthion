@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useEffect, useMemo, useState } from 'react';
+import { use, useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSession } from '@/contexts/SessionContext';
@@ -19,6 +19,8 @@ import {
   MapPin,
   Globe,
   Tag,
+  Plus,
+  X,
 } from 'lucide-react';
 import type {
   PhenomenonDetail,
@@ -50,27 +52,26 @@ export default function PhenomenonDetailPage({
     if (!loading && !user) router.replace('/mall/login');
   }, [loading, user, router]);
 
-  useEffect(() => {
-    let cancelled = false;
+  const reload = useCallback(async () => {
     setFetching(true);
     setError(null);
-    fetch(`/api/shoppermind/phenomenon/${encodeURIComponent(id)}`, { credentials: 'include' })
-      .then(async (res) => {
-        const body = (await res.json()) as DetailResponse;
-        if (cancelled) return;
-        if (body.error) setError(body.error);
-        setData(body);
-      })
-      .catch((err) => {
-        if (!cancelled) setError(err instanceof Error ? err.message : 'network error');
-      })
-      .finally(() => {
-        if (!cancelled) setFetching(false);
+    try {
+      const res = await fetch(`/api/shoppermind/phenomenon/${encodeURIComponent(id)}`, {
+        credentials: 'include',
       });
-    return () => {
-      cancelled = true;
-    };
+      const body = (await res.json()) as DetailResponse;
+      if (body.error) setError(body.error);
+      setData(body);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'network error');
+    } finally {
+      setFetching(false);
+    }
   }, [id]);
+
+  useEffect(() => {
+    void reload();
+  }, [reload]);
 
   if (loading) {
     return (
@@ -97,7 +98,7 @@ export default function PhenomenonDetailPage({
           {!fetching && data && !data.configured && <NotConfigured />}
           {!fetching && data?.configured && error && <ErrorBanner message={error} />}
           {!fetching && data?.configured && !error && !data.phenomenon && <NotFound id={id} />}
-          {!fetching && data?.phenomenon && <DetailBody phenomenon={data.phenomenon} />}
+          {!fetching && data?.phenomenon && <DetailBody phenomenon={data.phenomenon} onLinkAdded={reload} />}
         </div>
       </main>
     </>
@@ -128,7 +129,13 @@ function NotFound({ id }: { id: string }) {
   );
 }
 
-function DetailBody({ phenomenon: p }: { phenomenon: PhenomenonDetail }) {
+function DetailBody({
+  phenomenon: p,
+  onLinkAdded,
+}: {
+  phenomenon: PhenomenonDetail;
+  onLinkAdded: () => void | Promise<void>;
+}) {
   const latest = p.scores[0] ?? null;
   const firstSeen = new Date(p.firstSeenAt).toLocaleDateString();
   const lastSignal = new Date(p.lastSignalAt).toLocaleDateString();
@@ -147,6 +154,7 @@ function DetailBody({ phenomenon: p }: { phenomenon: PhenomenonDetail }) {
             linksFrom={p.linksFrom}
             linksTo={p.linksTo}
             selfId={p.id}
+            onLinkAdded={onLinkAdded}
           />
           <ScoreHistoryPanel scores={p.scores} />
         </section>
@@ -254,21 +262,19 @@ function LinksPanel({
   linksFrom,
   linksTo,
   selfId,
+  onLinkAdded,
 }: {
   linksFrom: PhenomenonLinkRow[];
   linksTo: PhenomenonLinkRow[];
   selfId: string;
+  onLinkAdded: () => void | Promise<void>;
 }) {
-  if (linksFrom.length === 0 && linksTo.length === 0) {
-    return (
-      <Card title="Link graph">
-        <p className="text-sm text-gray-500">No inferred links yet.</p>
-      </Card>
-    );
-  }
   return (
     <Card title="Link graph">
       <div className="space-y-4">
+        {linksFrom.length === 0 && linksTo.length === 0 && (
+          <p className="text-sm text-gray-500">No inferred links yet.</p>
+        )}
         {linksTo.length > 0 && (
           <LinkGroup
             heading="Upstream — phenomena that link into this one"
@@ -287,8 +293,202 @@ function LinksPanel({
             selfId={selfId}
           />
         )}
+        <LinkAuthor selfId={selfId} onLinkAdded={onLinkAdded} />
       </div>
     </Card>
+  );
+}
+
+const LINK_TYPE_OPTIONS: { value: LinkType; label: string }[] = [
+  { value: 'CONTRIBUTES_TO', label: 'Contributes to' },
+  { value: 'MANIFESTATION_OF', label: 'Manifestation of' },
+  { value: 'ACCELERATES', label: 'Accelerates' },
+  { value: 'PRECEDES', label: 'Precedes' },
+  { value: 'CONTRADICTS', label: 'Contradicts' },
+];
+
+function LinkAuthor({
+  selfId,
+  onLinkAdded,
+}: {
+  selfId: string;
+  onLinkAdded: () => void | Promise<void>;
+}) {
+  const [open, setOpen] = useState(false);
+  const [toPhenomenonId, setToPhenomenonId] = useState('');
+  const [linkType, setLinkType] = useState<LinkType>('CONTRIBUTES_TO');
+  const [weight, setWeight] = useState('1.0');
+  const [rationale, setRationale] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+
+  const reset = () => {
+    setToPhenomenonId('');
+    setLinkType('CONTRIBUTES_TO');
+    setWeight('1.0');
+    setRationale('');
+    setFormError(null);
+  };
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormError(null);
+    const trimmed = toPhenomenonId.trim();
+    if (!trimmed) {
+      setFormError('Target phenomenon ID required');
+      return;
+    }
+    if (trimmed === selfId) {
+      setFormError('Cannot link a phenomenon to itself');
+      return;
+    }
+    const w = Number(weight);
+    if (!Number.isFinite(w) || w < 0 || w > 1) {
+      setFormError('Weight must be between 0 and 1');
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const res = await fetch(`/api/shoppermind/phenomenon/${encodeURIComponent(selfId)}/links`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          toPhenomenonId: trimmed,
+          linkType,
+          weight: w,
+          rationale: rationale.trim() || undefined,
+        }),
+      });
+      if (res.status === 403) {
+        setFormError('ADMIN role required to author links');
+        return;
+      }
+      if (!res.ok) {
+        const body = (await res.json().catch(() => ({}))) as { error?: string };
+        setFormError(body.error ?? `Request failed (${res.status})`);
+        return;
+      }
+      reset();
+      setOpen(false);
+      await onLinkAdded();
+    } catch (err) {
+      setFormError(err instanceof Error ? err.message : 'network error');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="inline-flex items-center gap-1.5 text-xs text-indigo-600 hover:text-indigo-700 font-medium"
+      >
+        <Plus className="w-3.5 h-3.5" />
+        Author link (admin)
+      </button>
+    );
+  }
+
+  return (
+    <form onSubmit={submit} className="rounded-lg border border-indigo-200 bg-indigo-50/40 p-4 space-y-3">
+      <div className="flex items-center justify-between">
+        <div className="text-xs font-medium text-indigo-700 uppercase tracking-wide">
+          New link
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            setOpen(false);
+            reset();
+          }}
+          className="text-gray-400 hover:text-gray-600"
+          aria-label="Cancel"
+        >
+          <X className="w-4 h-4" />
+        </button>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <label className="text-xs text-gray-600 space-y-1 block">
+          Target phenomenon ID
+          <input
+            type="text"
+            value={toPhenomenonId}
+            onChange={(e) => setToPhenomenonId(e.target.value)}
+            placeholder="phenomenon-id"
+            className="w-full font-mono text-sm px-2 py-1.5 rounded border border-gray-300 bg-white"
+            disabled={submitting}
+          />
+        </label>
+        <label className="text-xs text-gray-600 space-y-1 block">
+          Link type
+          <select
+            value={linkType}
+            onChange={(e) => setLinkType(e.target.value as LinkType)}
+            className="w-full text-sm px-2 py-1.5 rounded border border-gray-300 bg-white"
+            disabled={submitting}
+          >
+            {LINK_TYPE_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="text-xs text-gray-600 space-y-1 block">
+          Weight (0–1)
+          <input
+            type="number"
+            step="0.05"
+            min="0"
+            max="1"
+            value={weight}
+            onChange={(e) => setWeight(e.target.value)}
+            className="w-full text-sm px-2 py-1.5 rounded border border-gray-300 bg-white"
+            disabled={submitting}
+          />
+        </label>
+        <label className="text-xs text-gray-600 space-y-1 block md:col-span-2">
+          Rationale (optional)
+          <textarea
+            value={rationale}
+            onChange={(e) => setRationale(e.target.value)}
+            rows={2}
+            placeholder="Why is this link correct?"
+            className="w-full text-sm px-2 py-1.5 rounded border border-gray-300 bg-white resize-none"
+            disabled={submitting}
+          />
+        </label>
+      </div>
+      {formError && (
+        <div className="text-xs text-red-600 bg-red-50 border border-red-200 rounded px-2 py-1.5">
+          {formError}
+        </div>
+      )}
+      <div className="flex justify-end gap-2">
+        <button
+          type="button"
+          onClick={() => {
+            setOpen(false);
+            reset();
+          }}
+          className="text-xs text-gray-500 hover:text-gray-700 px-3 py-1.5"
+          disabled={submitting}
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          disabled={submitting}
+          className="text-xs bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50 px-4 py-1.5 rounded font-medium"
+        >
+          {submitting ? 'Saving…' : 'Save link'}
+        </button>
+      </div>
+    </form>
   );
 }
 

@@ -5,6 +5,7 @@ import { ShopperMindClient } from '@stelthion/shoppermind-client';
 // gracefully degrade — the legacy behaviour used runtime model probing
 // for the same reason, this keeps that contract.
 let cached: ShopperMindClient | null | undefined;
+let cachedAdmin: ShopperMindClient | null | undefined;
 
 export function getShopperMindClient(): ShopperMindClient | null {
   if (cached !== undefined) return cached;
@@ -16,6 +17,20 @@ export function getShopperMindClient(): ShopperMindClient | null {
   }
   cached = new ShopperMindClient({ baseUrl, token });
   return cached;
+}
+
+// Admin-scoped factory — uses the internal token which unlocks PUT /markets
+// and POST /phenomena/:id/links. Callers MUST gate with requireAdmin first.
+export function getShopperMindAdminClient(): ShopperMindClient | null {
+  if (cachedAdmin !== undefined) return cachedAdmin;
+  const baseUrl = process.env.SHOPPERMIND_SERVICE_URL;
+  const token = process.env.SHOPPERMIND_INTERNAL_TOKEN;
+  if (!baseUrl || !token) {
+    cachedAdmin = null;
+    return null;
+  }
+  cachedAdmin = new ShopperMindClient({ baseUrl, token });
+  return cachedAdmin;
 }
 
 // Phase 1 mapping: mallId → marketId. Phase 2 replaces this with a DB lookup

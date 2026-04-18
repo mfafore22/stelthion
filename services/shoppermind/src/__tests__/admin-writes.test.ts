@@ -1,12 +1,14 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-process.env.NODE_ENV = 'test';
-process.env.DATABASE_URL = 'postgres://test/test';
-process.env.REDIS_URL = 'redis://localhost:6379';
-process.env.SHOPPERMIND_SERVICE_TOKEN = 'service-token-1234567890';
-process.env.SHOPPERMIND_INTERNAL_TOKEN = 'internal-token-1234567890';
-process.env.REVIEW_TTL_ENABLED = 'false';
-process.env.RETENTION_ENABLED = 'false';
+Object.assign(process.env, {
+  NODE_ENV: 'test',
+  DATABASE_URL: 'postgres://test/test',
+  REDIS_URL: 'redis://localhost:6379',
+  SHOPPERMIND_SERVICE_TOKEN: 'service-token-1234567890',
+  SHOPPERMIND_INTERNAL_TOKEN: 'internal-token-1234567890',
+  REVIEW_TTL_ENABLED: 'false',
+  RETENTION_ENABLED: 'false',
+});
 
 const marketUpsert = vi.fn();
 const phenomenonFindUnique = vi.fn();
