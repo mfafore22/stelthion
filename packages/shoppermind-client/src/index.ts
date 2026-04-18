@@ -2,10 +2,14 @@ import type {
   CronRunRequest,
   CronRunResponse,
   HealthResponse,
+  MarketConfig,
+  MarketConfigUpdate,
   MarketDetail,
   MarketListResponse,
   PhenomenaListResponse,
   PhenomenonDetail,
+  PhenomenonLinkCreate,
+  PhenomenonLinkRow,
   PhenomenonLinksResponse,
   PhenomenonStateValue,
   ReviewApproveResponse,
@@ -104,6 +108,36 @@ export class ShopperMindClient {
     return request<ReviewRejectResponse>(this.opts, 'POST', `v1/review/${encodeURIComponent(id)}/reject`, {
       body: args,
     });
+  }
+
+  // Admin — requires internal token in `ShopperMindClientOptions.token`.
+  getMarketConfig(marketId: string): Promise<MarketConfig> {
+    return request<MarketConfig>(
+      this.opts,
+      'GET',
+      `v1/markets/${encodeURIComponent(marketId)}/config`,
+    );
+  }
+
+  updateMarketConfig(marketId: string, body: MarketConfigUpdate): Promise<MarketConfig> {
+    return request<MarketConfig>(
+      this.opts,
+      'PUT',
+      `v1/markets/${encodeURIComponent(marketId)}/config`,
+      { body },
+    );
+  }
+
+  createPhenomenonLink(
+    fromPhenomenonId: string,
+    body: PhenomenonLinkCreate,
+  ): Promise<PhenomenonLinkRow> {
+    return request<PhenomenonLinkRow>(
+      this.opts,
+      'POST',
+      `v1/phenomena/${encodeURIComponent(fromPhenomenonId)}/links`,
+      { body },
+    );
   }
 }
 

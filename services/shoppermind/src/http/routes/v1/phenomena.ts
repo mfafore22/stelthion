@@ -1,12 +1,28 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { z } from 'zod';
 import { prisma } from '../../../db/prisma.js';
-import { requireAnyBearer } from '../../auth/bearer.js';
+import { requireAnyBearer, requireBearer } from '../../auth/bearer.js';
 
 const ListQuery = z.object({
   marketId: z.string().min(1),
   state: z.string().optional(),
   limit: z.coerce.number().int().min(1).max(100).default(25),
+});
+
+const LINK_TYPES = [
+  'CONTRIBUTES_TO',
+  'MANIFESTATION_OF',
+  'ACCELERATES',
+  'PRECEDES',
+  'CONTRADICTS',
+] as const;
+
+const LinkBody = z.object({
+  toPhenomenonId: z.string().min(1),
+  linkType: z.enum(LINK_TYPES),
+  weight: z.number().min(0).max(1).default(1),
+  rationale: z.string().optional(),
+  inferredBy: z.string().min(1).default('human'),
 });
 
 export const phenomenaRoutes: FastifyPluginAsync = async (app) => {
@@ -108,6 +124,64 @@ export const phenomenaRoutes: FastifyPluginAsync = async (app) => {
         }
       }
       return { linksFrom: from, linksTo: to };
+    },
+  );
+
+  // Admin: author a human link between two phenomena. Upserts on the unique
+  // (from, to, type) tuple so a human override cleanly replaces any prior
+  // auto-inferred link without colliding with the unique index.
+  app.post<{ Params: { id: string } }>(
+    '/v1/phenomena/:id/links',
+    { preHandler: requireBearer('internal') },
+    async (req, reply) => {
+      const parsed = LinkBody.safeParse(req.body ?? {});
+      if (!parsed.success) {
+        reply.code(400).send({ error: 'invalid_body', details: parsed.error.flatten() });
+        return;
+      }
+      const { toPhenomenonId, linkType, weight, rationale, inferredBy } = parsed.data;
+      const fromId = req.params.id;
+
+      if (fromId === toPhenomenonId) {
+        reply.code(400).send({ error: 'self_link' });
+        return;
+      }
+
+      const [from, to] = await Promise.all([
+        prisma().phenomenon.findUnique({ where: { id: fromId } }),
+        prisma().phenomenon.findUnique({ where: { id: toPhenomenonId } }),
+      ]);
+      if (!from || !to) {
+        reply.code(404).send({ error: 'phenomenon_not_found' });
+        return;
+      }
+
+      const saved = await prisma().phenomenonLink.upsert({
+        where: {
+          fromPhenomenonId_toPhenomenonId_linkType: {
+            fromPhenomenonId: fromId,
+            toPhenomenonId,
+            linkType,
+          },
+        },
+        create: {
+          fromPhenomenonId: fromId,
+          toPhenomenonId,
+          linkType,
+          weight,
+          inferredBy,
+          rationale: rationale ?? null,
+        },
+        update: {
+          weight,
+          inferredBy,
+          rationale: rationale ?? null,
+          supersededAt: null,
+        },
+      });
+
+      reply.code(201);
+      return saved;
     },
   );
 };
