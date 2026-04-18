@@ -91,6 +91,71 @@ export async function request<T>(
   throw lastErr instanceof Error ? lastErr : new ShopperMindNetworkError(lastErr);
 }
 
+/**
+ * Issue an authenticated request and return the raw `Response` so callers
+ * can stream NDJSON / large payloads without buffering. Retries on 5xx use
+ * the same exponential-backoff shape as `request`; non-5xx errors are
+ * wrapped as `ShopperMindApiError`.
+ */
+export async function requestStream(
+  opts: FetchOptions,
+  method: 'GET' | 'POST',
+  path: string,
+  init?: { query?: Record<string, string | number | undefined> },
+): Promise<Response> {
+  const fetchImpl = opts.fetchImpl ?? fetch;
+  const retries = opts.retries ?? 2;
+  const backoffMs = opts.backoffMs ?? 250;
+
+  const url = new URL(path.replace(/^\//, ''), opts.baseUrl.endsWith('/') ? opts.baseUrl : opts.baseUrl + '/');
+  if (init?.query) {
+    for (const [k, v] of Object.entries(init.query)) {
+      if (v !== undefined && v !== null) url.searchParams.set(k, String(v));
+    }
+  }
+
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${opts.token}`,
+    Accept: 'application/x-ndjson',
+  };
+
+  let lastErr: unknown;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const res = await fetchImpl(url.toString(), { method, headers });
+      if (res.ok) return res;
+      if (res.status === 401) throw new ShopperMindAuthError(null);
+      if (res.status === 400 || res.status === 422) throw new ShopperMindValidationError(null);
+      if (res.status >= 500 && attempt < retries) {
+        lastErr = new ShopperMindApiError(res.status, `http_${res.status}`, null);
+        await sleep(backoffMs * Math.pow(2, attempt));
+        continue;
+      }
+      throw new ShopperMindApiError(res.status, `http_${res.status}`, null);
+    } catch (err) {
+      if (
+        err instanceof ShopperMindApiError ||
+        err instanceof ShopperMindAuthError ||
+        err instanceof ShopperMindValidationError
+      ) {
+        if (err instanceof ShopperMindApiError && err.status >= 500 && attempt < retries) {
+          lastErr = err;
+          await sleep(backoffMs * Math.pow(2, attempt));
+          continue;
+        }
+        throw err;
+      }
+      if (attempt < retries) {
+        lastErr = err;
+        await sleep(backoffMs * Math.pow(2, attempt));
+        continue;
+      }
+      throw new ShopperMindNetworkError(err);
+    }
+  }
+  throw lastErr instanceof Error ? lastErr : new ShopperMindNetworkError(lastErr);
+}
+
 function safeJson(text: string): unknown {
   try {
     return JSON.parse(text);

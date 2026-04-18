@@ -237,6 +237,39 @@ export interface ResonanceResponse {
   resonances: ResonantPhenomenon[];
 }
 
+export interface TrainingRecord {
+  reviewItemId: string;
+  marketId: string;
+  phenomenonId: string;
+  gateDecision: string;
+  reviewerAction: 'APPROVED' | 'REJECTED' | 'EXPIRED' | null;
+  reviewerNote: string | null;
+  resolvedBy: string | null;
+  resolvedAt: string | null;
+  createdAt: string;
+  reasons: string[];
+  metricsSnapshot: unknown;
+  narrativeDraft: string | null;
+  phenomenon: {
+    label: string;
+    description: string | null;
+    phenomenonType: string | null;
+    culturalScope: string | null;
+    culturalLocality: string | null;
+    footTrafficScope: string | null;
+    footTrafficLocality: string | null;
+    state: string;
+  };
+}
+
+export interface InsightsExportQuery {
+  marketId?: string;
+  since?: string;
+  until?: string;
+  limit?: number;
+  status?: Array<'APPROVED' | 'REJECTED' | 'EXPIRED' | 'PENDING'>;
+}
+
 export interface CronRunRequest {
   stages?: Array<'ingest' | 'cluster' | 'score' | 'publish'>;
   markets?: string[];
