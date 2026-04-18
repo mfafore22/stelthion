@@ -310,6 +310,23 @@ export interface InteractionSummary {
   };
 }
 
+export interface PredictedEvent {
+  trendId: string;
+  trendLabel: string;
+  basisCount: number;
+  cadenceDays: number;
+  cadenceStability: number;
+  expectedStart: string;
+  expectedEnd: string | null;
+  confidence: number;
+  rationale: string;
+}
+
+export interface PredictedEventResponse {
+  prediction: PredictedEvent | null;
+  reason: 'not_a_trend' | 'insufficient_basis' | null;
+}
+
 export interface InsightsChatRequest {
   marketId: string;
   question: string;

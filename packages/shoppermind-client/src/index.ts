@@ -18,6 +18,7 @@ import type {
   PhenomenonLinkRow,
   PhenomenonLinksResponse,
   PhenomenonStateValue,
+  PredictedEventResponse,
   ResonanceResponse,
   ReviewApproveResponse,
   ReviewListResponse,
@@ -174,6 +175,14 @@ export class ShopperMindClient {
       'POST',
       `v1/phenomena/${encodeURIComponent(phenomenonId)}/feedback`,
       { body },
+    );
+  }
+
+  getPredictedEvents(phenomenonId: string): Promise<PredictedEventResponse> {
+    return request<PredictedEventResponse>(
+      this.opts,
+      'GET',
+      `v1/phenomena/${encodeURIComponent(phenomenonId)}/predicted-events`,
     );
   }
 
