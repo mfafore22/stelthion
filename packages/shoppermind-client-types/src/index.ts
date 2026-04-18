@@ -212,6 +212,31 @@ export interface PhenomenonLinkCreate {
   inferredBy?: string;
 }
 
+export interface ResonantMarket {
+  marketId: string;
+  country: string;
+  compositeScore: number;
+}
+
+export interface ResonantPhenomenon {
+  phenomenonId: string;
+  phenomenonLabel: string | null;
+  culturalScope: string | null;
+  culturalLocality: string | null;
+  phenomenonType: string | null;
+  date: string;
+  marketCount: number;
+  avgCompositeScore: number;
+  maxCompositeScore: number;
+  markets: ResonantMarket[];
+}
+
+export interface ResonanceResponse {
+  date: string;
+  count: number;
+  resonances: ResonantPhenomenon[];
+}
+
 export interface CronRunRequest {
   stages?: Array<'ingest' | 'cluster' | 'score' | 'publish'>;
   markets?: string[];
