@@ -6,6 +6,7 @@ import {
   recordInteraction,
   summariseInteractions,
 } from '../../../engine/insights/feedback-collector.js';
+import { predictForTrend } from '../../../engine/predictive/event-predictor.js';
 import { requireAnyBearer, requireBearer } from '../../auth/bearer.js';
 
 const ListQuery = z.object({
@@ -244,6 +245,27 @@ export const phenomenaRoutes: FastifyPluginAsync = async (app) => {
         return;
       }
       return summariseInteractions(id, parsed.data.marketId, parsed.data.windowDays);
+    },
+  );
+
+  app.get(
+    '/v1/phenomena/:id/predicted-events',
+    { preHandler: requireAnyBearer() },
+    async (req, reply) => {
+      const { id } = req.params as { id: string };
+      const phenomenon = await prisma().phenomenon.findUnique({
+        where: { id },
+        select: { id: true, phenomenonType: true },
+      });
+      if (!phenomenon) {
+        reply.code(404).send({ error: 'phenomenon_not_found' });
+        return;
+      }
+      if (phenomenon.phenomenonType !== 'TREND') {
+        return { prediction: null, reason: 'not_a_trend' };
+      }
+      const prediction = await predictForTrend(id);
+      return { prediction, reason: prediction ? null : 'insufficient_basis' };
     },
   );
 };
