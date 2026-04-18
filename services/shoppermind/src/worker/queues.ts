@@ -5,6 +5,9 @@ export const COORDINATOR_QUEUE = 'shoppermind:coordinator';
 export const REVIEW_TTL_QUEUE = 'shoppermind:review-ttl';
 export const REVIEW_TTL_JOB_NAME = 'expire';
 export const REVIEW_TTL_REPEAT_KEY = 'review-ttl-repeat';
+export const RETENTION_QUEUE = 'shoppermind:retention';
+export const RETENTION_JOB_NAME = 'prune';
+export const RETENTION_REPEAT_KEY = 'retention-repeat';
 
 export type CoordinatorJobData = {
   stages?: Array<'ingest' | 'cluster' | 'score' | 'publish'>;
@@ -13,8 +16,11 @@ export type CoordinatorJobData = {
 
 export type ReviewTtlJobData = Record<string, never>;
 
+export type RetentionJobData = Record<string, never>;
+
 let coordinatorQueue: Queue<CoordinatorJobData> | null = null;
 let reviewTtlQueue: Queue<ReviewTtlJobData> | null = null;
+let retentionQueue: Queue<RetentionJobData> | null = null;
 
 export function getCoordinatorQueue(): Queue<CoordinatorJobData> {
   if (coordinatorQueue) return coordinatorQueue;
@@ -71,6 +77,38 @@ export async function ensureReviewTtlRepeatable(cron: string): Promise<void> {
     {
       repeat: { pattern: cron, key: REVIEW_TTL_REPEAT_KEY },
       removeOnComplete: { age: 24 * 3600, count: 100 },
+    },
+  );
+}
+
+export function getRetentionQueue(): Queue<RetentionJobData> {
+  if (retentionQueue) return retentionQueue;
+  retentionQueue = new Queue<RetentionJobData>(RETENTION_QUEUE, {
+    connection: redis(),
+    defaultJobOptions: {
+      attempts: 2,
+      backoff: { type: 'exponential', delay: 30_000 },
+      removeOnComplete: { age: 7 * 24 * 3600, count: 50 },
+      removeOnFail: { age: 30 * 24 * 3600 },
+    },
+  });
+  return retentionQueue;
+}
+
+export async function ensureRetentionRepeatable(cron: string): Promise<void> {
+  const q = getRetentionQueue();
+  const existing = await q.getRepeatableJobs();
+  for (const job of existing) {
+    if (job.key?.includes(RETENTION_REPEAT_KEY) || job.name === RETENTION_JOB_NAME) {
+      await q.removeRepeatableByKey(job.key);
+    }
+  }
+  await q.add(
+    RETENTION_JOB_NAME,
+    {},
+    {
+      repeat: { pattern: cron, key: RETENTION_REPEAT_KEY },
+      removeOnComplete: { age: 7 * 24 * 3600, count: 50 },
     },
   );
 }
