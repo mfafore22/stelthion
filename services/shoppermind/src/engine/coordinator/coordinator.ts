@@ -1,5 +1,9 @@
 import { prisma } from '../../db/prisma.js';
 import { listMarkets, loadMarket } from '../registry/market-registry.js';
+import { runIngestion } from '../ingest-runner.js';
+import { runClustering } from '../clustering.js';
+import { runScoring } from '../scoring.js';
+import { runPublisher } from '../publisher.js';
 
 export type Stage = 'ingest' | 'cluster' | 'score' | 'publish';
 const DEFAULT_STAGES: Stage[] = ['ingest', 'cluster', 'score', 'publish'];
@@ -24,11 +28,37 @@ export type RunSummary = {
   markets: MarketRunSummary[];
 };
 
-// Phase 1 placeholder: the Coordinator is wired end-to-end but each stage
-// is a no-op pending the engine port. Real stage handlers replace these
-// functions in the next step of Phase 1.
 async function runStage(stage: Stage, marketId: string): Promise<{ ok: true; notes: string }> {
-  return { ok: true, notes: `${stage} stub` };
+  switch (stage) {
+    case 'ingest': {
+      const res = await runIngestion({ marketId });
+      return {
+        ok: true,
+        notes: `sources=${res.sourcesRun} new=${res.signalsNew} skipped=${res.signalsSkipped} errors=${res.errors}`,
+      };
+    }
+    case 'cluster': {
+      const res = await runClustering(marketId);
+      return {
+        ok: true,
+        notes: `processed=${res.signalsProcessed} assigned=${res.assignedToExisting} new=${res.newPhenomena} merged=${res.merged}`,
+      };
+    }
+    case 'score': {
+      const res = await runScoring(marketId);
+      return {
+        ok: true,
+        notes: `scored=${res.phenomenaScored} stateChanges=${res.stateChanges}`,
+      };
+    }
+    case 'publish': {
+      const res = await runPublisher(marketId);
+      return {
+        ok: true,
+        notes: `published=${res.published} reviewed=${res.reviewed} rejected=${res.rejected} skipped=${res.skipped} errors=${res.errors}`,
+      };
+    }
+  }
 }
 
 export async function runPipeline(args: RunArgs = {}): Promise<RunSummary> {
