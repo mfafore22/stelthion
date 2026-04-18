@@ -1,11 +1,11 @@
-export function movingAverage<T extends Record<string, unknown>>(
+export function movingAverage<T>(
   series: T[],
   field: keyof T,
   window?: number,
 ): number {
   if (series.length === 0) return 0;
   const slice = window ? series.slice(-window) : series;
-  const values = slice.map((s) => Number(s[field] as number) || 0);
+  const values = slice.map((s) => Number(s[field]) || 0);
   return values.reduce((a, b) => a + b, 0) / values.length;
 }
 
@@ -16,12 +16,12 @@ export function median(values: number[]): number {
   return sorted.length % 2 === 0 ? (sorted[mid - 1] + sorted[mid]) / 2 : sorted[mid];
 }
 
-export function medianAbsoluteDeviation<T extends Record<string, unknown>>(
+export function medianAbsoluteDeviation<T>(
   series: T[],
   field: keyof T,
 ): number {
   if (series.length === 0) return 0;
-  const values = series.map((s) => Number(s[field] as number) || 0);
+  const values = series.map((s) => Number(s[field]) || 0);
   const m = median(values);
   const deviations = values.map((v) => Math.abs(v - m));
   return median(deviations);
