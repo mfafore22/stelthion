@@ -4,6 +4,9 @@ import { cosineSimilarity } from './lib/stats.js';
 import { labelPhenomenon } from './prompts.js';
 import { loadMarket } from './registry/market-registry.js';
 import { resolveLocality } from './locality/locality-resolver.js';
+import { classify } from './taxonomy/classifier.js';
+import { inferLinks, type LinkablePhenomenon } from './linking/link-inferrer.js';
+import type { PhenomenonType, Scope } from './policy/policy-types.js';
 
 const SIMILARITY_THRESHOLD = 0.78;
 const MERGE_THRESHOLD = 0.85;
@@ -20,6 +23,7 @@ export interface ClusterSummary {
 
 export async function runClustering(marketId: string): Promise<ClusterSummary> {
   const start = Date.now();
+  const now = new Date();
   const db = prisma();
   const market = await loadMarket(marketId);
   if (!market) {
@@ -92,20 +96,29 @@ export async function runClustering(marketId: string): Promise<ClusterSummary> {
           market.profile,
           market.country,
         );
+        const keywords = extractKeywords(signal.title);
+        const classification = classify(
+          { label: label.label, description: label.description, keywords },
+          now,
+        );
         const phenom = await db.phenomenon.create({
           data: {
             label: label.label,
             description: label.description,
             primaryCountry: signal.country,
             categories: label.categories,
-            keywords: extractKeywords(signal.title),
+            keywords,
             centroid: vec,
             state: 'EMERGING',
             footTrafficScope: locality.footTraffic.scope,
             footTrafficLocality: locality.footTraffic.localityId,
             culturalScope: locality.cultural.scope,
             culturalLocality: locality.cultural.localityId,
-            phenomenonType: 'TREND',
+            phenomenonType: classification.type,
+            eventStart: classification.eventStart ?? null,
+            eventEnd: classification.eventEnd ?? null,
+            // lifecycleState is recomputed each scoring run so it stays fresh
+            // as now() crosses eventStart / eventEnd + fadeWindow.
             lifecycleState: null,
           },
         });
@@ -121,6 +134,13 @@ export async function runClustering(marketId: string): Promise<ClusterSummary> {
 
   const merged = await runMergeCompaction(market.country);
 
+  // Re-infer links for phenomena in this country that received signals recently
+  // enough to have changed during this run. Idempotent via (from, to, linkType)
+  // unique key; previously-authored links are preserved.
+  if (signalsProcessed > 0 || newPhenomena > 0) {
+    await refreshLinks(market.country, now);
+  }
+
   return {
     marketId,
     signalsProcessed,
@@ -129,6 +149,72 @@ export async function runClustering(marketId: string): Promise<ClusterSummary> {
     merged,
     durationMs: Date.now() - start,
   };
+}
+
+async function refreshLinks(country: string, now: Date): Promise<void> {
+  const db = prisma();
+  // Scope: phenomena in the same primaryCountry, active (not merged, not DORMANT).
+  // Link inference itself filters further on cultural scope equality.
+  const rows = await db.phenomenon.findMany({
+    where: {
+      primaryCountry: country,
+      mergedInto: null,
+      state: { not: 'DORMANT' },
+    },
+    select: {
+      id: true,
+      label: true,
+      keywords: true,
+      phenomenonType: true,
+      culturalScope: true,
+      culturalLocality: true,
+      eventStart: true,
+      eventEnd: true,
+      lifecycleState: true,
+    },
+  });
+
+  if (rows.length < 2) return;
+
+  const linkables: LinkablePhenomenon[] = rows.map((r) => ({
+    id: r.id,
+    label: r.label,
+    keywords: r.keywords,
+    type: (r.phenomenonType ?? 'TREND') as PhenomenonType,
+    culturalScope: (r.culturalScope ?? 'COUNTRY') as Scope,
+    culturalLocality: r.culturalLocality ?? country,
+    eventStart: r.eventStart,
+    eventEnd: r.eventEnd,
+    lifecycleState: r.lifecycleState as LinkablePhenomenon['lifecycleState'],
+  }));
+
+  for (const target of linkables) {
+    const links = inferLinks(target, linkables, now);
+    for (const link of links) {
+      await db.phenomenonLink.upsert({
+        where: {
+          fromPhenomenonId_toPhenomenonId_linkType: {
+            fromPhenomenonId: link.fromPhenomenonId,
+            toPhenomenonId: link.toPhenomenonId,
+            linkType: link.linkType,
+          },
+        },
+        create: {
+          fromPhenomenonId: link.fromPhenomenonId,
+          toPhenomenonId: link.toPhenomenonId,
+          linkType: link.linkType,
+          weight: link.weight,
+          inferredBy: 'rule-v1',
+          rationale: link.rationale,
+        },
+        update: {
+          weight: link.weight,
+          rationale: link.rationale,
+          supersededAt: null,
+        },
+      });
+    }
+  }
 }
 
 async function findClosestPhenomenon(
