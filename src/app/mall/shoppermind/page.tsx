@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSession } from '@/contexts/SessionContext';
 import { MallTopBar } from '@/components/mall/shell/MallTopBar';
@@ -185,7 +186,10 @@ function PhenomenonCard({ phenomenon }: { phenomenon: PhenomenonSummary }) {
   const meta = STATE_META[phenomenon.state];
   const Icon = meta.icon;
   return (
-    <div className="rounded-xl bg-white border border-gray-100 p-5">
+    <Link
+      href={`/mall/shoppermind/phenomenon/${encodeURIComponent(phenomenon.id)}`}
+      className="rounded-xl bg-white border border-gray-100 p-5 block hover:border-indigo-200 hover:shadow-sm transition"
+    >
       <div className="flex items-start justify-between gap-3 mb-2">
         <h3 className="font-medium text-gray-800 leading-snug">{phenomenon.label}</h3>
         <div className={`flex items-center gap-1 text-xs ${meta.color}`}>
@@ -201,6 +205,6 @@ function PhenomenonCard({ phenomenon }: { phenomenon: PhenomenonSummary }) {
         )}
         {phenomenon.lifecycleState && <span>· {phenomenon.lifecycleState}</span>}
       </div>
-    </div>
+    </Link>
   );
 }
