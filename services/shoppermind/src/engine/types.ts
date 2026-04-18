@@ -1,4 +1,4 @@
-import type { SourceType } from '@prisma/client';
+import type { SourceType } from '../../node_modules/.prisma/shoppermind-client/index.js';
 
 export interface RawSignalInput {
   externalId: string;

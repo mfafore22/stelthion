@@ -29,7 +29,7 @@ export async function buildServer() {
   await app.register(signalsRoutes);
   await app.register(reviewRoutes);
 
-  app.setErrorHandler((err, req, reply) => {
+  app.setErrorHandler((err: Error & { statusCode?: number }, req, reply) => {
     req.log.error({ err }, 'unhandled request error');
     if (reply.sent) return;
     reply.code(err.statusCode ?? 500).send({ error: err.name || 'internal_error' });

@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client';
+import type { Prisma } from '../../../node_modules/.prisma/shoppermind-client/index.js';
 import { prisma } from '../../db/prisma.js';
 
 type ListArgs = {

@@ -1,4 +1,4 @@
-import type { PhenomenonState } from '@prisma/client';
+import type { PhenomenonState } from '../../node_modules/.prisma/shoppermind-client/index.js';
 import { prisma } from '../db/prisma.js';
 import { movingAverage, medianAbsoluteDeviation, normalise } from './lib/stats.js';
 import { getWeights, type Weights } from './weights.js';
