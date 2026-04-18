@@ -19,6 +19,7 @@ import {
 } from '@/lib/data/ideaparkTransport';
 import prisma from '@/app/lib/prisma';
 import { getCounterProfile, getLiveFootfall } from '@/lib/data/liveFootfall';
+import { getShopperMindClient, resolveMarketIdFromMall } from '@/lib/shoppermind-client';
 import { tServer, weekdayName } from './tool-i18n';
 
 // ── Types ─────────────────────────────────────────────────
@@ -380,93 +381,54 @@ async function getZoneFlow(params: Record<string, unknown>, _mallId: string): Pr
 }
 
 // ── ShopperMind: Trends & Phenomena ──────────────────────
-// Uses dynamic import so concierge compiles without the shoppermind module.
-// When both branches are merged, the real data path executes; otherwise
-// returns a "not yet available" message at runtime.
+// Delegates to the ShopperMind microservice via the typed client. When the
+// service env vars (SHOPPERMIND_SERVICE_URL + SHOPPERMIND_SERVICE_TOKEN)
+// aren't set the tool returns a "not active" message so the concierge
+// continues to function without the service.
 
 async function getShopperMindTrends(params: Record<string, unknown>, mallId: string, language?: string): Promise<ToolResult> {
-  const country = (params.country as string)?.toUpperCase() || resolveCountryFromMall(mallId);
+  const marketId = (params.marketId as string) || resolveMarketIdFromMall(mallId);
+  const country = (params.country as string)?.toUpperCase() ?? marketId.split('-').at(-1)?.toUpperCase() ?? '';
 
-  let getMarketProfile: ((c: string) => { industryFocus?: string } | undefined) | undefined;
-  try {
-    // @ts-ignore — module only exists when shoppermind branch is merged
-    const mod = await import('@/services/shoppermind/markets');
-    getMarketProfile = (c: string) => mod.getMarketProfile(c) ?? undefined;
-  } catch {
-    // ShopperMind module not deployed yet
-  }
-
-  const hasShopperMindTables = typeof (prisma as unknown as Record<string, unknown>).phenomenon === 'object';
-
-  if (!getMarketProfile || !hasShopperMindTables) {
+  const client = getShopperMindClient();
+  if (!client) {
     return {
       text: `[Source: Stelthion ShopperMind] The ShopperMind trend engine is not yet active for ${country}. It will be available once the ShopperMind module is deployed.`,
     };
   }
 
-  const category = params.category as string | undefined;
-  const query = params.query as string | undefined;
   const state = params.state as string | undefined;
+  const query = (params.query as string | undefined)?.toLowerCase();
   const limit = Math.min(Number(params.limit) || 5, 10);
 
-  const profile = getMarketProfile(country);
-  const industryLabel = profile?.industryFocus === 'property' ? 'property-industry' : 'retail';
-
-  const phenomenonModel = (prisma as unknown as Record<string, unknown>).phenomenon as {
-    findMany: (args: Record<string, unknown>) => Promise<Array<Record<string, unknown>>>;
-  };
-  const signalOfTheDayModel = (prisma as unknown as Record<string, unknown>).signalOfTheDay as {
-    findFirst: (args: Record<string, unknown>) => Promise<Record<string, unknown> | null>;
-  };
-
-  const phenomena = await phenomenonModel.findMany({
-    where: {
-      mergedInto: null,
-      primaryCountry: country,
-      ...(category ? { categories: { has: category } } : {}),
-      ...(state ? { state: state.toUpperCase() } : {}),
-    },
-    include: {
-      scores: { orderBy: { date: 'desc' }, take: 1 },
-    },
-    orderBy: { lastSignalAt: 'desc' },
-    take: 30,
-  });
-
-  let results = phenomena
-    .filter((p: Record<string, unknown>) => (p.scores as unknown[]).length > 0)
-    .map((p: Record<string, unknown>) => {
-      const score = (p.scores as Record<string, unknown>[])[0];
-      return {
-        id: p.id as string,
-        label: p.label as string,
-        description: p.description as string,
-        state: p.state as string,
-        categories: p.categories as string[],
-        compositeScore: score.compositeScore as number,
-        velocity: score.velocity as number,
-        acceleration: score.acceleration as number,
-        signalCount: score.volume as number,
-      };
-    })
-    .sort((a, b) => b.compositeScore - a.compositeScore);
-
-  if (query) {
-    const q = query.toLowerCase();
-    results = results.filter(
-      (r) =>
-        r.label.toLowerCase().includes(q) ||
-        r.description.toLowerCase().includes(q) ||
-        r.categories.some((c) => c.includes(q)),
-    );
+  type PhenomStateValue = Parameters<typeof client.listPhenomena>[0]['state'];
+  let market: Awaited<ReturnType<typeof client.getMarket>> | null = null;
+  let phenomenaResp: Awaited<ReturnType<typeof client.listPhenomena>>;
+  let sotdResp: Awaited<ReturnType<typeof client.getSignalOfTheDay>>;
+  try {
+    [market, phenomenaResp, sotdResp] = await Promise.all([
+      client.getMarket(marketId).catch(() => null),
+      client.listPhenomena({ marketId, state: state?.toUpperCase() as PhenomStateValue, limit: 30 }),
+      client.getSignalOfTheDay({ marketId }),
+    ]);
+  } catch (err) {
+    return {
+      text: `[Source: Stelthion ShopperMind] Trend data for ${country} is temporarily unavailable (${err instanceof Error ? err.message : 'service error'}).`,
+    };
   }
 
+  const industryLabel =
+    market?.industryFocus === 'property' ? 'property-industry' : 'retail';
+
+  let results = [...phenomenaResp.phenomena].sort((a, b) => b.compositeScore - a.compositeScore);
+  if (query) {
+    results = results.filter(
+      (r) => r.label.toLowerCase().includes(query) || r.description.toLowerCase().includes(query),
+    );
+  }
   results = results.slice(0, limit);
 
-  const sotd = await signalOfTheDayModel.findFirst({
-    where: { country },
-    orderBy: { date: 'desc' },
-  });
+  const sotd = sotdResp.signalOfTheDay;
 
   if (results.length === 0 && !sotd) {
     return {
@@ -474,17 +436,16 @@ async function getShopperMindTrends(params: Record<string, unknown>, mallId: str
     };
   }
 
-  const lines = results.map((r) => {
-    const vel = r.velocity > 0 ? `+${r.velocity.toFixed(1)}` : r.velocity.toFixed(1);
-    return `• ${r.label} [${r.state}] — score ${r.compositeScore.toFixed(2)}, velocity ${vel}\n  ${r.description}`;
-  });
+  const lines = results.map(
+    (r) => `• ${r.label} [${r.state}] — score ${r.compositeScore.toFixed(2)}\n  ${r.description}`,
+  );
 
   let text = `[Source: Stelthion ShopperMind — ${industryLabel} trends for ${country}]\n\n`;
   if (results.length > 0) {
     text += `Top phenomena:\n${lines.join('\n\n')}\n\n`;
   }
   if (sotd) {
-    text += `Today's Signal of the Day:\n${(sotd as Record<string, unknown>).narrative}`;
+    text += `Today's Signal of the Day:\n${sotd.narrative}`;
   }
 
   return {
@@ -492,15 +453,9 @@ async function getShopperMindTrends(params: Record<string, unknown>, mallId: str
     attachment: {
       type: 'shoppermind_trends',
       title: `${tServer(language, 'concierge.attachments.trends.title')} (${country})`,
-      data: { country, phenomena: results, signalOfTheDay: (sotd as Record<string, unknown> | null)?.narrative },
+      data: { country, marketId, phenomena: results, signalOfTheDay: sotd?.narrative },
     },
   };
-}
-
-function resolveCountryFromMall(mallId: string): string {
-  const lower = mallId.toLowerCase();
-  if (lower.includes('dubai') || lower.includes('abu') || lower.includes('uae')) return 'AE';
-  return 'FI';
 }
 
 // ── Tool Registry ─────────────────────────────────────────
