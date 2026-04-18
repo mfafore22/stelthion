@@ -4,12 +4,16 @@ import { env } from '../config/env.js';
 import { disconnectPrisma } from '../db/prisma.js';
 import { disconnectRedis, redis } from '../db/redis.js';
 import { runPipeline } from '../engine/coordinator/coordinator.js';
+import { runRetention } from '../engine/retention/retention-service.js';
 import { expireReviewItems } from '../engine/review/review-service.js';
 import {
   COORDINATOR_QUEUE,
+  RETENTION_QUEUE,
   REVIEW_TTL_QUEUE,
+  ensureRetentionRepeatable,
   ensureReviewTtlRepeatable,
   type CoordinatorJobData,
+  type RetentionJobData,
   type ReviewTtlJobData,
 } from './queues.js';
 
@@ -39,6 +43,19 @@ async function processReviewTtlJob(job: Job<ReviewTtlJobData>) {
   return summary;
 }
 
+async function processRetentionJob(job: Job<RetentionJobData>) {
+  const summary = await runRetention({
+    scoreRetentionDays: env().RETENTION_SCORE_DAYS,
+    reviewRetentionDays: env().RETENTION_REVIEW_DAYS,
+  });
+  if (summary.scoresDeleted > 0 || summary.reviewsDeleted > 0) {
+    log.info({ jobId: job.id, ...summary }, 'retention sweep pruned rows');
+  } else {
+    log.debug({ jobId: job.id, ...summary }, 'retention sweep — nothing to prune');
+  }
+  return summary;
+}
+
 async function main(): Promise<void> {
   const coordinatorWorker = new Worker<CoordinatorJobData>(
     COORDINATOR_QUEUE,
@@ -61,6 +78,15 @@ async function main(): Promise<void> {
     log.error({ jobId: job?.id, err }, 'review-ttl job failed');
   });
 
+  const retentionWorker = new Worker<RetentionJobData>(
+    RETENTION_QUEUE,
+    processRetentionJob,
+    { connection: redis(), concurrency: 1 },
+  );
+  retentionWorker.on('failed', (job, err) => {
+    log.error({ jobId: job?.id, err }, 'retention job failed');
+  });
+
   if (env().REVIEW_TTL_ENABLED) {
     try {
       await ensureReviewTtlRepeatable(env().REVIEW_TTL_CRON);
@@ -72,10 +98,32 @@ async function main(): Promise<void> {
     log.info('review-ttl sweep disabled via env');
   }
 
+  if (env().RETENTION_ENABLED) {
+    try {
+      await ensureRetentionRepeatable(env().RETENTION_CRON);
+      log.info(
+        {
+          cron: env().RETENTION_CRON,
+          scoreDays: env().RETENTION_SCORE_DAYS,
+          reviewDays: env().RETENTION_REVIEW_DAYS,
+        },
+        'retention repeatable installed',
+      );
+    } catch (err) {
+      log.error({ err }, 'failed to install retention repeatable');
+    }
+  } else {
+    log.info('retention sweep disabled via env');
+  }
+
   const shutdown = async (signal: string) => {
     log.info({ signal }, 'worker shutting down');
     try {
-      await Promise.all([coordinatorWorker.close(), reviewTtlWorker.close()]);
+      await Promise.all([
+        coordinatorWorker.close(),
+        reviewTtlWorker.close(),
+        retentionWorker.close(),
+      ]);
       await disconnectPrisma();
       await disconnectRedis();
     } finally {
@@ -85,7 +133,10 @@ async function main(): Promise<void> {
   process.on('SIGTERM', () => void shutdown('SIGTERM'));
   process.on('SIGINT', () => void shutdown('SIGINT'));
 
-  log.info({ queues: [COORDINATOR_QUEUE, REVIEW_TTL_QUEUE] }, 'worker online');
+  log.info(
+    { queues: [COORDINATOR_QUEUE, REVIEW_TTL_QUEUE, RETENTION_QUEUE] },
+    'worker online',
+  );
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

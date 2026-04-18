@@ -15,6 +15,13 @@ const Env = z.object({
     .string()
     .default('true')
     .transform((v) => v !== 'false'),
+  RETENTION_CRON: z.string().default('0 3 * * *'),
+  RETENTION_ENABLED: z
+    .string()
+    .default('true')
+    .transform((v) => v !== 'false'),
+  RETENTION_SCORE_DAYS: z.coerce.number().int().positive().default(90),
+  RETENTION_REVIEW_DAYS: z.coerce.number().int().positive().default(180),
 });
 
 export type AppEnv = z.infer<typeof Env>;
