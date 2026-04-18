@@ -58,7 +58,7 @@ export interface ToolExecution {
  */
 export interface DataAttachment {
   id: string;
-  type: 'table' | 'chart' | 'metrics' | 'file';
+  type: 'table' | 'chart' | 'metrics' | 'file' | 'weather_card' | 'footfall_sparkline' | 'event_card' | 'parking_status' | 'transport_card';
   title: string;
   data: unknown;
   metadata?: Record<string, unknown>;

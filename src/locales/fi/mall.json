@@ -751,7 +751,92 @@
         "dataRetrieval": "Tiedonhaku",
         "flexibleAssistance": "Joustava avustus"
       }
-    }
+    },
+    "talkTo": "Hei! Olen Ideapark-assistentti",
+    "greeting": {
+      "morning": "Huomenta!",
+      "afternoon": "Hyvää päivää!",
+      "evening": "Hyvää iltaa!",
+      "intro": "Olen {{propertyName}} — kysy mitä vain minusta!"
+    },
+    "quickAction": {
+      "briefing": "Päiväkatsaus",
+      "weather": "Säätilanne",
+      "footfall": "Kävijämäärät",
+      "events": "Tulevat tapahtumat",
+      "parking": "Pysäköinti",
+      "transport": "Liikenne",
+      "trends": "Trendit",
+      "signalOfDay": "Päivän signaali",
+      "zoneFlow": "Kävijävirrat",
+      "mallStats": "Tunnusluvut"
+    },
+    "specialist": {
+      "weather": "Säätilaasiantuntija",
+      "footfall": "Kävijämääräanalyytikko",
+      "events": "Tapahtumakoordinaattori",
+      "parking": "Pysäköintipäällikkö",
+      "trends": "Trendianalyytikko",
+      "general": "Avustaja"
+    },
+    "briefing": {
+      "title": "Päiväkatsaus",
+      "subscribe": "Tilaa päivittäinen katsaus",
+      "deliveryTime": "Toimitusaika",
+      "sections": {
+        "weather": "Sää",
+        "footfall": "Kävijämäärät",
+        "events": "Tapahtumat",
+        "transport": "Liikenne",
+        "actions": "Toimenpiteet"
+      }
+    },
+    "attachments": {
+      "weather": {
+        "currentTitle": "Säätilanne",
+        "forecastTitle": "Sääennuste",
+        "forecastFor": "Ennuste {{date}}",
+        "conditions": {
+          "Clear": "Selkeä",
+          "Partly Cloudy": "Puolipilvinen",
+          "Cloudy": "Pilvinen",
+          "Overcast": "Täyspilvinen",
+          "Rain": "Sade",
+          "Heavy Rain": "Rankkasade",
+          "Snow": "Lumisade",
+          "Sleet": "Räntäsade"
+        }
+      },
+      "transport": {
+        "title": "Liikennelähdöt",
+        "trains": "Junat",
+        "buses": "Bussit"
+      },
+      "footfall": {
+        "weeklyTitle": "Viikon kävijäprofiili",
+        "dayTitle": "{{day}} kävijämäärät",
+        "currentHourTitle": "Kuluva tunti"
+      },
+      "events": {
+        "title": "Tulevat tapahtumat"
+      },
+      "parking": {
+        "title": "Pysäköinti"
+      },
+      "trends": {
+        "title": "ShopperMind – Trendit"
+      },
+      "weekdays": {
+        "0": "Sunnuntai",
+        "1": "Maanantai",
+        "2": "Tiistai",
+        "3": "Keskiviikko",
+        "4": "Torstai",
+        "5": "Perjantai",
+        "6": "Lauantai"
+      }
+    },
+    "switchAgent": "Vaihda asiantuntija"
   },
   "navigation": {
     "portfolio": {

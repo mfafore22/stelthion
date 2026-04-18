@@ -1,16 +1,16 @@
 /**
  * Mall Concierge Wrapper
- * Wraps the Concierge with user session data
+ * Wraps the Concierge with user session data and mallId.
  */
 
 'use client';
 
 import React from 'react';
 import { useSession } from '@/contexts/SessionContext';
+import { useParams } from 'next/navigation';
 import { ConciergeProvider, ConciergePanel } from '@/components/concierge';
 
-// Set to true to re-enable the Concierge AI feature
-const CONCIERGE_ENABLED = false;
+const CONCIERGE_ENABLED = true;
 
 interface MallConciergeWrapperProps {
   children: React.ReactNode;
@@ -18,22 +18,21 @@ interface MallConciergeWrapperProps {
 
 export function MallConciergeWrapper({ children }: MallConciergeWrapperProps) {
   const { user, loading } = useSession();
+  const params = useParams();
+
+  const mallId = (params?.mallId as string) || 'ideapark-lempaala';
 
   if (!CONCIERGE_ENABLED) {
     return <>{children}</>;
   }
 
-  // Always provide ConciergeProvider to avoid context errors
-  // But only render the panel when authenticated
   return (
     <ConciergeProvider
       tenantId={user?.mallId || 'default'}
       userId={user?.userId || 'anonymous'}
-      wsUrl={process.env.NEXT_PUBLIC_CONCIERGE_WS_URL}
+      mallId={mallId}
     >
-      {/* Only show Concierge panel when authenticated */}
       {!loading && user && <ConciergePanel />}
-
       {children}
     </ConciergeProvider>
   );
