@@ -1,10 +1,13 @@
 import type {
   CronRunRequest,
   CronRunResponse,
+  FeedbackCreate,
   HealthResponse,
   InsightsChatRequest,
   InsightsChatResponse,
   InsightsExportQuery,
+  InteractionRecord,
+  InteractionSummary,
   MarketConfig,
   MarketConfigUpdate,
   MarketDetail,
@@ -163,6 +166,27 @@ export class ShopperMindClient {
 
   chatInsights(body: InsightsChatRequest): Promise<InsightsChatResponse> {
     return request<InsightsChatResponse>(this.opts, 'POST', 'v1/insights/chat', { body });
+  }
+
+  recordFeedback(phenomenonId: string, body: FeedbackCreate): Promise<InteractionRecord> {
+    return request<InteractionRecord>(
+      this.opts,
+      'POST',
+      `v1/phenomena/${encodeURIComponent(phenomenonId)}/feedback`,
+      { body },
+    );
+  }
+
+  getPhenomenonInteractions(
+    phenomenonId: string,
+    args: { marketId?: string; windowDays?: number } = {},
+  ): Promise<InteractionSummary> {
+    return request<InteractionSummary>(
+      this.opts,
+      'GET',
+      `v1/phenomena/${encodeURIComponent(phenomenonId)}/interactions`,
+      { query: { marketId: args.marketId, windowDays: args.windowDays } },
+    );
   }
 }
 
