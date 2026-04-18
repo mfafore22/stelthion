@@ -77,10 +77,28 @@ export function evaluate({ snapshot, policy }: PolicyInput): PolicyResult {
       ? (effectivePolicy.lifecycleModifiers[snapshot.lifecycleState] ?? 0)
       : 0;
 
+  // Feedback-aware shift: positive thumbs lower the publish bar, negative thumbs
+  // raise it. Both are clamped per-direction so a single viral phenomenon can't
+  // collapse the gate entirely. Net shift = positiveLift + negativeLift where
+  // positiveLift is ≤ 0 and negativeLift is ≥ 0.
+  const fs = effectivePolicy.feedbackSensitivity;
+  let feedbackShift = 0;
+  if (fs) {
+    const posShift = -Math.min(
+      snapshot.positiveFeedback * fs.positivePerUnit,
+      fs.maxPositiveShift,
+    );
+    const negShift = Math.min(
+      snapshot.negativeFeedback * fs.negativePerUnit,
+      fs.maxNegativeShift,
+    );
+    feedbackShift = posShift + negShift;
+  }
+
   const effective = {
-    publish: resolved.tier.publish + lifecycleShift,
-    review: resolved.tier.review + lifecycleShift,
-    reject: resolved.tier.reject + lifecycleShift,
+    publish: resolved.tier.publish + lifecycleShift + feedbackShift,
+    review: resolved.tier.review + lifecycleShift + feedbackShift,
+    reject: resolved.tier.reject + lifecycleShift + feedbackShift,
   };
 
   const score = snapshot.compositeScore;
@@ -118,6 +136,11 @@ export function evaluate({ snapshot, policy }: PolicyInput): PolicyResult {
   }
   if (snapshot.linkBoost > 0) {
     reasons.push(`linkBoost=${snapshot.linkBoost.toFixed(3)}`);
+  }
+  if (feedbackShift !== 0) {
+    reasons.push(
+      `feedback pos=${snapshot.positiveFeedback} neg=${snapshot.negativeFeedback} shift=${feedbackShift >= 0 ? '+' : ''}${feedbackShift.toFixed(3)}`,
+    );
   }
 
   return {

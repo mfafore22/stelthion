@@ -48,4 +48,11 @@ export const DEFAULT_POLICY: MarketPolicy = {
     'INCIDENT:composite:COUNTRY': { publish: 0.45, review: 0.3, reject: 0.15 },
   },
   lifecycleModifiers: { UPCOMING: -0.1, ACTIVE: 0, CONCLUDED: 0.2 },
+  feedbackSensitivity: {
+    positivePerUnit: 0.02,
+    negativePerUnit: 0.03,
+    maxPositiveShift: 0.08,
+    maxNegativeShift: 0.1,
+    windowDays: 30,
+  },
 };
