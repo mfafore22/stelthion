@@ -11,6 +11,7 @@ import { phenomenaRoutes } from './routes/v1/phenomena.js';
 import { signalsRoutes } from './routes/v1/signals.js';
 import { reviewRoutes } from './routes/v1/review.js';
 import { resonanceRoutes } from './routes/v1/resonance.js';
+import { insightsRoutes } from './routes/v1/insights.js';
 
 export async function buildServer() {
   const app = Fastify({
@@ -34,6 +35,7 @@ export async function buildServer() {
   await app.register(signalsRoutes);
   await app.register(reviewRoutes);
   await app.register(resonanceRoutes);
+  await app.register(insightsRoutes);
 
   app.setErrorHandler((err: Error & { statusCode?: number }, req, reply) => {
     req.log.error({ err }, 'unhandled request error');
