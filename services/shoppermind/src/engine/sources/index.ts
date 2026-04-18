@@ -1,4 +1,4 @@
-import type { SourceType } from '@prisma/client';
+import type { SourceType } from '../../../node_modules/.prisma/shoppermind-client/index.js';
 import type { SourceFetcher } from '../types.js';
 import { fetchRss } from './rss.js';
 import { fetchGoogleTrends } from './googleTrends.js';
