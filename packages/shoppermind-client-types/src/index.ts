@@ -270,6 +270,27 @@ export interface InsightsExportQuery {
   status?: Array<'APPROVED' | 'REJECTED' | 'EXPIRED' | 'PENDING'>;
 }
 
+export interface InsightsChatRequest {
+  marketId: string;
+  question: string;
+  topK?: number;
+  windowDays?: number;
+}
+
+export interface InsightsChatCitation {
+  phenomenonId: string;
+  title: string;
+  excerpt: string;
+  score: number;
+}
+
+export interface InsightsChatResponse {
+  marketId: string;
+  question: string;
+  answer: string;
+  citations: InsightsChatCitation[];
+}
+
 export interface CronRunRequest {
   stages?: Array<'ingest' | 'cluster' | 'score' | 'publish'>;
   markets?: string[];
