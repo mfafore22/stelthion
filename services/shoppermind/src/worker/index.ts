@@ -4,7 +4,14 @@ import { env } from '../config/env.js';
 import { disconnectPrisma } from '../db/prisma.js';
 import { disconnectRedis, redis } from '../db/redis.js';
 import { runPipeline } from '../engine/coordinator/coordinator.js';
-import { COORDINATOR_QUEUE, type CoordinatorJobData } from './queues.js';
+import { expireReviewItems } from '../engine/review/review-service.js';
+import {
+  COORDINATOR_QUEUE,
+  REVIEW_TTL_QUEUE,
+  ensureReviewTtlRepeatable,
+  type CoordinatorJobData,
+  type ReviewTtlJobData,
+} from './queues.js';
 
 const log = pino({
   level: env().LOG_LEVEL,
@@ -22,23 +29,53 @@ async function processCoordinatorJob(job: Job<CoordinatorJobData>) {
   return summary;
 }
 
-async function main(): Promise<void> {
-  const worker = new Worker<CoordinatorJobData>(COORDINATOR_QUEUE, processCoordinatorJob, {
-    connection: redis(),
-    concurrency: 1,
-  });
+async function processReviewTtlJob(job: Job<ReviewTtlJobData>) {
+  const summary = await expireReviewItems();
+  if (summary.expired > 0) {
+    log.info({ jobId: job.id, ...summary }, 'review-ttl sweep expired items');
+  } else {
+    log.debug({ jobId: job.id, ...summary }, 'review-ttl sweep — nothing to expire');
+  }
+  return summary;
+}
 
-  worker.on('failed', (job, err) => {
+async function main(): Promise<void> {
+  const coordinatorWorker = new Worker<CoordinatorJobData>(
+    COORDINATOR_QUEUE,
+    processCoordinatorJob,
+    { connection: redis(), concurrency: 1 },
+  );
+  coordinatorWorker.on('failed', (job, err) => {
     log.error({ jobId: job?.id, err }, 'coordinator job failed');
   });
-  worker.on('completed', (job) => {
+  coordinatorWorker.on('completed', (job) => {
     log.debug({ jobId: job.id }, 'coordinator job completed');
   });
+
+  const reviewTtlWorker = new Worker<ReviewTtlJobData>(
+    REVIEW_TTL_QUEUE,
+    processReviewTtlJob,
+    { connection: redis(), concurrency: 1 },
+  );
+  reviewTtlWorker.on('failed', (job, err) => {
+    log.error({ jobId: job?.id, err }, 'review-ttl job failed');
+  });
+
+  if (env().REVIEW_TTL_ENABLED) {
+    try {
+      await ensureReviewTtlRepeatable(env().REVIEW_TTL_CRON);
+      log.info({ cron: env().REVIEW_TTL_CRON }, 'review-ttl repeatable installed');
+    } catch (err) {
+      log.error({ err }, 'failed to install review-ttl repeatable');
+    }
+  } else {
+    log.info('review-ttl sweep disabled via env');
+  }
 
   const shutdown = async (signal: string) => {
     log.info({ signal }, 'worker shutting down');
     try {
-      await worker.close();
+      await Promise.all([coordinatorWorker.close(), reviewTtlWorker.close()]);
       await disconnectPrisma();
       await disconnectRedis();
     } finally {
@@ -48,7 +85,7 @@ async function main(): Promise<void> {
   process.on('SIGTERM', () => void shutdown('SIGTERM'));
   process.on('SIGINT', () => void shutdown('SIGINT'));
 
-  log.info({ queue: COORDINATOR_QUEUE }, 'worker online');
+  log.info({ queues: [COORDINATOR_QUEUE, REVIEW_TTL_QUEUE] }, 'worker online');
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

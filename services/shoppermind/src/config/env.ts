@@ -10,6 +10,11 @@ const Env = z.object({
   OPENAI_API_KEY: z.string().optional(),
   ANTHROPIC_API_KEY: z.string().optional(),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
+  REVIEW_TTL_CRON: z.string().default('*/15 * * * *'),
+  REVIEW_TTL_ENABLED: z
+    .string()
+    .default('true')
+    .transform((v) => v !== 'false'),
 });
 
 export type AppEnv = z.infer<typeof Env>;

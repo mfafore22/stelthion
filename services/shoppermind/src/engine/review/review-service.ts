@@ -71,6 +71,32 @@ export async function approveReview(id: string, userId: string, note?: string): 
   return { ok: true, value: { reviewItemId: id, signalOfTheDayId: sot.id } };
 }
 
+export interface ExpireSummary {
+  expired: number;
+  durationMs: number;
+}
+
+/**
+ * Mark every PENDING ReviewItem whose ttlExpiresAt has elapsed as EXPIRED.
+ * Idempotent by design — safe to run on a cron cadence. Passing `now` lets
+ * tests freeze the clock; production callers omit it.
+ */
+export async function expireReviewItems(now: Date = new Date()): Promise<ExpireSummary> {
+  const start = Date.now();
+  const result = await prisma().reviewItem.updateMany({
+    where: {
+      status: 'PENDING',
+      ttlExpiresAt: { not: null, lte: now },
+    },
+    data: {
+      status: 'EXPIRED',
+      resolvedAt: now,
+      appliedAction: 'EXPIRED',
+    },
+  });
+  return { expired: result.count, durationMs: Date.now() - start };
+}
+
 export async function rejectReview(id: string, userId: string, note?: string): Promise<Result<{ reviewItemId: string }>> {
   const item = await prisma().reviewItem.findUnique({ where: { id } });
   if (!item) return { ok: false, status: 404, error: 'review_item_not_found' };
