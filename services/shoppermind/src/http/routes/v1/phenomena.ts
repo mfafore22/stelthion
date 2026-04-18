@@ -1,6 +1,11 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { z } from 'zod';
 import { prisma } from '../../../db/prisma.js';
+import {
+  INTERACTION_KINDS,
+  recordInteraction,
+  summariseInteractions,
+} from '../../../engine/insights/feedback-collector.js';
 import { requireAnyBearer, requireBearer } from '../../auth/bearer.js';
 
 const ListQuery = z.object({
@@ -182,6 +187,63 @@ export const phenomenaRoutes: FastifyPluginAsync = async (app) => {
 
       reply.code(201);
       return saved;
+    },
+  );
+
+  const FeedbackBody = z.object({
+    userId: z.string().min(1),
+    marketId: z.string().min(1).optional(),
+    interactionKind: z.enum(INTERACTION_KINDS).default('thumbs'),
+    verdict: z.string().min(1),
+    note: z.string().optional(),
+  });
+
+  app.post(
+    '/v1/phenomena/:id/feedback',
+    { preHandler: requireAnyBearer() },
+    async (req, reply) => {
+      const { id } = req.params as { id: string };
+      const parsed = FeedbackBody.safeParse(req.body);
+      if (!parsed.success) {
+        reply.code(400).send({ error: 'invalid_body', details: parsed.error.flatten() });
+        return;
+      }
+
+      const phenomenon = await prisma().phenomenon.findUnique({ where: { id } });
+      if (!phenomenon) {
+        reply.code(404).send({ error: 'phenomenon_not_found' });
+        return;
+      }
+
+      const saved = await recordInteraction({
+        phenomenonId: id,
+        userId: parsed.data.userId,
+        marketId: parsed.data.marketId,
+        interactionKind: parsed.data.interactionKind,
+        verdict: parsed.data.verdict,
+        note: parsed.data.note,
+      });
+      reply.code(201);
+      return saved;
+    },
+  );
+
+  const InteractionQuery = z.object({
+    marketId: z.string().min(1).optional(),
+    windowDays: z.coerce.number().int().min(1).max(365).default(30),
+  });
+
+  app.get(
+    '/v1/phenomena/:id/interactions',
+    { preHandler: requireAnyBearer() },
+    async (req, reply) => {
+      const { id } = req.params as { id: string };
+      const parsed = InteractionQuery.safeParse(req.query);
+      if (!parsed.success) {
+        reply.code(400).send({ error: 'invalid_query', details: parsed.error.flatten() });
+        return;
+      }
+      return summariseInteractions(id, parsed.data.marketId, parsed.data.windowDays);
     },
   );
 };

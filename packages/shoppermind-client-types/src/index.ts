@@ -270,6 +270,46 @@ export interface InsightsExportQuery {
   status?: Array<'APPROVED' | 'REJECTED' | 'EXPIRED' | 'PENDING'>;
 }
 
+export type InteractionKind =
+  | 'thumbs'
+  | 'click'
+  | 'dwell'
+  | 'chat_followup'
+  | 'chat_citation_click';
+
+export interface FeedbackCreate {
+  userId: string;
+  marketId?: string;
+  interactionKind?: InteractionKind;
+  verdict: string;
+  note?: string;
+}
+
+export interface InteractionRecord {
+  id: string;
+  phenomenonId: string;
+  marketId: string | null;
+  userId: string;
+  interactionKind: string;
+  verdict: string;
+  note: string | null;
+  createdAt: string;
+}
+
+export interface InteractionSummary {
+  phenomenonId: string;
+  marketId: string | null;
+  windowDays: number;
+  totals: {
+    thumbsUp: number;
+    thumbsDown: number;
+    clicks: number;
+    dwellEvents: number;
+    chatFollowups: number;
+    citationClicks: number;
+  };
+}
+
 export interface InsightsChatRequest {
   marketId: string;
   question: string;
