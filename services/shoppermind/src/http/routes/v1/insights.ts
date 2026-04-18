@@ -2,7 +2,8 @@ import type { FastifyPluginAsync } from 'fastify';
 import { z } from 'zod';
 import { Readable } from 'node:stream';
 import { streamTrainingRecords } from '../../../engine/insights/training-export.js';
-import { requireBearer } from '../../auth/bearer.js';
+import { answerInsightsQuestion } from '../../../engine/insights/chat-service.js';
+import { requireAnyBearer, requireBearer } from '../../auth/bearer.js';
 
 const STATUSES = ['APPROVED', 'REJECTED', 'EXPIRED', 'PENDING'] as const;
 
@@ -48,5 +49,22 @@ export const insightsRoutes: FastifyPluginAsync = async (app) => {
     }
 
     return reply.send(Readable.from(ndjson()));
+  });
+
+  const ChatBody = z.object({
+    marketId: z.string().min(1),
+    question: z.string().min(1).max(2000),
+    topK: z.number().int().min(1).max(10).optional(),
+    windowDays: z.number().int().min(1).max(365).optional(),
+  });
+
+  app.post('/v1/insights/chat', { preHandler: requireAnyBearer() }, async (req, reply) => {
+    const parsed = ChatBody.safeParse(req.body);
+    if (!parsed.success) {
+      reply.code(400).send({ error: 'invalid_body', details: parsed.error.flatten() });
+      return;
+    }
+    const response = await answerInsightsQuestion(parsed.data);
+    return response;
   });
 };

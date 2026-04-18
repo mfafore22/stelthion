@@ -2,6 +2,8 @@ import type {
   CronRunRequest,
   CronRunResponse,
   HealthResponse,
+  InsightsChatRequest,
+  InsightsChatResponse,
   InsightsExportQuery,
   MarketConfig,
   MarketConfigUpdate,
@@ -157,6 +159,10 @@ export class ShopperMindClient {
       `v1/phenomena/${encodeURIComponent(fromPhenomenonId)}/links`,
       { body },
     );
+  }
+
+  chatInsights(body: InsightsChatRequest): Promise<InsightsChatResponse> {
+    return request<InsightsChatResponse>(this.opts, 'POST', 'v1/insights/chat', { body });
   }
 }
 
