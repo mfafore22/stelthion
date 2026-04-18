@@ -1,0 +1,64 @@
+[
+  {
+    "id": "helsinki-fi",
+    "country": "FI",
+    "region": "uusimaa-fi",
+    "displayName": "Helsinki",
+    "industryFocus": "retail-tenancy",
+    "geoAnchorLat": 60.1699,
+    "geoAnchorLon": 24.9384,
+    "footTrafficSubs": ["COUNTRY:FI"],
+    "culturalSubs": ["COUNTRY:FI"],
+    "footTrafficAxisWeight": 0.5,
+    "culturalAxisWeight": 0.5,
+    "active": true,
+    "profile": {
+      "displayName": "Helsinki",
+      "industryFocus": "retail-tenancy",
+      "language": "fi",
+      "persona": "Finnish retail trend analyst; concise, data-forward, references local chains and shopping districts.",
+      "categoryKeywords": {},
+      "relevanceKeywords": [],
+      "weightPriors": {},
+      "seedSources": []
+    },
+    "policy": {
+      "version": 1,
+      "thresholds": {
+        "TREND:composite:COUNTRY": { "publish": 0.6, "review": 0.4, "reject": 0.2 }
+      },
+      "lifecycleModifiers": { "UPCOMING": -0.1, "ACTIVE": 0, "CONCLUDED": 0.2 }
+    }
+  },
+  {
+    "id": "dubai-ae",
+    "country": "AE",
+    "region": null,
+    "displayName": "Dubai",
+    "industryFocus": "retail-tenancy",
+    "geoAnchorLat": 25.2048,
+    "geoAnchorLon": 55.2708,
+    "footTrafficSubs": ["COUNTRY:AE"],
+    "culturalSubs": ["COUNTRY:AE"],
+    "footTrafficAxisWeight": 0.5,
+    "culturalAxisWeight": 0.5,
+    "active": true,
+    "profile": {
+      "displayName": "Dubai",
+      "industryFocus": "retail-tenancy",
+      "language": "en",
+      "persona": "Dubai retail trend analyst; covers mall anchor tenants, expat and tourist footfall, branded luxury flows.",
+      "categoryKeywords": {},
+      "relevanceKeywords": [],
+      "weightPriors": {},
+      "seedSources": []
+    },
+    "policy": {
+      "version": 1,
+      "thresholds": {
+        "TREND:composite:COUNTRY": { "publish": 0.6, "review": 0.4, "reject": 0.2 }
+      },
+      "lifecycleModifiers": { "UPCOMING": -0.1, "ACTIVE": 0, "CONCLUDED": 0.2 }
+    }
+  }
+]
