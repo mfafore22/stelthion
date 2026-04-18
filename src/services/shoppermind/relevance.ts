@@ -40,7 +40,7 @@ export function isRelevant(text: string, profile: MarketProfile): boolean {
 export function inferCategories(
   text: string,
   profile: MarketProfile,
-  max = 3,
+  maxCategories= 3,
 ): string[] {
   const lower = normaliseText(text);
   const scored: Array<{ category: string; hits: number }> = [];
@@ -49,5 +49,5 @@ export function inferCategories(
     if (hits > 0) scored.push({ category, hits });
   }
   scored.sort((a, b) => b.hits - a.hits);
-  return scored.slice(0, max).map((s) => s.category);
+  return scored.slice(0, maxCategories).map((s) => s.category);
 }

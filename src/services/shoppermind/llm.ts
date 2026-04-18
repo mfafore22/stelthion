@@ -26,7 +26,8 @@ export interface LLMClient {
 
 class StubLLMClient implements LLMClient {
   async *chat(messages: LLMMessage[]): AsyncIterable<LLMStreamChunk> {
-    const lastUser = [...messages].reverse().find((m) => m.role === 'user');
+    // Find the last user message efficiently
+    const lastUser = messages.findLast((m) => m.role === 'user');
     const fallback = `No local LLM connected. Input: "${(lastUser?.content ?? '').slice(0, 80)}"`;
     yield { type: 'text', text: fallback };
     yield { type: 'done' };
