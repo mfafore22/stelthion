@@ -166,6 +166,52 @@ export interface ReviewRejectResponse {
   reviewItemId: string;
 }
 
+export interface MarketPolicyThreshold {
+  publish: number;
+  review: number;
+  reject: number;
+}
+
+export interface MarketPolicy {
+  version: 1;
+  thresholds: Record<string, MarketPolicyThreshold>;
+  lifecycleModifiers?: {
+    UPCOMING?: number;
+    ACTIVE?: number;
+    CONCLUDED?: number;
+  };
+}
+
+export interface MarketConfig extends MarketDetail {
+  geoAnchorLat: number | null;
+  geoAnchorLon: number | null;
+  policy: MarketPolicy;
+}
+
+export interface MarketConfigUpdate {
+  country?: string;
+  region?: string | null;
+  displayName?: string;
+  industryFocus?: string;
+  geoAnchorLat?: number | null;
+  geoAnchorLon?: number | null;
+  footTrafficSubs?: string[];
+  culturalSubs?: string[];
+  footTrafficAxisWeight?: number;
+  culturalAxisWeight?: number;
+  profile?: Record<string, unknown>;
+  policy?: MarketPolicy;
+  active?: boolean;
+}
+
+export interface PhenomenonLinkCreate {
+  toPhenomenonId: string;
+  linkType: LinkType;
+  weight?: number;
+  rationale?: string;
+  inferredBy?: string;
+}
+
 export interface CronRunRequest {
   stages?: Array<'ingest' | 'cluster' | 'score' | 'publish'>;
   markets?: string[];
