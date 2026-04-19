@@ -89,6 +89,21 @@ export async function POST(
   }
   const cameras = parsed.cameras ?? [];
 
+  if (zones.length === 0) {
+    return NextResponse.json(
+      { ok: false, error: 'Refused: snapshot contains 0 zones. Restore aborted to protect live data.' },
+      { status: 400 },
+    );
+  }
+
+  const liveZoneCount = await prisma.floorplanZone.count({ where: { mallId, floor: snapshot.floor } });
+  if (liveZoneCount > 4 && zones.length < liveZoneCount * 0.5) {
+    return NextResponse.json(
+      { ok: false, error: `Refused: snapshot has ${zones.length} zones but live has ${liveZoneCount}. Restore would delete more than half. Use a more recent snapshot.` },
+      { status: 400 },
+    );
+  }
+
   await createFloorplanSnapshot(prisma, mallId, snapshot.floor, 'pre-restore');
 
   try {
