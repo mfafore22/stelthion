@@ -356,7 +356,7 @@ export const MARKET_PROFILE: Record<MarketCountry, MarketProfile> = {
 };
 
 export function getMarketProfile(country: string): MarketProfile | null {
-  return MARKET_PROFILE[country as MarketCountry] ?? null;
+  return MARKET_PROFILE[country as MarketCountry] ?? undefined;
 }
 
 export function listMarkets(): MarketProfile[] {

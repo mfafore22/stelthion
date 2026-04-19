@@ -60,19 +60,13 @@ export function PropertyGreeting({
 }
 
 function getGreeting(hour: number, language: string): string {
-  if (language === 'fi') {
-    if (hour < 10) return 'Huomenta!';
-    if (hour < 17) return 'Hyvää päivää!';
-    return 'Hyvää iltaa!';
-  }
-  if (language === 'sv') {
-    if (hour < 10) return 'God morgon!';
-    if (hour < 17) return 'God dag!';
-    return 'God kväll!';
-  }
-  if (hour < 10) return 'Good morning!';
-  if (hour < 17) return 'Good afternoon!';
-  return 'Good evening!';
+  const greetings = {
+    fi: hour < 10 ? 'Huomenta!' : hour < 17 ? 'Hyvää päivää!' : 'Hyvää iltaa!',
+    sv: hour < 10 ? 'God morgon!' : hour < 17 ? 'God dag!' : 'God kväll!',
+    en: hour < 10 ? 'Good morning!' : hour < 17 ? 'Good afternoon!' : 'Good evening!',
+  };
+  return greetings[language as keyof typeof greetings] || greetings.en;
+  
 }
 
 function getIntro(propertyName: string, language: string): string {

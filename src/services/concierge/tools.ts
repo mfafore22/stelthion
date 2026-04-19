@@ -391,7 +391,7 @@ async function getShopperMindTrends(params: Record<string, unknown>, mallId: str
   try {
     // @ts-ignore — module only exists when shoppermind branch is merged
     const mod = await import('@/services/shoppermind/markets');
-    getMarketProfile = mod.getMarketProfile;
+    getMarketProfile = (c: string) => mod.getMarketProfile(c) ?? undefined;
   } catch {
     // ShopperMind module not deployed yet
   }
