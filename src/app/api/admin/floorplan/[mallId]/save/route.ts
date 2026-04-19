@@ -69,59 +69,72 @@ export async function PUT(
         )
       : null;
 
-    await prisma.camera.deleteMany({ where: { mallId, floor } });
-    await prisma.floorplanZone.deleteMany({ where: { mallId, floor } });
+    const incomingZoneIds = zones.map((z: any) => z.zoneId as string);
 
-    const BATCH_SIZE = 10;
-    for (let i = 0; i < zones.length; i += BATCH_SIZE) {
-      const batch = zones.slice(i, i + BATCH_SIZE);
-      await Promise.all(
-        batch.map((z: any) =>
-          prisma.floorplanZone.create({
-            data: {
-              mallId,
-              floor,
-              zoneId: z.zoneId,
-              name: z.name,
-              nameFi: z.nameFi,
-              category: z.category,
-              subcategory: z.subcategory ?? null,
-              drawShape: z.drawShape ?? 'polygon',
-              svgPoints: z.svgPoints,
-              labelX: z.labelX,
-              labelY: z.labelY,
-              capacity: z.capacity,
-              areaSqm: z.areaSqm,
-              baseVisitors: z.baseVisitors ?? 0,
-              publishedAt: zonePublishedMap.get(z.zoneId) ?? latestPublishedAt,
-            },
-          })
-        )
-      );
-    }
+    // Entire save is atomic: if any write fails, nothing is lost.
+    await prisma.$transaction(async (tx) => {
+      // Upsert every zone in the incoming set — never blindly delete first.
+      for (const z of zones) {
+        await tx.floorplanZone.upsert({
+          where: { mallId_floor_zoneId: { mallId, floor, zoneId: z.zoneId } },
+          create: {
+            mallId,
+            floor,
+            zoneId: z.zoneId,
+            name: z.name,
+            nameFi: z.nameFi,
+            category: z.category,
+            subcategory: z.subcategory ?? null,
+            drawShape: z.drawShape ?? 'polygon',
+            svgPoints: z.svgPoints,
+            labelX: z.labelX,
+            labelY: z.labelY,
+            capacity: z.capacity,
+            areaSqm: z.areaSqm,
+            baseVisitors: z.baseVisitors ?? 0,
+            publishedAt: zonePublishedMap.get(z.zoneId) ?? latestPublishedAt,
+          },
+          update: {
+            name: z.name,
+            nameFi: z.nameFi,
+            category: z.category,
+            subcategory: z.subcategory ?? null,
+            drawShape: z.drawShape ?? 'polygon',
+            svgPoints: z.svgPoints,
+            labelX: z.labelX,
+            labelY: z.labelY,
+            capacity: z.capacity,
+            areaSqm: z.areaSqm,
+            baseVisitors: z.baseVisitors ?? 0,
+          },
+        });
+      }
 
-    for (let i = 0; i < cameras.length; i += BATCH_SIZE) {
-      const batch = cameras.slice(i, i + BATCH_SIZE);
-      await Promise.all(
-        batch.map((c: any) =>
-          prisma.camera.create({
-            data: {
-              mallId,
-              floor,
-              label: c.label,
-              x: c.x,
-              y: c.y,
-              deviceType: c.deviceType ?? 'camera',
-              angleDeg: c.angleDeg ?? null,
-              fovDeg: c.fovDeg ?? null,
-              rangeM: c.rangeM ?? null,
-              streamUrl: c.streamUrl ?? null,
-              active: c.active ?? true,
-            },
-          })
-        )
-      );
-    }
+      // Only remove zones the editor explicitly deleted (not in incoming set).
+      await tx.floorplanZone.deleteMany({
+        where: { mallId, floor, zoneId: { notIn: incomingZoneIds } },
+      });
+
+      // Cameras have no stable unique key — replace only the ones for this floor.
+      await tx.camera.deleteMany({ where: { mallId, floor } });
+      for (const c of cameras) {
+        await tx.camera.create({
+          data: {
+            mallId,
+            floor,
+            label: c.label,
+            x: c.x,
+            y: c.y,
+            deviceType: c.deviceType ?? 'camera',
+            angleDeg: c.angleDeg ?? null,
+            fovDeg: c.fovDeg ?? null,
+            rangeM: c.rangeM ?? null,
+            streamUrl: c.streamUrl ?? null,
+            active: c.active ?? true,
+          },
+        });
+      }
+    });
 
     const firstPublished = await prisma.floorplanZone.findFirst({
       where: { mallId, floor, publishedAt: { not: null } },
