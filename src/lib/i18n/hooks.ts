@@ -7,7 +7,7 @@
 'use client';
 
 import { useTranslation as useI18nextTranslation } from 'react-i18next';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { LanguageCode } from './config';
 import {
   formatNumber,
@@ -107,11 +107,17 @@ export function useTranslation(namespace?: string | string[]) {
  */
 export function useLanguage() {
   const { i18n } = useI18nextTranslation();
+  const [currentLanguage, setCurrentLanguage] = useState<LanguageCode>(i18n.language as LanguageCode);
+
+  useEffect(() => {
+    const handler = (lang: string) => setCurrentLanguage(lang as LanguageCode);
+    i18n.on('languageChanged', handler);
+    return () => { i18n.off('languageChanged', handler); };
+  }, [i18n]);
 
   const changeLanguage = useCallback(
     (language: LanguageCode) => {
       i18n.changeLanguage(language);
-      // Persist to localStorage
       if (typeof window !== 'undefined') {
         localStorage.setItem('stelthion-language', language);
       }
@@ -120,7 +126,7 @@ export function useLanguage() {
   );
 
   return {
-    currentLanguage: i18n.language as LanguageCode,
+    currentLanguage,
     changeLanguage,
     isReady: i18n.isInitialized,
   };

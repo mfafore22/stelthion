@@ -27,9 +27,9 @@ import type {
   SignalOfTheDayResponse,
   TrainingRecord,
 } from '@stelthion/shoppermind-client-types';
-import { request, requestStream, type FetchOptions } from './fetch.js';
+import { request, requestStream, type FetchOptions } from './fetch';
 
-export * from './errors.js';
+export * from './errors';
 export type * from '@stelthion/shoppermind-client-types';
 
 export interface ShopperMindClientOptions {

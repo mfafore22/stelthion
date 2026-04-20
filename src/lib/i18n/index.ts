@@ -31,6 +31,7 @@ i18n
       caches: ['localStorage'],
       lookupLocalStorage: 'stelthion-language',
     },
+    initImmediate: false,
     react: { useSuspense: false },
     supportedLngs: ['en', 'fi', 'sv'],
   });

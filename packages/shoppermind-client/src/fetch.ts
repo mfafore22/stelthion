@@ -3,7 +3,7 @@ import {
   ShopperMindAuthError,
   ShopperMindNetworkError,
   ShopperMindValidationError,
-} from './errors.js';
+} from './errors';
 
 export interface FetchOptions {
   baseUrl: string;
