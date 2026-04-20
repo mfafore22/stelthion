@@ -5,10 +5,11 @@
  * 1. Customers & Users (Ideapark AB + admins)
  * 2. Malls (Ideapark Lempäälä)
  * 3. Mall Stats, Branding, Categories
- * 4. Floorplan zones + cameras/counters
- * 5. ShopperMind signal sources
- * 6. ShopperMind demo phenomena
- * 7. Video analysis demo data (jobs, sessions, paths)
+ * 4. ShopperMind signal sources
+ * 5. ShopperMind demo phenomena
+ * 6. Video analysis demo data (jobs, sessions, paths)
+ *
+ * Floorplan zones + cameras seeded separately by scripts/seed-ideapark-layout.ts
  *
  * Non-destructive: uses upsert + existence checks
  * Usage: npx prisma db seed
@@ -18,8 +19,6 @@ import 'dotenv/config'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { PrismaClient, PhenomenonState } from '@prisma/client'
 import bcrypt from 'bcrypt'
-import { IDEAPARK_ZONES, IDEAPARK_UPPER_ZONES } from '../src/lib/data/ideaparkZones'
-import { GROUND_FLOOR_STORES } from '../src/lib/data/ideaparkStorePositions'
 import { MARKET_PROFILE } from '../src/services/shoppermind/markets'
 
 const dbUrl = process.env.DATABASE_URL || process.env.DIRECT_URL
@@ -42,14 +41,12 @@ async function seedCustomersAndUsers() {
 
   const hashedPassword = await bcrypt.hash('ideapark2024', 10)
 
-  // Create customer
   const ideapark = await prisma.customer.upsert({
     where: { id: 'ideapark' },
     update: { name: 'Koy Ideapark Ab' },
     create: { id: 'ideapark', name: 'Koy Ideapark Ab' },
   })
 
-  // Create users
   const users = [
     { email: 'faforemichael001@gmail.com', name: 'Michael Fafore', role: 'ADMIN' as const },
     { email: 'kimmoisbjornssund@pm.me', name: 'Kimmo Isbjörnssund', role: 'ADMIN' as const },
@@ -114,7 +111,6 @@ async function seedMalls() {
 async function seedMallMetadata() {
   console.log('Seeding mall metadata...')
 
-  // Stats
   const existingStats = await prisma.mallStats.findFirst({ where: { mallId: MALL_ID } })
   if (!existingStats) {
     await prisma.mallStats.create({
@@ -129,7 +125,6 @@ async function seedMallMetadata() {
     })
   }
 
-  // Branding
   const existingBranding = await prisma.mallBranding.findFirst({ where: { mallId: MALL_ID } })
   if (!existingBranding) {
     await prisma.mallBranding.create({
@@ -144,7 +139,6 @@ async function seedMallMetadata() {
     })
   }
 
-  // Categories
   const categories = [
     { mallId: MALL_ID, name: 'Fashion', shopCount: 50, percentage: 21.5 },
     { mallId: MALL_ID, name: 'Food & Beverage', shopCount: 22, percentage: 13.5 },
@@ -172,143 +166,7 @@ async function seedMallMetadata() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────
-// 4. FLOORPLAN ZONES & CAMERAS
-// ─────────────────────────────────────────────────────────────────────────
-
-async function seedFloorplan() {
-  console.log('Seeding floorplan...')
-
-  const mall = await prisma.mall.findUnique({ where: { mallId: MALL_ID } })
-  if (!mall) {
-    console.error(`  ERROR: Mall '${MALL_ID}' not found.`)
-    return
-  }
-
-  let zonesCreated = 0
-  let zonesUpdated = 0
-
-  // Ground floor zones
-  for (const z of IDEAPARK_ZONES) {
-    const result = await prisma.floorplanZone.upsert({
-      where: {
-        mallId_floor_zoneId: { mallId: MALL_ID, floor: 'ground', zoneId: z.id },
-      },
-      create: {
-        mallId: MALL_ID,
-        floor: 'ground',
-        zoneId: z.id,
-        name: z.name,
-        nameFi: z.nameFi,
-        category: z.category,
-        drawShape: 'polygon',
-        svgPoints: z.svgPoints,
-        labelX: z.labelX,
-        labelY: z.labelY,
-        capacity: z.capacity,
-        areaSqm: z.area_sqm,
-        baseVisitors: z.baseVisitors,
-        publishedAt: new Date(),
-      },
-      update: {
-        name: z.name,
-        nameFi: z.nameFi,
-        category: z.category,
-        svgPoints: z.svgPoints,
-        labelX: z.labelX,
-        labelY: z.labelY,
-        capacity: z.capacity,
-        areaSqm: z.area_sqm,
-        baseVisitors: z.baseVisitors,
-      },
-    })
-    if (result.createdAt.getTime() === result.updatedAt.getTime()) zonesCreated++
-    else zonesUpdated++
-  }
-
-  // Upper floor zones
-  for (const z of IDEAPARK_UPPER_ZONES) {
-    const result = await prisma.floorplanZone.upsert({
-      where: {
-        mallId_floor_zoneId: { mallId: MALL_ID, floor: 'upper', zoneId: z.id },
-      },
-      create: {
-        mallId: MALL_ID,
-        floor: 'upper',
-        zoneId: z.id,
-        name: z.name,
-        nameFi: z.nameFi,
-        category: z.category,
-        drawShape: 'polygon',
-        svgPoints: z.svgPoints,
-        labelX: z.labelX,
-        labelY: z.labelY,
-        capacity: z.capacity,
-        areaSqm: z.area_sqm,
-        baseVisitors: z.baseVisitors,
-        publishedAt: new Date(),
-      },
-      update: {
-        name: z.name,
-        nameFi: z.nameFi,
-        category: z.category,
-        svgPoints: z.svgPoints,
-        labelX: z.labelX,
-        labelY: z.labelY,
-        capacity: z.capacity,
-        areaSqm: z.area_sqm,
-        baseVisitors: z.baseVisitors,
-      },
-    })
-    if (result.createdAt.getTime() === result.updatedAt.getTime()) zonesCreated++
-    else zonesUpdated++
-  }
-
-  // Stores as zones
-  let storesCreated = 0
-  let storesUpdated = 0
-  for (const s of GROUND_FLOOR_STORES) {
-    const x2 = s.x + s.w
-    const y2 = s.y + s.h
-    const svgPoints = `${s.x},${s.y} ${x2},${s.y} ${x2},${y2} ${s.x},${y2}`
-    const zoneId = `store-${s.slug}`
-
-    const result = await prisma.floorplanZone.upsert({
-      where: {
-        mallId_floor_zoneId: { mallId: MALL_ID, floor: 'ground', zoneId },
-      },
-      create: {
-        mallId: MALL_ID,
-        floor: 'ground',
-        zoneId,
-        name: s.name,
-        nameFi: s.name,
-        category: 'Store',
-        drawShape: 'rect',
-        svgPoints,
-        labelX: s.x + s.w / 2,
-        labelY: s.y + s.h / 2,
-        capacity: 0,
-        areaSqm: 0,
-        baseVisitors: 0,
-        publishedAt: new Date(),
-      },
-      update: {
-        name: s.name,
-        svgPoints,
-        labelX: s.x + s.w / 2,
-        labelY: s.y + s.h / 2,
-      },
-    })
-    if (result.createdAt.getTime() === result.updatedAt.getTime()) storesCreated++
-    else storesUpdated++
-  }
-
-  console.log(`  ✓ Zones: ${zonesCreated} created, ${zonesUpdated} updated`)
-  console.log(`  ✓ Stores: ${storesCreated} created, ${storesUpdated} updated`)
-}
-
-// ─────────────────────────────────────────────────────────────────────────
-// 5. SHOPPERMIND SIGNAL SOURCES
+// 4. SHOPPERMIND SIGNAL SOURCES
 // ─────────────────────────────────────────────────────────────────────────
 
 async function seedSignalSources() {
@@ -348,7 +206,7 @@ async function seedSignalSources() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────
-// 6. SHOPPERMIND DEMO PHENOMENA
+// 5. SHOPPERMIND DEMO PHENOMENA
 // ─────────────────────────────────────────────────────────────────────────
 
 interface DemoPhenomenon {
@@ -480,7 +338,6 @@ function round(v: number): number {
 async function seedDemoPhenomena() {
   console.log('Seeding ShopperMind demo phenomena...')
 
-  // Check if demo data exists
   const existing = await prisma.phenomenon.findFirst({
     where: { label: { startsWith: '[demo]' } },
   })
@@ -525,7 +382,7 @@ async function seedDemoPhenomena() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────
-// 7. VIDEO ANALYSIS DEMO DATA
+// 6. VIDEO ANALYSIS DEMO DATA
 // ─────────────────────────────────────────────────────────────────────────
 
 function cuid() {
@@ -546,7 +403,6 @@ function pastDate(daysAgo: number) {
 async function seedAnalysisDemo() {
   console.log('Seeding video analysis demo data...')
 
-  // Check if already seeded
   const existing = await prisma.analysisJob.findMany({
     where: { requestedBy: 'demo-seed' },
     select: { id: true },
@@ -577,7 +433,6 @@ async function seedAnalysisDemo() {
 
   let jobsCreated = 0
 
-  // ── Job 1: ZONE_COUNT
   if (cameras.length > 0) {
     const job1Id = cuid()
     const cam1 = cameras[0]
@@ -613,7 +468,6 @@ async function seedAnalysisDemo() {
     jobsCreated++
   }
 
-  // ── Job 2: AB_TRACKING
   if (cameras.length >= 2) {
     const job2Id = cuid()
     const camA = cameras[0]
@@ -665,7 +519,6 @@ async function seedAnalysisDemo() {
     jobsCreated++
   }
 
-  // ── Job 3: JOURNEY_MAP
   if (zones.length >= 3) {
     const job3Id = cuid()
     const selectedZones = zones.slice(0, 5)
@@ -723,7 +576,6 @@ async function seedAnalysisDemo() {
     jobsCreated++
   }
 
-  // ── Job 4: ZONE_COUNT (pending)
   if (cameras.length > 0) {
     await prisma.analysisJob.create({
       data: {
@@ -742,7 +594,6 @@ async function seedAnalysisDemo() {
     jobsCreated++
   }
 
-  // ── Job 5: AB_TRACKING (processing)
   if (cameras.length >= 2) {
     await prisma.analysisJob.create({
       data: {
@@ -776,7 +627,7 @@ async function main() {
     await seedCustomersAndUsers()
     await seedMalls()
     await seedMallMetadata()
-    await seedFloorplan()
+    // Floorplan zones + cameras seeded by scripts/seed-ideapark-layout.ts
     await seedSignalSources()
     await seedDemoPhenomena()
     await seedAnalysisDemo()

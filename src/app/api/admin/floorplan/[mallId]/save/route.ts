@@ -57,9 +57,6 @@ export async function PUT(
     const zonePublishedMap = new Map(
       existingZones.map((z) => [z.zoneId, z.publishedAt]),
     );
-    // If ANY existing zone was published, the floorplan is in "published" state.
-    // New/renamed zones must inherit that state — otherwise editing zone IDs
-    // silently unpublishes them from the /mall view.
     const wasPublished = existingZones.some((z) => z.publishedAt !== null);
     const latestPublishedAt = wasPublished
       ? existingZones.reduce<Date | null>(
@@ -69,16 +66,29 @@ export async function PUT(
         )
       : null;
 
-    await prisma.camera.deleteMany({ where: { mallId, floor } });
-    await prisma.floorplanZone.deleteMany({ where: { mallId, floor } });
-
+    // ── Upsert zones (never delete) ──────────────────────────────────────────
     const BATCH_SIZE = 10;
     for (let i = 0; i < zones.length; i += BATCH_SIZE) {
       const batch = zones.slice(i, i + BATCH_SIZE);
       await Promise.all(
         batch.map((z: any) =>
-          prisma.floorplanZone.create({
-            data: {
+          prisma.floorplanZone.upsert({
+            where: { mallId_floor_zoneId: { mallId, floor, zoneId: z.zoneId } },
+            update: {
+              name: z.name,
+              nameFi: z.nameFi,
+              category: z.category,
+              subcategory: z.subcategory ?? null,
+              drawShape: z.drawShape ?? 'polygon',
+              svgPoints: z.svgPoints,
+              labelX: z.labelX,
+              labelY: z.labelY,
+              capacity: z.capacity,
+              areaSqm: z.areaSqm,
+              baseVisitors: z.baseVisitors ?? 0,
+              publishedAt: zonePublishedMap.get(z.zoneId) ?? latestPublishedAt,
+            },
+            create: {
               mallId,
               floor,
               zoneId: z.zoneId,
@@ -100,12 +110,36 @@ export async function PUT(
       );
     }
 
+    // ── Cameras: only delete cameras not in current save, upsert the rest ───
+    const incomingCameraLabels = cameras.map((c: any) => c.label);
+    if (incomingCameraLabels.length > 0) {
+      await prisma.camera.deleteMany({
+        where: {
+          mallId,
+          floor,
+          label: { notIn: incomingCameraLabels },
+        },
+      });
+    }
+
     for (let i = 0; i < cameras.length; i += BATCH_SIZE) {
       const batch = cameras.slice(i, i + BATCH_SIZE);
       await Promise.all(
         batch.map((c: any) =>
-          prisma.camera.create({
-            data: {
+          prisma.camera.upsert({
+            where: { id: c.id ?? '' },
+            update: {
+              label: c.label,
+              x: c.x,
+              y: c.y,
+              deviceType: c.deviceType ?? 'camera',
+              angleDeg: c.angleDeg ?? null,
+              fovDeg: c.fovDeg ?? null,
+              rangeM: c.rangeM ?? null,
+              streamUrl: c.streamUrl ?? null,
+              active: c.active ?? true,
+            },
+            create: {
               mallId,
               floor,
               label: c.label,
