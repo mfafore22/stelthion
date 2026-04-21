@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
 import { requireAdmin } from '@/lib/admin-auth';
-import { createUserAndSendWelcome } from '@/lib/email/sendOtp';
+import { createUserAndSendWelcome } from '@/lib/email/sendOTP';
 
 export async function GET() {
   try {

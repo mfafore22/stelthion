@@ -1,27 +1,5 @@
-import { PrismaClient } from '@prisma/client'
-import { PrismaPg } from '@prisma/adapter-pg'
-import { validateProductionEnv } from '@/lib/env-check'
-
-validateProductionEnv()
-
-
-
-const adapter = new PrismaPg({
-  connectionString: process.env.DATABASE_URL!,
-})
-
-const globalForPrisma = global as unknown as {
-  prisma: PrismaClient
-}
-
-const prisma =
-  globalForPrisma.prisma ||
-  new PrismaClient({
-    adapter,
-  })
-
-if (process.env.NODE_ENV !== 'production') {
-  globalForPrisma.prisma = prisma
-}
-
-export default prisma
+// Re-export shim. Canonical location: src/server/db/client.ts
+// This file is kept so existing imports (`@/app/lib/prisma`, `./app/lib/prisma`,
+// etc.) continue to work during the Phase 3 migration. Do not add new imports
+// from this path — import from `@/server/db/client` directly.
+export { default } from '@/server/db/client';

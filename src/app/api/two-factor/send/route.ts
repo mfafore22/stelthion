@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/auth'
 import prisma from '@/app/lib/prisma'
-import { generateAndSendOTP, maskEmail } from '@/lib/email/sendOtp'
+import { generateAndSendOTP, maskEmail } from '@/lib/email/sendOTP'
 
 export async function POST() {
   const session = await auth()
