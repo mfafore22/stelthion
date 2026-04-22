@@ -1,34 +1,42 @@
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';
-import { requireAdmin } from '@/lib/admin-auth';
-
 /**
- * GET /api/admin/edge/devices — List edge devices for the calling admin's
- * customer.
+ * /api/admin/edge/devices
  *
- * Phase B.5 tenant scoping: previously returned every device across every
- * customer. Now filtered to devices whose mall belongs to the caller's
- * customer.
+ * Phase D — admin group migration. The B.5 tenant-scoping checks are
+ * preserved bytewise. PATCH and DELETE now share an explicit
+ * requireDeviceOwnership check inlined locally (single Prisma lookup
+ * via mall.customerId).
+ *
+ * Tenant scoping (unchanged from B.5):
+ *   - GET filters devices whose mall belongs to the calling admin's customer.
+ *   - PATCH validates device ownership before update.
+ *   - DELETE validates device ownership before delete.
  */
-export async function GET() {
-  const guard = await requireAdmin();
-  if ('error' in guard) return guard.error;
 
-  try {
+import { z } from 'zod';
+import type { Session } from 'next-auth';
+import prisma from '@/server/db/client';
+import { defineHandler, HttpError } from '@/server/api/define-handler';
+
+// ─── GET ────────────────────────────────────────────────────────────
+
+export const GET = defineHandler(
+  { auth: 'admin' },
+  async ({ auth: session }) => {
     const devices = await prisma.edgeDevice.findMany({
-      where: { mall: { customerId: guard.session.user.customerId } },
+      where: { mall: { customerId: session.user.customerId } },
       orderBy: { createdAt: 'desc' },
     });
 
-    // Mark devices with stale heartbeat (>3 minutes) as OFFLINE
+    // Mark devices with stale heartbeat (>3 minutes) as OFFLINE.
     const now = Date.now();
-    const enriched = devices.map((d) => {
+    return devices.map((d) => {
       const heartbeatAge = d.lastHeartbeat
         ? now - new Date(d.lastHeartbeat).getTime()
         : Infinity;
-      const effectiveStatus = heartbeatAge > 3 * 60 * 1000 && d.status === 'ONLINE'
-        ? 'OFFLINE'
-        : d.status;
+      const effectiveStatus =
+        heartbeatAge > 3 * 60 * 1000 && d.status === 'ONLINE'
+          ? 'OFFLINE'
+          : d.status;
 
       return {
         id: d.id,
@@ -40,96 +48,67 @@ export async function GET() {
         status: effectiveStatus,
       };
     });
+  },
+);
 
-    return NextResponse.json(enriched);
-  } catch (error) {
-    console.error('Admin edge devices error:', error);
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to fetch devices' },
-      { status: 500 },
-    );
-  }
-}
+// ─── PATCH ──────────────────────────────────────────────────────────
 
-/**
- * PATCH /api/admin/edge/devices — Update edge device status (e.g. force OFFLINE).
- * Body: { id, status }
- *
- * Phase B.5 tenant scoping: verifies the device's mall belongs to the
- * caller's customer before allowing the update.
- */
-export async function PATCH(req: NextRequest) {
-  const guard = await requireAdmin();
-  if ('error' in guard) return guard.error;
+const patchSchema = z.object({
+  id: z.string().min(1),
+  status: z.enum(['ONLINE', 'OFFLINE', 'ERROR']),
+});
 
-  try {
-    const { id, status } = await req.json();
-    if (!id || !['ONLINE', 'OFFLINE', 'ERROR'].includes(status)) {
-      return NextResponse.json({ error: 'Invalid id or status' }, { status: 400 });
-    }
-
-    const existing = await prisma.edgeDevice.findUnique({
-      where: { id },
-      select: { mall: { select: { customerId: true } } },
-    });
-    if (!existing) {
-      return NextResponse.json({ error: 'Device not found' }, { status: 404 });
-    }
-    if (existing.mall.customerId !== guard.session.user.customerId) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
+export const PATCH = defineHandler(
+  { auth: 'admin', bodySchema: patchSchema },
+  async ({ body, auth: session }) => {
+    await requireDeviceOwnership(session, body.id);
 
     const device = await prisma.edgeDevice.update({
-      where: { id },
-      data: { status },
+      where: { id: body.id },
+      data: { status: body.status },
     });
 
-    return NextResponse.json({ id: device.id, status: device.status });
-  } catch (error) {
-    console.error('Admin edge update error:', error);
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to update device' },
-      { status: 500 },
-    );
-  }
-}
+    return { id: device.id, status: device.status };
+  },
+);
+
+// ─── DELETE ─────────────────────────────────────────────────────────
+
+const deleteSchema = z.object({
+  id: z.string().min(1),
+});
+
+export const DELETE = defineHandler(
+  { auth: 'admin', bodySchema: deleteSchema },
+  async ({ body, auth: session }) => {
+    await requireDeviceOwnership(session, body.id);
+
+    await prisma.edgeDevice.delete({ where: { id: body.id } });
+    return { deleted: true };
+  },
+);
+
+// ─── Local tenant guard ────────────────────────────────────────────
 
 /**
- * DELETE /api/admin/edge/devices — Revoke/remove an edge device.
- * Body: { id }
- *
- * Phase B.5 tenant scoping: verifies the device's mall belongs to the
- * caller's customer before allowing the delete.
+ * Asserts that the calling session's customer owns the edge device with
+ * the given id. Lives here (not in tenant-guards.ts) because edge devices
+ * are admin-only — no other route group references them.
  */
-export async function DELETE(req: NextRequest) {
-  const guard = await requireAdmin();
-  if ('error' in guard) return guard.error;
+async function requireDeviceOwnership(
+  session: Session,
+  deviceId: string,
+): Promise<void> {
+  const callerCustomerId = session.user?.customerId;
+  if (!callerCustomerId) throw new HttpError(401, 'Unauthorized');
 
-  try {
-    const { id } = await req.json();
-    if (!id) {
-      return NextResponse.json({ error: 'id is required' }, { status: 400 });
-    }
+  const device = await prisma.edgeDevice.findUnique({
+    where: { id: deviceId },
+    select: { mall: { select: { customerId: true } } },
+  });
 
-    const existing = await prisma.edgeDevice.findUnique({
-      where: { id },
-      select: { mall: { select: { customerId: true } } },
-    });
-    if (!existing) {
-      return NextResponse.json({ error: 'Device not found' }, { status: 404 });
-    }
-    if (existing.mall.customerId !== guard.session.user.customerId) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
-
-    await prisma.edgeDevice.delete({ where: { id } });
-
-    return NextResponse.json({ deleted: true });
-  } catch (error) {
-    console.error('Admin edge delete error:', error);
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to delete device' },
-      { status: 500 },
-    );
+  if (!device) throw new HttpError(404, 'Device not found');
+  if (!device.mall || device.mall.customerId !== callerCustomerId) {
+    throw new HttpError(403, 'Forbidden');
   }
 }

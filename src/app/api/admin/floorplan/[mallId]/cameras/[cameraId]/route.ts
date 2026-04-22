@@ -1,6 +1,23 @@
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';
-import { requireAdmin } from '@/lib/admin-auth';
+/**
+ * PATCH /api/admin/floorplan/[mallId]/cameras/[cameraId]
+ *
+ * Phase D — admin group migration. Pre-Phase-D this route was admin-gated
+ * and validated that the URL's mallId matched the camera's mallId, but
+ * did NOT validate that the URL's mallId belonged to the calling admin's
+ * customer. A tenant admin could PATCH another customer's camera
+ * (modify its stream URL, zone binding, FOV, etc.) by mallId+cameraId
+ * guess. Now gated by requireMallOwnership.
+ */
+
+import { z } from 'zod';
+import prisma from '@/server/db/client';
+import { defineHandler, HttpError } from '@/server/api/define-handler';
+import { requireMallOwnership } from '@/server/api/tenant-guards';
+
+const paramsSchema = z.object({
+  mallId: z.string(),
+  cameraId: z.string(),
+});
 
 const PATCHABLE = [
   'label', 'angleDeg', 'fovDeg', 'rangeM', 'streamUrl',
@@ -12,27 +29,28 @@ function pick(obj: Record<string, unknown>, keys: readonly string[]) {
   return Object.fromEntries(keys.filter((k) => k in obj).map((k) => [k, obj[k]]));
 }
 
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: Promise<{ mallId: string; cameraId: string }> },
-) {
-  const { error } = await requireAdmin();
-  if (error) return error;
+export const PATCH = defineHandler(
+  { auth: 'admin', paramsSchema },
+  async ({ req, params, auth: session }) => {
+    await requireMallOwnership(session, params.mallId);
 
-  const { mallId, cameraId } = await params;
+    const existing = await prisma.camera.findUnique({
+      where: { id: params.cameraId },
+    });
+    if (!existing || existing.mallId !== params.mallId) {
+      throw new HttpError(404, 'Camera not found');
+    }
 
-  const existing = await prisma.camera.findUnique({ where: { id: cameraId } });
-  if (!existing || existing.mallId !== mallId) {
-    return NextResponse.json({ error: 'Camera not found' }, { status: 404 });
-  }
+    const body = await req.json();
+    const data = pick(body, PATCHABLE);
 
-  const body = await req.json();
-  const data = pick(body, PATCHABLE);
+    if (Object.keys(data).length === 0) {
+      throw new HttpError(400, 'No valid fields to update');
+    }
 
-  if (Object.keys(data).length === 0) {
-    return NextResponse.json({ error: 'No valid fields to update' }, { status: 400 });
-  }
-
-  const updated = await prisma.camera.update({ where: { id: cameraId }, data });
-  return NextResponse.json(updated);
-}
+    return await prisma.camera.update({
+      where: { id: params.cameraId },
+      data,
+    });
+  },
+);

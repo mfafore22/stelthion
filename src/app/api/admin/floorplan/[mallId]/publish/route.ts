@@ -1,25 +1,34 @@
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';
-import { auth } from '@/auth';
+/**
+ * POST /api/admin/floorplan/[mallId]/publish
+ *
+ * Phase D — admin group migration. Pre-Phase-D this route was admin-gated
+ * but did NOT validate that the calling admin's customer owned the mall.
+ * A tenant admin could publish (mark as live) another customer's
+ * floorplan zones by mallId+floor guess, which would surface unfinished
+ * draft data to that customer's end users. Now gated by
+ * requireMallOwnership.
+ */
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: Promise<{ mallId: string }> },
-) {
-  const session = await auth();
-  if (!session?.user || session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+import { z } from 'zod';
+import prisma from '@/server/db/client';
+import { defineHandler } from '@/server/api/define-handler';
+import { requireMallOwnership } from '@/server/api/tenant-guards';
 
-  const { mallId } = await params;
-  const { floor } = await req.json();
+const paramsSchema = z.object({ mallId: z.string() });
+const bodySchema = z.object({ floor: z.string().min(1) });
 
-  const now = new Date();
+export const POST = defineHandler(
+  { auth: 'admin', paramsSchema, bodySchema },
+  async ({ params, body, auth: session }) => {
+    await requireMallOwnership(session, params.mallId);
 
-  await prisma.floorplanZone.updateMany({
-    where: { mallId, floor },
-    data: { publishedAt: now },
-  });
+    const now = new Date();
 
-  return NextResponse.json({ ok: true, publishedAt: now.toISOString() });
-}
+    await prisma.floorplanZone.updateMany({
+      where: { mallId: params.mallId, floor: body.floor },
+      data: { publishedAt: now },
+    });
+
+    return { ok: true, publishedAt: now.toISOString() };
+  },
+);

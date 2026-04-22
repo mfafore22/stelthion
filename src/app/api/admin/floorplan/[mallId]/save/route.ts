@@ -1,50 +1,65 @@
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';
-import { auth } from '@/auth';
+/**
+ * PUT /api/admin/floorplan/[mallId]/save
+ *
+ * Phase D — admin group migration. Pre-Phase-D this route was admin-gated
+ * but did NOT validate that the calling admin's customer owned the mall.
+ * A tenant admin could destructively overwrite another customer's
+ * floorplan (zones + cameras) by mallId+floor guess. Now gated by
+ * requireMallOwnership.
+ *
+ * The route's existing safety guards (refuse-when-empty, refuse-on-50%-loss,
+ * pre-save snapshot, never-delete-zones-just-upsert) are preserved
+ * bytewise — they protect against accidental destruction by an admin
+ * who legitimately owns the mall.
+ */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { z } from 'zod';
+import prisma from '@/server/db/client';
+import { defineHandler, HttpError } from '@/server/api/define-handler';
+import { requireMallOwnership } from '@/server/api/tenant-guards';
 import { createFloorplanSnapshot } from '@/lib/services/floorplanBackup';
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: Promise<{ mallId: string }> },
-) {
-  const session = await auth();
-  if (!session?.user || session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+const paramsSchema = z.object({ mallId: z.string() });
 
-  const { mallId } = await params;
+export const PUT = defineHandler(
+  { auth: 'admin', paramsSchema },
+  async ({ req, params, auth: session }) => {
+    await requireMallOwnership(session, params.mallId);
 
-  try {
+    const { mallId } = params;
     const { floor, zones, cameras } = await req.json();
 
-    const existingZoneCount = await prisma.floorplanZone.count({ where: { mallId, floor } });
-    const existingCameraCount = await prisma.camera.count({ where: { mallId, floor } });
+    const existingZoneCount = await prisma.floorplanZone.count({
+      where: { mallId, floor },
+    });
+    const existingCameraCount = await prisma.camera.count({
+      where: { mallId, floor },
+    });
 
     if (existingZoneCount > 0 && (!Array.isArray(zones) || zones.length === 0)) {
-      return NextResponse.json(
-        { ok: false, error: `Refused: save would delete all ${existingZoneCount} zones. Zones array is empty.` },
-        { status: 400 },
+      throw new HttpError(
+        400,
+        `Refused: save would delete all ${existingZoneCount} zones. Zones array is empty.`,
       );
     }
 
     if (!Array.isArray(zones) || !Array.isArray(cameras)) {
-      return NextResponse.json(
-        { ok: false, error: 'Invalid payload: zones and cameras must be arrays.' },
-        { status: 400 },
-      );
+      throw new HttpError(400, 'Invalid payload: zones and cameras must be arrays.');
     }
 
     if (existingZoneCount > 4 && zones.length < existingZoneCount * 0.5) {
-      return NextResponse.json(
-        { ok: false, error: `Refused: save would reduce zones from ${existingZoneCount} to ${zones.length} (>50% loss). Delete zones individually instead.` },
-        { status: 400 },
+      throw new HttpError(
+        400,
+        `Refused: save would reduce zones from ${existingZoneCount} to ${zones.length} (>50% loss). Delete zones individually instead.`,
       );
     }
 
     if (existingCameraCount > 0 && cameras.length === 0) {
-      return NextResponse.json(
-        { ok: false, error: `Refused: save would delete all ${existingCameraCount} cameras. Camera array is empty.` },
-        { status: 400 },
+      throw new HttpError(
+        400,
+        `Refused: save would delete all ${existingCameraCount} cameras. Camera array is empty.`,
       );
     }
 
@@ -105,8 +120,8 @@ export async function PUT(
               baseVisitors: z.baseVisitors ?? 0,
               publishedAt: zonePublishedMap.get(z.zoneId) ?? latestPublishedAt,
             },
-          })
-        )
+          }),
+        ),
       );
     }
 
@@ -152,8 +167,8 @@ export async function PUT(
               streamUrl: c.streamUrl ?? null,
               active: c.active ?? true,
             },
-          })
-        )
+          }),
+        ),
       );
     }
 
@@ -162,16 +177,10 @@ export async function PUT(
       select: { publishedAt: true },
     });
 
-    return NextResponse.json({
+    return {
       ok: true,
       count: { zones: zones.length, cameras: cameras.length },
       publishedAt: firstPublished?.publishedAt?.toISOString() ?? null,
-    });
-  } catch (error) {
-    console.error('Floorplan save error:', error);
-    return NextResponse.json(
-      { ok: false, error: error instanceof Error ? error.message : 'Save failed' },
-      { status: 500 },
-    );
-  }
-}
+    };
+  },
+);

@@ -25,6 +25,14 @@ import { auth } from '@/auth'
 const mallFindMany = (prisma as any).mall.findMany as jest.Mock
 const authMock = auth as unknown as jest.Mock
 
+// Next.js 16 always passes a routeCtx with a Promise-resolved `params`,
+// even for non-parameterized routes (where it resolves to `{}`). The
+// defineHandler wrapper awaits routeCtx.params, so the test must supply
+// it — production never invokes a route handler without it.
+const emptyCtx = () => ({ params: Promise.resolve({}) })
+const emptyReq = () =>
+  new Request('http://localhost/api/admin/malls', { method: 'GET' })
+
 beforeEach(() => {
   mallFindMany.mockReset()
   authMock.mockReset()
@@ -37,7 +45,7 @@ describe('GET /api/admin/malls — tenant scope', () => {
     })
     mallFindMany.mockResolvedValue([])
 
-    await GET()
+    await GET(emptyReq() as any, emptyCtx() as any)
 
     expect(mallFindMany).toHaveBeenCalledTimes(1)
     const args = mallFindMany.mock.calls[0][0]
@@ -46,7 +54,7 @@ describe('GET /api/admin/malls — tenant scope', () => {
 
   it('returns 401 when no session', async () => {
     authMock.mockResolvedValue(null)
-    const res = await GET()
+    const res = await GET(emptyReq() as any, emptyCtx() as any)
     expect(res.status).toBe(401)
     expect(mallFindMany).not.toHaveBeenCalled()
   })
@@ -55,7 +63,7 @@ describe('GET /api/admin/malls — tenant scope', () => {
     authMock.mockResolvedValue({
       user: { id: 'u1', role: 'USER', customerId: 'cust-A' },
     })
-    const res = await GET()
+    const res = await GET(emptyReq() as any, emptyCtx() as any)
     expect(res.status).toBe(403)
     expect(mallFindMany).not.toHaveBeenCalled()
   })
@@ -67,7 +75,7 @@ describe('GET /api/admin/malls — tenant scope', () => {
     mallFindMany.mockResolvedValue([
       { mallId: 'mall-A1', name: 'Acme A', city: 'Helsinki', status: 'LIVE' },
     ])
-    const res = await GET()
+    const res = await GET(emptyReq() as any, emptyCtx() as any)
     expect(res.status).toBe(200)
     const body = await res.json()
     expect(body).toEqual([

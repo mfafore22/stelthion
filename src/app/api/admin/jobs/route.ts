@@ -1,64 +1,58 @@
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';
-import { auth } from '@/auth';
-
 /**
- * GET /api/admin/jobs — List recent analysis jobs.
+ * /api/admin/jobs
  *
- * Phase B.5 tenant scoping: previously returned every job across every
- * customer. Now filtered to jobs whose mall belongs to the calling
- * admin's customer.
- */
-export async function GET() {
-  const session = await auth();
-  if (!session?.user || session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  const jobs = await prisma.analysisJob.findMany({
-    where: { mall: { customerId: session.user.customerId } },
-    include: { camera: true },
-    orderBy: { createdAt: 'desc' },
-    take: 200,
-  });
-
-  return NextResponse.json(jobs);
-}
-
-/**
- * PATCH /api/admin/jobs — Update a job's status.
+ * Phase D — admin group migration. The B.5 tenant-scoping checks are
+ * preserved bytewise:
+ *   - GET filters jobs whose mall belongs to the calling admin's customer.
+ *   - PATCH validates job ownership via requireJobOwnership before update.
  *
- * Phase B.5 tenant scoping: previously updated any job by id without
- * verifying ownership. Now we look up the job's mall and reject if
- * it does not belong to the calling admin's customer.
+ * Behaviour change worth noting: this route used to do its own role
+ * check returning 401 for an authenticated-non-ADMIN. Migrating to
+ * `auth: 'admin'` standardizes on requireAdmin's 403 for authenticated
+ * non-admins (and 401 for unauthenticated). All other admin routes
+ * already use this convention.
  */
-export async function PATCH(req: NextRequest) {
-  const session = await auth();
-  if (!session?.user || session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
 
-  const { id, status } = await req.json();
+import { z } from 'zod';
+import prisma from '@/server/db/client';
+import { defineHandler, HttpError } from '@/server/api/define-handler';
+import { requireJobOwnership } from '@/server/api/tenant-guards';
 
-  if (!id || !['PENDING', 'PROCESSING', 'COMPLETE', 'FAILED'].includes(status)) {
-    return NextResponse.json({ error: 'Invalid id or status' }, { status: 400 });
-  }
+// ─── GET ────────────────────────────────────────────────────────────
 
-  const existing = await prisma.analysisJob.findUnique({
-    where: { id },
-    select: { mall: { select: { customerId: true } } },
-  });
-  if (!existing) {
-    return NextResponse.json({ error: 'Job not found' }, { status: 404 });
-  }
-  if (existing.mall.customerId !== session.user.customerId) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
+export const GET = defineHandler(
+  { auth: 'admin' },
+  async ({ auth: session }) => {
+    return await prisma.analysisJob.findMany({
+      where: { mall: { customerId: session.user.customerId } },
+      include: { camera: true },
+      orderBy: { createdAt: 'desc' },
+      take: 200,
+    });
+  },
+);
 
-  const job = await prisma.analysisJob.update({
-    where: { id },
-    data: { status },
-  });
+// ─── PATCH ──────────────────────────────────────────────────────────
 
-  return NextResponse.json(job);
-}
+const VALID_STATUS = ['PENDING', 'PROCESSING', 'COMPLETE', 'FAILED'] as const;
+
+const patchSchema = z.object({
+  id: z.string().min(1),
+  status: z.enum(VALID_STATUS),
+});
+
+export const PATCH = defineHandler(
+  { auth: 'admin', bodySchema: patchSchema },
+  async ({ body, auth: session }) => {
+    await requireJobOwnership(session, body.id);
+
+    const job = await prisma.analysisJob.update({
+      where: { id: body.id },
+      data: { status: body.status },
+    });
+
+    if (!job) throw new HttpError(404, 'Job not found');
+
+    return job;
+  },
+);
