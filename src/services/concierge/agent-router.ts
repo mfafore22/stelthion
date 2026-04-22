@@ -114,7 +114,10 @@ const INTENT_PATTERNS: Record<IntentType, RegExp[]> = {
     /(will|tulee|future|tulevaisuus)/i,
   ],
   [IntentType.EXPLAIN]: [
-    /(why|miksi|how|miten|explain|selitä|reason|syy)/i,
+    // 'how' alone is too generic ('how many', 'how can' belong to other
+    // intents); require it to be a wh-explanation phrase like 'how does'
+    // or 'how come'.
+    /(why|miksi|how (does|do|did|come|is)|miten|explain|selitä|reason|syy)/i,
     /(caused|aiheutti|led to|johti)/i,
   ],
   [IntentType.TROUBLESHOOT]: [
@@ -196,12 +199,34 @@ export class AgentRouter {
       scores[intent as IntentType] = score;
     }
 
-    // Get highest scoring intent
+    // Demote GENERAL_QUESTION when any more specific intent matched: 'what'
+    // is a noisy signal that fires for almost every English question and
+    // shouldn't tie-break against real intent matches.
+    const generalScore = scores[IntentType.GENERAL_QUESTION] || 0;
+    if (generalScore > 0) {
+      const otherSum = Object.entries(scores).reduce(
+        (sum, [k, v]) => (k === IntentType.GENERAL_QUESTION ? sum : sum + v),
+        0,
+      );
+      if (otherSum > 0) {
+        scores[IntentType.GENERAL_QUESTION] = 0;
+      }
+    }
+
+    // Get highest scoring intent. Tie-breaker: prefer a more specific intent
+    // over QUERY_DATA, which uses very generic verbs ("show", "what are").
     const entries = Object.entries(scores);
-    const [topIntent, topScore] = entries.reduce((a, b) => (b[1] > a[1] ? b : a));
+    const [topIntent, topScore] = entries.reduce((a, b) => {
+      if (b[1] > a[1]) return b;
+      if (b[1] === a[1] && b[1] > 0 && a[0] === IntentType.QUERY_DATA) return b;
+      return a;
+    });
 
     const totalScore = entries.reduce((sum, [, score]) => sum + score, 0);
-    const confidence = totalScore > 0 ? topScore / totalScore : 0;
+    // Confidence: 0 when no patterns matched; otherwise interpolate between
+    // 0.4 (top intent shares score with many others) and 1.0 (clear winner).
+    const confidence =
+      totalScore > 0 ? Math.min(1, 0.4 + (topScore / totalScore) * 0.6) : 0;
 
     const entities = this.extractEntities(prompt);
     const domain = this.determineDomain(prompt, { intent: topIntent as IntentType } as IntentClassification, entities);
@@ -283,7 +308,14 @@ export class AgentRouter {
 
     // Get highest scoring domain
     const entries = Object.entries(scores);
-    const [topDomain] = entries.reduce((a, b) => (b[1] > a[1] ? b : a));
+    const [topDomain, topScore] = entries.reduce((a, b) => (b[1] > a[1] ? b : a));
+
+    // If nothing matched, fall back to GENERAL rather than returning the
+    // first enum value (which used to be SALES — a bad default for empty or
+    // off-topic prompts).
+    if (topScore === 0) {
+      return DomainType.GENERAL;
+    }
 
     return (topDomain || DomainType.GENERAL) as DomainType;
   }
@@ -327,6 +359,13 @@ export class AgentRouter {
     domain: DomainType,
     intent: IntentClassification
   ): number {
+    // Empty / blank prompts have no signal — return low confidence rather
+    // than the default 0.5 base, which falsely suggests we know what the
+    // user wants.
+    if (!prompt || prompt.trim().length === 0) {
+      return 0.3;
+    }
+
     let confidence = 0.5; // Base confidence
 
     // Boost if domain strongly matches
@@ -350,7 +389,9 @@ export class AgentRouter {
       confidence += 0.1;
     }
 
-    return Math.min(1.0, confidence);
+    // Round to 3 decimals to avoid floating-point artefacts like
+    // 0.7999999999999999 when adding 0.5 + 0.2 + 0.1.
+    return Math.min(1.0, Math.round(confidence * 1000) / 1000);
   }
 
   /**
@@ -409,6 +450,16 @@ export class AgentRouter {
     if (primaryAgent !== AgentRole.TREND_ANALYST && domain !== DomainType.GENERAL) {
       alternatives.push({
         agentRole: AgentRole.TREND_ANALYST,
+        confidence: 0.5,
+      });
+    }
+
+    // Always provide at least one alternative — fall back to General Assistant
+    // when nothing else surfaced (avoids an empty array that callers have to
+    // special-case).
+    if (alternatives.length === 0 && primaryAgent !== AgentRole.GENERAL_ASSISTANT) {
+      alternatives.push({
+        agentRole: AgentRole.GENERAL_ASSISTANT,
         confidence: 0.5,
       });
     }
