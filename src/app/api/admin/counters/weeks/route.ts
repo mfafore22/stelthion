@@ -1,21 +1,47 @@
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';
-import { requireAdmin } from '@/lib/admin-auth';
+/**
+ * /api/admin/counters/weeks
+ *
+ * GET: list per-week counter uploads (and legacy untracked rollups) for a mall.
+ * DELETE: remove a specific upload by id, or a legacy week+year bucket.
+ *
+ * Phase D — admin group migration. Pre-Phase-D leaks:
+ *   - GET defaulted mallId to the literal string 'ideapark' when the
+ *     query param was missing — a tenant admin could see Ideapark's
+ *     uploads without supplying mallId, and could pass any other
+ *     tenant's mallId to read their data. No ownership check.
+ *   - DELETE accepted client-supplied uploadId with NO ownership check
+ *     and no mallId binding — a tenant admin could delete any other
+ *     tenant's counter readings (destructive, irreversible).
+ *
+ * After Phase D:
+ *   - mallId is REQUIRED on both verbs (no fallback default).
+ *   - Both verbs require mall ownership before any DB read or write.
+ *   - DELETE-by-uploadId additionally re-validates that the upload's
+ *     mallId matches the URL mallId (which is now known to be owned).
+ */
 
-export async function GET(req: NextRequest) {
-  const guard = await requireAdmin();
-  if ('error' in guard) return guard.error;
+import { z } from 'zod';
+import prisma from '@/server/db/client';
+import { defineHandler, HttpError } from '@/server/api/define-handler';
+import { requireMallOwnership } from '@/server/api/tenant-guards';
 
-  const mallId = new URL(req.url).searchParams.get('mallId') ?? 'ideapark';
+// ─── GET ────────────────────────────────────────────────────────────
 
-  try {
-    // Return individual uploads so each document is visible
+export const GET = defineHandler(
+  { auth: 'admin' },
+  async ({ req, auth: session }) => {
+    const mallId = new URL(req.url).searchParams.get('mallId');
+    if (!mallId) throw new HttpError(400, 'mallId is required');
+
+    await requireMallOwnership(session, mallId);
+
+    // Return individual uploads so each document is visible.
     const uploads = await prisma.counterUpload.findMany({
       where: { mallId },
       orderBy: { uploadedAt: 'desc' },
     });
 
-    // Also return legacy week-grouped data for uploads that predate tracking
+    // Also return legacy week-grouped data for uploads that predate tracking.
     const legacyWeeks = await prisma.counterReading.groupBy({
       by: ['year', 'weekNumber', 'granularity'],
       where: { mallId, uploadId: null },
@@ -25,7 +51,7 @@ export async function GET(req: NextRequest) {
       orderBy: [{ year: 'desc' }, { weekNumber: 'desc' }],
     });
 
-    // Deduplicate legacy by year+week
+    // Deduplicate legacy by year+week, preferring finer granularity.
     const seen = new Map<string, (typeof legacyWeeks)[0]>();
     const granOrder: Record<string, number> = { hourly: 3, daily: 2, weekly: 1 };
     for (const w of legacyWeeks) {
@@ -36,8 +62,7 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    const result = [
-      // Tracked uploads
+    return [
       ...uploads.map((u) => ({
         id: u.id,
         year: u.year,
@@ -50,7 +75,6 @@ export async function GET(req: NextRequest) {
         fileName: u.fileName,
         type: 'upload' as const,
       })),
-      // Legacy untracked data
       ...[...seen.values()].map((w) => ({
         id: null as string | null,
         year: w.year,
@@ -64,46 +88,64 @@ export async function GET(req: NextRequest) {
         type: 'legacy' as const,
       })),
     ];
+  },
+);
 
-    return NextResponse.json(result);
-  } catch (err) {
-    console.error('[counter weeks]', err);
-    return NextResponse.json({ error: String(err) }, { status: 500 });
-  }
-}
+// ─── DELETE ─────────────────────────────────────────────────────────
 
-export async function DELETE(req: NextRequest) {
-  const guard = await requireAdmin();
-  if ('error' in guard) return guard.error;
+const deleteQuerySchema = z.object({
+  mallId: z.string().min(1),
+  uploadId: z.string().optional(),
+  week: z.coerce.number().int().optional(),
+  year: z.coerce.number().int().optional(),
+});
 
-  const { searchParams } = new URL(req.url);
-  const mallId = searchParams.get('mallId') ?? 'ideapark';
-  const uploadId = searchParams.get('uploadId');
-  const week = parseInt(searchParams.get('week') ?? '', 10);
-  const year = parseInt(searchParams.get('year') ?? '', 10);
+export const DELETE = defineHandler(
+  { auth: 'admin' },
+  async ({ req, auth: session }) => {
+    const url = new URL(req.url);
+    const parsed = deleteQuerySchema.safeParse({
+      mallId: url.searchParams.get('mallId'),
+      uploadId: url.searchParams.get('uploadId') ?? undefined,
+      week: url.searchParams.get('week') ?? undefined,
+      year: url.searchParams.get('year') ?? undefined,
+    });
+    if (!parsed.success) {
+      throw new HttpError(400, 'mallId is required');
+    }
+    const { mallId, uploadId, week, year } = parsed.data;
 
-  try {
+    await requireMallOwnership(session, mallId);
+
     if (uploadId) {
-      // Delete a specific tracked upload and its readings
+      // Re-validate that the upload belongs to the requested (and owned) mall.
+      // This blocks a CSRF-shaped attack where the attacker knows an
+      // uploadId for cust-B and tries to wrap it in their own mallId.
+      const upload = await prisma.counterUpload.findUnique({
+        where: { id: uploadId },
+        select: { mallId: true },
+      });
+      if (!upload) throw new HttpError(404, 'Upload not found');
+      if (upload.mallId !== mallId) {
+        throw new HttpError(403, 'Upload does not belong to this mall');
+      }
+
       const deleted = await prisma.counterReading.deleteMany({
         where: { uploadId },
       });
       await prisma.counterUpload.delete({ where: { id: uploadId } });
-      return NextResponse.json({ ok: true, deleted: deleted.count, uploadId });
+      return { ok: true, deleted: deleted.count, uploadId };
     }
 
     if (!week || !year) {
-      return NextResponse.json({ error: 'Missing week/year or uploadId' }, { status: 400 });
+      throw new HttpError(400, 'Missing week/year or uploadId');
     }
 
-    // Legacy delete by week+year (untracked uploads only)
+    // Legacy delete by week+year (untracked uploads only) — scoped to mallId.
     const deleted = await prisma.counterReading.deleteMany({
       where: { mallId, weekNumber: week, year, uploadId: null },
     });
 
-    return NextResponse.json({ ok: true, deleted: deleted.count, week, year });
-  } catch (err) {
-    console.error('[counter delete]', err);
-    return NextResponse.json({ error: String(err) }, { status: 500 });
-  }
-}
+    return { ok: true, deleted: deleted.count, week, year };
+  },
+);

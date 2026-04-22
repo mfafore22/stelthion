@@ -1,6 +1,23 @@
+/**
+ * POST /api/admin/counters/upload
+ *
+ * Phase D — admin group migration. Pre-Phase-D this route was admin-gated
+ * but accepted any client-supplied mallId in the upload form without
+ * checking that the calling admin's customer owned the mall. A tenant
+ * admin could inject counter data into another customer's mall by
+ * passing the foreign mallId — polluting their analytics, breaking
+ * their reports, and (because the route does a destructive deleteMany
+ * before the upsert) wiping out the rightful owner's existing data
+ * for the affected weeks. Now gated by requireMallOwnership.
+ *
+ * The Excel-parsing logic (legacy weekly + ViaWeb monthly) is preserved
+ * bytewise.
+ */
+
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';
+import prisma from '@/server/db/client';
 import { requireAdmin } from '@/lib/admin-auth';
+import { requireMallOwnership } from '@/server/api/tenant-guards';
 import * as XLSX from 'xlsx';
 
 export async function POST(req: NextRequest) {
@@ -14,6 +31,24 @@ export async function POST(req: NextRequest) {
 
     if (!file || !mallId) {
       return NextResponse.json({ error: 'Missing file or mallId' }, { status: 400 });
+    }
+
+    // Phase D tenant gate: ensure the mallId in the upload form belongs
+    // to the calling admin's customer. requireMallOwnership throws
+    // HttpError(404) if the mall doesn't exist, HttpError(403) on
+    // cross-tenant attempt — caught below and re-shaped to JSON.
+    try {
+      await requireMallOwnership(guard.session, mallId);
+    } catch (err) {
+      const status =
+        typeof err === 'object' && err !== null && 'status' in err
+          ? Number((err as { status: number }).status)
+          : 500;
+      const message =
+        typeof err === 'object' && err !== null && 'message' in err
+          ? String((err as { message: unknown }).message)
+          : 'Forbidden';
+      return NextResponse.json({ error: message }, { status });
     }
 
     const buffer = await file.arrayBuffer();

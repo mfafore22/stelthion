@@ -1,26 +1,33 @@
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';
-import { auth } from '@/auth';
+/**
+ * GET /api/admin/floorplan/[mallId]/zones
+ *
+ * Phase D — admin group migration. Pre-Phase-D this route was admin-gated
+ * but did NOT validate that the calling admin's customer owned the mall —
+ * a tenant admin could read another customer's zone definitions
+ * (geometry, capacity, baseVisitors) by mallId+floor guess. Now gated by
+ * requireMallOwnership.
+ */
 
-export async function GET(
-  _req: NextRequest,
-  { params }: { params: Promise<{ mallId: string }> },
-) {
-  const session = await auth();
-  if (!session?.user || session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+import { z } from 'zod';
+import prisma from '@/server/db/client';
+import { defineHandler } from '@/server/api/define-handler';
+import { requireMallOwnership } from '@/server/api/tenant-guards';
 
-  const { mallId } = await params;
-  const floor = new URL(_req.url).searchParams.get('floor') ?? 'ground';
+const paramsSchema = z.object({ mallId: z.string() });
 
-  const zones = await prisma.floorplanZone.findMany({
-    where: { mallId, floor },
-    orderBy: { zoneId: 'asc' },
-  });
+export const GET = defineHandler(
+  { auth: 'admin', paramsSchema },
+  async ({ req, params, auth: session }) => {
+    await requireMallOwnership(session, params.mallId);
 
-  return NextResponse.json(
-    zones.map((z) => ({
+    const floor = new URL(req.url).searchParams.get('floor') ?? 'ground';
+
+    const zones = await prisma.floorplanZone.findMany({
+      where: { mallId: params.mallId, floor },
+      orderBy: { zoneId: 'asc' },
+    });
+
+    return zones.map((z) => ({
       id: z.id,
       zoneId: z.zoneId,
       name: z.name,
@@ -35,6 +42,6 @@ export async function GET(
       areaSqm: z.areaSqm,
       baseVisitors: z.baseVisitors,
       publishedAt: z.publishedAt,
-    })),
-  );
-}
+    }));
+  },
+);

@@ -45,6 +45,13 @@ function makeReq(method: string, body: unknown): Request {
     body: JSON.stringify(body),
   })
 }
+function makeGetReq(): Request {
+  return new Request('http://localhost/api/admin/edge/devices', { method: 'GET' })
+}
+
+// Next.js 16 always passes a routeCtx with a Promise-resolved `params`,
+// even for non-parameterized routes. The defineHandler wrapper awaits it.
+const emptyCtx = () => ({ params: Promise.resolve({}) })
 
 beforeEach(() => {
   findMany.mockReset()
@@ -61,7 +68,7 @@ describe('GET /api/admin/edge/devices — tenant scope', () => {
     })
     findMany.mockResolvedValue([])
 
-    await GET()
+    await GET(makeGetReq() as any, emptyCtx() as any)
 
     expect(findMany).toHaveBeenCalledTimes(1)
     const args = findMany.mock.calls[0][0]
@@ -70,7 +77,7 @@ describe('GET /api/admin/edge/devices — tenant scope', () => {
 
   it('returns 401 when no session', async () => {
     authMock.mockResolvedValue(null)
-    const res = await GET()
+    const res = await GET(makeGetReq() as any, emptyCtx() as any)
     expect(res.status).toBe(401)
     expect(findMany).not.toHaveBeenCalled()
   })
@@ -79,7 +86,7 @@ describe('GET /api/admin/edge/devices — tenant scope', () => {
     authMock.mockResolvedValue({
       user: { id: 'u1', role: 'USER', customerId: 'cust-A' },
     })
-    const res = await GET()
+    const res = await GET(makeGetReq() as any, emptyCtx() as any)
     expect(res.status).toBe(403)
     expect(findMany).not.toHaveBeenCalled()
   })
@@ -95,7 +102,7 @@ describe('PATCH /api/admin/edge/devices — tenant scope', () => {
   it('rejects with 403 when the device belongs to a different customer', async () => {
     findUnique.mockResolvedValue({ mall: { customerId: 'cust-B' } })
 
-    const res = await PATCH(makeReq('PATCH', { id: 'd1', status: 'OFFLINE' }))
+    const res = await PATCH(makeReq('PATCH', { id: 'd1', status: 'OFFLINE' }) as any, emptyCtx() as any)
 
     expect(res.status).toBe(403)
     expect(update).not.toHaveBeenCalled()
@@ -103,7 +110,7 @@ describe('PATCH /api/admin/edge/devices — tenant scope', () => {
 
   it('rejects with 404 when the device does not exist', async () => {
     findUnique.mockResolvedValue(null)
-    const res = await PATCH(makeReq('PATCH', { id: 'd-x', status: 'OFFLINE' }))
+    const res = await PATCH(makeReq('PATCH', { id: 'd-x', status: 'OFFLINE' }) as any, emptyCtx() as any)
     expect(res.status).toBe(404)
     expect(update).not.toHaveBeenCalled()
   })
@@ -112,7 +119,7 @@ describe('PATCH /api/admin/edge/devices — tenant scope', () => {
     findUnique.mockResolvedValue({ mall: { customerId: 'cust-A' } })
     update.mockResolvedValue({ id: 'd1', status: 'OFFLINE' })
 
-    const res = await PATCH(makeReq('PATCH', { id: 'd1', status: 'OFFLINE' }))
+    const res = await PATCH(makeReq('PATCH', { id: 'd1', status: 'OFFLINE' }) as any, emptyCtx() as any)
 
     expect(res.status).toBe(200)
     expect(update).toHaveBeenCalledWith({
@@ -132,7 +139,7 @@ describe('DELETE /api/admin/edge/devices — tenant scope', () => {
   it('rejects with 403 when the device belongs to a different customer', async () => {
     findUnique.mockResolvedValue({ mall: { customerId: 'cust-B' } })
 
-    const res = await DELETE(makeReq('DELETE', { id: 'd1' }))
+    const res = await DELETE(makeReq('DELETE', { id: 'd1' }) as any, emptyCtx() as any)
 
     expect(res.status).toBe(403)
     expect(remove).not.toHaveBeenCalled()
@@ -140,7 +147,7 @@ describe('DELETE /api/admin/edge/devices — tenant scope', () => {
 
   it('rejects with 404 when the device does not exist', async () => {
     findUnique.mockResolvedValue(null)
-    const res = await DELETE(makeReq('DELETE', { id: 'd-x' }))
+    const res = await DELETE(makeReq('DELETE', { id: 'd-x' }) as any, emptyCtx() as any)
     expect(res.status).toBe(404)
     expect(remove).not.toHaveBeenCalled()
   })
@@ -149,7 +156,7 @@ describe('DELETE /api/admin/edge/devices — tenant scope', () => {
     findUnique.mockResolvedValue({ mall: { customerId: 'cust-A' } })
     remove.mockResolvedValue({})
 
-    const res = await DELETE(makeReq('DELETE', { id: 'd1' }))
+    const res = await DELETE(makeReq('DELETE', { id: 'd1' }) as any, emptyCtx() as any)
 
     expect(res.status).toBe(200)
     expect(remove).toHaveBeenCalledWith({ where: { id: 'd1' } })

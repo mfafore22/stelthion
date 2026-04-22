@@ -1,28 +1,26 @@
-import { NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';
-import { requireAdmin } from '@/lib/admin-auth';
-
 /**
- * GET /api/admin/malls — List malls for the admin sidebar mall selector.
+ * GET /api/admin/malls — list malls for the admin sidebar selector.
  *
- * Phase B.5 tenant scoping: previously returned every mall across every
- * customer. Now filtered to session.user.customerId so a tenant admin
- * only sees their own malls in the selector.
+ * Phase D — admin group migration. The B.5 tenant-scoping check is
+ * preserved bytewise; this commit only moves the auth/error/response
+ * shaping into the defineHandler wrapper.
  */
-export async function GET() {
-  const guard = await requireAdmin();
-  if ('error' in guard) return guard.error;
 
-  const malls = await prisma.mall.findMany({
-    where: { customerId: guard.session.user.customerId },
-    orderBy: { name: 'asc' },
-    select: {
-      mallId: true,
-      name: true,
-      city: true,
-      status: true,
-    },
-  });
+import prisma from '@/server/db/client';
+import { defineHandler } from '@/server/api/define-handler';
 
-  return NextResponse.json(malls);
-}
+export const GET = defineHandler(
+  { auth: 'admin' },
+  async ({ auth: session }) => {
+    return await prisma.mall.findMany({
+      where: { customerId: session.user.customerId },
+      orderBy: { name: 'asc' },
+      select: {
+        mallId: true,
+        name: true,
+        city: true,
+        status: true,
+      },
+    });
+  },
+);

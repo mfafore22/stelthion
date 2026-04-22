@@ -1,39 +1,60 @@
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';
-import { auth } from '@/auth';
+/**
+ * /api/admin/floorplan/[mallId]/snapshots
+ *
+ * GET: list snapshots for a mall+floor.
+ * POST: restore a snapshot — destructive (deletes all current zones &
+ *       cameras for the floor, replaces with snapshot contents).
+ *
+ * Phase D — admin group migration. Pre-Phase-D both verbs were
+ * admin-gated but did NOT validate that the calling admin's customer
+ * owned the mall. The leak shape:
+ *   - GET: cross-tenant snapshot list — leaks the timestamps and
+ *     reasons (e.g. "pre-restore") of another tenant's edits.
+ *   - POST: cross-tenant destructive restore — wipes another tenant's
+ *     current zones & cameras and overwrites them with stale snapshot
+ *     data, breaking their floorplan.
+ * Both verbs are now gated by requireMallOwnership. The POST verb
+ * additionally re-validates that the snapshot's mallId matches the URL
+ * mallId (which is now known to belong to the caller).
+ */
+
+import { z } from 'zod';
+import prisma from '@/server/db/client';
+import { defineHandler, HttpError } from '@/server/api/define-handler';
+import { requireMallOwnership } from '@/server/api/tenant-guards';
 import { createFloorplanSnapshot } from '@/lib/services/floorplanBackup';
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ mallId: string }> },
-) {
-  const session = await auth();
-  if (!session?.user || session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+const paramsSchema = z.object({ mallId: z.string() });
 
-  const { mallId } = await params;
-  const floor = new URL(req.url).searchParams.get('floor') ?? 'ground';
+// ─── GET ────────────────────────────────────────────────────────────
 
-  const snapshots = await prisma.floorplanSnapshot.findMany({
-    where: { mallId, floor },
-    orderBy: { createdAt: 'desc' },
-    take: 20,
-    select: {
-      id: true,
-      reason: true,
-      createdAt: true,
-    },
-  });
+export const GET = defineHandler(
+  { auth: 'admin', paramsSchema },
+  async ({ req, params, auth: session }) => {
+    await requireMallOwnership(session, params.mallId);
 
-  const list = snapshots.map((s) => ({
-    id: s.id,
-    reason: s.reason,
-    createdAt: s.createdAt,
-  }));
+    const floor = new URL(req.url).searchParams.get('floor') ?? 'ground';
 
-  return NextResponse.json(list);
-}
+    const snapshots = await prisma.floorplanSnapshot.findMany({
+      where: { mallId: params.mallId, floor },
+      orderBy: { createdAt: 'desc' },
+      take: 20,
+      select: {
+        id: true,
+        reason: true,
+        createdAt: true,
+      },
+    });
+
+    return snapshots.map((s) => ({
+      id: s.id,
+      reason: s.reason,
+      createdAt: s.createdAt,
+    }));
+  },
+);
+
+// ─── POST ───────────────────────────────────────────────────────────
 
 interface LegacyStore {
   id: string; mallId: string; floor: string; name: string; slug: string;
@@ -62,36 +83,34 @@ function convertLegacyStores(stores: LegacyStore[]) {
   }));
 }
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: Promise<{ mallId: string }> },
-) {
-  const session = await auth();
-  if (!session?.user || session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+const restoreBodySchema = z.object({
+  snapshotId: z.string().min(1),
+});
 
-  const { mallId } = await params;
-  const { snapshotId } = await req.json();
+export const POST = defineHandler(
+  { auth: 'admin', paramsSchema, bodySchema: restoreBodySchema },
+  async ({ params, body, auth: session }) => {
+    await requireMallOwnership(session, params.mallId);
 
-  const snapshot = await prisma.floorplanSnapshot.findUnique({
-    where: { id: snapshotId },
-  });
+    const { mallId } = params;
 
-  if (!snapshot || snapshot.mallId !== mallId) {
-    return NextResponse.json({ error: 'Snapshot not found' }, { status: 404 });
-  }
+    const snapshot = await prisma.floorplanSnapshot.findUnique({
+      where: { id: body.snapshotId },
+    });
 
-  const parsed = JSON.parse(snapshot.data);
-  let zones = parsed.zones ?? [];
-  if (parsed.stores?.length) {
-    zones = [...zones, ...convertLegacyStores(parsed.stores)];
-  }
-  const cameras = parsed.cameras ?? [];
+    if (!snapshot || snapshot.mallId !== mallId) {
+      throw new HttpError(404, 'Snapshot not found');
+    }
 
-  await createFloorplanSnapshot(prisma, mallId, snapshot.floor, 'pre-restore');
+    const parsed = JSON.parse(snapshot.data);
+    let zones = parsed.zones ?? [];
+    if (parsed.stores?.length) {
+      zones = [...zones, ...convertLegacyStores(parsed.stores)];
+    }
+    const cameras = parsed.cameras ?? [];
 
-  try {
+    await createFloorplanSnapshot(prisma, mallId, snapshot.floor, 'pre-restore');
+
     await prisma.$transaction(async (tx) => {
       await tx.camera.deleteMany({ where: { mallId, floor: snapshot.floor } });
       await tx.floorplanZone.deleteMany({ where: { mallId, floor: snapshot.floor } });
@@ -136,18 +155,12 @@ export async function POST(
       }
     });
 
-    return NextResponse.json({
+    return {
       ok: true,
       restored: {
         zones: zones.length,
         cameras: cameras.length,
       },
-    });
-  } catch (error) {
-    console.error('Snapshot restore error:', error);
-    return NextResponse.json(
-      { ok: false, error: error instanceof Error ? error.message : 'Restore failed' },
-      { status: 500 },
-    );
-  }
-}
+    };
+  },
+);
