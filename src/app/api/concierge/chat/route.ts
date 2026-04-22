@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/server/db/client';
 import { auth } from '@/auth';
 import { orchestrateChat } from '@/services/concierge/context-assembler';
 import { HttpError } from '@/server/api/define-handler';
-import { requireConversationOwnership } from '@/server/api/tenant-guards';
 import * as mallRepo from '@/server/repositories/mall';
+import * as conciergeRepo from '@/server/repositories/concierge';
 import type { LLMMessage } from '@/services/concierge/llm-client';
 
 function jsonErr(message: string, status: number): Response {
@@ -49,7 +48,7 @@ export async function POST(req: NextRequest) {
   // If resuming an existing conversation, verify the caller owns it.
   if (conversationId) {
     try {
-      await requireConversationOwnership(session, conversationId);
+      await conciergeRepo.assertConversationOwnership(session, conversationId);
     } catch (err) {
       if (err instanceof HttpError) return NextResponse.json({ error: err.message }, { status: err.status });
       throw err;
@@ -60,23 +59,18 @@ export async function POST(req: NextRequest) {
   let convId = conversationId;
   try {
     if (!convId) {
-      const conv = await prisma.conciergeConversation.create({
-        data: {
-          mallId: resolvedMallId,
-          userId: session.user.id,
-          title: message.substring(0, 60),
-        },
-      });
+      const conv = await conciergeRepo.createConversationForCaller(
+        session,
+        resolvedMallId,
+        message.substring(0, 60),
+      );
       convId = conv.id;
     }
 
     // Save user message
-    await prisma.conciergeMessage.create({
-      data: {
-        conversationId: convId,
-        sender: 'user',
-        content: message,
-      },
+    await conciergeRepo.appendMessageForCaller(session, convId, {
+      sender: 'user',
+      content: message,
     });
   } catch (dbError) {
     const errMsg = dbError instanceof Error ? dbError.message : 'Database error';
@@ -89,11 +83,7 @@ export async function POST(req: NextRequest) {
   }
 
   // Load conversation history
-  const history = await prisma.conciergeMessage.findMany({
-    where: { conversationId: convId },
-    orderBy: { createdAt: 'asc' },
-    take: 40,
-  });
+  const history = await conciergeRepo.listMessagesForCaller(session, convId!);
 
   const messages: LLMMessage[] = history.map(m => ({
     role: m.sender === 'user' ? 'user' as const : 'assistant' as const,
@@ -141,21 +131,15 @@ export async function POST(req: NextRequest) {
         }
 
         if (fullContent) {
-          await prisma.conciergeMessage.create({
-            data: {
-              conversationId: convId!,
-              sender: 'agent',
-              content: fullContent,
-              agentRole: agentRole || null,
-              toolCalls: allToolCalls.length > 0 ? JSON.parse(JSON.stringify(allToolCalls)) : undefined,
-              attachments: allAttachments.length > 0 ? JSON.parse(JSON.stringify(allAttachments)) : undefined,
-            },
+          await conciergeRepo.appendMessageForCaller(session, convId!, {
+            sender: 'agent',
+            content: fullContent,
+            agentRole: agentRole || null,
+            toolCalls: allToolCalls.length > 0 ? JSON.parse(JSON.stringify(allToolCalls)) : undefined,
+            attachments: allAttachments.length > 0 ? JSON.parse(JSON.stringify(allAttachments)) : undefined,
           });
 
-          await prisma.conciergeConversation.update({
-            where: { id: convId! },
-            data: { updatedAt: new Date() },
-          });
+          await conciergeRepo.touchConversationForCaller(session, convId!);
         }
       } catch (error) {
         const errMsg = error instanceof Error ? error.message : 'Unknown error';
