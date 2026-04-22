@@ -23,7 +23,12 @@
  */
 
 import type { Session } from 'next-auth';
-import type { Camera, FloorplanZone } from '@prisma/client';
+import type {
+  Camera,
+  FloorplanSnapshot,
+  FloorplanZone,
+  Prisma,
+} from '@prisma/client';
 import prisma from '@/server/db/client';
 import { HttpError } from '@/server/api/define-handler';
 import * as mallRepo from '@/server/repositories/mall';
@@ -85,22 +90,32 @@ export async function assertCameraOwnershipByPk(
 /**
  * Assert both (a) the caller owns the camera and (b) the camera's mallId
  * matches the mallId the caller passed. Used when creating an
- * AnalysisJob: the job's mallId is already validated upstream, and this
- * check blocks a cross-mall reference where a caller-owned mallId is
- * paired with a cameraId from a different (potentially foreign) mall.
+ * AnalysisJob (cross-mall reference defense) and by the admin camera
+ * PATCH route.
  *
- * Same error contract as assertCameraOwnershipByPk, plus a 400 when the
- * camera belongs to another mall the caller may or may not own.
+ * Errors:
+ *   - 401 if the session has no customerId
+ *   - 403 if the camera belongs to a different customer
+ *   - 404 if the camera does not exist, OR if it exists but belongs to a
+ *     different mallId (even when the caller owns both malls). The two
+ *     cases are fused intentionally: the 404 surface does not reveal
+ *     whether an unknown cameraId exists under another mall.
  */
 export async function assertCameraOwnedByMall(
   session: Session,
   mallId: string,
   cameraId: string,
 ): Promise<void> {
-  const cameraMallId = await assertCameraOwnershipByPk(session, cameraId);
-  if (cameraMallId !== mallId) {
-    throw new HttpError(400, 'Camera does not belong to this mall');
+  const callerCustomerId = requireCallerCustomerId(session);
+  const camera = await prisma.camera.findUnique({
+    where: { id: cameraId },
+    select: { mallId: true, mall: { select: { customerId: true } } },
+  });
+  if (!camera) throw new HttpError(404, 'Camera not found');
+  if (!camera.mall || camera.mall.customerId !== callerCustomerId) {
+    throw new HttpError(403, 'Forbidden');
   }
+  if (camera.mallId !== mallId) throw new HttpError(404, 'Camera not found');
 }
 
 // ─── Unscoped published/active reads ─────────────────────────────────
@@ -179,4 +194,82 @@ export async function listCamerasForMall(
     where: { mallId, ...(floor ? { floor } : {}) },
     orderBy: { label: 'asc' },
   });
+}
+
+/**
+ * Update a camera after asserting both caller ownership and that the
+ * camera belongs to the passed mallId. Used by admin camera PATCH.
+ */
+export async function updateCameraForMall(
+  session: Session,
+  mallId: string,
+  cameraId: string,
+  data: Prisma.CameraUpdateInput,
+): Promise<Camera> {
+  await assertCameraOwnedByMall(session, mallId, cameraId);
+  return prisma.camera.update({ where: { id: cameraId }, data });
+}
+
+/**
+ * Mark every zone on a mall+floor as published. Returns the timestamp
+ * used so callers can echo it back. Used by admin publish POST.
+ */
+export async function publishZonesForMall(
+  session: Session,
+  mallId: string,
+  floor: string,
+): Promise<{ publishedAt: Date }> {
+  await mallRepo.assertOwnership(session, mallId);
+  const publishedAt = new Date();
+  await prisma.floorplanZone.updateMany({
+    where: { mallId, floor },
+    data: { publishedAt },
+  });
+  return { publishedAt };
+}
+
+/**
+ * List snapshots for a mall+floor, newest first. The returned rows are
+ * trimmed to the id/reason/createdAt shape used by the admin UI — the
+ * full `data` blob is intentionally excluded to keep list responses
+ * small.
+ */
+export async function listSnapshotsForMall(
+  session: Session,
+  mallId: string,
+  floor: string,
+  take = 20,
+): Promise<Array<Pick<FloorplanSnapshot, 'id' | 'reason' | 'createdAt'>>> {
+  await mallRepo.assertOwnership(session, mallId);
+  return prisma.floorplanSnapshot.findMany({
+    where: { mallId, floor },
+    orderBy: { createdAt: 'desc' },
+    take,
+    select: { id: true, reason: true, createdAt: true },
+  });
+}
+
+/**
+ * Fetch a snapshot by pk after asserting both caller ownership of the
+ * passed mallId AND that the snapshot's own mallId matches. Carries the
+ * CSRF-shape defense for the restore flow: even if a caller owns multiple
+ * malls, the URL mallId and the snapshot's mallId must agree.
+ *
+ * Throws HttpError(404) if the snapshot is missing or belongs to a
+ * different mallId — the two cases are fused intentionally so the error
+ * does not reveal whether an unknown snapshotId exists in another tenant.
+ */
+export async function findSnapshotForMall(
+  session: Session,
+  mallId: string,
+  snapshotId: string,
+): Promise<FloorplanSnapshot> {
+  await mallRepo.assertOwnership(session, mallId);
+  const snapshot = await prisma.floorplanSnapshot.findUnique({
+    where: { id: snapshotId },
+  });
+  if (!snapshot || snapshot.mallId !== mallId) {
+    throw new HttpError(404, 'Snapshot not found');
+  }
+  return snapshot;
 }

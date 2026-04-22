@@ -168,8 +168,15 @@ describe('floorplan/[mallId]/cameras GET — tenant scope', () => {
 describe('floorplan/[mallId]/cameras/[cameraId] PATCH — tenant scope', () => {
   beforeEach(() => authMock.mockResolvedValue(adminA));
 
-  it('returns 403 before touching the camera when mall is foreign', async () => {
-    mallFindUnique.mockResolvedValue({ customerId: 'cust-B' });
+  it('returns 403 when the camera belongs to another customer', async () => {
+    // Phase E — ownership is now validated via camera.mall.customerId
+    // directly (floorplanRepo.assertCameraOwnedByMall). The URL mallId's
+    // own ownership is no longer pre-checked as a separate step — the
+    // camera-side check is a strict superset.
+    cameraFindUnique.mockResolvedValue({
+      mallId: 'm-foreign',
+      mall: { customerId: 'cust-B' },
+    });
     const res = await CAMERA_PATCH(
       makeReq(
         'http://localhost/api/admin/floorplan/m-foreign/cameras/c1',
@@ -179,13 +186,17 @@ describe('floorplan/[mallId]/cameras/[cameraId] PATCH — tenant scope', () => {
       ctx({ mallId: 'm-foreign', cameraId: 'c1' }) as any,
     );
     expect(res.status).toBe(403);
-    expect(cameraFindUnique).not.toHaveBeenCalled();
     expect(cameraUpdate).not.toHaveBeenCalled();
   });
 
   it('returns 404 when the camera is not in the (owned) mall', async () => {
-    mallFindUnique.mockResolvedValue({ customerId: 'cust-A' });
-    cameraFindUnique.mockResolvedValue({ mallId: 'other' });
+    // Caller owns both malls, but passes one mallId and a cameraId from
+    // the other — 404 rather than leaking existence of foreign-mall
+    // cameras.
+    cameraFindUnique.mockResolvedValue({
+      mallId: 'other',
+      mall: { customerId: 'cust-A' },
+    });
     const res = await CAMERA_PATCH(
       makeReq(
         'http://localhost/api/admin/floorplan/m-A1/cameras/c-mismatch',
@@ -199,8 +210,11 @@ describe('floorplan/[mallId]/cameras/[cameraId] PATCH — tenant scope', () => {
   });
 
   it('updates when ownership and camera both check out', async () => {
-    mallFindUnique.mockResolvedValue({ customerId: 'cust-A' });
-    cameraFindUnique.mockResolvedValue({ id: 'c1', mallId: 'm-A1' });
+    cameraFindUnique.mockResolvedValue({
+      id: 'c1',
+      mallId: 'm-A1',
+      mall: { customerId: 'cust-A' },
+    });
     cameraUpdate.mockResolvedValue({ id: 'c1', label: 'new' });
     const res = await CAMERA_PATCH(
       makeReq(

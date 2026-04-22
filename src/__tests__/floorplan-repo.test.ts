@@ -151,16 +151,18 @@ describe('floorplanRepo.assertCameraOwnedByMall', () => {
     ).rejects.toMatchObject({ status: 403 });
   });
 
-  it('throws 400 when the camera is owned but belongs to a different mall', async () => {
+  it('throws 404 when the camera is owned but belongs to a different mall (existence-leak defense)', async () => {
     // Caller owns both mall-A and mall-other (customerId matches), but the
     // caller claimed mall-A while passing a cameraId from mall-other.
+    // 404 is the same surface as "camera does not exist" so the response
+    // does not reveal that a camera under another mall exists.
     cameraFindUnique.mockResolvedValueOnce({
       mallId: 'mall-other',
       mall: { customerId: 'cust-A' },
     });
     await expect(
       floorplanRepo.assertCameraOwnedByMall(sessionA, 'mall-A', 'c-crossmall'),
-    ).rejects.toMatchObject({ status: 400 });
+    ).rejects.toMatchObject({ status: 404 });
   });
 
   it('resolves when the camera is owned AND belongs to the passed mall', async () => {

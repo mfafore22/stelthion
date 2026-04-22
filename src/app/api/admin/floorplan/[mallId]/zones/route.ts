@@ -1,31 +1,22 @@
 /**
  * GET /api/admin/floorplan/[mallId]/zones
  *
- * Phase D — admin group migration. Pre-Phase-D this route was admin-gated
- * but did NOT validate that the calling admin's customer owned the mall —
- * a tenant admin could read another customer's zone definitions
- * (geometry, capacity, baseVisitors) by mallId+floor guess. Now gated by
- * requireMallOwnership.
+ * Phase E — floorplanRepo migration. Ownership + scoped list now live
+ * in floorplanRepo.listZonesForMall; the route body shapes the
+ * response.
  */
 
 import { z } from 'zod';
-import prisma from '@/server/db/client';
 import { defineHandler } from '@/server/api/define-handler';
-import { requireMallOwnership } from '@/server/api/tenant-guards';
+import * as floorplanRepo from '@/server/repositories/floorplan';
 
 const paramsSchema = z.object({ mallId: z.string() });
 
 export const GET = defineHandler(
   { auth: 'admin', paramsSchema },
   async ({ req, params, auth: session }) => {
-    await requireMallOwnership(session, params.mallId);
-
     const floor = new URL(req.url).searchParams.get('floor') ?? 'ground';
-
-    const zones = await prisma.floorplanZone.findMany({
-      where: { mallId: params.mallId, floor },
-      orderBy: { zoneId: 'asc' },
-    });
+    const zones = await floorplanRepo.listZonesForMall(session, params.mallId, floor);
 
     return zones.map((z) => ({
       id: z.id,
