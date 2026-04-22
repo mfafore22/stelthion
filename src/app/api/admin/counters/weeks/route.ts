@@ -4,26 +4,14 @@
  * GET: list per-week counter uploads (and legacy untracked rollups) for a mall.
  * DELETE: remove a specific upload by id, or a legacy week+year bucket.
  *
- * Phase D — admin group migration. Pre-Phase-D leaks:
- *   - GET defaulted mallId to the literal string 'ideapark' when the
- *     query param was missing — a tenant admin could see Ideapark's
- *     uploads without supplying mallId, and could pass any other
- *     tenant's mallId to read their data. No ownership check.
- *   - DELETE accepted client-supplied uploadId with NO ownership check
- *     and no mallId binding — a tenant admin could delete any other
- *     tenant's counter readings (destructive, irreversible).
- *
- * After Phase D:
- *   - mallId is REQUIRED on both verbs (no fallback default).
- *   - Both verbs require mall ownership before any DB read or write.
- *   - DELETE-by-uploadId additionally re-validates that the upload's
- *     mallId matches the URL mallId (which is now known to be owned).
+ * Phase E — counterRepo migration. Ownership + CSRF-shape defense now
+ * live in src/server/repositories/counter.ts. The route body is pure
+ * request/response shaping.
  */
 
 import { z } from 'zod';
-import prisma from '@/server/db/client';
 import { defineHandler, HttpError } from '@/server/api/define-handler';
-import { requireMallOwnership } from '@/server/api/tenant-guards';
+import * as counterRepo from '@/server/repositories/counter';
 
 // ─── GET ────────────────────────────────────────────────────────────
 
@@ -33,23 +21,10 @@ export const GET = defineHandler(
     const mallId = new URL(req.url).searchParams.get('mallId');
     if (!mallId) throw new HttpError(400, 'mallId is required');
 
-    await requireMallOwnership(session, mallId);
-
-    // Return individual uploads so each document is visible.
-    const uploads = await prisma.counterUpload.findMany({
-      where: { mallId },
-      orderBy: { uploadedAt: 'desc' },
-    });
-
-    // Also return legacy week-grouped data for uploads that predate tracking.
-    const legacyWeeks = await prisma.counterReading.groupBy({
-      by: ['year', 'weekNumber', 'granularity'],
-      where: { mallId, uploadId: null },
-      _sum: { visitors: true },
-      _count: { counterLabel: true },
-      _max: { uploadedAt: true },
-      orderBy: [{ year: 'desc' }, { weekNumber: 'desc' }],
-    });
+    const { uploads, legacyWeeks } = await counterRepo.listWeeksPageDataForMall(
+      session,
+      mallId,
+    );
 
     // Deduplicate legacy by year+week, preferring finer granularity.
     const seen = new Map<string, (typeof legacyWeeks)[0]>();
@@ -115,37 +90,25 @@ export const DELETE = defineHandler(
     }
     const { mallId, uploadId, week, year } = parsed.data;
 
-    await requireMallOwnership(session, mallId);
-
     if (uploadId) {
-      // Re-validate that the upload belongs to the requested (and owned) mall.
-      // This blocks a CSRF-shaped attack where the attacker knows an
-      // uploadId for cust-B and tries to wrap it in their own mallId.
-      const upload = await prisma.counterUpload.findUnique({
-        where: { id: uploadId },
-        select: { mallId: true },
-      });
-      if (!upload) throw new HttpError(404, 'Upload not found');
-      if (upload.mallId !== mallId) {
-        throw new HttpError(403, 'Upload does not belong to this mall');
-      }
-
-      const deleted = await prisma.counterReading.deleteMany({
-        where: { uploadId },
-      });
-      await prisma.counterUpload.delete({ where: { id: uploadId } });
-      return { ok: true, deleted: deleted.count, uploadId };
+      const { deletedReadings } = await counterRepo.deleteUploadByIdForMall(
+        session,
+        mallId,
+        uploadId,
+      );
+      return { ok: true, deleted: deletedReadings, uploadId };
     }
 
     if (!week || !year) {
       throw new HttpError(400, 'Missing week/year or uploadId');
     }
 
-    // Legacy delete by week+year (untracked uploads only) — scoped to mallId.
-    const deleted = await prisma.counterReading.deleteMany({
-      where: { mallId, weekNumber: week, year, uploadId: null },
-    });
-
-    return { ok: true, deleted: deleted.count, week, year };
+    const { deletedReadings } = await counterRepo.deleteLegacyWeekForMall(
+      session,
+      mallId,
+      week,
+      year,
+    );
+    return { ok: true, deleted: deletedReadings, week, year };
   },
 );
