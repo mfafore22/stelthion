@@ -1,31 +1,25 @@
 /**
  * /api/admin/edge/devices
  *
- * Phase D — admin group migration. The B.5 tenant-scoping checks are
- * preserved bytewise. PATCH and DELETE now share an explicit
- * requireDeviceOwnership check inlined locally (single Prisma lookup
- * via mall.customerId).
- *
- * Tenant scoping (unchanged from B.5):
+ * Phase E — edgeDeviceRepo migration. Ownership checks now live in
+ * src/server/repositories/edge-device.ts; the route body is pure
+ * request/response shaping. Tenant scoping is unchanged semantically:
  *   - GET filters devices whose mall belongs to the calling admin's customer.
  *   - PATCH validates device ownership before update.
  *   - DELETE validates device ownership before delete.
  */
 
 import { z } from 'zod';
-import type { Session } from 'next-auth';
 import prisma from '@/server/db/client';
-import { defineHandler, HttpError } from '@/server/api/define-handler';
+import { defineHandler } from '@/server/api/define-handler';
+import * as edgeDeviceRepo from '@/server/repositories/edge-device';
 
 // ─── GET ────────────────────────────────────────────────────────────
 
 export const GET = defineHandler(
   { auth: 'admin' },
   async ({ auth: session }) => {
-    const devices = await prisma.edgeDevice.findMany({
-      where: { mall: { customerId: session.user.customerId } },
-      orderBy: { createdAt: 'desc' },
-    });
+    const devices = await edgeDeviceRepo.listForCaller(session);
 
     // Mark devices with stale heartbeat (>3 minutes) as OFFLINE.
     const now = Date.now();
@@ -61,7 +55,7 @@ const patchSchema = z.object({
 export const PATCH = defineHandler(
   { auth: 'admin', bodySchema: patchSchema },
   async ({ body, auth: session }) => {
-    await requireDeviceOwnership(session, body.id);
+    await edgeDeviceRepo.assertOwnership(session, body.id);
 
     const device = await prisma.edgeDevice.update({
       where: { id: body.id },
@@ -81,34 +75,9 @@ const deleteSchema = z.object({
 export const DELETE = defineHandler(
   { auth: 'admin', bodySchema: deleteSchema },
   async ({ body, auth: session }) => {
-    await requireDeviceOwnership(session, body.id);
+    await edgeDeviceRepo.assertOwnership(session, body.id);
 
     await prisma.edgeDevice.delete({ where: { id: body.id } });
     return { deleted: true };
   },
 );
-
-// ─── Local tenant guard ────────────────────────────────────────────
-
-/**
- * Asserts that the calling session's customer owns the edge device with
- * the given id. Lives here (not in tenant-guards.ts) because edge devices
- * are admin-only — no other route group references them.
- */
-async function requireDeviceOwnership(
-  session: Session,
-  deviceId: string,
-): Promise<void> {
-  const callerCustomerId = session.user?.customerId;
-  if (!callerCustomerId) throw new HttpError(401, 'Unauthorized');
-
-  const device = await prisma.edgeDevice.findUnique({
-    where: { id: deviceId },
-    select: { mall: { select: { customerId: true } } },
-  });
-
-  if (!device) throw new HttpError(404, 'Device not found');
-  if (!device.mall || device.mall.customerId !== callerCustomerId) {
-    throw new HttpError(403, 'Forbidden');
-  }
-}
