@@ -95,4 +95,33 @@ export async function listForCaller<
   }) as Promise<Array<Prisma.AnalysisJobGetPayload<{ include: I }>>>;
 }
 
+/**
+ * Group-by-status count scoped to the caller's customer. Used by the
+ * admin dashboard to render per-status tile counts without exposing
+ * cross-tenant totals.
+ *
+ * Returns an array of { status, _count } entries — Prisma's groupBy
+ * shape. Statuses with zero rows are absent, so consumers should
+ * default missing entries to 0.
+ */
+export async function countByStatusForCaller(
+  session: Session,
+): Promise<Array<{ status: AnalysisJob['status']; _count: number }>> {
+  const callerCustomerId = requireCallerCustomerId(session);
+
+  const rows = await prisma.analysisJob.groupBy({
+    by: ['status'],
+    where: { mall: { customerId: callerCustomerId } },
+    _count: true,
+  });
+
+  // Prisma's generated groupBy type wraps _count under the `_count`
+  // property as a number when a bare `_count: true` is used; reshape
+  // to the simple { status, _count } contract the callers expect.
+  return rows.map((r) => ({
+    status: r.status,
+    _count: (r as unknown as { _count: number })._count,
+  }));
+}
+
 export type { AnalysisJob };
