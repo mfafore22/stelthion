@@ -3,6 +3,30 @@ import prisma from '@/app/lib/prisma';
 import { auth } from '@/auth';
 import { generateBriefing } from '@/services/concierge/briefing-generator';
 
+/**
+ * Validates that the supplied mallId belongs to the caller's customer.
+ * Returns null on success, or a NextResponse error to short-circuit.
+ *
+ * Phase B.5 tenant scoping helper. Inlined here (rather than imported
+ * from tenant-guards) because this route does not use defineHandler;
+ * the helper signature returns a Response so the existing route shape
+ * is preserved.
+ */
+async function assertMallBelongsToSession(
+  mallId: string,
+  customerId: string,
+): Promise<NextResponse | null> {
+  const mall = await prisma.mall.findUnique({
+    where: { mallId },
+    select: { customerId: true },
+  });
+  if (!mall) return NextResponse.json({ error: 'Mall not found' }, { status: 404 });
+  if (mall.customerId !== customerId) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+  return null;
+}
+
 /** GET — Fetch today's briefing for the current user */
 export async function GET(req: NextRequest) {
   const session = await auth();
@@ -16,6 +40,10 @@ export async function GET(req: NextRequest) {
   if (!mallId) {
     return NextResponse.json({ error: 'mallId required' }, { status: 400 });
   }
+
+  // Phase B.5: prevent reading another tenant's briefing.
+  const denied = await assertMallBelongsToSession(mallId, session.user.customerId);
+  if (denied) return denied;
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -50,6 +78,10 @@ export async function POST(req: NextRequest) {
   if (!mallId) {
     return NextResponse.json({ error: 'mallId required' }, { status: 400 });
   }
+
+  // Phase B.5: prevent generating a briefing against another tenant's mall.
+  const denied = await assertMallBelongsToSession(mallId, session.user.customerId);
+  if (denied) return denied;
 
   // Check subscription for section preferences
   const sub = await prisma.conciergeBriefingSubscription.findUnique({

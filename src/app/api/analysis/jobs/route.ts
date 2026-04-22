@@ -5,6 +5,16 @@ import { auth } from '@/auth';
 const VALID_JOURNEY_COUNTS = [1, 5, 10, 15, 20];
 const VALID_MODES = ['ZONE_COUNT', 'AB_TRACKING', 'JOURNEY_MAP', 'STORE_BEHAVIOR'] as const;
 
+/**
+ * GET /api/analysis/jobs — List analysis jobs scoped to the caller's tenant.
+ *
+ * Phase B.5 tenant scoping:
+ *   - When mallId is supplied: validates the mall belongs to the caller's
+ *     customer, returns 403 otherwise.
+ *   - When mallId is omitted: results are filtered to jobs whose mall
+ *     belongs to the caller's customer (previously returned all jobs
+ *     across all customers).
+ */
 export async function GET(req: NextRequest) {
   const session = await auth();
   if (!session?.user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -15,8 +25,25 @@ export async function GET(req: NextRequest) {
   const mode = searchParams.get('mode');
   const type = searchParams.get('type');
 
+  // If mallId is supplied, verify ownership before querying.
+  if (mallId) {
+    const mall = await prisma.mall.findUnique({
+      where: { mallId },
+      select: { customerId: true },
+    });
+    if (!mall) return NextResponse.json({ error: 'Mall not found' }, { status: 404 });
+    if (mall.customerId !== session.user.customerId) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+  }
+
   const where: Record<string, unknown> = {};
-  if (mallId) where.mallId = mallId;
+  if (mallId) {
+    where.mallId = mallId;
+  } else {
+    // No explicit mallId — scope to all malls owned by the caller's customer.
+    where.mall = { customerId: session.user.customerId };
+  }
   if (status) where.status = status;
   if (mode && VALID_MODES.includes(mode as typeof VALID_MODES[number])) where.mode = mode;
   if (type === 'journey-planner') where.originZoneId = { not: null };
@@ -34,6 +61,14 @@ export async function GET(req: NextRequest) {
   return NextResponse.json(jobs);
 }
 
+/**
+ * POST /api/analysis/jobs — Create a new analysis job for a mall.
+ *
+ * Phase B.5 tenant scoping: validates mallId belongs to the caller's
+ * customer before creating the job. Previously trusted client-supplied
+ * mallId, allowing a tenant user to create jobs against another
+ * tenant's mall.
+ */
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session?.user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -47,6 +82,16 @@ export async function POST(req: NextRequest) {
 
   if (!mallId || !footageDate || !startTime || !endTime || !requestedBy) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+  }
+
+  // Verify mall ownership before doing any further work.
+  const mall = await prisma.mall.findUnique({
+    where: { mallId },
+    select: { customerId: true },
+  });
+  if (!mall) return NextResponse.json({ error: 'Mall not found' }, { status: 404 });
+  if (mall.customerId !== session.user.customerId) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
   if (!VALID_MODES.includes(mode)) {
