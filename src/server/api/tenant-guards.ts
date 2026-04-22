@@ -50,6 +50,7 @@ import prisma from '@/server/db/client'
 import { HttpError } from '@/server/api/define-handler'
 import * as mallRepo from '@/server/repositories/mall'
 import * as analysisJobRepo from '@/server/repositories/analysis-job'
+import * as customerRepo from '@/server/repositories/customer'
 
 /**
  * Asserts that the calling session's customer owns the given customerId.
@@ -64,13 +65,7 @@ export function requireCustomerOwnership(
   session: Session,
   customerId: string,
 ): void {
-  const callerCustomerId = session.user?.customerId
-  if (!callerCustomerId) {
-    throw new HttpError(401, 'Unauthorized')
-  }
-  if (callerCustomerId !== customerId) {
-    throw new HttpError(403, 'Forbidden')
-  }
+  customerRepo.assertOwnership(session, customerId)
 }
 
 /**

@@ -15,9 +15,9 @@
  */
 
 import { z } from 'zod'
-import prisma from '@/app/lib/prisma'
-import { defineHandler, HttpError } from '@/server/api/define-handler'
+import { defineHandler } from '@/server/api/define-handler'
 import { requireCustomerOwnership } from '@/server/api/tenant-guards'
+import * as customerRepo from '@/server/repositories/customer'
 
 const paramsSchema = z.object({ id: z.string() })
 
@@ -25,24 +25,6 @@ export const GET = defineHandler(
   { auth: 'session', paramsSchema },
   async ({ auth: session, params }) => {
     requireCustomerOwnership(session, params.id)
-
-    const customer = await prisma.customer.findUnique({
-      where: { id: params.id },
-      include: {
-        malls: {
-          include: {
-            stats: true,
-            branding: true,
-            categories: true,
-          },
-        },
-      },
-    })
-
-    if (!customer) {
-      throw new HttpError(404, 'Customer not found')
-    }
-
-    return customer
+    return await customerRepo.findOwnWithMalls(session)
   },
 )

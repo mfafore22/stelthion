@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation'
 import prisma from '@/app/lib/prisma'
 import Link from 'next/link'
 import { Building2, Users, TrendingUp, Clock, ShoppingBag } from 'lucide-react'
+import * as customerRepo from '@/server/repositories/customer'
+import { HttpError } from '@/server/api/define-handler'
 
 export default async function DashboardPage() {
   const session = await auth()
@@ -17,20 +19,13 @@ export default async function DashboardPage() {
     redirect('/two-factor')
   }
 
-  const customer = await prisma.customer.findUnique({
-    where: { id: session.user.customerId },
-    include: {
-      malls: {
-        include: {
-          stats: true,
-          branding: true,
-          categories: true,
-        }
-      }
-    }
-  })
-
-  if (!customer) redirect('/login')
+  let customer
+  try {
+    customer = await customerRepo.findOwnWithMalls(session)
+  } catch (err) {
+    if (err instanceof HttpError && err.status === 404) redirect('/login')
+    throw err
+  }
 
   const totalVisitors = customer.malls.reduce((sum, m) => sum + (m.stats?.currentVisitors ?? 0), 0)
   const totalAnnualSales = customer.malls.reduce((sum, m) => sum + (m.stats?.annualSales ?? 0), 0)
