@@ -1,15 +1,27 @@
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';
-import {auth} from '@/auth';
+/**
+ * GET /api/counters/[mallId]/export
+ *
+ * CSV (or JSON) export of CounterReading rows for a given week.
+ *
+ * Phase D — counters group migration. Pre-Phase-D this route checked for
+ * a session but did not assert mall ownership — a tenant user could
+ * export another tenant's counter data by guessing a mallId. Ownership
+ * now enforced via requireMallOwnership.
+ */
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ mallId: string }> },
-) {
-  try {
-    const session = await auth();
-    if(!session?.user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    const { mallId } = await params;
+import { NextResponse } from 'next/server';
+import { z } from 'zod';
+import prisma from '@/server/db/client';
+import { defineHandler, HttpError } from '@/server/api/define-handler';
+import { requireMallOwnership } from '@/server/api/tenant-guards';
+
+const paramsSchema = z.object({ mallId: z.string() });
+
+export const GET = defineHandler(
+  { auth: 'session', paramsSchema },
+  async ({ req, params, auth: session }) => {
+    await requireMallOwnership(session, params.mallId);
+
     const url = new URL(req.url);
     const week = parseInt(url.searchParams.get('week') ?? '0', 10);
     const year = parseInt(url.searchParams.get('year') ?? '0', 10);
@@ -17,10 +29,14 @@ export async function GET(
     const format = url.searchParams.get('format') ?? 'csv';
 
     if (!week || !year) {
-      return NextResponse.json({ error: 'week and year required' }, { status: 400 });
+      throw new HttpError(400, 'week and year required');
     }
 
-    const where: Record<string, unknown> = { mallId, weekNumber: week, year };
+    const where: Record<string, unknown> = {
+      mallId: params.mallId,
+      weekNumber: week,
+      year,
+    };
     if (counterFilter !== 'all') {
       where.counterLabel = counterFilter;
     }
@@ -39,12 +55,11 @@ export async function GET(
           r.visitorsPrevYear && r.visitorsPrevYear > 0
             ? (((r.visitors - r.visitorsPrevYear) / r.visitorsPrevYear) * 100).toFixed(1)
             : '';
-        // Escape counter label in case it contains commas
         const label = r.counterLabel.includes(',') ? `"${r.counterLabel}"` : r.counterLabel;
         return `${date},${hour},${label},${r.floor},${r.visitors},${r.visitorsPrevYear ?? ''},${delta}`;
       });
       const csv = header + rows.join('\n');
-      const filename = `counters-${mallId}-wk${week}-${year}.csv`;
+      const filename = `counters-${params.mallId}-wk${week}-${year}.csv`;
       return new NextResponse(csv, {
         headers: {
           'Content-Type': 'text/csv; charset=utf-8',
@@ -54,9 +69,6 @@ export async function GET(
     }
 
     // JSON fallback
-    return NextResponse.json(readings);
-  } catch (err) {
-    console.error('[counter export]', err);
-    return NextResponse.json({ error: String(err) }, { status: 500 });
-  }
-}
+    return readings;
+  },
+);
