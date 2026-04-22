@@ -17,6 +17,7 @@ import { z } from 'zod';
 import prisma from '@/server/db/client';
 import { defineHandler, HttpError } from '@/server/api/define-handler';
 import { requireMallOwnership } from '@/server/api/tenant-guards';
+import * as analysisJobRepo from '@/server/repositories/analysis-job';
 
 const VALID_JOURNEY_COUNTS = [1, 5, 10, 15, 20] as const;
 const VALID_MODES = ['ZONE_COUNT', 'AB_TRACKING', 'JOURNEY_MAP', 'STORE_BEHAVIOR'] as const;
@@ -26,9 +27,6 @@ const VALID_MODES = ['ZONE_COUNT', 'AB_TRACKING', 'JOURNEY_MAP', 'STORE_BEHAVIOR
 export const GET = defineHandler(
   { auth: 'session' },
   async ({ req, auth: session }) => {
-    const callerCustomerId = session.user?.customerId;
-    if (!callerCustomerId) throw new HttpError(401, 'Unauthorized');
-
     const { searchParams } = new URL(req.url);
     const mallId = searchParams.get('mallId');
     const status = searchParams.get('status');
@@ -40,17 +38,15 @@ export const GET = defineHandler(
     }
 
     const where: Record<string, unknown> = {};
-    if (mallId) {
-      where.mallId = mallId;
-    } else {
-      // No explicit mallId — scope to all malls owned by the caller's customer.
-      where.mall = { customerId: callerCustomerId };
-    }
+    if (mallId) where.mallId = mallId;
     if (status) where.status = status;
     if (mode && (VALID_MODES as readonly string[]).includes(mode)) where.mode = mode;
     if (type === 'journey-planner') where.originZoneId = { not: null };
 
-    return await prisma.analysisJob.findMany({
+    // listForCaller always injects `mall.customerId === caller`, so we
+    // don't need the explicit fall-through that B.5 added here — the
+    // repo makes the safe path the only path.
+    return await analysisJobRepo.listForCaller(session, {
       where,
       include: {
         camera: { select: { id: true, label: true, floor: true } },

@@ -49,6 +49,7 @@ import type { Session } from 'next-auth'
 import prisma from '@/server/db/client'
 import { HttpError } from '@/server/api/define-handler'
 import * as mallRepo from '@/server/repositories/mall'
+import * as analysisJobRepo from '@/server/repositories/analysis-job'
 
 /**
  * Asserts that the calling session's customer owns the given customerId.
@@ -119,23 +120,7 @@ export async function requireJobOwnership(
   session: Session,
   jobId: string,
 ): Promise<string> {
-  const callerCustomerId = session.user?.customerId
-  if (!callerCustomerId) {
-    throw new HttpError(401, 'Unauthorized')
-  }
-
-  const job = await prisma.analysisJob.findUnique({
-    where: { id: jobId },
-    select: { mall: { select: { customerId: true } } },
-  })
-
-  if (!job) {
-    throw new HttpError(404, 'Job not found')
-  }
-  if (!job.mall || job.mall.customerId !== callerCustomerId) {
-    throw new HttpError(403, 'Forbidden')
-  }
-  return job.mall.customerId
+  return analysisJobRepo.assertOwnership(session, jobId)
 }
 
 /**
