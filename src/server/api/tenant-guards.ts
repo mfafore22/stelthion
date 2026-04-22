@@ -48,6 +48,7 @@
 import type { Session } from 'next-auth'
 import prisma from '@/server/db/client'
 import { HttpError } from '@/server/api/define-handler'
+import * as mallRepo from '@/server/repositories/mall'
 
 /**
  * Asserts that the calling session's customer owns the given customerId.
@@ -86,23 +87,7 @@ export async function requireMallOwnership(
   session: Session,
   mallId: string,
 ): Promise<string> {
-  const callerCustomerId = session.user?.customerId
-  if (!callerCustomerId) {
-    throw new HttpError(401, 'Unauthorized')
-  }
-
-  const mall = await prisma.mall.findUnique({
-    where: { mallId },
-    select: { customerId: true },
-  })
-
-  if (!mall) {
-    throw new HttpError(404, 'Mall not found')
-  }
-  if (mall.customerId !== callerCustomerId) {
-    throw new HttpError(403, 'Forbidden')
-  }
-  return mall.customerId
+  return mallRepo.assertOwnership(session, mallId)
 }
 
 /**
@@ -114,23 +99,7 @@ export async function requireMallOwnershipByPk(
   session: Session,
   id: string,
 ): Promise<string> {
-  const callerCustomerId = session.user?.customerId
-  if (!callerCustomerId) {
-    throw new HttpError(401, 'Unauthorized')
-  }
-
-  const mall = await prisma.mall.findUnique({
-    where: { id },
-    select: { customerId: true },
-  })
-
-  if (!mall) {
-    throw new HttpError(404, 'Mall not found')
-  }
-  if (mall.customerId !== callerCustomerId) {
-    throw new HttpError(403, 'Forbidden')
-  }
-  return mall.customerId
+  return mallRepo.assertOwnershipByPk(session, id)
 }
 
 /**

@@ -21,20 +21,18 @@
 
 import { z } from 'zod';
 import prisma from '@/server/db/client';
-import { defineHandler, HttpError } from '@/server/api/define-handler';
+import { defineHandler } from '@/server/api/define-handler';
+import * as mallRepo from '@/server/repositories/mall';
 
 const paramsSchema = z.object({ mallId: z.string() });
 
 export const GET = defineHandler(
   { auth: 'session', paramsSchema },
   async ({ req, params, auth: session }) => {
-    const callerCustomerId = session.user?.customerId;
-    if (!callerCustomerId) throw new HttpError(401, 'Unauthorized');
-
     // Resolve mallId, accepting either a real mallId or a customerId
     // (legacy compatibility). Either way the resolved mall must belong
     // to the caller's customer.
-    const resolvedMallId = await resolveMallId(params.mallId, callerCustomerId);
+    const resolvedMallId = await mallRepo.resolveMallIdOrCustomerId(session, params.mallId);
 
     const url = new URL(req.url);
     const weekParam = url.searchParams.get('week');
@@ -175,41 +173,6 @@ export const GET = defineHandler(
     };
   },
 );
-
-/**
- * Resolve the path param to a real mallId, enforcing tenant ownership.
- *
- * Tries the param as a mallId first; on miss falls back to treating it
- * as a customerId. In both branches the result must belong to
- * `callerCustomerId` or we throw 403/404 — never silently returning
- * another tenant's data.
- */
-async function resolveMallId(param: string, callerCustomerId: string): Promise<string> {
-  const byMallId = await prisma.mall.findUnique({
-    where: { mallId: param },
-    select: { mallId: true, customerId: true },
-  });
-
-  if (byMallId) {
-    if (byMallId.customerId !== callerCustomerId) {
-      throw new HttpError(403, 'Forbidden');
-    }
-    return byMallId.mallId;
-  }
-
-  const byCustomer = await prisma.mall.findFirst({
-    where: { customerId: param },
-    select: { mallId: true, customerId: true },
-  });
-
-  if (!byCustomer) {
-    throw new HttpError(404, 'Mall not found');
-  }
-  if (byCustomer.customerId !== callerCustomerId) {
-    throw new HttpError(403, 'Forbidden');
-  }
-  return byCustomer.mallId;
-}
 
 function round(n: number): number {
   return Math.round(n * 100) / 100;

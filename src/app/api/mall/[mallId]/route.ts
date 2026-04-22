@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';
+import * as mallRepo from '@/server/repositories/mall';
 
 const IDEAPARK_DATA = {
   id: 'ideapark',
@@ -76,14 +76,14 @@ export async function GET(
     return NextResponse.json({ success: true, data });
   }
 
-  // Try database for other malls
-  const mall = await prisma.mall.findUnique({
-    where: { mallId },
-    include: {
-      stats: true,
-      branding: true,
-      categories: true,
-    },
+  // Try database for other malls.
+  // Unscoped: this is an explicitly public endpoint (no auth, drives the
+  // landing/properties page). Any new auth'd callers should migrate to a
+  // tenant-scoped mallRepo method instead.
+  const mall = await mallRepo.findByMallIdWithRelationsUnscoped(mallId, {
+    stats: true,
+    branding: true,
+    categories: true,
   });
 
   if (mall) {
