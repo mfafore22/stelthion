@@ -48,6 +48,12 @@ function makePost(body: unknown): Request {
   })
 }
 
+// Next.js 16 always passes a routeCtx with a Promise-resolved `params`,
+// even for non-parameterized routes (where it resolves to `{}`). The
+// defineHandler wrapper awaits routeCtx.params, so the test must supply
+// it — production never invokes a route handler without it.
+const emptyCtx = () => ({ params: Promise.resolve({}) })
+
 beforeEach(() => {
   mallFindUnique.mockReset()
   jobFindMany.mockReset()
@@ -65,21 +71,21 @@ describe('GET /api/analysis/jobs — tenant scope', () => {
 
   it('returns 401 when no session', async () => {
     authMock.mockResolvedValue(null)
-    const res = await GET(makeGet('?mallId=mall-A1') as any)
+    const res = await GET(makeGet('?mallId=mall-A1') as any, emptyCtx() as any)
     expect(res.status).toBe(401)
     expect(jobFindMany).not.toHaveBeenCalled()
   })
 
   it('rejects with 403 when supplied mallId belongs to a different customer', async () => {
     mallFindUnique.mockResolvedValue({ customerId: 'cust-B' })
-    const res = await GET(makeGet('?mallId=mall-B1') as any)
+    const res = await GET(makeGet('?mallId=mall-B1') as any, emptyCtx() as any)
     expect(res.status).toBe(403)
     expect(jobFindMany).not.toHaveBeenCalled()
   })
 
   it('returns 404 when supplied mallId is unknown', async () => {
     mallFindUnique.mockResolvedValue(null)
-    const res = await GET(makeGet('?mallId=ghost') as any)
+    const res = await GET(makeGet('?mallId=ghost') as any, emptyCtx() as any)
     expect(res.status).toBe(404)
     expect(jobFindMany).not.toHaveBeenCalled()
   })
@@ -87,14 +93,14 @@ describe('GET /api/analysis/jobs — tenant scope', () => {
   it('queries with mallId filter when ownership check passes', async () => {
     mallFindUnique.mockResolvedValue({ customerId: 'cust-A' })
     jobFindMany.mockResolvedValue([])
-    await GET(makeGet('?mallId=mall-A1') as any)
+    await GET(makeGet('?mallId=mall-A1') as any, emptyCtx() as any)
     expect(jobFindMany).toHaveBeenCalledTimes(1)
     expect(jobFindMany.mock.calls[0][0].where).toMatchObject({ mallId: 'mall-A1' })
   })
 
   it('falls back to mall.customerId filter when no mallId is supplied', async () => {
     jobFindMany.mockResolvedValue([])
-    await GET(makeGet('') as any)
+    await GET(makeGet('') as any, emptyCtx() as any)
     expect(jobFindMany).toHaveBeenCalledTimes(1)
     expect(jobFindMany.mock.calls[0][0].where).toEqual({
       mall: { customerId: 'cust-A' },
@@ -124,14 +130,14 @@ describe('POST /api/analysis/jobs — tenant scope', () => {
 
   it('rejects with 403 when mallId belongs to a different customer', async () => {
     mallFindUnique.mockResolvedValue({ customerId: 'cust-B' })
-    const res = await POST(makePost(validBody))
+    const res = await POST(makePost(validBody) as any, emptyCtx() as any)
     expect(res.status).toBe(403)
     expect(jobCreate).not.toHaveBeenCalled()
   })
 
   it('rejects with 404 when mallId is unknown', async () => {
     mallFindUnique.mockResolvedValue(null)
-    const res = await POST(makePost(validBody))
+    const res = await POST(makePost(validBody) as any, emptyCtx() as any)
     expect(res.status).toBe(404)
     expect(jobCreate).not.toHaveBeenCalled()
   })
@@ -139,7 +145,7 @@ describe('POST /api/analysis/jobs — tenant scope', () => {
   it('creates the job when mall ownership check passes', async () => {
     mallFindUnique.mockResolvedValue({ customerId: 'cust-A' })
     jobCreate.mockResolvedValue({ id: 'job-new' })
-    const res = await POST(makePost(validBody))
+    const res = await POST(makePost(validBody) as any, emptyCtx() as any)
     expect(res.status).toBe(201)
     expect(jobCreate).toHaveBeenCalledTimes(1)
     expect(jobCreate.mock.calls[0][0].data.mallId).toBe('mall-A1')
@@ -148,7 +154,7 @@ describe('POST /api/analysis/jobs — tenant scope', () => {
   it('returns 400 when mallId is missing', async () => {
     const { mallId: _omit, ...without } = validBody
     void _omit
-    const res = await POST(makePost(without))
+    const res = await POST(makePost(without) as any, emptyCtx() as any)
     expect(res.status).toBe(400)
     expect(mallFindUnique).not.toHaveBeenCalled()
     expect(jobCreate).not.toHaveBeenCalled()

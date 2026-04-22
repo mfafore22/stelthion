@@ -1,58 +1,48 @@
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';
-import { auth } from '@/auth';
-
 /**
- * GET /api/analysis/insights/[jobId] — Fetch insights for a job.
- * Returns edge-generated insights if available, otherwise empty.
+ * /api/analysis/insights/[jobId]
+ *
+ * GET: fetch stored insights for a job (returns empty if none).
+ * POST: trigger server-side LLM insight generation via local Ollama.
+ *
+ * Phase D — analysis group migration. Pre-Phase-D both verbs were
+ * session-gated but did NOT validate job ownership. Cross-tenant insight
+ * reads (and worse, cross-tenant insight *generation* costing the wrong
+ * customer's mall data + LLM time) were possible by jobId-guess. Both
+ * verbs now gated by requireJobOwnership.
  */
-export async function GET(
-  _req: NextRequest,
-  { params }: { params: Promise<{ jobId: string }> },
-) {
-  const session = await auth()
-  if (!session?.user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
 
-  const { jobId } = await params;
+import { z } from 'zod';
+import prisma from '@/server/db/client';
+import { defineHandler, HttpError } from '@/server/api/define-handler';
+import { requireJobOwnership } from '@/server/api/tenant-guards';
 
-  try {
+const paramsSchema = z.object({ jobId: z.string() });
+
+// ─── GET ────────────────────────────────────────────────────────────
+
+export const GET = defineHandler(
+  { auth: 'session', paramsSchema },
+  async ({ params, auth: session }) => {
+    await requireJobOwnership(session, params.jobId);
+
     const insights = await prisma.analysisInsight.findMany({
-      where: { jobId },
+      where: { jobId: params.jobId },
       orderBy: { createdAt: 'desc' },
     });
 
-    return NextResponse.json({ insights });
-  } catch (error) {
-    console.error('Fetch insights error:', error);
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to fetch insights' },
-      { status: 500 },
-    );
-  }
-}
+    return { insights };
+  },
+);
 
-/**
- * POST /api/analysis/insights/[jobId] — Trigger server-side LLM insight generation.
- * Fallback when edge insights are unavailable or need refinement.
- * Calls local Ollama endpoint to generate insights from job results.
- */
-export async function POST(
-  _req: NextRequest,
-  { params }: { params: Promise<{ jobId: string }> },
-) {
-  const session = await auth()
-  if (!session?.user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+// ─── POST ───────────────────────────────────────────────────────────
 
-  const { jobId } = await params;
+export const POST = defineHandler(
+  { auth: 'session', paramsSchema },
+  async ({ params, auth: session }) => {
+    await requireJobOwnership(session, params.jobId);
 
-  try {
-    // Fetch job with all results
     const job = await prisma.analysisJob.findUnique({
-      where: { id: jobId },
+      where: { id: params.jobId },
       include: {
         results: { orderBy: { hour: 'asc' } },
         journeys: { include: { paths: true } },
@@ -60,18 +50,13 @@ export async function POST(
       },
     });
 
-    if (!job) {
-      return NextResponse.json({ error: 'Job not found' }, { status: 404 });
-    }
-
+    if (!job) throw new HttpError(404, 'Job not found');
     if (job.status !== 'COMPLETE') {
-      return NextResponse.json({ error: 'Job not yet complete' }, { status: 400 });
+      throw new HttpError(400, 'Job not yet complete');
     }
 
-    // Build structured prompt for LLM
     const prompt = buildInsightPrompt(job);
 
-    // Call local Ollama endpoint
     const ollamaUrl = process.env.OLLAMA_URL ?? 'http://localhost:11434';
     const ollamaModel = process.env.OLLAMA_MODEL ?? 'llama3.1:8b';
 
@@ -90,14 +75,11 @@ export async function POST(
         }),
       });
 
-      if (!ollamaRes.ok) {
-        throw new Error(`Ollama returned ${ollamaRes.status}`);
-      }
+      if (!ollamaRes.ok) throw new Error(`Ollama returned ${ollamaRes.status}`);
 
       const ollamaData = await ollamaRes.json();
       const response = ollamaData.response ?? '';
 
-      // Parse LLM response — expect summary followed by recommendations
       const parts = response.split(/\n(?=Recommendations?:)/i);
       summary = parts[0]?.trim() || 'Analysis complete. No detailed insights generated.';
 
@@ -113,10 +95,9 @@ export async function POST(
       summary = generateFallbackSummary(job);
     }
 
-    // Store insight
     const insight = await prisma.analysisInsight.create({
       data: {
-        jobId,
+        jobId: params.jobId,
         source: 'server',
         summary,
         recommendations: recommendations.length > 0 ? JSON.stringify(recommendations) : null,
@@ -124,15 +105,9 @@ export async function POST(
       },
     });
 
-    return NextResponse.json({ ok: true, insight });
-  } catch (error) {
-    console.error('Generate insights error:', error);
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Insight generation failed' },
-      { status: 500 },
-    );
-  }
-}
+    return { ok: true, insight };
+  },
+);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildInsightPrompt(job: any): string {
@@ -155,10 +130,10 @@ function buildInsightPrompt(job: any): string {
   }
 
   if (job.journeys?.length > 0) {
-    for (const session of job.journeys) {
-      lines.push('', `Journey session: ${session.taggedCount} tagged, ${session.recognizedCount} recognized (${((session.recognizedCount / session.taggedCount) * 100).toFixed(1)}% match rate)`);
-      if (session.paths?.length > 0) {
-        lines.push(`  ${session.paths.length} individual paths recorded`);
+    for (const sess of job.journeys) {
+      lines.push('', `Journey session: ${sess.taggedCount} tagged, ${sess.recognizedCount} recognized (${((sess.recognizedCount / sess.taggedCount) * 100).toFixed(1)}% match rate)`);
+      if (sess.paths?.length > 0) {
+        lines.push(`  ${sess.paths.length} individual paths recorded`);
       }
     }
   }

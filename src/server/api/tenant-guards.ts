@@ -132,3 +132,39 @@ export async function requireMallOwnershipByPk(
   }
   return mall.customerId
 }
+
+/**
+ * Asserts that the calling session's customer owns the mall that the
+ * given analysis job belongs to.
+ *
+ * Used by /api/analysis/results/[jobId], /api/analysis/journeys/[jobId],
+ * and /api/analysis/insights/[jobId] — pre-Phase-D those three routes
+ * trusted any authenticated user with a valid jobId, allowing a tenant
+ * user to read another tenant's job output by guessing the cuid.
+ *
+ * Throws HttpError(404) when the job doesn't exist, HttpError(403) when
+ * it belongs to another customer, HttpError(401) when the session has
+ * no customerId.
+ */
+export async function requireJobOwnership(
+  session: Session,
+  jobId: string,
+): Promise<string> {
+  const callerCustomerId = session.user?.customerId
+  if (!callerCustomerId) {
+    throw new HttpError(401, 'Unauthorized')
+  }
+
+  const job = await prisma.analysisJob.findUnique({
+    where: { id: jobId },
+    select: { mall: { select: { customerId: true } } },
+  })
+
+  if (!job) {
+    throw new HttpError(404, 'Job not found')
+  }
+  if (!job.mall || job.mall.customerId !== callerCustomerId) {
+    throw new HttpError(403, 'Forbidden')
+  }
+  return job.mall.customerId
+}
