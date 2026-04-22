@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';
+import prisma from '@/server/db/client';
 import bcrypt from 'bcrypt';
 import { requireAdmin } from '@/lib/admin-auth';
+import { HttpError } from '@/server/api/define-handler';
+import * as mallRepo from '@/server/repositories/mall';
 
 /**
  * POST /api/edge/register — Edge device registration.
@@ -22,10 +24,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Verify mall exists
-    const mall = await prisma.mall.findUnique({ where: { mallId } });
-    if (!mall) {
-      return NextResponse.json({ error: 'Unknown mall' }, { status: 404 });
+    // Verify mall exists AND belongs to the calling admin's customer.
+    // Prevents an admin for customer A from registering an edge device
+    // against customer B's mall.
+    try {
+      await mallRepo.assertOwnership(guard.session, mallId);
+    } catch (err) {
+      if (err instanceof HttpError) {
+        return NextResponse.json({ error: err.message }, { status: err.status });
+      }
+      throw err;
     }
 
     const apiKeyHash = await bcrypt.hash(apiKey, 10);

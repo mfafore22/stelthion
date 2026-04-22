@@ -3,7 +3,8 @@ import prisma from '@/server/db/client';
 import { auth } from '@/auth';
 import { orchestrateChat } from '@/services/concierge/context-assembler';
 import { HttpError } from '@/server/api/define-handler';
-import { requireMallOwnership, requireConversationOwnership } from '@/server/api/tenant-guards';
+import { requireConversationOwnership } from '@/server/api/tenant-guards';
+import * as mallRepo from '@/server/repositories/mall';
 import type { LLMMessage } from '@/services/concierge/llm-client';
 
 function jsonErr(message: string, status: number): Response {
@@ -31,21 +32,15 @@ export async function POST(req: NextRequest) {
   // while the DB row is 'ideapark-lempaala'. Match exact first, then prefix.
   let resolvedMallId = mallId;
   try {
-    const exact = await prisma.mall.findUnique({ where: { mallId }, select: { mallId: true } });
-    if (!exact) {
-      const byPrefix = await prisma.mall.findFirst({
-        where: { mallId: { startsWith: mallId } },
-        select: { mallId: true },
-      });
-      if (byPrefix) resolvedMallId = byPrefix.mallId;
-    }
+    const resolved = await mallRepo.resolveMallIdUnscoped(mallId);
+    if (resolved) resolvedMallId = resolved;
   } catch (lookupErr) {
     console.error('[Concierge API] Mall lookup failed', lookupErr);
   }
 
   // Ownership guard: verify caller owns the resolved mall BEFORE any LLM cost is incurred.
   try {
-    await requireMallOwnership(session, resolvedMallId);
+    await mallRepo.assertOwnership(session, resolvedMallId);
   } catch (err) {
     if (err instanceof HttpError) return NextResponse.json({ error: err.message }, { status: err.status });
     throw err;
