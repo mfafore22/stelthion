@@ -18,7 +18,11 @@
 jest.mock('@/server/db/client', () => ({
   __esModule: true,
   default: {
-    analysisJob: { findUnique: jest.fn(), findMany: jest.fn() },
+    analysisJob: {
+      findUnique: jest.fn(),
+      findMany: jest.fn(),
+      groupBy: jest.fn(),
+    },
   },
 }));
 
@@ -30,6 +34,7 @@ import type { Session } from 'next-auth';
 
 const jobFindUnique = (prisma as any).analysisJob.findUnique as jest.Mock;
 const jobFindMany = (prisma as any).analysisJob.findMany as jest.Mock;
+const jobGroupBy = (prisma as any).analysisJob.groupBy as jest.Mock;
 
 const sessionA: Session = {
   user: { id: 'u1', role: 'USER', customerId: 'cust-A' },
@@ -42,6 +47,7 @@ const sessionNoCustomer: Session = {
 beforeEach(() => {
   jobFindUnique.mockReset();
   jobFindMany.mockReset();
+  jobGroupBy.mockReset();
 });
 
 // ─── assertOwnership ─────────────────────────────────────────────────
@@ -165,5 +171,39 @@ describe('analysisJobRepo.listForCaller', () => {
     const rows = [{ id: 'job-A', mallId: 'mall-A', status: 'PENDING' }];
     jobFindMany.mockResolvedValueOnce(rows);
     await expect(analysisJobRepo.listForCaller(sessionA)).resolves.toEqual(rows);
+  });
+});
+
+// ─── countByStatusForCaller ──────────────────────────────────────────
+
+describe('analysisJobRepo.countByStatusForCaller', () => {
+  it('throws 401 when session has no customerId', async () => {
+    await expect(
+      analysisJobRepo.countByStatusForCaller(sessionNoCustomer),
+    ).rejects.toMatchObject({ status: 401 });
+    expect(jobGroupBy).not.toHaveBeenCalled();
+  });
+
+  it('scopes groupBy to the caller customerId', async () => {
+    jobGroupBy.mockResolvedValueOnce([]);
+    await analysisJobRepo.countByStatusForCaller(sessionA);
+    expect(jobGroupBy).toHaveBeenCalledWith({
+      by: ['status'],
+      where: { mall: { customerId: 'cust-A' } },
+      _count: true,
+    });
+  });
+
+  it('reshapes prisma rows to { status, _count } entries', async () => {
+    jobGroupBy.mockResolvedValueOnce([
+      { status: 'PENDING', _count: 3 },
+      { status: 'COMPLETE', _count: 12 },
+    ]);
+    await expect(
+      analysisJobRepo.countByStatusForCaller(sessionA),
+    ).resolves.toEqual([
+      { status: 'PENDING', _count: 3 },
+      { status: 'COMPLETE', _count: 12 },
+    ]);
   });
 });

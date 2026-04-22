@@ -1,8 +1,13 @@
-import prisma from '@/app/lib/prisma';
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
+import * as analysisJobRepo from '@/server/repositories/analysis-job';
 import { AdminJobsClient } from './client';
 
 export default async function AdminJobsPage() {
-  const jobs = await prisma.analysisJob.findMany({
+  const session = await auth();
+  if (!session?.user?.customerId) redirect('/login');
+
+  const jobs = await analysisJobRepo.listForCaller(session, {
     include: { camera: true },
     orderBy: { createdAt: 'desc' },
     take: 100,
