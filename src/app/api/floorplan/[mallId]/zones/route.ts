@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';
+import * as floorplanRepo from '@/server/repositories/floorplan';
 
 export async function GET(
   _req: NextRequest,
@@ -7,10 +7,7 @@ export async function GET(
 ) {
   const { mallId } = await params;
 
-  const zones = await prisma.floorplanZone.findMany({
-    where: { mallId, publishedAt: { not: null } },
-    orderBy: { zoneId: 'asc' },
-  });
+  const zones = await floorplanRepo.listPublishedZonesForMallUnscoped(mallId);
 
   const mapZone = (z: typeof zones[number]) => ({
     id: z.zoneId,
