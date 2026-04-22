@@ -46,11 +46,10 @@
  */
 
 import type { Session } from 'next-auth'
-import prisma from '@/server/db/client'
-import { HttpError } from '@/server/api/define-handler'
 import * as mallRepo from '@/server/repositories/mall'
 import * as analysisJobRepo from '@/server/repositories/analysis-job'
 import * as customerRepo from '@/server/repositories/customer'
+import * as conciergeRepo from '@/server/repositories/concierge'
 
 /**
  * Asserts that the calling session's customer owns the given customerId.
@@ -130,20 +129,5 @@ export async function requireConversationOwnership(
   session: Session,
   conversationId: string,
 ): Promise<void> {
-  const callerUserId = session.user?.id
-  if (!callerUserId) {
-    throw new HttpError(401, 'Unauthorized')
-  }
-
-  const conv = await prisma.conciergeConversation.findUnique({
-    where: { id: conversationId },
-    select: { userId: true },
-  })
-
-  if (!conv) {
-    throw new HttpError(404, 'Conversation not found')
-  }
-  if (conv.userId !== callerUserId) {
-    throw new HttpError(403, 'Forbidden')
-  }
+  return conciergeRepo.assertConversationOwnership(session, conversationId)
 }
