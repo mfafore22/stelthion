@@ -82,6 +82,27 @@ export async function assertCameraOwnershipByPk(
   return camera.mallId;
 }
 
+/**
+ * Assert both (a) the caller owns the camera and (b) the camera's mallId
+ * matches the mallId the caller passed. Used when creating an
+ * AnalysisJob: the job's mallId is already validated upstream, and this
+ * check blocks a cross-mall reference where a caller-owned mallId is
+ * paired with a cameraId from a different (potentially foreign) mall.
+ *
+ * Same error contract as assertCameraOwnershipByPk, plus a 400 when the
+ * camera belongs to another mall the caller may or may not own.
+ */
+export async function assertCameraOwnedByMall(
+  session: Session,
+  mallId: string,
+  cameraId: string,
+): Promise<void> {
+  const cameraMallId = await assertCameraOwnershipByPk(session, cameraId);
+  if (cameraMallId !== mallId) {
+    throw new HttpError(400, 'Camera does not belong to this mall');
+  }
+}
+
 // ─── Unscoped published/active reads ─────────────────────────────────
 
 /**

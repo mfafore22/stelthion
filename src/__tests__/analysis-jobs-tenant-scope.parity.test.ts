@@ -115,7 +115,14 @@ describe('POST /api/analysis/jobs — tenant scope', () => {
     authMock.mockResolvedValue({
       user: { id: 'u1', role: 'USER', customerId: 'cust-A' },
     })
-    cameraFindUnique.mockResolvedValue({ id: 'cam-1', label: 'C1' })
+    // Phase E — analysis/jobs now validates camera ownership through
+    // floorplanRepo.assertCameraOwnedByMall, which selects
+    // { mallId, mall: { customerId } } and requires the camera's mall
+    // belongs to the caller's customer AND matches the body's mallId.
+    cameraFindUnique.mockResolvedValue({
+      mallId: 'mall-A1',
+      mall: { customerId: 'cust-A' },
+    })
   })
 
   const validBody = {
