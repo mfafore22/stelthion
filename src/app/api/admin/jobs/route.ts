@@ -17,14 +17,14 @@ import { z } from 'zod';
 import prisma from '@/server/db/client';
 import { defineHandler, HttpError } from '@/server/api/define-handler';
 import { requireJobOwnership } from '@/server/api/tenant-guards';
+import * as analysisJobRepo from '@/server/repositories/analysis-job';
 
 // ─── GET ────────────────────────────────────────────────────────────
 
 export const GET = defineHandler(
   { auth: 'admin' },
   async ({ auth: session }) => {
-    return await prisma.analysisJob.findMany({
-      where: { mall: { customerId: session.user.customerId } },
+    return await analysisJobRepo.listForCaller(session, {
       include: { camera: true },
       orderBy: { createdAt: 'desc' },
       take: 200,
