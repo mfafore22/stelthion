@@ -1,25 +1,33 @@
-import { NextRequest, NextResponse } from 'next/server'
+/**
+ * GET /api/customers/[id]
+ *
+ * Reference route for the Phase B defineHandler refactor. Behavior is
+ * preserved bytewise vs the pre-refactor handler:
+ *
+ *   - 401 when no session
+ *   - 403 when session.user.customerId !== params.id
+ *   - 404 when customer row is absent
+ *   - 200 with customer + nested malls (stats, branding, categories)
+ *   - 500 on unhandled exceptions (now with body { error: 'Internal server error' }
+ *     instead of { error: 'Server error' } — emitted by defineHandler's
+ *     generic error path. No client depends on the old text; verified by
+ *     grep for the literal 'Server error' across the repo.)
+ */
+
+import { z } from 'zod'
 import prisma from '@/app/lib/prisma'
-import { auth } from '@/auth'
+import { defineHandler, HttpError } from '@/server/api/define-handler'
+import { requireCustomerOwnership } from '@/server/api/tenant-guards'
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const session = await auth()
-  if (!session?.user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+const paramsSchema = z.object({ id: z.string() })
 
-  const { id } = await params
+export const GET = defineHandler(
+  { auth: 'session', paramsSchema },
+  async ({ auth: session, params }) => {
+    requireCustomerOwnership(session, params.id)
 
-  if (session.user.customerId !== id) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-  }
-
-  try {
     const customer = await prisma.customer.findUnique({
-      where: { id },
+      where: { id: params.id },
       include: {
         malls: {
           include: {
@@ -32,11 +40,9 @@ export async function GET(
     })
 
     if (!customer) {
-      return NextResponse.json({ error: 'Customer not found' }, { status: 404 })
+      throw new HttpError(404, 'Customer not found')
     }
 
-    return NextResponse.json(customer)
-  } catch {
-    return NextResponse.json({ error: 'Server error' }, { status: 500 })
-  }
-}
+    return customer
+  },
+)
