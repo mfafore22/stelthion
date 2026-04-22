@@ -131,6 +131,49 @@ describe('floorplanRepo.assertCameraOwnershipByPk', () => {
   });
 });
 
+// ─── assertCameraOwnedByMall ─────────────────────────────────────────
+
+describe('floorplanRepo.assertCameraOwnedByMall', () => {
+  it('propagates 404 when the camera does not exist', async () => {
+    cameraFindUnique.mockResolvedValueOnce(null);
+    await expect(
+      floorplanRepo.assertCameraOwnedByMall(sessionA, 'mall-A', 'ghost'),
+    ).rejects.toMatchObject({ status: 404 });
+  });
+
+  it('propagates 403 when the caller does not own the camera', async () => {
+    cameraFindUnique.mockResolvedValueOnce({
+      mallId: 'mall-B',
+      mall: { customerId: 'cust-B' },
+    });
+    await expect(
+      floorplanRepo.assertCameraOwnedByMall(sessionA, 'mall-A', 'c-foreign'),
+    ).rejects.toMatchObject({ status: 403 });
+  });
+
+  it('throws 400 when the camera is owned but belongs to a different mall', async () => {
+    // Caller owns both mall-A and mall-other (customerId matches), but the
+    // caller claimed mall-A while passing a cameraId from mall-other.
+    cameraFindUnique.mockResolvedValueOnce({
+      mallId: 'mall-other',
+      mall: { customerId: 'cust-A' },
+    });
+    await expect(
+      floorplanRepo.assertCameraOwnedByMall(sessionA, 'mall-A', 'c-crossmall'),
+    ).rejects.toMatchObject({ status: 400 });
+  });
+
+  it('resolves when the camera is owned AND belongs to the passed mall', async () => {
+    cameraFindUnique.mockResolvedValueOnce({
+      mallId: 'mall-A',
+      mall: { customerId: 'cust-A' },
+    });
+    await expect(
+      floorplanRepo.assertCameraOwnedByMall(sessionA, 'mall-A', 'c-own'),
+    ).resolves.toBeUndefined();
+  });
+});
+
 // ─── Unscoped helpers ────────────────────────────────────────────────
 
 describe('floorplanRepo.listPublishedZonesForMallUnscoped', () => {

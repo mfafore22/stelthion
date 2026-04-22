@@ -18,6 +18,7 @@ import prisma from '@/server/db/client';
 import { defineHandler, HttpError } from '@/server/api/define-handler';
 import { requireMallOwnership } from '@/server/api/tenant-guards';
 import * as analysisJobRepo from '@/server/repositories/analysis-job';
+import * as floorplanRepo from '@/server/repositories/floorplan';
 
 const VALID_JOURNEY_COUNTS = [1, 5, 10, 15, 20] as const;
 const VALID_MODES = ['ZONE_COUNT', 'AB_TRACKING', 'JOURNEY_MAP', 'STORE_BEHAVIOR'] as const;
@@ -107,13 +108,20 @@ export const POST = defineHandler(
       }
     }
 
+    // Cross-mall defense: pre-Phase-E these were bare findUnique calls
+    // that validated existence but not ownership. A session user with
+    // mall-A could reference mall-B's cameraId when creating a job in
+    // mall-A. Now the camera must be owned by the caller AND belong to
+    // the job's mallId.
     if (body.cameraId) {
-      const camera = await prisma.camera.findUnique({ where: { id: body.cameraId } });
-      if (!camera) throw new HttpError(404, 'Camera not found');
+      await floorplanRepo.assertCameraOwnedByMall(session, body.mallId, body.cameraId);
     }
     if (body.secondaryCameraId) {
-      const cam2 = await prisma.camera.findUnique({ where: { id: body.secondaryCameraId } });
-      if (!cam2) throw new HttpError(404, 'Secondary camera not found');
+      await floorplanRepo.assertCameraOwnedByMall(
+        session,
+        body.mallId,
+        body.secondaryCameraId,
+      );
     }
 
     const job = await prisma.analysisJob.create({
