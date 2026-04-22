@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/auth'
-import prisma from '@/app/lib/prisma'
+import * as customerRepo from '@/server/repositories/customer'
 
 export async function PUT(request: Request) {
   const session = await auth()
@@ -16,10 +16,7 @@ export async function PUT(request: Request) {
   try {
     const data = await request.json()
 
-    await prisma.customer.update({
-      where: { id: session.user.customerId },
-      data: { name: data.companyName },
-    })
+    await customerRepo.updateOwn(session, { name: data.companyName })
 
     // Stats model not yet in schema — return stub response
     return NextResponse.json({ success: true, stats: data })
