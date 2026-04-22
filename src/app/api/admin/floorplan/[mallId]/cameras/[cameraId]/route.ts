@@ -1,18 +1,14 @@
 /**
  * PATCH /api/admin/floorplan/[mallId]/cameras/[cameraId]
  *
- * Phase D — admin group migration. Pre-Phase-D this route was admin-gated
- * and validated that the URL's mallId matched the camera's mallId, but
- * did NOT validate that the URL's mallId belonged to the calling admin's
- * customer. A tenant admin could PATCH another customer's camera
- * (modify its stream URL, zone binding, FOV, etc.) by mallId+cameraId
- * guess. Now gated by requireMallOwnership.
+ * Phase E — floorplanRepo migration. Ownership + cross-mall CSRF check
+ * (camera's own mallId must match the URL mallId) now live in
+ * floorplanRepo.updateCameraForMall via assertCameraOwnedByMall.
  */
 
 import { z } from 'zod';
-import prisma from '@/server/db/client';
 import { defineHandler, HttpError } from '@/server/api/define-handler';
-import { requireMallOwnership } from '@/server/api/tenant-guards';
+import * as floorplanRepo from '@/server/repositories/floorplan';
 
 const paramsSchema = z.object({
   mallId: z.string(),
@@ -32,15 +28,6 @@ function pick(obj: Record<string, unknown>, keys: readonly string[]) {
 export const PATCH = defineHandler(
   { auth: 'admin', paramsSchema },
   async ({ req, params, auth: session }) => {
-    await requireMallOwnership(session, params.mallId);
-
-    const existing = await prisma.camera.findUnique({
-      where: { id: params.cameraId },
-    });
-    if (!existing || existing.mallId !== params.mallId) {
-      throw new HttpError(404, 'Camera not found');
-    }
-
     const body = await req.json();
     const data = pick(body, PATCHABLE);
 
@@ -48,9 +35,11 @@ export const PATCH = defineHandler(
       throw new HttpError(400, 'No valid fields to update');
     }
 
-    return await prisma.camera.update({
-      where: { id: params.cameraId },
+    return await floorplanRepo.updateCameraForMall(
+      session,
+      params.mallId,
+      params.cameraId,
       data,
-    });
+    );
   },
 );

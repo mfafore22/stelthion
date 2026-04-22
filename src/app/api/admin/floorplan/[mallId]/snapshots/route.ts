@@ -20,9 +20,9 @@
 
 import { z } from 'zod';
 import prisma from '@/server/db/client';
-import { defineHandler, HttpError } from '@/server/api/define-handler';
-import { requireMallOwnership } from '@/server/api/tenant-guards';
+import { defineHandler } from '@/server/api/define-handler';
 import { createFloorplanSnapshot } from '@/lib/services/floorplanBackup';
+import * as floorplanRepo from '@/server/repositories/floorplan';
 
 const paramsSchema = z.object({ mallId: z.string() });
 
@@ -31,21 +31,12 @@ const paramsSchema = z.object({ mallId: z.string() });
 export const GET = defineHandler(
   { auth: 'admin', paramsSchema },
   async ({ req, params, auth: session }) => {
-    await requireMallOwnership(session, params.mallId);
-
     const floor = new URL(req.url).searchParams.get('floor') ?? 'ground';
-
-    const snapshots = await prisma.floorplanSnapshot.findMany({
-      where: { mallId: params.mallId, floor },
-      orderBy: { createdAt: 'desc' },
-      take: 20,
-      select: {
-        id: true,
-        reason: true,
-        createdAt: true,
-      },
-    });
-
+    const snapshots = await floorplanRepo.listSnapshotsForMall(
+      session,
+      params.mallId,
+      floor,
+    );
     return snapshots.map((s) => ({
       id: s.id,
       reason: s.reason,
@@ -90,17 +81,12 @@ const restoreBodySchema = z.object({
 export const POST = defineHandler(
   { auth: 'admin', paramsSchema, bodySchema: restoreBodySchema },
   async ({ params, body, auth: session }) => {
-    await requireMallOwnership(session, params.mallId);
-
     const { mallId } = params;
-
-    const snapshot = await prisma.floorplanSnapshot.findUnique({
-      where: { id: body.snapshotId },
-    });
-
-    if (!snapshot || snapshot.mallId !== mallId) {
-      throw new HttpError(404, 'Snapshot not found');
-    }
+    const snapshot = await floorplanRepo.findSnapshotForMall(
+      session,
+      mallId,
+      body.snapshotId,
+    );
 
     const parsed = JSON.parse(snapshot.data);
     let zones = parsed.zones ?? [];
