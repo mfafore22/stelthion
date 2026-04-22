@@ -1,17 +1,21 @@
-import { NextRequest } from 'next/server';
-import prisma from '@/app/lib/prisma';
+import { NextRequest, NextResponse } from 'next/server';
+import prisma from '@/server/db/client';
 import { auth } from '@/auth';
 import { orchestrateChat } from '@/services/concierge/context-assembler';
+import { HttpError } from '@/server/api/define-handler';
+import { requireMallOwnership, requireConversationOwnership } from '@/server/api/tenant-guards';
 import type { LLMMessage } from '@/services/concierge/llm-client';
+
+function jsonErr(message: string, status: number): Response {
+  return new Response(JSON.stringify({ error: message }), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
 
 export async function POST(req: NextRequest) {
   const session = await auth();
-  if (!session?.user) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-      status: 401,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
+  if (!session?.user) return jsonErr('Unauthorized', 401);
 
   const body = await req.json();
   const { conversationId, mallId, message, language } = body as {
@@ -21,12 +25,7 @@ export async function POST(req: NextRequest) {
     language?: string;
   };
 
-  if (!mallId || !message) {
-    return new Response(JSON.stringify({ error: 'mallId and message required' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
+  if (!mallId || !message) return jsonErr('mallId and message required', 400);
 
   // Resolve mallId against DB — legacy code uses short names like 'ideapark'
   // while the DB row is 'ideapark-lempaala'. Match exact first, then prefix.
@@ -42,6 +41,24 @@ export async function POST(req: NextRequest) {
     }
   } catch (lookupErr) {
     console.error('[Concierge API] Mall lookup failed', lookupErr);
+  }
+
+  // Ownership guard: verify caller owns the resolved mall BEFORE any LLM cost is incurred.
+  try {
+    await requireMallOwnership(session, resolvedMallId);
+  } catch (err) {
+    if (err instanceof HttpError) return NextResponse.json({ error: err.message }, { status: err.status });
+    throw err;
+  }
+
+  // If resuming an existing conversation, verify the caller owns it.
+  if (conversationId) {
+    try {
+      await requireConversationOwnership(session, conversationId);
+    } catch (err) {
+      if (err instanceof HttpError) return NextResponse.json({ error: err.message }, { status: err.status });
+      throw err;
+    }
   }
 
   // Load or create conversation
@@ -73,10 +90,7 @@ export async function POST(req: NextRequest) {
       userId: session.user.id,
       error: errMsg,
     });
-    return new Response(
-      JSON.stringify({ error: `DB error: ${errMsg}` }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
-    );
+    return jsonErr(`DB error: ${errMsg}`, 500);
   }
 
   // Load conversation history
@@ -108,12 +122,10 @@ export async function POST(req: NextRequest) {
         );
 
         for await (const event of orchestrateChat({ mallId: resolvedMallId, messages, language })) {
-          // Forward SSE event to client
           controller.enqueue(
             encoder.encode(`data: ${JSON.stringify(event)}\n\n`)
           );
 
-          // Accumulate for DB persistence
           switch (event.type) {
             case 'message_start':
               agentRole = (event.data as { agentRole?: string }).agentRole;
@@ -133,7 +145,6 @@ export async function POST(req: NextRequest) {
           }
         }
 
-        // Save agent response to DB
         if (fullContent) {
           await prisma.conciergeMessage.create({
             data: {
@@ -146,7 +157,6 @@ export async function POST(req: NextRequest) {
             },
           });
 
-          // Update conversation title if it was auto-generated
           await prisma.conciergeConversation.update({
             where: { id: convId! },
             data: { updatedAt: new Date() },

@@ -1,57 +1,53 @@
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';
-import { auth } from '@/auth';
+import { z } from 'zod';
+import prisma from '@/server/db/client';
+import { defineHandler, HttpError } from '@/server/api/define-handler';
+import { requireMallOwnership } from '@/server/api/tenant-guards';
 
-/** GET — Fetch user's briefing subscription */
-export async function GET(req: NextRequest) {
-  const session = await auth();
-  if (!session?.user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+export const GET = defineHandler(
+  { auth: 'session' },
+  async ({ req, auth: session }) => {
+    const mallId = new URL(req.url).searchParams.get('mallId');
+    if (!mallId) throw new HttpError(400, 'mallId required');
 
-  const { searchParams } = new URL(req.url);
-  const mallId = searchParams.get('mallId');
+    await requireMallOwnership(session, mallId);
 
-  if (!mallId) {
-    return NextResponse.json({ error: 'mallId required' }, { status: 400 });
-  }
+    const sub = await prisma.conciergeBriefingSubscription.findUnique({
+      where: { mallId_userId: { mallId, userId: session.user.id } },
+    });
 
-  const sub = await prisma.conciergeBriefingSubscription.findUnique({
-    where: { mallId_userId: { mallId, userId: session.user.id } },
-  });
+    return sub || { enabled: false, timeUtc: '06:00', sections: ['weather', 'footfall', 'events', 'transport'] };
+  },
+);
 
-  return NextResponse.json(sub || { enabled: false, timeUtc: '06:00', sections: ['weather', 'footfall', 'events', 'transport'] });
-}
+export const PUT = defineHandler(
+  {
+    auth: 'session',
+    bodySchema: z.object({
+      mallId: z.string(),
+      enabled: z.boolean().optional(),
+      timeUtc: z.string().optional(),
+      sections: z.array(z.string()).optional(),
+    }),
+  },
+  async ({ body, auth: session }) => {
+    await requireMallOwnership(session, body.mallId);
 
-/** PUT — Create or update subscription */
-export async function PUT(req: NextRequest) {
-  const session = await auth();
-  if (!session?.user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+    const sub = await prisma.conciergeBriefingSubscription.upsert({
+      where: { mallId_userId: { mallId: body.mallId, userId: session.user.id } },
+      create: {
+        mallId: body.mallId,
+        userId: session.user.id,
+        enabled: body.enabled ?? true,
+        timeUtc: body.timeUtc ?? '06:00',
+        sections: body.sections ?? ['weather', 'footfall', 'events', 'transport'],
+      },
+      update: {
+        ...(body.enabled !== undefined ? { enabled: body.enabled } : {}),
+        ...(body.timeUtc ? { timeUtc: body.timeUtc } : {}),
+        ...(body.sections ? { sections: body.sections } : {}),
+      },
+    });
 
-  const body = await req.json();
-  const { mallId, enabled, timeUtc, sections } = body;
-
-  if (!mallId) {
-    return NextResponse.json({ error: 'mallId required' }, { status: 400 });
-  }
-
-  const sub = await prisma.conciergeBriefingSubscription.upsert({
-    where: { mallId_userId: { mallId, userId: session.user.id } },
-    create: {
-      mallId,
-      userId: session.user.id,
-      enabled: enabled ?? true,
-      timeUtc: timeUtc ?? '06:00',
-      sections: sections ?? ['weather', 'footfall', 'events', 'transport'],
-    },
-    update: {
-      ...(enabled !== undefined ? { enabled } : {}),
-      ...(timeUtc ? { timeUtc } : {}),
-      ...(sections ? { sections } : {}),
-    },
-  });
-
-  return NextResponse.json(sub);
-}
+    return sub;
+  },
+);
