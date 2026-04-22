@@ -1,50 +1,64 @@
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';
-import {auth} from '@/auth';
+/**
+ * GET /api/counters/[mallId]
+ *
+ * Phase D — counters group migration to defineHandler. Behavior preserved
+ * vs the pre-refactor handler:
+ *
+ *   - 401 when no session
+ *   - 403 when the resolved mall belongs to a different customer
+ *   - 404 when neither the mallId nor a customerId fallback resolves
+ *   - 200 with the per-week aggregated counters payload
+ *
+ * Tenant-scoping notes
+ * --------------------
+ * The path segment is documented as `mallId` but historically the route
+ * also accepted a customerId — when a mall lookup by `mallId` failed it
+ * fell back to `mall.findFirst({ where: { customerId: <param> } })`. The
+ * fallback is preserved for compatibility, but ownership is now enforced
+ * in BOTH branches against the calling session's customerId. A caller
+ * cannot reach another tenant's data via either branch.
+ */
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ mallId: string }> },
-) {
-  try {
+import { z } from 'zod';
+import prisma from '@/server/db/client';
+import { defineHandler, HttpError } from '@/server/api/define-handler';
 
-    const session = await auth();
-    if (!session?.user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    
-    let { mallId } = await params;
+const paramsSchema = z.object({ mallId: z.string() });
+
+export const GET = defineHandler(
+  { auth: 'session', paramsSchema },
+  async ({ req, params, auth: session }) => {
+    const callerCustomerId = session.user?.customerId;
+    if (!callerCustomerId) throw new HttpError(401, 'Unauthorized');
+
+    // Resolve mallId, accepting either a real mallId or a customerId
+    // (legacy compatibility). Either way the resolved mall must belong
+    // to the caller's customer.
+    const resolvedMallId = await resolveMallId(params.mallId, callerCustomerId);
+
     const url = new URL(req.url);
     const weekParam = url.searchParams.get('week');
     const yearParam = url.searchParams.get('year');
 
-    // Resolve mallId: if no mall found by mallId, try as customerId fallback
-    // (mirrors /api/mall/[mallId] which also accepts customerId)
-    const mallExists = await prisma.mall.findUnique({ where: { mallId }, select: { mallId: true } });
-    if (!mallExists) {
-      const byCustomer = await prisma.mall.findFirst({
-        where: { customerId: mallId },
-        select: { mallId: true },
-      });
-      if (byCustomer) mallId = byCustomer.mallId;
-    }
-
     const availableWeeks = await prisma.counterReading.groupBy({
       by: ['year', 'weekNumber'],
-      where: { mallId },
+      where: { mallId: resolvedMallId },
       orderBy: [{ year: 'desc' }, { weekNumber: 'desc' }],
     });
 
     const weekList = availableWeeks.map((w) => ({ week: w.weekNumber, year: w.year }));
 
-    // If no week specified, use most recent
     const targetWeek = weekParam ? parseInt(weekParam, 10) : weekList[0]?.week ?? 0;
-    const targetYear = yearParam ? parseInt(yearParam, 10) : weekList[0]?.year ?? new Date().getFullYear();
+    const targetYear = yearParam
+      ? parseInt(yearParam, 10)
+      : weekList[0]?.year ?? new Date().getFullYear();
 
     if (targetWeek === 0) {
-      return NextResponse.json({ week: 0, year: targetYear, counters: [], availableWeeks: weekList });
+      return { week: 0, year: targetYear, counters: [], availableWeeks: weekList };
     }
 
     const readings = await prisma.counterReading.findMany({
-      where: { mallId, weekNumber: targetWeek, year: targetYear },
+      where: { mallId: resolvedMallId, weekNumber: targetWeek, year: targetYear },
       orderBy: [{ counterLabel: 'asc' }, { date: 'asc' }, { hour: 'asc' }],
     });
 
@@ -61,7 +75,6 @@ export async function GET(
       const granularity = rows[0].granularity;
 
       if (granularity === 'hourly') {
-        // Group hourly rows by date
         const byDate = new Map<string, typeof rows>();
         for (const r of rows) {
           const dk = r.date.toISOString().split('T')[0];
@@ -96,7 +109,9 @@ export async function GET(
           dailyData,
           weekTotal,
           weekTotalPrevYear: weekTotalPrev,
-          deltaPercent: weekTotalPrev ? round(((weekTotal - weekTotalPrev) / weekTotalPrev) * 100) : null,
+          deltaPercent: weekTotalPrev
+            ? round(((weekTotal - weekTotalPrev) / weekTotalPrev) * 100)
+            : null,
         };
       }
 
@@ -117,7 +132,9 @@ export async function GET(
           dailyData,
           weekTotal,
           weekTotalPrevYear: weekTotalPrev,
-          deltaPercent: weekTotalPrev ? round(((weekTotal - weekTotalPrev) / weekTotalPrev) * 100) : null,
+          deltaPercent: weekTotalPrev
+            ? round(((weekTotal - weekTotalPrev) / weekTotalPrev) * 100)
+            : null,
         };
       }
 
@@ -150,16 +167,48 @@ export async function GET(
       };
     });
 
-    return NextResponse.json({
+    return {
       week: targetWeek,
       year: targetYear,
       counters,
       availableWeeks: weekList,
-    });
-  } catch (err) {
-    console.error('[counter data]', err);
-    return NextResponse.json({ error: String(err) }, { status: 500 });
+    };
+  },
+);
+
+/**
+ * Resolve the path param to a real mallId, enforcing tenant ownership.
+ *
+ * Tries the param as a mallId first; on miss falls back to treating it
+ * as a customerId. In both branches the result must belong to
+ * `callerCustomerId` or we throw 403/404 — never silently returning
+ * another tenant's data.
+ */
+async function resolveMallId(param: string, callerCustomerId: string): Promise<string> {
+  const byMallId = await prisma.mall.findUnique({
+    where: { mallId: param },
+    select: { mallId: true, customerId: true },
+  });
+
+  if (byMallId) {
+    if (byMallId.customerId !== callerCustomerId) {
+      throw new HttpError(403, 'Forbidden');
+    }
+    return byMallId.mallId;
   }
+
+  const byCustomer = await prisma.mall.findFirst({
+    where: { customerId: param },
+    select: { mallId: true, customerId: true },
+  });
+
+  if (!byCustomer) {
+    throw new HttpError(404, 'Mall not found');
+  }
+  if (byCustomer.customerId !== callerCustomerId) {
+    throw new HttpError(403, 'Forbidden');
+  }
+  return byCustomer.mallId;
 }
 
 function round(n: number): number {
