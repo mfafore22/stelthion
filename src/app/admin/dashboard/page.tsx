@@ -1,24 +1,16 @@
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
-import prisma from '@/app/lib/prisma';
 import * as analysisJobRepo from '@/server/repositories/analysis-job';
+import * as floorplanRepo from '@/server/repositories/floorplan';
 import { AdminDashboardClient } from './client';
 
 export default async function AdminDashboard() {
   const session = await auth();
   if (!session?.user?.customerId) redirect('/login');
 
-  const callerCustomerId = session.user.customerId;
-
-  // FloorplanZone and Camera both scope via mallId -> mall.customerId;
-  // a dedicated floorplanRepo lands in the Phase E floorplan slice —
-  // until then the tenant filter is inlined here so this admin tile
-  // stops leaking cross-customer totals.
-  const mallScope = { mall: { customerId: callerCustomerId } };
-
   const [zoneCount, cameraCount, jobCounts] = await Promise.all([
-    prisma.floorplanZone.count({ where: mallScope }),
-    prisma.camera.count({ where: mallScope }),
+    floorplanRepo.countZonesForCaller(session),
+    floorplanRepo.countCamerasForCaller(session),
     analysisJobRepo.countByStatusForCaller(session),
   ]);
 

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';
-import { auth} from '@/auth';
+import { auth } from '@/auth';
+import * as floorplanRepo from '@/server/repositories/floorplan';
 
 export async function GET(
   req: NextRequest,
@@ -8,22 +8,16 @@ export async function GET(
 ) {
   try {
     const session = await auth();
-    if(!session?.user) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    
+
     const { mallId } = await params;
     const floor = new URL(req.url).searchParams.get('floor') ?? 'ground';
 
     const [zones, cameras] = await Promise.all([
-      prisma.floorplanZone.findMany({
-        where: { mallId, floor, publishedAt: { not: null } },
-        orderBy: { zoneId: 'asc' },
-      }),
-      prisma.camera.findMany({
-        where: { mallId, floor, active: true },
-        orderBy: { label: 'asc' },
-      }),
+      floorplanRepo.listPublishedZonesForMallUnscoped(mallId, floor),
+      floorplanRepo.listActiveCamerasForMallUnscoped(mallId, floor),
     ]);
 
     // Map to IdeaparkZone shape expected by FootfallAnalysis
