@@ -50,6 +50,7 @@ function makePost(body: unknown): Request {
     body: JSON.stringify(body),
   })
 }
+const emptyCtx = () => ({ params: Promise.resolve({}) })
 
 beforeEach(() => {
   mallFindUnique.mockReset()
@@ -69,27 +70,27 @@ describe('GET /api/concierge/briefing — tenant scope', () => {
 
   it('returns 401 when no session', async () => {
     authMock.mockResolvedValue(null)
-    const res = await GET(makeGet('?mallId=mall-A1') as any)
+    const res = await GET(makeGet('?mallId=mall-A1') as any, emptyCtx() as any)
     expect(res.status).toBe(401)
     expect(briefingFindUnique).not.toHaveBeenCalled()
   })
 
   it('returns 400 when mallId query param is missing', async () => {
-    const res = await GET(makeGet('') as any)
+    const res = await GET(makeGet('') as any, emptyCtx() as any)
     expect(res.status).toBe(400)
     expect(briefingFindUnique).not.toHaveBeenCalled()
   })
 
   it('rejects with 403 when mallId belongs to a different customer', async () => {
     mallFindUnique.mockResolvedValue({ customerId: 'cust-B' })
-    const res = await GET(makeGet('?mallId=mall-B1') as any)
+    const res = await GET(makeGet('?mallId=mall-B1') as any, emptyCtx() as any)
     expect(res.status).toBe(403)
     expect(briefingFindUnique).not.toHaveBeenCalled()
   })
 
   it('returns 404 when mallId is unknown', async () => {
     mallFindUnique.mockResolvedValue(null)
-    const res = await GET(makeGet('?mallId=ghost') as any)
+    const res = await GET(makeGet('?mallId=ghost') as any, emptyCtx() as any)
     expect(res.status).toBe(404)
     expect(briefingFindUnique).not.toHaveBeenCalled()
   })
@@ -97,7 +98,7 @@ describe('GET /api/concierge/briefing — tenant scope', () => {
   it('reads the briefing when ownership check passes', async () => {
     mallFindUnique.mockResolvedValue({ customerId: 'cust-A' })
     briefingFindUnique.mockResolvedValue({ id: 'b1', mallId: 'mall-A1' })
-    const res = await GET(makeGet('?mallId=mall-A1') as any)
+    const res = await GET(makeGet('?mallId=mall-A1') as any, emptyCtx() as any)
     expect(res.status).toBe(200)
     expect(briefingFindUnique).toHaveBeenCalledTimes(1)
   })
@@ -114,7 +115,7 @@ describe('POST /api/concierge/briefing — tenant scope', () => {
 
   it('rejects with 403 when mallId belongs to a different customer', async () => {
     mallFindUnique.mockResolvedValue({ customerId: 'cust-B' })
-    const res = await POST(makePost({ mallId: 'mall-B1' }))
+    const res = await POST(makePost({ mallId: 'mall-B1' }) as any, emptyCtx() as any)
     expect(res.status).toBe(403)
     expect(generateBriefingMock).not.toHaveBeenCalled()
     expect(briefingUpsert).not.toHaveBeenCalled()
@@ -122,13 +123,13 @@ describe('POST /api/concierge/briefing — tenant scope', () => {
 
   it('returns 404 when mallId is unknown', async () => {
     mallFindUnique.mockResolvedValue(null)
-    const res = await POST(makePost({ mallId: 'ghost' }))
+    const res = await POST(makePost({ mallId: 'ghost' }) as any, emptyCtx() as any)
     expect(res.status).toBe(404)
     expect(generateBriefingMock).not.toHaveBeenCalled()
   })
 
   it('returns 400 when mallId is missing', async () => {
-    const res = await POST(makePost({}))
+    const res = await POST(makePost({}) as any, emptyCtx() as any)
     expect(res.status).toBe(400)
     expect(mallFindUnique).not.toHaveBeenCalled()
   })
@@ -137,7 +138,7 @@ describe('POST /api/concierge/briefing — tenant scope', () => {
     mallFindUnique.mockResolvedValue({ customerId: 'cust-A' })
     briefingUpsert.mockResolvedValue({ id: 'b1', mallId: 'mall-A1' })
 
-    const res = await POST(makePost({ mallId: 'mall-A1' }))
+    const res = await POST(makePost({ mallId: 'mall-A1' }) as any, emptyCtx() as any)
 
     expect(res.status).toBe(201)
     expect(generateBriefingMock).toHaveBeenCalledWith('mall-A1', expect.any(Array))

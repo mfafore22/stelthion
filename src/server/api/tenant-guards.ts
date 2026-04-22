@@ -168,3 +168,33 @@ export async function requireJobOwnership(
   }
   return job.mall.customerId
 }
+
+/**
+ * Asserts that the calling session's user owns the given concierge
+ * conversation (i.e. the conversation was created by this user).
+ *
+ * Throws HttpError(404) if the conversation does not exist, HttpError(403)
+ * if it belongs to a different user, HttpError(401) if the session has no
+ * userId.
+ */
+export async function requireConversationOwnership(
+  session: Session,
+  conversationId: string,
+): Promise<void> {
+  const callerUserId = session.user?.id
+  if (!callerUserId) {
+    throw new HttpError(401, 'Unauthorized')
+  }
+
+  const conv = await prisma.conciergeConversation.findUnique({
+    where: { id: conversationId },
+    select: { userId: true },
+  })
+
+  if (!conv) {
+    throw new HttpError(404, 'Conversation not found')
+  }
+  if (conv.userId !== callerUserId) {
+    throw new HttpError(403, 'Forbidden')
+  }
+}

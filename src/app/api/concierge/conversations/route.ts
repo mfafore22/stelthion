@@ -1,14 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/auth'
+import { defineHandler } from '@/server/api/define-handler';
 
-export async function GET(req: NextRequest) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-
-  const tenantId = new URL(req.url).searchParams.get('tenantId')
-
-  return NextResponse.json({
-    conversations: [],
-    tenantId: tenantId || 'default',
-  })
-}
+export const GET = defineHandler(
+  { auth: 'session' },
+  async ({ req }) => {
+    const tenantId = new URL(req.url).searchParams.get('tenantId');
+    return { conversations: [], tenantId: tenantId || 'default' };
+  },
+);
