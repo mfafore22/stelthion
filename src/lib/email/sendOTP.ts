@@ -149,28 +149,18 @@ export async function createUserAndSendWelcome({
     const hashedPassword = await bcrypt.hash(plainPassword, 10);
 
     const user = await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-        name,
-        role,
-        customerId,
-      },
+      data: { email, password: hashedPassword, name, role, customerId },
     });
 
     if (!process.env.RESEND_API_KEY) {
-      console.log(`\n📧 [WELCOME EMAIL DEV MODE]`);
-      console.log(`To: ${email}`);
-      console.log(`Name: ${name}`);
-      console.log(`Password: ${plainPassword}`);
-      console.log(`Customer: ${customerId}\n`);
+      console.log(`\n📧 [WELCOME EMAIL DEV MODE]\nTo: ${email}\nPassword: ${plainPassword}\n`);
       return { userId: user.id, password: plainPassword };
     }
 
     const fromEmail = process.env.WELCOME_FROM_EMAIL || 'accounts@stelthion.com';
     const loginUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://stelthion.com';
 
-    const res = await fetch('https://api.resend.com/emails', {
+    await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
@@ -180,56 +170,9 @@ export async function createUserAndSendWelcome({
         from: `Stelthion <${fromEmail}>`,
         to: [email],
         subject: 'Tervetuloa Stelthion PropertyOS-käyttäjäksi',
-        html: `
-          <div style="font-family: -apple-system, sans-serif; max-width: 480px; margin: 0 auto; padding: 32px 24px;">
-            <p style="font-size: 13px; color: #888; letter-spacing: 1px;">STELTHION PROPERTYOS</p>
-            
-            <h1 style="font-size: 22px; color: #1a1a1a; margin-top: 8px;">
-              Tervetuloa käyttämään Stelthion PropertyOS-palvelua!
-            </h1>
-            
-            <p style="color: #444; line-height: 1.6;">
-              Seuraavan linkin kautta pääset kirjautumaan:
-            </p>
-            
-            <div style="margin: 20px 0;">
-              <a href="${loginUrl}/login" 
-                 style="display: inline-block; background: #1a1a1a; color: #fff; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
-                Kirjaudu sisään
-              </a>
-            </div>
-            
-            <p style="color: #444; line-height: 1.6;">
-              Käyttäjätunnuksesi on sähköpostiosoitteesi.
-            </p>
-            
-            <div style="background: #f4f3f1; border-radius: 12px; padding: 20px; margin: 20px 0;">
-              <p style="font-size: 13px; color: #666; margin: 0 0 4px 0;">Sähköposti:</p>
-              <p style="font-size: 16px; font-weight: 600; color: #1a1a1a; margin: 0 0 16px 0;">${email}</p>
-              <p style="font-size: 13px; color: #666; margin: 0 0 4px 0;">Salasanasi:</p>
-              <p style="font-size: 16px; font-weight: 700; color: #1a1a1a; letter-spacing: 1px; margin: 0; font-family: monospace;">${plainPassword}</p>
-            </div>
-            
-            <p style="color: #444; line-height: 1.6; font-size: 14px;">
-              Jokainen kirjautuminen vaatii kaksivaiheisen tunnistautumisen. Koodi lähetetään sinulle sähköpostitse.
-            </p>
-            
-            <hr style="border: none; border-top: 1px solid #eee; margin: 28px 0;" />
-            
-            <p style="font-size: 13px; color: #888;">
-              Ystävällisesti,<br />
-              Stelthion-tiimi
-            </p>
-            
-            <p style="font-size: 11px; color: #aaa; margin-top: 16px;">Stelthion PropertyOS — Mall Analytics Platform</p>
-          </div>
-        `,
+        html: `<p>Email: ${email}<br/>Password: ${plainPassword}<br/><a href="${loginUrl}/login">Login</a></p>`,
       }),
     });
-
-    if (!res.ok) {
-      console.error('Failed to send welcome email:', await res.text());
-    }
 
     return { userId: user.id, password: plainPassword };
   } catch (error) {
