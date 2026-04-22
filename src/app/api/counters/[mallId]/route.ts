@@ -20,9 +20,9 @@
  */
 
 import { z } from 'zod';
-import prisma from '@/server/db/client';
 import { defineHandler } from '@/server/api/define-handler';
 import * as mallRepo from '@/server/repositories/mall';
+import * as counterRepo from '@/server/repositories/counter';
 
 const paramsSchema = z.object({ mallId: z.string() });
 
@@ -38,27 +38,24 @@ export const GET = defineHandler(
     const weekParam = url.searchParams.get('week');
     const yearParam = url.searchParams.get('year');
 
-    const availableWeeks = await prisma.counterReading.groupBy({
-      by: ['year', 'weekNumber'],
-      where: { mallId: resolvedMallId },
-      orderBy: [{ year: 'desc' }, { weekNumber: 'desc' }],
-    });
+    const weekList = await counterRepo.listAvailableWeeksForMallUnscoped(resolvedMallId);
 
-    const weekList = availableWeeks.map((w) => ({ week: w.weekNumber, year: w.year }));
-
-    const targetWeek = weekParam ? parseInt(weekParam, 10) : weekList[0]?.week ?? 0;
+    const targetWeek = weekParam ? parseInt(weekParam, 10) : weekList[0]?.weekNumber ?? 0;
     const targetYear = yearParam
       ? parseInt(yearParam, 10)
       : weekList[0]?.year ?? new Date().getFullYear();
 
+    const availableWeeks = weekList.map((w) => ({ week: w.weekNumber, year: w.year }));
+
     if (targetWeek === 0) {
-      return { week: 0, year: targetYear, counters: [], availableWeeks: weekList };
+      return { week: 0, year: targetYear, counters: [], availableWeeks };
     }
 
-    const readings = await prisma.counterReading.findMany({
-      where: { mallId: resolvedMallId, weekNumber: targetWeek, year: targetYear },
-      orderBy: [{ counterLabel: 'asc' }, { date: 'asc' }, { hour: 'asc' }],
-    });
+    const readings = await counterRepo.listReadingsForMallWeekUnscoped(
+      resolvedMallId,
+      targetWeek,
+      targetYear,
+    );
 
     // Group by counter
     const grouped = new Map<string, typeof readings>();
@@ -169,7 +166,7 @@ export const GET = defineHandler(
       week: targetWeek,
       year: targetYear,
       counters,
-      availableWeeks: weekList,
+      availableWeeks,
     };
   },
 );

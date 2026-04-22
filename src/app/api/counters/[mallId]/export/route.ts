@@ -3,17 +3,16 @@
  *
  * CSV (or JSON) export of CounterReading rows for a given week.
  *
- * Phase D — counters group migration. Pre-Phase-D this route checked for
- * a session but did not assert mall ownership — a tenant user could
- * export another tenant's counter data by guessing a mallId. Ownership
- * now enforced via requireMallOwnership.
+ * Phase E — counterRepo migration. Ownership is still enforced via
+ * requireMallOwnership, then the findMany goes through the Unscoped
+ * repo helper (ownership already verified).
  */
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import prisma from '@/server/db/client';
 import { defineHandler, HttpError } from '@/server/api/define-handler';
 import { requireMallOwnership } from '@/server/api/tenant-guards';
+import * as counterRepo from '@/server/repositories/counter';
 
 const paramsSchema = z.object({ mallId: z.string() });
 
@@ -32,19 +31,15 @@ export const GET = defineHandler(
       throw new HttpError(400, 'week and year required');
     }
 
-    const where: Record<string, unknown> = {
-      mallId: params.mallId,
-      weekNumber: week,
-      year,
-    };
-    if (counterFilter !== 'all') {
-      where.counterLabel = counterFilter;
-    }
+    const extraWhere =
+      counterFilter !== 'all' ? { counterLabel: counterFilter } : {};
 
-    const readings = await prisma.counterReading.findMany({
-      where,
-      orderBy: [{ counterLabel: 'asc' }, { date: 'asc' }, { hour: 'asc' }],
-    });
+    const readings = await counterRepo.listReadingsForMallWeekUnscoped(
+      params.mallId,
+      week,
+      year,
+      extraWhere,
+    );
 
     if (format === 'csv') {
       const header = 'Date,Hour,Counter,Floor,Visitors,Visitors Prev Year,Delta %\n';
