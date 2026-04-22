@@ -1,30 +1,38 @@
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';
-import {auth} from '@/auth';
+/**
+ * GET /api/analysis/results/[jobId]
+ *
+ * Phase D — analysis group migration. Pre-Phase-D this route was
+ * session-gated but did NOT validate that the calling tenant owned the
+ * job — any authenticated user could read another tenant's analysis
+ * results by guessing the cuid. requireJobOwnership now enforces the
+ * scope check.
+ */
 
-export async function GET(
-  _req: NextRequest,
-  { params }: { params: Promise<{ jobId: string }> },
+import { z } from 'zod';
+import prisma from '@/server/db/client';
+import { defineHandler, HttpError } from '@/server/api/define-handler';
+import { requireJobOwnership } from '@/server/api/tenant-guards';
 
-) {
+const paramsSchema = z.object({ jobId: z.string() });
 
-  const session = await auth();
-  if(!session?.user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  
-  const { jobId } = await params;
+export const GET = defineHandler(
+  { auth: 'session', paramsSchema },
+  async ({ params, auth: session }) => {
+    await requireJobOwnership(session, params.jobId);
 
-  const job = await prisma.analysisJob.findUnique({
-    where: { id: jobId },
-    include: {
-      camera: { select: { label: true, floor: true } },
-      secondaryCamera: { select: { label: true, floor: true } },
-      results: { orderBy: [{ hour: 'asc' }, { zoneId: 'asc' }] },
-    },
-  });
+    const job = await prisma.analysisJob.findUnique({
+      where: { id: params.jobId },
+      include: {
+        camera: { select: { label: true, floor: true } },
+        secondaryCamera: { select: { label: true, floor: true } },
+        results: { orderBy: [{ hour: 'asc' }, { zoneId: 'asc' }] },
+      },
+    });
 
-  if (!job) {
-    return NextResponse.json({ error: 'Job not found' }, { status: 404 });
-  }
+    // requireJobOwnership already 404'd if the job is gone; this is a
+    // belt-and-suspenders check in case of a race.
+    if (!job) throw new HttpError(404, 'Job not found');
 
-  return NextResponse.json(job);
-}
+    return job;
+  },
+);

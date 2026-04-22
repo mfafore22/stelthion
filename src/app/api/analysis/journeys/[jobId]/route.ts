@@ -1,39 +1,46 @@
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';
-import {auth} from '@/auth';
+/**
+ * GET /api/analysis/journeys/[jobId]
+ *
+ * Phase D — analysis group migration. Pre-Phase-D this route was
+ * session-gated but did NOT validate that the calling tenant owned the
+ * job — cross-tenant journey reads were possible by jobId-guess. Now
+ * gated by requireJobOwnership.
+ */
 
-export async function GET(
-  _req: NextRequest,
-  { params }: { params: Promise<{ jobId: string }> },
-) {
-  const session = await auth();
-  if (!session?.user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  
-  const { jobId } = await params;
+import { z } from 'zod';
+import prisma from '@/server/db/client';
+import { defineHandler, HttpError } from '@/server/api/define-handler';
+import { requireJobOwnership } from '@/server/api/tenant-guards';
 
-  const job = await prisma.analysisJob.findUnique({
-    where: { id: jobId },
-    select: {
-      originZoneId: true,
-      destinationZoneId: true,
-      selectedZoneIds: true,
-      mode: true,
-      journeys: {
-        include: { paths: true },
-        orderBy: { createdAt: 'desc' },
+const paramsSchema = z.object({ jobId: z.string() });
+
+export const GET = defineHandler(
+  { auth: 'session', paramsSchema },
+  async ({ params, auth: session }) => {
+    await requireJobOwnership(session, params.jobId);
+
+    const job = await prisma.analysisJob.findUnique({
+      where: { id: params.jobId },
+      select: {
+        originZoneId: true,
+        destinationZoneId: true,
+        selectedZoneIds: true,
+        mode: true,
+        journeys: {
+          include: { paths: true },
+          orderBy: { createdAt: 'desc' },
+        },
       },
-    },
-  });
+    });
 
-  if (!job) {
-    return NextResponse.json({ error: 'Job not found' }, { status: 404 });
-  }
+    if (!job) throw new HttpError(404, 'Job not found');
 
-  return NextResponse.json({
-    sessions: job.journeys,
-    originZoneId: job.originZoneId,
-    destinationZoneId: job.destinationZoneId,
-    selectedZoneIds: job.selectedZoneIds ? JSON.parse(job.selectedZoneIds) : [],
-    mode: job.mode,
-  });
-}
+    return {
+      sessions: job.journeys,
+      originZoneId: job.originZoneId,
+      destinationZoneId: job.destinationZoneId,
+      selectedZoneIds: job.selectedZoneIds ? JSON.parse(job.selectedZoneIds) : [],
+      mode: job.mode,
+    };
+  },
+);
