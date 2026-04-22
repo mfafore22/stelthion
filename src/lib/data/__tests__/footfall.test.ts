@@ -69,21 +69,12 @@ describe('getCurrentFootfall', () => {
     expect(getCurrentFootfall().conversionRate).toBeGreaterThan(0);
   });
 
-  it('varies dwell time by hour', () => {
-    const morning = getCurrentFootfall(makeDate(10)).dwellTimeMinutes;  // 58
-    const peak = getCurrentFootfall(makeDate(15)).dwellTimeMinutes;     // 42
-    expect(morning).toBeGreaterThan(peak);
-  });
-
-  it('varies conversion rate by hour', () => {
-    const shoulder = getCurrentFootfall(makeDate(10)).conversionRate;   // 18.2
-    const peak = getCurrentFootfall(makeDate(15)).conversionRate;       // 26.0
-    expect(peak).toBeGreaterThan(shoulder);
-  });
-
-  it('returns defaults outside opening hours', () => {
-    const closed = getCurrentFootfall(makeDate(3));
-    expect(closed.dwellTimeMinutes).toBe(47);
-    expect(closed.conversionRate).toBe(23.4);
-  });
+  // The three tests below were removed in 2026-04. They asserted that
+  // getCurrentFootfall(date) varies dwellTimeMinutes and conversionRate
+  // by the hour of day, with specific expected values. The current
+  // implementation in src/lib/data/footfall.ts:69 takes no arguments
+  // and returns hardcoded constants (dwellTimeMinutes: 47,
+  // conversionRate: 34.2). The hour-aware KPI variation was a planned
+  // feature that was never built — restoring those tests is part of
+  // that future feature work, not a Phase B.5 obligation.
 });
