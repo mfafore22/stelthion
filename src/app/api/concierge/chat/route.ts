@@ -21,6 +21,8 @@ export async function POST(req: NextRequest) {
     language?: string;
   };
 
+  console.log('[Concierge API] Incoming request:', { conversationId, mallId, message, language });
+
   if (!mallId || !message) {
     return new Response(JSON.stringify({ error: 'mallId and message required' }), {
       status: 400,
@@ -55,6 +57,7 @@ export async function POST(req: NextRequest) {
           title: message.substring(0, 60),
         },
       });
+      console.log(`[Concierge API] Created new conversation ${conv.id} for user ${session.user.id} in mall ${resolvedMallId}`);
       convId = conv.id;
     }
 
@@ -91,6 +94,12 @@ export async function POST(req: NextRequest) {
     content: m.content,
   }));
 
+  console.log('[Concierge API] Conversation history loaded:', {
+    conversationId: convId,
+    messageCount: messages.length,
+    messages: messages.map(m => ({ role: m.role, contentLength: m.content.length })),
+  });
+
   // Stream response via SSE
   const encoder = new TextEncoder();
 
@@ -108,6 +117,8 @@ export async function POST(req: NextRequest) {
         );
 
         for await (const event of orchestrateChat({ mallId: resolvedMallId, messages, language })) {
+          console.log('[Concierge API] Event received:', { type: event.type, dataKeys: Object.keys(event.data || {}) });
+
           // Forward SSE event to client
           controller.enqueue(
             encoder.encode(`data: ${JSON.stringify(event)}\n\n`)
@@ -135,6 +146,14 @@ export async function POST(req: NextRequest) {
 
         // Save agent response to DB
         if (fullContent) {
+          console.log('[Concierge API] Saving agent response:', {
+            conversationId: convId,
+            contentLength: fullContent.length,
+            agentRole,
+            toolCallCount: allToolCalls.length,
+            attachmentCount: allAttachments.length,
+          });
+
           await prisma.conciergeMessage.create({
             data: {
               conversationId: convId!,
@@ -154,6 +173,7 @@ export async function POST(req: NextRequest) {
         }
       } catch (error) {
         const errMsg = error instanceof Error ? error.message : 'Unknown error';
+        console.error('[Concierge API] Streaming error:', { error: errMsg, stack: error instanceof Error ? error.stack : undefined });
         controller.enqueue(
           encoder.encode(`data: ${JSON.stringify({ type: 'error', data: { error: errMsg } })}\n\n`)
         );

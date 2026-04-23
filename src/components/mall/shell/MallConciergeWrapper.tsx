@@ -20,7 +20,7 @@ export function MallConciergeWrapper({ children }: MallConciergeWrapperProps) {
   const { user, loading } = useSession();
   const params = useParams();
 
-  const mallId = (params?.mallId as string) || 'ideapark-lempaala';
+  const mallId = (params?.mallId as string) || 'ideapark';
 
   if (!CONCIERGE_ENABLED) {
     return <>{children}</>;
