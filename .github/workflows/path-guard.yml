@@ -1,0 +1,68 @@
+name: Path Guard
+
+# Enforces the branch-separation rule documented in docs/branching.md.
+# A `backend/*` branch may not touch UI paths.
+# A `frontend/*` branch may not touch backend paths.
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  path-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine branch class
+        id: classify
+        run: |
+          ref="${GITHUB_HEAD_REF}"
+          if [[ "$ref" == backend/* ]]; then
+            echo "class=backend" >> "$GITHUB_OUTPUT"
+          elif [[ "$ref" == frontend/* ]]; then
+            echo "class=frontend" >> "$GITHUB_OUTPUT"
+          else
+            echo "class=unrestricted" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Compute changed files
+        id: changed
+        run: |
+          base="${{ github.event.pull_request.base.sha }}"
+          head="${{ github.event.pull_request.head.sha }}"
+          git fetch --no-tags --depth=1 origin "$base" "$head" 2>/dev/null || true
+          files=$(git diff --name-only "$base"..."$head")
+          echo "files<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$files" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Enforce backend purity
+        if: steps.classify.outputs.class == 'backend'
+        run: |
+          violations=$(printf '%s\n' "${{ steps.changed.outputs.files }}" | grep -E '^(src/components/|src/locales/|src/contexts/)' || true)
+          # Mall-app pages: any src/app path that is NOT under src/app/api/
+          ui_pages=$(printf '%s\n' "${{ steps.changed.outputs.files }}" | grep -E '^src/app/' | grep -vE '^src/app/api/' || true)
+          if [[ -n "$violations" || -n "$ui_pages" ]]; then
+            echo "::error::backend/* branches may not edit UI paths."
+            echo "Violations:"
+            [[ -n "$violations" ]] && printf '  - %s\n' $violations
+            [[ -n "$ui_pages" ]] && printf '  - %s\n' $ui_pages
+            exit 1
+          fi
+          echo "Backend purity OK."
+
+      - name: Enforce frontend purity
+        if: steps.classify.outputs.class == 'frontend'
+        run: |
+          violations=$(printf '%s\n' "${{ steps.changed.outputs.files }}" | grep -E '^(src/app/api/|src/server/|services/|packages/|prisma/)' || true)
+          if [[ -n "$violations" ]]; then
+            echo "::error::frontend/* branches may not edit backend paths."
+            echo "Violations:"
+            printf '  - %s\n' $violations
+            exit 1
+          fi
+          echo "Frontend purity OK."
