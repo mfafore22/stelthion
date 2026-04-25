@@ -32,10 +32,12 @@ export async function POST(req: NextRequest) {
 
   // Resolve mallId against DB — legacy code uses short names like 'ideapark'
   // while the DB row is 'ideapark-lempaala'. Match exact first, then prefix.
-  let resolvedMallId = mallId;
+  let resolvedMallId: string | null = null;
   try {
     const exact = await prisma.mall.findUnique({ where: { mallId }, select: { mallId: true } });
-    if (!exact) {
+    if (exact) {
+      resolvedMallId = exact.mallId;
+    } else {
       const byPrefix = await prisma.mall.findFirst({
         where: { mallId: { startsWith: mallId } },
         select: { mallId: true },
@@ -44,6 +46,13 @@ export async function POST(req: NextRequest) {
     }
   } catch (lookupErr) {
     console.error('[Concierge API] Mall lookup failed', lookupErr);
+  }
+
+  if (!resolvedMallId) {
+    return new Response(
+      JSON.stringify({ error: `Mall not found: ${mallId}` }),
+      { status: 404, headers: { 'Content-Type': 'application/json' } },
+    );
   }
 
   // Load or create conversation
