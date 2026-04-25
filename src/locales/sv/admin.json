@@ -8,7 +8,10 @@
     "floorPlan": "Planlösning",
     "analysisJobs": "Analysjobb",
     "resultsJourneys": "Resultat & resor",
-    "edgeDevices": "Edge-enheter"
+    "edgeDevices": "Edge-enheter",
+    "counterData": "Räknardata",
+    "customers": "Kunder",
+    "plans": "Abonnemang"
   },
   "dashboard": {
     "title": "Administratörspanel",

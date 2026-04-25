@@ -48,6 +48,14 @@ export const phenomenaRoutes: FastifyPluginAsync = async (app) => {
     });
 
     const seen = new Set<string>();
+    const latestByPhenomenon = new Map<string, (typeof scores)[number]>();
+    for (const s of scores) {
+      if (!latestByPhenomenon.has(s.phenomenonId)) {
+        latestByPhenomenon.set(s.phenomenonId, s);
+      }
+    }
+
+    const selectedIds: string[] = [];
     const out: Array<{
       id: string;
       label: string;
@@ -62,12 +70,35 @@ export const phenomenaRoutes: FastifyPluginAsync = async (app) => {
       compositeScore: number;
       footTrafficScore: number;
       culturalScore: number;
+      categories: string[];
+      keywords: string[];
+      latestVelocity: number;
+      i18n: unknown;
+      recentScores?: Array<{
+        id: string;
+        phenomenonId: string;
+        marketId: string;
+        country: string;
+        date: string;
+        volume: number;
+        velocity: number;
+        acceleration: number;
+        noiseAdjusted: number;
+        sourceDiversity: number;
+        compositeScore: number;
+        footTrafficScore: number;
+        culturalScore: number;
+        footTrafficProximity: number;
+        culturalProximity: number;
+        linkBoost: number;
+      }>;
     }> = [];
 
     for (const s of scores) {
       if (seen.has(s.phenomenonId)) continue;
       if (state && s.phenomenon.state !== state) continue;
       seen.add(s.phenomenonId);
+      selectedIds.push(s.phenomenonId);
       out.push({
         id: s.phenomenon.id,
         label: s.phenomenon.label,
@@ -82,8 +113,52 @@ export const phenomenaRoutes: FastifyPluginAsync = async (app) => {
         compositeScore: s.compositeScore,
         footTrafficScore: s.footTrafficScore,
         culturalScore: s.culturalScore,
+        categories: s.phenomenon.categories ?? [],
+        keywords: s.phenomenon.keywords ?? [],
+        latestVelocity: s.velocity,
+        i18n: s.phenomenon.i18n ?? null,
       });
       if (out.length >= limit) break;
+    }
+
+    // Attach 14d recent score history per selected phenomenon for sparklines.
+    if (selectedIds.length > 0) {
+      const history = await prisma().phenomenonScore.findMany({
+        where: { marketId, phenomenonId: { in: selectedIds } },
+        orderBy: [{ date: 'desc' }],
+        take: selectedIds.length * 14,
+      });
+      const byPhenomenon = new Map<string, typeof history>();
+      for (const row of history) {
+        const bucket = byPhenomenon.get(row.phenomenonId) ?? [];
+        if (bucket.length < 14) {
+          bucket.push(row);
+          byPhenomenon.set(row.phenomenonId, bucket);
+        }
+      }
+      for (const row of out) {
+        const rows = byPhenomenon.get(row.id);
+        if (rows && rows.length > 0) {
+          row.recentScores = rows.map((r) => ({
+            id: r.id,
+            phenomenonId: r.phenomenonId,
+            marketId: r.marketId,
+            country: r.country,
+            date: r.date.toISOString(),
+            volume: r.volume,
+            velocity: r.velocity,
+            acceleration: r.acceleration,
+            noiseAdjusted: r.noiseAdjusted,
+            sourceDiversity: r.sourceDiversity,
+            compositeScore: r.compositeScore,
+            footTrafficScore: r.footTrafficScore,
+            culturalScore: r.culturalScore,
+            footTrafficProximity: r.footTrafficProximity,
+            culturalProximity: r.culturalProximity,
+            linkBoost: r.linkBoost,
+          }));
+        }
+      }
     }
 
     return { phenomena: out };

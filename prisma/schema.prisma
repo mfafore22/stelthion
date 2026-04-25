@@ -8,11 +8,22 @@ datasource db {
 
 // ─── Tenant / Auth ──────────────────────────────────────────────────────────
 
+model Plan {
+  id           String     @id @default(cuid())
+  name         String     @unique
+  features     Json
+  priceMonthly Float?
+  createdAt    DateTime   @default(now())
+  customers    Customer[]
+}
+
 model Customer {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  planId    String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  plan      Plan?     @relation(fields: [planId], references: [id])
   users     User[]
   malls     Mall[]
 }
@@ -86,6 +97,13 @@ model Mall {
   events      MallEvent[]
   edgeDevices EdgeDevice[]
   conciergeConversations ConciergeConversation[]
+  marketMapping  MallMarketMapping?
+}
+
+model MallMarketMapping {
+  mallId    String  @unique
+  marketId  String
+  mall      Mall    @relation(fields: [mallId], references: [mallId])
 }
 
 enum MallStatus {

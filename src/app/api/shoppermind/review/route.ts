@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
   const pageParam = searchParams.get('page');
   const pageSizeParam = searchParams.get('pageSize');
 
-  const marketId = marketIdParam ?? (mallId ? resolveMarketIdFromMall(mallId) : null);
+  const marketId = marketIdParam ?? (mallId ? await resolveMarketIdFromMall(mallId) : null);
   if (!marketId) {
     return NextResponse.json({ error: 'marketId or mallId required' }, { status: 400 });
   }

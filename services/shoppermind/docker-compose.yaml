@@ -39,8 +39,8 @@ services:
       NODE_ENV: development
       DATABASE_URL: postgres://shoppermind:shoppermind@postgres:5432/shoppermind_db
       REDIS_URL: redis://redis:6379
-      SHOPPERMIND_SERVICE_TOKEN: dev-local-token
-      SHOPPERMIND_INTERNAL_TOKEN: dev-internal-token
+      SHOPPERMIND_SERVICE_TOKEN: dev-local-token-0000
+      SHOPPERMIND_INTERNAL_TOKEN: dev-internal-token-0000
       PORT: "4000"
     ports:
       - "4000:4000"
@@ -59,6 +59,8 @@ services:
       NODE_ENV: development
       DATABASE_URL: postgres://shoppermind:shoppermind@postgres:5432/shoppermind_db
       REDIS_URL: redis://redis:6379
+      SHOPPERMIND_SERVICE_TOKEN: dev-local-token-0000
+      SHOPPERMIND_INTERNAL_TOKEN: dev-internal-token-0000
     depends_on:
       postgres:
         condition: service_healthy

@@ -416,7 +416,178 @@
   },
   "shoppermind": {
     "title": "ShopperMind",
-    "tagline": "Foresight for every mall with actionable forecasts"
+    "tagline": "Foresight for every mall with actionable forecasts",
+    "loading": "Loading\u2026",
+    "loadingTrends": "Loading trends\u2026",
+    "loadingTrend": "Loading trend\u2026",
+    "noMarket": "Trend engine",
+    "marketPrefix": "Market",
+    "back": "Back to trends",
+    "breadcrumbRoot": "ShopperMind",
+    "notFound": "Trend {{id}} was not found.",
+    "notConfigured": {
+      "title": "Service not configured for this environment",
+      "body": "Set {{envVar1}} and {{envVar2}} to connect. This mall would resolve to {{marketId}}.",
+      "detail": "ShopperMind service is not configured in this environment."
+    },
+    "upgrade": {
+      "title": "ShopperMind is not included in your plan",
+      "body": "Upgrade to unlock trend intelligence for your markets. Contact your account manager or an administrator to change your plan."
+    },
+    "errorBanner": "Trend service unreachable: {{message}}",
+    "grid": {
+      "empty": "No trends tracked for this market yet.",
+      "topTrends": "Top trends",
+      "tracked_one": "{{count}} trend tracked",
+      "tracked_other": "{{count}} trends tracked",
+      "score": "Score"
+    },
+    "signalOfTheDay": {
+      "title": "Signal of the Day",
+      "empty": "No signal published yet for this market today."
+    },
+    "states": {
+      "EMERGING": "Emerging",
+      "ACCELERATING": "Accelerating",
+      "STABLE": "Stable",
+      "FADING": "Fading",
+      "DORMANT": "Dormant"
+    },
+    "lifecycle": {
+      "label": "Lifecycle",
+      "relevance": "Relevance",
+      "rising": "rising",
+      "cooling": "cooling",
+      "holding": "holding",
+      "youAreHere": "You are here"
+    },
+    "trajectory": {
+      "title": "Trend trajectory",
+      "subtitle": "Composite score over time \u2014 pick a window",
+      "empty": "No scoring history recorded yet.",
+      "windows": {
+        "7d": "7d",
+        "14d": "14d",
+        "30d": "30d"
+      },
+      "series": {
+        "composite": "Composite",
+        "footTraffic": "Foot traffic",
+        "cultural": "Cultural"
+      },
+      "stats": {
+        "relevance": "Relevance",
+        "velocity": "Velocity",
+        "acceleration": "Acceleration",
+        "volume": "Volume"
+      }
+    },
+    "sections": {
+      "summary": "Summary",
+      "signal": "Signal in this market",
+      "impact": "What this means for you",
+      "opportunity": "Opportunity",
+      "watchOut": "Watch-out",
+      "opportunityBody": "With the trend accelerating, there is upside for retailers who move early on the angles above.",
+      "watchOutBody": "This trend is cooling. Plan for slower uptake and prepare to rotate out of deep exposure."
+    },
+    "detail": {
+      "description": "Description",
+      "linkGraph": "Link graph",
+      "linkGraphEmpty": "No inferred links yet.",
+      "upstream": "Upstream \u2014 trends that feed into this one",
+      "downstream": "Downstream \u2014 trends this one feeds into",
+      "recentScoring": "Recent scoring",
+      "details": "Details",
+      "tags": "Tags",
+      "categories": "Categories",
+      "keywords": "Keywords",
+      "meta": {
+        "eventStart": "Event start",
+        "eventEnd": "Event end",
+        "firstSeen": "First seen",
+        "lastSignal": "Last signal",
+        "cultural": "Cultural",
+        "footTraffic": "Foot traffic"
+      },
+      "metrics": {
+        "composite": "Composite",
+        "footTraffic": "Foot-traffic",
+        "cultural": "Cultural",
+        "velocity": "Velocity",
+        "acceleration": "Acceleration",
+        "volume": "Volume",
+        "empty": "No scores recorded yet."
+      },
+      "table": {
+        "date": "Date",
+        "composite": "Composite",
+        "footTraffic": "Foot-traffic",
+        "cultural": "Cultural",
+        "velocity": "Velocity",
+        "volume": "Volume",
+        "boost": "Boost"
+      }
+    },
+    "linkTypes": {
+      "CONTRIBUTES_TO": "Contributes to",
+      "MANIFESTATION_OF": "Manifestation of",
+      "ACCELERATES": "Accelerates",
+      "PRECEDES": "Precedes",
+      "CONTRADICTS": "Contradicts"
+    },
+    "phenomenonTypes": {
+      "TREND": "Trend",
+      "EVENT": "Event",
+      "CAMPAIGN": "Campaign",
+      "INCIDENT": "Incident"
+    },
+    "lifecycleStates": {
+      "UPCOMING": "Upcoming",
+      "ACTIVE": "Active",
+      "CONCLUDED": "Concluded"
+    },
+    "scopes": {
+      "CITY": "City",
+      "REGION": "Region",
+      "COUNTRY": "Country",
+      "GLOBAL": "Global"
+    },
+    "errors": {
+      "network": "Network error",
+      "serviceUnavailable": "Service unavailable"
+    },
+    "linkAuthor": {
+      "openButton": "Author link (admin)",
+      "heading": "New link",
+      "cancel": "Cancel",
+      "save": "Save link",
+      "saving": "Saving\u2026",
+      "targetLabel": "Target trend ID",
+      "targetPlaceholder": "trend-id",
+      "typeLabel": "Link type",
+      "weightLabel": "Weight (0\u20131)",
+      "rationaleLabel": "Rationale (optional)",
+      "rationalePlaceholder": "Why is this link correct?",
+      "errors": {
+        "targetRequired": "Target trend ID required",
+        "cannotLinkSelf": "Cannot link a trend to itself",
+        "weightRange": "Weight must be between 0 and 1",
+        "forbidden": "ADMIN role required to author links",
+        "requestFailed": "Request failed ({{status}})"
+      }
+    },
+    "demo": {
+      "badge": "Demo",
+      "getAccess": "Get full access",
+      "notSeededTitle": "Demo data not yet seeded",
+      "notSeededBody": "Run {{command}} to populate demo markets.",
+      "defaultFocus": "Retail trend intelligence",
+      "loading": "Loading trend data\u2026",
+      "ctaTitle": "See ShopperMind with your mall\u2019s data",
+      "ctaBody": "When connected to Stelthion, ShopperMind correlates these trends with real footfall data from your mall \u2014 showing you which trends are already driving traffic.",
+      "bookDemo": "Book a demo"
+    }
   },
   "campaigns": {
     "title": "Campaigns",
@@ -796,6 +967,10 @@
       "label": "ShopperMind",
       "description": "Trends and Predictions"
     },
+    "space-optimizer": {
+      "label": "Space Optimizer",
+      "description": "Trend-driven rental-space recommendations"
+    },
     "managementCompany": "Management Company",
     "comingSoon": "Coming Soon"
   },
@@ -929,5 +1104,80 @@
     "coverSubtitle": "Floor: {{floor}} · Hour: {{hour}}:00",
     "executiveSummary": "Executive Summary",
     "keyHighlights": "Key Highlights"
+  },
+  "spaceOptimizer": {
+    "title": "Space Optimizer",
+    "subtitle": "Tangible rental-space moves driven by ShopperMind trends and operational signals",
+    "header": {
+      "summary": "{{count}} suggestion across {{zones}} zones",
+      "summary_other": "{{count}} suggestions across {{zones}} zones",
+      "drivenBy": "Driven by {{count}} trend",
+      "drivenBy_other": "Driven by {{count}} trends",
+      "lastRun": "Generated {{date}}"
+    },
+    "actions": {
+      "EXPAND": "Expand",
+      "CONVERT": "Convert",
+      "MAINTAIN": "Maintain",
+      "SUNSET": "Sunset",
+      "expandLong": "Expand footprint",
+      "convertLong": "Convert to a new category",
+      "maintainLong": "Maintain — no change recommended",
+      "sunsetLong": "Sunset and re-let"
+    },
+    "filters": {
+      "all": "All",
+      "byAction": "Action",
+      "byTrend": "Trend",
+      "sortByConfidence": "Highest confidence",
+      "sortByUplift": "Largest uplift",
+      "sortByLeaseEnd": "Lease ending soonest"
+    },
+    "card": {
+      "currentCategory": "Currently",
+      "proposedCategory": "Proposed",
+      "drivingTrends": "Driving trends",
+      "confidence": "Confidence",
+      "projectedUplift": "Projected uplift",
+      "projectedAnnual": "~{{value}}/yr",
+      "leaseEnds": "Lease ends {{date}}",
+      "noLease": "No lease info",
+      "tenant": "Tenant",
+      "viewPhenomenon": "View trend",
+      "dismiss": "Dismiss",
+      "accept": "Mark for follow-up",
+      "projection": "projection — directional, not guaranteed"
+    },
+    "floorplan": {
+      "title": "Floorplan",
+      "legend": "Legend",
+      "floor": "Floor {{floor}}",
+      "noZones": "No zones to display"
+    },
+    "empty": {
+      "title": "No suggestions yet",
+      "body": "ShopperMind hasn't surfaced a clear space move for {{mall}} this cycle. The next refresh runs daily — check back tomorrow."
+    },
+    "errors": {
+      "load": "Couldn't load space-optimizer suggestions: {{message}}",
+      "gated": {
+        "title": "Space Optimizer requires an upgrade",
+        "body": "This feature is part of the Realidea Suite plan. Contact your account manager to enable it for your mall."
+      }
+    },
+    "demo": {
+      "badge": "Live Demo",
+      "header": "Realidea — Sello",
+      "subtitle": "What ShopperMind sees today, applied to Sello's actual zone mix",
+      "getAccess": "Get Access",
+      "ctaTitle": "Want this for your portfolio?",
+      "ctaBody": "Live recommendations against your own POS, footfall, and camera signals.",
+      "bookDemo": "Book a demo",
+      "loading": "Loading suggestions for Sello..."
+    },
+    "nav": {
+      "label": "Space Optimizer",
+      "description": "Trend-driven rental-space recommendations"
+    }
   }
 }

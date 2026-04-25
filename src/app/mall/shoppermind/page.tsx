@@ -3,16 +3,22 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 import { useSession } from '@/contexts/SessionContext';
 import { MallTopBar } from '@/components/mall/shell/MallTopBar';
 import { MallLeftNav } from '@/components/mall/shell/MallLeftNav';
-import { Brain, TrendingUp, TrendingDown, Activity, Circle, Pause } from 'lucide-react';
+import { MallCard } from '@/components/mall/ui/MallCard';
+import { Brain, ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
 import type {
   MarketDetail,
   PhenomenonSummary,
   SignalOfTheDay,
-  PhenomenonStateValue,
 } from '@stelthion/shoppermind-client-types';
+import { StateBadge } from '@/components/mall/shoppermind/StateBadge';
+import { LifecycleContinuumCompact } from '@/components/mall/shoppermind/LifecycleContinuum';
+import { MiniSparkline } from '@/components/mall/shoppermind/MiniSparkline';
+import { localizePhenomenon, localizeSotdNarrative } from '@/lib/shoppermind/localize';
+import { cn } from '@/lib/utils';
 
 interface OverviewResponse {
   configured: boolean;
@@ -26,9 +32,11 @@ interface OverviewResponse {
 export default function ShopperMindPage() {
   const { user, loading } = useSession();
   const router = useRouter();
+  const { t } = useTranslation('mall');
   const [data, setData] = useState<OverviewResponse | null>(null);
   const [fetching, setFetching] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [gated, setGated] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) router.replace('/mall/login');
@@ -39,21 +47,26 @@ export default function ShopperMindPage() {
     let cancelled = false;
     setFetching(true);
     setError(null);
+    setGated(false);
     fetch(`/api/shoppermind/overview?mallId=${encodeURIComponent(user.mallId)}`, {
       credentials: 'include',
     })
       .then(async (res) => {
         const body = (await res.json()) as OverviewResponse & { error?: string };
         if (cancelled) return;
+        if (res.status === 403 && body.error === 'feature_not_on_plan') {
+          setGated(true);
+          return;
+        }
         if (!res.ok && !body.configured) {
-          setError(body.error ?? 'Service unavailable');
+          setError(body.error ?? t('shoppermind.errors.serviceUnavailable'));
         } else if (body.error) {
           setError(body.error);
         }
         setData(body);
       })
       .catch((err) => {
-        if (!cancelled) setError(err instanceof Error ? err.message : 'network error');
+        if (!cancelled) setError(err instanceof Error ? err.message : t('shoppermind.errors.network'));
       })
       .finally(() => {
         if (!cancelled) setFetching(false);
@@ -65,8 +78,8 @@ export default function ShopperMindPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#F8F6F3]">
-        <div className="animate-pulse text-gray-400 text-sm">Loading…</div>
+      <div className="flex items-center justify-center min-h-screen bg-bo-neutral-50">
+        <div className="animate-pulse text-bo-neutral-400 text-sm">{t('shoppermind.loading')}</div>
       </div>
     );
   }
@@ -76,13 +89,20 @@ export default function ShopperMindPage() {
     <>
       <MallLeftNav />
       <MallTopBar />
-      <main className="ml-[80px] h-screen overflow-auto pt-[80px] bg-[#F8F6F3]">
+      <main className="ml-[80px] h-screen overflow-auto pt-[80px] bg-bo-neutral-50">
         <div className="p-8 max-w-[1600px] mx-auto space-y-6">
           <Header market={data?.market ?? null} marketId={data?.marketId ?? null} />
-          {fetching && <div className="text-sm text-gray-400 animate-pulse">Loading trends…</div>}
-          {!fetching && data && !data.configured && <NotConfigured marketId={data.marketId} />}
-          {!fetching && data?.configured && error && <ErrorBanner message={error} />}
-          {!fetching && data?.configured && !error && (
+          {fetching && (
+            <div className="text-sm text-bo-neutral-400 animate-pulse">
+              {t('shoppermind.loadingTrends')}
+            </div>
+          )}
+          {!fetching && gated && <UpgradeBanner />}
+          {!fetching && !gated && data && !data.configured && (
+            <NotConfigured marketId={data.marketId} />
+          )}
+          {!fetching && !gated && data?.configured && error && <ErrorBanner message={error} />}
+          {!fetching && !gated && data?.configured && !error && (
             <>
               <SignalOfTheDayCard sotd={data.signalOfTheDay} />
               <PhenomenaGrid phenomena={data.phenomena} />
@@ -95,116 +115,169 @@ export default function ShopperMindPage() {
 }
 
 function Header({ market, marketId }: { market: MarketDetail | null; marketId: string | null }) {
+  const { t } = useTranslation('mall');
+  const subtitle = market
+    ? `${market.displayName} · ${market.industryFocus}`
+    : marketId
+      ? `${t('shoppermind.marketPrefix')}: ${marketId}`
+      : t('shoppermind.noMarket');
   return (
     <div className="flex items-center gap-3">
-      <Brain className="w-8 h-8 text-indigo-500" />
+      <div className="w-12 h-12 rounded-xl bg-bo-primary-100 flex items-center justify-center">
+        <Brain className="w-6 h-6 text-bo-primary" />
+      </div>
       <div>
-        <h1 className="text-2xl font-semibold text-gray-800">ShopperMind</h1>
-        <p className="text-sm text-gray-500">
-          {market
-            ? `${market.displayName} · ${market.industryFocus}`
-            : marketId
-              ? `Market: ${marketId}`
-              : 'Trend engine'}
-        </p>
+        <h1 className="text-2xl font-semibold text-bo-neutral-950 tracking-tight">
+          {t('shoppermind.title')}
+        </h1>
+        <p className="text-sm text-bo-neutral-500">{subtitle}</p>
       </div>
     </div>
   );
 }
 
-function NotConfigured({ marketId }: { marketId: string }) {
+function UpgradeBanner() {
+  const { t } = useTranslation('mall');
   return (
-    <div className="rounded-xl border border-amber-200 bg-amber-50 p-6 text-sm text-amber-800">
-      <div className="font-medium mb-1">Service not configured for this environment</div>
-      <div className="text-amber-700">
-        Set <code className="font-mono">SHOPPERMIND_SERVICE_URL</code> and{' '}
-        <code className="font-mono">SHOPPERMIND_SERVICE_TOKEN</code> to connect. This mall would
-        resolve to <code className="font-mono">{marketId}</code>.
+    <div className="rounded-xl border-2 border-bo-accent/30 bg-bo-accent-light/40 p-6 text-sm text-bo-accent-dark backdrop-blur-xl">
+      <div className="font-medium mb-1">{t('shoppermind.upgrade.title')}</div>
+      <div className="text-bo-accent-dark/80">{t('shoppermind.upgrade.body')}</div>
+    </div>
+  );
+}
+
+function NotConfigured({ marketId }: { marketId: string }) {
+  const { t } = useTranslation('mall');
+  return (
+    <div className="rounded-xl border-2 border-bo-warning/30 bg-bo-warning-light/40 p-6 text-sm text-bo-warning-dark backdrop-blur-xl">
+      <div className="font-medium mb-1">{t('shoppermind.notConfigured.title')}</div>
+      <div className="text-bo-warning-dark/80">
+        {t('shoppermind.notConfigured.body', {
+          envVar1: 'SHOPPERMIND_SERVICE_URL',
+          envVar2: 'SHOPPERMIND_SERVICE_TOKEN',
+          marketId,
+        })}
       </div>
     </div>
   );
 }
 
 function ErrorBanner({ message }: { message: string }) {
+  const { t } = useTranslation('mall');
   return (
-    <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-      Trend service unreachable: {message}
+    <div className="rounded-xl border-2 border-bo-error/30 bg-bo-error-light/40 p-4 text-sm text-bo-error-dark">
+      {t('shoppermind.errorBanner', { message })}
     </div>
   );
 }
 
 function SignalOfTheDayCard({ sotd }: { sotd: SignalOfTheDay | null }) {
+  const { t, i18n } = useTranslation('mall');
   if (!sotd) {
     return (
-      <div className="rounded-xl bg-white border border-gray-100 p-6">
-        <div className="text-xs uppercase tracking-wide text-gray-400 mb-2">Signal of the Day</div>
-        <div className="text-sm text-gray-500">
-          No signal published yet for this market today.
+      <MallCard variant="glass" padding="md">
+        <div className="text-xs uppercase tracking-wider text-bo-neutral-400 mb-2 font-medium">
+          {t('shoppermind.signalOfTheDay.title')}
         </div>
-      </div>
+        <div className="text-sm text-bo-neutral-500">{t('shoppermind.signalOfTheDay.empty')}</div>
+      </MallCard>
     );
   }
+  const narrative = localizeSotdNarrative(sotd, i18n.language);
   return (
-    <div className="rounded-xl bg-white border border-gray-100 p-6">
-      <div className="text-xs uppercase tracking-wide text-gray-400 mb-2">
-        Signal of the Day · {sotd.date.slice(0, 10)}
+    <MallCard variant="glass" padding="md">
+      <div className="text-xs uppercase tracking-wider text-bo-neutral-400 mb-2 font-medium">
+        {t('shoppermind.signalOfTheDay.title')} · {sotd.date.slice(0, 10)}
       </div>
-      <p className="text-gray-800 leading-relaxed whitespace-pre-wrap">{sotd.narrative}</p>
-    </div>
+      <p className="text-bo-neutral-900 leading-relaxed whitespace-pre-wrap">{narrative}</p>
+    </MallCard>
   );
 }
 
 function PhenomenaGrid({ phenomena }: { phenomena: PhenomenonSummary[] }) {
+  const { t } = useTranslation('mall');
   if (phenomena.length === 0) {
     return (
-      <div className="rounded-xl bg-white border border-gray-100 p-6 text-sm text-gray-500">
-        No phenomena tracked for this market yet.
-      </div>
+      <MallCard variant="glass" padding="md">
+        <div className="text-sm text-bo-neutral-500">{t('shoppermind.grid.empty')}</div>
+      </MallCard>
     );
   }
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-      {phenomena.map((p) => (
-        <PhenomenonCard key={p.id} phenomenon={p} />
-      ))}
+    <div>
+      <div className="flex items-center gap-3 mb-3">
+        <h2 className="text-sm font-semibold text-bo-neutral-950 uppercase tracking-wider">
+          {t('shoppermind.grid.topTrends')}
+        </h2>
+        <span className="text-xs text-bo-neutral-400">
+          {t('shoppermind.grid.tracked', { count: phenomena.length })}
+        </span>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        {phenomena.map((p) => (
+          <PhenomenonCard key={p.id} phenomenon={p} />
+        ))}
+      </div>
     </div>
   );
 }
 
-const STATE_META: Record<
-  PhenomenonStateValue,
-  { label: string; color: string; icon: React.ComponentType<{ className?: string }> }
-> = {
-  EMERGING: { label: 'Emerging', color: 'text-sky-600', icon: Circle },
-  ACCELERATING: { label: 'Accelerating', color: 'text-emerald-600', icon: TrendingUp },
-  STABLE: { label: 'Stable', color: 'text-gray-500', icon: Activity },
-  FADING: { label: 'Fading', color: 'text-amber-600', icon: TrendingDown },
-  DORMANT: { label: 'Dormant', color: 'text-gray-400', icon: Pause },
-};
-
 function PhenomenonCard({ phenomenon }: { phenomenon: PhenomenonSummary }) {
-  const meta = STATE_META[phenomenon.state];
-  const Icon = meta.icon;
+  const { t, i18n } = useTranslation('mall');
+  const localized = localizePhenomenon(phenomenon, i18n.language);
+  const teaser = (localized.parsed.retailerImpact ?? localized.parsed.summary).slice(0, 140);
+  const velocity = phenomenon.latestVelocity ?? 0;
+  const VelIcon = velocity > 0.02 ? ArrowUpRight : velocity < -0.02 ? ArrowDownRight : Minus;
+  const velColor =
+    velocity > 0.02
+      ? 'text-bo-success-dark bg-bo-success-light border-bo-success/30'
+      : velocity < -0.02
+        ? 'text-bo-warning-dark bg-bo-warning-light border-bo-warning/30'
+        : 'text-bo-neutral-500 bg-bo-neutral-100 border-bo-neutral-200';
   return (
     <Link
       href={`/mall/shoppermind/phenomenon/${encodeURIComponent(phenomenon.id)}`}
-      className="rounded-xl bg-white border border-gray-100 p-5 block hover:border-indigo-200 hover:shadow-sm transition"
+      className="block"
     >
-      <div className="flex items-start justify-between gap-3 mb-2">
-        <h3 className="font-medium text-gray-800 leading-snug">{phenomenon.label}</h3>
-        <div className={`flex items-center gap-1 text-xs ${meta.color}`}>
-          <Icon className="w-3.5 h-3.5" />
-          <span>{meta.label}</span>
+      <MallCard variant="glass" padding="md" hover className="h-full">
+        <div className="flex items-start justify-between gap-3 mb-3">
+          <h3 className="font-semibold text-bo-neutral-950 leading-snug tracking-tight">
+            {localized.label}
+          </h3>
+          <StateBadge state={phenomenon.state} />
         </div>
-      </div>
-      <p className="text-sm text-gray-600 line-clamp-3 mb-3">{phenomenon.description}</p>
-      <div className="flex items-center gap-4 text-xs text-gray-500">
-        <span>Score {phenomenon.compositeScore.toFixed(2)}</span>
-        {phenomenon.phenomenonType && (
-          <span className="uppercase tracking-wide">{phenomenon.phenomenonType}</span>
+        <div className="mb-3">
+          {phenomenon.recentScores && phenomenon.recentScores.length >= 2 ? (
+            <MiniSparkline scores={phenomenon.recentScores} height={28} />
+          ) : (
+            <div className="h-[28px]" />
+          )}
+        </div>
+        <LifecycleContinuumCompact state={phenomenon.state} className="mb-3" />
+        {teaser && (
+          <p className="text-sm text-bo-neutral-700 line-clamp-2 mb-3 leading-relaxed">
+            {teaser}
+          </p>
         )}
-        {phenomenon.lifecycleState && <span>· {phenomenon.lifecycleState}</span>}
-      </div>
+        <div className="flex items-center justify-between gap-3 text-xs pt-3 border-t border-bo-neutral-200/60">
+          <span className="text-bo-neutral-500">
+            {t('shoppermind.grid.score')}{' '}
+            <strong className="text-bo-neutral-900">
+              {phenomenon.compositeScore.toFixed(2)}
+            </strong>
+          </span>
+          <span
+            className={cn(
+              'inline-flex items-center gap-1 px-2 py-0.5 rounded-md border font-medium',
+              velColor,
+            )}
+          >
+            <VelIcon className="w-3 h-3" />
+            {velocity > 0 ? '+' : ''}
+            {velocity.toFixed(2)}
+          </span>
+        </div>
+      </MallCard>
     </Link>
   );
 }

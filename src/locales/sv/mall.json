@@ -425,7 +425,178 @@
   },
   "shoppermind": {
     "title": "ShopperMind",
-    "tagline": "Framförhållning för varje köpcentrum med handlingsbara prognoser"
+    "tagline": "Framf\u00f6rh\u00e5llning f\u00f6r varje k\u00f6pcentrum med handlingsbara prognoser",
+    "loading": "Laddar\u2026",
+    "loadingTrends": "Laddar trender\u2026",
+    "loadingTrend": "Laddar trend\u2026",
+    "noMarket": "Trendmotor",
+    "marketPrefix": "Marknad",
+    "back": "Tillbaka till trender",
+    "breadcrumbRoot": "ShopperMind",
+    "notFound": "Trenden {{id}} hittades inte.",
+    "notConfigured": {
+      "title": "Tj\u00e4nsten \u00e4r inte konfigurerad i den h\u00e4r milj\u00f6n",
+      "body": "Ange {{envVar1}} och {{envVar2}} f\u00f6r att ansluta. Det h\u00e4r k\u00f6pcentrumet skulle motsvara {{marketId}}.",
+      "detail": "ShopperMind-tj\u00e4nsten \u00e4r inte konfigurerad i den h\u00e4r milj\u00f6n."
+    },
+    "upgrade": {
+      "title": "ShopperMind ing\u00e5r inte i din plan",
+      "body": "Uppgradera f\u00f6r att l\u00e5sa upp trendintelligens f\u00f6r dina marknader. Kontakta din kundansvarig eller en administrat\u00f6r f\u00f6r att byta plan."
+    },
+    "errorBanner": "Trendtj\u00e4nsten \u00e4r inte tillg\u00e4nglig: {{message}}",
+    "grid": {
+      "empty": "Inga trender sp\u00e5ras f\u00f6r den h\u00e4r marknaden \u00e4nnu.",
+      "topTrends": "Topptrender",
+      "tracked_one": "{{count}} trend sp\u00e5ras",
+      "tracked_other": "{{count}} trender sp\u00e5ras",
+      "score": "Po\u00e4ng"
+    },
+    "signalOfTheDay": {
+      "title": "Dagens signal",
+      "empty": "Ingen signal har publicerats f\u00f6r den h\u00e4r marknaden idag."
+    },
+    "states": {
+      "EMERGING": "Framv\u00e4xande",
+      "ACCELERATING": "Accelererande",
+      "STABLE": "Stabil",
+      "FADING": "Avtagande",
+      "DORMANT": "Vilande"
+    },
+    "lifecycle": {
+      "label": "Livscykel",
+      "relevance": "Relevans",
+      "rising": "stigande",
+      "cooling": "svalnande",
+      "holding": "stabil",
+      "youAreHere": "Du \u00e4r h\u00e4r"
+    },
+    "trajectory": {
+      "title": "Trendens utveckling",
+      "subtitle": "Sammansatt po\u00e4ng \u00f6ver tid \u2014 v\u00e4lj ett f\u00f6nster",
+      "empty": "Ingen po\u00e4ngshistorik \u00e4nnu.",
+      "windows": {
+        "7d": "7 d",
+        "14d": "14 d",
+        "30d": "30 d"
+      },
+      "series": {
+        "composite": "Sammansatt",
+        "footTraffic": "Bes\u00f6kstrafik",
+        "cultural": "Kulturell"
+      },
+      "stats": {
+        "relevance": "Relevans",
+        "velocity": "Hastighet",
+        "acceleration": "Acceleration",
+        "volume": "Volym"
+      }
+    },
+    "sections": {
+      "summary": "Sammanfattning",
+      "signal": "Signal p\u00e5 den h\u00e4r marknaden",
+      "impact": "Vad det betyder f\u00f6r dig",
+      "opportunity": "M\u00f6jlighet",
+      "watchOut": "Varning",
+      "opportunityBody": "N\u00e4r trenden accelererar finns det uppsida f\u00f6r handlare som r\u00f6r sig tidigt p\u00e5 vinklarna ovan.",
+      "watchOutBody": "Trenden svalnar. Planera f\u00f6r l\u00e5ngsammare upptag och f\u00f6rbered dig p\u00e5 att rotera bort fr\u00e5n djup exponering."
+    },
+    "detail": {
+      "description": "Beskrivning",
+      "linkGraph": "L\u00e4nkkarta",
+      "linkGraphEmpty": "Inga h\u00e4rledda l\u00e4nkar \u00e4nnu.",
+      "upstream": "Uppstr\u00f6ms \u2014 trender som matar in i den h\u00e4r",
+      "downstream": "Nedstr\u00f6ms \u2014 trender som den h\u00e4r matar in i",
+      "recentScoring": "Senaste po\u00e4ngs\u00e4ttning",
+      "details": "Detaljer",
+      "tags": "Taggar",
+      "categories": "Kategorier",
+      "keywords": "Nyckelord",
+      "meta": {
+        "eventStart": "H\u00e4ndelsens start",
+        "eventEnd": "H\u00e4ndelsens slut",
+        "firstSeen": "F\u00f6rsta observation",
+        "lastSignal": "Senaste signal",
+        "cultural": "Kulturell",
+        "footTraffic": "Bes\u00f6kstrafik"
+      },
+      "metrics": {
+        "composite": "Sammansatt",
+        "footTraffic": "Bes\u00f6kstrafik",
+        "cultural": "Kulturell",
+        "velocity": "Hastighet",
+        "acceleration": "Acceleration",
+        "volume": "Volym",
+        "empty": "Inga po\u00e4ng registrerade \u00e4nnu."
+      },
+      "table": {
+        "date": "Datum",
+        "composite": "Sammansatt",
+        "footTraffic": "Bes\u00f6kstrafik",
+        "cultural": "Kulturell",
+        "velocity": "Hastighet",
+        "volume": "Volym",
+        "boost": "Booster"
+      }
+    },
+    "linkTypes": {
+      "CONTRIBUTES_TO": "Bidrar till",
+      "MANIFESTATION_OF": "Manifestation av",
+      "ACCELERATES": "Accelererar",
+      "PRECEDES": "F\u00f6reg\u00e5r",
+      "CONTRADICTS": "Mots\u00e4ger"
+    },
+    "phenomenonTypes": {
+      "TREND": "Trend",
+      "EVENT": "H\u00e4ndelse",
+      "CAMPAIGN": "Kampanj",
+      "INCIDENT": "Incident"
+    },
+    "lifecycleStates": {
+      "UPCOMING": "Kommande",
+      "ACTIVE": "Aktiv",
+      "CONCLUDED": "Avslutad"
+    },
+    "scopes": {
+      "CITY": "Stad",
+      "REGION": "Region",
+      "COUNTRY": "Land",
+      "GLOBAL": "Global"
+    },
+    "errors": {
+      "network": "N\u00e4tverksfel",
+      "serviceUnavailable": "Tj\u00e4nsten \u00e4r inte tillg\u00e4nglig"
+    },
+    "linkAuthor": {
+      "openButton": "Skapa l\u00e4nk (admin)",
+      "heading": "Ny l\u00e4nk",
+      "cancel": "Avbryt",
+      "save": "Spara l\u00e4nk",
+      "saving": "Sparar\u2026",
+      "targetLabel": "M\u00e5ltrendens ID",
+      "targetPlaceholder": "trend-id",
+      "typeLabel": "L\u00e4nktyp",
+      "weightLabel": "Vikt (0\u20131)",
+      "rationaleLabel": "Motivering (valfritt)",
+      "rationalePlaceholder": "Varf\u00f6r \u00e4r den h\u00e4r l\u00e4nken korrekt?",
+      "errors": {
+        "targetRequired": "M\u00e5ltrendens ID kr\u00e4vs",
+        "cannotLinkSelf": "En trend kan inte l\u00e4nkas till sig sj\u00e4lv",
+        "weightRange": "Vikten m\u00e5ste vara mellan 0 och 1",
+        "forbidden": "ADMIN-roll kr\u00e4vs f\u00f6r att skapa l\u00e4nkar",
+        "requestFailed": "Beg\u00e4ran misslyckades ({{status}})"
+      }
+    },
+    "demo": {
+      "badge": "Demo",
+      "getAccess": "F\u00e5 full tillg\u00e5ng",
+      "notSeededTitle": "Demodata \u00e4nnu inte inl\u00e4st",
+      "notSeededBody": "K\u00f6r {{command}} f\u00f6r att fylla demomarknader.",
+      "defaultFocus": "Detaljhandelns trendintelligens",
+      "loading": "Laddar trenddata\u2026",
+      "ctaTitle": "Se ShopperMind med ditt k\u00f6pcentrums data",
+      "ctaBody": "N\u00e4r det \u00e4r anslutet till Stelthion korrelerar ShopperMind de h\u00e4r trenderna med verklig bes\u00f6kstrafik fr\u00e5n ditt k\u00f6pcentrum \u2014 och visar vilka trender som redan drar trafik.",
+      "bookDemo": "Boka en demo"
+    }
   },
   "campaigns": {
     "title": "Kampanjer",
@@ -803,6 +974,10 @@
       "label": "ShopperMind",
       "description": "Trender och prognoser"
     },
+    "space-optimizer": {
+      "label": "Ytoptimering",
+      "description": "Trenddrivna rekommendationer för uthyrningsyta"
+    },
     "managementCompany": "Förvaltningsbolag",
     "comingSoon": "Kommer snart"
   },
@@ -958,5 +1133,80 @@
     "coverSubtitle": "Våning: {{floor}} · Klockan: {{hour}}:00",
     "executiveSummary": "Sammanfattning",
     "keyHighlights": "Viktiga observationer"
+  },
+  "spaceOptimizer": {
+    "title": "Yt-Optimerare",
+    "subtitle": "Konkreta hyresytsförändringar drivna av ShopperMind-trender och operativa signaler",
+    "header": {
+      "summary": "{{count}} förslag över {{zones}} zoner",
+      "summary_other": "{{count}} förslag över {{zones}} zoner",
+      "drivenBy": "Drivs av {{count}} trend",
+      "drivenBy_other": "Drivs av {{count}} trender",
+      "lastRun": "Genererad {{date}}"
+    },
+    "actions": {
+      "EXPAND": "Expandera",
+      "CONVERT": "Konvertera",
+      "MAINTAIN": "Behåll",
+      "SUNSET": "Avveckla",
+      "expandLong": "Utöka ytan",
+      "convertLong": "Konvertera till ny kategori",
+      "maintainLong": "Behåll — ingen åtgärd",
+      "sunsetLong": "Avveckla och hyr ut igen"
+    },
+    "filters": {
+      "all": "Alla",
+      "byAction": "Åtgärd",
+      "byTrend": "Trend",
+      "sortByConfidence": "Högsta konfidens",
+      "sortByUplift": "Störst lyft",
+      "sortByLeaseEnd": "Avtal löper ut först"
+    },
+    "card": {
+      "currentCategory": "Nuvarande",
+      "proposedCategory": "Föreslagen",
+      "drivingTrends": "Drivkrafter",
+      "confidence": "Konfidens",
+      "projectedUplift": "Prognosticerat lyft",
+      "projectedAnnual": "~{{value}}/år",
+      "leaseEnds": "Avtal slutar {{date}}",
+      "noLease": "Ingen avtalsinfo",
+      "tenant": "Hyresgäst",
+      "viewPhenomenon": "Visa trend",
+      "dismiss": "Avvisa",
+      "accept": "Markera för uppföljning",
+      "projection": "prognos — riktning, ej garanti"
+    },
+    "floorplan": {
+      "title": "Planritning",
+      "legend": "Förklaring",
+      "floor": "Våning {{floor}}",
+      "noZones": "Inga zoner att visa"
+    },
+    "empty": {
+      "title": "Inga förslag ännu",
+      "body": "ShopperMind har inte lyft fram något tydligt yt-förslag för {{mall}} denna cykel. Nästa uppdatering körs dagligen — återkom imorgon."
+    },
+    "errors": {
+      "load": "Kunde inte ladda Yt-Optimerare: {{message}}",
+      "gated": {
+        "title": "Yt-Optimerare kräver uppgradering",
+        "body": "Funktionen ingår i Realidea Suite-planen. Kontakta din kontoansvarige för att aktivera."
+      }
+    },
+    "demo": {
+      "badge": "Live-demo",
+      "header": "Realidea — Sello",
+      "subtitle": "Vad ShopperMind ser idag, applicerat på Sellos faktiska zonmix",
+      "getAccess": "Få åtkomst",
+      "ctaTitle": "Vill du ha detta för din portfölj?",
+      "ctaBody": "Direktrekommendationer mot dina egna POS-, besökar- och kamerasignaler.",
+      "bookDemo": "Boka demo",
+      "loading": "Laddar förslag för Sello..."
+    },
+    "nav": {
+      "label": "Yt-Optimerare",
+      "description": "Trenddrivna hyresytsrekommendationer"
+    }
   }
 }

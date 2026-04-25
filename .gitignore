@@ -7,3 +7,6 @@ out
 # OS & build artefacts
 .DS_Store
 tsconfig.tsbuildinfo
+
+# Claude Code workspace
+.claude/

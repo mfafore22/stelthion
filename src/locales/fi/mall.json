@@ -416,7 +416,178 @@
   },
   "shoppermind": {
     "title": "ShopperMind",
-    "tagline": "Ennakointi jokaiseen kauppakeskukseen toimivilla ennusteilla"
+    "tagline": "Ennakointi jokaiseen kauppakeskukseen toimivilla ennusteilla",
+    "loading": "Ladataan\u2026",
+    "loadingTrends": "Ladataan trendej\u00e4\u2026",
+    "loadingTrend": "Ladataan trendi\u00e4\u2026",
+    "noMarket": "Trendimoottori",
+    "marketPrefix": "Markkina",
+    "back": "Takaisin trendeihin",
+    "breadcrumbRoot": "ShopperMind",
+    "notFound": "Trendi\u00e4 {{id}} ei l\u00f6ytynyt.",
+    "notConfigured": {
+      "title": "Palvelua ei ole m\u00e4\u00e4ritetty t\u00e4h\u00e4n ymp\u00e4rist\u00f6\u00f6n",
+      "body": "Aseta {{envVar1}} ja {{envVar2}} yhdist\u00e4\u00e4ksesi. T\u00e4m\u00e4 kauppakeskus vastaisi tunnusta {{marketId}}.",
+      "detail": "ShopperMind-palvelua ei ole m\u00e4\u00e4ritetty t\u00e4h\u00e4n ymp\u00e4rist\u00f6\u00f6n."
+    },
+    "upgrade": {
+      "title": "ShopperMind ei sis\u00e4lly sopimukseesi",
+      "body": "P\u00e4ivit\u00e4 sopimus ottaaksesi trendi\u00e4lyn k\u00e4ytt\u00f6\u00f6n markkinoillasi. Ota yhteyt\u00e4 asiakkuusvastaavaasi tai j\u00e4rjestelm\u00e4nvalvojaan vaihtaaksesi sopimuksen."
+    },
+    "errorBanner": "Trendipalvelu ei ole tavoitettavissa: {{message}}",
+    "grid": {
+      "empty": "T\u00e4lle markkinalle ei ole viel\u00e4 seurattuja trendej\u00e4.",
+      "topTrends": "P\u00e4\u00e4trendit",
+      "tracked_one": "{{count}} trendi seurannassa",
+      "tracked_other": "{{count}} trendi\u00e4 seurannassa",
+      "score": "Pisteet"
+    },
+    "signalOfTheDay": {
+      "title": "P\u00e4iv\u00e4n signaali",
+      "empty": "T\u00e4lle markkinalle ei ole viel\u00e4 julkaistu signaalia t\u00e4n\u00e4\u00e4n."
+    },
+    "states": {
+      "EMERGING": "Nouseva",
+      "ACCELERATING": "Kiihtyv\u00e4",
+      "STABLE": "Vakaa",
+      "FADING": "Hiipuva",
+      "DORMANT": "Lepotilassa"
+    },
+    "lifecycle": {
+      "label": "El\u00e4m\u00e4nkaari",
+      "relevance": "Relevanssi",
+      "rising": "nouseva",
+      "cooling": "viilenev\u00e4",
+      "holding": "vakaa",
+      "youAreHere": "T\u00e4ss\u00e4 ollaan"
+    },
+    "trajectory": {
+      "title": "Trendin kehitys",
+      "subtitle": "Yhdistelm\u00e4pisteet ajan mittaan \u2014 valitse aikaikkuna",
+      "empty": "Pisteytyshistoriaa ei ole viel\u00e4 kertynyt.",
+      "windows": {
+        "7d": "7 pv",
+        "14d": "14 pv",
+        "30d": "30 pv"
+      },
+      "series": {
+        "composite": "Yhdistelm\u00e4",
+        "footTraffic": "Jalankulkuliikenne",
+        "cultural": "Kulttuurinen"
+      },
+      "stats": {
+        "relevance": "Relevanssi",
+        "velocity": "Nopeus",
+        "acceleration": "Kiihtyvyys",
+        "volume": "Volyymi"
+      }
+    },
+    "sections": {
+      "summary": "Tiivistelm\u00e4",
+      "signal": "Signaali t\u00e4ll\u00e4 markkinalla",
+      "impact": "Mit\u00e4 t\u00e4m\u00e4 tarkoittaa sinulle",
+      "opportunity": "Mahdollisuus",
+      "watchOut": "Varoitus",
+      "opportunityBody": "Trendin kiihtyess\u00e4 varhain liikkeell\u00e4 oleville j\u00e4lleenmyyjille on tarjolla nousupotentiaalia edell\u00e4 kuvattujen kulmien kautta.",
+      "watchOutBody": "T\u00e4m\u00e4 trendi viilenee. Varaudu hitaampaan kysynt\u00e4\u00e4n ja valmistaudu siirt\u00e4m\u00e4\u00e4n painopistett\u00e4 pois syv\u00e4st\u00e4 altistumisesta."
+    },
+    "detail": {
+      "description": "Kuvaus",
+      "linkGraph": "Linkkikartta",
+      "linkGraphEmpty": "P\u00e4\u00e4telty\u00e4 linkki\u00e4 ei viel\u00e4 ole.",
+      "upstream": "Yl\u00e4virta \u2014 trendit, jotka sy\u00f6tt\u00e4v\u00e4t t\u00e4t\u00e4",
+      "downstream": "Alavirta \u2014 trendit, joihin t\u00e4m\u00e4 sy\u00f6tt\u00e4\u00e4",
+      "recentScoring": "Viimeisin pisteytys",
+      "details": "Tiedot",
+      "tags": "Tunnisteet",
+      "categories": "Kategoriat",
+      "keywords": "Avainsanat",
+      "meta": {
+        "eventStart": "Tapahtuman alku",
+        "eventEnd": "Tapahtuman loppu",
+        "firstSeen": "Ensin havaittu",
+        "lastSignal": "Viimeisin signaali",
+        "cultural": "Kulttuurinen",
+        "footTraffic": "Jalankulkuliikenne"
+      },
+      "metrics": {
+        "composite": "Yhdistelm\u00e4",
+        "footTraffic": "Jalankulku",
+        "cultural": "Kulttuurinen",
+        "velocity": "Nopeus",
+        "acceleration": "Kiihtyvyys",
+        "volume": "Volyymi",
+        "empty": "Pisteytyksi\u00e4 ei ole viel\u00e4 kirjattu."
+      },
+      "table": {
+        "date": "P\u00e4iv\u00e4ys",
+        "composite": "Yhdistelm\u00e4",
+        "footTraffic": "Jalankulku",
+        "cultural": "Kulttuurinen",
+        "velocity": "Nopeus",
+        "volume": "Volyymi",
+        "boost": "Vahvistus"
+      }
+    },
+    "linkTypes": {
+      "CONTRIBUTES_TO": "Edist\u00e4\u00e4",
+      "MANIFESTATION_OF": "Ilmentym\u00e4",
+      "ACCELERATES": "Kiihdytt\u00e4\u00e4",
+      "PRECEDES": "Edelt\u00e4\u00e4",
+      "CONTRADICTS": "Ristiriita"
+    },
+    "phenomenonTypes": {
+      "TREND": "Trendi",
+      "EVENT": "Tapahtuma",
+      "CAMPAIGN": "Kampanja",
+      "INCIDENT": "Poikkeama"
+    },
+    "lifecycleStates": {
+      "UPCOMING": "Tuleva",
+      "ACTIVE": "K\u00e4ynniss\u00e4",
+      "CONCLUDED": "P\u00e4\u00e4ttynyt"
+    },
+    "scopes": {
+      "CITY": "Kaupunki",
+      "REGION": "Alue",
+      "COUNTRY": "Maa",
+      "GLOBAL": "Globaali"
+    },
+    "errors": {
+      "network": "Verkkovirhe",
+      "serviceUnavailable": "Palvelu ei ole k\u00e4ytett\u00e4viss\u00e4"
+    },
+    "linkAuthor": {
+      "openButton": "Lis\u00e4\u00e4 linkki (admin)",
+      "heading": "Uusi linkki",
+      "cancel": "Peruuta",
+      "save": "Tallenna linkki",
+      "saving": "Tallennetaan\u2026",
+      "targetLabel": "Kohdetrendin tunnus",
+      "targetPlaceholder": "trendi-id",
+      "typeLabel": "Linkin tyyppi",
+      "weightLabel": "Paino (0\u20131)",
+      "rationaleLabel": "Perustelu (valinnainen)",
+      "rationalePlaceholder": "Miksi t\u00e4m\u00e4 linkki on oikein?",
+      "errors": {
+        "targetRequired": "Kohdetrendin tunnus vaaditaan",
+        "cannotLinkSelf": "Trendi\u00e4 ei voi linkitt\u00e4\u00e4 itseens\u00e4",
+        "weightRange": "Painon on oltava v\u00e4lill\u00e4 0 ja 1",
+        "forbidden": "Linkkien kirjoittamiseen vaaditaan ADMIN-rooli",
+        "requestFailed": "Pyynt\u00f6 ep\u00e4onnistui ({{status}})"
+      }
+    },
+    "demo": {
+      "badge": "Demo",
+      "getAccess": "Hanki t\u00e4ysi k\u00e4ytt\u00f6oikeus",
+      "notSeededTitle": "Demo-dataa ei ole viel\u00e4 sy\u00f6tetty",
+      "notSeededBody": "Suorita {{command}} sy\u00f6tt\u00e4\u00e4ksesi demo-markkinat.",
+      "defaultFocus": "Kaupan trendi\u00e4ly",
+      "loading": "Ladataan trendidataa\u2026",
+      "ctaTitle": "N\u00e4e ShopperMind kauppakeskuksesi omilla tiedoilla",
+      "ctaBody": "Kun yhdistet\u00e4\u00e4n Stelthioniin, ShopperMind korreloi n\u00e4m\u00e4 trendit kauppakeskuksesi todellisen k\u00e4vij\u00e4liikenteen kanssa \u2014 n\u00e4ytt\u00e4en mitk\u00e4 trendit jo vet\u00e4v\u00e4t liikennett\u00e4.",
+      "bookDemo": "Varaa demo"
+    }
   },
   "campaigns": {
     "title": "Kampanjat",
@@ -796,6 +967,10 @@
       "label": "ShopperMind",
       "description": "Trendit ja ennusteet"
     },
+    "space-optimizer": {
+      "label": "Tilaoptimointi",
+      "description": "Trendipohjaiset vuokratilan suositukset"
+    },
     "managementCompany": "Kiinteistönhallintayhtiö",
     "comingSoon": "Tulossa pian"
   },
@@ -929,5 +1104,80 @@
     "coverSubtitle": "Kerros: {{floor}} · Klo: {{hour}}:00",
     "executiveSummary": "Yhteenveto",
     "keyHighlights": "Keskeiset havainnot"
+  },
+  "spaceOptimizer": {
+    "title": "Tilaoptimoija",
+    "subtitle": "Konkreettisia vuokratilojen muutoksia ShopperMind-trendien ja operatiivisten signaalien pohjalta",
+    "header": {
+      "summary": "{{count}} suositus, {{zones}} aluetta",
+      "summary_other": "{{count}} suositusta, {{zones}} aluetta",
+      "drivenBy": "Ajurina {{count}} trendi",
+      "drivenBy_other": "Ajurina {{count}} trendiä",
+      "lastRun": "Luotu {{date}}"
+    },
+    "actions": {
+      "EXPAND": "Laajenna",
+      "CONVERT": "Muunna",
+      "MAINTAIN": "Säilytä",
+      "SUNSET": "Lopeta",
+      "expandLong": "Laajenna tilaa",
+      "convertLong": "Muunna uuteen kategoriaan",
+      "maintainLong": "Säilytä — ei muutosta",
+      "sunsetLong": "Lopeta ja vuokraa uudelleen"
+    },
+    "filters": {
+      "all": "Kaikki",
+      "byAction": "Toimenpide",
+      "byTrend": "Trendi",
+      "sortByConfidence": "Korkein luottamus",
+      "sortByUplift": "Suurin nousu",
+      "sortByLeaseEnd": "Sopimus päättyy ensin"
+    },
+    "card": {
+      "currentCategory": "Nykyinen",
+      "proposedCategory": "Ehdotettu",
+      "drivingTrends": "Ajurit",
+      "confidence": "Luottamus",
+      "projectedUplift": "Ennustettu nousu",
+      "projectedAnnual": "~{{value}}/v",
+      "leaseEnds": "Sopimus päättyy {{date}}",
+      "noLease": "Ei sopimustietoa",
+      "tenant": "Vuokralainen",
+      "viewPhenomenon": "Näytä trendi",
+      "dismiss": "Hylkää",
+      "accept": "Merkitse seurantaan",
+      "projection": "ennuste — suuntaa-antava"
+    },
+    "floorplan": {
+      "title": "Pohjakuva",
+      "legend": "Selitykset",
+      "floor": "Kerros {{floor}}",
+      "noZones": "Ei näytettäviä alueita"
+    },
+    "empty": {
+      "title": "Ei suosituksia",
+      "body": "ShopperMind ei ole nostanut tällä syklillä selkeää tilaehdotusta kohteelle {{mall}}. Seuraava päivitys ajetaan päivittäin — tarkista huomenna."
+    },
+    "errors": {
+      "load": "Tilaoptimoijan latauksessa virhe: {{message}}",
+      "gated": {
+        "title": "Tilaoptimoija vaatii päivityksen",
+        "body": "Toiminto kuuluu Realidea Suite -tilaukseen. Aktivoi se tilihoitajasi kautta."
+      }
+    },
+    "demo": {
+      "badge": "Live-demo",
+      "header": "Realidea — Sello",
+      "subtitle": "Mitä ShopperMind näkee tänään, sovitettuna Sellon todelliseen aluekokoonpanoon",
+      "getAccess": "Hanki käyttöoikeus",
+      "ctaTitle": "Haluatko tämän omaan portfolioosi?",
+      "ctaBody": "Reaaliaikaisia suosituksia oman POS-, kävijämäärä- ja kamera-aineistosi pohjalta.",
+      "bookDemo": "Varaa demo",
+      "loading": "Ladataan ehdotuksia Sellolle..."
+    },
+    "nav": {
+      "label": "Tilaoptimoija",
+      "description": "Trendipohjaiset vuokratilojen suositukset"
+    }
   }
 }

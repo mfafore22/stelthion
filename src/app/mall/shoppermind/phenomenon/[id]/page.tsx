@@ -3,16 +3,14 @@
 import { use, useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 import { useSession } from '@/contexts/SessionContext';
 import { MallTopBar } from '@/components/mall/shell/MallTopBar';
 import { MallLeftNav } from '@/components/mall/shell/MallLeftNav';
+import { MallCard } from '@/components/mall/ui/MallCard';
+import { MallButton } from '@/components/mall/ui/MallButton';
 import {
   ArrowLeft,
-  Activity,
-  TrendingUp,
-  TrendingDown,
-  Circle,
-  Pause,
   ArrowDownRight,
   ArrowUpRight,
   Calendar,
@@ -21,14 +19,25 @@ import {
   Tag,
   Plus,
   X,
+  ChevronRight,
+  Sparkles,
+  Activity as ActivityIcon,
+  Lightbulb,
+  Target,
+  AlertTriangle,
 } from 'lucide-react';
 import type {
   PhenomenonDetail,
   PhenomenonLinkRow,
   PhenomenonScoreRow,
-  PhenomenonStateValue,
   LinkType,
 } from '@stelthion/shoppermind-client-types';
+import { StateBadge } from '@/components/mall/shoppermind/StateBadge';
+import { LifecycleContinuum } from '@/components/mall/shoppermind/LifecycleContinuum';
+import { TrajectoryChart } from '@/components/mall/shoppermind/TrajectoryChart';
+import { SectionCard } from '@/components/mall/shoppermind/SectionCard';
+import { localizePhenomenon } from '@/lib/shoppermind/localize';
+import { cn } from '@/lib/utils';
 
 interface DetailResponse {
   configured: boolean;
@@ -44,6 +53,7 @@ export default function PhenomenonDetailPage({
   const { id } = use(params);
   const { user, loading } = useSession();
   const router = useRouter();
+  const { t, i18n } = useTranslation('mall');
   const [data, setData] = useState<DetailResponse | null>(null);
   const [fetching, setFetching] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -63,11 +73,11 @@ export default function PhenomenonDetailPage({
       if (body.error) setError(body.error);
       setData(body);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'network error');
+      setError(err instanceof Error ? err.message : t('shoppermind.errors.network'));
     } finally {
       setFetching(false);
     }
-  }, [id]);
+  }, [id, t]);
 
   useEffect(() => {
     void reload();
@@ -75,57 +85,91 @@ export default function PhenomenonDetailPage({
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#F8F6F3]">
-        <div className="animate-pulse text-gray-400 text-sm">Loading…</div>
+      <div className="flex items-center justify-center min-h-screen bg-bo-neutral-50">
+        <div className="animate-pulse text-bo-neutral-400 text-sm">{t('shoppermind.loading')}</div>
       </div>
     );
   }
   if (!user) return null;
 
+  const localizedLabel = data?.phenomenon
+    ? localizePhenomenon(data.phenomenon, i18n.language).label
+    : null;
+
   return (
     <>
       <MallLeftNav />
       <MallTopBar />
-      <main className="ml-[80px] h-screen overflow-auto pt-[80px] bg-[#F8F6F3]">
+      <main className="ml-[80px] h-screen overflow-auto pt-[80px] bg-bo-neutral-50">
         <div className="p-8 max-w-[1400px] mx-auto space-y-6">
-          <Link
-            href="/mall/shoppermind"
-            className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
-          >
-            <ArrowLeft className="w-4 h-4" /> Back to ShopperMind
-          </Link>
-          {fetching && <div className="text-sm text-gray-400 animate-pulse">Loading…</div>}
+          <TopNav phenomenonLabel={localizedLabel} />
+          {fetching && (
+            <div className="text-sm text-bo-neutral-400 animate-pulse">
+              {t('shoppermind.loadingTrend')}
+            </div>
+          )}
           {!fetching && data && !data.configured && <NotConfigured />}
           {!fetching && data?.configured && error && <ErrorBanner message={error} />}
           {!fetching && data?.configured && !error && !data.phenomenon && <NotFound id={id} />}
-          {!fetching && data?.phenomenon && <DetailBody phenomenon={data.phenomenon} onLinkAdded={reload} />}
+          {!fetching && data?.phenomenon && (
+            <DetailBody phenomenon={data.phenomenon} onLinkAdded={reload} />
+          )}
         </div>
       </main>
     </>
   );
 }
 
-function NotConfigured() {
+function TopNav({ phenomenonLabel }: { phenomenonLabel: string | null }) {
+  const { t } = useTranslation('mall');
   return (
-    <div className="rounded-xl border border-amber-200 bg-amber-50 p-6 text-sm text-amber-800">
-      ShopperMind service is not configured in this environment.
+    <div className="flex items-center justify-between gap-4">
+      <nav className="flex items-center gap-1.5 text-sm text-bo-neutral-500 min-w-0">
+        <Link
+          href="/mall/shoppermind"
+          className="font-medium text-bo-neutral-700 hover:text-bo-primary transition-colors"
+        >
+          {t('shoppermind.breadcrumbRoot')}
+        </Link>
+        {phenomenonLabel && (
+          <>
+            <ChevronRight className="w-3.5 h-3.5 text-bo-neutral-400 shrink-0" />
+            <span className="text-bo-neutral-900 truncate font-medium">{phenomenonLabel}</span>
+          </>
+        )}
+      </nav>
+      <Link href="/mall/shoppermind" className="shrink-0">
+        <MallButton variant="secondary" size="sm" icon={<ArrowLeft className="w-4 h-4" />}>
+          {t('shoppermind.back')}
+        </MallButton>
+      </Link>
+    </div>
+  );
+}
+
+function NotConfigured() {
+  const { t } = useTranslation('mall');
+  return (
+    <div className="rounded-xl border-2 border-bo-warning/30 bg-bo-warning-light/40 p-6 text-sm text-bo-warning-dark backdrop-blur-xl">
+      {t('shoppermind.notConfigured.detail')}
     </div>
   );
 }
 
 function ErrorBanner({ message }: { message: string }) {
   return (
-    <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+    <div className="rounded-xl border-2 border-bo-error/30 bg-bo-error-light/40 p-4 text-sm text-bo-error-dark">
       {message}
     </div>
   );
 }
 
 function NotFound({ id }: { id: string }) {
+  const { t } = useTranslation('mall');
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-6 text-sm text-gray-500">
-      Phenomenon <code className="font-mono">{id}</code> was not found.
-    </div>
+    <MallCard variant="glass" padding="md">
+      <div className="text-sm text-bo-neutral-500">{t('shoppermind.notFound', { id })}</div>
+    </MallCard>
   );
 }
 
@@ -136,20 +180,23 @@ function DetailBody({
   phenomenon: PhenomenonDetail;
   onLinkAdded: () => void | Promise<void>;
 }) {
-  const latest = p.scores[0] ?? null;
+  const { i18n } = useTranslation('mall');
   const firstSeen = new Date(p.firstSeenAt).toLocaleDateString();
   const lastSignal = new Date(p.lastSignalAt).toLocaleDateString();
+  const localized = localizePhenomenon(p, i18n.language);
+  const latest = p.scores[0] ?? null;
   return (
     <>
-      <Header phenomenon={p} />
-      <MetricsStrip latest={latest} />
+      <Header phenomenon={p} label={localized.label} />
+      <LifecycleContinuum
+        state={p.state}
+        compositeScore={latest?.compositeScore ?? p.scores[0]?.compositeScore}
+        velocity={latest?.velocity}
+      />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <section className="lg:col-span-2 space-y-6">
-          <Card title="Description">
-            <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
-              {p.description}
-            </p>
-          </Card>
+          <NarrativeSections parsed={localized.parsed} state={p.state} />
+          <TrajectoryChart scores={p.scores} />
           <LinksPanel
             linksFrom={p.linksFrom}
             linksTo={p.linksTo}
@@ -159,11 +206,7 @@ function DetailBody({
           <ScoreHistoryPanel scores={p.scores} />
         </section>
         <aside className="space-y-6">
-          <MetaPanel
-            phenomenon={p}
-            firstSeen={firstSeen}
-            lastSignal={lastSignal}
-          />
+          <MetaPanel phenomenon={p} firstSeen={firstSeen} lastSignal={lastSignal} />
           <CategoriesPanel categories={p.categories} keywords={p.keywords} />
         </aside>
       </div>
@@ -171,91 +214,104 @@ function DetailBody({
   );
 }
 
-const STATE_META: Record<
-  PhenomenonStateValue,
-  { label: string; color: string; icon: React.ComponentType<{ className?: string }> }
-> = {
-  EMERGING: { label: 'Emerging', color: 'text-sky-600', icon: Circle },
-  ACCELERATING: { label: 'Accelerating', color: 'text-emerald-600', icon: TrendingUp },
-  STABLE: { label: 'Stable', color: 'text-gray-500', icon: Activity },
-  FADING: { label: 'Fading', color: 'text-amber-600', icon: TrendingDown },
-  DORMANT: { label: 'Dormant', color: 'text-gray-400', icon: Pause },
-};
-
-function Header({ phenomenon: p }: { phenomenon: PhenomenonDetail }) {
-  const meta = STATE_META[p.state];
-  const Icon = meta.icon;
+function Header({ phenomenon: p, label }: { phenomenon: PhenomenonDetail; label: string }) {
+  const { t } = useTranslation('mall');
   return (
     <div className="flex items-start justify-between gap-4">
       <div className="min-w-0 flex-1">
-        <h1 className="text-2xl font-semibold text-gray-800 mb-1">{p.label}</h1>
-        <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500">
-          <span className={`inline-flex items-center gap-1 ${meta.color}`}>
-            <Icon className="w-3.5 h-3.5" /> {meta.label}
-          </span>
+        <h1 className="text-3xl font-semibold text-bo-neutral-950 mb-2 tracking-tight">
+          {label}
+        </h1>
+        <div className="flex flex-wrap items-center gap-2 text-xs text-bo-neutral-500">
+          <StateBadge state={p.state} />
           {p.phenomenonType && (
-            <span className="uppercase tracking-wide">{p.phenomenonType}</span>
+            <span className="uppercase tracking-wider font-medium bg-bo-neutral-100 text-bo-neutral-700 px-2 py-1 rounded-md border border-bo-neutral-200">
+              {t(`shoppermind.phenomenonTypes.${p.phenomenonType}`)}
+            </span>
           )}
-          {p.lifecycleState && <span>· {p.lifecycleState}</span>}
-          <span>· {p.primaryCountry}</span>
+          {p.lifecycleState && (
+            <span className="text-bo-neutral-500">
+              · {t(`shoppermind.lifecycleStates.${p.lifecycleState}`)}
+            </span>
+          )}
+          <span className="text-bo-neutral-500">· {p.primaryCountry}</span>
         </div>
       </div>
     </div>
   );
 }
 
-function MetricsStrip({ latest }: { latest: PhenomenonScoreRow | null }) {
-  if (!latest) {
+function NarrativeSections({
+  parsed,
+  state,
+}: {
+  parsed: ReturnType<typeof localizePhenomenon>['parsed'];
+  state: PhenomenonDetail['state'];
+}) {
+  const { t } = useTranslation('mall');
+  const hasStructured = parsed.signalCommentary || parsed.retailerImpact;
+  const isOpportunity = state === 'ACCELERATING' || state === 'EMERGING';
+  const isWatchOut = state === 'FADING' || state === 'DORMANT';
+
+  if (!hasStructured) {
     return (
-      <div className="rounded-xl bg-white border border-gray-100 p-4 text-xs text-gray-500">
-        No scores recorded yet.
-      </div>
+      <SectionCard icon={Sparkles} title={t('shoppermind.sections.summary')} accent="neutral">
+        <p className="whitespace-pre-wrap leading-relaxed">{parsed.summary}</p>
+      </SectionCard>
     );
   }
+
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-3">
-      <Metric label="Composite" value={latest.compositeScore.toFixed(2)} />
-      <Metric label="Foot-traffic" value={latest.footTrafficScore.toFixed(2)} />
-      <Metric label="Cultural" value={latest.culturalScore.toFixed(2)} />
-      <Metric label="Velocity" value={latest.velocity.toFixed(2)} />
-      <Metric label="Acceleration" value={latest.acceleration.toFixed(2)} />
-      <Metric label="Volume" value={latest.volume.toString()} />
+    <div className="space-y-4">
+      <SectionCard icon={Sparkles} title={t('shoppermind.sections.summary')} accent="neutral">
+        <p className="whitespace-pre-wrap leading-relaxed">{parsed.summary}</p>
+      </SectionCard>
+      {parsed.signalCommentary && (
+        <SectionCard
+          icon={ActivityIcon}
+          title={t('shoppermind.sections.signal')}
+          accent="accent"
+        >
+          <p className="whitespace-pre-wrap leading-relaxed">{parsed.signalCommentary}</p>
+        </SectionCard>
+      )}
+      {parsed.retailerImpact && (
+        <SectionCard
+          icon={Lightbulb}
+          title={t('shoppermind.sections.impact')}
+          accent="warning"
+        >
+          <p className="whitespace-pre-wrap leading-relaxed">{parsed.retailerImpact}</p>
+        </SectionCard>
+      )}
+      {isOpportunity && parsed.retailerImpact && (
+        <SectionCard
+          icon={Target}
+          title={t('shoppermind.sections.opportunity')}
+          accent="primary"
+        >
+          <p className="leading-relaxed">{t('shoppermind.sections.opportunityBody')}</p>
+        </SectionCard>
+      )}
+      {isWatchOut && parsed.retailerImpact && (
+        <SectionCard
+          icon={AlertTriangle}
+          title={t('shoppermind.sections.watchOut')}
+          accent="error"
+        >
+          <p className="leading-relaxed">{t('shoppermind.sections.watchOutBody')}</p>
+        </SectionCard>
+      )}
     </div>
   );
 }
-
-function Metric({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-xl bg-white border border-gray-100 p-3">
-      <div className="text-xs uppercase tracking-wide text-gray-400 mb-1">{label}</div>
-      <div className="text-lg font-medium text-gray-800">{value}</div>
-    </div>
-  );
-}
-
-function Card({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="rounded-xl bg-white border border-gray-100 p-5">
-      <h2 className="text-xs uppercase tracking-wide text-gray-400 mb-3">{title}</h2>
-      {children}
-    </div>
-  );
-}
-
-const LINK_LABEL: Record<LinkType, string> = {
-  CONTRIBUTES_TO: 'Contributes to',
-  MANIFESTATION_OF: 'Manifestation of',
-  ACCELERATES: 'Accelerates',
-  PRECEDES: 'Precedes',
-  CONTRADICTS: 'Contradicts',
-};
 
 const LINK_COLOR: Record<LinkType, string> = {
-  CONTRIBUTES_TO: 'text-emerald-600 bg-emerald-50 border-emerald-200',
-  MANIFESTATION_OF: 'text-indigo-600 bg-indigo-50 border-indigo-200',
-  ACCELERATES: 'text-sky-600 bg-sky-50 border-sky-200',
-  PRECEDES: 'text-gray-600 bg-gray-50 border-gray-200',
-  CONTRADICTS: 'text-red-600 bg-red-50 border-red-200',
+  CONTRIBUTES_TO: 'text-bo-success-dark bg-bo-success-light border-bo-success/30',
+  MANIFESTATION_OF: 'text-bo-accent-dark bg-bo-accent-light border-bo-accent/30',
+  ACCELERATES: 'text-bo-info-dark bg-bo-info-light border-bo-info/30',
+  PRECEDES: 'text-bo-neutral-700 bg-bo-neutral-100 border-bo-neutral-300',
+  CONTRADICTS: 'text-bo-error-dark bg-bo-error-light border-bo-error/30',
 };
 
 function LinksPanel({
@@ -269,16 +325,20 @@ function LinksPanel({
   selfId: string;
   onLinkAdded: () => void | Promise<void>;
 }) {
+  const { t } = useTranslation('mall');
   return (
-    <Card title="Link graph">
+    <MallCard variant="glass" padding="md">
+      <h2 className="text-xs uppercase tracking-wider text-bo-neutral-400 mb-3 font-medium">
+        {t('shoppermind.detail.linkGraph')}
+      </h2>
       <div className="space-y-4">
         {linksFrom.length === 0 && linksTo.length === 0 && (
-          <p className="text-sm text-gray-500">No inferred links yet.</p>
+          <p className="text-sm text-bo-neutral-500">{t('shoppermind.detail.linkGraphEmpty')}</p>
         )}
         {linksTo.length > 0 && (
           <LinkGroup
-            heading="Upstream — phenomena that link into this one"
-            icon={<ArrowDownRight className="w-4 h-4 text-gray-400" />}
+            heading={t('shoppermind.detail.upstream')}
+            icon={<ArrowDownRight className="w-4 h-4 text-bo-neutral-400" />}
             links={linksTo}
             otherIdKey="fromPhenomenonId"
             selfId={selfId}
@@ -286,8 +346,8 @@ function LinksPanel({
         )}
         {linksFrom.length > 0 && (
           <LinkGroup
-            heading="Downstream — phenomena this one links into"
-            icon={<ArrowUpRight className="w-4 h-4 text-gray-400" />}
+            heading={t('shoppermind.detail.downstream')}
+            icon={<ArrowUpRight className="w-4 h-4 text-bo-neutral-400" />}
             links={linksFrom}
             otherIdKey="toPhenomenonId"
             selfId={selfId}
@@ -295,17 +355,9 @@ function LinksPanel({
         )}
         <LinkAuthor selfId={selfId} onLinkAdded={onLinkAdded} />
       </div>
-    </Card>
+    </MallCard>
   );
 }
-
-const LINK_TYPE_OPTIONS: { value: LinkType; label: string }[] = [
-  { value: 'CONTRIBUTES_TO', label: 'Contributes to' },
-  { value: 'MANIFESTATION_OF', label: 'Manifestation of' },
-  { value: 'ACCELERATES', label: 'Accelerates' },
-  { value: 'PRECEDES', label: 'Precedes' },
-  { value: 'CONTRADICTS', label: 'Contradicts' },
-];
 
 function LinkAuthor({
   selfId,
@@ -314,6 +366,7 @@ function LinkAuthor({
   selfId: string;
   onLinkAdded: () => void | Promise<void>;
 }) {
+  const { t } = useTranslation('mall');
   const [open, setOpen] = useState(false);
   const [toPhenomenonId, setToPhenomenonId] = useState('');
   const [linkType, setLinkType] = useState<LinkType>('CONTRIBUTES_TO');
@@ -321,6 +374,14 @@ function LinkAuthor({
   const [rationale, setRationale] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+
+  const LINK_TYPES: LinkType[] = [
+    'CONTRIBUTES_TO',
+    'MANIFESTATION_OF',
+    'ACCELERATES',
+    'PRECEDES',
+    'CONTRADICTS',
+  ];
 
   const reset = () => {
     setToPhenomenonId('');
@@ -335,46 +396,51 @@ function LinkAuthor({
     setFormError(null);
     const trimmed = toPhenomenonId.trim();
     if (!trimmed) {
-      setFormError('Target phenomenon ID required');
+      setFormError(t('shoppermind.linkAuthor.errors.targetRequired'));
       return;
     }
     if (trimmed === selfId) {
-      setFormError('Cannot link a phenomenon to itself');
+      setFormError(t('shoppermind.linkAuthor.errors.cannotLinkSelf'));
       return;
     }
     const w = Number(weight);
     if (!Number.isFinite(w) || w < 0 || w > 1) {
-      setFormError('Weight must be between 0 and 1');
+      setFormError(t('shoppermind.linkAuthor.errors.weightRange'));
       return;
     }
 
     setSubmitting(true);
     try {
-      const res = await fetch(`/api/shoppermind/phenomenon/${encodeURIComponent(selfId)}/links`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          toPhenomenonId: trimmed,
-          linkType,
-          weight: w,
-          rationale: rationale.trim() || undefined,
-        }),
-      });
+      const res = await fetch(
+        `/api/shoppermind/phenomenon/${encodeURIComponent(selfId)}/links`,
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            toPhenomenonId: trimmed,
+            linkType,
+            weight: w,
+            rationale: rationale.trim() || undefined,
+          }),
+        },
+      );
       if (res.status === 403) {
-        setFormError('ADMIN role required to author links');
+        setFormError(t('shoppermind.linkAuthor.errors.forbidden'));
         return;
       }
       if (!res.ok) {
         const body = (await res.json().catch(() => ({}))) as { error?: string };
-        setFormError(body.error ?? `Request failed (${res.status})`);
+        setFormError(
+          body.error ?? t('shoppermind.linkAuthor.errors.requestFailed', { status: res.status }),
+        );
         return;
       }
       reset();
       setOpen(false);
       await onLinkAdded();
     } catch (err) {
-      setFormError(err instanceof Error ? err.message : 'network error');
+      setFormError(err instanceof Error ? err.message : t('shoppermind.errors.network'));
     } finally {
       setSubmitting(false);
     }
@@ -385,19 +451,22 @@ function LinkAuthor({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-1.5 text-xs text-indigo-600 hover:text-indigo-700 font-medium"
+        className="inline-flex items-center gap-1.5 text-xs text-bo-primary hover:text-bo-primary-700 font-medium"
       >
         <Plus className="w-3.5 h-3.5" />
-        Author link (admin)
+        {t('shoppermind.linkAuthor.openButton')}
       </button>
     );
   }
 
   return (
-    <form onSubmit={submit} className="rounded-lg border border-indigo-200 bg-indigo-50/40 p-4 space-y-3">
+    <form
+      onSubmit={submit}
+      className="rounded-lg border-2 border-bo-accent/30 bg-bo-accent-light/30 p-4 space-y-3"
+    >
       <div className="flex items-center justify-between">
-        <div className="text-xs font-medium text-indigo-700 uppercase tracking-wide">
-          New link
+        <div className="text-xs font-medium text-bo-accent-dark uppercase tracking-wider">
+          {t('shoppermind.linkAuthor.heading')}
         </div>
         <button
           type="button"
@@ -405,41 +474,41 @@ function LinkAuthor({
             setOpen(false);
             reset();
           }}
-          className="text-gray-400 hover:text-gray-600"
-          aria-label="Cancel"
+          className="text-bo-neutral-400 hover:text-bo-neutral-700"
+          aria-label={t('shoppermind.linkAuthor.cancel')}
         >
           <X className="w-4 h-4" />
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <label className="text-xs text-gray-600 space-y-1 block">
-          Target phenomenon ID
+        <label className="text-xs text-bo-neutral-600 space-y-1 block">
+          {t('shoppermind.linkAuthor.targetLabel')}
           <input
             type="text"
             value={toPhenomenonId}
             onChange={(e) => setToPhenomenonId(e.target.value)}
-            placeholder="phenomenon-id"
-            className="w-full font-mono text-sm px-2 py-1.5 rounded border border-gray-300 bg-white"
+            placeholder={t('shoppermind.linkAuthor.targetPlaceholder')}
+            className="w-full font-mono text-sm px-2 py-1.5 rounded border border-bo-neutral-300 bg-white"
             disabled={submitting}
           />
         </label>
-        <label className="text-xs text-gray-600 space-y-1 block">
-          Link type
+        <label className="text-xs text-bo-neutral-600 space-y-1 block">
+          {t('shoppermind.linkAuthor.typeLabel')}
           <select
             value={linkType}
             onChange={(e) => setLinkType(e.target.value as LinkType)}
-            className="w-full text-sm px-2 py-1.5 rounded border border-gray-300 bg-white"
+            className="w-full text-sm px-2 py-1.5 rounded border border-bo-neutral-300 bg-white"
             disabled={submitting}
           >
-            {LINK_TYPE_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
+            {LINK_TYPES.map((v) => (
+              <option key={v} value={v}>
+                {t(`shoppermind.linkTypes.${v}`)}
               </option>
             ))}
           </select>
         </label>
-        <label className="text-xs text-gray-600 space-y-1 block">
-          Weight (0–1)
+        <label className="text-xs text-bo-neutral-600 space-y-1 block">
+          {t('shoppermind.linkAuthor.weightLabel')}
           <input
             type="number"
             step="0.05"
@@ -447,46 +516,45 @@ function LinkAuthor({
             max="1"
             value={weight}
             onChange={(e) => setWeight(e.target.value)}
-            className="w-full text-sm px-2 py-1.5 rounded border border-gray-300 bg-white"
+            className="w-full text-sm px-2 py-1.5 rounded border border-bo-neutral-300 bg-white"
             disabled={submitting}
           />
         </label>
-        <label className="text-xs text-gray-600 space-y-1 block md:col-span-2">
-          Rationale (optional)
+        <label className="text-xs text-bo-neutral-600 space-y-1 block md:col-span-2">
+          {t('shoppermind.linkAuthor.rationaleLabel')}
           <textarea
             value={rationale}
             onChange={(e) => setRationale(e.target.value)}
             rows={2}
-            placeholder="Why is this link correct?"
-            className="w-full text-sm px-2 py-1.5 rounded border border-gray-300 bg-white resize-none"
+            placeholder={t('shoppermind.linkAuthor.rationalePlaceholder')}
+            className="w-full text-sm px-2 py-1.5 rounded border border-bo-neutral-300 bg-white resize-none"
             disabled={submitting}
           />
         </label>
       </div>
       {formError && (
-        <div className="text-xs text-red-600 bg-red-50 border border-red-200 rounded px-2 py-1.5">
+        <div className="text-xs text-bo-error-dark bg-bo-error-light border border-bo-error/30 rounded px-2 py-1.5">
           {formError}
         </div>
       )}
       <div className="flex justify-end gap-2">
-        <button
+        <MallButton
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => {
             setOpen(false);
             reset();
           }}
-          className="text-xs text-gray-500 hover:text-gray-700 px-3 py-1.5"
           disabled={submitting}
         >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          disabled={submitting}
-          className="text-xs bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50 px-4 py-1.5 rounded font-medium"
-        >
-          {submitting ? 'Saving…' : 'Save link'}
-        </button>
+          {t('shoppermind.linkAuthor.cancel')}
+        </MallButton>
+        <MallButton type="submit" variant="primary" size="sm" disabled={submitting}>
+          {submitting
+            ? t('shoppermind.linkAuthor.saving')
+            : t('shoppermind.linkAuthor.save')}
+        </MallButton>
       </div>
     </form>
   );
@@ -505,9 +573,10 @@ function LinkGroup({
   otherIdKey: 'fromPhenomenonId' | 'toPhenomenonId';
   selfId: string;
 }) {
+  const { t } = useTranslation('mall');
   return (
     <div>
-      <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
+      <div className="flex items-center gap-2 text-xs text-bo-neutral-500 mb-2">
         {icon}
         <span>{heading}</span>
       </div>
@@ -518,21 +587,24 @@ function LinkGroup({
           return (
             <li key={link.id} className="flex items-center gap-2">
               <span
-                className={`inline-flex items-center text-xs font-medium px-2 py-0.5 rounded-full border ${LINK_COLOR[link.linkType]}`}
+                className={cn(
+                  'inline-flex items-center text-xs font-medium px-2 py-0.5 rounded-full border',
+                  LINK_COLOR[link.linkType],
+                )}
               >
-                {LINK_LABEL[link.linkType]}
+                {t(`shoppermind.linkTypes.${link.linkType}`)}
               </span>
               {isSelf ? (
-                <span className="font-mono text-xs text-gray-400">{otherId}</span>
+                <span className="font-mono text-xs text-bo-neutral-400">{otherId}</span>
               ) : (
                 <Link
                   href={`/mall/shoppermind/phenomenon/${encodeURIComponent(otherId)}`}
-                  className="font-mono text-xs text-indigo-600 hover:text-indigo-700 hover:underline truncate"
+                  className="font-mono text-xs text-bo-primary hover:text-bo-primary-700 hover:underline truncate"
                 >
                   {otherId}
                 </Link>
               )}
-              <span className="text-xs text-gray-400 ml-auto shrink-0">
+              <span className="text-xs text-bo-neutral-400 ml-auto shrink-0">
                 w={link.weight.toFixed(2)}
               </span>
             </li>
@@ -544,26 +616,32 @@ function LinkGroup({
 }
 
 function ScoreHistoryPanel({ scores }: { scores: PhenomenonScoreRow[] }) {
+  const { t } = useTranslation('mall');
   if (scores.length === 0) return null;
   const recent = scores.slice(0, 14);
   return (
-    <Card title="Recent scoring">
+    <MallCard variant="glass" padding="md">
+      <h2 className="text-xs uppercase tracking-wider text-bo-neutral-400 mb-3 font-medium">
+        {t('shoppermind.detail.recentScoring')}
+      </h2>
       <div className="overflow-x-auto">
         <table className="w-full text-xs">
           <thead>
-            <tr className="text-gray-400 text-left">
-              <th className="font-normal py-1 pr-3">Date</th>
-              <th className="font-normal py-1 pr-3">Composite</th>
-              <th className="font-normal py-1 pr-3">Foot-traffic</th>
-              <th className="font-normal py-1 pr-3">Cultural</th>
-              <th className="font-normal py-1 pr-3">Velocity</th>
-              <th className="font-normal py-1 pr-3">Volume</th>
-              <th className="font-normal py-1">Boost</th>
+            <tr className="text-bo-neutral-400 text-left">
+              <th className="font-normal py-1 pr-3">{t('shoppermind.detail.table.date')}</th>
+              <th className="font-normal py-1 pr-3">{t('shoppermind.detail.table.composite')}</th>
+              <th className="font-normal py-1 pr-3">
+                {t('shoppermind.detail.table.footTraffic')}
+              </th>
+              <th className="font-normal py-1 pr-3">{t('shoppermind.detail.table.cultural')}</th>
+              <th className="font-normal py-1 pr-3">{t('shoppermind.detail.table.velocity')}</th>
+              <th className="font-normal py-1 pr-3">{t('shoppermind.detail.table.volume')}</th>
+              <th className="font-normal py-1">{t('shoppermind.detail.table.boost')}</th>
             </tr>
           </thead>
           <tbody>
             {recent.map((s) => (
-              <tr key={s.id} className="border-t border-gray-50 text-gray-700">
+              <tr key={s.id} className="border-t border-bo-neutral-200/60 text-bo-neutral-700">
                 <td className="py-1 pr-3 font-mono">{s.date.slice(0, 10)}</td>
                 <td className="py-1 pr-3">{s.compositeScore.toFixed(2)}</td>
                 <td className="py-1 pr-3">{s.footTrafficScore.toFixed(2)}</td>
@@ -576,7 +654,7 @@ function ScoreHistoryPanel({ scores }: { scores: PhenomenonScoreRow[] }) {
           </tbody>
         </table>
       </div>
-    </Card>
+    </MallCard>
   );
 }
 
@@ -589,49 +667,53 @@ function MetaPanel({
   firstSeen: string;
   lastSignal: string;
 }) {
+  const { t } = useTranslation('mall');
   return (
-    <Card title="Details">
+    <MallCard variant="glass" padding="md">
+      <h2 className="text-xs uppercase tracking-wider text-bo-neutral-400 mb-3 font-medium">
+        {t('shoppermind.detail.details')}
+      </h2>
       <dl className="text-sm space-y-2.5">
         {p.eventStart && (
           <MetaRow
-            icon={<Calendar className="w-4 h-4 text-gray-400" />}
-            label="Event start"
+            icon={<Calendar className="w-4 h-4 text-bo-neutral-400" />}
+            label={t('shoppermind.detail.meta.eventStart')}
             value={new Date(p.eventStart).toLocaleDateString()}
           />
         )}
         {p.eventEnd && (
           <MetaRow
-            icon={<Calendar className="w-4 h-4 text-gray-400" />}
-            label="Event end"
+            icon={<Calendar className="w-4 h-4 text-bo-neutral-400" />}
+            label={t('shoppermind.detail.meta.eventEnd')}
             value={new Date(p.eventEnd).toLocaleDateString()}
           />
         )}
         <MetaRow
-          icon={<Calendar className="w-4 h-4 text-gray-400" />}
-          label="First seen"
+          icon={<Calendar className="w-4 h-4 text-bo-neutral-400" />}
+          label={t('shoppermind.detail.meta.firstSeen')}
           value={firstSeen}
         />
         <MetaRow
-          icon={<Calendar className="w-4 h-4 text-gray-400" />}
-          label="Last signal"
+          icon={<Calendar className="w-4 h-4 text-bo-neutral-400" />}
+          label={t('shoppermind.detail.meta.lastSignal')}
           value={lastSignal}
         />
         {(p.culturalScope || p.culturalLocality) && (
           <MetaRow
-            icon={<Globe className="w-4 h-4 text-gray-400" />}
-            label="Cultural"
-            value={`${p.culturalScope ?? '—'} · ${p.culturalLocality ?? '—'}`}
+            icon={<Globe className="w-4 h-4 text-bo-neutral-400" />}
+            label={t('shoppermind.detail.meta.cultural')}
+            value={`${p.culturalScope ? t(`shoppermind.scopes.${p.culturalScope}`) : '—'} · ${p.culturalLocality ?? '—'}`}
           />
         )}
         {(p.footTrafficScope || p.footTrafficLocality) && (
           <MetaRow
-            icon={<MapPin className="w-4 h-4 text-gray-400" />}
-            label="Foot traffic"
-            value={`${p.footTrafficScope ?? '—'} · ${p.footTrafficLocality ?? '—'}`}
+            icon={<MapPin className="w-4 h-4 text-bo-neutral-400" />}
+            label={t('shoppermind.detail.meta.footTraffic')}
+            value={`${p.footTrafficScope ? t(`shoppermind.scopes.${p.footTrafficScope}`) : '—'} · ${p.footTrafficLocality ?? '—'}`}
           />
         )}
       </dl>
-    </Card>
+    </MallCard>
   );
 }
 
@@ -646,11 +728,11 @@ function MetaRow({
 }) {
   return (
     <div className="flex items-center justify-between gap-3">
-      <dt className="flex items-center gap-2 text-gray-500 text-xs uppercase tracking-wide">
+      <dt className="flex items-center gap-2 text-bo-neutral-500 text-xs uppercase tracking-wider">
         {icon}
         {label}
       </dt>
-      <dd className="text-gray-800 text-right">{value}</dd>
+      <dd className="text-bo-neutral-900 text-right font-medium">{value}</dd>
     </div>
   );
 }
@@ -662,19 +744,25 @@ function CategoriesPanel({
   categories: string[];
   keywords: string[];
 }) {
+  const { t } = useTranslation('mall');
   const cats = useMemo(() => categories.filter(Boolean), [categories]);
   const kws = useMemo(() => keywords.filter(Boolean), [keywords]);
   if (cats.length === 0 && kws.length === 0) return null;
   return (
-    <Card title="Tags">
+    <MallCard variant="glass" padding="md">
+      <h2 className="text-xs uppercase tracking-wider text-bo-neutral-400 mb-3 font-medium">
+        {t('shoppermind.detail.tags')}
+      </h2>
       {cats.length > 0 && (
         <div className="mb-3">
-          <div className="text-xs text-gray-400 mb-1.5">Categories</div>
+          <div className="text-xs text-bo-neutral-400 mb-1.5">
+            {t('shoppermind.detail.categories')}
+          </div>
           <div className="flex flex-wrap gap-1.5">
             {cats.map((c) => (
               <span
                 key={c}
-                className="inline-flex items-center gap-1 text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full border border-indigo-100"
+                className="inline-flex items-center gap-1 text-xs bg-bo-primary-100 text-bo-primary-700 px-2 py-0.5 rounded-full border border-bo-primary-200"
               >
                 <Tag className="w-3 h-3" />
                 {c}
@@ -685,12 +773,14 @@ function CategoriesPanel({
       )}
       {kws.length > 0 && (
         <div>
-          <div className="text-xs text-gray-400 mb-1.5">Keywords</div>
+          <div className="text-xs text-bo-neutral-400 mb-1.5">
+            {t('shoppermind.detail.keywords')}
+          </div>
           <div className="flex flex-wrap gap-1.5">
             {kws.map((k) => (
               <span
                 key={k}
-                className="inline-flex items-center text-xs bg-gray-50 text-gray-700 px-2 py-0.5 rounded-full border border-gray-200"
+                className="inline-flex items-center text-xs bg-bo-neutral-100 text-bo-neutral-700 px-2 py-0.5 rounded-full border border-bo-neutral-200"
               >
                 {k}
               </span>
@@ -698,6 +788,6 @@ function CategoriesPanel({
           </div>
         </div>
       )}
-    </Card>
+    </MallCard>
   );
 }

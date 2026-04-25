@@ -39,6 +39,18 @@ export interface MarketListResponse {
   markets: MarketSummary[];
 }
 
+export interface PhenomenonLocalizedContent {
+  label?: string;
+  summary?: string;
+  stateCommentary?: string;
+  retailerImpact?: string;
+  description?: string;
+}
+
+export type PhenomenonI18n = {
+  [lang: string]: PhenomenonLocalizedContent | undefined;
+};
+
 export interface PhenomenonSummary {
   id: string;
   label: string;
@@ -53,6 +65,11 @@ export interface PhenomenonSummary {
   compositeScore: number;
   footTrafficScore: number;
   culturalScore: number;
+  categories?: string[];
+  keywords?: string[];
+  recentScores?: PhenomenonScoreRow[];
+  latestVelocity?: number;
+  i18n?: PhenomenonI18n | null;
 }
 
 export interface PhenomenaListResponse {
@@ -111,12 +128,21 @@ export interface PhenomenonDetail {
   scores: PhenomenonScoreRow[];
   linksFrom: PhenomenonLinkRow[];
   linksTo: PhenomenonLinkRow[];
+  i18n?: PhenomenonI18n | null;
 }
 
 export interface PhenomenonLinksResponse {
   linksFrom: PhenomenonLinkRow[];
   linksTo: PhenomenonLinkRow[];
 }
+
+export interface SignalOfTheDayLocalizedContent {
+  narrative?: string;
+}
+
+export type SignalOfTheDayI18n = {
+  [lang: string]: SignalOfTheDayLocalizedContent | undefined;
+};
 
 export interface SignalOfTheDay {
   id: string;
@@ -126,6 +152,7 @@ export interface SignalOfTheDay {
   phenomenonIds: string[];
   narrative: string;
   publishedAt: string;
+  i18n?: SignalOfTheDayI18n | null;
 }
 
 export interface SignalOfTheDayResponse {

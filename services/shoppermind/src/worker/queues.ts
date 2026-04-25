@@ -1,11 +1,11 @@
 import { Queue, type JobsOptions } from 'bullmq';
 import { redis } from '../db/redis.js';
 
-export const COORDINATOR_QUEUE = 'shoppermind:coordinator';
-export const REVIEW_TTL_QUEUE = 'shoppermind:review-ttl';
+export const COORDINATOR_QUEUE = 'shoppermind-coordinator';
+export const REVIEW_TTL_QUEUE = 'shoppermind-review-ttl';
 export const REVIEW_TTL_JOB_NAME = 'expire';
 export const REVIEW_TTL_REPEAT_KEY = 'review-ttl-repeat';
-export const RETENTION_QUEUE = 'shoppermind:retention';
+export const RETENTION_QUEUE = 'shoppermind-retention';
 export const RETENTION_JOB_NAME = 'prune';
 export const RETENTION_REPEAT_KEY = 'retention-repeat';
 

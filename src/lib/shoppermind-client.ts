@@ -1,4 +1,5 @@
 import { ShopperMindClient } from '@stelthion/shoppermind-client';
+import prisma from '@/app/lib/prisma';
 
 // Server-only factory. Returns null when the service env vars aren't
 // configured so callers (concierge tools, future mall admin UI) can
@@ -33,9 +34,15 @@ export function getShopperMindAdminClient(): ShopperMindClient | null {
   return cachedAdmin;
 }
 
-// Phase 1 mapping: mallId → marketId. Phase 2 replaces this with a DB lookup
-// (Mall.marketId column) so new markets don't need code changes here.
-export function resolveMarketIdFromMall(mallId: string): string {
+// Resolves mallId → ShopperMind marketId via MallMarketMapping table.
+// Falls back to a heuristic for unmapped malls so existing behaviour is preserved.
+export async function resolveMarketIdFromMall(mallId: string): Promise<string> {
+  try {
+    const row = await prisma.mallMarketMapping.findUnique({ where: { mallId } });
+    if (row) return row.marketId;
+  } catch {
+    // DB unavailable — fall through to heuristic
+  }
   const lower = mallId.toLowerCase();
   if (lower.includes('dubai') || lower.includes('abu') || lower.includes('uae')) return 'dubai-ae';
   return 'helsinki-fi';

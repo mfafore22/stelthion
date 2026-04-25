@@ -25,9 +25,13 @@ import {
   TrendingUpDown,
   HandPlatter,
   Brain,
+  LayoutPanelTop,
+  Lock,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSession } from '@/contexts/SessionContext';
+import useSWR from 'swr';
+import type { PlanFeatures } from '@/lib/plan-gate';
 import {
   Tooltip,
   TooltipContent,
@@ -46,13 +50,14 @@ export interface MallNavItem {
 }
 
 const NAV_ITEMS: MallNavItem[] = [
-  { id: 'portfolio',    label: 'Portfolio',    icon: LayoutGrid,    route: '/mall/portfolio' },
-  { id: 'properties',  label: 'Properties',   icon: Building2,     route: '/mall/properties' },
-  { id: 'campaigns',   label: 'Campaigns',    icon: Megaphone,     route: '/mall/campaigns' },
-  { id: 'analytics',   label: 'Analytics',    icon: BarChart3,     route: '/mall/analytics' },
-  { id: 'scenarios',   label: 'Scenarios',    icon: TrendingUpDown, route: '/mall/scenarios' },
-  { id: 'assistants',  label: 'Assistants',   icon: HandPlatter,   route: '/mall/assistants' },
-  { id: 'shoppermind', label: 'ShopperMind',  icon: Brain,         route: '/mall/shoppermind' },
+  { id: 'portfolio',       label: 'Portfolio',       icon: LayoutGrid,     route: '/mall/portfolio' },
+  { id: 'properties',      label: 'Properties',      icon: Building2,      route: '/mall/properties' },
+  { id: 'campaigns',       label: 'Campaigns',       icon: Megaphone,      route: '/mall/campaigns' },
+  { id: 'analytics',       label: 'Analytics',       icon: BarChart3,      route: '/mall/analytics' },
+  { id: 'scenarios',       label: 'Scenarios',       icon: TrendingUpDown, route: '/mall/scenarios' },
+  { id: 'assistants',      label: 'Assistants',      icon: HandPlatter,    route: '/mall/assistants' },
+  { id: 'shoppermind',     label: 'ShopperMind',     icon: Brain,          route: '/mall/shoppermind' },
+  { id: 'space-optimizer', label: 'Space Optimizer', icon: LayoutPanelTop, route: '/mall/space-optimizer' },
 ];
 
 export interface MallLeftNavProps {
@@ -71,6 +76,8 @@ export interface MallLeftNavProps {
   className?: string;
 }
 
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
+
 export function MallLeftNav({
   managementCompanyId,
   onNavigate,
@@ -80,22 +87,29 @@ export function MallLeftNav({
   const pathname = usePathname();
   const { user } = useSession();
   const { t } = useTranslation();
+  const { data: features } = useSWR<PlanFeatures>('/api/mall/my-features', fetcher);
 
-  // Active nav items — only Portfolio and Properties are functional at this stage
-  const ACTIVE_NAV_IDS = new Set(['portfolio', 'properties']);
+  // Base active items — always enabled
+  const ALWAYS_ACTIVE = new Set(['portfolio', 'properties']);
+  // Plan-gated items
+  const planActive = new Set<string>([
+    ...(features?.shoppermind ? ['shoppermind'] : []),
+    ...(features?.concierge ? ['assistants'] : []),
+    ...(features?.spaceAllocation ? ['space-optimizer'] : []),
+  ]);
 
   // Generate tenant-specific navigation items
   const navItems = React.useMemo(() => {
     if (!user) return NAV_ITEMS.map(item => ({
       ...item,
-      disabled: !ACTIVE_NAV_IDS.has(item.id),
+      disabled: !ALWAYS_ACTIVE.has(item.id),
     }));
 
     const tenantSlug = user.companyName.toLowerCase().replace(/\s+/g, '-');
 
     return NAV_ITEMS
       .map(item => {
-        const disabled = !ACTIVE_NAV_IDS.has(item.id);
+        const disabled = !ALWAYS_ACTIVE.has(item.id) && !planActive.has(item.id);
 
         if (item.id === 'portfolio') {
           if (user.isMultiProperty) {
@@ -181,7 +195,14 @@ export function MallLeftNav({
                   aria-current={isActive ? 'page' : undefined}
                   aria-disabled={item.disabled || undefined}
                 >
-                  <Icon className="h-6 w-6" />
+                  {item.disabled && !ALWAYS_ACTIVE.has(item.id) ? (
+                    <span className="relative">
+                      <Icon className="h-6 w-6" />
+                      <Lock className="h-3 w-3 absolute -bottom-1 -right-1 text-bo-neutral-400" />
+                    </span>
+                  ) : (
+                    <Icon className="h-6 w-6" />
+                  )}
                 </button>
               </TooltipTrigger>
               <TooltipContent
@@ -192,9 +213,11 @@ export function MallLeftNav({
                   {item.labelOverride ?? t(`mall:navigation.${item.id}.label`)}
                 </div>
                 <div className="text-xs text-gray-300 mt-1 leading-relaxed">
-                  {item.disabled
-                    ? t('navigation.comingSoon', 'Coming Soon')
-                    : (item.descriptionOverride ?? t(`mall:navigation.${item.id}.description`))}
+                  {item.disabled && !ALWAYS_ACTIVE.has(item.id)
+                    ? t('navigation.upgradePlan', 'Upgrade your plan to unlock')
+                    : item.disabled
+                      ? t('navigation.comingSoon', 'Coming Soon')
+                      : (item.descriptionOverride ?? t(`mall:navigation.${item.id}.description`))}
                 </div>
               </TooltipContent>
             </Tooltip>

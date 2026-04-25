@@ -387,7 +387,7 @@ async function getZoneFlow(params: Record<string, unknown>, _mallId: string): Pr
 // continues to function without the service.
 
 async function getShopperMindTrends(params: Record<string, unknown>, mallId: string, language?: string): Promise<ToolResult> {
-  const marketId = (params.marketId as string) || resolveMarketIdFromMall(mallId);
+  const marketId = (params.marketId as string) || await resolveMarketIdFromMall(mallId);
   const country = (params.country as string)?.toUpperCase() ?? marketId.split('-').at(-1)?.toUpperCase() ?? '';
 
   const client = getShopperMindClient();
