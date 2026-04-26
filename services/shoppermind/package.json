@@ -13,6 +13,7 @@
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
     "import:legacy": "tsx scripts/import-legacy-data.ts",
+    "seed:trend-bootstrap": "tsx scripts/seed-bootstrap-trends.ts",
     "regression": "tsx scripts/regression-harness.ts",
     "smoke": "tsx scripts/smoke-test.ts",
     "test": "vitest run",
