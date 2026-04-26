@@ -125,6 +125,24 @@ export function evaluate({ snapshot, policy }: PolicyInput): PolicyResult {
     );
   }
 
+  // Hard composite-source gate. A TREND otherwise cleared to PUBLISH gets
+  // downgraded to REVIEW when fewer than minStrongSources corroborating
+  // sources have weighed in. Reject decisions are left alone — the gate
+  // queues phenomena, it doesn't rescue them from clear failure.
+  const compositeSource =
+    effectivePolicy.compositeSource ?? DEFAULT_POLICY.compositeSource;
+  if (
+    decision === 'PUBLISH' &&
+    snapshot.phenomenonType === 'TREND' &&
+    compositeSource &&
+    snapshot.strongSourceCount < compositeSource.minStrongSources
+  ) {
+    decision = 'REVIEW';
+    reasons.push(
+      `composite_source_gate strong=${snapshot.strongSourceCount} < min=${compositeSource.minStrongSources}`,
+    );
+  }
+
   reasons.push(`threshold source=${resolved.source} key=${resolved.key}`);
   if (snapshot.lifecycleState) {
     reasons.push(

@@ -4,6 +4,7 @@ import { generateNarrative } from './prompts.js';
 import { gate } from './gate/publish-gate.js';
 import { getFeedbackCounts } from './policy/feedback-aggregator.js';
 import { DEFAULT_POLICY } from './policy/default-policies.js';
+import { countStrongSources } from './insights/source-strength.js';
 import type { MetricsSnapshot, Scope } from './policy/policy-types.js';
 
 export interface PublishSummary {
@@ -101,10 +102,15 @@ export async function runPublisher(marketId: string): Promise<PublishSummary> {
     market.policy.feedbackSensitivity?.windowDays ??
     DEFAULT_POLICY.feedbackSensitivity?.windowDays ??
     30;
+  const strongWeight =
+    market.policy.compositeSource?.strongSourceWeight ??
+    DEFAULT_POLICY.compositeSource?.strongSourceWeight ??
+    0.7;
 
   for (const s of active) {
     try {
       const feedback = await getFeedbackCounts(s.phenomenonId, marketId, windowDays);
+      const strength = await countStrongSources(s.phenomenonId, strongWeight);
       const snapshot: MetricsSnapshot = {
         date: today.toISOString(),
         marketId,
@@ -120,6 +126,7 @@ export async function runPublisher(marketId: string): Promise<PublishSummary> {
         velocity: s.velocity,
         acceleration: s.acceleration,
         sourceDiversity: s.sourceDiversity,
+        strongSourceCount: strength.strongSourceCount,
         noiseAdjusted: s.noiseAdjusted,
         footTrafficScore: s.footTrafficScore,
         culturalScore: s.culturalScore,

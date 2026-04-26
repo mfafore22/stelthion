@@ -55,4 +55,8 @@ export const DEFAULT_POLICY: MarketPolicy = {
     maxNegativeShift: 0.1,
     windowDays: 30,
   },
+  compositeSource: {
+    minStrongSources: 2,
+    strongSourceWeight: 0.7,
+  },
 };

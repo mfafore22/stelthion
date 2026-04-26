@@ -255,6 +255,7 @@ export function runPipelineForMarket(
       velocity: p.velocity,
       acceleration: p.acceleration,
       sourceDiversity: 1,
+      strongSourceCount: p.signalCount,
       noiseAdjusted: p.velocity,
       footTrafficScore: p.footTrafficScore,
       culturalScore: p.culturalScore,

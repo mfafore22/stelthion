@@ -31,6 +31,15 @@ export const FeedbackSensitivitySchema = z.object({
   windowDays: z.number().int().positive().default(30),
 });
 
+// Hard composite-source gate. A TREND must have ≥minStrongSources distinct
+// sources with weight ≥strongSourceWeight before it can PUBLISH. Failing the
+// gate downgrades any otherwise-passing decision to REVIEW so the phenomenon
+// stays in the queue until corroborating sources arrive.
+export const CompositeSourcePolicySchema = z.object({
+  minStrongSources: z.number().int().nonnegative().default(2),
+  strongSourceWeight: z.number().min(0).max(1).default(0.7),
+});
+
 export const MarketPolicySchema = z.object({
   version: z.literal(1),
   // thresholds keyed by `${type}:${axis}:${scope}`, e.g. "TREND:composite:COUNTRY"
@@ -50,6 +59,7 @@ export const MarketPolicySchema = z.object({
     })
     .default({ UPCOMING: -0.1, ACTIVE: 0, CONCLUDED: 0.2 }),
   feedbackSensitivity: FeedbackSensitivitySchema.optional(),
+  compositeSource: CompositeSourcePolicySchema.optional(),
 });
 
 export const MarketSchema = z.object({
@@ -73,3 +83,4 @@ export type MarketConfig = z.infer<typeof MarketSchema>;
 export type MarketProfile = z.infer<typeof MarketProfileSchema>;
 export type MarketPolicy = z.infer<typeof MarketPolicySchema>;
 export type FeedbackSensitivity = z.infer<typeof FeedbackSensitivitySchema>;
+export type CompositeSourcePolicy = z.infer<typeof CompositeSourcePolicySchema>;

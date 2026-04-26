@@ -21,6 +21,7 @@ export interface MetricsSnapshot {
   velocity: number;
   acceleration: number;
   sourceDiversity: number;
+  strongSourceCount: number;
   noiseAdjusted: number;
   footTrafficScore: number;
   culturalScore: number;

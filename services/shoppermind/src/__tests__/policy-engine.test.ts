@@ -18,6 +18,7 @@ function snap(overrides: Partial<MetricsSnapshot>): MetricsSnapshot {
     velocity: 5,
     acceleration: 0,
     sourceDiversity: 1,
+    strongSourceCount: 2,
     noiseAdjusted: 5,
     footTrafficScore: 0.5,
     culturalScore: 0.5,
