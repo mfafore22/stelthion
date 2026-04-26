@@ -146,7 +146,7 @@
     "venuesAndUpcoming": "Tapahtumapaikkoja & Tulevia tapahtumia",
     "nearbyImpact": "Lähistön tapahtumien vaikutus",
     "refresh": "Päivitä",
-    "fetchError": "Tapahtumatietojen haku epäonnistui — näytetään välimuistissa olevia tietoja",
+    "fetchError": "Tapahtumatietojen haku epäonnistui. Näytetään välimuistissa olevia tietoja.",
     "nearbyVenues": "Lähistön tapahtumapaikkoja",
     "allUpcoming": "Kaikki tulevat tapahtumat",
     "nextHours": "Tapahtumat (seuraavat 2–6 tuntia)",
@@ -790,13 +790,13 @@
       "excellent": "Erinomainen ostossää",
       "great": "Loistava kauppakeskuspäivä",
       "good": "Hyvä ostossää",
-      "outdoors": "Kaunis ulkoilusää — vähemmän kävijöitä"
+      "outdoors": "Kaunis ulkoilusää, vähemmän kävijöitä"
     },
     "impact": {
       "indoor": "🌧️ Sää ohjaa kävijöitä sisätiloihin",
       "mild": "☀️ Lievä säävaikutus kävijämääriin",
       "outdoor": "🌤️ Optimaaliset ulko-olosuhteet",
-      "quiet": "❄️ Hiljainen kausi — vähemmän kävijöitä odotettavissa",
+      "quiet": "❄️ Hiljainen kausi, vähemmän kävijöitä odotettavissa",
       "normal": "Normaali kävijävirta odotettavissa"
     },
     "forecastMsg": {
@@ -899,14 +899,14 @@
     "selectAgent": "Valitse agentti",
     "chooseAgent": "Valitse paras agentti tehtävällesi:",
     "notSure": "Etkö ole varma?",
-    "generalAssistantSuggestion": "Aloita yleisavustajalla — se voi auttaa missä tahansa kysymyksessä ja ohjata automaattisesti erikoistuneille agenteille tarvittaessa.",
+    "generalAssistantSuggestion": "Aloita yleisavustajalla. Se voi auttaa missä tahansa kysymyksessä ja ohjata automaattisesti erikoistuneille agenteille tarvittaessa.",
     "startWithGeneral": "Aloita yleisavustajalla",
     "startConversation": "Aloita keskustelu",
     "startConversationDesc": "Kysy myynneistä, kävijämääristä, tapahtumista, pysäköinnistä tai trendeistä. Olen täällä auttamassa sinua tekemään parempia päätöksiä.",
     "askAnything": "Kysy mitä tahansa...",
     "typeMessage": "Kirjoita viestisi...",
     "agentLabel": "Agentti",
-    "noBackendStub": "Tämä on käyttöliittymäesikatselu — AI-taustapalvelu ei ole vielä yhteydessä. Kun Concierge-palvelu on konfiguroitu, vastaan reaaliajassa.",
+    "noBackendStub": "Tämä on käyttöliittymäesikatselu. AI-taustapalvelu ei ole vielä yhteydessä. Kun Concierge-palvelu on konfiguroitu, vastaan reaaliajassa.",
     "select": "Valitse",
     "bestFor": "Parhaiten soveltuu:",
     "agents": {
@@ -954,7 +954,7 @@
       "morning": "Huomenta!",
       "afternoon": "Hyvää päivää!",
       "evening": "Hyvää iltaa!",
-      "intro": "Olen {{propertyName}} — kysy mitä vain minusta!"
+      "intro": "Olen {{propertyName}}. Kysy mitä vain minusta!"
     },
     "quickAction": {
       "briefing": "Päiväkatsaus",
@@ -1143,7 +1143,7 @@
     },
     "gdpr": {
       "title": "Tietosuoja ja GDPR-vaatimustenmukaisuus",
-      "description": "Kaikki seuranta on täysin anonyymiä. Järjestelmä tunnistaa henkilöt ainoastaan ulkoisen olemuksen perusteella — kasvojentunnistusta, biometrisiä tietoja, ikää, sukupuolta tai muita henkilötietoja ei käsitellä tai tallenneta. EU:n GDPR-asetuksen mukainen."
+      "description": "Kaikki seuranta on täysin anonyymiä. Järjestelmä tunnistaa henkilöt ainoastaan ulkoisen olemuksen perusteella. Kasvojentunnistusta, biometrisiä tietoja, ikää, sukupuolta tai muita henkilötietoja ei käsitellä tai tallenneta. EU:n GDPR-asetuksen mukainen."
     },
     "future": {
       "llmAnalysis": "Tekoälynäkemykset",
@@ -1219,7 +1219,7 @@
       "SUNSET": "Lopeta",
       "expandLong": "Laajenna tilaa",
       "convertLong": "Muunna uuteen kategoriaan",
-      "maintainLong": "Säilytä — ei muutosta",
+      "maintainLong": "Säilytä: ei muutosta",
       "sunsetLong": "Lopeta ja vuokraa uudelleen"
     },
     "filters": {
@@ -1243,7 +1243,7 @@
       "viewPhenomenon": "Näytä trendi",
       "dismiss": "Hylkää",
       "accept": "Merkitse seurantaan",
-      "projection": "ennuste — suuntaa-antava"
+      "projection": "ennuste, suuntaa-antava"
     },
     "floorplan": {
       "title": "Pohjakuva",
@@ -1253,7 +1253,7 @@
     },
     "empty": {
       "title": "Ei suosituksia",
-      "body": "ShopperMind ei ole nostanut tällä syklillä selkeää tilaehdotusta kohteelle {{mall}}. Seuraava päivitys ajetaan päivittäin — tarkista huomenna."
+      "body": "ShopperMind ei ole nostanut tällä syklillä selkeää tilaehdotusta kohteelle {{mall}}. Seuraava päivitys ajetaan päivittäin. Tarkista huomenna."
     },
     "errors": {
       "load": "Tilaoptimoijan latauksessa virhe: {{message}}",
@@ -1264,13 +1264,13 @@
     },
     "demo": {
       "badge": "Live-demo",
-      "header": "Realidea — Sello",
+      "header": "Realidea: Sello",
       "subtitle": "Mitä ShopperMind näkee tänään, sovitettuna Sellon todelliseen aluekokoonpanoon",
       "getAccess": "Hanki käyttöoikeus",
       "ctaTitle": "Haluatko tämän omaan portfolioosi?",
       "ctaBody": "Reaaliaikaisia suosituksia oman POS-, kävijämäärä- ja kamera-aineistosi pohjalta.",
       "bookDemo": "Varaa demo",
-      "loading": "Ladataan ehdotuksia Sellolle..."
+      "loading": "Ladataan ehdotuksia..."
     },
     "nav": {
       "label": "Tilaoptimoija",

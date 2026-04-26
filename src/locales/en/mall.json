@@ -146,7 +146,7 @@
     "venuesAndUpcoming": "Event Venues & Upcoming Events",
     "nearbyImpact": "Nearby Events Impact",
     "refresh": "Refresh",
-    "fetchError": "Unable to fetch events data — showing cached information",
+    "fetchError": "Unable to fetch events data. Showing cached information.",
     "nearbyVenues": "Nearby Event Venues",
     "allUpcoming": "All Upcoming Events",
     "nextHours": "Events (Next 2–6 hours)",
@@ -790,13 +790,13 @@
       "excellent": "Excellent for shopping",
       "great": "Great for mall visits",
       "good": "Good for shopping",
-      "outdoors": "Nice outdoors — fewer visitors expected"
+      "outdoors": "Nice outdoors; fewer visitors expected"
     },
     "impact": {
       "indoor": "🌧️ Weather drives visitors indoors",
       "mild": "☀️ Mild weather impact on visitor numbers",
       "outdoor": "🌤️ Optimal outdoor conditions",
-      "quiet": "❄️ Quiet period — fewer visitors expected",
+      "quiet": "❄️ Quiet period; fewer visitors expected",
       "normal": "Normal visitor flow expected"
     },
     "forecastMsg": {
@@ -899,14 +899,14 @@
     "selectAgent": "Select Agent",
     "chooseAgent": "Choose the best agent for your task:",
     "notSure": "Not sure?",
-    "generalAssistantSuggestion": "Start with General Assistant — it can help with any question and automatically route to specialised agents when needed.",
+    "generalAssistantSuggestion": "Start with General Assistant. It can help with any question and automatically route to specialised agents when needed.",
     "startWithGeneral": "Start with General Assistant",
     "startConversation": "Start a Conversation",
     "startConversationDesc": "Ask me about sales, footfall, events, parking, or trends. I'm here to help you make better decisions for your mall.",
     "askAnything": "Ask me anything...",
     "typeMessage": "Type your message...",
     "agentLabel": "Agent",
-    "noBackendStub": "This is a UI preview — the AI backend is not yet connected. Once the Concierge service is configured, I will respond in real time.",
+    "noBackendStub": "This is a UI preview. The AI backend is not yet connected. Once the Concierge service is configured, I will respond in real time.",
     "select": "Select",
     "bestFor": "Best for:",
     "agents": {
@@ -954,7 +954,7 @@
       "morning": "Good morning!",
       "afternoon": "Good afternoon!",
       "evening": "Good evening!",
-      "intro": "I'm {{propertyName}} — ask me anything about your property!"
+      "intro": "I'm {{propertyName}}. Ask me anything about your property!"
     },
     "quickAction": {
       "briefing": "Today's briefing",
@@ -1021,7 +1021,7 @@
         "title": "Parking Status"
       },
       "trends": {
-        "title": "ShopperMind — Trends"
+        "title": "ShopperMind: Trends"
       },
       "weekdays": {
         "0": "Sunday",
@@ -1143,7 +1143,7 @@
     },
     "gdpr": {
       "title": "Privacy & GDPR Compliance",
-      "description": "All tracking is fully anonymous. The system identifies individuals by visual appearance only — no facial recognition, biometric data, age, gender, or personally identifiable information is processed or stored. Compliant with EU GDPR regulation."
+      "description": "All tracking is fully anonymous. The system identifies individuals by visual appearance only; no facial recognition, biometric data, age, gender, or personally identifiable information is processed or stored. Compliant with EU GDPR regulation."
     },
     "future": {
       "llmAnalysis": "AI-Powered Insights",
@@ -1219,7 +1219,7 @@
       "SUNSET": "Sunset",
       "expandLong": "Expand footprint",
       "convertLong": "Convert to a new category",
-      "maintainLong": "Maintain — no change recommended",
+      "maintainLong": "Maintain: no change recommended",
       "sunsetLong": "Sunset and re-let"
     },
     "filters": {
@@ -1243,7 +1243,7 @@
       "viewPhenomenon": "View trend",
       "dismiss": "Dismiss",
       "accept": "Mark for follow-up",
-      "projection": "projection — directional, not guaranteed"
+      "projection": "projection: directional, not guaranteed"
     },
     "floorplan": {
       "title": "Floorplan",
@@ -1253,7 +1253,7 @@
     },
     "empty": {
       "title": "No suggestions yet",
-      "body": "ShopperMind hasn't surfaced a clear space move for {{mall}} this cycle. The next refresh runs daily — check back tomorrow."
+      "body": "ShopperMind hasn't surfaced a clear space move for {{mall}} this cycle. The next refresh runs daily. Check back tomorrow."
     },
     "errors": {
       "load": "Couldn't load space-optimizer suggestions: {{message}}",
@@ -1264,13 +1264,13 @@
     },
     "demo": {
       "badge": "Live Demo",
-      "header": "Realidea — Sello",
+      "header": "Realidea: Sello",
       "subtitle": "What ShopperMind sees today, applied to Sello's actual zone mix",
       "getAccess": "Get Access",
       "ctaTitle": "Want this for your portfolio?",
       "ctaBody": "Live recommendations against your own POS, footfall, and camera signals.",
       "bookDemo": "Book a demo",
-      "loading": "Loading suggestions for Sello..."
+      "loading": "Loading suggestions..."
     },
     "nav": {
       "label": "Space Optimizer",

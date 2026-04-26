@@ -10,7 +10,7 @@ export default async function AdminJobsPage() {
 
   const serialized = jobs.map((j) => ({
     id: j.id,
-    cameraLabel: j.camera?.label ?? '—',
+    cameraLabel: j.camera?.label ?? '–',
     footageDate: j.footageDate.toISOString(),
     startTime: j.startTime,
     endTime: j.endTime,

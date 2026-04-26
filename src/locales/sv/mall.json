@@ -146,7 +146,7 @@
     "venuesAndUpcoming": "Arenor och kommande evenemang",
     "nearbyImpact": "Påverkan från närliggande evenemang",
     "refresh": "Uppdatera",
-    "fetchError": "Kunde inte hämta evenemangsdata — visar cachad information",
+    "fetchError": "Kunde inte hämta evenemangsdata. Visar cachad information.",
     "nearbyVenues": "Närliggande arenor",
     "allUpcoming": "Alla kommande evenemang",
     "nextHours": "Evenemang (Nästa 2–6 timmar)",
@@ -776,7 +776,7 @@
   "weather": {
     "title": "Analys av väderpåverkan",
     "loading": "Laddar väderdata...",
-    "serviceUnavailable": "Vädertjänsten otillgänglig — visar uppskattade data",
+    "serviceUnavailable": "Vädertjänsten otillgänglig. Visar uppskattade data.",
     "temperature": "Temperatur",
     "precipitation": "Nederbörd",
     "comfortIndex": "Komfortindex",
@@ -800,21 +800,21 @@
       "excellent": "Utmärkt för shopping",
       "great": "Bra dag för köpcentret",
       "good": "Bra shoppingväder",
-      "outdoors": "Fint utomhusväder — färre besökare förväntas"
+      "outdoors": "Fint utomhusväder, färre besökare förväntas"
     },
     "impact": {
       "indoor": "🌧️ Vädret driver besökare inomhus",
       "mild": "☀️ Måttlig väderpåverkan på besökarantalet",
       "outdoor": "🌤️ Optimala utomhusförhållanden",
-      "quiet": "🌙 Lugn period — lägre besökarantal förväntas",
-      "normal": "🌥️ Typiska förhållanden — normalt besöksmönster"
+      "quiet": "🌙 Lugn period, lägre besökarantal förväntas",
+      "normal": "🌥️ Typiska förhållanden, normalt besöksmönster"
     },
     "forecastMsg": {
       "significant": "{{condition}} – betydande inomhustrafik på grund av vädret",
       "moderate": "{{description}} – besökarantalet förväntas öka",
       "outdoor": "Utmärkt utomhusväder kan minska köpcentrumbesöken",
       "stable": "{{description}} – stabilt besökarantal förväntas",
-      "coldQuiet": "Kallt eller mörkt väder — lugnare period för köpcentret"
+      "coldQuiet": "Kallt eller mörkt väder, lugnare period för köpcentret"
     },
     "condition": {
       "Cloudy": "Mestadels molnigt",
@@ -906,14 +906,14 @@
     "selectAgent": "Välj agent",
     "chooseAgent": "Välj den bästa agenten för din uppgift:",
     "notSure": "Osäker?",
-    "generalAssistantSuggestion": "Börja med Generell assistent — den kan hjälpa till med alla frågor och dirigerar automatiskt till specialiserade agenter vid behov.",
+    "generalAssistantSuggestion": "Börja med Generell assistent. Den kan hjälpa till med alla frågor och dirigerar automatiskt till specialiserade agenter vid behov.",
     "startWithGeneral": "Börja med Generell assistent",
     "startConversation": "Starta en konversation",
     "startConversationDesc": "Fråga mig om försäljning, besöksflöde, evenemang, parkering eller trender. Jag finns här för att hjälpa dig fatta bättre beslut för ditt köpcentrum.",
     "askAnything": "Fråga mig vad som helst...",
     "typeMessage": "Skriv ditt meddelande...",
     "agentLabel": "Agent",
-    "noBackendStub": "Detta är en UI-förhandsvisning — AI-backend är ännu ej ansluten. När Concierge-tjänsten är konfigurerad svarar jag i realtid.",
+    "noBackendStub": "Detta är en UI-förhandsvisning. AI-backend är ännu ej ansluten. När Concierge-tjänsten är konfigurerad svarar jag i realtid.",
     "select": "Välj",
     "bestFor": "Bäst för:",
     "agents": {
@@ -961,7 +961,7 @@
       "morning": "God morgon!",
       "afternoon": "God dag!",
       "evening": "God kväll!",
-      "intro": "Jag är {{propertyName}} — fråga mig vad som helst!"
+      "intro": "Jag är {{propertyName}}. Fråga mig vad som helst!"
     },
     "quickAction": {
       "briefing": "Dagens briefing",
@@ -1151,7 +1151,7 @@
     },
     "gdpr": {
       "title": "Integritet & GDPR-efterlevnad",
-      "description": "All spårning är helt anonym. Systemet identifierar individer enbart genom visuellt utseende — ingen ansiktsigenkänning, biometrisk data, ålder, kön eller annan personligt identifierbar information bearbetas eller lagras. I enlighet med EU:s GDPR-förordning."
+      "description": "All spårning är helt anonym. Systemet identifierar individer enbart genom visuellt utseende. Ingen ansiktsigenkänning, biometrisk data, ålder, kön eller annan personligt identifierbar information bearbetas eller lagras. I enlighet med EU:s GDPR-förordning."
     },
     "future": {
       "llmAnalysis": "AI-drivna insikter",
@@ -1248,7 +1248,7 @@
       "SUNSET": "Avveckla",
       "expandLong": "Utöka ytan",
       "convertLong": "Konvertera till ny kategori",
-      "maintainLong": "Behåll — ingen åtgärd",
+      "maintainLong": "Behåll: ingen åtgärd",
       "sunsetLong": "Avveckla och hyr ut igen"
     },
     "filters": {
@@ -1272,7 +1272,7 @@
       "viewPhenomenon": "Visa trend",
       "dismiss": "Avvisa",
       "accept": "Markera för uppföljning",
-      "projection": "prognos — riktning, ej garanti"
+      "projection": "prognos: riktning, ej garanti"
     },
     "floorplan": {
       "title": "Planritning",
@@ -1282,7 +1282,7 @@
     },
     "empty": {
       "title": "Inga förslag ännu",
-      "body": "ShopperMind har inte lyft fram något tydligt yt-förslag för {{mall}} denna cykel. Nästa uppdatering körs dagligen — återkom imorgon."
+      "body": "ShopperMind har inte lyft fram något tydligt yt-förslag för {{mall}} denna cykel. Nästa uppdatering körs dagligen. Återkom imorgon."
     },
     "errors": {
       "load": "Kunde inte ladda Yt-Optimerare: {{message}}",
@@ -1293,13 +1293,13 @@
     },
     "demo": {
       "badge": "Live-demo",
-      "header": "Realidea — Sello",
+      "header": "Realidea: Sello",
       "subtitle": "Vad ShopperMind ser idag, applicerat på Sellos faktiska zonmix",
       "getAccess": "Få åtkomst",
       "ctaTitle": "Vill du ha detta för din portfölj?",
       "ctaBody": "Direktrekommendationer mot dina egna POS-, besökar- och kamerasignaler.",
       "bookDemo": "Boka demo",
-      "loading": "Laddar förslag för Sello..."
+      "loading": "Laddar förslag..."
     },
     "nav": {
       "label": "Yt-Optimerare",

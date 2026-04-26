@@ -172,7 +172,7 @@ export function SuggestionCard({
           value={
             suggestion.projectedUpliftPct != null
               ? `+${suggestion.projectedUpliftPct}%`
-              : '—'
+              : '–'
           }
           valueClass={
             suggestion.projectedUpliftPct != null && suggestion.projectedUpliftPct > 0
@@ -191,7 +191,7 @@ export function SuggestionCard({
               ? formatCurrency(suggestion.projectedAnnualEur, lang)
               : suggestion.leaseEndsOn
                 ? formatDate(suggestion.leaseEndsOn, lang, 'short')
-                : '—'
+                : '–'
           }
         />
       </div>

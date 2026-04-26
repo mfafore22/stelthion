@@ -76,7 +76,7 @@ function getGreeting(hour: number, language: string): string {
 }
 
 function getIntro(propertyName: string, language: string): string {
-  if (language === 'fi') return `Olen ${propertyName} — kysy mitä vain minusta!`;
-  if (language === 'sv') return `Jag är ${propertyName} — fråga mig vad som helst!`;
-  return `I'm ${propertyName} — ask me anything about your property!`;
+  if (language === 'fi') return `Olen ${propertyName}. Kysy mitä vain minusta!`;
+  if (language === 'sv') return `Jag är ${propertyName}. Fråga mig vad som helst!`;
+  return `I'm ${propertyName}. Ask me anything about your property!`;
 }

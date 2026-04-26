@@ -141,7 +141,7 @@ function Header({ marketId, total }: { marketId: string | null; total: number })
       <div>
         <h1 className="text-2xl font-semibold text-gray-800">Review Queue</h1>
         <p className="text-sm text-gray-500">
-          {marketId ? `${marketId} · ${total} item${total === 1 ? '' : 's'}` : '—'}
+          {marketId ? `${marketId} · ${total} item${total === 1 ? '' : 's'}` : '–'}
         </p>
       </div>
     </div>
@@ -291,7 +291,7 @@ function ReviewCard({
       )}
       {item.resolutionNote && (
         <div className="text-xs text-gray-500 mb-3">
-          Note: {item.resolutionNote} {item.resolvedBy && <span>— {item.resolvedBy}</span>}
+          Note: {item.resolutionNote} {item.resolvedBy && <span>· {item.resolvedBy}</span>}
         </div>
       )}
       {allowActions && (

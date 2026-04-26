@@ -103,7 +103,7 @@ export function JourneyResults({ mallId }: { mallId: string }) {
               value={
                 session.taggedCount > 0
                   ? `${Math.round((session.recognizedCount / session.taggedCount) * 100)}%`
-                  : '—'
+                  : '–'
               }
             />
           </div>

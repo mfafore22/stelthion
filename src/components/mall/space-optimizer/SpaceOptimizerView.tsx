@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LayoutPanelTop } from 'lucide-react';
 import { MallCard } from '@/components/mall/ui/MallCard';
+import { getMall } from '@/lib/mall/mallDatabase';
 import {
   fetchSpaceSuggestions,
   fetchDemoSpaceSuggestions,
@@ -120,7 +121,7 @@ export function SpaceOptimizerView({
     return result;
   }, [data, dismissed]);
 
-  const mallName = mallNameOverride ?? data?.mallName ?? mallId;
+  const mallName = mallNameOverride ?? getMall(mallId)?.name ?? data?.mallName ?? mallId;
 
   if (gated) {
     return (

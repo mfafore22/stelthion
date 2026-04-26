@@ -147,7 +147,7 @@ export function ZoneStoreList({ zoneId, zoneName, onClose }: ZoneStoreListProps)
           <span className="text-xs font-semibold text-slate-700">{zoneName}</span>
           {stores && (
             <span className="text-[10px] text-slate-400 font-medium">
-              — {stores.length} liikettä
+              · {stores.length} liikettä
             </span>
           )}
         </div>

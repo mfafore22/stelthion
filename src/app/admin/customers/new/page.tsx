@@ -185,7 +185,7 @@ export default function NewCustomerPage() {
                 onClick={() => setPlanId('')}
                 className="text-xs text-bo-neutral-400 underline"
               >
-                Skip — assign plan later
+                Skip, assign plan later
               </button>
             </div>
           </div>
@@ -225,7 +225,7 @@ export default function NewCustomerPage() {
             ) : null}
             <button type="button" onClick={() => setSkipMall(!skipMall)}
               className="text-xs text-bo-neutral-400 underline">
-              {skipMall ? 'Add a mall now' : 'Skip — add malls later'}
+              {skipMall ? 'Add a mall now' : 'Skip, add malls later'}
             </button>
           </div>
         )}
@@ -250,7 +250,7 @@ export default function NewCustomerPage() {
             ) : null}
             <button type="button" onClick={() => setSkipInvite(!skipInvite)}
               className="text-xs text-bo-neutral-400 underline">
-              {skipInvite ? 'Invite a user now' : 'Skip — invite users later'}
+              {skipInvite ? 'Invite a user now' : 'Skip, invite users later'}
             </button>
 
             {error && (

@@ -481,8 +481,8 @@ function MetaPanel({
             }
             value={`${(() => {
               const norm = normalizeScope(p.culturalScope);
-              return norm ? t(`shoppermind.scopes.${norm}`) : '—';
-            })()} · ${canonicalCity(p.culturalLocality) ?? '—'}`}
+              return norm ? t(`shoppermind.scopes.${norm}`) : '–';
+            })()} · ${canonicalCity(p.culturalLocality) ?? '–'}`}
           />
         )}
         {(p.footTrafficScope || p.footTrafficLocality) && (
@@ -495,8 +495,8 @@ function MetaPanel({
             }
             value={`${(() => {
               const norm = normalizeScope(p.footTrafficScope);
-              return norm ? t(`shoppermind.scopes.${norm}`) : '—';
-            })()} · ${canonicalCity(p.footTrafficLocality) ?? '—'}`}
+              return norm ? t(`shoppermind.scopes.${norm}`) : '–';
+            })()} · ${canonicalCity(p.footTrafficLocality) ?? '–'}`}
           />
         )}
       </dl>

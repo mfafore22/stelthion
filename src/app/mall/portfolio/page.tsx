@@ -169,7 +169,7 @@ export default function PortfolioPage() {
                         <Store className="h-4 w-4 text-bo-neutral-500" />
                         <div>
                           <div className="text-sm font-semibold text-bo-neutral-950">
-                            {mall.stores ?? '—'}
+                            {mall.stores ?? '–'}
                           </div>
                           <div className="text-xs text-bo-neutral-500">
                             {t('portfolio.retailUnits', 'Retail Units')}
@@ -182,7 +182,7 @@ export default function PortfolioPage() {
                           <div className="text-sm font-semibold text-bo-neutral-950">
                             {mall.annualVisitors
                               ? formatNumber(mall.annualVisitors)
-                              : '—'}
+                              : '–'}
                           </div>
                           <div className="text-xs text-bo-neutral-500">
                             {t('portfolio.annualVisitors', 'Annual Visitors')}
@@ -195,7 +195,7 @@ export default function PortfolioPage() {
                           <div className="text-sm font-semibold text-bo-neutral-950">
                             {mall.gla
                               ? `${(mall.gla / 1000).toFixed(0)}k m²`
-                              : '—'}
+                              : '–'}
                           </div>
                           <div className="text-xs text-bo-neutral-500">
                             {t('portfolio.totalArea', 'Total Area')}

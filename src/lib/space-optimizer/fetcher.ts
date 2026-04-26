@@ -1,3 +1,4 @@
+import { getMall } from '@/lib/mall/mallDatabase';
 import type { SpaceSuggestionsResponse } from './types';
 import { SELLO_MOCK_FIXTURE } from './mock-fixture';
 
@@ -8,6 +9,15 @@ export interface FetchOptions {
   signal?: AbortSignal;
 }
 
+function mockForMall(mallId: string): SpaceSuggestionsResponse {
+  return {
+    ...SELLO_MOCK_FIXTURE,
+    mallId,
+    mallName: getMall(mallId)?.name ?? SELLO_MOCK_FIXTURE.mallName,
+    generatedAt: new Date().toISOString(),
+  };
+}
+
 export async function fetchSpaceSuggestions(
   mallId: string,
   options: FetchOptions = {},
@@ -15,7 +25,7 @@ export async function fetchSpaceSuggestions(
   const { mode = 'live', signal } = options;
 
   if (mode === 'mock') {
-    return { ...SELLO_MOCK_FIXTURE, mallId, generatedAt: new Date().toISOString() };
+    return mockForMall(mallId);
   }
 
   const res = await fetch(`/api/space-optimizer/suggestions?mallId=${encodeURIComponent(mallId)}`, {
@@ -35,13 +45,13 @@ export async function fetchDemoSpaceSuggestions(
 ): Promise<SpaceSuggestionsResponse> {
   const { signal, preferLive = false } = options;
   if (!preferLive) {
-    return { ...SELLO_MOCK_FIXTURE, mallId, generatedAt: new Date().toISOString() };
+    return mockForMall(mallId);
   }
   try {
     const res = await fetch(`/api/demo/space-optimizer?mallId=${encodeURIComponent(mallId)}`, { signal });
     if (!res.ok) throw new Error(`demo space-optimizer ${res.status}`);
     return (await res.json()) as SpaceSuggestionsResponse;
   } catch {
-    return { ...SELLO_MOCK_FIXTURE, mallId, generatedAt: new Date().toISOString() };
+    return mockForMall(mallId);
   }
 }

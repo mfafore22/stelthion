@@ -47,9 +47,9 @@ function classify(type: SourceType): SourceAuthority {
 
 function tooltip(active: ContributingSource | undefined, type: SourceType): string {
   const m = META[type];
-  if (!active) return `${m.label} — not contributing`;
+  if (!active) return `${m.label}: not contributing`;
   const date = new Date(active.lastSignalAt);
-  const ts = isNaN(date.getTime()) ? '—' : date.toISOString().slice(0, 10);
+  const ts = isNaN(date.getTime()) ? '–' : date.toISOString().slice(0, 10);
   return `${m.label} · ${active.signalCount} signal${active.signalCount === 1 ? '' : 's'} · last ${ts}`;
 }
 

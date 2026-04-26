@@ -56,7 +56,7 @@ export function FeedbackTable({ rows }: { rows: FeedbackRow[] }) {
                 {r.note ? (
                   <span className="whitespace-pre-wrap">{r.note}</span>
                 ) : (
-                  <span className="text-bo-neutral-300">—</span>
+                  <span className="text-bo-neutral-300">–</span>
                 )}
               </td>
               <td className="px-4 py-2 text-bo-neutral-500 text-xs font-mono">

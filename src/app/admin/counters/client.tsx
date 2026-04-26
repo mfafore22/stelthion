@@ -268,10 +268,10 @@ export function CounterDataClient() {
                     </td>
                     <td className="px-4 py-2 text-right text-bo-neutral-600">{entry.counterCount}</td>
                     <td className="px-4 py-2 text-right text-bo-neutral-600">
-                      {entry.readingCount ?? (entry.totalVisitors?.toLocaleString() ?? '—')}
+                      {entry.readingCount ?? (entry.totalVisitors?.toLocaleString() ?? '–')}
                     </td>
                     <td className="px-4 py-2 text-right text-bo-neutral-400 text-xs">
-                      {entry.uploadedAt ? new Date(entry.uploadedAt).toLocaleString() : '—'}
+                      {entry.uploadedAt ? new Date(entry.uploadedAt).toLocaleString() : '–'}
                     </td>
                     <td className="px-4 py-2 text-right">
                       <div className="flex items-center justify-end gap-1">
