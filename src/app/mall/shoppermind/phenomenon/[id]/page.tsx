@@ -31,6 +31,8 @@ import { StateBadge } from '@/components/mall/shoppermind/StateBadge';
 import { LifecycleContinuum } from '@/components/mall/shoppermind/LifecycleContinuum';
 import { TrajectoryChart } from '@/components/mall/shoppermind/TrajectoryChart';
 import { SectionCard } from '@/components/mall/shoppermind/SectionCard';
+import { MarketStatusGrid } from '@/components/mall/shoppermind/MarketStatusGrid';
+import { EvidencePanel } from '@/components/mall/shoppermind/EvidencePanel';
 import { CampaignIdeaInline } from '@/components/mall/shoppermind/campaign-idea';
 import { TrendFeedback } from '@/components/mall/shoppermind/TrendFeedback';
 import { localizePhenomenon } from '@/lib/shoppermind/localize';
@@ -198,6 +200,7 @@ function DetailBody({ phenomenon: p }: { phenomenon: PhenomenonDetail }) {
         compositeScore={latest?.compositeScore ?? p.scores[0]?.compositeScore}
         velocity={latest?.velocity}
       />
+      <MarketStatusGrid phenomenonId={p.id} />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <section className="lg:col-span-2 space-y-6">
           <NarrativeSections parsed={localized.parsed} state={p.state} />
@@ -207,6 +210,7 @@ function DetailBody({ phenomenon: p }: { phenomenon: PhenomenonDetail }) {
           <LinksPanel linksFrom={p.linksFrom} linksTo={p.linksTo} selfId={p.id} />
         </section>
         <aside className="space-y-6">
+          <EvidencePanel phenomenonId={p.id} />
           <MetaPanel phenomenon={p} firstSeen={firstSeen} lastSignal={lastSignal} />
           <CategoriesPanel categories={p.categories} keywords={p.keywords} />
         </aside>

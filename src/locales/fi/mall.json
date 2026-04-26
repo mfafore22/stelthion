@@ -471,6 +471,24 @@
       "FADING": "Hiipuva",
       "DORMANT": "Lepotilassa"
     },
+    "markets": {
+      "gridTitle": "Tilanne markkinoittain",
+      "market": "Markkina",
+      "country": "Maa",
+      "state": "Tila",
+      "compositeScore": "Kokonaispisteet",
+      "divergentCallout": "Huomattava ero: trendi etenee eri tahtiin eri markkinoilla."
+    },
+    "evidence": {
+      "title": "N\u00e4yt\u00f6t",
+      "confidence": "Luottamusaste",
+      "componentsLabel": "Luottamusasteen osatekij\u00e4t",
+      "sourceList": "L\u00e4hteet",
+      "strongSources": "Vahvoja l\u00e4hteit\u00e4",
+      "corroboratedIn": "Vahvistavat markkinat",
+      "whyConfident": "Miksi luotamme t\u00e4h\u00e4n",
+      "whyCautious": "Miksi olemme varovaisia"
+    },
     "lifecycle": {
       "label": "El\u00e4m\u00e4nkaari",
       "relevance": "Relevanssi",

@@ -471,6 +471,24 @@
       "FADING": "Fading",
       "DORMANT": "Dormant"
     },
+    "markets": {
+      "gridTitle": "Status across markets",
+      "market": "Market",
+      "country": "Country",
+      "state": "State",
+      "compositeScore": "Composite",
+      "divergentCallout": "Notable contrast: this trend plays out differently across markets."
+    },
+    "evidence": {
+      "title": "Evidence",
+      "confidence": "Confidence",
+      "componentsLabel": "Confidence components",
+      "sourceList": "Cited sources",
+      "strongSources": "Strong sources",
+      "corroboratedIn": "Markets corroborating",
+      "whyConfident": "Why we're confident",
+      "whyCautious": "Why we're cautious"
+    },
     "lifecycle": {
       "label": "Lifecycle",
       "relevance": "Relevance",
