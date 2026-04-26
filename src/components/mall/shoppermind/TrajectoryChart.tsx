@@ -14,10 +14,21 @@ import {
 import { ArrowDown, ArrowUp, Minus } from 'lucide-react';
 import type { PhenomenonScoreRow } from '@stelthion/shoppermind-client-types';
 import { cn } from '@/lib/utils';
+import { MetricTerm } from './MetricTerm';
 
-type WindowDays = 7 | 14 | 30;
+type WindowKey = '4w' | '12w' | '12m';
 
-const WINDOWS: WindowDays[] = [7, 14, 30];
+interface WindowSpec {
+  key: WindowKey;
+  days: number;
+  bin: 'day' | 'week' | 'month';
+}
+
+const WINDOWS: WindowSpec[] = [
+  { key: '4w', days: 28, bin: 'day' },
+  { key: '12w', days: 84, bin: 'week' },
+  { key: '12m', days: 365, bin: 'month' },
+];
 
 type SeriesKey = 'compositeScore' | 'footTrafficScore' | 'culturalScore';
 
@@ -27,27 +38,77 @@ const SERIES: { key: SeriesKey; labelKey: string; color: string }[] = [
   { key: 'culturalScore', labelKey: 'shoppermind.trajectory.series.cultural', color: '#8B5CF6' },
 ];
 
+function startOfIsoWeek(d: Date): Date {
+  const day = d.getUTCDay();
+  const diff = (day + 6) % 7;
+  const monday = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() - diff));
+  return monday;
+}
+
+function bucketKey(dateStr: string, bin: WindowSpec['bin']): string {
+  const d = new Date(dateStr);
+  if (bin === 'day') return dateStr.slice(0, 10);
+  if (bin === 'week') return startOfIsoWeek(d).toISOString().slice(0, 10);
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-01`;
+}
+
+function formatBucketLabel(bucketIso: string, bin: WindowSpec['bin'], lang: string): string {
+  if (bin === 'day') return bucketIso.slice(5);
+  if (bin === 'week') return bucketIso.slice(5);
+  try {
+    return new Intl.DateTimeFormat(lang, { month: 'short' }).format(new Date(bucketIso));
+  } catch {
+    return bucketIso.slice(0, 7);
+  }
+}
+
+function aggregate(
+  scores: PhenomenonScoreRow[],
+  spec: WindowSpec,
+  lang: string,
+) {
+  if (scores.length === 0) return [];
+  const sorted = [...scores].sort(
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+  );
+  const cutoffMs = Date.now() - spec.days * 86_400_000;
+  const filtered = sorted.filter((s) => new Date(s.date).getTime() >= cutoffMs);
+  if (filtered.length === 0) {
+    const tail = sorted.slice(-spec.days);
+    if (tail.length === 0) return [];
+    return aggregate(tail, { ...spec, days: Math.max(spec.days, tail.length) }, lang);
+  }
+  const groups = new Map<string, PhenomenonScoreRow[]>();
+  for (const s of filtered) {
+    const k = bucketKey(s.date, spec.bin);
+    const arr = groups.get(k);
+    if (arr) arr.push(s);
+    else groups.set(k, [s]);
+  }
+  const ordered = [...groups.entries()].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0));
+  return ordered.map(([bucket, items]) => {
+    const avg = (pick: (r: PhenomenonScoreRow) => number) =>
+      items.reduce((acc, r) => acc + pick(r), 0) / items.length;
+    return {
+      date: formatBucketLabel(bucket, spec.bin, lang),
+      compositeScore: Number(avg((r) => r.compositeScore).toFixed(3)),
+      footTrafficScore: Number(avg((r) => r.footTrafficScore).toFixed(3)),
+      culturalScore: Number(avg((r) => r.culturalScore).toFixed(3)),
+    };
+  });
+}
+
 export function TrajectoryChart({ scores }: { scores: PhenomenonScoreRow[] }) {
-  const { t } = useTranslation('mall');
-  const [windowDays, setWindowDays] = useState<WindowDays>(14);
+  const { t, i18n } = useTranslation('mall');
+  const [windowKey, setWindowKey] = useState<WindowKey>('12w');
+  const spec = WINDOWS.find((w) => w.key === windowKey) ?? WINDOWS[1];
   const [enabled, setEnabled] = useState<Record<SeriesKey, boolean>>({
     compositeScore: true,
     footTrafficScore: false,
     culturalScore: false,
   });
 
-  const chartData = useMemo(() => {
-    const sorted = [...scores].sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-    );
-    const sliced = sorted.slice(-windowDays);
-    return sliced.map((s) => ({
-      date: s.date.slice(5, 10),
-      compositeScore: Number(s.compositeScore.toFixed(3)),
-      footTrafficScore: Number(s.footTrafficScore.toFixed(3)),
-      culturalScore: Number(s.culturalScore.toFixed(3)),
-    }));
-  }, [scores, windowDays]);
+  const chartData = useMemo(() => aggregate(scores, spec, i18n.language), [scores, spec, i18n.language]);
 
   const latest = scores[0] ?? null;
   const earliest = scores[scores.length - 1] ?? null;
@@ -76,17 +137,17 @@ export function TrajectoryChart({ scores }: { scores: PhenomenonScoreRow[] }) {
         <div className="flex gap-1 bg-bo-neutral-100 rounded-lg p-1">
           {WINDOWS.map((w) => (
             <button
-              key={w}
+              key={w.key}
               type="button"
-              onClick={() => setWindowDays(w)}
+              onClick={() => setWindowKey(w.key)}
               className={cn(
                 'px-3 py-1 rounded-md text-xs font-medium transition-colors',
-                windowDays === w
+                windowKey === w.key
                   ? 'bg-white text-bo-neutral-950 shadow-bo-sm'
                   : 'text-bo-neutral-500 hover:text-bo-neutral-800',
               )}
             >
-              {t(`shoppermind.trajectory.windows.${w}d`)}
+              {t(`shoppermind.trajectory.windows.${w.key}`)}
             </button>
           ))}
         </div>
@@ -147,22 +208,38 @@ export function TrajectoryChart({ scores }: { scores: PhenomenonScoreRow[] }) {
       {latest && (
         <div className="grid grid-cols-4 gap-3 pt-2 border-t border-bo-neutral-200">
           <DeltaStat
-            label={t('shoppermind.trajectory.stats.relevance')}
+            label={
+              <MetricTerm tooltip={t('shoppermind.tooltips.relevance')}>
+                {t('shoppermind.trajectory.stats.relevance')}
+              </MetricTerm>
+            }
             value={latest.compositeScore.toFixed(2)}
             delta={compositeDelta}
           />
           <DeltaStat
-            label={t('shoppermind.trajectory.stats.velocity')}
+            label={
+              <MetricTerm tooltip={t('shoppermind.tooltips.velocity')}>
+                {t('shoppermind.trajectory.stats.velocity')}
+              </MetricTerm>
+            }
             value={latest.velocity.toFixed(2)}
             delta={latest.velocity}
           />
           <DeltaStat
-            label={t('shoppermind.trajectory.stats.acceleration')}
+            label={
+              <MetricTerm tooltip={t('shoppermind.tooltips.acceleration')}>
+                {t('shoppermind.trajectory.stats.acceleration')}
+              </MetricTerm>
+            }
             value={latest.acceleration.toFixed(2)}
             delta={latest.acceleration}
           />
           <Stat
-            label={t('shoppermind.trajectory.stats.volume')}
+            label={
+              <MetricTerm tooltip={t('shoppermind.tooltips.volume')}>
+                {t('shoppermind.trajectory.stats.volume')}
+              </MetricTerm>
+            }
             value={latest.volume.toString()}
           />
         </div>
@@ -171,7 +248,7 @@ export function TrajectoryChart({ scores }: { scores: PhenomenonScoreRow[] }) {
   );
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
+function Stat({ label, value }: { label: React.ReactNode; value: string }) {
   return (
     <div>
       <div className="text-[10px] uppercase tracking-wider text-bo-neutral-400 mb-0.5">
@@ -187,7 +264,7 @@ function DeltaStat({
   value,
   delta,
 }: {
-  label: string;
+  label: React.ReactNode;
   value: string;
   delta: number;
 }) {

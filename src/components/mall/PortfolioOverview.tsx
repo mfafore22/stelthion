@@ -14,7 +14,7 @@ import { PortfolioMap } from './PortfolioMap';
 // Ideapark Portfolio Data
 const IDEAPARK_MALLS = [
   {
-    id: 'ideapark',
+    id: 'ideapark-lempaala',
     name: 'Ideapark Lempäälä',
     city: 'Lempäälä',
     annualVisitors: 4500000,

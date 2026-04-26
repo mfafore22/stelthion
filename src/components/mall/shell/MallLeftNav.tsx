@@ -24,10 +24,28 @@ import {
   BarChart3,
   TrendingUpDown,
   HandPlatter,
-  Brain,
   LayoutPanelTop,
   Lock,
 } from 'lucide-react';
+
+function ShopperMindIcon({ className }: { className?: string }) {
+  return (
+    <span
+      className={cn(
+        'relative inline-block h-8 w-8',
+        className && className.replace(/\bh-\d+\b|\bw-\d+\b/g, '').trim(),
+      )}
+    >
+      <Image
+        src="/shoppermind-icon.png"
+        alt=""
+        fill
+        sizes="32px"
+        className="object-contain group-aria-[current=page]:invert"
+      />
+    </span>
+  );
+}
 import { cn } from '@/lib/utils';
 import { useSession } from '@/contexts/SessionContext';
 import useSWR from 'swr';
@@ -56,7 +74,7 @@ const NAV_ITEMS: MallNavItem[] = [
   { id: 'analytics',       label: 'Analytics',       icon: BarChart3,      route: '/mall/analytics' },
   { id: 'scenarios',       label: 'Scenarios',       icon: TrendingUpDown, route: '/mall/scenarios' },
   { id: 'assistants',      label: 'Assistants',      icon: HandPlatter,    route: '/mall/assistants' },
-  { id: 'shoppermind',     label: 'ShopperMind',     icon: Brain,          route: '/mall/shoppermind' },
+  { id: 'shoppermind',     label: 'ShopperMind',     icon: ShopperMindIcon, route: '/mall/shoppermind' },
   { id: 'space-optimizer', label: 'Space Optimizer', icon: LayoutPanelTop, route: '/mall/space-optimizer' },
 ];
 
@@ -184,7 +202,7 @@ export function MallLeftNav({
                 <button
                   onClick={() => handleNavClick(item)}
                   className={cn(
-                    'w-14 h-14 rounded-xl flex items-center justify-center',
+                    'group w-14 h-14 rounded-xl flex items-center justify-center',
                     'transition-all duration-300 ease-bo-out-expo',
                     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bo-primary-600 focus-visible:ring-opacity-20',
                     item.disabled && 'text-bo-neutral-400 cursor-not-allowed opacity-60',

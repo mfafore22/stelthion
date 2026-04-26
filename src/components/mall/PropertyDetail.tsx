@@ -27,6 +27,7 @@ import { EventsCalendar } from './EventsCalendar';
 import { MallKPICard } from './ui/MallKPICard';
 import { useMallDetail } from '@/hooks/mall/useMallData';
 import { useMallIdentity } from '@/hooks/mall/useMallIdentity';
+import { isMallId } from '@/lib/mall/ids';
 import type { HSLAccessibility, NysseAccessibility, VRConnections, CatchmentDemographics, ParkingData, LiveDepartures } from '@/lib/types/transport';
 import type { EventsData } from '@/lib/types/events';
 import { getCurrentFootfall } from '@/lib/data/footfall';
@@ -184,7 +185,7 @@ export function PropertyDetail({ mallId: mallIdProp, showPredicted = false }: Pr
   // Fetch transport, demographics, and parking data
   useEffect(() => {
     const fetchLocationData = async () => {
-      if (mallId !== 'ideapark') return;
+      if (!isMallId(mallId, 'ideapark-lempaala')) return;
 
       setLocationDataLoading(true);
       try {
@@ -224,7 +225,7 @@ export function PropertyDetail({ mallId: mallIdProp, showPredicted = false }: Pr
 
   // Fetch live departures (updates every 30 seconds)
   useEffect(() => {
-    if (mallId !== 'ideapark') return;
+    if (!isMallId(mallId, 'ideapark-lempaala')) return;
 
     const fetchDepartures = async () => {
       try {

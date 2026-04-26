@@ -16,7 +16,7 @@ export async function GET(request: Request) {
   }
 
   const { searchParams } = new URL(request.url);
-  const mallId = searchParams.get('mallId') || 'ideapark';
+  const mallId = searchParams.get('mallId') || 'ideapark-lempaala';
 
   const coords = getMallCoordinates(mallId);
   const now = new Date();

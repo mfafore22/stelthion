@@ -10,9 +10,20 @@ import {
   BarChart3,
   TrendingUpDown,
   HandPlatter,
-  Brain,
   Settings,
 } from 'lucide-react'
+
+function ShopperMindIcon({ size = 20 }: { size?: number }) {
+  return (
+    <Image
+      src="/shoppermind-icon.png"
+      alt=""
+      width={size + 8}
+      height={size + 8}
+      className="object-contain"
+    />
+  )
+}
 
 const navItems = [
   { href: '/dashboard', icon: LayoutGrid, label: 'Portfolio' },
@@ -21,7 +32,7 @@ const navItems = [
   { href: '/dashboard/analytics', icon: BarChart3, label: 'Analytics' },
   { href: '/dashboard/insights', icon: TrendingUpDown, label: 'Scenarios' },
   { href: '/dashboard/messages', icon: HandPlatter, label: 'Assistants' },
-  { href: '/dashboard/shoppermind', icon: Brain, label: 'ShopperMind' },
+  { href: '/dashboard/shoppermind', icon: ShopperMindIcon, label: 'ShopperMind' },
   { href: '/dashboard/settings', icon: Settings, label: 'Settings' },
 ]
 

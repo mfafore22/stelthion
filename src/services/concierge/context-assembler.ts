@@ -18,6 +18,15 @@ export interface ChatRequest {
   mallId: string;
   messages: LLMMessage[];
   language?: string;
+  viewContext?: ShopperMindTrendViewContext | null;
+}
+
+export interface ShopperMindTrendViewContext {
+  kind: 'shoppermind_trend';
+  phenomenonId: string;
+  label: string;
+  state: string;
+  primaryCountry: string;
 }
 
 export interface ToolExecutionResult {
@@ -91,7 +100,7 @@ export async function executeToolCalls(
 export async function* orchestrateChat(
   request: ChatRequest
 ): AsyncGenerator<SSEEvent> {
-  const { mallId, messages, language } = request;
+  const { mallId, messages, language, viewContext } = request;
   const persona = getPropertyPersona(mallId);
   const toolSchemas = getToolSchemas();
   const client = getLLMClient();
@@ -104,9 +113,14 @@ export async function* orchestrateChat(
     agentRole = routing.agentRole;
   }
 
+  const viewContextBlock = renderViewContextBlock(viewContext);
+  const systemPrompt = viewContextBlock
+    ? `${persona.systemPrompt}\n\n${viewContextBlock}`
+    : persona.systemPrompt;
+
   // Build full message list with system prompt
   const fullMessages: LLMMessage[] = [
-    { role: 'system', content: persona.systemPrompt },
+    { role: 'system', content: systemPrompt },
     ...trimConversationHistory(messages, 20),
   ];
 
@@ -218,6 +232,30 @@ export async function* orchestrateChat(
       agentRole,
     },
   };
+}
+
+// ── View context ──────────────────────────────────────────
+
+function renderViewContextBlock(
+  viewContext: ShopperMindTrendViewContext | null | undefined,
+): string | null {
+  if (!viewContext) return null;
+  if (viewContext.kind === 'shoppermind_trend') {
+    return [
+      'CURRENT VIEWING CONTEXT',
+      'The user is currently looking at a ShopperMind trend:',
+      `- Label: ${viewContext.label}`,
+      `- State: ${viewContext.state}`,
+      `- Primary country: ${viewContext.primaryCountry}`,
+      `- Phenomenon ID: ${viewContext.phenomenonId}`,
+      '',
+      'When the user asks open-ended questions ("ideas?", "what should I do?",',
+      '"miten hyödyntäisin tätä?"), assume they mean this trend unless they say',
+      'otherwise. Prefer the generate_campaign_idea tool for concrete proposals;',
+      'pass this phenomenonId. Keep responses in the user\'s language.',
+    ].join('\n');
+  }
+  return null;
 }
 
 // ── Tool/agent helpers ────────────────────────────────────

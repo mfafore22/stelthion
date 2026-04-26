@@ -12,18 +12,22 @@ export interface PropertyPersona {
   systemPrompt: string;
 }
 
+import { canonicalizeMallId } from '@/lib/mall/ids';
+
 const PERSONAS: Record<string, Omit<PropertyPersona, 'systemPrompt'>> = {
   'ideapark-lempaala': {
     mallId: 'ideapark-lempaala',
     name: 'Ideapark Lempäälä',
     city: 'Lempäälä',
   },
-  'ideapark': {
-    mallId: 'ideapark',
-    name: 'Ideapark Lempäälä',
-    city: 'Lempäälä',
-  },
 };
+
+const FALLBACK_PERSONA = PERSONAS['ideapark-lempaala'];
+
+function resolvePersona(mallId: string): Omit<PropertyPersona, 'systemPrompt'> {
+  const canonical = canonicalizeMallId(mallId);
+  return (canonical && PERSONAS[canonical]) || FALLBACK_PERSONA;
+}
 
 function buildSystemPrompt(persona: Omit<PropertyPersona, 'systemPrompt'>): string {
   return `You are ${persona.name}, a shopping centre in ${persona.city}, Finland, near Tampere.
@@ -58,7 +62,7 @@ SAFETY:
 }
 
 export function getPropertyPersona(mallId: string): PropertyPersona {
-  const base = PERSONAS[mallId] || PERSONAS['ideapark'];
+  const base = resolvePersona(mallId);
   return {
     ...base,
     systemPrompt: buildSystemPrompt(base),
@@ -70,7 +74,7 @@ export function getPropertyGreeting(mallId: string, language: string): {
   greeting: string;
   intro: string;
 } {
-  const persona = PERSONAS[mallId] || PERSONAS['ideapark'];
+  const persona = resolvePersona(mallId);
   const hour = new Date().getHours();
 
   if (language === 'fi') {

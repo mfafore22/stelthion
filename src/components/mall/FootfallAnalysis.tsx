@@ -1,7 +1,7 @@
 /**
  * FootfallAnalysis Component
  * Floor plan heatmap with clickable zones, time slider, and per-zone visitor data.
- * Designed for Ideapark Lempäälä (mallId: 'ideapark').
+ * Designed for Ideapark Lempäälä (mallId: 'ideapark-lempaala').
  */
 
 'use client';

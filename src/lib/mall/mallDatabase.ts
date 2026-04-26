@@ -54,8 +54,8 @@ export const OPERATORS: Record<string, MallOperator> = {
 };
 
 export const MALLS: Record<string, MallProperty> = {
-  ideapark: {
-    id: 'ideapark',
+  'ideapark-lempaala': {
+    id: 'ideapark-lempaala',
     name: 'Ideapark Lempäälä',
     operator: 'koy_ideapark',
     city: 'Lempäälä',
@@ -74,7 +74,7 @@ export function getMallsByOperator(operatorId: string): MallProperty[] {
 }
 
 export function getMallBrandColors(mallId: string): { primary: string; secondary: string; accent: string } {
-  const mall = MALLS[mallId];
+  const mall = getMall(mallId);
   if (!mall) {
     return { primary: '#64748b', secondary: '#94a3b8', accent: '#cbd5e1' };
   }
@@ -91,8 +91,18 @@ export function getOperator(operatorId: string): MallOperator | undefined {
   return OPERATORS[operatorId];
 }
 
+// Legacy id aliases — kept here (instead of importing from ./ids) to avoid a
+// circular import. Mirror src/lib/mall/ids.ts:LEGACY_ALIASES.
+const LEGACY_ID_ALIASES: Record<string, string> = {
+  ideapark: 'ideapark-lempaala',
+};
+
 export function getMall(mallId: string): MallProperty | undefined {
-  return MALLS[mallId];
+  if (!mallId) return undefined;
+  const exact = MALLS[mallId];
+  if (exact) return exact;
+  const aliased = LEGACY_ID_ALIASES[mallId];
+  return aliased ? MALLS[aliased] : undefined;
 }
 
 export function getMallsByCountry(countryCode: 'FI' | 'SE' | 'NO' | 'EE'): MallProperty[] {
@@ -100,7 +110,7 @@ export function getMallsByCountry(countryCode: 'FI' | 'SE' | 'NO' | 'EE'): MallP
 }
 
 export function getMallCoordinatesForWeather(mallId: string): { lat: number; lon: number; city: string } {
-  const mall = MALLS[mallId];
+  const mall = getMall(mallId);
   if (!mall) {
     return { lat: 61.3615, lon: 23.7987, city: 'Lempäälä' };
   }

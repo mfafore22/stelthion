@@ -14,6 +14,9 @@ import { MessageInput } from './MessageInput';
 import { PropertyGreeting } from './PropertyGreeting';
 import { QuickActionChips } from './QuickActionChips';
 import { SpecialistIndicator } from './SpecialistIndicator';
+import { ViewContextChip } from './ViewContextChip';
+import { TrendGreeting } from './TrendGreeting';
+import { useViewContext } from '@/lib/shoppermind/view-context';
 import { MoreVertical, Minimize2, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
@@ -32,6 +35,7 @@ export function ConversationPanel() {
     deleteActiveConversation,
   } = useConcierge();
   const { t } = useTranslation('mall');
+  const { value: viewContext } = useViewContext();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [showScrollButton, setShowScrollButton] = useState(false);
@@ -69,13 +73,14 @@ export function ConversationPanel() {
           onDelete={deleteActiveConversation}
         />
 
-        {/* Property greeting */}
+        {/* Greeting — trend-aware if viewing a ShopperMind trend, else generic */}
         <div className="flex-1 flex flex-col items-center justify-center">
-          <PropertyGreeting />
+          {viewContext?.kind === 'shoppermind_trend' ? <TrendGreeting /> : <PropertyGreeting />}
         </div>
 
         {/* Quick action chips + input */}
-        <div className="border-t border-bo-neutral-200/60">
+        <div className="border-t border-bo-neutral-200/60 flex flex-col">
+          <ViewContextChip />
           <QuickActionChips onSend={sendMessage} disabled={state.isStreaming} />
           <div className="px-4 pb-4">
             <MessageInput

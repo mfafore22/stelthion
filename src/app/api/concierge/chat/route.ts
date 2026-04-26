@@ -14,11 +14,18 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { conversationId, mallId, message, language } = body as {
+  const { conversationId, mallId, message, language, viewContext } = body as {
     conversationId?: string;
     mallId: string;
     message: string;
     language?: string;
+    viewContext?: {
+      kind: 'shoppermind_trend';
+      phenomenonId: string;
+      label: string;
+      state: string;
+      primaryCountry: string;
+    } | null;
   };
 
   if (!mallId || !message) {
@@ -116,7 +123,12 @@ export async function POST(req: NextRequest) {
           encoder.encode(`data: ${JSON.stringify({ type: 'conversation', data: { conversationId: convId } })}\n\n`)
         );
 
-        for await (const event of orchestrateChat({ mallId: resolvedMallId, messages, language })) {
+        for await (const event of orchestrateChat({
+          mallId: resolvedMallId,
+          messages,
+          language,
+          viewContext: viewContext ?? null,
+        })) {
           // Forward SSE event to client
           controller.enqueue(
             encoder.encode(`data: ${JSON.stringify(event)}\n\n`)

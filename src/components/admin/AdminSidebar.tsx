@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from '@/lib/i18n/hooks';
 import '@/lib/i18n';
-import { LayoutDashboard, Map, ClipboardList, Route, Cpu, BarChart3, ChevronDown, Building2, Tag } from 'lucide-react';
+import { LayoutDashboard, Map, ClipboardList, Route, Cpu, BarChart3, ChevronDown, Building2, Tag, MessageSquare } from 'lucide-react';
 import useSWR from 'swr';
 import {
   Tooltip,
@@ -36,6 +36,7 @@ export function AdminSidebar() {
     { href: '/admin/results', labelKey: 'sidebar.resultsJourneys', icon: Route },
     { href: '/admin/edge', labelKey: 'sidebar.edgeDevices', icon: Cpu },
     { href: '/admin/customers', labelKey: 'sidebar.customers', icon: Building2 },
+    { href: '/admin/shoppermind/feedback', labelKey: 'sidebar.shopperMindFeedback', icon: MessageSquare },
     { href: '/admin/plans', labelKey: 'sidebar.plans', icon: Tag },
   ];
 

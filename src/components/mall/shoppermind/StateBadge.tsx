@@ -25,11 +25,11 @@ const STATE_ICON: Record<PhenomenonStateValue, React.ComponentType<{ className?:
 };
 
 const STATE_CLASSES: Record<PhenomenonStateValue, string> = {
-  EMERGING: 'bg-bo-info-light text-bo-info-dark border-bo-info/20',
-  ACCELERATING: 'bg-bo-success-light text-bo-success-dark border-bo-success/30',
-  STABLE: 'bg-bo-neutral-100 text-bo-neutral-700 border-bo-neutral-300',
-  FADING: 'bg-bo-warning-light text-bo-warning-dark border-bo-warning/20',
-  DORMANT: 'bg-bo-neutral-100 text-bo-neutral-500 border-bo-neutral-200',
+  EMERGING: 'bg-sky-500 text-white border-sky-600 shadow-sm shadow-sky-500/30',
+  ACCELERATING: 'bg-emerald-500 text-white border-emerald-600 shadow-sm shadow-emerald-500/30',
+  STABLE: 'bg-amber-400 text-amber-950 border-amber-500 shadow-sm shadow-amber-400/30',
+  FADING: 'bg-orange-500 text-white border-orange-600 shadow-sm shadow-orange-500/30',
+  DORMANT: 'bg-bo-neutral-400 text-white border-bo-neutral-500',
 };
 
 export function StateBadge({

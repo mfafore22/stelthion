@@ -22,7 +22,7 @@ const CONDITIONS = [
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const mallId = searchParams.get('mallId') || 'ideapark';
+  const mallId = searchParams.get('mallId') || 'ideapark-lempaala';
 
   const now = new Date();
   const season = getSeason(now);

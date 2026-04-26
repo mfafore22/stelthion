@@ -5,6 +5,7 @@ import type {
   PhenomenonLocalizedContent,
   SignalOfTheDay,
   SignalOfTheDayI18n,
+  SignalOfTheDaySections,
 } from '@stelthion/shoppermind-client-types';
 import {
   parsePhenomenonDescription,
@@ -45,7 +46,12 @@ export function localizePhenomenon(
   const label = content?.label?.trim() || phen.label;
 
   // Prefer structured sections when available — no parsing needed.
-  if (content?.summary || content?.retailerImpact || content?.stateCommentary) {
+  if (
+    content?.summary ||
+    content?.retailerImpact ||
+    content?.stateCommentary ||
+    content?.opportunity
+  ) {
     const description = content.description?.trim() || phen.description;
     return {
       label,
@@ -54,6 +60,7 @@ export function localizePhenomenon(
         summary: content.summary?.trim() || '',
         signalCommentary: content.stateCommentary?.trim() || null,
         retailerImpact: content.retailerImpact?.trim() || null,
+        opportunity: content.opportunity?.trim() || null,
       },
     };
   }
@@ -79,4 +86,28 @@ export function localizeSotdNarrative(
   const fallback = i18n.en?.narrative;
   if (typeof fallback === 'string' && fallback.trim()) return fallback;
   return sotd.narrative;
+}
+
+export function localizeSotdSections(
+  sotd: SignalOfTheDay,
+  lang: string | undefined | null,
+): SignalOfTheDaySections | null {
+  const i18n = sotd.i18n as SignalOfTheDayI18n | null | undefined;
+  if (!i18n || typeof i18n !== 'object') return null;
+  const norm = normaliseLang(lang);
+  const direct = i18n[norm]?.sections;
+  if (direct && hasContent(direct)) return direct;
+  const fallback = i18n.en?.sections;
+  if (fallback && hasContent(fallback)) return fallback;
+  return null;
+}
+
+function hasContent(s: SignalOfTheDaySections): boolean {
+  return Boolean(
+    s.headline?.trim() ||
+      (s.keyFindings && s.keyFindings.length > 0) ||
+      (s.byCity && s.byCity.length > 0) ||
+      (s.alsoVisible && s.alsoVisible.length > 0) ||
+      (s.watching && s.watching.length > 0),
+  );
 }

@@ -14,11 +14,19 @@ const ORDER: PhenomenonStateValue[] = [
 ];
 
 const HEAT_CLASSES: Record<PhenomenonStateValue, string> = {
-  EMERGING: 'bg-bo-heat-low',
-  ACCELERATING: 'bg-bo-heat-mid',
-  STABLE: 'bg-bo-heat-high',
-  FADING: 'bg-bo-warning',
-  DORMANT: 'bg-bo-neutral-300',
+  EMERGING: 'bg-sky-500',
+  ACCELERATING: 'bg-emerald-500',
+  STABLE: 'bg-amber-400',
+  FADING: 'bg-orange-500',
+  DORMANT: 'bg-bo-neutral-400',
+};
+
+const HEAT_RING: Record<PhenomenonStateValue, string> = {
+  EMERGING: 'ring-sky-500/40 shadow-sky-500/40',
+  ACCELERATING: 'ring-emerald-500/40 shadow-emerald-500/40',
+  STABLE: 'ring-amber-400/50 shadow-amber-400/40',
+  FADING: 'ring-orange-500/40 shadow-orange-500/40',
+  DORMANT: 'ring-bo-neutral-400/40 shadow-bo-neutral-400/30',
 };
 
 export function LifecycleContinuum({
@@ -108,21 +116,41 @@ export function LifecycleContinuumCompact({
   const labels = useStateLabels();
   const activeIdx = ORDER.indexOf(state);
   return (
-    <div className={cn('flex gap-0.5 w-full', className)}>
-      {ORDER.map((s, i) => {
-        const isActive = i === activeIdx;
-        return (
-          <div
-            key={s}
-            className={cn(
-              'flex-1 h-1.5 rounded-sm',
-              HEAT_CLASSES[s],
-              !isActive && 'opacity-30',
-            )}
-            aria-label={`${labels[s]}${isActive ? ' ✓' : ''}`}
-          />
-        );
-      })}
+    <div className={cn('w-full space-y-1.5', className)}>
+      <div className="flex gap-1 items-end">
+        {ORDER.map((s, i) => {
+          const isActive = i === activeIdx;
+          return (
+            <div
+              key={s}
+              className={cn(
+                'flex-1 rounded-sm transition-all',
+                HEAT_CLASSES[s],
+                isActive
+                  ? cn('h-3 ring-2 ring-offset-1 ring-offset-white shadow-sm', HEAT_RING[s])
+                  : 'h-1.5 opacity-40',
+              )}
+              aria-label={`${labels[s]}${isActive ? ' ✓' : ''}`}
+            />
+          );
+        })}
+      </div>
+      <div className="flex justify-between text-[9px] uppercase tracking-wider font-medium">
+        {ORDER.map((s, i) => {
+          const isActive = i === activeIdx;
+          return (
+            <span
+              key={s}
+              className={cn(
+                'flex-1 text-center truncate',
+                isActive ? 'text-bo-neutral-900' : 'text-bo-neutral-300',
+              )}
+            >
+              {labels[s]}
+            </span>
+          );
+        })}
+      </div>
     </div>
   );
 }

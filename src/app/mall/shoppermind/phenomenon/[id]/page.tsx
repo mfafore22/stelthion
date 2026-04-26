@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useCallback, useEffect, useMemo, useState } from 'react';
+import { use, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
@@ -11,33 +11,34 @@ import { MallCard } from '@/components/mall/ui/MallCard';
 import { MallButton } from '@/components/mall/ui/MallButton';
 import {
   ArrowLeft,
-  ArrowDownRight,
-  ArrowUpRight,
   Calendar,
   MapPin,
   Globe,
   Tag,
-  Plus,
-  X,
   ChevronRight,
   Sparkles,
-  Activity as ActivityIcon,
   Lightbulb,
   Target,
   AlertTriangle,
+  Wand2,
+  MessageSquare,
 } from 'lucide-react';
 import type {
   PhenomenonDetail,
   PhenomenonLinkRow,
-  PhenomenonScoreRow,
-  LinkType,
 } from '@stelthion/shoppermind-client-types';
 import { StateBadge } from '@/components/mall/shoppermind/StateBadge';
 import { LifecycleContinuum } from '@/components/mall/shoppermind/LifecycleContinuum';
 import { TrajectoryChart } from '@/components/mall/shoppermind/TrajectoryChart';
 import { SectionCard } from '@/components/mall/shoppermind/SectionCard';
+import { CampaignIdeaInline } from '@/components/mall/shoppermind/campaign-idea';
+import { TrendFeedback } from '@/components/mall/shoppermind/TrendFeedback';
 import { localizePhenomenon } from '@/lib/shoppermind/localize';
-import { cn } from '@/lib/utils';
+import { normalizeScope } from '@/lib/shoppermind/scope';
+import { canonicalCity } from '@/lib/shoppermind/cities';
+import { MetricTerm } from '@/components/mall/shoppermind/MetricTerm';
+import { useSetTrendViewContext, useViewContext } from '@/lib/shoppermind/view-context';
+import { useConciergeOptional } from '@/components/concierge/ConciergeContext';
 
 interface DetailResponse {
   configured: boolean;
@@ -62,26 +63,29 @@ export default function PhenomenonDetailPage({
     if (!loading && !user) router.replace('/mall/login');
   }, [loading, user, router]);
 
-  const reload = useCallback(async () => {
+  useEffect(() => {
+    let cancelled = false;
     setFetching(true);
     setError(null);
-    try {
-      const res = await fetch(`/api/shoppermind/phenomenon/${encodeURIComponent(id)}`, {
-        credentials: 'include',
+    fetch(`/api/shoppermind/phenomenon/${encodeURIComponent(id)}`, { credentials: 'include' })
+      .then(async (res) => {
+        const body = (await res.json()) as DetailResponse;
+        if (cancelled) return;
+        if (body.error) setError(body.error);
+        setData(body);
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : t('shoppermind.errors.network'));
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setFetching(false);
       });
-      const body = (await res.json()) as DetailResponse;
-      if (body.error) setError(body.error);
-      setData(body);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : t('shoppermind.errors.network'));
-    } finally {
-      setFetching(false);
-    }
+    return () => {
+      cancelled = true;
+    };
   }, [id, t]);
-
-  useEffect(() => {
-    void reload();
-  }, [reload]);
 
   if (loading) {
     return (
@@ -111,9 +115,7 @@ export default function PhenomenonDetailPage({
           {!fetching && data && !data.configured && <NotConfigured />}
           {!fetching && data?.configured && error && <ErrorBanner message={error} />}
           {!fetching && data?.configured && !error && !data.phenomenon && <NotFound id={id} />}
-          {!fetching && data?.phenomenon && (
-            <DetailBody phenomenon={data.phenomenon} onLinkAdded={reload} />
-          )}
+          {!fetching && data?.phenomenon && <DetailBody phenomenon={data.phenomenon} />}
         </div>
       </main>
     </>
@@ -173,18 +175,21 @@ function NotFound({ id }: { id: string }) {
   );
 }
 
-function DetailBody({
-  phenomenon: p,
-  onLinkAdded,
-}: {
-  phenomenon: PhenomenonDetail;
-  onLinkAdded: () => void | Promise<void>;
-}) {
+function DetailBody({ phenomenon: p }: { phenomenon: PhenomenonDetail }) {
   const { i18n } = useTranslation('mall');
+  const { user } = useSession();
   const firstSeen = new Date(p.firstSeenAt).toLocaleDateString();
   const lastSignal = new Date(p.lastSignalAt).toLocaleDateString();
   const localized = localizePhenomenon(p, i18n.language);
   const latest = p.scores[0] ?? null;
+
+  useSetTrendViewContext({
+    phenomenonId: p.id,
+    label: localized.label,
+    state: p.state,
+    primaryCountry: p.primaryCountry,
+  });
+
   return (
     <>
       <Header phenomenon={p} label={localized.label} />
@@ -196,14 +201,10 @@ function DetailBody({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <section className="lg:col-span-2 space-y-6">
           <NarrativeSections parsed={localized.parsed} state={p.state} />
+          <CampaignIdeaSection phenomenon={p} mallId={user?.mallId ?? null} />
+          <FeedbackSection phenomenonId={p.id} mallId={user?.mallId ?? null} />
           <TrajectoryChart scores={p.scores} />
-          <LinksPanel
-            linksFrom={p.linksFrom}
-            linksTo={p.linksTo}
-            selfId={p.id}
-            onLinkAdded={onLinkAdded}
-          />
-          <ScoreHistoryPanel scores={p.scores} />
+          <LinksPanel linksFrom={p.linksFrom} linksTo={p.linksTo} selfId={p.id} />
         </section>
         <aside className="space-y-6">
           <MetaPanel phenomenon={p} firstSeen={firstSeen} lastSignal={lastSignal} />
@@ -211,6 +212,50 @@ function DetailBody({
         </aside>
       </div>
     </>
+  );
+}
+
+function FeedbackSection({ phenomenonId, mallId }: { phenomenonId: string; mallId: string | null }) {
+  const { t } = useTranslation('mall');
+  return (
+    <SectionCard icon={MessageSquare} title={t('shoppermind.sections.feedback')} accent="neutral">
+      <TrendFeedback phenomenonId={phenomenonId} mallId={mallId} />
+    </SectionCard>
+  );
+}
+
+function CampaignIdeaSection({
+  phenomenon,
+  mallId,
+}: {
+  phenomenon: PhenomenonDetail;
+  mallId: string | null | undefined;
+}) {
+  const { t } = useTranslation('mall');
+  const view = useViewContext();
+  const concierge = useConciergeOptional();
+  const handleRefineInChat = () => {
+    if (view.value?.kind !== 'shoppermind_trend' || view.value.phenomenonId !== phenomenon.id) {
+      view.setValue({
+        kind: 'shoppermind_trend',
+        phenomenonId: phenomenon.id,
+        label: phenomenon.label,
+        state: phenomenon.state,
+        primaryCountry: phenomenon.primaryCountry,
+      });
+    }
+    concierge?.openPanel();
+  };
+  return (
+    <SectionCard icon={Wand2} title={t('shoppermind.sections.campaignIdea')} accent="primary">
+      <CampaignIdeaInline
+        phenomenon={phenomenon}
+        mallId={mallId}
+        variant="full"
+        autoGenerate={false}
+        onRefineInChat={handleRefineInChat}
+      />
+    </SectionCard>
   );
 }
 
@@ -249,30 +294,18 @@ function NarrativeSections({
   state: PhenomenonDetail['state'];
 }) {
   const { t } = useTranslation('mall');
-  const hasStructured = parsed.signalCommentary || parsed.retailerImpact;
-  const isOpportunity = state === 'ACCELERATING' || state === 'EMERGING';
   const isWatchOut = state === 'FADING' || state === 'DORMANT';
-
-  if (!hasStructured) {
-    return (
-      <SectionCard icon={Sparkles} title={t('shoppermind.sections.summary')} accent="neutral">
-        <p className="whitespace-pre-wrap leading-relaxed">{parsed.summary}</p>
-      </SectionCard>
-    );
-  }
+  const opportunityCopy =
+    parsed.opportunity ||
+    (isWatchOut
+      ? t('shoppermind.sections.watchOutBody')
+      : t('shoppermind.sections.opportunityBody'));
 
   return (
     <div className="space-y-4">
-      <SectionCard icon={Sparkles} title={t('shoppermind.sections.summary')} accent="neutral">
-        <p className="whitespace-pre-wrap leading-relaxed">{parsed.summary}</p>
-      </SectionCard>
-      {parsed.signalCommentary && (
-        <SectionCard
-          icon={ActivityIcon}
-          title={t('shoppermind.sections.signal')}
-          accent="accent"
-        >
-          <p className="whitespace-pre-wrap leading-relaxed">{parsed.signalCommentary}</p>
+      {parsed.summary && (
+        <SectionCard icon={Sparkles} title={t('shoppermind.sections.summary')} accent="neutral">
+          <p className="whitespace-pre-wrap leading-relaxed">{parsed.summary}</p>
         </SectionCard>
       )}
       {parsed.retailerImpact && (
@@ -284,375 +317,111 @@ function NarrativeSections({
           <p className="whitespace-pre-wrap leading-relaxed">{parsed.retailerImpact}</p>
         </SectionCard>
       )}
-      {isOpportunity && parsed.retailerImpact && (
+      {(parsed.retailerImpact || parsed.summary) && (
         <SectionCard
-          icon={Target}
-          title={t('shoppermind.sections.opportunity')}
-          accent="primary"
+          icon={isWatchOut ? AlertTriangle : Target}
+          title={
+            isWatchOut
+              ? t('shoppermind.sections.watchOut')
+              : t('shoppermind.sections.opportunity')
+          }
+          accent={isWatchOut ? 'error' : 'primary'}
         >
-          <p className="leading-relaxed">{t('shoppermind.sections.opportunityBody')}</p>
-        </SectionCard>
-      )}
-      {isWatchOut && parsed.retailerImpact && (
-        <SectionCard
-          icon={AlertTriangle}
-          title={t('shoppermind.sections.watchOut')}
-          accent="error"
-        >
-          <p className="leading-relaxed">{t('shoppermind.sections.watchOutBody')}</p>
+          <p className="whitespace-pre-wrap leading-relaxed">{opportunityCopy}</p>
         </SectionCard>
       )}
     </div>
   );
 }
 
-const LINK_COLOR: Record<LinkType, string> = {
-  CONTRIBUTES_TO: 'text-bo-success-dark bg-bo-success-light border-bo-success/30',
-  MANIFESTATION_OF: 'text-bo-accent-dark bg-bo-accent-light border-bo-accent/30',
-  ACCELERATES: 'text-bo-info-dark bg-bo-info-light border-bo-info/30',
-  PRECEDES: 'text-bo-neutral-700 bg-bo-neutral-100 border-bo-neutral-300',
-  CONTRADICTS: 'text-bo-error-dark bg-bo-error-light border-bo-error/30',
-};
+interface RelatedSummary {
+  id: string;
+  label: string;
+  state: PhenomenonDetail['state'];
+}
 
 function LinksPanel({
   linksFrom,
   linksTo,
   selfId,
-  onLinkAdded,
 }: {
   linksFrom: PhenomenonLinkRow[];
   linksTo: PhenomenonLinkRow[];
   selfId: string;
-  onLinkAdded: () => void | Promise<void>;
 }) {
-  const { t } = useTranslation('mall');
+  const { t, i18n } = useTranslation('mall');
+
+  const relatedIds = useMemo(() => {
+    const ids = new Set<string>();
+    for (const l of linksTo) if (l.fromPhenomenonId !== selfId) ids.add(l.fromPhenomenonId);
+    for (const l of linksFrom) if (l.toPhenomenonId !== selfId) ids.add(l.toPhenomenonId);
+    return [...ids];
+  }, [linksFrom, linksTo, selfId]);
+
+  const [related, setRelated] = useState<Record<string, RelatedSummary>>({});
+
+  useEffect(() => {
+    if (relatedIds.length === 0) {
+      setRelated({});
+      return;
+    }
+    let cancelled = false;
+    Promise.all(
+      relatedIds.map((id) =>
+        fetch(`/api/shoppermind/phenomenon/${encodeURIComponent(id)}`, {
+          credentials: 'include',
+        })
+          .then((res) => res.json() as Promise<DetailResponse>)
+          .catch(() => null),
+      ),
+    ).then((results) => {
+      if (cancelled) return;
+      const map: Record<string, RelatedSummary> = {};
+      for (const body of results) {
+        const p = body?.phenomenon;
+        if (!p) continue;
+        map[p.id] = {
+          id: p.id,
+          label: localizePhenomenon(p, i18n.language).label,
+          state: p.state,
+        };
+      }
+      setRelated(map);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [relatedIds, i18n.language]);
+
+  if (relatedIds.length === 0) return null;
+
   return (
     <MallCard variant="glass" padding="md">
       <h2 className="text-xs uppercase tracking-wider text-bo-neutral-400 mb-3 font-medium">
-        {t('shoppermind.detail.linkGraph')}
+        {t('shoppermind.detail.relatedTrends')}
       </h2>
-      <div className="space-y-4">
-        {linksFrom.length === 0 && linksTo.length === 0 && (
-          <p className="text-sm text-bo-neutral-500">{t('shoppermind.detail.linkGraphEmpty')}</p>
-        )}
-        {linksTo.length > 0 && (
-          <LinkGroup
-            heading={t('shoppermind.detail.upstream')}
-            icon={<ArrowDownRight className="w-4 h-4 text-bo-neutral-400" />}
-            links={linksTo}
-            otherIdKey="fromPhenomenonId"
-            selfId={selfId}
-          />
-        )}
-        {linksFrom.length > 0 && (
-          <LinkGroup
-            heading={t('shoppermind.detail.downstream')}
-            icon={<ArrowUpRight className="w-4 h-4 text-bo-neutral-400" />}
-            links={linksFrom}
-            otherIdKey="toPhenomenonId"
-            selfId={selfId}
-          />
-        )}
-        <LinkAuthor selfId={selfId} onLinkAdded={onLinkAdded} />
-      </div>
-    </MallCard>
-  );
-}
-
-function LinkAuthor({
-  selfId,
-  onLinkAdded,
-}: {
-  selfId: string;
-  onLinkAdded: () => void | Promise<void>;
-}) {
-  const { t } = useTranslation('mall');
-  const [open, setOpen] = useState(false);
-  const [toPhenomenonId, setToPhenomenonId] = useState('');
-  const [linkType, setLinkType] = useState<LinkType>('CONTRIBUTES_TO');
-  const [weight, setWeight] = useState('1.0');
-  const [rationale, setRationale] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
-
-  const LINK_TYPES: LinkType[] = [
-    'CONTRIBUTES_TO',
-    'MANIFESTATION_OF',
-    'ACCELERATES',
-    'PRECEDES',
-    'CONTRADICTS',
-  ];
-
-  const reset = () => {
-    setToPhenomenonId('');
-    setLinkType('CONTRIBUTES_TO');
-    setWeight('1.0');
-    setRationale('');
-    setFormError(null);
-  };
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setFormError(null);
-    const trimmed = toPhenomenonId.trim();
-    if (!trimmed) {
-      setFormError(t('shoppermind.linkAuthor.errors.targetRequired'));
-      return;
-    }
-    if (trimmed === selfId) {
-      setFormError(t('shoppermind.linkAuthor.errors.cannotLinkSelf'));
-      return;
-    }
-    const w = Number(weight);
-    if (!Number.isFinite(w) || w < 0 || w > 1) {
-      setFormError(t('shoppermind.linkAuthor.errors.weightRange'));
-      return;
-    }
-
-    setSubmitting(true);
-    try {
-      const res = await fetch(
-        `/api/shoppermind/phenomenon/${encodeURIComponent(selfId)}/links`,
-        {
-          method: 'POST',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            toPhenomenonId: trimmed,
-            linkType,
-            weight: w,
-            rationale: rationale.trim() || undefined,
-          }),
-        },
-      );
-      if (res.status === 403) {
-        setFormError(t('shoppermind.linkAuthor.errors.forbidden'));
-        return;
-      }
-      if (!res.ok) {
-        const body = (await res.json().catch(() => ({}))) as { error?: string };
-        setFormError(
-          body.error ?? t('shoppermind.linkAuthor.errors.requestFailed', { status: res.status }),
-        );
-        return;
-      }
-      reset();
-      setOpen(false);
-      await onLinkAdded();
-    } catch (err) {
-      setFormError(err instanceof Error ? err.message : t('shoppermind.errors.network'));
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  if (!open) {
-    return (
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-1.5 text-xs text-bo-primary hover:text-bo-primary-700 font-medium"
-      >
-        <Plus className="w-3.5 h-3.5" />
-        {t('shoppermind.linkAuthor.openButton')}
-      </button>
-    );
-  }
-
-  return (
-    <form
-      onSubmit={submit}
-      className="rounded-lg border-2 border-bo-accent/30 bg-bo-accent-light/30 p-4 space-y-3"
-    >
-      <div className="flex items-center justify-between">
-        <div className="text-xs font-medium text-bo-accent-dark uppercase tracking-wider">
-          {t('shoppermind.linkAuthor.heading')}
-        </div>
-        <button
-          type="button"
-          onClick={() => {
-            setOpen(false);
-            reset();
-          }}
-          className="text-bo-neutral-400 hover:text-bo-neutral-700"
-          aria-label={t('shoppermind.linkAuthor.cancel')}
-        >
-          <X className="w-4 h-4" />
-        </button>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <label className="text-xs text-bo-neutral-600 space-y-1 block">
-          {t('shoppermind.linkAuthor.targetLabel')}
-          <input
-            type="text"
-            value={toPhenomenonId}
-            onChange={(e) => setToPhenomenonId(e.target.value)}
-            placeholder={t('shoppermind.linkAuthor.targetPlaceholder')}
-            className="w-full font-mono text-sm px-2 py-1.5 rounded border border-bo-neutral-300 bg-white"
-            disabled={submitting}
-          />
-        </label>
-        <label className="text-xs text-bo-neutral-600 space-y-1 block">
-          {t('shoppermind.linkAuthor.typeLabel')}
-          <select
-            value={linkType}
-            onChange={(e) => setLinkType(e.target.value as LinkType)}
-            className="w-full text-sm px-2 py-1.5 rounded border border-bo-neutral-300 bg-white"
-            disabled={submitting}
-          >
-            {LINK_TYPES.map((v) => (
-              <option key={v} value={v}>
-                {t(`shoppermind.linkTypes.${v}`)}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="text-xs text-bo-neutral-600 space-y-1 block">
-          {t('shoppermind.linkAuthor.weightLabel')}
-          <input
-            type="number"
-            step="0.05"
-            min="0"
-            max="1"
-            value={weight}
-            onChange={(e) => setWeight(e.target.value)}
-            className="w-full text-sm px-2 py-1.5 rounded border border-bo-neutral-300 bg-white"
-            disabled={submitting}
-          />
-        </label>
-        <label className="text-xs text-bo-neutral-600 space-y-1 block md:col-span-2">
-          {t('shoppermind.linkAuthor.rationaleLabel')}
-          <textarea
-            value={rationale}
-            onChange={(e) => setRationale(e.target.value)}
-            rows={2}
-            placeholder={t('shoppermind.linkAuthor.rationalePlaceholder')}
-            className="w-full text-sm px-2 py-1.5 rounded border border-bo-neutral-300 bg-white resize-none"
-            disabled={submitting}
-          />
-        </label>
-      </div>
-      {formError && (
-        <div className="text-xs text-bo-error-dark bg-bo-error-light border border-bo-error/30 rounded px-2 py-1.5">
-          {formError}
-        </div>
-      )}
-      <div className="flex justify-end gap-2">
-        <MallButton
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={() => {
-            setOpen(false);
-            reset();
-          }}
-          disabled={submitting}
-        >
-          {t('shoppermind.linkAuthor.cancel')}
-        </MallButton>
-        <MallButton type="submit" variant="primary" size="sm" disabled={submitting}>
-          {submitting
-            ? t('shoppermind.linkAuthor.saving')
-            : t('shoppermind.linkAuthor.save')}
-        </MallButton>
-      </div>
-    </form>
-  );
-}
-
-function LinkGroup({
-  heading,
-  icon,
-  links,
-  otherIdKey,
-  selfId,
-}: {
-  heading: string;
-  icon: React.ReactNode;
-  links: PhenomenonLinkRow[];
-  otherIdKey: 'fromPhenomenonId' | 'toPhenomenonId';
-  selfId: string;
-}) {
-  const { t } = useTranslation('mall');
-  return (
-    <div>
-      <div className="flex items-center gap-2 text-xs text-bo-neutral-500 mb-2">
-        {icon}
-        <span>{heading}</span>
-      </div>
-      <ul className="space-y-1.5">
-        {links.map((link) => {
-          const otherId = link[otherIdKey];
-          const isSelf = otherId === selfId;
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        {relatedIds.map((id) => {
+          const r = related[id];
           return (
-            <li key={link.id} className="flex items-center gap-2">
-              <span
-                className={cn(
-                  'inline-flex items-center text-xs font-medium px-2 py-0.5 rounded-full border',
-                  LINK_COLOR[link.linkType],
-                )}
-              >
-                {t(`shoppermind.linkTypes.${link.linkType}`)}
+            <Link
+              key={id}
+              href={`/mall/shoppermind/phenomenon/${encodeURIComponent(id)}`}
+              className="flex items-center justify-between gap-2 px-3 py-2 rounded-lg border border-bo-neutral-200 bg-white hover:border-bo-primary hover:shadow-sm transition-all"
+            >
+              <span className="text-sm font-medium text-bo-neutral-900 truncate">
+                {r?.label ?? id}
               </span>
-              {isSelf ? (
-                <span className="font-mono text-xs text-bo-neutral-400">{otherId}</span>
+              {r ? (
+                <StateBadge state={r.state} className="shrink-0" />
               ) : (
-                <Link
-                  href={`/mall/shoppermind/phenomenon/${encodeURIComponent(otherId)}`}
-                  className="font-mono text-xs text-bo-primary hover:text-bo-primary-700 hover:underline truncate"
-                >
-                  {otherId}
-                </Link>
+                <span className="text-xs text-bo-neutral-400 shrink-0 animate-pulse">
+                  …
+                </span>
               )}
-              <span className="text-xs text-bo-neutral-400 ml-auto shrink-0">
-                w={link.weight.toFixed(2)}
-              </span>
-            </li>
+            </Link>
           );
         })}
-      </ul>
-    </div>
-  );
-}
-
-function ScoreHistoryPanel({ scores }: { scores: PhenomenonScoreRow[] }) {
-  const { t } = useTranslation('mall');
-  if (scores.length === 0) return null;
-  const recent = scores.slice(0, 14);
-  return (
-    <MallCard variant="glass" padding="md">
-      <h2 className="text-xs uppercase tracking-wider text-bo-neutral-400 mb-3 font-medium">
-        {t('shoppermind.detail.recentScoring')}
-      </h2>
-      <div className="overflow-x-auto">
-        <table className="w-full text-xs">
-          <thead>
-            <tr className="text-bo-neutral-400 text-left">
-              <th className="font-normal py-1 pr-3">{t('shoppermind.detail.table.date')}</th>
-              <th className="font-normal py-1 pr-3">{t('shoppermind.detail.table.composite')}</th>
-              <th className="font-normal py-1 pr-3">
-                {t('shoppermind.detail.table.footTraffic')}
-              </th>
-              <th className="font-normal py-1 pr-3">{t('shoppermind.detail.table.cultural')}</th>
-              <th className="font-normal py-1 pr-3">{t('shoppermind.detail.table.velocity')}</th>
-              <th className="font-normal py-1 pr-3">{t('shoppermind.detail.table.volume')}</th>
-              <th className="font-normal py-1">{t('shoppermind.detail.table.boost')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {recent.map((s) => (
-              <tr key={s.id} className="border-t border-bo-neutral-200/60 text-bo-neutral-700">
-                <td className="py-1 pr-3 font-mono">{s.date.slice(0, 10)}</td>
-                <td className="py-1 pr-3">{s.compositeScore.toFixed(2)}</td>
-                <td className="py-1 pr-3">{s.footTrafficScore.toFixed(2)}</td>
-                <td className="py-1 pr-3">{s.culturalScore.toFixed(2)}</td>
-                <td className="py-1 pr-3">{s.velocity.toFixed(2)}</td>
-                <td className="py-1 pr-3">{s.volume}</td>
-                <td className="py-1">{s.linkBoost.toFixed(2)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
       </div>
     </MallCard>
   );
@@ -701,15 +470,29 @@ function MetaPanel({
         {(p.culturalScope || p.culturalLocality) && (
           <MetaRow
             icon={<Globe className="w-4 h-4 text-bo-neutral-400" />}
-            label={t('shoppermind.detail.meta.cultural')}
-            value={`${p.culturalScope ? t(`shoppermind.scopes.${p.culturalScope}`) : '—'} · ${p.culturalLocality ?? '—'}`}
+            label={
+              <MetricTerm tooltip={t('shoppermind.tooltips.cultural')}>
+                {t('shoppermind.detail.meta.cultural')}
+              </MetricTerm>
+            }
+            value={`${(() => {
+              const norm = normalizeScope(p.culturalScope);
+              return norm ? t(`shoppermind.scopes.${norm}`) : '—';
+            })()} · ${canonicalCity(p.culturalLocality) ?? '—'}`}
           />
         )}
         {(p.footTrafficScope || p.footTrafficLocality) && (
           <MetaRow
             icon={<MapPin className="w-4 h-4 text-bo-neutral-400" />}
-            label={t('shoppermind.detail.meta.footTraffic')}
-            value={`${p.footTrafficScope ? t(`shoppermind.scopes.${p.footTrafficScope}`) : '—'} · ${p.footTrafficLocality ?? '—'}`}
+            label={
+              <MetricTerm tooltip={t('shoppermind.tooltips.footTraffic')}>
+                {t('shoppermind.detail.meta.footTraffic')}
+              </MetricTerm>
+            }
+            value={`${(() => {
+              const norm = normalizeScope(p.footTrafficScope);
+              return norm ? t(`shoppermind.scopes.${norm}`) : '—';
+            })()} · ${canonicalCity(p.footTrafficLocality) ?? '—'}`}
           />
         )}
       </dl>
@@ -723,7 +506,7 @@ function MetaRow({
   value,
 }: {
   icon: React.ReactNode;
-  label: string;
+  label: React.ReactNode;
   value: string;
 }) {
   return (

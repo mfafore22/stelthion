@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
-import { Brain, ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import type {
   MarketDetail,
   PhenomenonSummary,
@@ -57,7 +58,13 @@ export default function ShopperMindDemoPage() {
       <header className="h-[72px] bg-bo-glass border-b-2 border-bo-neutral-300/60 backdrop-blur-xl flex items-center justify-between px-8 shadow-bo-md">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-bo-primary-100 flex items-center justify-center">
-            <Brain className="w-5 h-5 text-bo-primary" />
+            <Image
+              src="/shoppermind-icon.png"
+              alt=""
+              width={24}
+              height={24}
+              className="object-contain"
+            />
           </div>
           <span className="font-semibold text-bo-neutral-950 text-lg tracking-tight">
             {t('shoppermind.title')}

@@ -458,6 +458,63 @@ async function getShopperMindTrends(params: Record<string, unknown>, mallId: str
   };
 }
 
+async function generateCampaignIdeaTool(
+  params: Record<string, unknown>,
+  mallId: string,
+  language?: string,
+): Promise<ToolResult> {
+  const phenomenonId = params.phenomenonId as string | undefined;
+  if (!phenomenonId) {
+    return { text: 'phenomenonId is required to generate a campaign idea.' };
+  }
+
+  const client = getShopperMindClient();
+  if (!client) {
+    return { text: 'The ShopperMind module is not active for this property — cannot generate a campaign idea.' };
+  }
+
+  const marketId = await resolveMarketIdFromMall(mallId);
+  const lang = (language ?? 'en').toLowerCase();
+  const langCode: 'fi' | 'sv' | 'en' = lang.startsWith('fi') ? 'fi' : lang.startsWith('sv') ? 'sv' : 'en';
+
+  const budgetParam = params.budget as string | undefined;
+  const budget: 'light' | 'standard' | 'premium' =
+    budgetParam === 'light' || budgetParam === 'premium' ? budgetParam : 'standard';
+
+  try {
+    const res = await client.generateCampaignIdea(phenomenonId, {
+      marketId,
+      language: langCode,
+      angle: typeof params.angle === 'string' ? params.angle : undefined,
+      audience: typeof params.audience === 'string' ? params.audience : undefined,
+      durationDays: typeof params.durationDays === 'number' ? params.durationDays : undefined,
+      budget,
+    });
+    const idea = res.idea;
+    const channels = idea.channels.join(' · ');
+    const text = [
+      `Hook: ${idea.hook}`,
+      `Audience: ${idea.audience}`,
+      `Channels: ${channels}`,
+      `CTA: ${idea.cta}`,
+      `Success metric: ${idea.successMetric}`,
+      `Why now: ${idea.whyNow}`,
+      `Budget: ${idea.budgetTier} · ${idea.durationDays} days`,
+      `Angle: ${idea.angle}`,
+    ].join('\n');
+    return {
+      text,
+      attachment: {
+        type: 'campaign_idea',
+        title: tServer(language, 'concierge.attachments.campaignIdea.title'),
+        data: idea,
+      },
+    };
+  } catch (err) {
+    return { text: `Could not generate a campaign idea: ${err instanceof Error ? err.message : 'service error'}.` };
+  }
+}
+
 // ── Tool Registry ─────────────────────────────────────────
 
 export const CONCIERGE_TOOLS: ToolDefinition[] = [
@@ -564,6 +621,18 @@ export const CONCIERGE_TOOLS: ToolDefinition[] = [
       limit: { type: 'number', description: 'Max phenomena to return (default 5, max 10)', required: false },
     },
     execute: getShopperMindTrends,
+  },
+  {
+    name: 'generate_campaign_idea',
+    description: 'Generate a concrete, actionable campaign idea for a specific ShopperMind trend (phenomenon). Returns hook, audience, channels, CTA, success metric, and budget tier. Use when the user asks for "ideas", "what should I do", or wants to act on a trend they are looking at. Pass the phenomenonId from the current viewing context.',
+    parameters: {
+      phenomenonId: { type: 'string', description: 'Phenomenon ID from the ShopperMind trend the user is acting on. Use the ID from the current viewing context.', required: true },
+      angle: { type: 'string', description: 'Optional angle or framing requested by the user (e.g. "restaurant partnership", "B2C in-mall retail", "loyalty retention").', required: false },
+      audience: { type: 'string', description: 'Optional target audience override (e.g. "existing buyers", "families", "25–45 foodies").', required: false },
+      budget: { type: 'string', description: 'Budget tier — light, standard, or premium (default standard).', required: false, enum: ['light', 'standard', 'premium'] },
+      durationDays: { type: 'number', description: 'Optional campaign duration in days (3–60).', required: false },
+    },
+    execute: generateCampaignIdeaTool,
   },
 ];
 

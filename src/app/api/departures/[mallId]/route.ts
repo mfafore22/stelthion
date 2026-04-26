@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getIdeaparkLiveDepartures } from '@/lib/data/ideaparkTransport';
+import { isMallId } from '@/lib/mall/ids';
 
 export async function GET(
   _request: Request,
@@ -7,7 +8,7 @@ export async function GET(
 ) {
   const { mallId } = await params;
 
-  if (mallId !== 'ideapark') {
+  if (!isMallId(mallId, 'ideapark-lempaala')) {
     return NextResponse.json({ error: `Departure data not available for mall '${mallId}'` }, { status: 404 });
   }
 

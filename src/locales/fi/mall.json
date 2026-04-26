@@ -422,6 +422,16 @@
     "loadingTrend": "Ladataan trendi\u00e4\u2026",
     "noMarket": "Trendimoottori",
     "marketPrefix": "Markkina",
+    "snapshot": {
+      "section": "Trendikatsaus"
+    },
+    "countries": {
+      "FI": "Suomi",
+      "JP": "Japani",
+      "US": "Yhdysvallat",
+      "SE": "Ruotsi",
+      "DE": "Saksa"
+    },
     "back": "Takaisin trendeihin",
     "breadcrumbRoot": "ShopperMind",
     "notFound": "Trendi\u00e4 {{id}} ei l\u00f6ytynyt.",
@@ -446,6 +456,14 @@
       "title": "P\u00e4iv\u00e4n signaali",
       "empty": "T\u00e4lle markkinalle ei ole viel\u00e4 julkaistu signaalia t\u00e4n\u00e4\u00e4n."
     },
+    "signalSections": {
+      "monthly": "Kuukauden signaali",
+      "headline": "P\u00e4\u00e4otsikko",
+      "keyFindings": "T\u00e4rkeimm\u00e4t l\u00f6yd\u00f6kset",
+      "byCity": "Kauppiaat, {{city}}",
+      "alsoVisible": "My\u00f6s n\u00e4kyvill\u00e4",
+      "watching": "Seurannassa"
+    },
     "states": {
       "EMERGING": "Nouseva",
       "ACCELERATING": "Kiihtyv\u00e4",
@@ -468,7 +486,10 @@
       "windows": {
         "7d": "7 pv",
         "14d": "14 pv",
-        "30d": "30 pv"
+        "30d": "30 pv",
+        "4w": "4 vk",
+        "12w": "12 vk",
+        "12m": "12 kk"
       },
       "series": {
         "composite": "Yhdistelm\u00e4",
@@ -482,6 +503,15 @@
         "volume": "Volyymi"
       }
     },
+    "tooltips": {
+      "relevance": "Yhdistelm\u00e4pisteet (0\u20131): kertoo kuinka merkitt\u00e4v\u00e4 t\u00e4m\u00e4 trendi on juuri t\u00e4lle markkinalle. Yhdist\u00e4\u00e4 volyymin, nopeuden, l\u00e4hteiden monipuolisuuden ja kulttuurisen / jalankulun l\u00e4heisyyden.",
+      "velocity": "Trendin kasvuvauhti: kuinka nopeasti signaalim\u00e4\u00e4r\u00e4 muuttuu. Positiivinen = nousussa, negatiivinen = laskussa.",
+      "acceleration": "Kasvuvauhdin muutos: kiihtyyk\u00f6 vai hidastuuko trendi. Positiivinen kiihtyvyys = nousu voimistuu.",
+      "volume": "Havaittujen signaalien m\u00e4\u00e4r\u00e4 t\u00e4ll\u00e4 jaksolla \u2014 kuinka monta kertaa trendist\u00e4 on saatu mainintoja eri l\u00e4hteist\u00e4.",
+      "cultural": "Kulttuurinen ulottuvuus: kuinka l\u00e4hell\u00e4 trendi on t\u00e4m\u00e4n markkinan kulttuurista keskustelua \u2014 esim. somessa, mediassa ja ihmisten arjen valinnoissa.",
+      "footTraffic": "Jalankulkuliikenne: kuinka l\u00e4hell\u00e4 trendi on todellista k\u00e4vij\u00e4virtaa kauppakeskuksen ymp\u00e4rill\u00e4 \u2014 paikallisia tapahtumia, liikennett\u00e4 ja saavutettavuutta.",
+      "composite": "Yhdistelm\u00e4: kulttuurisen ja jalankulun signaalien painotettu yhdistelm\u00e4 \u2014 kokonaiskuva trendin merkitt\u00e4vyydest\u00e4."
+    },
     "sections": {
       "summary": "Tiivistelm\u00e4",
       "signal": "Signaali t\u00e4ll\u00e4 markkinalla",
@@ -489,10 +519,52 @@
       "opportunity": "Mahdollisuus",
       "watchOut": "Varoitus",
       "opportunityBody": "Trendin kiihtyess\u00e4 varhain liikkeell\u00e4 oleville j\u00e4lleenmyyjille on tarjolla nousupotentiaalia edell\u00e4 kuvattujen kulmien kautta.",
-      "watchOutBody": "T\u00e4m\u00e4 trendi viilenee. Varaudu hitaampaan kysynt\u00e4\u00e4n ja valmistaudu siirt\u00e4m\u00e4\u00e4n painopistett\u00e4 pois syv\u00e4st\u00e4 altistumisesta."
+      "watchOutBody": "T\u00e4m\u00e4 trendi viilenee. Varaudu hitaampaan kysynt\u00e4\u00e4n ja valmistaudu siirt\u00e4m\u00e4\u00e4n painopistett\u00e4 pois syv\u00e4st\u00e4 altistumisesta.",
+      "campaignIdea": "Kampanjaidea",
+      "feedback": "Oliko tästä hyötyä?"
+    },
+    "feedback": {
+      "relevant": "Hyödyllinen",
+      "notRelevant": "Ei hyödyllinen",
+      "commentPlaceholder": "Lisää lyhyt kommentti (valinnainen)",
+      "submit": "Lähetä",
+      "cancel": "Peruuta",
+      "edit": "Muokkaa",
+      "submitting": "Lähetetään…",
+      "submitted": "Kiitos palautteestasi",
+      "error": "Palautteen tallennus epäonnistui"
+    },
+    "campaignIdea": {
+      "generate": "Luo kampanjaidea",
+      "generating": "Luonnostellaan ideaa\u2026",
+      "regenerate": "Luo uusi versio",
+      "refineInChat": "Hio chatissa",
+      "openInDetail": "Avaa lis\u00e4tiedot",
+      "errorTitle": "Idean luominen ei onnistunut",
+      "errorBody": "Generaattori ei vastannut. Yrit\u00e4 hetken kuluttua uudelleen.",
+      "fields": {
+        "hook": "Iskulause",
+        "audience": "Kohderyhm\u00e4",
+        "channels": "Kanavat",
+        "successMetric": "Onnistumismittari",
+        "angle": "Kulma",
+        "cta": "Toimintakehotus",
+        "whyNow": "Miksi nyt",
+        "rationale": "Perustelut",
+        "duration": "Kesto",
+        "budget": "Budjetti"
+      },
+      "budget": {
+        "light": "Kevyt",
+        "standard": "Perus",
+        "premium": "Premium"
+      },
+      "durationDays": "{{count}} p\u00e4iv\u00e4\u00e4"
     },
     "detail": {
       "description": "Kuvaus",
+      "relatedTrends": "Liittyv\u00e4t trendit",
+      "relatedTrendsEmpty": "T\u00e4lle trendille ei ole liitettyj\u00e4 trendej\u00e4.",
       "linkGraph": "Linkkikartta",
       "linkGraphEmpty": "P\u00e4\u00e4telty\u00e4 linkki\u00e4 ei viel\u00e4 ole.",
       "upstream": "Yl\u00e4virta \u2014 trendit, jotka sy\u00f6tt\u00e4v\u00e4t t\u00e4t\u00e4",
@@ -794,6 +866,13 @@
     }
   },
   "concierge": {
+    "viewContext": {
+      "shoppermindTrendChip": "Trendi: {{label}}",
+      "clear": "Poista konteksti"
+    },
+    "greetings": {
+      "shoppermindTrend": "N\u00e4en, ett\u00e4 tutkit *{{label}}* -trendi\u00e4 ({{state}}). Haluatko, ett\u00e4 luonnostelen sille kampanjaidean? Voin my\u00f6s ehdottaa pari erilaista linjaa."
+    },
     "newConversation": "Uusi keskustelu",
     "recent": "Viimeisimmät",
     "loading": "Ladataan...",

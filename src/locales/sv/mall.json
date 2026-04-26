@@ -431,6 +431,16 @@
     "loadingTrend": "Laddar trend\u2026",
     "noMarket": "Trendmotor",
     "marketPrefix": "Marknad",
+    "snapshot": {
+      "section": "Trend\u00f6versikt"
+    },
+    "countries": {
+      "FI": "Finland",
+      "JP": "Japan",
+      "US": "USA",
+      "SE": "Sverige",
+      "DE": "Tyskland"
+    },
     "back": "Tillbaka till trender",
     "breadcrumbRoot": "ShopperMind",
     "notFound": "Trenden {{id}} hittades inte.",
@@ -455,6 +465,14 @@
       "title": "Dagens signal",
       "empty": "Ingen signal har publicerats f\u00f6r den h\u00e4r marknaden idag."
     },
+    "signalSections": {
+      "monthly": "M\u00e5nadens signal",
+      "headline": "Rubrik",
+      "keyFindings": "Huvudsakliga insikter",
+      "byCity": "Handlare i {{city}}",
+      "alsoVisible": "\u00c4ven synligt",
+      "watching": "Bevakning"
+    },
     "states": {
       "EMERGING": "Framv\u00e4xande",
       "ACCELERATING": "Accelererande",
@@ -477,7 +495,10 @@
       "windows": {
         "7d": "7 d",
         "14d": "14 d",
-        "30d": "30 d"
+        "30d": "30 d",
+        "4w": "4 v",
+        "12w": "12 v",
+        "12m": "12 m"
       },
       "series": {
         "composite": "Sammansatt",
@@ -491,6 +512,15 @@
         "volume": "Volym"
       }
     },
+    "tooltips": {
+      "relevance": "Kombinerat po\u00e4ng (0\u20131): hur relevant trenden \u00e4r f\u00f6r just denna marknad. Kombinerar volym, hastighet, k\u00e4llmangfald och kulturell / fotg\u00e4ngarn\u00e4rhet.",
+      "velocity": "Trendens tillv\u00e4xttakt: hur snabbt signalvolymen f\u00f6r\u00e4ndras. Positivt = stigande, negativt = fallande.",
+      "acceleration": "F\u00f6r\u00e4ndring av tillv\u00e4xttakten: om trenden accelererar eller avtar. Positivt = momentum byggs upp.",
+      "volume": "Antal observerade signaler under perioden \u2014 hur m\u00e5nga g\u00e5nger trenden har n\u00e4mnts i olika k\u00e4llor.",
+      "cultural": "Kulturell dimension: hur n\u00e4ra trenden ligger marknadens kulturella samtal \u2014 sociala medier, nyheter och vardagliga val.",
+      "footTraffic": "Fotg\u00e4ngardimension: hur n\u00e4ra trenden ligger den faktiska bes\u00f6kstr\u00f6mmen runt k\u00f6pcentrumet \u2014 lokala evenemang, transit och tillg\u00e4nglighet.",
+      "composite": "Kombinerat: viktad blandning av de kulturella och fotg\u00e4ngarsignalerna \u2014 den \u00f6vergripande bilden av trendens relevans."
+    },
     "sections": {
       "summary": "Sammanfattning",
       "signal": "Signal p\u00e5 den h\u00e4r marknaden",
@@ -498,10 +528,52 @@
       "opportunity": "M\u00f6jlighet",
       "watchOut": "Varning",
       "opportunityBody": "N\u00e4r trenden accelererar finns det uppsida f\u00f6r handlare som r\u00f6r sig tidigt p\u00e5 vinklarna ovan.",
-      "watchOutBody": "Trenden svalnar. Planera f\u00f6r l\u00e5ngsammare upptag och f\u00f6rbered dig p\u00e5 att rotera bort fr\u00e5n djup exponering."
+      "watchOutBody": "Trenden svalnar. Planera f\u00f6r l\u00e5ngsammare upptag och f\u00f6rbered dig p\u00e5 att rotera bort fr\u00e5n djup exponering.",
+      "campaignIdea": "Kampanjid\u00e9",
+      "feedback": "Var detta anv\u00e4ndbart?"
+    },
+    "feedback": {
+      "relevant": "Relevant",
+      "notRelevant": "Inte relevant",
+      "commentPlaceholder": "L\u00e4gg till en kort kommentar (valfritt)",
+      "submit": "Skicka",
+      "cancel": "Avbryt",
+      "edit": "Redigera",
+      "submitting": "Skickar\u2026",
+      "submitted": "Tack f\u00f6r din feedback",
+      "error": "Kunde inte spara din feedback"
+    },
+    "campaignIdea": {
+      "generate": "Skapa kampanjid\u00e9",
+      "generating": "Skissar p\u00e5 en id\u00e9\u2026",
+      "regenerate": "Skapa ny version",
+      "refineInChat": "Finslipa i chatten",
+      "openInDetail": "\u00d6ppna detaljer",
+      "errorTitle": "Kunde inte skapa en id\u00e9 just nu",
+      "errorBody": "Generatorn svarade inte. F\u00f6rs\u00f6k igen om en stund.",
+      "fields": {
+        "hook": "Slogan",
+        "audience": "M\u00e5lgrupp",
+        "channels": "Kanaler",
+        "successMetric": "Framg\u00e5ngsm\u00e5tt",
+        "angle": "Vinkel",
+        "cta": "Uppmaning",
+        "whyNow": "Varf\u00f6r nu",
+        "rationale": "Motivering",
+        "duration": "Varaktighet",
+        "budget": "Budget"
+      },
+      "budget": {
+        "light": "L\u00e4tt",
+        "standard": "Standard",
+        "premium": "Premium"
+      },
+      "durationDays": "{{count}} dagar"
     },
     "detail": {
       "description": "Beskrivning",
+      "relatedTrends": "Relaterade trender",
+      "relatedTrendsEmpty": "Inga relaterade trender kopplade till den h\u00e4r \u00e4nnu.",
       "linkGraph": "L\u00e4nkkarta",
       "linkGraphEmpty": "Inga h\u00e4rledda l\u00e4nkar \u00e4nnu.",
       "upstream": "Uppstr\u00f6ms \u2014 trender som matar in i den h\u00e4r",
@@ -801,6 +873,13 @@
     }
   },
   "concierge": {
+    "viewContext": {
+      "shoppermindTrendChip": "Trend: {{label}}",
+      "clear": "Rensa kontext"
+    },
+    "greetings": {
+      "shoppermindTrend": "Jag ser att du tittar p\u00e5 trenden *{{label}}* ({{state}}). Vill du att jag skissar en kampanjid\u00e9 f\u00f6r den? Jag kan ocks\u00e5 f\u00f6resl\u00e5 ett par olika vinklar."
+    },
     "newConversation": "Ny konversation",
     "recent": "Senaste",
     "loading": "Laddar...",

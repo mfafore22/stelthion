@@ -21,7 +21,7 @@ const TENANT_MAP: Record<string, string> = {
 
 const ALL_PROPERTIES = [
   {
-    id: 'ideapark',
+    id: 'ideapark-lempaala',
     name: 'Ideapark Lempäälä',
     city: 'Lempäälä',
     status: 'live' as const,
@@ -132,7 +132,7 @@ export default function TenantPortfolioPage() {
     if (!user || !tenantName) return [];
 
     if (tenantName === 'Koy Ideapark Ab') {
-      return ALL_PROPERTIES.filter(property => property.id === 'ideapark');
+      return ALL_PROPERTIES.filter(property => property.id === 'ideapark-lempaala');
     }
 
     return [];

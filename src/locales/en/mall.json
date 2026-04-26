@@ -422,6 +422,16 @@
     "loadingTrend": "Loading trend\u2026",
     "noMarket": "Trend engine",
     "marketPrefix": "Market",
+    "snapshot": {
+      "section": "Trend snapshot"
+    },
+    "countries": {
+      "FI": "Finland",
+      "JP": "Japan",
+      "US": "United States",
+      "SE": "Sweden",
+      "DE": "Germany"
+    },
     "back": "Back to trends",
     "breadcrumbRoot": "ShopperMind",
     "notFound": "Trend {{id}} was not found.",
@@ -441,6 +451,14 @@
       "tracked_one": "{{count}} trend tracked",
       "tracked_other": "{{count}} trends tracked",
       "score": "Score"
+    },
+    "signalSections": {
+      "monthly": "Signal of the month",
+      "headline": "Headline",
+      "keyFindings": "Key findings",
+      "byCity": "Merchants in {{city}}",
+      "alsoVisible": "Also visible",
+      "watching": "Watching"
     },
     "signalOfTheDay": {
       "title": "Signal of the Day",
@@ -468,7 +486,10 @@
       "windows": {
         "7d": "7d",
         "14d": "14d",
-        "30d": "30d"
+        "30d": "30d",
+        "4w": "4w",
+        "12w": "12w",
+        "12m": "12m"
       },
       "series": {
         "composite": "Composite",
@@ -482,6 +503,15 @@
         "volume": "Volume"
       }
     },
+    "tooltips": {
+      "relevance": "Composite score (0\u20131): how relevant this trend is to this specific market. Combines volume, velocity, source diversity, and cultural / foot-traffic proximity.",
+      "velocity": "Growth rate of the trend: how fast signal volume is changing. Positive = rising, negative = falling.",
+      "acceleration": "Change in growth rate: whether the trend is speeding up or slowing down. Positive = momentum building.",
+      "volume": "Number of signals observed in the period \u2014 how many times this trend has been mentioned across sources.",
+      "cultural": "Cultural dimension: how close this trend is to this market's cultural conversation \u2014 social media, news and everyday choices.",
+      "footTraffic": "Foot-traffic dimension: how close this trend is to actual visitor flow around the mall \u2014 local events, transit, and accessibility.",
+      "composite": "Composite: weighted blend of the cultural and foot-traffic signals \u2014 the overall picture of the trend's relevance."
+    },
     "sections": {
       "summary": "Summary",
       "signal": "Signal in this market",
@@ -489,10 +519,52 @@
       "opportunity": "Opportunity",
       "watchOut": "Watch-out",
       "opportunityBody": "With the trend accelerating, there is upside for retailers who move early on the angles above.",
-      "watchOutBody": "This trend is cooling. Plan for slower uptake and prepare to rotate out of deep exposure."
+      "watchOutBody": "This trend is cooling. Plan for slower uptake and prepare to rotate out of deep exposure.",
+      "campaignIdea": "Campaign idea",
+      "feedback": "Was this useful?"
+    },
+    "feedback": {
+      "relevant": "Relevant",
+      "notRelevant": "Not relevant",
+      "commentPlaceholder": "Add a short comment (optional)",
+      "submit": "Submit",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "submitting": "Submitting…",
+      "submitted": "Thanks for your feedback",
+      "error": "Couldn't save your feedback"
+    },
+    "campaignIdea": {
+      "generate": "Generate campaign idea",
+      "generating": "Drafting an idea\u2026",
+      "regenerate": "Regenerate",
+      "refineInChat": "Refine in chat",
+      "openInDetail": "Open in detail",
+      "errorTitle": "Couldn't draft an idea right now",
+      "errorBody": "The generator didn't respond. Try again in a moment.",
+      "fields": {
+        "hook": "Hook",
+        "audience": "Audience",
+        "channels": "Channels",
+        "successMetric": "Success metric",
+        "angle": "Angle",
+        "cta": "Call to action",
+        "whyNow": "Why now",
+        "rationale": "Rationale",
+        "duration": "Duration",
+        "budget": "Budget"
+      },
+      "budget": {
+        "light": "Light",
+        "standard": "Standard",
+        "premium": "Premium"
+      },
+      "durationDays": "{{count}} days"
     },
     "detail": {
       "description": "Description",
+      "relatedTrends": "Related trends",
+      "relatedTrendsEmpty": "No related trends connected to this one yet.",
       "linkGraph": "Link graph",
       "linkGraphEmpty": "No inferred links yet.",
       "upstream": "Upstream \u2014 trends that feed into this one",
@@ -794,6 +866,13 @@
     }
   },
   "concierge": {
+    "viewContext": {
+      "shoppermindTrendChip": "Trend: {{label}}",
+      "clear": "Clear context"
+    },
+    "greetings": {
+      "shoppermindTrend": "I see you're looking at the *{{label}}* trend ({{state}}). Want me to draft a campaign idea for it? I can also suggest a couple of different angles."
+    },
     "newConversation": "New Conversation",
     "recent": "Recent",
     "loading": "Loading...",

@@ -2,6 +2,7 @@ export interface ParsedPhenomenonNarrative {
   summary: string;
   signalCommentary: string | null;
   retailerImpact: string | null;
+  opportunity: string | null;
 }
 
 const SIGNAL_MARKER = /\n\nSignal in [^:]+:\s*/;
@@ -26,5 +27,5 @@ export function parsePhenomenonDescription(description: string): ParsedPhenomeno
     ? preImpact.slice(0, signalMatch.index ?? preImpact.length).trim()
     : preImpact.trim();
 
-  return { summary, signalCommentary, retailerImpact };
+  return { summary, signalCommentary, retailerImpact, opportunity: null };
 }

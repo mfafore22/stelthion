@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { getIdeaparkUpcomingEvents } from '@/lib/data/ideaparkEvents';
+import { isMallId } from '@/lib/mall/ids';
 
 export async function GET(
   _request: Request,
@@ -13,7 +14,7 @@ export async function GET(
 
   const { mallId } = await params;
 
-  if (mallId.startsWith('ideapark')) {
+  if (isMallId(mallId, 'ideapark-lempaala')) {
     const data = getIdeaparkUpcomingEvents();
     return NextResponse.json(data, {
       headers: { 'Cache-Control': 'public, max-age=3600' },

@@ -6,7 +6,7 @@ export async function GET(req: NextRequest) {
   const guard = await requireAdmin();
   if ('error' in guard) return guard.error;
 
-  const mallId = new URL(req.url).searchParams.get('mallId') ?? 'ideapark';
+  const mallId = new URL(req.url).searchParams.get('mallId') ?? 'ideapark-lempaala';
 
   try {
     // Return individual uploads so each document is visible
@@ -77,7 +77,7 @@ export async function DELETE(req: NextRequest) {
   if ('error' in guard) return guard.error;
 
   const { searchParams } = new URL(req.url);
-  const mallId = searchParams.get('mallId') ?? 'ideapark';
+  const mallId = searchParams.get('mallId') ?? 'ideapark-lempaala';
   const uploadId = searchParams.get('uploadId');
   const week = parseInt(searchParams.get('week') ?? '', 10);
   const year = parseInt(searchParams.get('year') ?? '', 10);

@@ -21,6 +21,7 @@ import {
 import { AgentRole } from '@/lib/gcm-types';
 import { getAgentRouter } from '@/services/concierge/agent-router';
 import { useTranslation } from 'react-i18next';
+import { useViewContext } from '@/lib/shoppermind/view-context';
 
 /**
  * Context value type
@@ -77,6 +78,7 @@ export function ConciergeProvider({
   mallId,
 }: ConciergeProviderProps) {
   const { t, i18n } = useTranslation('mall');
+  const viewContextStore = useViewContext();
   const [state, setState] = useState<ConciergeUIState>({
     panelOpen: false,
     panelMinimized: false,
@@ -255,6 +257,7 @@ export function ConciergeProvider({
             mallId,
             message: content,
             language: i18n.language || preferences.language || 'en',
+            viewContext: viewContextStore.value,
           }),
           signal: controller.signal,
         });
@@ -394,7 +397,7 @@ export function ConciergeProvider({
         abortRef.current = null;
       }
     },
-    [activeConversation, mallId, i18n.language, preferences.language, createConversation]
+    [activeConversation, mallId, i18n.language, preferences.language, createConversation, viewContextStore.value]
   );
 
   const stopStreaming = useCallback(() => {

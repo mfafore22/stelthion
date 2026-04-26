@@ -9,6 +9,7 @@ import React from 'react';
 import { useSession } from '@/contexts/SessionContext';
 import { useParams } from 'next/navigation';
 import { ConciergeProvider, ConciergePanel } from '@/components/concierge';
+import { ViewContextProvider } from '@/lib/shoppermind/view-context';
 
 const CONCIERGE_ENABLED = true;
 
@@ -27,13 +28,15 @@ export function MallConciergeWrapper({ children }: MallConciergeWrapperProps) {
   }
 
   return (
-    <ConciergeProvider
-      tenantId={user?.mallId || 'default'}
-      userId={user?.userId || 'anonymous'}
-      mallId={mallId}
-    >
-      {!loading && user && <ConciergePanel />}
-      {children}
-    </ConciergeProvider>
+    <ViewContextProvider>
+      <ConciergeProvider
+        tenantId={user?.mallId || 'default'}
+        userId={user?.userId || 'anonymous'}
+        mallId={mallId}
+      >
+        {!loading && user && <ConciergePanel />}
+        {children}
+      </ConciergeProvider>
+    </ViewContextProvider>
   );
 }

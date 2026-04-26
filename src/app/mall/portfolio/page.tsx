@@ -9,7 +9,7 @@ import { MallLeftNav } from '@/components/mall/shell/MallLeftNav';
 import { MallKPICard } from '@/components/mall/ui/MallKPICard';
 import { getCurrentFootfall } from '@/lib/data/footfall';
 import { useCounterFootfall } from '@/hooks/mall/useCounterFootfall';
-import { MALLS } from '@/lib/mall/mallDatabase';
+import { getMall } from '@/lib/mall/mallDatabase';
 import { Building2, MapPin, Store, Users, ArrowRight } from 'lucide-react';
 
 export default function PortfolioPage() {
@@ -27,7 +27,7 @@ export default function PortfolioPage() {
 
   const mall = useMemo(() => {
     if (!user?.mallId) return null;
-    return MALLS[user.mallId] ?? null;
+    return getMall(user.mallId) ?? null;
   }, [user?.mallId]);
 
   useEffect(() => {

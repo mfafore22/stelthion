@@ -29,7 +29,7 @@ export default async function AdminLayout({
     redirect('/two-factor');
   }
 
-  const identity = getMallIdentity('ideapark');
+  const identity = getMallIdentity('ideapark-lempaala');
   const textColor = getContrastTextColor(identity.colors.primary);
 
   return (

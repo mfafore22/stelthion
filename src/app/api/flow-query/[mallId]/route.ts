@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { generateFlowQueryResponse } from '@/lib/data/flowQueryDemo';
 import type { FlowDirection } from '@/lib/types/flowQuery';
 import { auth } from '@/auth';
+import { isMallId } from '@/lib/mall/ids';
 
 const VALID_DIRECTIONS: FlowDirection[] = ['outbound', 'inbound', 'between'];
 
@@ -21,9 +22,9 @@ export async function POST(
 
   const { mallId } = await params;
 
-  if (mallId !== 'ideapark') {
+  if (!isMallId(mallId, 'ideapark-lempaala')) {
     return NextResponse.json(
-      { error: 'Flow query is only available for ideapark' },
+      { error: 'Flow query is only available for Ideapark Lempäälä' },
       { status: 404 }
     );
   }

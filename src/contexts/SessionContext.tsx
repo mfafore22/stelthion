@@ -11,6 +11,7 @@ interface MallUser {
   isMultiProperty: boolean;
   properties: string[];
   mallDisplayName?: string;
+  role?: string | null;
 }
 
 interface SessionContextType {
@@ -63,6 +64,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
           isMultiProperty: properties.length > 1,
           properties,
           mallDisplayName: customer.name || session.user.email || '',
+          role: (session.user as { role?: string | null }).role ?? null,
         });
         setLoading(false);
       })

@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
+import { isMallId } from '@/lib/mall/ids';
 
 const IDEAPARK_DATA = {
-  id: 'ideapark',
+  id: 'ideapark-lempaala',
   summary: {
     mall_name: 'Ideapark Lempäälä',
     city: 'Lempäälä',
@@ -65,7 +66,7 @@ export async function GET(
   const { mallId } = await params;
 
   // Try static data first (ideapark)
-  if (mallId === 'ideapark') {
+  if (isMallId(mallId, 'ideapark-lempaala')) {
     const data = {
       ...IDEAPARK_DATA,
       summary: {

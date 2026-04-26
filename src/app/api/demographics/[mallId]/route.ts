@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { ideaparkCatchmentDemographics } from '@/lib/data/ideaparkTransport';
 import { auth } from '@/auth';
+import { isMallId } from '@/lib/mall/ids';
 
 export async function GET(
   _request: Request,
@@ -12,7 +13,7 @@ export async function GET(
 
   const { mallId } = await params;
 
-  if (mallId !== 'ideapark') {
+  if (!isMallId(mallId, 'ideapark-lempaala')) {
     return NextResponse.json({ error: `Demographics not available for mall '${mallId}'` }, { status: 404 });
   }
 
