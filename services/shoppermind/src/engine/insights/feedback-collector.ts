@@ -137,3 +137,90 @@ export async function summariseInteractions(
 
   return { phenomenonId, marketId: marketId ?? null, windowDays, totals };
 }
+
+export interface ListFeedbackFilters {
+  phenomenonId?: string;
+  userId?: string;
+  verdict?: string;
+  marketId?: string;
+  since?: Date;
+  limit: number;
+}
+
+export interface FeedbackListRow {
+  id: string;
+  phenomenonId: string;
+  phenomenonLabel: string;
+  userId: string;
+  marketId: string | null;
+  interactionKind: string;
+  verdict: string;
+  note: string | null;
+  createdAt: string;
+}
+
+export interface FeedbackListAggregate {
+  phenomenonId: string;
+  phenomenonLabel: string;
+  relevant: number;
+  notRelevant: number;
+  commentCount: number;
+}
+
+export interface FeedbackListResult {
+  rows: FeedbackListRow[];
+  aggregates: FeedbackListAggregate[];
+}
+
+/**
+ * List feedback rows for the admin review surface plus per-phenomenon
+ * aggregates over the same filtered set. Joins each row with the
+ * phenomenon so the admin can read trend labels without a second query.
+ */
+export async function listFeedback(filters: ListFeedbackFilters): Promise<FeedbackListResult> {
+  const where: Record<string, unknown> = {};
+  if (filters.phenomenonId) where.phenomenonId = filters.phenomenonId;
+  if (filters.userId) where.userId = filters.userId;
+  if (filters.verdict) where.verdict = filters.verdict;
+  if (filters.marketId) where.marketId = filters.marketId;
+  if (filters.since) where.createdAt = { gte: filters.since };
+
+  const rawRows = await prisma().phenomenonFeedback.findMany({
+    where,
+    orderBy: { createdAt: 'desc' },
+    take: filters.limit,
+    include: { phenomenon: { select: { label: true } } },
+  });
+
+  const rows: FeedbackListRow[] = rawRows.map((r) => ({
+    id: r.id,
+    phenomenonId: r.phenomenonId,
+    phenomenonLabel: r.phenomenon?.label ?? r.phenomenonId,
+    userId: r.userId,
+    marketId: r.marketId ?? null,
+    interactionKind: r.interactionKind,
+    verdict: r.verdict,
+    note: r.note ?? null,
+    createdAt: r.createdAt.toISOString(),
+  }));
+
+  const aggMap = new Map<string, FeedbackListAggregate>();
+  for (const r of rows) {
+    let agg = aggMap.get(r.phenomenonId);
+    if (!agg) {
+      agg = {
+        phenomenonId: r.phenomenonId,
+        phenomenonLabel: r.phenomenonLabel,
+        relevant: 0,
+        notRelevant: 0,
+        commentCount: 0,
+      };
+      aggMap.set(r.phenomenonId, agg);
+    }
+    if (POSITIVE.has(r.verdict)) agg.relevant++;
+    else if (NEGATIVE.has(r.verdict)) agg.notRelevant++;
+    if (r.note && r.note.trim().length > 0) agg.commentCount++;
+  }
+
+  return { rows, aggregates: [...aggMap.values()] };
+}

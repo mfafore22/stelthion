@@ -26,7 +26,7 @@ function pastDate(daysAgo: number) {
 }
 
 export async function seedAnalysis(prisma: PrismaClient) {
-  const MALL_ID = 'ideapark'
+  const MALL_ID = 'ideapark-lempaala'
 
   // Check if already seeded
   const existing = await prisma.analysisJob.findMany({

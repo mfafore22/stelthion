@@ -2,7 +2,12 @@ import type { FastifyPluginAsync } from 'fastify';
 import { z } from 'zod';
 import { prisma } from '../../../db/prisma.js';
 import {
+  generateCampaignIdea,
+  type CampaignIdeaInput,
+} from '../../../engine/campaign-ideas.js';
+import {
   INTERACTION_KINDS,
+  listFeedback,
   recordInteraction,
   summariseInteractions,
 } from '../../../engine/insights/feedback-collector.js';
@@ -323,6 +328,32 @@ export const phenomenaRoutes: FastifyPluginAsync = async (app) => {
     },
   );
 
+  const FeedbackListQuery = z.object({
+    phenomenonId: z.string().min(1).optional(),
+    userId: z.string().min(1).optional(),
+    verdict: z.string().min(1).optional(),
+    marketId: z.string().min(1).optional(),
+    since: z.string().datetime().optional(),
+    limit: z.coerce.number().int().min(1).max(500).default(100),
+  });
+
+  app.get('/v1/feedback', { preHandler: requireAnyBearer() }, async (req, reply) => {
+    const parsed = FeedbackListQuery.safeParse(req.query);
+    if (!parsed.success) {
+      reply.code(400).send({ error: 'invalid_query', details: parsed.error.flatten() });
+      return;
+    }
+    const since = parsed.data.since ? new Date(parsed.data.since) : undefined;
+    return listFeedback({
+      phenomenonId: parsed.data.phenomenonId,
+      userId: parsed.data.userId,
+      verdict: parsed.data.verdict,
+      marketId: parsed.data.marketId,
+      since,
+      limit: parsed.data.limit,
+    });
+  });
+
   app.get(
     '/v1/phenomena/:id/predicted-events',
     { preHandler: requireAnyBearer() },
@@ -343,4 +374,107 @@ export const phenomenaRoutes: FastifyPluginAsync = async (app) => {
       return { prediction, reason: prediction ? null : 'insufficient_basis' };
     },
   );
+
+  const CampaignIdeaBody = z.object({
+    marketId: z.string().min(1),
+    language: z.enum(['fi', 'en', 'sv']).default('en'),
+    angle: z.string().min(1).max(280).optional(),
+    audience: z.string().min(1).max(280).optional(),
+    budget: z.enum(['light', 'standard', 'premium']).default('standard'),
+    durationDays: z.coerce.number().int().min(3).max(60).optional(),
+  });
+
+  app.post<{ Params: { id: string } }>(
+    '/v1/phenomena/:id/campaign-idea',
+    { preHandler: requireAnyBearer() },
+    async (req, reply) => {
+      const parsed = CampaignIdeaBody.safeParse(req.body ?? {});
+      if (!parsed.success) {
+        reply.code(400).send({ error: 'invalid_body', details: parsed.error.flatten() });
+        return;
+      }
+      const { id } = req.params;
+      const { marketId, language, angle, audience, budget, durationDays } = parsed.data;
+
+      const [phenomenon, market, latestScore] = await Promise.all([
+        prisma().phenomenon.findUnique({ where: { id } }),
+        prisma().market.findUnique({ where: { id: marketId } }),
+        prisma().phenomenonScore.findFirst({
+          where: { phenomenonId: id, marketId },
+          orderBy: [{ date: 'desc' }],
+        }),
+      ]);
+      if (!phenomenon) {
+        reply.code(404).send({ error: 'phenomenon_not_found' });
+        return;
+      }
+      if (!market) {
+        reply.code(404).send({ error: 'market_not_found' });
+        return;
+      }
+
+      const localized = pickLocalized(phenomenon.i18n, language);
+      const label = localized?.label?.trim() || phenomenon.label;
+      const summary =
+        localized?.summary?.trim() ||
+        pickLocalized(phenomenon.i18n, 'en')?.summary?.trim() ||
+        phenomenon.description;
+      const retailerImpact =
+        localized?.retailerImpact?.trim() ||
+        pickLocalized(phenomenon.i18n, 'en')?.retailerImpact?.trim() ||
+        null;
+      const opportunity =
+        localized?.opportunity?.trim() ||
+        pickLocalized(phenomenon.i18n, 'en')?.opportunity?.trim() ||
+        null;
+
+      const input: CampaignIdeaInput = {
+        phenomenonId: phenomenon.id,
+        label,
+        state: phenomenon.state,
+        phenomenonType: phenomenon.phenomenonType,
+        primaryCountry: phenomenon.primaryCountry,
+        culturalScope: phenomenon.culturalScope,
+        culturalLocality: phenomenon.culturalLocality,
+        footTrafficScope: phenomenon.footTrafficScope,
+        footTrafficLocality: phenomenon.footTrafficLocality,
+        categories: phenomenon.categories ?? [],
+        keywords: phenomenon.keywords ?? [],
+        compositeScore: latestScore?.compositeScore ?? 0,
+        velocity: latestScore?.velocity ?? 0,
+        summary,
+        retailerImpact,
+        opportunity,
+        marketDisplay: market.displayName,
+        industryFocus: market.industryFocus,
+      };
+
+      const idea = await generateCampaignIdea(input, {
+        language,
+        angle,
+        audience,
+        budget,
+        durationDays,
+      });
+      return { idea };
+    },
+  );
 };
+
+interface LocalizedBlock {
+  label?: string;
+  summary?: string;
+  stateCommentary?: string;
+  retailerImpact?: string;
+  opportunity?: string;
+  description?: string;
+}
+
+function pickLocalized(i18n: unknown, lang: string): LocalizedBlock | null {
+  if (!i18n || typeof i18n !== 'object') return null;
+  const map = i18n as Record<string, unknown>;
+  const head = (lang.split('-')[0] ?? 'en').toLowerCase();
+  const direct = map[head];
+  if (direct && typeof direct === 'object') return direct as LocalizedBlock;
+  return null;
+}

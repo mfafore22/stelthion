@@ -49,14 +49,14 @@ async function main() {
 
   // Upsert mall
   await prisma.mall.upsert({
-    where: { mallId: 'ideapark' },
+    where: { mallId: 'ideapark-lempaala' },
     update: {
       name: 'Ideapark Lempäälä',
       city: 'Lempäälä',
       totalShops: 163,
     },
     create: {
-      mallId: 'ideapark',
+      mallId: 'ideapark-lempaala',
       name: 'Ideapark Lempäälä',
       city: 'Lempäälä',
       totalShops: 163,
@@ -66,11 +66,11 @@ async function main() {
   })
 
   // Upsert stats
-  const existingStats = await prisma.mallStats.findFirst({ where: { mallId: 'ideapark' } })
+  const existingStats = await prisma.mallStats.findFirst({ where: { mallId: 'ideapark-lempaala' } })
   if (!existingStats) {
     await prisma.mallStats.create({
       data: {
-        mallId: 'ideapark',
+        mallId: 'ideapark-lempaala',
         currentVisitors: 3900,
         annualVisitors: 5000000,
         annualSales: 180000000,
@@ -81,11 +81,11 @@ async function main() {
   }
 
   // Upsert branding
-  const existingBranding = await prisma.mallBranding.findFirst({ where: { mallId: 'ideapark' } })
+  const existingBranding = await prisma.mallBranding.findFirst({ where: { mallId: 'ideapark-lempaala' } })
   if (!existingBranding) {
     await prisma.mallBranding.create({
       data: {
-        mallId: 'ideapark',
+        mallId: 'ideapark-lempaala',
         primaryColor: '#328d2e',
         secondaryColor: '#7cb928',
         accentColor: '#214990',
@@ -97,15 +97,15 @@ async function main() {
 
   // Upsert categories
   const categories = [
-    { mallId: 'ideapark', name: 'Fashion', shopCount: 50, percentage: 21.5 },
-    { mallId: 'ideapark', name: 'Food & Beverage', shopCount: 22, percentage: 13.5 },
-    { mallId: 'ideapark', name: 'Auto', shopCount: 12, percentage: 7.4 },
-    { mallId: 'ideapark', name: 'Sports', shopCount: 26, percentage: 16.0 },
-    { mallId: 'ideapark', name: 'Home & Living', shopCount: 23, percentage: 14.1 },
-    { mallId: 'ideapark', name: 'Services', shopCount: 34, percentage: 20.9 },
-    { mallId: 'ideapark', name: 'Beauty & Health', shopCount: 17, percentage: 10.4 },
-    { mallId: 'ideapark', name: 'Children', shopCount: 17, percentage: 10.4 },
-    { mallId: 'ideapark', name: 'Daily Goods & Tech', shopCount: 9, percentage: 5.5 },
+    { mallId: 'ideapark-lempaala', name: 'Fashion', shopCount: 50, percentage: 21.5 },
+    { mallId: 'ideapark-lempaala', name: 'Food & Beverage', shopCount: 22, percentage: 13.5 },
+    { mallId: 'ideapark-lempaala', name: 'Auto', shopCount: 12, percentage: 7.4 },
+    { mallId: 'ideapark-lempaala', name: 'Sports', shopCount: 26, percentage: 16.0 },
+    { mallId: 'ideapark-lempaala', name: 'Home & Living', shopCount: 23, percentage: 14.1 },
+    { mallId: 'ideapark-lempaala', name: 'Services', shopCount: 34, percentage: 20.9 },
+    { mallId: 'ideapark-lempaala', name: 'Beauty & Health', shopCount: 17, percentage: 10.4 },
+    { mallId: 'ideapark-lempaala', name: 'Children', shopCount: 17, percentage: 10.4 },
+    { mallId: 'ideapark-lempaala', name: 'Daily Goods & Tech', shopCount: 9, percentage: 5.5 },
   ]
 
   for (const cat of categories) {

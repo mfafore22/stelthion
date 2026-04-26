@@ -18,6 +18,25 @@ export type LinkType =
   | 'PRECEDES'
   | 'CONTRADICTS';
 
+export type SourceType =
+  | 'RSS'
+  | 'GOOGLE_TRENDS'
+  | 'REDDIT'
+  | 'X'
+  | 'TIKTOK'
+  | 'TRADE_PUB'
+  | 'STATFIN'
+  | 'FRED';
+
+export type SourceAuthority = 'authoritative' | 'opinion';
+
+export interface ContributingSource {
+  type: SourceType;
+  authority: SourceAuthority;
+  signalCount: number;
+  lastSignalAt: string;
+}
+
 export interface MarketSummary {
   id: string;
   country: string;
@@ -44,6 +63,7 @@ export interface PhenomenonLocalizedContent {
   summary?: string;
   stateCommentary?: string;
   retailerImpact?: string;
+  opportunity?: string;
   description?: string;
 }
 
@@ -70,6 +90,7 @@ export interface PhenomenonSummary {
   recentScores?: PhenomenonScoreRow[];
   latestVelocity?: number;
   i18n?: PhenomenonI18n | null;
+  contributingSources?: ContributingSource[];
 }
 
 export interface PhenomenaListResponse {
@@ -129,6 +150,7 @@ export interface PhenomenonDetail {
   linksFrom: PhenomenonLinkRow[];
   linksTo: PhenomenonLinkRow[];
   i18n?: PhenomenonI18n | null;
+  contributingSources?: ContributingSource[];
 }
 
 export interface PhenomenonLinksResponse {
@@ -136,8 +158,22 @@ export interface PhenomenonLinksResponse {
   linksTo: PhenomenonLinkRow[];
 }
 
+export interface SignalOfTheDayCityBlock {
+  city: string;
+  body: string;
+}
+
+export interface SignalOfTheDaySections {
+  headline?: string;
+  keyFindings?: string[];
+  byCity?: SignalOfTheDayCityBlock[];
+  alsoVisible?: string[];
+  watching?: string[];
+}
+
 export interface SignalOfTheDayLocalizedContent {
   narrative?: string;
+  sections?: SignalOfTheDaySections;
 }
 
 export type SignalOfTheDayI18n = {
@@ -153,6 +189,7 @@ export interface SignalOfTheDay {
   narrative: string;
   publishedAt: string;
   i18n?: SignalOfTheDayI18n | null;
+  contributingSources?: ContributingSource[];
 }
 
 export interface SignalOfTheDayResponse {
@@ -337,6 +374,40 @@ export interface InteractionSummary {
   };
 }
 
+export interface FeedbackRow {
+  id: string;
+  phenomenonId: string;
+  phenomenonLabel: string;
+  userId: string;
+  marketId: string | null;
+  interactionKind: string;
+  verdict: string;
+  note: string | null;
+  createdAt: string;
+}
+
+export interface FeedbackAggregate {
+  phenomenonId: string;
+  phenomenonLabel: string;
+  relevant: number;
+  notRelevant: number;
+  commentCount: number;
+}
+
+export interface FeedbackListResponse {
+  rows: FeedbackRow[];
+  aggregates: FeedbackAggregate[];
+}
+
+export interface FeedbackListQuery {
+  phenomenonId?: string;
+  userId?: string;
+  verdict?: string;
+  marketId?: string;
+  since?: string;
+  limit?: number;
+}
+
 export interface PredictedEvent {
   trendId: string;
   trendLabel: string;
@@ -352,6 +423,36 @@ export interface PredictedEvent {
 export interface PredictedEventResponse {
   prediction: PredictedEvent | null;
   reason: 'not_a_trend' | 'insufficient_basis' | null;
+}
+
+export type CampaignIdeaBudget = 'light' | 'standard' | 'premium';
+export type CampaignIdeaLanguage = 'fi' | 'en' | 'sv';
+
+export interface CampaignIdeaRequest {
+  language?: CampaignIdeaLanguage;
+  angle?: string;
+  audience?: string;
+  budget?: CampaignIdeaBudget;
+  durationDays?: number;
+}
+
+export interface CampaignIdea {
+  phenomenonId: string;
+  language: CampaignIdeaLanguage;
+  angle: string;
+  audience: string;
+  channels: string[];
+  hook: string;
+  cta: string;
+  successMetric: string;
+  whyNow: string;
+  budgetTier: CampaignIdeaBudget;
+  durationDays: number;
+  rationale: string;
+}
+
+export interface CampaignIdeaResponse {
+  idea: CampaignIdea;
 }
 
 export interface InsightsChatRequest {

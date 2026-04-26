@@ -1,7 +1,11 @@
 import type {
+  CampaignIdeaRequest,
+  CampaignIdeaResponse,
   CronRunRequest,
   CronRunResponse,
   FeedbackCreate,
+  FeedbackListQuery,
+  FeedbackListResponse,
   HealthResponse,
   InsightsChatRequest,
   InsightsChatResponse,
@@ -178,6 +182,19 @@ export class ShopperMindClient {
     );
   }
 
+  listFeedback(query: FeedbackListQuery = {}): Promise<FeedbackListResponse> {
+    return request<FeedbackListResponse>(this.opts, 'GET', 'v1/feedback', {
+      query: {
+        phenomenonId: query.phenomenonId,
+        userId: query.userId,
+        verdict: query.verdict,
+        marketId: query.marketId,
+        since: query.since,
+        limit: query.limit,
+      },
+    });
+  }
+
   getPredictedEvents(phenomenonId: string): Promise<PredictedEventResponse> {
     return request<PredictedEventResponse>(
       this.opts,
@@ -195,6 +212,18 @@ export class ShopperMindClient {
       'GET',
       `v1/phenomena/${encodeURIComponent(phenomenonId)}/interactions`,
       { query: { marketId: args.marketId, windowDays: args.windowDays } },
+    );
+  }
+
+  generateCampaignIdea(
+    phenomenonId: string,
+    body: CampaignIdeaRequest & { marketId: string },
+  ): Promise<CampaignIdeaResponse> {
+    return request<CampaignIdeaResponse>(
+      this.opts,
+      'POST',
+      `v1/phenomena/${encodeURIComponent(phenomenonId)}/campaign-idea`,
+      { body },
     );
   }
 }
