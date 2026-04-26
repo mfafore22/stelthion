@@ -477,7 +477,8 @@
       "country": "Country",
       "state": "State",
       "compositeScore": "Composite",
-      "divergentCallout": "Notable contrast: this trend plays out differently across markets."
+      "divergentCallout": "Notable contrast: this trend plays out differently across markets.",
+      "empty": "Cross-market readings are still being gathered for this trend."
     },
     "evidence": {
       "title": "Evidence",
@@ -487,7 +488,8 @@
       "strongSources": "Strong sources",
       "corroboratedIn": "Markets corroborating",
       "whyConfident": "Why we're confident",
-      "whyCautious": "Why we're cautious"
+      "whyCautious": "Why we're cautious",
+      "empty": "Evidence is still being corroborated across sources."
     },
     "lifecycle": {
       "label": "Lifecycle",

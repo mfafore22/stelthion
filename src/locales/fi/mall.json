@@ -477,7 +477,8 @@
       "country": "Maa",
       "state": "Tila",
       "compositeScore": "Kokonaispisteet",
-      "divergentCallout": "Huomattava ero: trendi etenee eri tahtiin eri markkinoilla."
+      "divergentCallout": "Huomattava ero: trendi etenee eri tahtiin eri markkinoilla.",
+      "empty": "Markkinakohtaisia tietoja ker\u00e4t\u00e4\u00e4n yh\u00e4."
     },
     "evidence": {
       "title": "N\u00e4yt\u00f6t",
@@ -487,7 +488,8 @@
       "strongSources": "Vahvoja l\u00e4hteit\u00e4",
       "corroboratedIn": "Vahvistavat markkinat",
       "whyConfident": "Miksi luotamme t\u00e4h\u00e4n",
-      "whyCautious": "Miksi olemme varovaisia"
+      "whyCautious": "Miksi olemme varovaisia",
+      "empty": "N\u00e4ytt\u00f6\u00e4 vahvistetaan viel\u00e4 eri l\u00e4hteist\u00e4."
     },
     "lifecycle": {
       "label": "El\u00e4m\u00e4nkaari",

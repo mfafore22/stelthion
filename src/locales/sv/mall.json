@@ -486,7 +486,8 @@
       "country": "Land",
       "state": "Status",
       "compositeScore": "Po\u00e4ng",
-      "divergentCallout": "Markant skillnad: trenden utvecklas olika p\u00e5 olika marknader."
+      "divergentCallout": "Markant skillnad: trenden utvecklas olika p\u00e5 olika marknader.",
+      "empty": "Marknadsdata samlas fortfarande in."
     },
     "evidence": {
       "title": "Belysning",
@@ -496,7 +497,8 @@
       "strongSources": "Starka k\u00e4llor",
       "corroboratedIn": "Marknader som bekr\u00e4ftar",
       "whyConfident": "Varf\u00f6r vi \u00e4r s\u00e4kra",
-      "whyCautious": "Varf\u00f6r vi \u00e4r f\u00f6rsiktiga"
+      "whyCautious": "Varf\u00f6r vi \u00e4r f\u00f6rsiktiga",
+      "empty": "Bel\u00e4ggen bekr\u00e4ftas fortfarande."
     },
     "lifecycle": {
       "label": "Livscykel",

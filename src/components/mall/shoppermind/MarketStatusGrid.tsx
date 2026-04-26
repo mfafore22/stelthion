@@ -42,7 +42,13 @@ export function MarketStatusGrid({ phenomenonId }: { phenomenonId: string }) {
       </SectionCard>
     );
   }
-  if (!data?.configured || !data.rows.length) return null;
+  if (!data?.configured || !data.rows.length) {
+    return (
+      <SectionCard icon={Globe} title={t('shoppermind.markets.gridTitle')} accent="accent">
+        <div className="text-xs text-bo-neutral-500">{t('shoppermind.markets.empty')}</div>
+      </SectionCard>
+    );
+  }
 
   return (
     <SectionCard icon={Globe} title={t('shoppermind.markets.gridTitle')} accent="accent">

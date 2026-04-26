@@ -35,7 +35,13 @@ export function EvidencePanel({ phenomenonId }: { phenomenonId: string }) {
       </SectionCard>
     );
   }
-  if (!data?.configured || !data.evidence) return null;
+  if (!data?.configured || !data.evidence) {
+    return (
+      <SectionCard icon={ShieldCheck} title={t('shoppermind.evidence.title')} accent="accent">
+        <div className="text-xs text-bo-neutral-500">{t('shoppermind.evidence.empty')}</div>
+      </SectionCard>
+    );
+  }
   const ev = data.evidence;
   const confidencePct = Math.round(ev.confidence * 100);
 
