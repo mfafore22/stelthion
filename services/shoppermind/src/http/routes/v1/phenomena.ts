@@ -5,12 +5,16 @@ import {
   generateCampaignIdea,
   type CampaignIdeaInput,
 } from '../../../engine/campaign-ideas.js';
+import { computeConfidence } from '../../../engine/insights/confidence.js';
+import { detectDivergence } from '../../../engine/insights/divergence.js';
 import {
   INTERACTION_KINDS,
   listFeedback,
   recordInteraction,
   summariseInteractions,
 } from '../../../engine/insights/feedback-collector.js';
+import { classifyMarketState } from '../../../engine/insights/per-market-state.js';
+import { countStrongSources } from '../../../engine/insights/source-strength.js';
 import { predictForTrend } from '../../../engine/predictive/event-predictor.js';
 import { requireAnyBearer, requireBearer } from '../../auth/bearer.js';
 
@@ -210,6 +214,139 @@ export const phenomenaRoutes: FastifyPluginAsync = async (app) => {
         }
       }
       return { linksFrom: from, linksTo: to };
+    },
+  );
+
+  // Per-market status grid (B6). One row per Market that has a recent
+  // PhenomenonScore for this phenomenon. State is derived from the most
+  // recent row's velocity/acceleration so the grid lights up immediately
+  // for bootstrap data (which writes one score per market). The verdict
+  // also flags divergence so the UI can render a "Notable contrast"
+  // callout when the phenomenon plays out differently across markets.
+  app.get<{ Params: { id: string } }>(
+    '/v1/phenomena/:id/markets',
+    { preHandler: requireAnyBearer() },
+    async (req, reply) => {
+      const phenomenonId = req.params.id;
+      const phenomenon = await prisma().phenomenon.findUnique({
+        where: { id: phenomenonId },
+        select: { id: true },
+      });
+      if (!phenomenon) {
+        reply.code(404).send({ error: 'phenomenon_not_found' });
+        return;
+      }
+      const scores = await prisma().phenomenonScore.findMany({
+        where: { phenomenonId },
+        orderBy: [{ marketId: 'asc' }, { date: 'desc' }],
+      });
+      const latestByMarket = new Map<string, (typeof scores)[number]>();
+      for (const row of scores) {
+        if (!latestByMarket.has(row.marketId)) latestByMarket.set(row.marketId, row);
+      }
+      const marketIds = Array.from(latestByMarket.keys());
+      const markets = marketIds.length
+        ? await prisma().market.findMany({
+            where: { id: { in: marketIds } },
+            select: { id: true, displayName: true, country: true },
+          })
+        : [];
+      const marketById = new Map(markets.map((m) => [m.id, m]));
+      const rows = Array.from(latestByMarket.values())
+        .filter((s) => marketById.has(s.marketId))
+        .map((s) => {
+          const m = marketById.get(s.marketId)!;
+          return {
+            marketId: s.marketId,
+            marketLabel: m.displayName,
+            country: m.country,
+            state: classifyMarketState({
+              volume: s.volume,
+              velocity: s.velocity,
+              acceleration: s.acceleration,
+            }),
+            compositeScore: s.compositeScore,
+            velocity: s.velocity,
+            lastSignalAt: s.date,
+          };
+        });
+      const verdict = detectDivergence(rows.map((r) => ({ marketId: r.marketId, state: r.state })));
+      return { rows, divergence: verdict };
+    },
+  );
+
+  // Evidence panel (B9). Returns the corroborating sources and a
+  // confidence breakdown so the customer-facing detail page can show
+  // "why we're confident" without re-deriving anything client-side.
+  app.get<{ Params: { id: string } }>(
+    '/v1/phenomena/:id/evidence',
+    { preHandler: requireAnyBearer() },
+    async (req, reply) => {
+      const phenomenonId = req.params.id;
+      const phenomenon = await prisma().phenomenon.findUnique({
+        where: { id: phenomenonId },
+        select: { id: true, lastSignalAt: true },
+      });
+      if (!phenomenon) {
+        reply.code(404).send({ error: 'phenomenon_not_found' });
+        return;
+      }
+      const strength = await countStrongSources(phenomenonId);
+      const signals = await prisma().rawSignal.findMany({
+        where: { phenomenonId },
+        orderBy: { publishedAt: 'desc' },
+        take: 25,
+        include: { source: { select: { name: true, weight: true, type: true } } },
+      });
+      const sourceMap = new Map<
+        string,
+        { sourceId: string; name: string; weight: number; type: string; lastSignalAt: Date; url: string | null }
+      >();
+      for (const sig of signals) {
+        if (!sig.source) continue;
+        if (sourceMap.has(sig.sourceId)) continue;
+        sourceMap.set(sig.sourceId, {
+          sourceId: sig.sourceId,
+          name: sig.source.name,
+          weight: sig.source.weight,
+          type: sig.source.type as string,
+          lastSignalAt: sig.publishedAt,
+          url: sig.url ?? null,
+        });
+      }
+      const sources = Array.from(sourceMap.values()).sort((a, b) => b.weight - a.weight);
+
+      const marketScores = await prisma().phenomenonScore.findMany({
+        where: { phenomenonId },
+        orderBy: [{ marketId: 'asc' }, { date: 'desc' }],
+      });
+      const latestByMarket = new Map<string, (typeof marketScores)[number]>();
+      for (const row of marketScores) {
+        if (!latestByMarket.has(row.marketId)) latestByMarket.set(row.marketId, row);
+      }
+      const linkBoost = Math.max(
+        0,
+        ...Array.from(latestByMarket.values()).map((s) => s.linkBoost ?? 0),
+      );
+      const crossMarketCount = Array.from(latestByMarket.values()).filter(
+        (s) => s.compositeScore >= 0.5,
+      ).length;
+
+      const breakdown = computeConfidence({
+        strongSourceCount: strength.strongSourceCount,
+        crossMarketCount,
+        lastSignalAt: phenomenon.lastSignalAt ?? null,
+        linkBoost,
+      });
+
+      return {
+        confidence: breakdown.confidence,
+        components: breakdown.components,
+        strongSourceCount: strength.strongSourceCount,
+        totalSourceCount: strength.totalSourceCount,
+        crossMarketCount,
+        sources,
+      };
     },
   );
 

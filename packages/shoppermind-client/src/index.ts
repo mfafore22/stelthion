@@ -18,9 +18,11 @@ import type {
   MarketListResponse,
   PhenomenaListResponse,
   PhenomenonDetail,
+  PhenomenonEvidenceResponse,
   PhenomenonLinkCreate,
   PhenomenonLinkRow,
   PhenomenonLinksResponse,
+  PhenomenonMarketsResponse,
   PhenomenonStateValue,
   PredictedEventResponse,
   ResonanceResponse,
@@ -86,6 +88,22 @@ export class ShopperMindClient {
       this.opts,
       'GET',
       `v1/phenomena/${encodeURIComponent(id)}/links`,
+    );
+  }
+
+  getPhenomenonMarkets(id: string): Promise<PhenomenonMarketsResponse> {
+    return request<PhenomenonMarketsResponse>(
+      this.opts,
+      'GET',
+      `v1/phenomena/${encodeURIComponent(id)}/markets`,
+    );
+  }
+
+  getPhenomenonEvidence(id: string): Promise<PhenomenonEvidenceResponse> {
+    return request<PhenomenonEvidenceResponse>(
+      this.opts,
+      'GET',
+      `v1/phenomena/${encodeURIComponent(id)}/evidence`,
     );
   }
 

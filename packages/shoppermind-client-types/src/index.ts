@@ -408,6 +408,53 @@ export interface FeedbackListQuery {
   limit?: number;
 }
 
+export interface MarketStatusRow {
+  marketId: string;
+  marketLabel: string;
+  country: string;
+  state: PhenomenonStateValue;
+  compositeScore: number;
+  velocity: number;
+  lastSignalAt: string;
+}
+
+export interface MarketDivergenceVerdict {
+  divergent: boolean;
+  distinctStates: PhenomenonStateValue[];
+  contrasts: Array<{ accelerating: string[]; fading: string[] }>;
+}
+
+export interface PhenomenonMarketsResponse {
+  rows: MarketStatusRow[];
+  divergence: MarketDivergenceVerdict;
+}
+
+export interface EvidenceSourceRow {
+  sourceId: string;
+  name: string;
+  weight: number;
+  type: string;
+  lastSignalAt: string;
+  url: string | null;
+}
+
+export interface ConfidenceComponents {
+  strongSources: number;
+  cadenceStability: number;
+  crossMarket: number;
+  recency: number;
+  linkBoost: number;
+}
+
+export interface PhenomenonEvidenceResponse {
+  confidence: number;
+  components: ConfidenceComponents;
+  strongSourceCount: number;
+  totalSourceCount: number;
+  crossMarketCount: number;
+  sources: EvidenceSourceRow[];
+}
+
 export interface PredictedEvent {
   trendId: string;
   trendLabel: string;
