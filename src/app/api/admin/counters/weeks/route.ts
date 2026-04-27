@@ -1,12 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
-import { requireAdmin } from '@/lib/admin-auth';
+import { getActiveCustomer, requireMallAccess } from '@/lib/admin-customer';
 
 export async function GET(req: NextRequest) {
-  const guard = await requireAdmin();
-  if ('error' in guard) return guard.error;
+  let mallId = new URL(req.url).searchParams.get('mallId');
+  if (!mallId) {
+    const active = await getActiveCustomer();
+    if (!active) {
+      return NextResponse.json({ error: 'No active customer' }, { status: 409 });
+    }
+    const firstMall = await prisma.mall.findFirst({
+      where: { customerId: active.id },
+      orderBy: { name: 'asc' },
+      select: { mallId: true },
+    });
+    if (!firstMall) {
+      return NextResponse.json({ error: 'No mall for customer' }, { status: 404 });
+    }
+    mallId = firstMall.mallId;
+  }
 
-  const mallId = new URL(req.url).searchParams.get('mallId') ?? 'ideapark-lempaala';
+  const guard = await requireMallAccess(mallId);
+  if ('error' in guard) return guard.error;
 
   try {
     // Return individual uploads so each document is visible
@@ -73,11 +88,14 @@ export async function GET(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const guard = await requireAdmin();
+  const { searchParams } = new URL(req.url);
+  const mallId = searchParams.get('mallId');
+  if (!mallId) {
+    return NextResponse.json({ error: 'mallId is required' }, { status: 400 });
+  }
+  const guard = await requireMallAccess(mallId);
   if ('error' in guard) return guard.error;
 
-  const { searchParams } = new URL(req.url);
-  const mallId = searchParams.get('mallId') ?? 'ideapark-lempaala';
   const uploadId = searchParams.get('uploadId');
   const week = parseInt(searchParams.get('week') ?? '', 10);
   const year = parseInt(searchParams.get('year') ?? '', 10);

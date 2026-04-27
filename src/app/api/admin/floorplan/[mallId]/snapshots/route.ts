@@ -1,18 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
-import { auth } from '@/auth';
+import { requireMallAccess } from '@/lib/admin-customer';
 import { createFloorplanSnapshot } from '@/lib/services/floorplanBackup';
 
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ mallId: string }> },
 ) {
-  const session = await auth();
-  if (!session?.user || session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
   const { mallId } = await params;
+  const guard = await requireMallAccess(mallId);
+  if ('error' in guard) return guard.error;
   const floor = new URL(req.url).searchParams.get('floor') ?? 'ground';
 
   const snapshots = await prisma.floorplanSnapshot.findMany({
@@ -66,12 +63,9 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ mallId: string }> },
 ) {
-  const session = await auth();
-  if (!session?.user || session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
   const { mallId } = await params;
+  const guard = await requireMallAccess(mallId);
+  if ('error' in guard) return guard.error;
   const { snapshotId } = await req.json();
 
   const snapshot = await prisma.floorplanSnapshot.findUnique({
