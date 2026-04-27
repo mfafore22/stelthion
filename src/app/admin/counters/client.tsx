@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import '@/lib/i18n';
 import { Upload, Download, FileSpreadsheet, AlertTriangle, Check, Trash2 } from 'lucide-react';
+import { useAdminMall } from '@/lib/hooks/useAdminMall';
 
 interface UploadEntry {
   id: string | null;
@@ -39,7 +40,8 @@ export function CounterDataClient() {
   const [deleting, setDeleting] = useState<string | null>(null);
   const [deleteInProgress, setDeleteInProgress] = useState(false);
 
-  const mallId = 'ideapark-lempaala';
+  const { activeMallId } = useAdminMall();
+  const mallId = activeMallId;
 
   const fetchEntries = useCallback(async () => {
     try {
