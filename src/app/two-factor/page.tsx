@@ -69,7 +69,7 @@ export default function TwoFactorPage() {
           window.location.replace('/dashboard')
         }
       } else {
-        window.location.replace('/admin/dashboard')
+        window.location.replace('/admin')
       }
     } catch {
       setError('Something went wrong')

@@ -10,7 +10,7 @@ export function AdminCustomerSwitcher({ customerName }: { customerName: string }
       <Tooltip>
         <TooltipTrigger asChild>
           <Link
-            href="/admin/select-customer"
+            href="/select-customer"
             className="w-14 h-14 rounded-xl flex items-center justify-center text-bo-neutral-600 hover:bg-bo-neutral-100 hover:text-bo-neutral-950 transition-colors"
             aria-label="Switch customer"
           >

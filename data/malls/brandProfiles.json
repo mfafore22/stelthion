@@ -22,19 +22,19 @@
     }
   },
   "fallback": {
-    "name": "Ideapark Lempäälä",
-    "logo": "/ideapark-logo.png",
+    "name": "Stelthion",
+    "logo": "",
     "colors": {
-      "primary": "#328d2e",
-      "secondary": "#7cb928",
-      "accent": "#214990",
+      "primary": "#1f2937",
+      "secondary": "#374151",
+      "accent": "#6b7280",
       "warning": "#f7966b",
       "error": "#f04e54",
-      "background": "#F8F6F3"
+      "background": "#F4F4F5"
     },
     "gradient": {
-      "from": "#264d21",
-      "to": "#1a3a15"
+      "from": "#1f2937",
+      "to": "#111827"
     },
     "typography": {
       "fontFamily": "Inter, sans-serif",
