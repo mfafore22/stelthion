@@ -19,22 +19,22 @@ const LANGUAGE = 'fi';
 
 const SOURCES = [
   {
-    name: 'Yle Uutiset — pääuutiset',
+    name: 'Yle Uutiset: pääuutiset',
     url: 'https://feeds.yle.fi/uutiset/v1/majorHeadlines/YLE_UUTISET.rss',
     weight: 1.0,
   },
   {
-    name: 'Yle Uutiset — kaikki',
+    name: 'Yle Uutiset: kaikki',
     url: 'https://yle.fi/uutiset/rss/uutiset.rss',
     weight: 0.8,
   },
   {
-    name: 'Helsingin Sanomat — tuoreimmat',
+    name: 'Helsingin Sanomat: tuoreimmat',
     url: 'https://www.hs.fi/rss/tuoreimmat.xml',
     weight: 1.0,
   },
   {
-    name: 'Ilta-Sanomat — tuoreimmat',
+    name: 'Ilta-Sanomat: tuoreimmat',
     url: 'https://www.is.fi/rss/tuoreimmat.xml',
     weight: 0.7,
   },

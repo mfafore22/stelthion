@@ -59,6 +59,28 @@ const BUDGET_HINT: Record<CampaignIdeaBudget, string> = {
   premium: 'large budget, integrated paid+owned+earned with venue events',
 };
 
+const STATE_FI: Record<string, string> = {
+  EMERGING: 'nouseva',
+  ACCELERATING: 'kiihtyvä',
+  STABLE: 'vakaa',
+  FADING: 'hiipuva',
+  DORMANT: 'lepotilassa',
+};
+
+const STATE_SV: Record<string, string> = {
+  EMERGING: 'framväxande',
+  ACCELERATING: 'accelererande',
+  STABLE: 'stabil',
+  FADING: 'avtagande',
+  DORMANT: 'vilande',
+};
+
+function stateLabel(state: string, lang: CampaignIdeaLanguage): string {
+  if (lang === 'fi') return STATE_FI[state] ?? state.toLowerCase();
+  if (lang === 'sv') return STATE_SV[state] ?? state.toLowerCase();
+  return state.toLowerCase();
+}
+
 export async function generateCampaignIdea(
   input: CampaignIdeaInput,
   opts: CampaignIdeaOptions = {},
@@ -73,7 +95,7 @@ export async function generateCampaignIdea(
   const constraints: string[] = [];
   if (opts.angle) constraints.push(`Angle to use: "${opts.angle}".`);
   if (opts.audience) constraints.push(`Target audience: "${opts.audience}".`);
-  constraints.push(`Budget tier: ${budget} — ${budgetHint}.`);
+  constraints.push(`Budget tier: ${budget}: ${budgetHint}.`);
   constraints.push(`Duration: roughly ${durationDays} days.`);
 
   const messages: LLMMessage[] = [
@@ -91,11 +113,17 @@ export async function generateCampaignIdea(
         `  "channels": string[],    // 2 to 4 distribution channels, short noun phrases`,
         `  "hook": string,          // single line, customer-facing tagline (quote-worthy)`,
         `  "cta": string,           // single line, customer action verb leading`,
-        `  "successMetric": string, // single line, MEASURABLE — KPI + target shape`,
+        `  "successMetric": string, // single line, MEASURABLE: KPI + target shape`,
         `  "whyNow": string,        // single line, ties to the trend's state and velocity`,
         `  "rationale": string      // 1 short paragraph (max 320 chars), internal-facing reasoning`,
         `}`,
         `Keep tone professional and grounded. No hype. Avoid generic "engage your audience" filler.`,
+        `Do not use em dashes (—). Use periods, commas, colons, or parentheses.`,
+        language === 'fi'
+          ? `Finnish: keep market/city names in nominative case (do not append -ssa/-ssä mechanically; consonant gradation breaks). Translate trend state to Finnish (kiihtyvä, nouseva, vakaa, hiipuva, lepotilassa). Use "kiinteistödata" instead of "venue-data".`
+          : language === 'sv'
+            ? `Swedish: translate trend state (accelererande, framväxande, stabil, avtagande, vilande). Use "fastighetsdata" instead of "venue-data".`
+            : `English: keep state lowercased mid-sentence (accelerating, emerging, stable, fading, dormant).`,
       ].join('\n'),
     },
     {
@@ -223,37 +251,40 @@ function fallback(input: CampaignIdeaInput, language: CampaignIdeaLanguage): Fal
   const stateNote = input.velocity > 0 ? 'rising' : input.velocity < 0 ? 'cooling' : 'steady';
 
   if (language === 'fi') {
+    const stateFi = stateLabel(input.state, 'fi');
     return {
-      angle: `Aktivoi ${label}-trendi paikallisesti kohteessa ${market} kohdistamalla viesti niihin asiakassegmentteihin, jotka jo seuraavat aihetta. Painopiste: kokeilun kynnyksen madaltaminen.`,
-      audience: `Trendin parissa aktiiviset kuluttajat ${market}n vaikutusalueella; ensisijaisesti olemassa olevat kanta-asiakkaat.`,
+      angle: `Aktivoi ${label}-trendi paikallisesti kohteessa ${market}: kohdista viesti asiakassegmentteihin, jotka jo seuraavat aihetta. Painopiste: kokeilun kynnyksen madaltaminen.`,
+      audience: `Trendin parissa aktiiviset kuluttajat kohteen ${market} vaikutusalueella, ensisijaisesti olemassa olevat kanta-asiakkaat.`,
       channels: ['Instagram-mainonta', 'Kauppakeskuksen uutiskirje', 'Paikallinen yhteistyö'],
-      hook: `${label} — nyt ${market}ssä.`,
+      hook: `${label}: nyt ${market}.`,
       cta: 'Tule paikan päälle ja kokeile.',
-      successMetric: 'Kohdesegmentin venue-vierailut +10 % kampanjajakson aikana.',
-      whyNow: `Signaali on ${stateNote === 'rising' ? 'kiihtymässä' : stateNote === 'cooling' ? 'jäähtymässä mutta yhä aktiivinen' : 'vakaa'} — ajoitus on kohdallaan.`,
-      rationale: `Trendi (${input.state}) yhdistää tunnistetun kysynnän kauppakeskuksen kanaviin ilman raskasta tuotantoa. Riski hallittu, mittaus kytketty venue-dataan.`,
+      successMetric: 'Kohdesegmentin kiinteistövierailut +10 % kampanjajakson aikana.',
+      whyNow: `Signaali on ${stateNote === 'rising' ? 'kiihtymässä' : stateNote === 'cooling' ? 'jäähtymässä mutta yhä aktiivinen' : 'vakaa'}. Ajoitus on kohdallaan.`,
+      rationale: `Trendi (${stateFi}) yhdistää tunnistetun kysynnän kauppakeskuksen kanaviin ilman raskasta tuotantoa. Riski on hallittu, mittaus kytketty kiinteistödataan.`,
     };
   }
   if (language === 'sv') {
+    const stateSv = stateLabel(input.state, 'sv');
     return {
       angle: `Aktivera trenden ${label} lokalt på ${market} genom att rikta budskapet mot kundsegmenten som redan följer ämnet. Fokus: sänk tröskeln att prova.`,
-      audience: `Konsumenter som engagerar sig i trenden inom ${market}s upptagningsområde, främst befintliga lojala kunder.`,
+      audience: `Konsumenter som engagerar sig i trenden inom upptagningsområdet för ${market}, främst befintliga lojala kunder.`,
       channels: ['Instagram-annonsering', 'Köpcentrumets nyhetsbrev', 'Lokalt samarbete'],
-      hook: `${label} — nu på ${market}.`,
+      hook: `${label}: nu på ${market}.`,
       cta: 'Kom förbi och prova.',
       successMetric: 'Besök i målsegmentet +10 % under kampanjperioden.',
-      whyNow: `Signalen ${stateNote === 'rising' ? 'accelererar' : stateNote === 'cooling' ? 'svalnar men är fortfarande aktiv' : 'är stabil'} — tajmingen stämmer.`,
-      rationale: `Trenden (${input.state}) kopplar identifierad efterfrågan till köpcentrumets egna kanaler utan tung produktion. Hanterbar risk, mätbar via venue-data.`,
+      whyNow: `Signalen ${stateNote === 'rising' ? 'accelererar' : stateNote === 'cooling' ? 'svalnar men är fortfarande aktiv' : 'är stabil'}. Tajmingen stämmer.`,
+      rationale: `Trenden (${stateSv}) kopplar identifierad efterfrågan till köpcentrumets egna kanaler utan tung produktion. Hanterbar risk, mätbar via fastighetsdata.`,
     };
   }
+  const stateEn = stateLabel(input.state, 'en');
   return {
     angle: `Activate the ${label} trend locally at ${market} by targeting the customer segments that already follow it. Focus: lower the trial threshold.`,
-    audience: `Trend-engaged consumers in ${market}'s catchment area, weighted toward existing loyalty members.`,
+    audience: `Trend-engaged consumers in the ${market} catchment area, weighted toward existing loyalty members.`,
     channels: ['Instagram paid', 'Mall newsletter', 'Local partnership'],
-    hook: `${label} — now at ${market}.`,
+    hook: `${label}: now at ${market}.`,
     cta: 'Stop by and try it.',
     successMetric: 'Target-segment venue visits +10% over the campaign window.',
-    whyNow: `Signal is ${stateNote === 'rising' ? 'accelerating' : stateNote === 'cooling' ? 'cooling but still active' : 'stable'} — timing is right.`,
-    rationale: `The trend (${input.state}) ties identified demand to the mall's own channels without heavy production. Risk is bounded; measurement plugs into venue data.`,
+    whyNow: `Signal is ${stateNote === 'rising' ? 'accelerating' : stateNote === 'cooling' ? 'cooling but still active' : 'stable'}. Timing is right.`,
+    rationale: `The trend (${stateEn}) ties identified demand to the mall's own channels without heavy production. Risk is bounded; measurement plugs into property data.`,
   };
 }
