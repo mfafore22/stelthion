@@ -4,7 +4,11 @@ import { auth } from '@/auth';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import { AdminHeader } from '@/components/admin/AdminHeader';
 import { getMallIdentity, getContrastTextColor } from '@/lib/mall/mallIdentity';
-import { getActiveCustomer } from '@/lib/admin-customer';
+import {
+  getActiveCustomer,
+  getSelectedCustomer,
+  listSelectableCustomers,
+} from '@/lib/admin-customer';
 
 export default async function AdminLayout({
   children,
@@ -30,7 +34,12 @@ export default async function AdminLayout({
     redirect('/two-factor');
   }
 
-  const active = await getActiveCustomer();
+  let active = await getSelectedCustomer();
+  if (!active) {
+    const customers = await listSelectableCustomers();
+    if (customers.length > 1) redirect('/select-customer');
+    active = await getActiveCustomer();
+  }
   const firstMall = active
     ? await prisma.mall.findFirst({
         where: { customerId: active.id },
@@ -39,7 +48,7 @@ export default async function AdminLayout({
       })
     : null;
 
-  const identity = getMallIdentity(firstMall?.mallId ?? 'ideapark-lempaala');
+  const identity = getMallIdentity(firstMall?.mallId ?? '');
   const textColor = getContrastTextColor(identity.colors.primary);
   const tenantLabel = active?.name ?? identity.name;
   const cityLabel = firstMall?.city ?? '';

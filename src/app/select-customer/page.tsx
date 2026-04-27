@@ -18,10 +18,7 @@ export default async function SelectCustomerPage() {
   if (!user?.twoFactorVerifiedAt) redirect('/two-factor');
 
   const customers = await listSelectableCustomers();
-
-  if (customers.length === 1) {
-    redirect('/admin/dashboard');
-  }
+  if (customers.length <= 1) redirect('/admin/dashboard');
 
   return <CustomerSelectorClient customers={customers} />;
 }

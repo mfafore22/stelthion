@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { auth } from '@/auth';
 import prisma from '@/app/lib/prisma';
-import { getActiveCustomer, listSelectableCustomers } from '@/lib/admin-customer';
+import { getSelectedCustomer, listSelectableCustomers } from '@/lib/admin-customer';
 
 export default async function AdminPage() {
   const session = await auth();
@@ -14,10 +14,10 @@ export default async function AdminPage() {
   });
   if (!user?.twoFactorVerifiedAt) redirect('/two-factor');
 
-  const active = await getActiveCustomer();
-  if (active) redirect('/admin/dashboard');
+  const selected = await getSelectedCustomer();
+  if (selected) redirect('/admin/dashboard');
 
   const customers = await listSelectableCustomers();
   if (customers.length <= 1) redirect('/admin/dashboard');
-  redirect('/admin/select-customer');
+  redirect('/select-customer');
 }

@@ -50,6 +50,36 @@ export async function getActiveCustomer(): Promise<CustomerContext | null> {
 }
 
 /**
+ * Resolve the customer the admin has explicitly selected via the active-customer
+ * cookie. Unlike `getActiveCustomer()`, this does NOT fall back to the home
+ * customer — used by the post-login entry page to distinguish "selected" from
+ * "default" so super-admins can be routed through the selector.
+ */
+export async function getSelectedCustomer(): Promise<CustomerContext | null> {
+  const session = await auth();
+  if (!session?.user || session.user.role !== 'ADMIN') return null;
+
+  const homeCustomerId = session.user.customerId;
+  if (!homeCustomerId) return null;
+
+  const isStelthionAdmin = homeCustomerId === 'ideapark';
+
+  const cookieStore = await cookies();
+  const cookieValue = cookieStore.get(ACTIVE_CUSTOMER_COOKIE)?.value;
+  if (!cookieValue) return null;
+
+  if (!isStelthionAdmin && cookieValue !== homeCustomerId) return null;
+
+  const customer = await prisma.customer.findUnique({
+    where: { id: cookieValue },
+    select: { id: true, name: true },
+  });
+  if (!customer) return null;
+
+  return { id: customer.id, name: customer.name, isStelthionAdmin };
+}
+
+/**
  * Returns true iff the given mallId belongs to a customer the current admin
  * session is allowed to operate on. Used to gate per-mall API routes.
  */
