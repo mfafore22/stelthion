@@ -18,13 +18,17 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
+      // LOCAL ONLY — DO NOT COMMIT TO GITHUB
+      // NextAuth v5 returns { url } not { ok, error } when redirect: false.
+      // A failed login url contains '/api/auth/error'; success url is the callbackUrl.
       const result = await signIn('credentials', {
         email,
         password,
         redirect: false,
       });
 
-      if (result?.error || !result?.ok) {
+      const failed = !result?.url || result.url.includes('/api/auth/error');
+      if (failed) {
         setError('Invalid email or password');
         setLoading(false);
         return;
