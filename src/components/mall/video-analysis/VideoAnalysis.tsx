@@ -23,7 +23,11 @@ import type {
 } from './types';
 import type { FlowQueryResponse } from '@/lib/types/flowQuery';
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+const fetcher = async (url: string) => {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
+};
 
 interface VideoAnalysisProps {
   mallId: string;

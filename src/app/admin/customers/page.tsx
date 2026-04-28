@@ -139,10 +139,18 @@ export default function AdminCustomersPage() {
                       </div>
                     </td>
                     <td className="px-5 py-3 text-center">
-                      <span className="flex items-center justify-center gap-1 text-bo-neutral-600">
-                        <Store className="w-3.5 h-3.5" />
-                        {c._count.malls}
-                      </span>
+                      <div className="flex items-center justify-center gap-2">
+                        <span className="flex items-center gap-1 text-bo-neutral-600">
+                          <Store className="w-3.5 h-3.5" />
+                          {c._count.malls}
+                        </span>
+                        <Link
+                          href={`/admin/customers/${c.id}/malls/new`}
+                          className="text-xs text-bo-primary-600 hover:underline"
+                        >
+                          + Add
+                        </Link>
+                      </div>
                     </td>
                     <td className="px-5 py-3 text-center">
                       <span className="flex items-center justify-center gap-1 text-bo-neutral-600">

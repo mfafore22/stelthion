@@ -1,11 +1,19 @@
 import prisma from '@/app/lib/prisma';
+import { activeCustomerMallIds } from '@/lib/admin-customer';
 import { AdminDashboardClient } from './client';
 
 export default async function AdminDashboard() {
+  const mallIds = (await activeCustomerMallIds()) ?? [];
+  const mallScope = { mallId: { in: mallIds } };
+
   const [zoneCount, cameraCount, jobCounts] = await Promise.all([
-    prisma.floorplanZone.count(),
-    prisma.camera.count(),
-    prisma.analysisJob.groupBy({ by: ['status'], _count: true }),
+    prisma.floorplanZone.count({ where: mallScope }),
+    prisma.camera.count({ where: mallScope }),
+    prisma.analysisJob.groupBy({
+      by: ['status'],
+      _count: true,
+      where: mallScope,
+    }),
   ]);
 
   const pending = jobCounts.find((j: { status: string }) => j.status === 'PENDING')?._count ?? 0;

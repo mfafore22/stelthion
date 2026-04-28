@@ -6,9 +6,9 @@ import { useTranslation } from 'react-i18next';
 import '@/lib/i18n';
 import { FloorplanEditor, type ZoneData, type CameraData } from '@/components/admin/FloorplanEditor';
 
-const FLOOR_CONFIG: Record<string, { viewBox: string; src: string }> = {
-  ground: { viewBox: '0 0 1504 704', src: '/assets/malls/ideapark/floorplan-ground.png' },
-  upper: { viewBox: '0 0 1518 688', src: '/assets/malls/ideapark/floorplan-upper.png' },
+const FLOOR_CONFIG: Record<string, { viewBox: string }> = {
+  ground: { viewBox: '0 0 1504 704' },
+  upper: { viewBox: '0 0 1518 688' },
 };
 
 export default function FloorplanPage() {
@@ -25,13 +25,14 @@ export default function FloorplanPage() {
       fetch(`/api/admin/floorplan/${mallId}/zones?floor=${floor}`).then((r) => r.json()),
       fetch(`/api/admin/floorplan/${mallId}/cameras?floor=${floor}`).then((r) => r.json()),
     ]).then(([z, c]) => {
-      setZones(z);
-      setCameras(c);
+      setZones(Array.isArray(z) ? z : []);
+      setCameras(Array.isArray(c) ? c : []);
       setLoading(false);
     });
   }, [mallId, floor]);
 
   const cfg = FLOOR_CONFIG[floor];
+  const floorplanSrc = `/assets/malls/${mallId}/floorplan-${floor}.png`;
 
   return (
     <div className="flex flex-col" style={{ height: 'calc(100vh - 120px)' }}>
@@ -65,7 +66,7 @@ export default function FloorplanPage() {
             mallId={mallId}
             floor={floor}
             viewBox={cfg.viewBox}
-            floorplanSrc={cfg.src}
+            floorplanSrc={floorplanSrc}
             initialZones={zones}
             initialCameras={cameras}
           />

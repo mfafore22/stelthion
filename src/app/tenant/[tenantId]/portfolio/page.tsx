@@ -3,6 +3,7 @@
 import React, { useMemo, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Image from 'next/image';
+import useSWR from 'swr';
 import { useSession } from '@/contexts/SessionContext';
 import { useTranslation } from '@/lib/i18n/hooks';
 import { MallLeftNav } from '@/components/mall/shell/MallLeftNav';
@@ -15,22 +16,40 @@ import { getMallBrandColors } from '@/lib/mall/mallDatabase';
 import { getOperatorLogoOrFallback } from '@/lib/mall/operatorLogos';
 import { getCurrentFootfall } from '@/lib/data/footfall';
 
+// Tenant URL slug → DB customer name. The 2FA flow redirects to
+// `/tenant/${customerId}/portfolio`, so the keys here must equal the
+// customerId values in the DB (not pretty-printed slugs).
 const TENANT_MAP: Record<string, string> = {
-  'koy-ideapark-ab': 'Koy Ideapark Ab',
+  ideapark: 'Koy Ideapark Ab',
+  'realidea-oy': 'Realidea Oy',
 };
 
-const ALL_PROPERTIES = [
-  {
-    id: 'ideapark-lempaala',
-    name: 'Ideapark Lempäälä',
-    city: 'Lempäälä',
-    status: 'live' as const,
-    currentVisitors: 0,
-    annualVisitors: 7500000,
-    annualSales: 450000000,
-    coordinates: [23.7987, 61.3615] as [number, number],
-  },
-];
+interface CustomerMall {
+  mallId: string;
+  name: string;
+  city: string;
+  status: 'LIVE' | 'BETA' | 'ALPHA' | 'PLANNED';
+  totalShops: number | null;
+  stats: {
+    currentVisitors: number;
+    annualVisitors: number;
+    annualSales: number;
+    dwellTime: number;
+    conversionRate: number;
+  } | null;
+}
+
+interface CustomerResponse {
+  id: string;
+  name: string;
+  malls: CustomerMall[];
+}
+
+const fetcher = async (url: string) => {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
+};
 
 function formatNumber(num: number): string {
   if (num >= 1000000000) {
@@ -68,6 +87,16 @@ const STATUS_ACCENTS: Record<string, { badgeBg: string; badgeText: string }> = {
   alpha: { badgeBg: 'bg-[#e7f1ff]', badgeText: 'text-[#1c64f2]' },
   planned: { badgeBg: 'bg-[#eef2f7]', badgeText: 'text-[#475569]' },
 };
+
+interface PortfolioProperty {
+  id: string;
+  name: string;
+  city: string;
+  status: string;
+  currentVisitors: number;
+  annualVisitors: number;
+  annualSales: number;
+}
 
 const getPortfolioKPIs = (t: (key: string) => string) => {
   const footfall = getCurrentFootfall();
@@ -128,15 +157,26 @@ export default function TenantPortfolioPage() {
     }
   }, [sessionLoading, user, tenantId, router]);
 
-  const authorizedProperties = useMemo(() => {
-    if (!user || !tenantName) return [];
+  // 2FA redirect lands on /tenant/${customerId}/portfolio, so the URL
+  // segment is the customerId. Fetch the full customer + malls from the API.
+  const customerId = tenantId;
+  const { data: customerData } = useSWR<CustomerResponse>(
+    user && customerId ? `/api/customers/${customerId}` : null,
+    fetcher,
+  );
 
-    if (tenantName === 'Koy Ideapark Ab') {
-      return ALL_PROPERTIES.filter(property => property.id === 'ideapark-lempaala');
-    }
-
-    return [];
-  }, [user, tenantName]);
+  const authorizedProperties = useMemo<PortfolioProperty[]>(() => {
+    const malls = customerData?.malls ?? [];
+    return malls.map((m) => ({
+      id: m.mallId,
+      name: m.name,
+      city: m.city,
+      status: m.status.toLowerCase(),
+      currentVisitors: m.stats?.currentVisitors ?? 0,
+      annualVisitors: m.stats?.annualVisitors ?? 0,
+      annualSales: m.stats?.annualSales ?? 0,
+    }));
+  }, [customerData]);
 
   const tenantStats = useMemo(() => {
     const totalProperties = authorizedProperties.length;
@@ -262,7 +302,7 @@ export default function TenantPortfolioPage() {
 
             <div className="space-y-5">
               {authorizedProperties.map((mall) => {
-                const identity = getMallIdentity(mall.id);
+                const identity = getMallIdentity(mall.id, customerId);
                 return (
                   <MallCard
                     key={mall.id}
