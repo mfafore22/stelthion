@@ -112,6 +112,73 @@ export async function requireMallAccess(mallId: string) {
   return guard;
 }
 
+/**
+ * Returns the list of mallIds owned by the active customer, or null if no
+ * active customer is resolvable. Cross-route helper used to scope per-mall
+ * resources (jobs, edge devices, etc.).
+ */
+export async function activeCustomerMallIds(): Promise<string[] | null> {
+  const active = await getActiveCustomer();
+  if (!active) return null;
+  const malls = await prisma.mall.findMany({
+    where: { customerId: active.id },
+    select: { mallId: true },
+  });
+  return malls.map((m) => m.mallId);
+}
+
+/**
+ * Returns the list of mallIds visible to the current session — for ADMIN users
+ * this respects the active-customer cookie; for regular users it is locked to
+ * their home customer. Returns null if no resolvable session/customer.
+ *
+ * Use this in non-/admin/ APIs that are still reached from authenticated UI
+ * (e.g. /api/analysis/*) so cross-tenant access is blocked.
+ */
+export async function currentUserMallIds(): Promise<string[] | null> {
+  const session = await auth();
+  if (!session?.user?.customerId) return null;
+  if (session.user.role === 'ADMIN') {
+    return activeCustomerMallIds();
+  }
+  const malls = await prisma.mall.findMany({
+    where: { customerId: session.user.customerId },
+    select: { mallId: true },
+  });
+  return malls.map((m) => m.mallId);
+}
+
+/**
+ * Verify a target customerId is one the current admin is allowed to act on:
+ * either it matches the user's home customer, or the user is a Stelthion
+ * super-admin.
+ */
+export async function requireOwnedCustomer(customerId: string) {
+  const guard = await requireAdmin();
+  if ('error' in guard) return guard;
+  const homeCustomerId = guard.session.user.customerId;
+  const isStelthionAdmin = homeCustomerId === 'ideapark';
+  if (!isStelthionAdmin && customerId !== homeCustomerId) {
+    return {
+      error: NextResponse.json({ error: 'Forbidden: not your customer' }, { status: 403 }),
+    };
+  }
+  return guard;
+}
+
+/**
+ * Verify an analysis job belongs to a mall in the active customer.
+ */
+export async function jobBelongsToActiveCustomer(jobId: string): Promise<boolean> {
+  const mallIds = await activeCustomerMallIds();
+  if (!mallIds) return false;
+  const job = await prisma.analysisJob.findUnique({
+    where: { id: jobId },
+    select: { mallId: true },
+  });
+  return !!job && mallIds.includes(job.mallId);
+}
+
 export async function listSelectableCustomers(): Promise<{ id: string; name: string }[]> {
   const session = await auth();
   if (!session?.user || session.user.role !== 'ADMIN') return [];

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
 import { requireAdmin } from '@/lib/admin-auth';
+import { jobBelongsToActiveCustomer } from '@/lib/admin-customer';
 
 /**
  * GET /api/admin/verification/[jobId]
@@ -15,6 +16,10 @@ export async function GET(
   if ('error' in guard) return guard.error;
 
   const { jobId } = await params;
+
+  if (!(await jobBelongsToActiveCustomer(jobId))) {
+    return NextResponse.json({ error: 'Forbidden: job not in active customer' }, { status: 403 });
+  }
 
   const job = await prisma.analysisJob.findUnique({
     where: { id: jobId },
@@ -113,6 +118,11 @@ export async function POST(
   if ('error' in guard) return guard.error;
 
   const { jobId } = await params;
+
+  if (!(await jobBelongsToActiveCustomer(jobId))) {
+    return NextResponse.json({ error: 'Forbidden: job not in active customer' }, { status: 403 });
+  }
+
   const { anonymousTagId, verdict, notes } = await req.json();
 
   if (!anonymousTagId || !['match', 'mismatch', 'unsure'].includes(verdict)) {

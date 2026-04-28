@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Prisma } from '@prisma/client';
 import prisma from '@/app/lib/prisma';
 import { requireAdmin } from '@/lib/admin-auth';
+import { getActiveCustomer } from '@/lib/admin-customer';
 
 export async function GET() {
   const gate = await requireAdmin();
@@ -14,6 +15,14 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   const gate = await requireAdmin();
   if ('error' in gate) return gate.error;
+
+  const active = await getActiveCustomer();
+  if (!active?.isStelthionAdmin) {
+    return NextResponse.json(
+      { error: 'Forbidden: only Stelthion admins can manage plans' },
+      { status: 403 },
+    );
+  }
 
   let body: { name?: unknown; priceMonthly?: unknown; features?: unknown };
   try {

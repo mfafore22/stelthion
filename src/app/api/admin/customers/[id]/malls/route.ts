@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
-import { requireAdmin } from '@/lib/admin-auth';
+import { requireOwnedCustomer } from '@/lib/admin-customer';
 
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const gate = await requireAdmin();
+  const { id: customerId } = await params;
+  const gate = await requireOwnedCustomer(customerId);
   if ('error' in gate) return gate.error;
 
-  const { id: customerId } = await params;
   const { mallId, name, city, marketId } = await req.json();
 
   if (!mallId || !name || !city) {

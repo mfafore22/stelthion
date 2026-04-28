@@ -1,17 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
 import { requireAdmin } from '@/lib/admin-auth';
-import { getActiveCustomer } from '@/lib/admin-customer';
-
-async function activeCustomerMallIds(): Promise<string[] | null> {
-  const active = await getActiveCustomer();
-  if (!active) return null;
-  const malls = await prisma.mall.findMany({
-    where: { customerId: active.id },
-    select: { mallId: true },
-  });
-  return malls.map((m) => m.mallId);
-}
+import { activeCustomerMallIds } from '@/lib/admin-customer';
 
 export async function GET() {
   const guard = await requireAdmin();

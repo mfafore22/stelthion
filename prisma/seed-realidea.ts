@@ -2,11 +2,22 @@
  * Seed: Realidea Oy customer + 18 mall properties.
  * NON-DESTRUCTIVE / idempotent: upserts on Customer.id and Mall.mallId.
  *
+ * Optionally provisions a demo user when REALIDEA_DEMO_EMAIL is set.
+ * The password is taken from REALIDEA_DEMO_PASSWORD (defaults to a safe
+ * dev placeholder). Email gets the OTP for the 2FA step, so use a real
+ * mailbox you can read.
+ *
  * Usage:
- *   npx tsx prisma/seed-realidea.ts
+ *   npx tsx --env-file=.env prisma/seed-realidea.ts
+ *
+ *   # with demo user:
+ *   REALIDEA_DEMO_EMAIL='you+realidea@proton.me' \
+ *   REALIDEA_DEMO_PASSWORD='your-pick' \
+ *     npx tsx --env-file=.env prisma/seed-realidea.ts
  */
 
 import 'dotenv/config'
+import bcrypt from 'bcrypt'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { PrismaClient, MallStatus } from '@prisma/client'
 
@@ -22,25 +33,65 @@ const REALIDEA_MALLS: Array<{
   status: MallStatus
   totalShops?: number
 }> = [
-  { mallId: 'realidea-sello', name: 'Sello', city: 'Espoo', status: 'LIVE' },
+  { mallId: 'realidea-sello', name: 'Sello', city: 'Espoo', status: 'LIVE', totalShops: 160 },
   { mallId: 'realidea-tripla', name: 'Mall of Tripla', city: 'Helsinki', status: 'LIVE' },
-  { mallId: 'realidea-itis', name: 'Itis', city: 'Helsinki', status: 'LIVE' },
-  { mallId: 'realidea-jumbo', name: 'Jumbo', city: 'Vantaa', status: 'LIVE' },
-  { mallId: 'realidea-kamp-galleria', name: 'Kämp Galleria', city: 'Helsinki', status: 'PLANNED' },
-  { mallId: 'realidea-karuselli', name: 'Karuselli', city: 'Kerava', status: 'BETA' },
-  { mallId: 'realidea-plaza', name: 'Plaza', city: 'Salo', status: 'ALPHA' },
+  { mallId: 'realidea-kamp-galleria', name: 'Kämp Galleria', city: 'Helsinki', status: 'LIVE' },
+  { mallId: 'realidea-karuselli', name: 'Karuselli', city: 'Kerava', status: 'LIVE' },
+  { mallId: 'realidea-plaza', name: 'Plaza', city: 'Salo', status: 'LIVE' },
   { mallId: 'realidea-arabia', name: 'Arabia', city: 'Helsinki', status: 'LIVE' },
   { mallId: 'realidea-columbus', name: 'Columbus', city: 'Helsinki', status: 'LIVE' },
   { mallId: 'realidea-duo', name: 'Duo', city: 'Tampere', status: 'LIVE' },
-  { mallId: 'realidea-grani', name: 'Grani', city: 'Kauniainen', status: 'BETA' },
-  { mallId: 'realidea-dixi', name: 'Dixi', city: 'Vantaa', status: 'ALPHA' },
+  { mallId: 'realidea-grani', name: 'Grani', city: 'Kauniainen', status: 'LIVE' },
+  { mallId: 'realidea-dixi', name: 'Dixi', city: 'Vantaa', status: 'LIVE' },
   { mallId: 'realidea-entresse', name: 'Entresse', city: 'Espoo', status: 'LIVE' },
   { mallId: 'realidea-fresko', name: 'Fresko', city: 'Vantaa', status: 'LIVE' },
-  { mallId: 'realidea-kale', name: 'Kale', city: 'Tampere', status: 'BETA' },
+  { mallId: 'realidea-kale', name: 'Kale', city: 'Tampere', status: 'LIVE' },
   { mallId: 'realidea-kivis', name: 'Kivis', city: 'Vantaa', status: 'LIVE' },
-  { mallId: 'realidea-liila', name: 'Liila', city: 'Espoo', status: 'ALPHA' },
+  { mallId: 'realidea-liila', name: 'Liila', city: 'Espoo', status: 'LIVE' },
   { mallId: 'realidea-lansikeskus', name: 'Länsikeskus', city: 'Espoo', status: 'LIVE' },
+  { mallId: 'realidea-malmin-nova', name: 'Malmin Nova', city: 'Helsinki', status: 'LIVE' },
+  { mallId: 'realidea-martinlaakso', name: 'Martinlaakson ostari', city: 'Vantaa', status: 'LIVE' },
 ]
+
+async function seedSelloStub() {
+  // Minimal Sello stats row so the portfolio card has something to render
+  // before real numbers are entered. Set to zero — operator backfills via UI.
+  const existing = await prisma.mallStats.findFirst({ where: { mallId: 'realidea-sello' } })
+  if (existing) return
+  await prisma.mallStats.create({
+    data: {
+      mallId: 'realidea-sello',
+      currentVisitors: 0,
+      annualVisitors: 0,
+      annualSales: 0,
+      dwellTime: 0,
+      conversionRate: 0,
+    },
+  })
+  console.log('  Stats: realidea-sello (zeroed stub)')
+}
+
+async function seedDemoUser(customerId: string) {
+  const email = process.env.REALIDEA_DEMO_EMAIL
+  if (!email) {
+    console.log('REALIDEA_DEMO_EMAIL not set — skipping demo user creation.')
+    return
+  }
+  const password = process.env.REALIDEA_DEMO_PASSWORD
+  if (!password) {
+    console.log('REALIDEA_DEMO_PASSWORD not set — skipping demo user creation.')
+    return
+  }
+  const name = process.env.REALIDEA_DEMO_NAME || 'Realidea Demo'
+  const hashed = await bcrypt.hash(password, 10)
+
+  await prisma.user.upsert({
+    where: { email },
+    update: { customerId, name, role: 'USER' },
+    create: { email, password: hashed, name, role: 'USER', customerId },
+  })
+  console.log(`  Demo user: ${email} / ${password} (role=USER, customer=${customerId})`)
+}
 
 async function main() {
   console.log('Seeding Realidea Oy customer + malls (idempotent)...')
@@ -72,6 +123,9 @@ async function main() {
     })
     console.log(`  Mall: ${m.mallId} (${m.name}, ${m.city}, ${m.status})`)
   }
+
+  await seedSelloStub()
+  await seedDemoUser(customer.id)
 
   const count = await prisma.mall.count({ where: { customerId: customer.id } })
   console.log(`Realidea Oy: ${count} malls in DB.`)

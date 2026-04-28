@@ -1,13 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
-import { requireAdmin } from '@/lib/admin-auth';
+import { getActiveCustomer } from '@/lib/admin-customer';
 
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const gate = await requireAdmin();
-  if ('error' in gate) return gate.error;
+  const active = await getActiveCustomer();
+  if (!active?.isStelthionAdmin) {
+    return NextResponse.json(
+      { error: 'Forbidden: only Stelthion admins can change plans' },
+      { status: 403 },
+    );
+  }
 
   const { id } = await params;
   const { planId } = await req.json();

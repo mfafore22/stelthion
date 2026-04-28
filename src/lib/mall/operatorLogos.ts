@@ -4,6 +4,7 @@ export function getOperatorLogo(companyName: string): string | null {
   const logoMap: Record<string, string> = {
     'koy ideapark ab': '/assets/mall-operators/ideapark-logo.png',
     'koy ideapark oy': '/assets/mall-operators/ideapark-logo.png',
+    'realidea oy': '/realidea-logo.webp',
   };
 
   return logoMap[normalizedName] || null;

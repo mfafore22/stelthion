@@ -19,5 +19,6 @@ export async function GET() {
     id: active.id,
     name: active.name,
     canSwitch: active.isStelthionAdmin,
+    isStelthionAdmin: active.isStelthionAdmin,
   });
 }

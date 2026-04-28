@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "ideapark": {
+    "ideapark-lempaala": {
       "name": "Ideapark Lempäälä",
       "logo": "/ideapark-logo.png",
       "colors": {
@@ -14,6 +14,48 @@
       "gradient": {
         "from": "#264d21",
         "to": "#1a3a15"
+      },
+      "typography": {
+        "fontFamily": "Inter, sans-serif",
+        "headingWeight": 700
+      }
+    },
+    "realidea-sello": {
+      "name": "Sello",
+      "logo": "",
+      "colors": {
+        "primary": "#c4007f",
+        "secondary": "#7a004f",
+        "accent": "#1a1a1a",
+        "warning": "#f7966b",
+        "error": "#f04e54",
+        "background": "#FAF7FA"
+      },
+      "gradient": {
+        "from": "#c4007f",
+        "to": "#7a004f"
+      },
+      "typography": {
+        "fontFamily": "Inter, sans-serif",
+        "headingWeight": 700
+      }
+    }
+  },
+  "customerFallback": {
+    "realidea-oy": {
+      "name": "Realidea Oy",
+      "logo": "",
+      "colors": {
+        "primary": "#1f3866",
+        "secondary": "#4d6694",
+        "accent": "#c4a675",
+        "warning": "#f7966b",
+        "error": "#f04e54",
+        "background": "#F5F6F8"
+      },
+      "gradient": {
+        "from": "#1f3866",
+        "to": "#0f1d3a"
       },
       "typography": {
         "fontFamily": "Inter, sans-serif",

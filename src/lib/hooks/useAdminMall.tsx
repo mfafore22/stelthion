@@ -3,7 +3,6 @@
 import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from 'react';
 import useSWR from 'swr';
 
-const DEFAULT_MALL_ID = 'ideapark-lempaala';
 const STORAGE_KEY = 'stelthion-admin-mall';
 
 interface MallOption {
@@ -18,18 +17,13 @@ interface AdminMallContextValue {
 }
 
 const AdminMallContext = createContext<AdminMallContextValue>({
-  activeMallId: DEFAULT_MALL_ID,
+  activeMallId: '',
   setActiveMallId: () => {},
 });
 
 function getStoredMallId(): string {
-  if (typeof window === 'undefined') return DEFAULT_MALL_ID;
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored === 'ideapark') {
-    localStorage.setItem(STORAGE_KEY, DEFAULT_MALL_ID);
-    return DEFAULT_MALL_ID;
-  }
-  return stored ?? DEFAULT_MALL_ID;
+  if (typeof window === 'undefined') return '';
+  return localStorage.getItem(STORAGE_KEY) ?? '';
 }
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());

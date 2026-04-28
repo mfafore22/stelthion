@@ -1,6 +1,12 @@
 /**
  * Mall Identity System
- * Utilities for accessing mall brand profiles, colors, and theming
+ * Utilities for accessing mall brand profiles, colors, and theming.
+ *
+ * Resolution chain (first match wins):
+ *   1. profiles[mallId]            — explicit per-mall brand
+ *   2. customerFallback[customerId] — tenant-level fallback (e.g. Realidea Oy navy
+ *      for any Realidea mall without a specific profile yet)
+ *   3. fallback                    — neutral Stelthion grey
  */
 
 import brandProfiles from '../../../data/malls/brandProfiles.json';
@@ -32,24 +38,24 @@ export interface MallIdentity {
 }
 
 /**
- * Get mall identity by ID
- * Returns fallback identity if mall not found
+ * Get mall identity by ID.
+ * Pass `customerId` to allow tenant-level fallback when no per-mall profile exists.
  */
-export function getMallIdentity(mallId: string): MallIdentity {
+export function getMallIdentity(mallId: string, customerId?: string): MallIdentity {
   const profile = brandProfiles.profiles[mallId as keyof typeof brandProfiles.profiles];
-
   if (profile) {
-    return {
-      id: mallId,
-      ...profile,
-    } as MallIdentity;
+    return { id: mallId, ...profile } as MallIdentity;
   }
 
-  // Return fallback identity
-  return {
-    id: 'fallback',
-    ...brandProfiles.fallback,
-  } as MallIdentity;
+  if (customerId) {
+    const tenantProfile =
+      brandProfiles.customerFallback?.[customerId as keyof typeof brandProfiles.customerFallback];
+    if (tenantProfile) {
+      return { id: customerId, ...tenantProfile } as MallIdentity;
+    }
+  }
+
+  return { id: 'fallback', ...brandProfiles.fallback } as MallIdentity;
 }
 
 /**
