@@ -489,7 +489,17 @@
       "corroboratedIn": "Markets corroborating",
       "whyConfident": "Why we're confident",
       "whyCautious": "Why we're cautious",
-      "empty": "Evidence is still being corroborated across sources."
+      "empty": "Evidence is still being corroborated across sources.",
+      "strip": {
+        "show": "Sources",
+        "label_one": "{{count}} strong source",
+        "label_other": "{{count}} strong sources",
+        "loading": "Loading sources…",
+        "empty": "No sources available yet.",
+        "collecting": "Gathering evidence from more sources…",
+        "noUrls": "No article links yet for this trend.",
+        "error": "Could not load sources."
+      }
     },
     "lifecycle": {
       "label": "Lifecycle",

@@ -10,6 +10,7 @@ import { StateBadge } from './StateBadge';
 import { LifecycleContinuumCompact } from './LifecycleContinuum';
 import { MiniSparkline } from './MiniSparkline';
 import { PhenomenonCardFooter } from './PhenomenonCardFooter';
+import { PhenomenonSourceStrip } from './PhenomenonSourceStrip';
 import { CampaignIdeaInline } from './campaign-idea';
 import { localizePhenomenon } from '@/lib/shoppermind/localize';
 import { useViewContext } from '@/lib/shoppermind/view-context';
@@ -73,6 +74,7 @@ export function PhenomenonCard({
             ideaOpen={ideaOpen}
             onToggleIdea={() => setIdeaOpen((v) => !v)}
           />
+          <PhenomenonSourceStrip phenomenonId={phenomenon.id} />
         </MallCard>
       </Link>
       {ideaOpen && (

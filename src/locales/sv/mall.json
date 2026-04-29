@@ -498,7 +498,17 @@
       "corroboratedIn": "Marknader som bekräftar",
       "whyConfident": "Varför vi är säkra",
       "whyCautious": "Varför vi är försiktiga",
-      "empty": "Beläggen bekräftas fortfarande."
+      "empty": "Beläggen bekräftas fortfarande.",
+      "strip": {
+        "show": "Källor",
+        "label_one": "{{count}} stark källa",
+        "label_other": "{{count}} starka källor",
+        "loading": "Laddar källor…",
+        "empty": "Inga källor tillgängliga ännu.",
+        "collecting": "Samlar bevis från fler källor…",
+        "noUrls": "Inga artikellänkar ännu för denna trend.",
+        "error": "Kunde inte ladda källor."
+      }
     },
     "lifecycle": {
       "label": "Livscykel",

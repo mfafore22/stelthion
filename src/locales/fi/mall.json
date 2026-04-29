@@ -489,7 +489,17 @@
       "corroboratedIn": "Vahvistavat markkinat",
       "whyConfident": "Miksi luotamme tähän",
       "whyCautious": "Miksi olemme varovaisia",
-      "empty": "Näyttöä vahvistetaan vielä eri lähteistä."
+      "empty": "Näyttöä vahvistetaan vielä eri lähteistä.",
+      "strip": {
+        "show": "Lähteet",
+        "label_one": "{{count}} vahva lähde",
+        "label_other": "{{count}} vahvaa lähdettä",
+        "loading": "Ladataan lähteitä…",
+        "empty": "Lähteitä ei vielä saatavilla.",
+        "collecting": "Kerätään näyttöä useammasta lähteestä…",
+        "noUrls": "Tähän trendiin ei ole vielä artikkelilinkkejä.",
+        "error": "Lähteitä ei voitu ladata."
+      }
     },
     "lifecycle": {
       "label": "Elämänkaari",
