@@ -58,7 +58,11 @@ export default function LoginPage() {
         className="object-cover object-center -z-10"
       />
       <div className="relative z-10 w-full max-w-lg px-4">
-        <div className="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] border border-gray-100 px-10 pt-8 pb-8">
+        <div className={`rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] border border-gray-100 px-10 pt-8 pb-8 ${
+          mode === 'choose'
+            ? 'bg-gradient-to-t from-white/10 via-white/90 to-white'
+            : 'bg-white'
+        }`}>
 
           <div className="flex flex-col items-center mb-4">
             <Image

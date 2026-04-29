@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +14,11 @@ import type {
   SignalOfTheDay,
 } from '@stelthion/shoppermind-client-types';
 import { SourceLogos } from '@/components/mall/shoppermind/SourceLogos';
-import { PhenomenonCard } from '@/components/mall/shoppermind/PhenomenonCard';
+import { MegaScenarioSection } from '@/components/mall/shoppermind/MegaScenarioSection';
+import { HorizonSection } from '@/components/mall/shoppermind/HorizonSection';
+import { MacroDashboard } from '@/components/mall/shoppermind/MacroDashboard';
+import { getMegaScenario } from '@/lib/shoppermind/megaScenario';
+import { groupByHorizon } from '@/lib/shoppermind/horizon';
 import {
   localizeSotdNarrative,
   localizeSotdSections,
@@ -32,7 +36,7 @@ interface OverviewResponse {
 export default function ShopperMindPage() {
   const { user, loading } = useSession();
   const router = useRouter();
-  const { t } = useTranslation('mall');
+  const { t, i18n } = useTranslation('mall');
   const [data, setData] = useState<OverviewResponse | null>(null);
   const [fetching, setFetching] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -76,6 +80,16 @@ export default function ShopperMindPage() {
     };
   }, [user?.mallId]);
 
+  const grouped = useMemo(
+    () => groupByHorizon(data?.phenomena ?? []),
+    [data?.phenomena],
+  );
+  const country = data?.market?.country ?? 'FI';
+  const megaScenario = useMemo(
+    () => getMegaScenario(country, i18n.language, user?.mallId ?? null),
+    [country, i18n.language, user?.mallId],
+  );
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-bo-neutral-50">
@@ -90,7 +104,7 @@ export default function ShopperMindPage() {
       <MallLeftNav />
       <MallTopBar />
       <main className="ml-[80px] h-screen overflow-auto pt-[80px] bg-bo-neutral-50">
-        <div className="p-8 max-w-[1600px] mx-auto space-y-6">
+        <div className="p-8 max-w-[1600px] mx-auto space-y-4">
           <Header market={data?.market ?? null} marketId={data?.marketId ?? null} />
           {fetching && (
             <div className="text-sm text-bo-neutral-400 animate-pulse">
@@ -104,8 +118,17 @@ export default function ShopperMindPage() {
           {!fetching && !gated && data?.configured && error && <ErrorBanner message={error} />}
           {!fetching && !gated && data?.configured && !error && (
             <>
-              <SignalOfTheDayCard sotd={data.signalOfTheDay} />
-              <PhenomenaGrid phenomena={data.phenomena} mallId={user?.mallId ?? null} />
+              <MacroDashboard country={country} />
+              {megaScenario && <MegaScenarioSection scenario={megaScenario} />}
+              <HorizonSection
+                horizon="short"
+                phenomena={grouped.short}
+                mallId={user?.mallId ?? null}
+                defaultOpen
+                topSlot={<SignalOfTheDayCard sotd={data.signalOfTheDay} />}
+              />
+              <HorizonSection horizon="medium" phenomena={grouped.medium} mallId={user?.mallId ?? null} />
+              <HorizonSection horizon="long" phenomena={grouped.long} mallId={user?.mallId ?? null} />
             </>
           )}
         </div>
@@ -141,21 +164,13 @@ function Header({ market, marketId }: { market: MarketDetail | null; marketId: s
   return (
     <div className="flex items-center gap-3">
       <div className="w-12 h-12 rounded-xl bg-bo-primary-100 flex items-center justify-center">
-        <Image
-          src="/shoppermind-icon.png"
-          alt=""
-          width={28}
-          height={28}
-          className="object-contain"
-        />
+        <Image src="/shoppermind-icon.png" alt="" width={28} height={28} className="object-contain" />
       </div>
       <div>
         <h1 className="text-2xl font-semibold text-bo-neutral-950 tracking-tight">
           {t('shoppermind.title')}
         </h1>
-        {cadenceLine && (
-          <p className="text-sm font-medium text-bo-neutral-700">{cadenceLine}</p>
-        )}
+        {cadenceLine && <p className="text-sm font-medium text-bo-neutral-700">{cadenceLine}</p>}
         <p className="text-xs text-bo-neutral-500">{marketLine}</p>
       </div>
     </div>
@@ -201,7 +216,7 @@ function SignalOfTheDayCard({ sotd }: { sotd: SignalOfTheDay | null }) {
   const { t, i18n } = useTranslation('mall');
   if (!sotd) {
     return (
-      <MallCard variant="glass" padding="md">
+      <MallCard variant="glass" padding="md" className="mb-4">
         <div className="text-xs uppercase tracking-wider text-bo-neutral-400 mb-2 font-medium">
           {t('shoppermind.signalSections.monthly')}
         </div>
@@ -224,68 +239,12 @@ function SignalOfTheDayCard({ sotd }: { sotd: SignalOfTheDay | null }) {
     }
   })();
   return (
-    <MallCard variant="glass" padding="md">
+    <MallCard variant="glass" padding="md" className="mb-4">
       <div className="text-xs uppercase tracking-wider text-bo-neutral-400 mb-3 font-medium">
         {t('shoppermind.signalSections.monthly')} · {monthLabel}
       </div>
       {sections ? (
-        <div className="space-y-5">
-          {sections.headline && (
-            <h2 className="text-lg font-semibold text-bo-neutral-950 leading-snug tracking-tight">
-              {sections.headline}
-            </h2>
-          )}
-          {sections.keyFindings && sections.keyFindings.length > 0 && (
-            <section>
-              <div className="text-[10px] uppercase tracking-wider text-bo-neutral-500 mb-1.5 font-semibold">
-                {t('shoppermind.signalSections.keyFindings')}
-              </div>
-              <ul className="list-disc pl-5 space-y-1 text-sm text-bo-neutral-800 leading-relaxed">
-                {sections.keyFindings.map((item, i) => (
-                  <li key={i}>{item}</li>
-                ))}
-              </ul>
-            </section>
-          )}
-          {sections.byCity && sections.byCity.length > 0 && (
-            <section className="space-y-3">
-              {sections.byCity.map((block, i) => (
-                <div key={i}>
-                  <div className="text-[10px] uppercase tracking-wider text-bo-neutral-500 mb-1.5 font-semibold">
-                    {t('shoppermind.signalSections.byCity', { city: block.city })}
-                  </div>
-                  <p className="text-sm text-bo-neutral-800 leading-relaxed whitespace-pre-wrap">
-                    {block.body}
-                  </p>
-                </div>
-              ))}
-            </section>
-          )}
-          {sections.alsoVisible && sections.alsoVisible.length > 0 && (
-            <section>
-              <div className="text-[10px] uppercase tracking-wider text-bo-neutral-500 mb-1.5 font-semibold">
-                {t('shoppermind.signalSections.alsoVisible')}
-              </div>
-              <ul className="list-disc pl-5 space-y-1 text-sm text-bo-neutral-800 leading-relaxed">
-                {sections.alsoVisible.map((item, i) => (
-                  <li key={i}>{item}</li>
-                ))}
-              </ul>
-            </section>
-          )}
-          {sections.watching && sections.watching.length > 0 && (
-            <section>
-              <div className="text-[10px] uppercase tracking-wider text-bo-neutral-500 mb-1.5 font-semibold">
-                {t('shoppermind.signalSections.watching')}
-              </div>
-              <ul className="list-disc pl-5 space-y-1 text-sm text-bo-neutral-800 leading-relaxed">
-                {sections.watching.map((item, i) => (
-                  <li key={i}>{item}</li>
-                ))}
-              </ul>
-            </section>
-          )}
-        </div>
+        <SignalSections sections={sections} />
       ) : (
         <p className="text-bo-neutral-900 leading-relaxed whitespace-pre-wrap">{narrative}</p>
       )}
@@ -299,36 +258,50 @@ function SignalOfTheDayCard({ sotd }: { sotd: SignalOfTheDay | null }) {
   );
 }
 
-function PhenomenaGrid({
-  phenomena,
-  mallId,
-}: {
-  phenomena: PhenomenonSummary[];
-  mallId: string | null | undefined;
-}) {
+function SignalSections({ sections }: { sections: ReturnType<typeof localizeSotdSections> }) {
   const { t } = useTranslation('mall');
-  if (phenomena.length === 0) {
-    return (
-      <MallCard variant="glass" padding="md">
-        <div className="text-sm text-bo-neutral-500">{t('shoppermind.grid.empty')}</div>
-      </MallCard>
-    );
-  }
+  if (!sections) return null;
   return (
-    <div>
-      <div className="flex items-center gap-3 mb-3">
-        <h2 className="text-sm font-semibold text-bo-neutral-950 uppercase tracking-wider">
-          {t('shoppermind.grid.topTrends')}
-        </h2>
-        <span className="text-xs text-bo-neutral-400">
-          {t('shoppermind.grid.tracked', { count: phenomena.length })}
-        </span>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {phenomena.map((p) => (
-          <PhenomenonCard key={p.id} phenomenon={p} mallId={mallId} />
-        ))}
-      </div>
+    <div className="space-y-5">
+      {sections.headline && (
+        <h3 className="text-lg font-semibold text-bo-neutral-950 leading-snug tracking-tight">
+          {sections.headline}
+        </h3>
+      )}
+      {sections.keyFindings && sections.keyFindings.length > 0 && (
+        <BulletBlock label={t('shoppermind.signalSections.keyFindings')} items={sections.keyFindings} />
+      )}
+      {sections.byCity && sections.byCity.length > 0 && (
+        <div className="space-y-3">
+          {sections.byCity.map((block, i) => (
+            <div key={i}>
+              <div className="text-[10px] uppercase tracking-wider text-bo-neutral-500 mb-1.5 font-semibold">
+                {t('shoppermind.signalSections.byCity', { city: block.city })}
+              </div>
+              <p className="text-sm text-bo-neutral-800 leading-relaxed whitespace-pre-wrap">{block.body}</p>
+            </div>
+          ))}
+        </div>
+      )}
+      {sections.alsoVisible && sections.alsoVisible.length > 0 && (
+        <BulletBlock label={t('shoppermind.signalSections.alsoVisible')} items={sections.alsoVisible} />
+      )}
+      {sections.watching && sections.watching.length > 0 && (
+        <BulletBlock label={t('shoppermind.signalSections.watching')} items={sections.watching} />
+      )}
     </div>
+  );
+}
+
+function BulletBlock({ label, items }: { label: string; items: string[] }) {
+  return (
+    <section>
+      <div className="text-[10px] uppercase tracking-wider text-bo-neutral-500 mb-1.5 font-semibold">{label}</div>
+      <ul className="list-disc pl-5 space-y-1 text-sm text-bo-neutral-800 leading-relaxed">
+        {items.map((item, i) => (
+          <li key={i}>{item}</li>
+        ))}
+      </ul>
+    </section>
   );
 }

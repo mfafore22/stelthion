@@ -417,9 +417,9 @@
   "shoppermind": {
     "title": "ShopperMind",
     "tagline": "Foresight for every mall with actionable forecasts",
-    "loading": "Loading\u2026",
-    "loadingTrends": "Loading trends\u2026",
-    "loadingTrend": "Loading trend\u2026",
+    "loading": "Loading…",
+    "loadingTrends": "Loading trends…",
+    "loadingTrend": "Loading trend…",
     "noMarket": "Trend engine",
     "marketPrefix": "Market",
     "snapshot": {
@@ -501,7 +501,7 @@
     },
     "trajectory": {
       "title": "Trend trajectory",
-      "subtitle": "Composite score over time \u2014 pick a window",
+      "subtitle": "Composite score over time — pick a window",
       "empty": "No scoring history recorded yet.",
       "windows": {
         "7d": "7d",
@@ -524,13 +524,13 @@
       }
     },
     "tooltips": {
-      "relevance": "Composite score (0\u20131): how relevant this trend is to this specific market. Combines volume, velocity, source diversity, and cultural / foot-traffic proximity.",
+      "relevance": "Composite score (0–1): how relevant this trend is to this specific market. Combines volume, velocity, source diversity, and cultural / foot-traffic proximity.",
       "velocity": "Growth rate of the trend: how fast signal volume is changing. Positive = rising, negative = falling.",
       "acceleration": "Change in growth rate: whether the trend is speeding up or slowing down. Positive = momentum building.",
-      "volume": "Number of signals observed in the period \u2014 how many times this trend has been mentioned across sources.",
-      "cultural": "Cultural dimension: how close this trend is to this market's cultural conversation \u2014 social media, news and everyday choices.",
-      "footTraffic": "Foot-traffic dimension: how close this trend is to actual visitor flow around the mall \u2014 local events, transit, and accessibility.",
-      "composite": "Composite: weighted blend of the cultural and foot-traffic signals \u2014 the overall picture of the trend's relevance."
+      "volume": "Number of signals observed in the period — how many times this trend has been mentioned across sources.",
+      "cultural": "Cultural dimension: how close this trend is to this market's cultural conversation — social media, news and everyday choices.",
+      "footTraffic": "Foot-traffic dimension: how close this trend is to actual visitor flow around the mall — local events, transit, and accessibility.",
+      "composite": "Composite: weighted blend of the cultural and foot-traffic signals — the overall picture of the trend's relevance."
     },
     "sections": {
       "summary": "Summary",
@@ -556,7 +556,7 @@
     },
     "campaignIdea": {
       "generate": "Generate campaign idea",
-      "generating": "Drafting an idea\u2026",
+      "generating": "Drafting an idea…",
       "regenerate": "Regenerate",
       "refineInChat": "Refine in chat",
       "openInDetail": "Open in detail",
@@ -587,8 +587,8 @@
       "relatedTrendsEmpty": "No related trends connected to this one yet.",
       "linkGraph": "Link graph",
       "linkGraphEmpty": "No inferred links yet.",
-      "upstream": "Upstream \u2014 trends that feed into this one",
-      "downstream": "Downstream \u2014 trends this one feeds into",
+      "upstream": "Upstream — trends that feed into this one",
+      "downstream": "Downstream — trends this one feeds into",
       "recentScoring": "Recent scoring",
       "details": "Details",
       "tags": "Tags",
@@ -654,11 +654,11 @@
       "heading": "New link",
       "cancel": "Cancel",
       "save": "Save link",
-      "saving": "Saving\u2026",
+      "saving": "Saving…",
       "targetLabel": "Target trend ID",
       "targetPlaceholder": "trend-id",
       "typeLabel": "Link type",
-      "weightLabel": "Weight (0\u20131)",
+      "weightLabel": "Weight (0–1)",
       "rationaleLabel": "Rationale (optional)",
       "rationalePlaceholder": "Why is this link correct?",
       "errors": {
@@ -675,10 +675,56 @@
       "notSeededTitle": "Demo data not yet seeded",
       "notSeededBody": "Run {{command}} to populate demo markets.",
       "defaultFocus": "Retail trend intelligence",
-      "loading": "Loading trend data\u2026",
-      "ctaTitle": "See ShopperMind with your mall\u2019s data",
-      "ctaBody": "When connected to Stelthion, ShopperMind correlates these trends with real footfall data from your mall \u2014 showing you which trends are already driving traffic.",
+      "loading": "Loading trend data…",
+      "ctaTitle": "See ShopperMind with your mall’s data",
+      "ctaBody": "When connected to Stelthion, ShopperMind correlates these trends with real footfall data from your mall — showing you which trends are already driving traffic.",
       "bookDemo": "Book a demo"
+    },
+    "section": {
+      "expand": "Expand",
+      "collapse": "Collapse",
+      "sources": "Sources"
+    },
+    "horizons": {
+      "short": {
+        "label": "Short term",
+        "timespan": "2026",
+        "subtitle": "Immediate opportunities",
+        "verb": "Capture"
+      },
+      "medium": {
+        "label": "Medium term",
+        "timespan": "2027–2029",
+        "subtitle": "Trends to prepare for",
+        "verb": "Prepare"
+      },
+      "long": {
+        "label": "Long term",
+        "timespan": "2030+",
+        "subtitle": "Industry-shaping shifts",
+        "verb": "Restructure"
+      },
+      "tracked_one": "{{count}} phenomenon tracked",
+      "tracked_other": "{{count}} phenomena tracked",
+      "emptyShort": "No short-term signals tracked yet.",
+      "emptyMedium": "Medium-term trends are still being built.",
+      "emptyLong": "Long-term phenomena are still being built."
+    },
+    "megaScenario": {
+      "label": "Headline view",
+      "pathBlocks": {
+        "macro": "Macroeconomy",
+        "consumer": "Consumer",
+        "retail": "Retail",
+        "property": "Property market",
+        "mallImpact": "Mall impact"
+      }
+    },
+    "macro": {
+      "title": "Economic indicators",
+      "loading": "Loading indicators…",
+      "updated": "updated {{date}}",
+      "noData": "no data"
     }
   },
   "campaigns": {

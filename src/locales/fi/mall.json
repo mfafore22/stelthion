@@ -417,9 +417,9 @@
   "shoppermind": {
     "title": "ShopperMind",
     "tagline": "Ennakointi jokaiseen kauppakeskukseen toimivilla ennusteilla",
-    "loading": "Ladataan\u2026",
-    "loadingTrends": "Ladataan trendej\u00e4\u2026",
-    "loadingTrend": "Ladataan trendi\u00e4\u2026",
+    "loading": "Ladataan…",
+    "loadingTrends": "Ladataan trendejä…",
+    "loadingTrend": "Ladataan trendiä…",
     "noMarket": "Trendimoottori",
     "marketPrefix": "Markkina",
     "snapshot": {
@@ -434,39 +434,39 @@
     },
     "back": "Takaisin trendeihin",
     "breadcrumbRoot": "ShopperMind",
-    "notFound": "Trendi\u00e4 {{id}} ei l\u00f6ytynyt.",
+    "notFound": "Trendiä {{id}} ei löytynyt.",
     "notConfigured": {
-      "title": "Palvelua ei ole m\u00e4\u00e4ritetty t\u00e4h\u00e4n ymp\u00e4rist\u00f6\u00f6n",
-      "body": "Aseta {{envVar1}} ja {{envVar2}} yhdist\u00e4\u00e4ksesi. T\u00e4m\u00e4 kauppakeskus vastaisi tunnusta {{marketId}}.",
-      "detail": "ShopperMind-palvelua ei ole m\u00e4\u00e4ritetty t\u00e4h\u00e4n ymp\u00e4rist\u00f6\u00f6n."
+      "title": "Palvelua ei ole määritetty tähän ympäristöön",
+      "body": "Aseta {{envVar1}} ja {{envVar2}} yhdistääksesi. Tämä kauppakeskus vastaisi tunnusta {{marketId}}.",
+      "detail": "ShopperMind-palvelua ei ole määritetty tähän ympäristöön."
     },
     "upgrade": {
-      "title": "ShopperMind ei sis\u00e4lly sopimukseesi",
-      "body": "P\u00e4ivit\u00e4 sopimus ottaaksesi trendi\u00e4lyn k\u00e4ytt\u00f6\u00f6n markkinoillasi. Ota yhteyt\u00e4 asiakkuusvastaavaasi tai j\u00e4rjestelm\u00e4nvalvojaan vaihtaaksesi sopimuksen."
+      "title": "ShopperMind ei sisälly sopimukseesi",
+      "body": "Päivitä sopimus ottaaksesi trendiälyn käyttöön markkinoillasi. Ota yhteytä asiakkuusvastaavaasi tai järjestelmänvalvojaan vaihtaaksesi sopimuksen."
     },
     "errorBanner": "Trendipalvelu ei ole tavoitettavissa: {{message}}",
     "grid": {
-      "empty": "T\u00e4lle markkinalle ei ole viel\u00e4 seurattuja trendej\u00e4.",
-      "topTrends": "P\u00e4\u00e4trendit",
+      "empty": "Tälle markkinalle ei ole vielä seurattuja trendejä.",
+      "topTrends": "Päätrendit",
       "tracked_one": "{{count}} trendi seurannassa",
-      "tracked_other": "{{count}} trendi\u00e4 seurannassa",
+      "tracked_other": "{{count}} trendiä seurannassa",
       "score": "Pisteet"
     },
     "signalOfTheDay": {
-      "title": "P\u00e4iv\u00e4n signaali",
-      "empty": "T\u00e4lle markkinalle ei ole viel\u00e4 julkaistu signaalia t\u00e4n\u00e4\u00e4n."
+      "title": "Päivän signaali",
+      "empty": "Tälle markkinalle ei ole vielä julkaistu signaalia tänään."
     },
     "signalSections": {
       "monthly": "Kuukauden signaali",
-      "headline": "P\u00e4\u00e4otsikko",
-      "keyFindings": "T\u00e4rkeimm\u00e4t l\u00f6yd\u00f6kset",
+      "headline": "Pääotsikko",
+      "keyFindings": "Tärkeimmät löydökset",
       "byCity": "Kauppiaat, {{city}}",
-      "alsoVisible": "My\u00f6s n\u00e4kyvill\u00e4",
+      "alsoVisible": "Myös näkyvillä",
       "watching": "Seurannassa"
     },
     "states": {
       "EMERGING": "Nouseva",
-      "ACCELERATING": "Kiihtyv\u00e4",
+      "ACCELERATING": "Kiihtyvä",
       "STABLE": "Vakaa",
       "FADING": "Hiipuva",
       "DORMANT": "Lepotilassa"
@@ -478,31 +478,31 @@
       "state": "Tila",
       "compositeScore": "Kokonaispisteet",
       "divergentCallout": "Huomattava ero: trendi etenee eri tahtiin eri markkinoilla.",
-      "empty": "Markkinakohtaisia tietoja ker\u00e4t\u00e4\u00e4n yh\u00e4."
+      "empty": "Markkinakohtaisia tietoja kerätään yhä."
     },
     "evidence": {
-      "title": "N\u00e4yt\u00f6t",
+      "title": "Näytöt",
       "confidence": "Luottamusaste",
-      "componentsLabel": "Luottamusasteen osatekij\u00e4t",
-      "sourceList": "L\u00e4hteet",
-      "strongSources": "Vahvoja l\u00e4hteit\u00e4",
+      "componentsLabel": "Luottamusasteen osatekijät",
+      "sourceList": "Lähteet",
+      "strongSources": "Vahvoja lähteitä",
       "corroboratedIn": "Vahvistavat markkinat",
-      "whyConfident": "Miksi luotamme t\u00e4h\u00e4n",
+      "whyConfident": "Miksi luotamme tähän",
       "whyCautious": "Miksi olemme varovaisia",
-      "empty": "N\u00e4ytt\u00f6\u00e4 vahvistetaan viel\u00e4 eri l\u00e4hteist\u00e4."
+      "empty": "Näyttöä vahvistetaan vielä eri lähteistä."
     },
     "lifecycle": {
-      "label": "El\u00e4m\u00e4nkaari",
+      "label": "Elämänkaari",
       "relevance": "Relevanssi",
       "rising": "nouseva",
-      "cooling": "viilenev\u00e4",
+      "cooling": "viilenevä",
       "holding": "vakaa",
-      "youAreHere": "T\u00e4ss\u00e4 ollaan"
+      "youAreHere": "Tässä ollaan"
     },
     "trajectory": {
       "title": "Trendin kehitys",
-      "subtitle": "Yhdistelm\u00e4pisteet ajan mittaan \u2014 valitse aikaikkuna",
-      "empty": "Pisteytyshistoriaa ei ole viel\u00e4 kertynyt.",
+      "subtitle": "Yhdistelmäpisteet ajan mittaan — valitse aikaikkuna",
+      "empty": "Pisteytyshistoriaa ei ole vielä kertynyt.",
       "windows": {
         "7d": "7 pv",
         "14d": "14 pv",
@@ -512,7 +512,7 @@
         "12m": "12 kk"
       },
       "series": {
-        "composite": "Yhdistelm\u00e4",
+        "composite": "Yhdistelmä",
         "footTraffic": "Jalankulkuliikenne",
         "cultural": "Kulttuurinen"
       },
@@ -524,22 +524,22 @@
       }
     },
     "tooltips": {
-      "relevance": "Yhdistelm\u00e4pisteet (0\u20131): kertoo kuinka merkitt\u00e4v\u00e4 t\u00e4m\u00e4 trendi on juuri t\u00e4lle markkinalle. Yhdist\u00e4\u00e4 volyymin, nopeuden, l\u00e4hteiden monipuolisuuden ja kulttuurisen / jalankulun l\u00e4heisyyden.",
-      "velocity": "Trendin kasvuvauhti: kuinka nopeasti signaalim\u00e4\u00e4r\u00e4 muuttuu. Positiivinen = nousussa, negatiivinen = laskussa.",
-      "acceleration": "Kasvuvauhdin muutos: kiihtyyk\u00f6 vai hidastuuko trendi. Positiivinen kiihtyvyys = nousu voimistuu.",
-      "volume": "Havaittujen signaalien m\u00e4\u00e4r\u00e4 t\u00e4ll\u00e4 jaksolla \u2014 kuinka monta kertaa trendist\u00e4 on saatu mainintoja eri l\u00e4hteist\u00e4.",
-      "cultural": "Kulttuurinen ulottuvuus: kuinka l\u00e4hell\u00e4 trendi on t\u00e4m\u00e4n markkinan kulttuurista keskustelua \u2014 esim. somessa, mediassa ja ihmisten arjen valinnoissa.",
-      "footTraffic": "Jalankulkuliikenne: kuinka l\u00e4hell\u00e4 trendi on todellista k\u00e4vij\u00e4virtaa kauppakeskuksen ymp\u00e4rill\u00e4 \u2014 paikallisia tapahtumia, liikennett\u00e4 ja saavutettavuutta.",
-      "composite": "Yhdistelm\u00e4: kulttuurisen ja jalankulun signaalien painotettu yhdistelm\u00e4 \u2014 kokonaiskuva trendin merkitt\u00e4vyydest\u00e4."
+      "relevance": "Yhdistelmäpisteet (0–1): kertoo kuinka merkittävä tämä trendi on juuri tälle markkinalle. Yhdistää volyymin, nopeuden, lähteiden monipuolisuuden ja kulttuurisen / jalankulun läheisyyden.",
+      "velocity": "Trendin kasvuvauhti: kuinka nopeasti signaalimäärä muuttuu. Positiivinen = nousussa, negatiivinen = laskussa.",
+      "acceleration": "Kasvuvauhdin muutos: kiihtyykö vai hidastuuko trendi. Positiivinen kiihtyvyys = nousu voimistuu.",
+      "volume": "Havaittujen signaalien määrä tällä jaksolla — kuinka monta kertaa trendistä on saatu mainintoja eri lähteistä.",
+      "cultural": "Kulttuurinen ulottuvuus: kuinka lähellä trendi on tämän markkinan kulttuurista keskustelua — esim. somessa, mediassa ja ihmisten arjen valinnoissa.",
+      "footTraffic": "Jalankulkuliikenne: kuinka lähellä trendi on todellista kävijävirtaa kauppakeskuksen ympärillä — paikallisia tapahtumia, liikennettä ja saavutettavuutta.",
+      "composite": "Yhdistelmä: kulttuurisen ja jalankulun signaalien painotettu yhdistelmä — kokonaiskuva trendin merkittävyydestä."
     },
     "sections": {
-      "summary": "Tiivistelm\u00e4",
-      "signal": "Signaali t\u00e4ll\u00e4 markkinalla",
-      "impact": "Mit\u00e4 t\u00e4m\u00e4 tarkoittaa sinulle",
+      "summary": "Tiivistelmä",
+      "signal": "Signaali tällä markkinalla",
+      "impact": "Mitä tämä tarkoittaa sinulle",
       "opportunity": "Mahdollisuus",
       "watchOut": "Varoitus",
-      "opportunityBody": "Trendin kiihtyess\u00e4 varhain liikkeell\u00e4 oleville j\u00e4lleenmyyjille on tarjolla nousupotentiaalia edell\u00e4 kuvattujen kulmien kautta.",
-      "watchOutBody": "T\u00e4m\u00e4 trendi viilenee. Varaudu hitaampaan kysynt\u00e4\u00e4n ja valmistaudu siirt\u00e4m\u00e4\u00e4n painopistett\u00e4 pois syv\u00e4st\u00e4 altistumisesta.",
+      "opportunityBody": "Trendin kiihtyessä varhain liikkeellä oleville jälleenmyyjille on tarjolla nousupotentiaalia edellä kuvattujen kulmien kautta.",
+      "watchOutBody": "Tämä trendi viilenee. Varaudu hitaampaan kysyntään ja valmistaudu siirtämään painopistettä pois syvästä altistumisesta.",
       "campaignIdea": "Kampanjaidea",
       "feedback": "Oliko tästä hyötyä?"
     },
@@ -556,15 +556,15 @@
     },
     "campaignIdea": {
       "generate": "Luo kampanjaidea",
-      "generating": "Luonnostellaan ideaa\u2026",
+      "generating": "Luonnostellaan ideaa…",
       "regenerate": "Luo uusi versio",
       "refineInChat": "Hio chatissa",
-      "openInDetail": "Avaa lis\u00e4tiedot",
+      "openInDetail": "Avaa lisätiedot",
       "errorTitle": "Idean luominen ei onnistunut",
-      "errorBody": "Generaattori ei vastannut. Yrit\u00e4 hetken kuluttua uudelleen.",
+      "errorBody": "Generaattori ei vastannut. Yritä hetken kuluttua uudelleen.",
       "fields": {
         "hook": "Iskulause",
-        "audience": "Kohderyhm\u00e4",
+        "audience": "Kohderyhmä",
         "channels": "Kanavat",
         "successMetric": "Onnistumismittari",
         "angle": "Kulma",
@@ -579,16 +579,16 @@
         "standard": "Perus",
         "premium": "Premium"
       },
-      "durationDays": "{{count}} p\u00e4iv\u00e4\u00e4"
+      "durationDays": "{{count}} päivää"
     },
     "detail": {
       "description": "Kuvaus",
-      "relatedTrends": "Liittyv\u00e4t trendit",
-      "relatedTrendsEmpty": "T\u00e4lle trendille ei ole liitettyj\u00e4 trendej\u00e4.",
+      "relatedTrends": "Liittyvät trendit",
+      "relatedTrendsEmpty": "Tälle trendille ei ole liitettyjä trendejä.",
       "linkGraph": "Linkkikartta",
-      "linkGraphEmpty": "P\u00e4\u00e4telty\u00e4 linkki\u00e4 ei viel\u00e4 ole.",
-      "upstream": "Yl\u00e4virta \u2014 trendit, jotka sy\u00f6tt\u00e4v\u00e4t t\u00e4t\u00e4",
-      "downstream": "Alavirta \u2014 trendit, joihin t\u00e4m\u00e4 sy\u00f6tt\u00e4\u00e4",
+      "linkGraphEmpty": "Pääteltyä linkkiä ei vielä ole.",
+      "upstream": "Ylävirta — trendit, jotka syöttävät tätä",
+      "downstream": "Alavirta — trendit, joihin tämä syöttää",
       "recentScoring": "Viimeisin pisteytys",
       "details": "Tiedot",
       "tags": "Tunnisteet",
@@ -603,17 +603,17 @@
         "footTraffic": "Jalankulkuliikenne"
       },
       "metrics": {
-        "composite": "Yhdistelm\u00e4",
+        "composite": "Yhdistelmä",
         "footTraffic": "Jalankulku",
         "cultural": "Kulttuurinen",
         "velocity": "Nopeus",
         "acceleration": "Kiihtyvyys",
         "volume": "Volyymi",
-        "empty": "Pisteytyksi\u00e4 ei ole viel\u00e4 kirjattu."
+        "empty": "Pisteytyksiä ei ole vielä kirjattu."
       },
       "table": {
-        "date": "P\u00e4iv\u00e4ys",
-        "composite": "Yhdistelm\u00e4",
+        "date": "Päiväys",
+        "composite": "Yhdistelmä",
         "footTraffic": "Jalankulku",
         "cultural": "Kulttuurinen",
         "velocity": "Nopeus",
@@ -622,10 +622,10 @@
       }
     },
     "linkTypes": {
-      "CONTRIBUTES_TO": "Edist\u00e4\u00e4",
-      "MANIFESTATION_OF": "Ilmentym\u00e4",
-      "ACCELERATES": "Kiihdytt\u00e4\u00e4",
-      "PRECEDES": "Edelt\u00e4\u00e4",
+      "CONTRIBUTES_TO": "Edistää",
+      "MANIFESTATION_OF": "Ilmentymä",
+      "ACCELERATES": "Kiihdyttää",
+      "PRECEDES": "Edeltää",
       "CONTRADICTS": "Ristiriita"
     },
     "phenomenonTypes": {
@@ -636,8 +636,8 @@
     },
     "lifecycleStates": {
       "UPCOMING": "Tuleva",
-      "ACTIVE": "K\u00e4ynniss\u00e4",
-      "CONCLUDED": "P\u00e4\u00e4ttynyt"
+      "ACTIVE": "Käynnissä",
+      "CONCLUDED": "Päättynyt"
     },
     "scopes": {
       "CITY": "Kaupunki",
@@ -647,38 +647,84 @@
     },
     "errors": {
       "network": "Verkkovirhe",
-      "serviceUnavailable": "Palvelu ei ole k\u00e4ytett\u00e4viss\u00e4"
+      "serviceUnavailable": "Palvelu ei ole käytettävissä"
     },
     "linkAuthor": {
-      "openButton": "Lis\u00e4\u00e4 linkki (admin)",
+      "openButton": "Lisää linkki (admin)",
       "heading": "Uusi linkki",
       "cancel": "Peruuta",
       "save": "Tallenna linkki",
-      "saving": "Tallennetaan\u2026",
+      "saving": "Tallennetaan…",
       "targetLabel": "Kohdetrendin tunnus",
       "targetPlaceholder": "trendi-id",
       "typeLabel": "Linkin tyyppi",
-      "weightLabel": "Paino (0\u20131)",
+      "weightLabel": "Paino (0–1)",
       "rationaleLabel": "Perustelu (valinnainen)",
-      "rationalePlaceholder": "Miksi t\u00e4m\u00e4 linkki on oikein?",
+      "rationalePlaceholder": "Miksi tämä linkki on oikein?",
       "errors": {
         "targetRequired": "Kohdetrendin tunnus vaaditaan",
-        "cannotLinkSelf": "Trendi\u00e4 ei voi linkitt\u00e4\u00e4 itseens\u00e4",
-        "weightRange": "Painon on oltava v\u00e4lill\u00e4 0 ja 1",
+        "cannotLinkSelf": "Trendiä ei voi linkittää itseensä",
+        "weightRange": "Painon on oltava välillä 0 ja 1",
         "forbidden": "Linkkien kirjoittamiseen vaaditaan ADMIN-rooli",
-        "requestFailed": "Pyynt\u00f6 ep\u00e4onnistui ({{status}})"
+        "requestFailed": "Pyyntö epäonnistui ({{status}})"
       }
     },
     "demo": {
       "badge": "Demo",
-      "getAccess": "Hanki t\u00e4ysi k\u00e4ytt\u00f6oikeus",
-      "notSeededTitle": "Demo-dataa ei ole viel\u00e4 sy\u00f6tetty",
-      "notSeededBody": "Suorita {{command}} sy\u00f6tt\u00e4\u00e4ksesi demo-markkinat.",
-      "defaultFocus": "Kaupan trendi\u00e4ly",
-      "loading": "Ladataan trendidataa\u2026",
-      "ctaTitle": "N\u00e4e ShopperMind kauppakeskuksesi omilla tiedoilla",
-      "ctaBody": "Kun yhdistet\u00e4\u00e4n Stelthioniin, ShopperMind korreloi n\u00e4m\u00e4 trendit kauppakeskuksesi todellisen k\u00e4vij\u00e4liikenteen kanssa \u2014 n\u00e4ytt\u00e4en mitk\u00e4 trendit jo vet\u00e4v\u00e4t liikennett\u00e4.",
+      "getAccess": "Hanki täysi käyttöoikeus",
+      "notSeededTitle": "Demo-dataa ei ole vielä syötetty",
+      "notSeededBody": "Suorita {{command}} syöttääksesi demo-markkinat.",
+      "defaultFocus": "Kaupan trendiäly",
+      "loading": "Ladataan trendidataa…",
+      "ctaTitle": "Näe ShopperMind kauppakeskuksesi omilla tiedoilla",
+      "ctaBody": "Kun yhdistetään Stelthioniin, ShopperMind korreloi nämä trendit kauppakeskuksesi todellisen kävijäliikenteen kanssa — näyttäen mitkä trendit jo vetävät liikennettä.",
       "bookDemo": "Varaa demo"
+    },
+    "section": {
+      "expand": "Laajenna",
+      "collapse": "Tiivistä",
+      "sources": "Lähteet"
+    },
+    "horizons": {
+      "short": {
+        "label": "Lyhyt aikaväli",
+        "timespan": "2026",
+        "subtitle": "Välittömät mahdollisuudet",
+        "verb": "Hyödynnä"
+      },
+      "medium": {
+        "label": "Keskipitkä aikaväli",
+        "timespan": "2027–2029",
+        "subtitle": "Trendit, joihin valmistautua",
+        "verb": "Valmistaudu"
+      },
+      "long": {
+        "label": "Pitkä aikaväli",
+        "timespan": "2030+",
+        "subtitle": "Toimialaa muokkaavat ilmiöt",
+        "verb": "Uudelleenjärjestele"
+      },
+      "tracked_one": "{{count}} ilmiö seurannassa",
+      "tracked_other": "{{count}} ilmiötä seurannassa",
+      "emptyShort": "Lyhyen aikavälin signaaleja kerätään parhaillaan.",
+      "emptyMedium": "Keskipitkän aikavälin trendejä päivitetään.",
+      "emptyLong": "Pitkän aikavälin ilmiöitä rakennetaan parhaillaan."
+    },
+    "megaScenario": {
+      "label": "Päänäkymä",
+      "pathBlocks": {
+        "macro": "Makrotalous",
+        "consumer": "Kuluttaja",
+        "retail": "Kauppa",
+        "property": "Kiinteistömarkkina",
+        "mallImpact": "Vaikutus kauppakeskukseen"
+      }
+    },
+    "macro": {
+      "title": "Talouden tunnusluvut",
+      "loading": "Ladataan tunnuslukuja…",
+      "updated": "päivitetty {{date}}",
+      "noData": "ei dataa"
     }
   },
   "campaigns": {
@@ -891,7 +937,7 @@
       "clear": "Poista konteksti"
     },
     "greetings": {
-      "shoppermindTrend": "N\u00e4en, ett\u00e4 tutkit *{{label}}* -trendi\u00e4 ({{state}}). Haluatko, ett\u00e4 luonnostelen sille kampanjaidean? Voin my\u00f6s ehdottaa pari erilaista linjaa."
+      "shoppermindTrend": "Näen, että tutkit *{{label}}* -trendiä ({{state}}). Haluatko, että luonnostelen sille kampanjaidean? Voin myös ehdottaa pari erilaista linjaa."
     },
     "newConversation": "Uusi keskustelu",
     "recent": "Viimeisimmät",
