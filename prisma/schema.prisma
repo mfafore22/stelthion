@@ -579,3 +579,22 @@ model ConciergeBriefingSubscription {
 
   @@unique([mallId, userId])
 }
+
+// ─── ShopperMind macro indicators ──────────────────────────────────────────
+// Public macroeconomic series fetched from open APIs (e.g. Tilastokeskus PxWeb).
+// One row per (indicator, period). Sync script upserts on conflict.
+
+model MacroIndicatorPoint {
+  id            String   @id @default(cuid())
+  indicatorCode String
+  country       String
+  period        String
+  periodDate    DateTime
+  value         Float
+  raw           Json?
+  fetchedAt     DateTime @default(now())
+
+  @@unique([indicatorCode, period])
+  @@index([indicatorCode, periodDate])
+  @@index([country])
+}
