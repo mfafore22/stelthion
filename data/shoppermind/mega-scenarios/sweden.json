@@ -1,0 +1,47 @@
+{
+  "id": "sweden-placeholder",
+  "country": "SE",
+  "timespan": "2030+",
+  "updatedAt": "2026-04-30",
+  "placeholder": true,
+  "i18n": {
+    "fi": {
+      "title": "Ruotsin rakenteellinen siirtymä",
+      "intro": "Ruotsin markkinaa kerätään parhaillaan. Lähiaikoina avautuu sama kolmen polun analyysi kuin Suomelle: hidas normalisoituminen, julkisen talouden sokki ja uusi kasvuarkkitehtuuri.",
+      "redString": "Tulossa pian.",
+      "pathsLabel": "Kolme polkua vuoteen 2035",
+      "paths": [],
+      "actionsLabel": "Toimenpide-ehdotukset kiinteistöille",
+      "actionsGeneralLabel": "Kaikkia kiinteistöjä koskevat",
+      "actionsGeneral": [],
+      "actionsPerMallLabel": "Kiinteistökohtaiset ehdotukset",
+      "actionsPerMall": {}
+    },
+    "en": {
+      "title": "Sweden's structural transition",
+      "intro": "The Swedish market analysis is in preparation. The same three-path framework used for Finland (slow normalisation, public-finance shock, new growth architecture) will follow shortly.",
+      "redString": "Coming soon.",
+      "pathsLabel": "Three paths to 2035",
+      "paths": [],
+      "actionsLabel": "Property action recommendations",
+      "actionsGeneralLabel": "Across all properties",
+      "actionsGeneral": [],
+      "actionsPerMallLabel": "Property-specific recommendations",
+      "actionsPerMall": {}
+    },
+    "sv": {
+      "title": "Sveriges strukturomställning",
+      "intro": "Svensk marknadsanalys är under förberedelse. Samma tre-vägs-ramverk som för Finland (långsam normalisering, offentlig finanschock, ny tillväxtarkitektur) kommer inom kort.",
+      "redString": "Kommer snart.",
+      "pathsLabel": "Tre vägar till 2035",
+      "paths": [],
+      "actionsLabel": "Åtgärdsförslag för fastigheter",
+      "actionsGeneralLabel": "Gäller alla fastigheter",
+      "actionsGeneral": [],
+      "actionsPerMallLabel": "Fastighetsspecifika rekommendationer",
+      "actionsPerMall": {}
+    }
+  },
+  "glossary": { "fi": {}, "en": {}, "sv": {} },
+  "sources": []
+}

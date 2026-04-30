@@ -487,7 +487,17 @@
       "state": "Status",
       "compositeScore": "Poäng",
       "divergentCallout": "Markant skillnad: trenden utvecklas olika på olika marknader.",
-      "empty": "Marknadsdata samlas fortfarande in."
+      "empty": "Marknadsdata samlas fortfarande in.",
+      "FI": "Finland",
+      "SE": "Sverige",
+      "US": "USA",
+      "UAE": "Förenade Arabemiraten",
+      "KR": "Sydkorea",
+      "EU": "EU (översikt)",
+      "comingSoon": "Kommer snart",
+      "comingSoonBody": "Marknadsanalys förbereds. Vyn uppdateras när källorna validerats.",
+      "noScenario": "En huvudvy för denna marknad förbereds.",
+      "horizonsComingSoon": "Tidshorisontstrender tillgängliga snart."
     },
     "evidence": {
       "title": "Belysning",
@@ -737,13 +747,31 @@
         "retail": "Handel",
         "property": "Fastighetsmarknad",
         "mallImpact": "Påverkan på köpcentrum"
-      }
+      },
+      "pathToneNeutral": "Neutral",
+      "pathToneDark": "Mörk",
+      "pathToneBright": "Ljus",
+      "evidenceLabel": "Bevis",
+      "keyNumbersLabel": "Nyckeltal"
     },
     "macro": {
       "title": "Ekonomiska indikatorer",
       "loading": "Laddar indikatorer…",
       "updated": "uppdaterad {{date}}",
-      "noData": "ingen data"
+      "noData": "ingen data",
+      "onlyFinland": "Live-makroindikatorer endast tillgängliga för Finland för närvarande."
+    },
+    "header": {
+      "title": "ShopperMind Trendöversikt",
+      "marketLabel": "Marknad"
+    },
+    "actions": {
+      "general": "Åtgärdsförslag för fastigheter",
+      "perMall": "Fastighetsspecifika rekommendationer",
+      "selectProperty": "Välj fastighet",
+      "kpisLabel": "Nyckelmått",
+      "kpiTarget": "Mål",
+      "noMallSelected": "Välj en fastighet för att se rekommendationerna."
     }
   },
   "campaigns": {

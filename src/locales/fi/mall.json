@@ -478,7 +478,17 @@
       "state": "Tila",
       "compositeScore": "Kokonaispisteet",
       "divergentCallout": "Huomattava ero: trendi etenee eri tahtiin eri markkinoilla.",
-      "empty": "Markkinakohtaisia tietoja kerätään yhä."
+      "empty": "Markkinakohtaisia tietoja kerätään yhä.",
+      "FI": "Suomi",
+      "SE": "Ruotsi",
+      "US": "Yhdysvallat",
+      "UAE": "Arabiemiirikunnat",
+      "KR": "Etelä-Korea",
+      "EU": "EU (yleiskuva)",
+      "comingSoon": "Tulossa pian",
+      "comingSoonBody": "Markkinaa kerätään parhaillaan. Päivitämme näkymän, kun lähteet on validoitu.",
+      "noScenario": "Tämän markkinan päänäkymää kerätään parhaillaan.",
+      "horizonsComingSoon": "Aikajaksokohtaiset trendit saatavilla pian."
     },
     "evidence": {
       "title": "Näytöt",
@@ -728,13 +738,31 @@
         "retail": "Kauppa",
         "property": "Kiinteistömarkkina",
         "mallImpact": "Vaikutus kauppakeskukseen"
-      }
+      },
+      "pathToneNeutral": "Neutraali",
+      "pathToneDark": "Synkkä",
+      "pathToneBright": "Valoisa",
+      "evidenceLabel": "Näyttö",
+      "keyNumbersLabel": "Tunnusluvut"
     },
     "macro": {
       "title": "Talouden tunnusluvut",
       "loading": "Ladataan tunnuslukuja…",
       "updated": "päivitetty {{date}}",
-      "noData": "ei dataa"
+      "noData": "ei dataa",
+      "onlyFinland": "Live-makroindikaattorit saatavilla vain Suomesta toistaiseksi."
+    },
+    "header": {
+      "title": "ShopperMind Trendikatsaus",
+      "marketLabel": "Markkina"
+    },
+    "actions": {
+      "general": "Toimenpide-ehdotukset kiinteistöille",
+      "perMall": "Kiinteistökohtaiset ehdotukset",
+      "selectProperty": "Valitse kiinteistö",
+      "kpisLabel": "Ydinmittarit",
+      "kpiTarget": "Tavoite",
+      "noMallSelected": "Valitse kiinteistö nähdäksesi ehdotukset."
     }
   },
   "campaigns": {

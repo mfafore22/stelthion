@@ -478,7 +478,17 @@
       "state": "State",
       "compositeScore": "Composite",
       "divergentCallout": "Notable contrast: this trend plays out differently across markets.",
-      "empty": "Cross-market readings are still being gathered for this trend."
+      "empty": "Cross-market readings are still being gathered for this trend.",
+      "FI": "Finland",
+      "SE": "Sweden",
+      "US": "United States",
+      "UAE": "United Arab Emirates",
+      "KR": "South Korea",
+      "EU": "EU (overview)",
+      "comingSoon": "Coming soon",
+      "comingSoonBody": "Market analysis is in preparation. The view updates once sources are validated.",
+      "noScenario": "A headline view for this market is in preparation.",
+      "horizonsComingSoon": "Time-horizon trends available shortly."
     },
     "evidence": {
       "title": "Evidence",
@@ -728,13 +738,31 @@
         "retail": "Retail",
         "property": "Property market",
         "mallImpact": "Mall impact"
-      }
+      },
+      "pathToneNeutral": "Neutral",
+      "pathToneDark": "Dark",
+      "pathToneBright": "Bright",
+      "evidenceLabel": "Evidence",
+      "keyNumbersLabel": "Key numbers"
     },
     "macro": {
       "title": "Economic indicators",
       "loading": "Loading indicators…",
       "updated": "updated {{date}}",
-      "noData": "no data"
+      "noData": "no data",
+      "onlyFinland": "Live macro indicators available for Finland only at this time."
+    },
+    "header": {
+      "title": "ShopperMind Trend Outlook",
+      "marketLabel": "Market"
+    },
+    "actions": {
+      "general": "Property action recommendations",
+      "perMall": "Property-specific recommendations",
+      "selectProperty": "Select property",
+      "kpisLabel": "Key metrics",
+      "kpiTarget": "Target",
+      "noMallSelected": "Select a property to see its recommendations."
     }
   },
   "campaigns": {
