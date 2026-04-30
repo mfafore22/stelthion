@@ -763,7 +763,29 @@
       "selectProperty": "Select property",
       "kpisLabel": "Key metrics",
       "kpiTarget": "Target",
-      "noMallSelected": "Select a property to see its recommendations."
+      "noMallSelected": "Select a property to see its recommendations.",
+      "ownProperties": "Own properties",
+      "competitorProperties": "Competitors (benchmark)",
+      "competitorTag": "Competitor"
+    },
+    "curatedTrends": {
+      "label": "Analyst trends",
+      "tracked_one": "{{count}} curated trend",
+      "tracked_other": "{{count}} curated trends",
+      "confidence": "Confidence {{score}}/100",
+      "confidenceTooltip": "Confidence score from source agreement and recency",
+      "mallImplications": "What this means for the property",
+      "mallImplicationsFor": "What this means for {{mallName}}",
+      "opportunities": "Opportunities",
+      "campaigns": "Campaign ideas",
+      "playAtMall": "Use this trend",
+      "marketsNote": "{{- defaultValue}}"
+    },
+    "mallFormat": {
+      "transit": "Transit hub",
+      "mixedUse": "Service hub",
+      "destination": "Destination",
+      "all": "All formats"
     }
   },
   "campaigns": {

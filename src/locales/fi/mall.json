@@ -763,7 +763,29 @@
       "selectProperty": "Valitse kiinteistö",
       "kpisLabel": "Ydinmittarit",
       "kpiTarget": "Tavoite",
-      "noMallSelected": "Valitse kiinteistö nähdäksesi ehdotukset."
+      "noMallSelected": "Valitse kiinteistö nähdäksesi ehdotukset.",
+      "ownProperties": "Omat kohteet",
+      "competitorProperties": "Kilpailijat (vertailu)",
+      "competitorTag": "Kilpailija"
+    },
+    "curatedTrends": {
+      "label": "Analyytikon trendit",
+      "tracked_one": "{{count}} kuratoitu trendi",
+      "tracked_other": "{{count}} kuratoitua trendiä",
+      "confidence": "Luotettavuus {{score}}/100",
+      "confidenceTooltip": "Lähteiden ja yhdenmukaisuuden luotettavuusarvio",
+      "mallImplications": "Mitä tämä tarkoittaa kiinteistölle",
+      "mallImplicationsFor": "Mitä tämä tarkoittaa kohteelle: {{mallName}}",
+      "opportunities": "Mahdollisuudet",
+      "campaigns": "Kampanjaideat",
+      "playAtMall": "Käytä tätä trendiä",
+      "marketsNote": "{{- defaultValue}}"
+    },
+    "mallFormat": {
+      "transit": "Kauttakulkukeskus",
+      "mixedUse": "Palvelukeskus",
+      "destination": "Kohdekeskus",
+      "all": "Kaikki muodot"
     }
   },
   "campaigns": {

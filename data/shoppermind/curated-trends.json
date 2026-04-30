@@ -1,0 +1,337 @@
+{
+  "version": 1,
+  "updatedAt": "2026-04-30",
+  "report": "Integrated FI/SE consumer-trends report",
+  "trends": [
+    {
+      "id": "smart-value-low-risk",
+      "horizon": "short",
+      "countries": ["FI", "SE"],
+      "mallFormat": "all",
+      "state": "ACCELERATING",
+      "confidence": 95,
+      "label": {
+        "fi": "Älykäs arvo ja matalan riskin kulutus",
+        "en": "Smart value and low-risk spending",
+        "sv": "Smart värde och lågriskkonsumtion"
+      },
+      "marketsNote": {
+        "fi": "Suomessa voimakkaampi 2026, Ruotsissa lievempi mutta nähtävissä.",
+        "en": "Stronger in Finland in 2026, also affecting Sweden but less defensively.",
+        "sv": "Starkare i Finland 2026, syns även i Sverige men mindre defensivt."
+      },
+      "body": {
+        "fi": "Molempien maiden kuluttajat haluavat arvoa, mutta eivät pelkkänä alennuksena. He palkitsevat läpinäkyvän hinnoittelun, kestävän laadun, pienemmän ostoriskin ja helpommat valinnat. Kauppakeskuksissa kategoriatuottavuus siirtyy heikosti erottuvasta vapaa-ajan vähittäiskaupasta toimijoille, jotka osaavat viestiä reiluudesta, hyödyllisyydestä ja varmuudesta.",
+        "en": "Consumers in both countries want value, but not as simple discount. They reward transparent pricing, durable quality, lower purchase risk, and easier choices. Category productivity shifts away from weakly differentiated discretionary tenants toward retailers who communicate fairness, usefulness, and confidence.",
+        "sv": "Konsumenter i båda länderna vill ha värde, men inte som ren rabatt. De belönar transparent prissättning, hållbar kvalitet, lägre köprisk och enklare val. Kategoriproduktivitet flyttas från svagt differentierad sällanhandel till aktörer som kommunicerar rättvisa, nytta och trygghet."
+      },
+      "mallImplications": {
+        "realidea-tripla": {
+          "fi": ["Hyödynnä korkea kävijämäärä ja sekakäyttöympäristö ankkuroidaksesi arvoa kätevien päivittäistavaroiden, ruoan, terveyden ja nopeiden ostosten kautta.", "Säilytä kokemustarjontaa, joka oikeuttaa satunnaisen hemmottelun."],
+          "en": ["Use the high footfall and mixed-use environment to anchor value through convenience-led grocery, food, health, and fast-mission retail.", "Keep experience tenants that justify occasional indulgence."],
+          "sv": ["Använd det höga besökarflödet och blandanvändningsmiljön för att förankra värde genom dagligvaror, mat, hälsa och snabb-mission-handel.", "Behåll upplevelsehyresgäster som motiverar tillfällig lyx."]
+        },
+        "realidea-sello": {
+          "fi": ["Vahvista välttämätöntä vähittäiskauppaa, kotitalouden arvoa ja perheryhmiä.", "Tarjoa palveluita, jotka tukevat toistuvia käyntejä heikon luottamuksen aikana."],
+          "en": ["Strengthen essential retail, household value, and family categories.", "Offer services that support repeat visits during weak-confidence periods."],
+          "sv": ["Stärk dagligvaruhandel, hushållsvärde och familjekategorier.", "Erbjud tjänster som stöder återkommande besök under svaga förtroendeperioder."]
+        },
+        "citycon-itis": {
+          "fi": ["Vahvista välttämättömyyksiä ja arjen palveluita laajalle väestökatteelle.", "Hyödynnä julkisen liikenteen yhteyttä toistuvan asioinnin lähteenä."],
+          "en": ["Strengthen essentials and everyday services for the broad catchment.", "Use the public transport connection as a repeat-visit driver."],
+          "sv": ["Stärk basvaror och vardagstjänster för det breda upptagningsområdet.", "Använd kollektivtrafikförbindelsen som drivkraft för återkommande besök."]
+        },
+        "citycon-jumbo": {
+          "fi": ["Suojele kohdekeskuksen rooli yhdistämällä perheystävällinen arvo ja vapaa-ajan ankkurit.", "Suuremmat ostokorit valikoituvat tarkasti paineen alla."],
+          "en": ["Protect the destination role by combining family-led value with leisure anchors.", "Larger baskets become more selective under pressure."],
+          "sv": ["Skydda destinationsrollen genom att kombinera familjevärde med fritidsankare.", "Större varukorgar blir mer selektiva under press."]
+        },
+        "westfield-mos": {
+          "fi": ["Vältä pelkkää luksuspainotusta.", "Rakenna 'saavutettava premium' ja kuratoitu arvo."],
+          "en": ["Avoid over-indexing on luxury-only positioning.", "Build reachable premium and curated value."],
+          "sv": ["Undvik renodlad lyxpositionering.", "Bygg åtkomlig premium och kuraterat värde."]
+        },
+        "westfield-taby": {
+          "fi": ["Korosta kuratoituja arvovalintoja perheille ja paikallisille kävijöille.", "Yhdistä uskollisuusohjelmat hintojen läpinäkyvyyteen."],
+          "en": ["Highlight curated value choices for families and local visitors.", "Tie loyalty to transparent pricing."],
+          "sv": ["Lyft fram kuraterade värdeval för familjer och lokala besökare.", "Knyt lojalitet till prisklarhet."]
+        }
+      },
+      "opportunities": {
+        "fi": ["Omien merkkien pop-up- ja löytöalueet", "Takuu-, korjaus- ja vaihtopalvelut elektroniikan ja kodin lähellä", "Perheen budjettimissio etenkin Suomessa"],
+        "en": ["Private label pop-ups and discovery zones", "Warranty, repair, and trade-in services near electronics and home", "Family budget missions, especially in Finland"],
+        "sv": ["Pop-up och upptäcktszoner för egna märken", "Garanti-, reparations- och inbytestjänster nära elektronik och hem", "Familjebudget-mission, särskilt i Finland"]
+      },
+      "campaigns": [
+        { "name": "Worth It This Week" },
+        { "name": "No Surprise Prices Across the Mall" },
+        { "name": "Trade In, Trade Up, Spend Safer" }
+      ],
+      "sourceIds": ["niq-consumer-outlook-2026", "capgemini-consumer-2026", "nepa-nordic-fmcg-2026", "stat-fi-confidence-mar-2026", "scb-better-economy-2026"]
+    },
+    {
+      "id": "frictionless-omnichannel",
+      "horizon": "medium",
+      "countries": ["FI", "SE"],
+      "mallFormat": "all",
+      "state": "ACCELERATING",
+      "confidence": 92,
+      "label": {
+        "fi": "Saumaton monikanavaisuus ja kauppakeskus toimitusalustana",
+        "en": "Frictionless omnichannel and the mall as fulfilment platform",
+        "sv": "Friktionsfri omnikanal och köpcentret som leveransplattform"
+      },
+      "marketsNote": {
+        "fi": "Ruotsi tällä hetkellä kypsempi, Suomi ottaa kiinni markkinapaineen alla.",
+        "en": "Sweden currently more mature, Finland catching up under marketplace pressure.",
+        "sv": "Sverige för närvarande mognare, Finland kommer ikapp under marknadstryck."
+      },
+      "body": {
+        "fi": "Pohjoismainen kuluttaja olettaa kauppakeskuksen ja kauppojen toimivan yhtenä järjestelmänä: mobiililöytö, reaaliaikainen varastotieto, verkkotilaus ja nouto, helpot palautukset, lokerot, sosiaalinen inspiraatio ja nopea toimitus. Suuret kauppakeskukset voivat ylittää yksittäiset myymälät muuttumalla paikalliseksi logistiikka- ja mukavuuskeskukseksi.",
+        "en": "The Nordic consumer expects the mall and retailers to function as one system: mobile discovery, real-time stock, click-and-collect, easy returns, lockers, social-led inspiration, and fast last-mile. Major malls can outperform standalone stores by becoming local logistics and convenience hubs rather than just footfall aggregators.",
+        "sv": "Den nordiska konsumenten förväntar sig att köpcentret och butikerna fungerar som ett system: mobil upptäckt, realtidslager, click-and-collect, enkla returer, skåp, social inspiration och snabb sista milen. Stora köpcentrum kan överträffa fristående butiker genom att bli lokala logistik- och bekvämlighetsnav."
+      },
+      "mallImplications": {
+        "realidea-tripla": {
+          "fi": ["Tripla on parhaiten asemoitu Suomen johtavaksi 'fyysiseksi toimitusalustaksi' liikenneintegraation ja laajan myymäläsekoituksen ansiosta.", "Tee asemavirta ja noutopisteet näkyväksi sovelluksessa ja asemahallissa."],
+          "en": ["Tripla is best positioned to become Finland's leading physical fulfilment platform thanks to transport integration and broad store mix.", "Make station flow and pickup points visible in app and station hall."],
+          "sv": ["Tripla är bäst positionerad att bli Finlands ledande fysiska leveransplattform tack vare transitintegration och bred butiksmix.", "Gör stationsflödet och hämtpunkterna synliga i app och stationshall."]
+        },
+        "realidea-sello": {
+          "fi": ["Painota lähialueen toimituslogiikkaa, palautusten käsittelyä, terveys- ja palveluasiointia.", "Yhdistä uskollisuusohjelma ja sovelluskokemus saumattomasti."],
+          "en": ["Lean into neighbourhood fulfilment, returns handling, and healthcare/service errands.", "Integrate loyalty and app experiences seamlessly."],
+          "sv": ["Satsa på lokal leverans, returhantering och hälso-/servicebesök.", "Integrera lojalitet och app-upplevelse sömlöst."]
+        },
+        "citycon-itis": {
+          "fi": ["Hyödynnä julkisen liikenteen virta ja laaja katealue alueellisena toimitussolmuna.", "Tarjoa keskitetyt palautus- ja noutopisteet."],
+          "en": ["Use public-transport flow and broad catchment as a regional fulfilment node.", "Offer centralized returns and pickup points."],
+          "sv": ["Använd kollektivtrafikflödet och brett upptagningsområde som regional leveransnod.", "Erbjud centraliserade returer och hämtningspunkter."]
+        },
+        "citycon-jumbo": {
+          "fi": ["Yhdistä kohdekäynnit ennakkovaraukseen ja perheen reittisuunnitteluun.", "Tee parkki-noutoreitistä helppo."],
+          "en": ["Connect destination visits with pre-booking and family planning.", "Make parking-to-pickup journey easy."],
+          "sv": ["Koppla destinationsbesök till förbokning och familjeplanering.", "Gör parkering-till-hämtning enkel."]
+        },
+        "westfield-mos": {
+          "fi": ["Toimituskanavat ja sujuva mobiilikokemus ovat perusinfraa, eivät innovaatio.", "Korosta tekoälyavusteista navigointia ja tuotteen löydettävyyttä."],
+          "en": ["Treat fulfilment choice and seamless mobile UX as basic infrastructure, not optional innovation.", "Highlight AI-assisted navigation and product discovery."],
+          "sv": ["Behandla leveransval och sömlös mobil-UX som grundinfrastruktur, inte valbar innovation.", "Lyft fram AI-assisterad navigation och produktupptäckt."]
+        },
+        "westfield-taby": {
+          "fi": ["Saumaton mobiili-UX ja noutoinfrastruktuuri perheasiakkaille.", "Sitoutumiseen liittyvät toimituspalvelut, ei pelkät tarjoukset."],
+          "en": ["Seamless mobile UX and pickup infrastructure for family customers.", "Loyalty-linked fulfilment services, not just discounts."],
+          "sv": ["Sömlös mobil-UX och hämtinfrastruktur för familjekunder.", "Lojalitetskopplade leveranstjänster, inte bara rabatter."]
+        }
+      },
+      "opportunities": {
+        "fi": ["Kauppakeskusten laajuiset noutopisteet ja palautukset", "Lokerot, palvelutiskit ja viimeisen mailin kumppanuudet", "Tekoälyavusteinen navigointi ja löydettävyys etenkin suurissa keskuksissa"],
+        "en": ["Mall-wide click-and-collect and return points", "Lockers, service desks, and last-mile partnerships", "AI-assisted mall navigation and product discovery, especially in very large centres"],
+        "sv": ["Hela köpcentrets click-and-collect och returpunkter", "Skåp, servicediskar och sista milen-partnerskap", "AI-assisterad navigering och produktupptäckt, särskilt i stora centrum"]
+      },
+      "campaigns": [
+        { "name": "Seen Online, Picked Up in 30 Minutes" },
+        { "name": "One Trip, Many Missions" },
+        { "name": "Return Anywhere in the Center" }
+      ],
+      "sourceIds": ["solteq-nordic-ecom-2026", "nshift-nordic-commerce-2026", "klingit-digital-buying-se-2026", "capgemini-consumer-2026"]
+    },
+    {
+      "id": "curated-discretionary",
+      "horizon": "medium",
+      "countries": ["FI", "SE"],
+      "mallFormat": "all",
+      "state": "EMERGING",
+      "confidence": 88,
+      "label": {
+        "fi": "Kuratoitu vapaa-ajan kulutuksen palautuminen",
+        "en": "Curated discretionary recovery",
+        "sv": "Kuraterad återhämtning av sällanhandeln"
+      },
+      "marketsNote": {
+        "fi": "Ruotsi aiemmin, Suomi myöhemmin.",
+        "en": "Sweden earlier, Finland later.",
+        "sv": "Sverige tidigare, Finland senare."
+      },
+      "body": {
+        "fi": "Vapaa-ajan vähittäiskauppa ei katoa, mutta muuttuu valikoivammaksi, kategorisoituneemmaksi ja tunneperäisemmäksi. Kokemus, muoti, kauneus, ruoka ja koti voivat palautua, mutta vain jos ne tuntuvat kuratoiduilta, ajantasaisilta ja sopivasti hinnoitelluilta.",
+        "en": "Discretionary retail is not vanishing; it is becoming more selective, more category-specific, and more dependent on emotional legitimacy. Experience, fashion, beauty, food, and home can recover, but only if they feel edited, current, and appropriately priced.",
+        "sv": "Sällanhandeln försvinner inte; den blir mer selektiv, mer kategorispecifik och mer beroende av emotionell legitimitet. Upplevelse, mode, skönhet, mat och hem kan återhämta sig, men bara om de känns kuraterade, aktuella och rätt prissatta."
+      },
+      "mallImplications": {
+        "realidea-tripla": {
+          "fi": ["Tripla voi johtaa trendipohjaista muotia, ruokaa ja viihdettä mittakaavansa ja yleisön monimuotoisuuden ansiosta.", "Yhdistä kausikuratointi sosiaalisen median löytöön."],
+          "en": ["Tripla can lead in trend-led fashion, food, and entertainment given its scale and audience variety.", "Combine seasonal curation with social discovery."],
+          "sv": ["Tripla kan leda inom trenddriven mode, mat och underhållning tack vare sin skala och publikvariation.", "Kombinera säsongskurerade urval med social upptäckt."]
+        },
+        "realidea-sello": {
+          "fi": ["Korosta perheen elämäntyyliä, hyvinvointia ja 'parempaa arkea' pelkän muotinäyttävyyden sijaan.", "Tarjoa pieni hemmotteluhetki perhereitin varrella."],
+          "en": ["Emphasize family lifestyle, wellness, and 'better everyday living' rather than pure fashion spectacle.", "Offer a small treat moment along the family route."],
+          "sv": ["Betona familjelivsstil, välmående och bättre vardag snarare än ren modespektakel.", "Erbjud ett litet välbefinnandeögonblick längs familjerundan."]
+        },
+        "citycon-itis": {
+          "fi": ["Saavutettava muoti, urheilu, nuori- ja perhevähittäiskauppa sekä viihdepaketit toimivat täällä.", "Pidä kuratointi ajantasaisena, älä luksuspainotteisena."],
+          "en": ["Accessible fashion, sports, youth/family retail, and entertainment bundles work here.", "Keep curation current, not luxury-led."],
+          "sv": ["Åtkomlig mode, sport, ungdom/familj-handel och underhållningspaket fungerar här.", "Håll urvalet aktuellt, inte lyxinriktat."]
+        },
+        "citycon-jumbo": {
+          "fi": ["Yhdistä saavutettava muoti ja viihde perheille.", "Vapaa-ajan ja shoppailun yhdistelmä on kohdekeskuksen vahvuus."],
+          "en": ["Combine accessible fashion and entertainment for families.", "Leisure-plus-shopping bundling is the destination's strength."],
+          "sv": ["Kombinera åtkomlig mode och underhållning för familjer.", "Fritid-plus-shopping är destinationens styrka."]
+        },
+        "westfield-mos": {
+          "fi": ["MoS voi johtaa trendipohjaista muotia ja viihdettä laajalla skaalalla.", "Saavutettava premium kuratoidulla 'small treat' -tarjonnalla."],
+          "en": ["MoS can lead in trend-led fashion and entertainment at scale.", "Accessible premium with curated 'small treat' offer."],
+          "sv": ["MoS kan leda inom trenddriven mode och underhållning i stor skala.", "Åtkomlig premium med kuraterat 'small treat'-erbjudande."]
+        },
+        "westfield-taby": {
+          "fi": ["Perheen elämäntyyli, hyvinvointi ja 'parempaa arkea' alueellisesti.", "Tasapainota muoti, kahvilat ja palvelut viikonloppumissioon."],
+          "en": ["Family lifestyle, wellness, and 'better everyday living' regionally.", "Balance fashion, cafés, and services for the weekend mission."],
+          "sv": ["Familjelivsstil, välmående och bättre vardag regionalt.", "Balansera mode, caféer och tjänster för helgmissionen."]
+        }
+      },
+      "opportunities": {
+        "fi": ["Kausikuratointi ja drop-konseptit", "Tapahtumavetoinen vähittäiskauppa ja ruokavetoinen viipymäaika", "Hyvinvointi-, kauneus- ja 'edullinen hemmottelu' -alueet"],
+        "en": ["Seasonal curation and drop concepts", "Event-based retail and food-led dwell time", "Wellness, beauty, and affordable-treat zones"],
+        "sv": ["Säsongskurerade urval och drop-koncept", "Eventbaserad handel och matledd vistelsetid", "Välmående, skönhet och prisvärda välbefinnandezoner"]
+      },
+      "campaigns": [
+        { "name": "Refresh the Season" },
+        { "name": "Little Luxury Weekend" },
+        { "name": "Three Looks, One Smart Budget" }
+      ],
+      "sourceIds": ["capgemini-consumer-2026", "bof-recession-out", "yougov-fashion-se-2026", "scb-retail-mar-2026"]
+    },
+    {
+      "id": "circular-commerce",
+      "horizon": "short",
+      "countries": ["FI", "SE"],
+      "mallFormat": "all",
+      "state": "ACCELERATING",
+      "confidence": 90,
+      "label": {
+        "fi": "Kiertokauppa ja tuotteen elinkaaren pidentäminen",
+        "en": "Circular commerce and product-life extension",
+        "sv": "Cirkulär handel och förlängd produktlivslängd"
+      },
+      "marketsNote": {
+        "fi": "Suomi vahvempi yritystason kiertotaloudessa, Ruotsi vahvempi digitaalis-kaupallisessa skaalauksessa.",
+        "en": "Finland stronger on corporate circular readiness, Sweden stronger on digital-commercial scaling.",
+        "sv": "Finland starkare på cirkulär företagsmognad, Sverige starkare på digital-kommersiell skalning."
+      },
+      "body": {
+        "fi": "Pohjoismaissa kiertotalousmallit etenevät, mutta yritysten valmius ja koko talouden kiertokyky eivät ole sama asia. Kauppakeskuksille mahdollisuus on hyvin käytännöllinen: rakenna jälleenmyynti, korjaus, uudelleenkäyttö ja jäljitettävyys vuokralaismixiin ja kävijäpolkuun.",
+        "en": "The Nordic region is moving toward circular retail, but corporate readiness and economy-wide circularity are not the same thing. For malls, the opportunity is very practical: build resale, repair, reuse, and traceability into the tenant mix and the visitor journey.",
+        "sv": "Norden går mot cirkulär handel, men företagsmognad och systemmässig cirkularitet är inte samma sak. För köpcentrum är möjligheten mycket praktisk: bygg in återförsäljning, reparation, återanvändning och spårbarhet i hyresgästmixen och besöksupplevelsen."
+      },
+      "mallImplications": {
+        "realidea-tripla": {
+          "fi": ["Tue kiertotaloutta korjaamoiden, käytetyn kaupan, takaisinotto­palveluiden ja keskustasoisten kierrätys-/keräyspolkujen kautta.", "Yhdistä asemavirta ja kiertotalouspysäkki."],
+          "en": ["Support circularity through repair studios, second-hand concepts, take-back services, and mall-level recycling journeys.", "Pair station flow with a circular pit-stop."],
+          "sv": ["Stöd cirkularitet genom reparationsstudior, second-hand, take-back-tjänster och cirkulära återvinnings­vägar.", "Koppla stationsflödet till en cirkulär pit-stop."]
+        },
+        "realidea-sello": {
+          "fi": ["Tarjoa korjauspaja, second hand -konseptit ja keräyspisteet keskeisenä palveluna.", "Yhdistä kiertotalous arjen palveluihin."],
+          "en": ["Offer a repair workshop, second-hand concepts, and collection points as core services.", "Tie circularity to everyday services."],
+          "sv": ["Erbjud reparationsverkstad, second-hand-koncept och insamlingspunkter som basservice.", "Koppla cirkularitet till vardagstjänster."]
+        },
+        "citycon-itis": {
+          "fi": ["Yhdistä kiertotalous laajaan kävijäkateeseen: korjaus, kierrätys, vaatevaihto.", "Ohjaa kierrätyspisteet julkisen liikenteen reitin varrelle."],
+          "en": ["Pair circularity with the broad catchment: repair, recycling, clothes swap.", "Place collection points along the transit route."],
+          "sv": ["Koppla cirkularitet till brett upptagningsområde: reparation, återvinning, klädbyte.", "Placera insamlingspunkter längs transitvägen."]
+        },
+        "citycon-jumbo": {
+          "fi": ["Kiertotalous perheen edullisuuden, urheilun ja vapaa-ajan kategorioiden kautta.", "Suuret 'second life' -tapahtumat hyödyntävät kohdekeskuksen mittakaavaa."],
+          "en": ["Circularity through family affordability, sports/outdoor reuse, and leisure categories.", "Large 'second life' events leverage destination scale."],
+          "sv": ["Cirkularitet via familjepris, sport/utomhus-återbruk och fritidskategorier.", "Stora 'second life'-event utnyttjar destinationsskalan."]
+        },
+        "westfield-mos": {
+          "fi": ["Tee kiertotaloudesta premiumia: brändätty jälleenmyynti, kunnostus ja jäljitettävät tuotetarinat.", "Sertifioidut resale-alueet rakennetussa ympäristössä."],
+          "en": ["Make circularity premium: branded resale, refurbishment, and traceable product narratives.", "Certified resale districts in a built environment."],
+          "sv": ["Gör cirkularitet premium: branded resale, renovering och spårbara produktberättelser.", "Certifierade resale-distrikt i byggd miljö."]
+        },
+        "westfield-taby": {
+          "fi": ["Premium-resale ja korjauspalvelut perheille; kiertotalouspalkitsemiset uskollisuusohjelmassa.", "Yhdistä kiertotalous arvostettuun arjen elämäntapaan."],
+          "en": ["Premium resale and repair for families; circular rewards in the loyalty program.", "Tie circularity to a curated everyday lifestyle."],
+          "sv": ["Premium resale och reparation för familjer; cirkulära belöningar i lojalitetsprogrammet.", "Koppla cirkularitet till kuraterad vardagslivsstil."]
+        }
+      },
+      "opportunities": {
+        "fi": ["Sertifioidut resale-alueet tai 'second life' -popup-markkinat", "Korjaus- ja huoltohubit", "Kauppakeskusten laajuiset kiertotalouspalkitsemiset"],
+        "en": ["Certified resale districts or rotating 'second life' markets", "Repair-and-care hubs", "Mall-wide circular loyalty rewards"],
+        "sv": ["Certifierade resale-distrikt eller roterande 'second life'-marknader", "Reparations- och vårdnav", "Cirkulära lojalitetsbelöningar i hela köpcentret"]
+      },
+      "campaigns": [
+        { "name": "Second Life Festival" },
+        { "name": "Bring Back & Benefit" },
+        { "name": "Know Your Product Journey" }
+      ],
+      "sourceIds": ["clic-circular-fi", "vtt-nordic-circular", "rise-circular-2024", "nordic-innovation-circular", "ec-2030-consumer-agenda"]
+    },
+    {
+      "id": "service-led-ageing",
+      "horizon": "long",
+      "countries": ["FI", "SE"],
+      "mallFormat": "all",
+      "state": "EMERGING",
+      "confidence": 82,
+      "label": {
+        "fi": "Palveluvetoiset kauppakeskukset, esteettömyys ja ikääntyminen",
+        "en": "Service-led malls, accessibility, and ageing",
+        "sv": "Servicedrivna köpcentrum, tillgänglighet och åldrande"
+      },
+      "marketsNote": {
+        "fi": "Rakenteellisesti tärkeämpi Suomessa, mutta merkityksellinen molemmissa.",
+        "en": "Structurally more important in Finland, but relevant in both.",
+        "sv": "Strukturellt viktigare i Finland, men relevant i båda."
+      },
+      "body": {
+        "fi": "Vuoteen 2030+ mennessä vähittäiskaupan kasvu ei tule yksinomaan myymällä enemmän tuotteita, vaan yhdistämällä vähittäiskauppa palveluihin, mukavuuteen, hyvinvointiin ja ikäystävälliseen suunnitteluun. Tämä koskee erityisesti suuria keskuksia, jotka kehittyvät jo paikallisiksi palveluekosysteemeiksi.",
+        "en": "By 2030+, retail growth comes less from selling more units and more from bundling retail with services, convenience, wellness, and age-inclusive design. This matters especially for large malls already evolving into local service ecosystems.",
+        "sv": "Fram till 2030+ kommer handelstillväxt mindre från att sälja fler enheter och mer från att kombinera handel med tjänster, bekvämlighet, välmående och åldersinkluderande design. Detta gäller särskilt stora köpcentrum som redan utvecklas till lokala serviceekosystem."
+      },
+      "mallImplications": {
+        "realidea-tripla": {
+          "fi": ["Yhdistä liikenne, ruoka, tapahtumat ja palvelut 'arjen alustaksi'.", "Esteettömyys ja levähdyspaikat asema-alueella."],
+          "en": ["Combine transit, food, events, and services into a daily-life platform.", "Accessibility and rest spaces in the station area."],
+          "sv": ["Kombinera transit, mat, evenemang och tjänster till en vardagsplattform.", "Tillgänglighet och vilopunkter i stationsområdet."]
+        },
+        "realidea-sello": {
+          "fi": ["Sello on erityisen linjassa: laaja palveluvalikoima ja alueellinen rooli.", "Syvennä terveys-, hyvinvointi- ja arjen palveluja."],
+          "en": ["Sello is especially aligned: broad service mix and regional role.", "Deepen health, wellness, and everyday services."],
+          "sv": ["Sello är särskilt anpassad: bred servicemix och regional roll.", "Fördjupa hälsa, välmående och vardagstjänster."]
+        },
+        "citycon-itis": {
+          "fi": ["Syvennä julkisia ja yksityisiä palveluita ja yhteisön käyttöä.", "Hyödynnä julkisen liikenteen ja laajan kateen profiili."],
+          "en": ["Deepen public/private services and community utility.", "Leverage transport and broad-catchment profile."],
+          "sv": ["Fördjupa offentliga/privata tjänster och samhällsanvändning.", "Utnyttja transit- och breddprofilen."]
+        },
+        "citycon-jumbo": {
+          "fi": ["Vapaa-aika ja perheviihde tukevat ikääntyvien isovanhempien ja lasten yhteisiä käyntejä.", "Esteetön perhereitti ja levähdyspisteet."],
+          "en": ["Leisure and family entertainment support multigenerational visits.", "Accessible family route and rest stops."],
+          "sv": ["Fritid och familjeunderhållning stöder flergenerationsbesök.", "Tillgänglig familjerunda och vilopunkter."]
+        },
+        "westfield-mos": {
+          "fi": ["Laajenna palveluvetoista mukavuutta terveyden, hyvinvoinnin ja perhetukea kautta.", "Sisällyttävä navigointi ja levähdys."],
+          "en": ["Extend service-led convenience through health, wellness, and family support.", "Inclusive navigation and rest."],
+          "sv": ["Utöka servicedriven bekvämlighet genom hälsa, välmående och familjestöd.", "Inkluderande navigering och vila."]
+        },
+        "westfield-taby": {
+          "fi": ["Esikaupunkimukavuus ja yhteisöpalvelut ikäystävällisesti.", "Membership-ohjelmat sidotaan palveluihin, ei pelkkiin alennuksiin."],
+          "en": ["Suburban convenience and community services with age-inclusive design.", "Membership tied to services, not only discounts."],
+          "sv": ["Förorts­bekvämlighet och samhällstjänster med åldersinkluderande design.", "Medlemskap kopplat till tjänster, inte bara rabatter."]
+        }
+      },
+      "opportunities": {
+        "fi": ["Terveys- ja hyvinvointivuokralaiset", "Mukavuuteen ja palveluihin sidotut jäsenyysohjelmat", "Parempi esteettömyys, levähdyspaikat ja opasteet"],
+        "en": ["Healthcare and wellbeing tenants", "Membership programs tied to convenience and services, not only discounts", "Better accessibility, rest areas, and wayfinding"],
+        "sv": ["Vård- och välmåendehyresgäster", "Medlemskap kopplat till bekvämlighet och tjänster, inte bara rabatter", "Bättre tillgänglighet, vilopunkter och vägledning"]
+      },
+      "campaigns": [
+        { "name": "Everything for Everyday Life" },
+        { "name": "Designed for Every Decade" },
+        { "name": "Care, Comfort, Convenience" }
+      ],
+      "sourceIds": ["bof-longterm-aging", "ey-fi-changing-consumption", "mintel-2026-beyond", "ki-fiscal-2026"]
+    }
+  ]
+}

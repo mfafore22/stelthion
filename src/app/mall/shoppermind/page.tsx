@@ -12,7 +12,8 @@ import { MegaScenarioSection } from '@/components/mall/shoppermind/MegaScenarioS
 import { HorizonSection } from '@/components/mall/shoppermind/HorizonSection';
 import { MacroDashboard } from '@/components/mall/shoppermind/MacroDashboard';
 import { SignalOfTheDayCard } from '@/components/mall/shoppermind/SignalOfTheDayCard';
-import { getMegaScenario, SUPPORTED_COUNTRIES } from '@/lib/shoppermind/megaScenario';
+import { CuratedTrendStrip } from '@/components/mall/shoppermind/CuratedTrendStrip';
+import { getMegaScenario, getCuratedTrendsByHorizon, SUPPORTED_COUNTRIES } from '@/lib/shoppermind/megaScenario';
 import { groupByHorizon } from '@/lib/shoppermind/horizon';
 
 interface OverviewResponse {
@@ -71,6 +72,12 @@ export default function ShopperMindPage() {
     () => getMegaScenario(country, i18n.language, selectedMallId),
     [country, i18n.language, selectedMallId],
   );
+  const curated = useMemo(() => ({
+    short:  getCuratedTrendsByHorizon(country, i18n.language, 'short',  selectedMallId),
+    medium: getCuratedTrendsByHorizon(country, i18n.language, 'medium', selectedMallId),
+    long:   getCuratedTrendsByHorizon(country, i18n.language, 'long',   selectedMallId),
+  }), [country, i18n.language, selectedMallId]);
+  const selectedMallName = megaScenario?.perMall?.name;
 
   const isSupported = SUPPORTED_SET.has(country);
 
@@ -121,9 +128,14 @@ export default function ShopperMindPage() {
                 {isSupported ? (
                   <>
                     <HorizonSection horizon="short" phenomena={grouped.short} mallId={user?.mallId ?? null}
-                                    defaultOpen topSlot={<SignalOfTheDayCard sotd={data.signalOfTheDay} />} />
-                    <HorizonSection horizon="medium" phenomena={grouped.medium} mallId={user?.mallId ?? null} />
-                    <HorizonSection horizon="long" phenomena={grouped.long} mallId={user?.mallId ?? null} />
+                                    defaultOpen topSlot={<>
+                                      <CuratedTrendStrip trends={curated.short} mallName={selectedMallName} />
+                                      <SignalOfTheDayCard sotd={data.signalOfTheDay} />
+                                    </>} />
+                    <HorizonSection horizon="medium" phenomena={grouped.medium} mallId={user?.mallId ?? null}
+                                    topSlot={<CuratedTrendStrip trends={curated.medium} mallName={selectedMallName} />} />
+                    <HorizonSection horizon="long" phenomena={grouped.long} mallId={user?.mallId ?? null}
+                                    topSlot={<CuratedTrendStrip trends={curated.long} mallName={selectedMallName} />} />
                   </>
                 ) : (
                   <div className="rounded-lg border border-dashed border-bo-neutral-300 bg-bo-neutral-50/50 p-6 text-sm text-bo-neutral-600">

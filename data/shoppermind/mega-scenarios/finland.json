@@ -507,7 +507,9 @@
               "target": "≥ 95/100",
               "hint": "pidetään johtoasema"
             }
-          ]
+          ],
+          "operator": "Realidea",
+          "isCompetitor": false
         },
         "realidea-tripla": {
           "name": "Mall of Tripla, Helsinki",
@@ -559,6 +561,100 @@
               "label": "Kanta-asiakasohjelmaan kuuluvat",
               "target": "≥ 30 %",
               "hint": "data-arvo"
+            }
+          ],
+          "operator": "Realidea",
+          "isCompetitor": false
+        },
+        "citycon-itis": {
+          "operator": "Citycon",
+          "isCompetitor": true,
+          "name": "Itis, Helsinki",
+          "context": "Citycon-omisteinen kilpailijakauppakeskus. Yli 120 myymälää, vahva julkisen liikenteen yhteys, laaja katealue. Käytä vertailupohjana arjen palveluiden ja edullisen vähittäiskaupan strategioissa.",
+          "items": [
+            "Vertaa arjen välttämättömyyksien painotusta: kuinka paljon Itis painottaa päivittäistavaraa ja terveyspalveluita oman portfolion vastaaviin nähden.",
+            "Seuraa metro- ja bussiliityntää toistuvan asioinnin moottorina, peilaa Sellon ja Triplan oman asemavirran konversioon.",
+            "Tarkista keskitettyjen palautus- ja noutopisteiden määrä ja sijoittelu vs. omat keskukset.",
+            "Mittaa kierrätys- ja korjauspisteiden näkyvyys reittien varrella, vertaa omiin kiertotaloustoimenpiteisiin.",
+            "Arvioi saavutettavan muodin ja viihteen yhdistelmäpaketit kilpailijan kalenterissa.",
+            "Vertaa julkiset palvelut + terveys + arki -mission yhdistelmää oman tarjonnan vastaaviin."
+          ],
+          "kpis": [
+            {
+              "label": "Julkisen liikenteen kävijöiden osuus",
+              "target": "vertailu",
+              "hint": "metro- ja bussipysäkkien hyödyntäminen vs. oma"
+            },
+            {
+              "label": "Arjen välttämättömyyksien osuus pinta-alasta",
+              "target": "vertailu",
+              "hint": "päivittäistavara, apteekki, terveys"
+            },
+            {
+              "label": "Keskitetyt palautus- ja noutopisteet",
+              "target": "vertailu",
+              "hint": "sijoittelu ja määrä"
+            },
+            {
+              "label": "Kierrätys- ja korjauspisteet",
+              "target": "vertailu",
+              "hint": "näkyvillä reiteillä"
+            },
+            {
+              "label": "Tapahtumakalenterin tiheys",
+              "target": "vertailu",
+              "hint": "kuukauden tapahtumat"
+            },
+            {
+              "label": "Vuokrasopimusten kesto",
+              "target": "vertailu",
+              "hint": "liikevaihtosidonnaisten osuus"
+            }
+          ]
+        },
+        "citycon-jumbo": {
+          "operator": "Citycon",
+          "isCompetitor": true,
+          "name": "Jumbo-Flamingo, Vantaa",
+          "context": "Citycon-omisteinen kohdekauppakeskus yhdessä Flamingo-vapaa-ajan kanssa. Vertaile suuren kohdekäynnin strategioita: pitkä viipymäaika, perheen ostokorit ja vapaa-ajan ankkurien kytkös retail-myyntiin.",
+          "items": [
+            "Vertaa keskimääräistä viipymäaikaa: Jumbon kohdekäynti vs. omien kohteiden vastaava.",
+            "Mittaa vapaa-ajan ankkurien (kylpylä, elokuvat) konversio retail-myyntiin saman käynnin aikana.",
+            "Seuraa perheryhmäkävijöiden osuutta ja peilaa Sellon ja Triplan vastaaviin lukuihin.",
+            "Vertaa kiertotaloustapahtumia (lasten vaatevaihto, urheilun second hand) oman kalenterin vastaaviin.",
+            "Tarkista pysäköintialueiden saatavuus ruuhka-aikana, käytä benchmarkina.",
+            "Arvioi viikonlopun ostokorin keskikoko ja vertaa oman kohdekeskuksen vastaavaan."
+          ],
+          "kpis": [
+            {
+              "label": "Keskimääräinen viipymäaika",
+              "target": "vertailu",
+              "hint": "kohdekäynnin pituus"
+            },
+            {
+              "label": "Perheryhmäkävijöiden osuus",
+              "target": "vertailu",
+              "hint": "2+ kävijää, joista 1+ alle 18 v"
+            },
+            {
+              "label": "Vapaa-aika -> retail -konversio",
+              "target": "vertailu",
+              "hint": "samasta käynnistä"
+            },
+            {
+              "label": "Pysäköinnin saatavuus ruuhka-aikana",
+              "target": "vertailu",
+              "hint": "lauantai 12-16"
+            },
+            {
+              "label": "Kohde-ostosten keskikoko",
+              "target": "vertailu",
+              "hint": "kävijää kohti"
+            },
+            {
+              "label": "Vapaa-ajan tapahtumat / kuukausi",
+              "target": "vertailu",
+              "hint": "Flamingo + Jumbo yhteensä"
             }
           ]
         }
@@ -1066,7 +1162,9 @@
               "target": "≥ 95/100",
               "hint": "maintain leadership"
             }
-          ]
+          ],
+          "operator": "Realidea",
+          "isCompetitor": false
         },
         "realidea-tripla": {
           "name": "Mall of Tripla, Helsinki",
@@ -1118,6 +1216,100 @@
               "label": "Loyalty-program members share",
               "target": "≥ 30 %",
               "hint": "data value"
+            }
+          ],
+          "operator": "Realidea",
+          "isCompetitor": false
+        },
+        "citycon-itis": {
+          "operator": "Citycon",
+          "isCompetitor": true,
+          "name": "Itis, Helsinki",
+          "context": "Citycon-owned competitor mall. 120+ stores, strong public-transport links, broad catchment. Use as a benchmark for everyday-service and value-retail strategy.",
+          "items": [
+            "Benchmark essentials weighting: how much Itis leans on grocery and health vs. your own portfolio.",
+            "Track metro/bus interchange as a repeat-visit driver vs. Sello and Tripla flow.",
+            "Compare centralised return and pickup point density and placement.",
+            "Check visibility of recycling and repair stations along routes vs. your circular actions.",
+            "Audit accessible-fashion + entertainment bundles in the competitor calendar.",
+            "Compare public-services + health + everyday mission bundling vs. your own offer."
+          ],
+          "kpis": [
+            {
+              "label": "Public-transport visitor share",
+              "target": "benchmark",
+              "hint": "interchange flow vs. your own"
+            },
+            {
+              "label": "Essentials share of leasable area",
+              "target": "benchmark",
+              "hint": "grocery, pharmacy, health"
+            },
+            {
+              "label": "Centralised return and pickup points",
+              "target": "benchmark",
+              "hint": "placement and count"
+            },
+            {
+              "label": "Recycling and repair points",
+              "target": "benchmark",
+              "hint": "on visible routes"
+            },
+            {
+              "label": "Event calendar density",
+              "target": "benchmark",
+              "hint": "monthly events"
+            },
+            {
+              "label": "Lease term and turnover-linked share",
+              "target": "benchmark",
+              "hint": "vs. your own portfolio"
+            }
+          ]
+        },
+        "citycon-jumbo": {
+          "operator": "Citycon",
+          "isCompetitor": true,
+          "name": "Jumbo-Flamingo, Vantaa",
+          "context": "Citycon-owned destination mall paired with Flamingo leisure complex. Use as a benchmark for destination-visit strategy: long dwell time, family baskets, and leisure-anchor conversion to retail.",
+          "items": [
+            "Benchmark average dwell time: Jumbo destination visit vs. your own destination assets.",
+            "Measure leisure-anchor (spa, cinema) conversion to retail in the same visit.",
+            "Track family-group visitor share vs. Sello and Tripla.",
+            "Compare circular-economy events (kids clothing swap, sports second hand) vs. your calendar.",
+            "Check parking availability at peak as a benchmark.",
+            "Evaluate weekend basket size vs. your destination assets."
+          ],
+          "kpis": [
+            {
+              "label": "Average dwell time",
+              "target": "benchmark",
+              "hint": "destination visit length"
+            },
+            {
+              "label": "Family-group visitor share",
+              "target": "benchmark",
+              "hint": "2+ visitors, 1+ under 18"
+            },
+            {
+              "label": "Leisure-to-retail conversion",
+              "target": "benchmark",
+              "hint": "same visit"
+            },
+            {
+              "label": "Parking availability at peak",
+              "target": "benchmark",
+              "hint": "Saturday 12-16"
+            },
+            {
+              "label": "Destination basket size",
+              "target": "benchmark",
+              "hint": "per visitor"
+            },
+            {
+              "label": "Leisure events per month",
+              "target": "benchmark",
+              "hint": "Flamingo + Jumbo combined"
             }
           ]
         }
@@ -1625,7 +1817,9 @@
               "target": "≥ 95/100",
               "hint": "behåll ledarskapet"
             }
-          ]
+          ],
+          "operator": "Realidea",
+          "isCompetitor": false
         },
         "realidea-tripla": {
           "name": "Mall of Tripla, Helsingfors",
@@ -1677,6 +1871,100 @@
               "label": "Kundklubbsmedlemmars andel",
               "target": "≥ 30 %",
               "hint": "datavärde"
+            }
+          ],
+          "operator": "Realidea",
+          "isCompetitor": false
+        },
+        "citycon-itis": {
+          "operator": "Citycon",
+          "isCompetitor": true,
+          "name": "Itis, Helsingfors",
+          "context": "Citycon-ägd konkurrent. 120+ butiker, starka kollektivtrafikförbindelser, brett upptagningsområde. Använd som benchmark för vardagstjänster och värdehandel.",
+          "items": [
+            "Jämför basvarors vikt: hur mycket Itis lutar mot dagligvaror och hälsa vs. egen portfölj.",
+            "Följ metro/buss-byte som återbesöksdrivkraft vs. Sello och Tripla.",
+            "Jämför centraliserad retur/hämtning, antal och placering.",
+            "Kontrollera synlighet av återvinning och reparation längs stråk vs. egna cirkulära åtgärder.",
+            "Granska åtkomliga mode- och underhållningspaket i konkurrentens kalender.",
+            "Jämför offentliga tjänster + hälsa + vardag som mission vs. eget erbjudande."
+          ],
+          "kpis": [
+            {
+              "label": "Andel kollektivtrafikbesökare",
+              "target": "benchmark",
+              "hint": "byte vs. egen"
+            },
+            {
+              "label": "Basvarors andel av yta",
+              "target": "benchmark",
+              "hint": "dagligvaror, apotek, hälsa"
+            },
+            {
+              "label": "Centraliserad retur/hämtning",
+              "target": "benchmark",
+              "hint": "placering och antal"
+            },
+            {
+              "label": "Återvinning och reparation",
+              "target": "benchmark",
+              "hint": "synliga stråk"
+            },
+            {
+              "label": "Eventkalenderns densitet",
+              "target": "benchmark",
+              "hint": "månadsvis"
+            },
+            {
+              "label": "Hyrestid och omsättningsbaserade",
+              "target": "benchmark",
+              "hint": "vs. egen portfölj"
+            }
+          ]
+        },
+        "citycon-jumbo": {
+          "operator": "Citycon",
+          "isCompetitor": true,
+          "name": "Jumbo-Flamingo, Vanda",
+          "context": "Citycon-ägd destination tillsammans med Flamingo-fritidskomplexet. Använd som benchmark för destinationsbesök: lång vistelsetid, familjekorg och fritidsankar-konvertering till handel.",
+          "items": [
+            "Jämför genomsnittlig vistelsetid: Jumbo destination vs. egna destinationer.",
+            "Mät fritidsankar (spa, bio) konvertering till handel i samma besök.",
+            "Följ familjebesöksandel vs. Sello och Tripla.",
+            "Jämför cirkulärekonomi-event (barnkläder-byte, sport second hand) vs. egen kalender.",
+            "Kontrollera parkeringstillgång vid topp som benchmark.",
+            "Utvärdera helgkorg vs. egna destinationer."
+          ],
+          "kpis": [
+            {
+              "label": "Genomsnittlig vistelsetid",
+              "target": "benchmark",
+              "hint": "destinationsbesökets längd"
+            },
+            {
+              "label": "Familjebesöksandel",
+              "target": "benchmark",
+              "hint": "2+ besökare, 1+ under 18"
+            },
+            {
+              "label": "Fritid till handel-konvertering",
+              "target": "benchmark",
+              "hint": "samma besök"
+            },
+            {
+              "label": "Parkeringstillgång vid topp",
+              "target": "benchmark",
+              "hint": "lördag 12-16"
+            },
+            {
+              "label": "Destinationskorg per besökare",
+              "target": "benchmark",
+              "hint": "familjemission"
+            },
+            {
+              "label": "Fritidsevenemang per månad",
+              "target": "benchmark",
+              "hint": "Flamingo + Jumbo tillsammans"
             }
           ]
         }

@@ -772,7 +772,29 @@
       "selectProperty": "Välj fastighet",
       "kpisLabel": "Nyckelmått",
       "kpiTarget": "Mål",
-      "noMallSelected": "Välj en fastighet för att se rekommendationerna."
+      "noMallSelected": "Välj en fastighet för att se rekommendationerna.",
+      "ownProperties": "Egna fastigheter",
+      "competitorProperties": "Konkurrenter (benchmark)",
+      "competitorTag": "Konkurrent"
+    },
+    "curatedTrends": {
+      "label": "Analytiker-trender",
+      "tracked_one": "{{count}} kuraterad trend",
+      "tracked_other": "{{count}} kuraterade trender",
+      "confidence": "Tillförlitlighet {{score}}/100",
+      "confidenceTooltip": "Tillförlitlighet baserad på källöverenskommelse och aktualitet",
+      "mallImplications": "Vad det betyder för fastigheten",
+      "mallImplicationsFor": "Vad det betyder för {{mallName}}",
+      "opportunities": "Möjligheter",
+      "campaigns": "Kampanjidéer",
+      "playAtMall": "Använd denna trend",
+      "marketsNote": "{{- defaultValue}}"
+    },
+    "mallFormat": {
+      "transit": "Transitnav",
+      "mixedUse": "Servicenav",
+      "destination": "Destination",
+      "all": "Alla format"
     }
   },
   "campaigns": {
