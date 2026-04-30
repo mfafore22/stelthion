@@ -762,8 +762,9 @@
       "onlyFinland": "Live-makroindikatorer endast tillgängliga för Finland för närvarande."
     },
     "header": {
-      "title": "ShopperMind Trendöversikt",
-      "marketLabel": "Marknad"
+      "marketLabel": "Marknad",
+      "titleBrand": "ShopperMind",
+      "titleSuffix": "Trendöversikt"
     },
     "actions": {
       "general": "Åtgärdsförslag för fastigheter",

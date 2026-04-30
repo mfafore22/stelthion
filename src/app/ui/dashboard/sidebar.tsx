@@ -16,7 +16,7 @@ import {
 function ShopperMindIcon({ size = 20 }: { size?: number }) {
   return (
     <Image
-      src="/shoppermind-icon.png"
+      src="/ShopperMind_icon_vector.svg"
       alt=""
       width={size + 8}
       height={size + 8}

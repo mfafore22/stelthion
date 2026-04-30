@@ -88,8 +88,8 @@ export default function ShopperMindPage() {
       <MallLeftNav />
       <MallTopBar />
       <main className="ml-[80px] h-screen overflow-auto pt-[80px] bg-bo-neutral-50">
+        <ShopperMindHeader country={country} onCountryChange={setCountry} />
         <div className="px-8 max-w-[1600px] mx-auto">
-          <ShopperMindHeader country={country} onCountryChange={setCountry} />
           <div className="py-6 space-y-4">
             {fetching && (
               <div className="text-sm text-bo-neutral-400 animate-pulse">{t('shoppermind.loadingTrends')}</div>

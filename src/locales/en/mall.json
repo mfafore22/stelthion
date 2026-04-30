@@ -753,8 +753,9 @@
       "onlyFinland": "Live macro indicators available for Finland only at this time."
     },
     "header": {
-      "title": "ShopperMind Trend Outlook",
-      "marketLabel": "Market"
+      "marketLabel": "Market",
+      "titleBrand": "ShopperMind",
+      "titleSuffix": "Trend Outlook"
     },
     "actions": {
       "general": "Property action recommendations",

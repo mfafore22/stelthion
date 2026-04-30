@@ -753,8 +753,9 @@
       "onlyFinland": "Live-makroindikaattorit saatavilla vain Suomesta toistaiseksi."
     },
     "header": {
-      "title": "ShopperMind Trendikatsaus",
-      "marketLabel": "Markkina"
+      "marketLabel": "Markkina",
+      "titleBrand": "ShopperMind",
+      "titleSuffix": "Trendikatsaus"
     },
     "actions": {
       "general": "Toimenpide-ehdotukset kiinteistöille",

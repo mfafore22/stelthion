@@ -27,7 +27,7 @@ export function CollapsibleSection({
   const { t } = useTranslation('mall');
   const aria = open ? t('shoppermind.section.collapse') : t('shoppermind.section.expand');
   return (
-    <section className={`rounded-2xl border border-bo-neutral-200/60 bg-white/70 backdrop-blur-xl ${toneClassName ?? ''}`}>
+    <section className={`rounded-2xl border-2 border-bo-neutral-300/60 bg-bo-glass shadow-bo-glass backdrop-blur-xl ${toneClassName ?? ''}`}>
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}

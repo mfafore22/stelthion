@@ -59,7 +59,7 @@ export default function ShopperMindDemoPage() {
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-bo-primary-100 flex items-center justify-center">
             <Image
-              src="/shoppermind-icon.png"
+              src="/ShopperMind_icon_vector.svg"
               alt=""
               width={24}
               height={24}

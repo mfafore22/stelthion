@@ -37,7 +37,7 @@ function ShopperMindIcon({ className }: { className?: string }) {
       )}
     >
       <Image
-        src="/shoppermind-icon.png"
+        src="/ShopperMind_icon_vector.svg"
         alt=""
         fill
         sizes="32px"
