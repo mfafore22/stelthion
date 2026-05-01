@@ -6,6 +6,7 @@ import { PathCollapsible } from './PathCollapsible';
 import { MegaScenarioActions } from './MegaScenarioActions';
 import { MallActionsPanel } from './MallActionsPanel';
 import { MallKpiGrid } from './MallKpiGrid';
+import { MallScenarioStressPanel } from './MallScenarioStressPanel';
 import { SourceLinkList } from './SourceLinkList';
 
 interface Props {
@@ -15,7 +16,8 @@ interface Props {
 }
 
 export function MegaScenarioSection({ scenario, selectedMallId, onSelectMall }: Props) {
-  const { t } = useTranslation('mall');
+  const { t, i18n } = useTranslation('mall');
+  const lang = i18n.language;
   const title = `${t('shoppermind.megaScenario.label')}: ${scenario.title}`;
   if (scenario.placeholder) {
     return (
@@ -51,6 +53,7 @@ export function MegaScenarioSection({ scenario, selectedMallId, onSelectMall }: 
           perMall={scenario.perMall}
         />
         <MallKpiGrid kpis={scenario.perMall?.kpis} />
+        <MallScenarioStressPanel mallId={selectedMallId} lang={lang} />
       </CollapsibleSection>
       <SourceLinkList sources={scenario.sources} />
     </CollapsibleSection>

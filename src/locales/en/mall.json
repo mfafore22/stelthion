@@ -800,6 +800,17 @@
       "in-store": "In-store",
       "event": "Event",
       "email": "Email"
+    },
+    "stress": {
+      "title": "Scenario sensitivity: {{mallName}}",
+      "operationalChanges": "Operational changes",
+      "keyRisks": "Key risks",
+      "sensitivities": "Sensitivities",
+      "impact": {
+        "low": "Low impact",
+        "medium": "Medium impact",
+        "high": "High impact"
+      }
     }
   },
   "campaigns": {

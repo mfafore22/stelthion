@@ -800,6 +800,17 @@
       "in-store": "Myymälöissä",
       "event": "Tapahtuma",
       "email": "Sähköposti"
+    },
+    "stress": {
+      "title": "Skenaario-herkkyys: {{mallName}}",
+      "operationalChanges": "Toimenpidemuutokset",
+      "keyRisks": "Keskeiset riskit",
+      "sensitivities": "Herkkyysmittarit",
+      "impact": {
+        "low": "Pieni vaikutus",
+        "medium": "Keskisuuri vaikutus",
+        "high": "Suuri vaikutus"
+      }
     }
   },
   "campaigns": {

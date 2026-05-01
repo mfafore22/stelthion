@@ -2,6 +2,7 @@ import finland from '../../../data/shoppermind/mega-scenarios/finland.json';
 import sweden from '../../../data/shoppermind/mega-scenarios/sweden.json';
 import reportSources from '../../../data/shoppermind/report-sources.json';
 import curatedTrendsData from '../../../data/shoppermind/curated-trends.json';
+import scenarioStressData from '../../../data/shoppermind/scenario-stress.json';
 
 type Lang = 'fi' | 'en' | 'sv';
 type Horizon = 'short' | 'medium' | 'long';
@@ -159,4 +160,29 @@ export function getCuratedTrends(country: string, lang: string, mallId?: string 
 
 export function getCuratedTrendsByHorizon(country: string, lang: string, horizon: Horizon, mallId?: string | null): CuratedTrendResolved[] {
   return getCuratedTrends(country, lang, mallId).filter((t) => t.horizon === horizon);
+}
+
+export type StressImpact = 'low' | 'medium' | 'high';
+export interface StressSensitivity { label: string; impact: StressImpact; note: string }
+export interface StressPath {
+  headline: string;
+  operationalChanges: string[];
+  keyRisks: string[];
+  sensitivities: StressSensitivity[];
+}
+export interface MallScenarioStressResolved {
+  mallId: string;
+  mallName: string;
+  paths: { a: StressPath; b: StressPath; c: StressPath };
+}
+
+export function getMallScenarioStress(mallId: string, lang: string): MallScenarioStressResolved | null {
+  if (!mallId) return null;
+  const L = pickLang(lang);
+  const entry = (scenarioStressData.malls as Array<{ mallId: string; i18n: Record<Lang, MallScenarioStressResolved> }>)
+    .find((m) => m.mallId === mallId);
+  if (!entry) return null;
+  const i = entry.i18n[L];
+  if (!i) return null;
+  return { mallId, mallName: i.mallName, paths: i.paths };
 }

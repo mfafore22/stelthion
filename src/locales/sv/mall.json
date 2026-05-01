@@ -809,6 +809,17 @@
       "in-store": "I butik",
       "event": "Evenemang",
       "email": "E-post"
+    },
+    "stress": {
+      "title": "Scenariokänslighet: {{mallName}}",
+      "operationalChanges": "Operativa ändringar",
+      "keyRisks": "Nyckelrisker",
+      "sensitivities": "Känslighetsmått",
+      "impact": {
+        "low": "Låg påverkan",
+        "medium": "Medel påverkan",
+        "high": "Hög påverkan"
+      }
     }
   },
   "campaigns": {
