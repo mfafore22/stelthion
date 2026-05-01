@@ -40,7 +40,14 @@ export interface MegaScenarioResolved {
   sources: MegaSource[];
 }
 
-export interface CuratedCampaign { name: string; mallIds?: string[] }
+export interface CuratedCampaign {
+  name: string;
+  audience?: string;
+  whyNow?: string;
+  channels?: string[];
+  successMetric?: string;
+  mallIds?: string[];
+}
 export interface CuratedTrendResolved {
   id: string;
   horizon: Horizon;
@@ -49,6 +56,7 @@ export interface CuratedTrendResolved {
   state: string;
   confidence: number;
   label: string;
+  category: string;
   marketsNote: string;
   body: string;
   mallImplications: string[];
@@ -112,6 +120,7 @@ export function getCuratedTrends(country: string, lang: string, mallId?: string 
     .map((t) => {
       const impl = (t.mallImplications as Record<string, Record<Lang, string[]>>);
       const mallImpl = mallId && impl[mallId] ? impl[mallId][L] : [];
+      const category = (t as { category?: Record<Lang, string> }).category;
       return {
         id: t.id,
         horizon: t.horizon as Horizon,
@@ -120,11 +129,29 @@ export function getCuratedTrends(country: string, lang: string, mallId?: string 
         state: t.state,
         confidence: t.confidence,
         label: t.label[L],
+        category: category ? category[L] : '',
         marketsNote: t.marketsNote[L],
         body: t.body[L],
         mallImplications: mallImpl,
         opportunities: (t.opportunities as Record<Lang, string[]>)[L],
-        campaigns: t.campaigns,
+        campaigns: (t.campaigns as unknown as Array<unknown>).map((c) => {
+          const cc = c as {
+            name: string | Record<Lang, string>;
+            audience?: Record<Lang, string>;
+            whyNow?: Record<Lang, string>;
+            channels?: string[];
+            successMetric?: Record<Lang, string>;
+            mallIds?: string[];
+          };
+          return {
+            name: typeof cc.name === 'string' ? cc.name : cc.name[L],
+            audience: cc.audience ? cc.audience[L] : undefined,
+            whyNow: cc.whyNow ? cc.whyNow[L] : undefined,
+            channels: cc.channels,
+            successMetric: cc.successMetric ? cc.successMetric[L] : undefined,
+            mallIds: cc.mallIds,
+          };
+        }),
         sources: resolveSourceIds(t.sourceIds, L),
       };
     });

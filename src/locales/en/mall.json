@@ -779,13 +779,27 @@
       "opportunities": "Opportunities",
       "campaigns": "Campaign ideas",
       "playAtMall": "Use this trend",
-      "marketsNote": "{{- defaultValue}}"
+      "marketsNote": "{{- defaultValue}}",
+      "audience": "Audience",
+      "whyNow": "Why now",
+      "successMetric": "Success metric",
+      "channels": "Channels"
     },
     "mallFormat": {
       "transit": "Transit hub",
       "mixedUse": "Service hub",
       "destination": "Destination",
       "all": "All formats"
+    },
+    "channels": {
+      "app": "App",
+      "screens": "Digital screens",
+      "station": "Station hall",
+      "social": "Social media",
+      "signage": "Signage",
+      "in-store": "In-store",
+      "event": "Event",
+      "email": "Email"
     }
   },
   "campaigns": {

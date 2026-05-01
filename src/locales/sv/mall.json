@@ -788,13 +788,27 @@
       "opportunities": "Möjligheter",
       "campaigns": "Kampanjidéer",
       "playAtMall": "Använd denna trend",
-      "marketsNote": "{{- defaultValue}}"
+      "marketsNote": "{{- defaultValue}}",
+      "audience": "Målgrupp",
+      "whyNow": "Varför nu",
+      "successMetric": "Mätetal",
+      "channels": "Kanaler"
     },
     "mallFormat": {
       "transit": "Transitnav",
       "mixedUse": "Servicenav",
       "destination": "Destination",
       "all": "Alla format"
+    },
+    "channels": {
+      "app": "App",
+      "screens": "Digitala skärmar",
+      "station": "Stationsområde",
+      "social": "Sociala medier",
+      "signage": "Skyltar",
+      "in-store": "I butik",
+      "event": "Evenemang",
+      "email": "E-post"
     }
   },
   "campaigns": {

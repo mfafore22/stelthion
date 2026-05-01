@@ -9,6 +9,7 @@ import { StateBadge } from './StateBadge';
 import { MallFormatBadge } from './MallFormatBadge';
 import { ConfidencePip } from './ConfidencePip';
 import { MallImplicationsPanel } from './MallImplicationsPanel';
+import { CuratedCampaignList } from './CuratedCampaignList';
 
 interface Props {
   trend: CuratedTrendResolved;
@@ -28,6 +29,11 @@ export function CuratedTrendCard({ trend, mallName }: Props) {
       </div>
       <div className="flex items-center gap-2 flex-wrap mb-2">
         <MallFormatBadge format={trend.mallFormat} />
+        {trend.category && (
+          <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-bo-neutral-100 border border-bo-neutral-300 text-bo-neutral-700">
+            {trend.category}
+          </span>
+        )}
         <ConfidencePip score={trend.confidence} />
         <span className="text-[10px] text-bo-neutral-500 italic">
           {t('shoppermind.curatedTrends.marketsNote', { defaultValue: trend.marketsNote })}
@@ -52,20 +58,7 @@ export function CuratedTrendCard({ trend, mallName }: Props) {
             opportunitiesFallback={trend.opportunities}
             mallName={mallName}
           />
-          {trend.campaigns.length > 0 && (
-            <section>
-              <div className="text-[10px] uppercase tracking-[0.12em] font-semibold text-bo-neutral-500 mb-1.5">
-                {t('shoppermind.curatedTrends.campaigns')}
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {trend.campaigns.map((c, i) => (
-                  <span key={i} className="inline-flex text-[11px] px-2 py-0.5 rounded-full bg-bo-primary-50 border border-bo-primary-200 text-bo-primary-800">
-                    {c.name}
-                  </span>
-                ))}
-              </div>
-            </section>
-          )}
+          {trend.campaigns.length > 0 && <CuratedCampaignList campaigns={trend.campaigns} />}
           {trend.sources.length > 0 && (
             <section>
               <div className="text-[10px] uppercase tracking-[0.12em] font-semibold text-bo-neutral-500 mb-1">

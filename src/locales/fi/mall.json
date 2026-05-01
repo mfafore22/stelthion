@@ -779,13 +779,27 @@
       "opportunities": "Mahdollisuudet",
       "campaigns": "Kampanjaideat",
       "playAtMall": "Käytä tätä trendiä",
-      "marketsNote": "{{- defaultValue}}"
+      "marketsNote": "{{- defaultValue}}",
+      "audience": "Yleisö",
+      "whyNow": "Miksi nyt",
+      "successMetric": "Mittari",
+      "channels": "Kanavat"
     },
     "mallFormat": {
       "transit": "Kauttakulkukeskus",
       "mixedUse": "Palvelukeskus",
       "destination": "Kohdekeskus",
       "all": "Kaikki muodot"
+    },
+    "channels": {
+      "app": "Sovellus",
+      "screens": "Diginäytöt",
+      "station": "Asema-alue",
+      "social": "Sosiaalinen media",
+      "signage": "Opasteet",
+      "in-store": "Myymälöissä",
+      "event": "Tapahtuma",
+      "email": "Sähköposti"
     }
   },
   "campaigns": {
