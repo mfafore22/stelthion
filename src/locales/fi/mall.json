@@ -750,7 +750,8 @@
       "loading": "Ladataan tunnuslukuja…",
       "updated": "päivitetty {{date}}",
       "noData": "ei dataa",
-      "onlyFinland": "Live-makroindikaattorit saatavilla vain Suomesta toistaiseksi."
+      "onlyFinland": "Live-makroindikaattorit saatavilla vain Suomesta toistaiseksi.",
+      "notSupported": "Makroindikaattorit eivät ole vielä saatavilla tälle markkinalle."
     },
     "header": {
       "marketLabel": "Markkina",

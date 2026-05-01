@@ -750,7 +750,8 @@
       "loading": "Loading indicators…",
       "updated": "updated {{date}}",
       "noData": "no data",
-      "onlyFinland": "Live macro indicators available for Finland only at this time."
+      "onlyFinland": "Live macro indicators available for Finland only at this time.",
+      "notSupported": "Macro indicators are not yet available for this market."
     },
     "header": {
       "marketLabel": "Market",

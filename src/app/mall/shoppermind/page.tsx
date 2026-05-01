@@ -106,11 +106,11 @@ export default function ShopperMindPage() {
             {!fetching && !gated && data?.configured && error && <ErrorBanner message={error} />}
             {!fetching && !gated && data?.configured && !error && (
               <>
-                {isSupported && country === 'FI' ? (
+                {isSupported ? (
                   <MacroDashboard country={country} />
                 ) : (
                   <div className="text-xs text-bo-neutral-500 italic">
-                    {t('shoppermind.macro.onlyFinland', { defaultValue: 'Live-makroindikaattorit saatavilla vain Suomesta toistaiseksi.' })}
+                    {t('shoppermind.macro.notSupported', { defaultValue: 'Makroindikaattorit eivät ole vielä saatavilla tälle markkinalle.' })}
                   </div>
                 )}
                 {megaScenario && (

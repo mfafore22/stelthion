@@ -759,7 +759,8 @@
       "loading": "Laddar indikatorer…",
       "updated": "uppdaterad {{date}}",
       "noData": "ingen data",
-      "onlyFinland": "Live-makroindikatorer endast tillgängliga för Finland för närvarande."
+      "onlyFinland": "Live-makroindikatorer endast tillgängliga för Finland för närvarande.",
+      "notSupported": "Makroindikatorer är inte ännu tillgängliga för denna marknad."
     },
     "header": {
       "marketLabel": "Marknad",
