@@ -45,7 +45,7 @@ function parsePoints(
   json: JsonStatResponse,
   pickPeriod: StatFinQuery['pickPeriod'],
 ): StatFinPoint[] {
-  const timeId = json.id.find((id) => /vuosi|aika|kuukausi|neljännes|year|month|quarter|time/i.test(id))
+  const timeId = json.id.find((id) => /vuosi|aika|kuukausi|neljännes|year|month|quarter|time|^tid$/i.test(id))
     ?? json.id[json.id.length - 1];
   const timeDim = json.dimension[timeId];
   if (!timeDim) return [];
@@ -80,9 +80,11 @@ export function parseMonth(label: string): { period: string; periodDate: Date } 
 }
 
 export function parseQuarter(label: string): { period: string; periodDate: Date } | null {
-  const m = label.match(/(\d{4}).{0,2}Q?([1-4])/i) ?? label.match(/Q?([1-4]).{0,2}(\d{4})/i);
+  // Accepts "2025Q4", "2025 Q4", "2025K4" (Swedish), "Q4 2025", etc.
+  const m = label.match(/(\d{4}).{0,2}[QK]?([1-4])/i) ?? label.match(/[QK]?([1-4]).{0,2}(\d{4})/i);
   if (!m) return null;
   const year = m[1].length === 4 ? +m[1] : +m[2];
   const q = m[1].length === 4 ? +m[2] : +m[1];
+  if (q < 1 || q > 4) return null;
   return { period: `${year}Q${q}`, periodDate: new Date(Date.UTC(year, (q - 1) * 3, 1)) };
 }

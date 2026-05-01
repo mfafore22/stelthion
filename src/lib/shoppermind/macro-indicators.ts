@@ -96,10 +96,77 @@ export const FI_INDICATORS: MacroIndicatorMeta[] = [
   },
 ];
 
+// Sweden indicators via SCB PxWeb. Same JSON-stat 2.0 spec as StatFin.
+// Tables verified live 2026-05-01.
+export const SE_INDICATORS: MacroIndicatorMeta[] = [
+  {
+    code: 'se-retail-volume',
+    country: 'SE',
+    cadence: 'monthly',
+    unit: 'volume-index',
+    publisher: 'SCB',
+    sourceUrl: 'https://www.scb.se/en/finding-statistics/statistics-by-subject-area/business-activities-and-foreign-trade/business-production-sales-and-orders-in-the-service-sector/preliminary-retail-sales-index/',
+    i18n: { fi: 'Vähittäiskaupan myynnin määrä', en: 'Retail trade volume', sv: 'Detaljhandelns volym' },
+    fetch: {
+      table: 'https://api.scb.se/OV0104/v1/doris/en/ssd/START/HA/HA0101/HA0101B/DetOms07N',
+      query: {
+        query: [
+          { code: 'SNI2007',      selection: { filter: 'item', values: ['47'] } },
+          { code: 'ContentsCode', selection: { filter: 'item', values: ['000006VU'] } },
+        ],
+        response: { format: 'json-stat2' },
+      },
+      pickPeriod: parseMonth,
+    },
+  },
+  {
+    code: 'se-household-consumption',
+    country: 'SE',
+    cadence: 'monthly',
+    unit: 'volume-index',
+    publisher: 'SCB',
+    sourceUrl: 'https://www.scb.se/en/finding-statistics/statistics-by-subject-area/national-accounts/national-accounts/monthly-indicator-of-household-consumption/',
+    i18n: { fi: 'Kotitalouksien kulutus, indeksi', en: 'Household consumption indicator', sv: 'Hushållens konsumtion, index' },
+    fetch: {
+      table: 'https://api.scb.se/OV0104/v1/doris/en/ssd/START/HA/HA0101/HA0101B/HushKonInd',
+      query: {
+        query: [
+          { code: 'Andamal',      selection: { filter: 'item', values: ['HTK'] } },
+          { code: 'ContentsCode', selection: { filter: 'item', values: ['HA0101AN'] } },
+        ],
+        response: { format: 'json-stat2' },
+      },
+      pickPeriod: parseMonth,
+    },
+  },
+  {
+    code: 'se-gdp-volume',
+    country: 'SE',
+    cadence: 'quarterly',
+    unit: 'volume-index',
+    publisher: 'SCB',
+    sourceUrl: 'https://www.scb.se/en/finding-statistics/statistics-by-subject-area/national-accounts/national-accounts/national-accounts-quarterly-and-annual-estimates/',
+    i18n: { fi: 'BKT, volyymi (mrd. SEK)', en: 'GDP, volume (SEK bn)', sv: 'BNP, volym (mdr SEK)' },
+    fetch: {
+      table: 'https://api.scb.se/OV0104/v1/doris/en/ssd/START/NR/NR0103/NR0103B/NR0103ENS2010T10SKv',
+      query: {
+        query: [
+          { code: 'Anvandningstyp', selection: { filter: 'item', values: ['BNPM'] } },
+          { code: 'ContentsCode',   selection: { filter: 'item', values: ['NR0103CE'] } },
+        ],
+        response: { format: 'json-stat2' },
+      },
+      pickPeriod: parseQuarter,
+    },
+  },
+];
+
+const ALL_INDICATORS = [...FI_INDICATORS, ...SE_INDICATORS];
+
 export function getIndicatorsForCountry(country: string): MacroIndicatorMeta[] {
-  return FI_INDICATORS.filter((i) => i.country === country.toUpperCase());
+  return ALL_INDICATORS.filter((i) => i.country === country.toUpperCase());
 }
 
 export function getIndicatorMeta(code: string): MacroIndicatorMeta | undefined {
-  return FI_INDICATORS.find((i) => i.code === code);
+  return ALL_INDICATORS.find((i) => i.code === code);
 }
