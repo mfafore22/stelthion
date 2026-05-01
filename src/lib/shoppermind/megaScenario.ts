@@ -1,5 +1,7 @@
 import finland from '../../../data/shoppermind/mega-scenarios/finland.json';
 import sweden from '../../../data/shoppermind/mega-scenarios/sweden.json';
+import usa from '../../../data/shoppermind/mega-scenarios/usa.json';
+import uae from '../../../data/shoppermind/mega-scenarios/uae.json';
 import reportSources from '../../../data/shoppermind/report-sources.json';
 import curatedTrendsData from '../../../data/shoppermind/curated-trends.json';
 import scenarioStressData from '../../../data/shoppermind/scenario-stress.json';
@@ -69,10 +71,12 @@ export interface CuratedTrendResolved {
 const SCENARIOS: Record<string, typeof finland> = {
   FI: finland,
   SE: sweden as unknown as typeof finland,
+  US: usa as unknown as typeof finland,
+  UAE: uae as unknown as typeof finland,
 };
 
-export const SUPPORTED_COUNTRIES = ['FI', 'SE'] as const;
-export const STUB_COUNTRIES = ['US', 'UAE', 'KR', 'EU'] as const;
+export const SUPPORTED_COUNTRIES = ['FI', 'SE', 'US', 'UAE'] as const;
+export const STUB_COUNTRIES = ['KR', 'EU'] as const;
 export const ALL_COUNTRIES = [...SUPPORTED_COUNTRIES, ...STUB_COUNTRIES] as const;
 
 function pickLang(lang: string): Lang {

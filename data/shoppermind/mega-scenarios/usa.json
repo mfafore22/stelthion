@@ -1,0 +1,188 @@
+{
+  "id": "usa-structural-shift",
+  "country": "US",
+  "timespan": "2030+",
+  "updatedAt": "2026-05-01",
+  "placeholder": false,
+  "i18n": {
+    "fi": {
+      "title": "Yhdysvaltojen rakenteellinen siirtymä",
+      "intro": "OECD arvioi USA:n kasvun hidastuvan 1,5 prosenttiin vuonna 2026, kun tariffit, hidas maahanmuutto ja liittovaltion työvoiman supistuminen painavat kysyntää. Keskiluokka on puristuksissa: arvohakuinen kulutus kasvaa, mutta varakkaammat segmentit vaativat vahvempia kohde-elämyksiä. Kauppakeskuksissa tämä polarisoi: off-price ja perheviihde puristavat geneeristä keskiluokan vähittäiskauppaa.",
+      "redString": "Punainen lanka: USA:ssa voittavat ne kohteet, jotka osaavat olla joko todella edullisia tai todella elämyksellisiä. Geneerinen keskiluokan apparel puristuu rajusti.",
+      "pathsLabel": "Kolme polkua vuoteen 2035",
+      "paths": [
+        {
+          "id": "a", "title": "Polku A: Hidas kuluttaminen", "tone": "neutraali",
+          "summary": "Kasvu hidastuu mutta välttää taantuman. Off-price ja kohde-keskukset kestävät, keskiluokan vähittäiskauppa kärsii.",
+          "macro": "BKT kasvaa 1,5–2 prosenttia 2026–2030. Inflaatio palautuu 2 prosenttiin, korot laskevat. Tariffit vaimentavat kuluttajatuotteiden tarjontaa ja nostavat hintoja kategorioissa kuten elektroniikka ja vaatteet.",
+          "consumer": "Keskiluokan reaalitulot pysyvät kireinä. Off-price-ostokset (TJ Maxx, Marshalls) kasvavat. Premium-kuluttaja jatkaa elämysostamista, mutta valikoivasti.",
+          "retail": "Off-price ja terveyspalvelut kasvavat. Keskiluokan apparel ja kodintavarat painuvat. DTC-brändit hyödyntävät kohdekeskusten lippulaivoja.",
+          "property": "Tuottovaateet säilyvät korkeina sekundäärisissä keskuksissa. A-luokka kohdekeskukset (Mall of America -tyyppiset) hyötyvät elämystrendistä.",
+          "mallImpact": "Vuokralaismixistä 15–20 prosenttia siirtyy off-priceen. Perheviihde, F&B ja terveys tukevat kohdekäyntejä. Geneerinen muotipinta-ala vähenee 20 prosentilla.",
+          "keyNumbers": [
+            { "label": "BKT-kasvu",         "value": "1,5–2 %",  "hint": "vuodessa 2026–2030" },
+            { "label": "Off-price -kasvu",  "value": "+8–12 %",  "hint": "vuodessa" },
+            { "label": "Tariffivaikutus",   "value": "+3–5 %",   "hint": "kuluttajahintoihin" },
+            { "label": "Keskiluokan apparel","value": "−10 %",   "hint": "myymäläverkko 2030 mennessä" }
+          ],
+          "evidenceCharts": [
+            { "label": "BKT-kasvu, %", "unit": "%", "series": [{"p":"2024","v":2.8},{"p":"2025","v":1.6},{"p":"2026","v":1.5},{"p":"2027","v":1.7},{"p":"2028","v":1.9},{"p":"2029","v":2.0},{"p":"2030","v":2.0}] },
+            { "label": "Off-price-osuus, %", "unit": "%", "series": [{"p":"2024","v":12},{"p":"2025","v":13},{"p":"2026","v":15},{"p":"2027","v":17},{"p":"2028","v":18},{"p":"2029","v":19},{"p":"2030","v":20}] }
+          ]
+        },
+        {
+          "id": "b", "title": "Polku B: Tariffi-induktoitu hidastus", "tone": "synkkä",
+          "summary": "Vastatariffit ja inflaatiopaine pakottavat kuluttajan defensiiviseksi. Keskiluokan vähittäiskauppa romahtaa, mutta off-price ja viihde säilyvät.",
+          "macro": "Vastatariffit nostavat kuluttajahintoja 8–12 prosenttia. Reaalitulot supistuvat. BKT lähellä nollaa 2027–2028. Liittovaltion lähde valikoiviin elvytystoimiin.",
+          "consumer": "Diskretionaariset menot supistuvat 15–20 prosenttia. Vaatteet ja kodintavarat saavat suurimman osuman. Off-price ja outlet-kanavat kasvavat 15–20 prosenttia.",
+          "retail": "Geneerinen keskihintainen apparel karsiutuu rajusti. Department storeja sulkeutuu. Off-price- ja value-formaatit kasvavat osuuksiaan.",
+          "property": "Sekundääriset keskukset menettävät 20–30 prosenttia arvostaan. Kohde-A-keskukset säilyvät, mutta tuottovaateet nousevat 50 korkoyksikköä.",
+          "mallImpact": "Tyhjien tilojen täyttöaste laskee 10 prosenttiyksikköä. Department-storejen poistot luovat suuria pinta-aloja, jotka muunnetaan viihteeksi, terveyspalveluiksi tai logistiikkaan.",
+          "keyNumbers": [
+            { "label": "Tariffi-inflaatio", "value": "+8–12 %", "hint": "kuluttajahinnoissa" },
+            { "label": "Discretionary",     "value": "−15–20 %","hint": "huippua kohti" },
+            { "label": "Department storet", "value": "−25 %",   "hint": "myymäläkato 2030" },
+            { "label": "Tuottovaateet",     "value": "+50 bps", "hint": "sekundäärisissä" }
+          ],
+          "evidenceCharts": [
+            { "label": "BKT-kasvu, %", "unit": "%", "series": [{"p":"2024","v":2.8},{"p":"2025","v":1.6},{"p":"2026","v":1.0},{"p":"2027","v":0.0},{"p":"2028","v":0.5},{"p":"2029","v":1.5},{"p":"2030","v":1.8}] }
+          ]
+        },
+        {
+          "id": "c", "title": "Polku C: Tekno- ja palveluvetoinen kasvu", "tone": "valoisa",
+          "summary": "Tekoälyn ja palveluiden tuottavuus nostaa kasvua. Premium-kohteet ja DTC-lippulaivat skaalautuvat.",
+          "macro": "BKT kasvaa 2,5–3 prosenttia 2030-luvulla. AI-tuottavuus vahvistuu, palveluala kasvaa. Tariffit lievenevät kahdenvälisillä neuvotteluilla.",
+          "consumer": "Reaalitulot kasvavat. Discretionary palaa nopeasti. Premium-elämykset, beauty, wellness ja viihde johtavat kasvua.",
+          "retail": "DTC-brändien kohdekeskuslippulaivat skaalautuvat. F&B ja perheviihde kasvavat 8 prosenttia vuodessa. Off-price tasaantuu mutta säilyttää volyymin.",
+          "property": "Tuottovaateet laskevat 40 korkoyksikköä A-luokassa. Uusi rakentaminen elpyy mixed-use-formaateissa.",
+          "mallImpact": "Mall of America -tyyppiset kohteet kasvavat 30 prosenttia kävijämäärää 2030 mennessä. Vuokralaismixistä 25 prosenttia DTC-lippulaivoja ja immersiivistä viihdettä.",
+          "keyNumbers": [
+            { "label": "BKT-kasvu",          "value": "2,5–3 %",  "hint": "2030-luvulla" },
+            { "label": "Premium-kasvu",      "value": "+8 %",     "hint": "vuodessa" },
+            { "label": "DTC-lippulaivat",    "value": "+25 %",    "hint": "kohteen pinta-alasta" },
+            { "label": "Tuottovaateet",      "value": "−40 bps",  "hint": "A-luokan kohteet" }
+          ],
+          "evidenceCharts": [
+            { "label": "BKT-kasvu, %", "unit": "%", "series": [{"p":"2024","v":2.8},{"p":"2025","v":1.6},{"p":"2026","v":2.0},{"p":"2027","v":2.5},{"p":"2028","v":2.8},{"p":"2029","v":3.0},{"p":"2030","v":3.0}] }
+          ]
+        }
+      ],
+      "actionsLabel": "Toimenpide-ehdotukset kiinteistöille",
+      "actionsGeneralLabel": "Kaikkia kiinteistöjä koskevat",
+      "actionsGeneral": [
+        "Vältä geneeristä keskiluokan apparel-vuokrasopimusta. Painota off-pricea tai kohde-elämyksiä.",
+        "Investoi DTC-brändien lippulaivoihin ja immersiiviseen viihteeseen.",
+        "Lisää terveys- ja wellness-tarjontaa, etenkin esikaupungeissa.",
+        "Käytä urban-keskuksissa toimistovirtaa convenience-asioinnin ankkurina.",
+        "Mall of America -tyyppisissä kohteissa: showroom-konseptit, ei vain perinteinen retail."
+      ],
+      "actionsPerMallLabel": "Kiinteistökohtaiset ehdotukset",
+      "actionsPerMall": {
+        "us-dc-urban": {
+          "operator": "esimerkki", "isCompetitor": true,
+          "name": "Washington D.C., urbaani keskus (kilpailijaesimerkki)",
+          "context": "Toimistotyöntekijöiden ja julkisen liikenteen vetovoima. Painottuu grab-and-go -arkeen ja convenience-tarjontaan.",
+          "items": [
+            "Painota convenience: kahvilat, lounas, terveys, palvelut.",
+            "Pidä off-price ja value-formaatit edustettuna.",
+            "Yhdistä toimistovirta ja iltakävijät F&B-tarjonnassa.",
+            "Käytä julkisen liikenteen virtaa retail media -kanavana.",
+            "Vältä luksuspositioita: keskiluokka on puristuksissa."
+          ],
+          "kpis": [
+            { "label": "Convenience-osuus pinta-alasta",  "target": "20–25 %",  "hint": "F&B + grab-and-go" },
+            { "label": "Off-price-osuus",                 "target": "≥ 15 %",   "hint": "tariffi-inflaation puskurina" },
+            { "label": "Toimistovirran konversio",        "target": "≥ 25 %",   "hint": "lounas + iltakahvi" },
+            { "label": "Vuokrasopimusten kesto",          "target": "≤ 4 v",    "hint": "tariffisokin varalta" }
+          ]
+        },
+        "us-mall-of-america": {
+          "operator": "Triple Five Group", "isCompetitor": true,
+          "name": "Mall of America, Minnesota (kilpailija, destination-vertailu)",
+          "context": "Yli 32 miljoonaa vuosikävijää, 5,6 milj. neliöjalkaa, 520 liikettä ja ravintolaa. Toimii puhtaasti turistivirran, viihteen ja lippulaivamyymälöiden ehdoilla.",
+          "items": [
+            "Vertaa lippulaivamyymälöiden osuutta vuokralaismixistä.",
+            "Mittaa viihdeankkurien (vesipuisto, teemapuisto) konversiota retailiin.",
+            "Seuraa DTC-brändien tuomista kohdekeskukseen ennen omaa portfoliotasi.",
+            "Vertaa tapahtumakalenterin tiheys ja perheviihde-konseptien skaala.",
+            "Tarkkaile viipymäaika ja kohdekäynnin keskikoko."
+          ],
+          "kpis": [
+            { "label": "Lippulaivamyymälöiden osuus",    "target": "vertailu", "hint": "vs. oma kohdekeskus" },
+            { "label": "Viihteen retail-konversio",       "target": "vertailu", "hint": "samasta käynnistä" },
+            { "label": "Kävijämäärä per neliöjalka",      "target": "vertailu", "hint": "kohdekeskuksen tiheys" },
+            { "label": "DTC-brändien lisäysnopeus",       "target": "vertailu", "hint": "vuosittainen netto" },
+            { "label": "Tapahtumakalenterin tiheys",      "target": "vertailu", "hint": "kuukauden tapahtumat" }
+          ]
+        }
+      }
+    },
+    "en": {
+      "title": "United States structural shift",
+      "intro": "OECD projects US growth slowing to 1.5% in 2026 as tariffs, slower immigration, and federal-workforce cuts dampen demand. The middle class is squeezed: value-seeking spending grows while wealthier segments demand stronger destination experiences. Malls polarise: off-price and family entertainment squeeze generic mid-market retail.",
+      "redString": "Red string: in the US, the winners are properties that excel at being either truly affordable or truly experiential. Generic mid-market apparel squeezes hardest.",
+      "pathsLabel": "Three paths to 2035",
+      "paths": [
+        { "id": "a", "title": "Path A: Slow consuming", "tone": "neutral", "summary": "Growth slows but avoids recession. Off-price and destination centres hold; mid-market suffers.", "macro": "GDP grows 1.5-2% 2026-2030. Inflation returns to 2%, rates ease. Tariffs dampen consumer-goods supply and lift prices in electronics and apparel.", "consumer": "Middle-class real income stays tight. Off-price purchases (TJ Maxx, Marshalls) grow. Premium consumers continue experience spending, but selectively.", "retail": "Off-price and health services grow. Mid-market apparel and home goods decline. DTC brands leverage destination flagships.", "property": "Yields stay elevated in secondary centres. A-tier destinations (Mall of America type) benefit from experience trend.", "mallImpact": "15-20% of tenant mix shifts to off-price. Family entertainment, F&B and health support destination visits. Generic fashion area declines 20%.",
+          "keyNumbers": [ { "label": "GDP growth", "value": "1.5-2%", "hint": "per year 2026-2030" }, { "label": "Off-price growth", "value": "+8-12%", "hint": "per year" }, { "label": "Tariff price impact", "value": "+3-5%", "hint": "consumer prices" }, { "label": "Mid-market apparel", "value": "−10%", "hint": "stores by 2030" } ],
+          "evidenceCharts": [ { "label": "GDP growth, %", "unit": "%", "series": [{"p":"2024","v":2.8},{"p":"2025","v":1.6},{"p":"2026","v":1.5},{"p":"2027","v":1.7},{"p":"2028","v":1.9},{"p":"2029","v":2.0},{"p":"2030","v":2.0}] }, { "label": "Off-price share, %", "unit": "%", "series": [{"p":"2024","v":12},{"p":"2025","v":13},{"p":"2026","v":15},{"p":"2027","v":17},{"p":"2028","v":18},{"p":"2029","v":19},{"p":"2030","v":20}] } ] },
+        { "id": "b", "title": "Path B: Tariff-induced slowdown", "tone": "dark", "summary": "Counter-tariffs and inflation push consumers defensive. Mid-market collapses; off-price and entertainment hold.", "macro": "Counter-tariffs lift consumer prices 8-12%. Real income contracts. GDP near zero in 2027-2028. Federal selective stimulus.", "consumer": "Discretionary spending falls 15-20%. Apparel and home take the biggest hit. Off-price and outlets grow 15-20%.", "retail": "Generic mid-priced apparel culls fast. Department-store closures. Off-price and value formats gain share.", "property": "Secondary centres lose 20-30% of value. A-tier destinations hold, yields rise 50bps.", "mallImpact": "Vacancies up 10pp. Department-store voids become entertainment, health services, or logistics conversions.",
+          "keyNumbers": [ { "label": "Tariff inflation", "value": "+8-12%", "hint": "consumer prices" }, { "label": "Discretionary", "value": "−15-20%", "hint": "trough" }, { "label": "Department stores", "value": "−25%", "hint": "stores by 2030" }, { "label": "Yields", "value": "+50bps", "hint": "secondary centres" } ],
+          "evidenceCharts": [ { "label": "GDP growth, %", "unit": "%", "series": [{"p":"2024","v":2.8},{"p":"2025","v":1.6},{"p":"2026","v":1.0},{"p":"2027","v":0.0},{"p":"2028","v":0.5},{"p":"2029","v":1.5},{"p":"2030","v":1.8}] } ] },
+        { "id": "c", "title": "Path C: Tech and services-led growth", "tone": "bright", "summary": "AI-driven productivity and services lift growth. Premium destinations and DTC flagships scale.", "macro": "GDP grows 2.5-3% in the 2030s. AI productivity strengthens, services expand. Tariffs ease via bilateral deals.", "consumer": "Real income rises. Discretionary returns fast. Premium experiences, beauty, wellness and entertainment lead growth.", "retail": "DTC destination flagships scale. F&B and family entertainment grow 8% per year. Off-price plateaus but holds volume.", "property": "Yields fall 40bps in A-tier. New mixed-use construction recovers.", "mallImpact": "Mall of America-type destinations grow 30% in visitor count by 2030. 25% of tenant mix is DTC flagships and immersive entertainment.",
+          "keyNumbers": [ { "label": "GDP growth", "value": "2.5-3%", "hint": "in the 2030s" }, { "label": "Premium growth", "value": "+8%", "hint": "per year" }, { "label": "DTC flagships", "value": "+25%", "hint": "of destination area" }, { "label": "Yields", "value": "−40bps", "hint": "A-tier" } ],
+          "evidenceCharts": [ { "label": "GDP growth, %", "unit": "%", "series": [{"p":"2024","v":2.8},{"p":"2025","v":1.6},{"p":"2026","v":2.0},{"p":"2027","v":2.5},{"p":"2028","v":2.8},{"p":"2029","v":3.0},{"p":"2030","v":3.0}] } ] }
+      ],
+      "actionsLabel": "Property action recommendations",
+      "actionsGeneralLabel": "Across all properties",
+      "actionsGeneral": [ "Avoid generic mid-market apparel leases. Lean into off-price or destination experiences.", "Invest in DTC flagships and immersive entertainment.", "Add health and wellness, especially in suburbs.", "In urban centres, use office flow as a convenience anchor.", "In Mall of America-type destinations: showroom concepts, not pure retail." ],
+      "actionsPerMallLabel": "Property-specific recommendations",
+      "actionsPerMall": {
+        "us-dc-urban": { "operator": "example", "isCompetitor": true, "name": "Washington D.C. urban centre (competitor example)", "context": "Office worker and transit pull. Tilts toward grab-and-go everyday and convenience.",
+          "items": [ "Lead with convenience: cafés, lunch, health, services.", "Keep off-price and value formats represented.", "Combine office flow and evening visitors in F&B.", "Use transit flow as a retail-media channel.", "Avoid luxury positioning: middle class is squeezed." ],
+          "kpis": [ { "label": "Convenience share of area", "target": "20-25%", "hint": "F&B + grab-and-go" }, { "label": "Off-price share", "target": "≥ 15%", "hint": "tariff-inflation hedge" }, { "label": "Office-flow conversion", "target": "≥ 25%", "hint": "lunch + evening coffee" }, { "label": "Lease term", "target": "≤ 4 yr", "hint": "tariff shock hedge" } ]
+        },
+        "us-mall-of-america": { "operator": "Triple Five Group", "isCompetitor": true, "name": "Mall of America, Minnesota (competitor, destination benchmark)", "context": "32M+ annual visits, 5.6M sq ft, 520 stores and restaurants. Runs purely on tourist flow, entertainment, and flagship stores.",
+          "items": [ "Compare flagship-store share of tenant mix.", "Measure entertainment-anchor (water park, theme park) conversion to retail.", "Watch DTC arrivals to destination centres before your portfolio.", "Compare event-calendar density and family-entertainment scale.", "Track dwell time and average destination basket size." ],
+          "kpis": [ { "label": "Flagship-store share", "target": "benchmark", "hint": "vs. own destination" }, { "label": "Entertainment-to-retail conversion", "target": "benchmark", "hint": "same visit" }, { "label": "Visitors per sq ft", "target": "benchmark", "hint": "destination density" }, { "label": "DTC addition rate", "target": "benchmark", "hint": "annual net" }, { "label": "Event-calendar density", "target": "benchmark", "hint": "monthly events" } ]
+        }
+      }
+    },
+    "sv": {
+      "title": "USA:s strukturella omställning",
+      "intro": "OECD räknar med att USA:s tillväxt bromsar till 1,5 % 2026 när tullar, långsammare invandring och nedskärningar i federal arbetskraft dämpar efterfrågan. Medelklassen är pressad: värdedriven konsumtion växer medan rikare segment kräver starkare destinationsupplevelser. Köpcentrum polariseras: off-price och familjenöjen pressar generisk mellanmarknadshandel.",
+      "redString": "Röd tråd: i USA vinner de fastigheter som verkligen är antingen prisvärda eller upplevelsedrivna. Generisk mellanmarknadsmode pressas hårdast.",
+      "pathsLabel": "Tre vägar till 2035",
+      "paths": [
+        { "id": "a", "title": "Väg A: Långsam konsumtion", "tone": "neutral", "summary": "Tillväxt bromsar men undviker recession. Off-price och destinationscentrum håller.", "macro": "BNP växer 1,5-2 % 2026-2030. Inflationen återgår till 2 %, räntorna lättar. Tullar dämpar konsumentvarornas utbud och höjer priserna.", "consumer": "Medelklassens reala inkomst pressas. Off-price (TJ Maxx) växer. Premium fortsätter selektivt.", "retail": "Off-price och hälsa växer. Mellanmarknadsmode och hem faller. DTC-flaggskepp i destinationscentrum.", "property": "Avkastningskrav höga i sekundära centrum. A-läge destinationer gynnas.", "mallImpact": "15-20 % av hyresmix flyttar till off-price. Familjeunderhållning, F&B och hälsa stöder destinationsbesök.",
+          "keyNumbers": [ { "label": "BNP-tillväxt", "value": "1,5-2 %", "hint": "per år 2026-2030" }, { "label": "Off-price-tillväxt", "value": "+8-12 %", "hint": "per år" }, { "label": "Tullinflation", "value": "+3-5 %", "hint": "konsumentpriser" }, { "label": "Mellanmarknadsmode", "value": "−10 %", "hint": "butiker till 2030" } ],
+          "evidenceCharts": [ { "label": "BNP-tillväxt, %", "unit": "%", "series": [{"p":"2024","v":2.8},{"p":"2025","v":1.6},{"p":"2026","v":1.5},{"p":"2027","v":1.7},{"p":"2028","v":1.9},{"p":"2029","v":2.0},{"p":"2030","v":2.0}] } ] },
+        { "id": "b", "title": "Väg B: Tullinducerad inbromsning", "tone": "dark", "summary": "Mottullar och inflation tvingar konsumenter defensiva. Mellanmarknad kollapsar; off-price och underhållning håller.", "macro": "Mottullar höjer konsumentpriserna 8-12 %. Real inkomst krymper. BNP nära noll 2027-2028.", "consumer": "Sällan-utgifter faller 15-20 %. Kläder och hem tar hårdast smällen. Off-price växer 15-20 %.", "retail": "Generisk mellanprisad mode rensas hårt. Department store-stängningar.", "property": "Sekundära centrum förlorar 20-30 % värde. A-läge håller; avkastningskrav +50bps.", "mallImpact": "Vakanser +10pp. Department store-vakanser blir underhållning, hälsa eller logistik.",
+          "keyNumbers": [ { "label": "Tullinflation", "value": "+8-12 %", "hint": "konsumentpriser" }, { "label": "Sällanhandel", "value": "−15-20 %", "hint": "botten" } ],
+          "evidenceCharts": [ { "label": "BNP-tillväxt, %", "unit": "%", "series": [{"p":"2024","v":2.8},{"p":"2025","v":1.6},{"p":"2026","v":1.0},{"p":"2027","v":0.0},{"p":"2028","v":0.5},{"p":"2029","v":1.5},{"p":"2030","v":1.8}] } ] },
+        { "id": "c", "title": "Väg C: Teknik- och servicedriven tillväxt", "tone": "bright", "summary": "AI-produktivitet och tjänster höjer tillväxt. Premium-destinationer och DTC-flaggskepp skalar.", "macro": "BNP växer 2,5-3 % på 2030-talet. AI-produktivitet stärks. Tullar lindras via bilaterala avtal.", "consumer": "Real inkomst stiger. Sällanhandel återhämtar snabbt. Premium-upplevelser leder.", "retail": "DTC-flaggskepp skalar. F&B och familjeunderhållning växer 8 %.", "property": "Avkastningskrav faller 40bps i A-läge.", "mallImpact": "Mall of America-typ växer 30 % i besökare till 2030. 25 % av hyresmix DTC och immersivt.",
+          "keyNumbers": [ { "label": "BNP-tillväxt", "value": "2,5-3 %", "hint": "på 2030-talet" }, { "label": "Premium-tillväxt", "value": "+8 %", "hint": "per år" } ],
+          "evidenceCharts": [ { "label": "BNP-tillväxt, %", "unit": "%", "series": [{"p":"2024","v":2.8},{"p":"2025","v":1.6},{"p":"2026","v":2.0},{"p":"2027","v":2.5},{"p":"2028","v":2.8},{"p":"2029","v":3.0},{"p":"2030","v":3.0}] } ] }
+      ],
+      "actionsLabel": "Åtgärdsförslag för fastigheter",
+      "actionsGeneralLabel": "Gäller alla fastigheter",
+      "actionsGeneral": [ "Undvik generiska mellanmarknadsmode-avtal. Satsa på off-price eller destinationsupplevelser.", "Investera i DTC-flaggskepp och immersiv underhållning.", "Lägg till hälsa och välmående, särskilt i förorter.", "I urbana centrum: använd kontorsflöde som bekvämlighetsankare.", "I Mall of America-typ destinationer: showroom-koncept, inte ren handel." ],
+      "actionsPerMallLabel": "Fastighetsspecifika rekommendationer",
+      "actionsPerMall": {
+        "us-dc-urban": { "operator": "exempel", "isCompetitor": true, "name": "Washington D.C. urbant centrum (konkurrent-exempel)", "context": "Kontorsanställdas och kollektivtrafikens dragkraft. Lutar mot grab-and-go vardag.",
+          "items": [ "Led med bekvämlighet: caféer, lunch, hälsa, tjänster.", "Behåll off-price och värdeformat representerade.", "Kombinera kontorsflöde och kvällsbesökare i F&B." ],
+          "kpis": [ { "label": "Bekvämlighetens andel av yta", "target": "20-25 %", "hint": "F&B + grab-and-go" }, { "label": "Off-price-andel", "target": "≥ 15 %", "hint": "tullinflations-skydd" } ]
+        },
+        "us-mall-of-america": { "operator": "Triple Five Group", "isCompetitor": true, "name": "Mall of America, Minnesota (konkurrent, destinationsbenchmark)", "context": "32M+ årliga besök, 5,6M kvft, 520 butiker och restauranger. Drivs helt av turistflöde, underhållning och flaggskeppsbutiker.",
+          "items": [ "Jämför flaggskeppsbutikers andel av hyresmix.", "Mät underhållningsankarens (vattenpark, temapark) konvertering till handel.", "Bevaka DTC-tillkomst till destinationscentrum före din portfölj." ],
+          "kpis": [ { "label": "Flaggskeppsbutikers andel", "target": "benchmark", "hint": "vs. egen destination" }, { "label": "Underhållning-till-handel-konvertering", "target": "benchmark", "hint": "samma besök" }, { "label": "Besökare per kvft", "target": "benchmark", "hint": "destinationsdensitet" } ]
+        }
+      }
+    }
+  },
+  "glossary": { "fi": {}, "en": {}, "sv": {} },
+  "sources": [
+    { "id": "oecd-us-2026", "url": "https://www.oecd.org/economic-outlook/", "publisher": "OECD", "title": { "fi": "OECD: Yhdysvaltojen talousnäkymä 2026", "en": "OECD: US economic outlook 2026", "sv": "OECD: USA:s ekonomiska utsikter 2026" } },
+    { "id": "mall-of-america", "url": "https://www.mallofamerica.com", "publisher": "Mall of America", "title": { "fi": "Mall of America, Minnesota", "en": "Mall of America, Minnesota", "sv": "Mall of America, Minnesota" } }
+  ]
+}

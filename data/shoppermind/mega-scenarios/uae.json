@@ -1,0 +1,188 @@
+{
+  "id": "uae-diversification",
+  "country": "UAE",
+  "timespan": "2030+",
+  "updatedAt": "2026-05-01",
+  "placeholder": false,
+  "i18n": {
+    "fi": {
+      "title": "Arabiemiirikuntien diversifikaatio",
+      "intro": "IMF arvioi UAE:n BKT:n kasvavan 4,8 prosenttia 2025 ja 5,0 prosenttia 2026. Kasvu nojaa yhä enemmän öljyn ulkopuolisiin sektoreihin: turismi, ulkomainen pääoma ja teknologia. Dubai-tyyppiset super-regional-keskukset elävät turismin ja luksuksen ehdoilla, kun taas yhteisökeskukset palvelevat ekspatti­yhteisöjen arkea.",
+      "redString": "Punainen lanka: UAE:ssa 'value' ei tarkoita halpaa, vaan paremmin segmentoitua mukavuutta. Premium ja convenience -kerrokset ovat erilliset tarinat samalla markkinalla.",
+      "pathsLabel": "Kolme polkua vuoteen 2035",
+      "paths": [
+        {
+          "id": "a", "title": "Polku A: Vakaa kasvu", "tone": "neutraali",
+          "summary": "Kasvu jatkuu 4–5 prosentissa. Premium-keskukset hyötyvät turistivirrasta, yhteisökeskukset palvelevat ekspatteja.",
+          "macro": "BKT kasvaa 4,5–5 prosenttia 2026–2030. Inflaatio 2–3 prosenttia. Ulkomainen pääoma jatkaa virtaa kiinteistöihin. Vuokrahinnat super-regional-keskuksissa nousivat 14,9 prosenttia 2024.",
+          "consumer": "Tuloluokat polarisoituvat. Ekspattiyhteisöt arvostavat conveniencea ja palveluita. Turistit etsivät korkealuokkaista luksusta ja viihdettä.",
+          "retail": "Luksus, beauty ja wellness johtavat. Family entertainment kasvaa. Convenience-formaatit yhteisökeskuksissa kasvavat 8–10 prosenttia.",
+          "property": "Tuottovaateet pysyvät matalina A-luokan kohteissa. Sijoittajakysyntä jatkuu kansainvälisesti.",
+          "mallImpact": "The Dubai Mall ja Mall of the Emirates pidentävät premium-johtoasemaansa. Yhteisökeskukset Dubaissa ja Abu Dhabissa kasvattavat 10–15 prosenttia palvelu- ja terveyskerrosta.",
+          "keyNumbers": [
+            { "label": "BKT-kasvu",         "value": "4,5–5 %",  "hint": "vuodessa 2026–2030" },
+            { "label": "Prime-vuokrat",     "value": "+10–15 %", "hint": "vuodessa super-regionaaleissa" },
+            { "label": "Turistivirta",      "value": "+8 %",     "hint": "vuodessa" },
+            { "label": "Vuokrausaste",      "value": "vahva",    "hint": "A-luokassa" }
+          ],
+          "evidenceCharts": [
+            { "label": "BKT-kasvu, %", "unit": "%", "series": [{"p":"2024","v":3.5},{"p":"2025","v":4.8},{"p":"2026","v":5.0},{"p":"2027","v":4.8},{"p":"2028","v":4.5},{"p":"2029","v":4.5},{"p":"2030","v":4.5}] }
+          ]
+        },
+        {
+          "id": "b", "title": "Polku B: Öljyn hintasokki", "tone": "synkkä",
+          "summary": "Öljyn hinnan romahdus tai geopoliittinen sokki hidastaa kasvua. Premium-keskukset kestävät paremmin kuin alueelliset.",
+          "macro": "Öljyn hinta laskee, alueellinen liikuttaminen heikkenee. BKT 2–3 prosenttia 2027–2029. Ulkomainen turistivirta laskee 15–20 prosenttia. Kruunaajaiset/maailmantapahtumat siirtyvät.",
+          "consumer": "Ekspattiyhteisöjen ostovoima säilyy, mutta turistivirran vähentyminen vaikuttaa luksusmyymälöihin. Premium-kuluttajat siirtyvät 'reachable luxury' -kategorioihin.",
+          "retail": "Luksus painuu 10–15 prosenttia. Convenience ja yhteisökeskuksissa terveys kasvaa. F&B kestää.",
+          "property": "Tuottovaateet nousevat 25–50 korkoyksikköä sekundääreissä. A-luokan kohteet säilyttävät tuottovaateensa.",
+          "mallImpact": "Premium-vuokralaiset uudelleenneuvottelevat sopimuksia. Yhteisökeskuksissa palvelu-osuus kasvaa.",
+          "keyNumbers": [
+            { "label": "BKT-kasvu",         "value": "2–3 %",     "hint": "2027–2029" },
+            { "label": "Luksus",            "value": "−10–15 %",  "hint": "myynti vs. baseline" },
+            { "label": "Turistivirta",      "value": "−15–20 %",  "hint": "ulkomailta" },
+            { "label": "Tuottovaateet",     "value": "+25–50 bps","hint": "sekundäärisissä" }
+          ],
+          "evidenceCharts": [
+            { "label": "BKT-kasvu, %", "unit": "%", "series": [{"p":"2024","v":3.5},{"p":"2025","v":4.8},{"p":"2026","v":4.2},{"p":"2027","v":2.5},{"p":"2028","v":2.0},{"p":"2029","v":3.0},{"p":"2030","v":3.5}] }
+          ]
+        },
+        {
+          "id": "c", "title": "Polku C: Tekno-ja-turismi-veto", "tone": "valoisa",
+          "summary": "AI, fintech ja luksusturismi nostavat kasvun 6 prosenttiin. Dubai- ja Abu Dhabi -alueet skaalautuvat globaaleiksi destinaatioiksi.",
+          "macro": "BKT kasvaa 5,5–6 prosenttia 2030-luvulla. Diversifikaatio onnistuu, ulkomainen pääoma kasvaa edelleen. Kestävät-/EXPO-tapahtumat ankkuroivat turistivirran.",
+          "consumer": "Ostovoima kasvaa. Premium-segmentit räjähtävät. Wellness, beauty ja kokemukset johtavat.",
+          "retail": "Luksus ja premium kasvavat 12–15 prosenttia vuodessa. Branded resale ja korkealaatuinen ravintola siirtyy yhteisökeskuksiin.",
+          "property": "Tuottovaateet laskevat 50 korkoyksikköä. Uusi rakentaminen monikäyttöisesti elpyy. Riad-/hotel-sekoitukset kasvavat.",
+          "mallImpact": "Dubai Mall -tyyppisten lippulaivat kasvavat 20 prosenttia. Yhteisökeskuksissa wellness-/klinikka-osuus kasvaa 15 prosenttia pinta-alasta.",
+          "keyNumbers": [
+            { "label": "BKT-kasvu",         "value": "5,5–6 %",  "hint": "2030-luvulla" },
+            { "label": "Luksus-kasvu",      "value": "+12–15 %", "hint": "vuodessa" },
+            { "label": "Turismi",            "value": "+12 %",   "hint": "kävijät vuodessa" },
+            { "label": "Tuottovaateet",      "value": "−50 bps", "hint": "A-luokan kohteet" }
+          ],
+          "evidenceCharts": [
+            { "label": "BKT-kasvu, %", "unit": "%", "series": [{"p":"2024","v":3.5},{"p":"2025","v":4.8},{"p":"2026","v":5.5},{"p":"2027","v":5.8},{"p":"2028","v":6.0},{"p":"2029","v":6.0},{"p":"2030","v":5.8}] }
+          ]
+        }
+      ],
+      "actionsLabel": "Toimenpide-ehdotukset kiinteistöille",
+      "actionsGeneralLabel": "Kaikkia kiinteistöjä koskevat",
+      "actionsGeneral": [
+        "Erotat selvästi premium-kerroksen ja convenience-kerroksen — älä yritä olla molempia samalla pinta-alalla.",
+        "Yhteisökeskuksissa: terveys, wellness, ekspatti-ystävälliset arjen palvelut.",
+        "Super-regionaaleissa: lippulaivat, food halls, viihde turistivirran ehdoilla.",
+        "Investoi sähköiseen jälleenmyyntiin ja jäljitettävyyteen premium-kategorioissa.",
+        "Mittaa erikseen turistien ja paikallisten kävijöiden konversioita."
+      ],
+      "actionsPerMallLabel": "Kiinteistökohtaiset ehdotukset",
+      "actionsPerMall": {
+        "uae-dubai-mall": {
+          "operator": "Emaar Malls", "isCompetitor": true,
+          "name": "The Dubai Mall (kilpailija, super-regional)",
+          "context": "Globaali turistikohde, Emaar Malls. Yli 80 miljoonaa vuosikävijää. Korkein vuokrataso, lippulaiva- ja luksusbrändien johto.",
+          "items": [
+            "Vertaa luksusbrändien tiheys ja kierto.",
+            "Mittaa turistikävijöiden osuus (eri valuutta-segmentit).",
+            "Seuraa F&B fine-dining osuus vs. fast casual.",
+            "Tarkkaile sosiaalisen median 'instagrammable' -konseptien kalenteri.",
+            "Tarkkaile kausitapahtumia (Ramadan, kesä-tax-free)."
+          ],
+          "kpis": [
+            { "label": "Luksusbrändien tiheys",       "target": "vertailu", "hint": "vs. omat A-luokan kohteet" },
+            { "label": "Turistikävijöiden osuus",      "target": "vertailu", "hint": "valuutta-segmenteittäin" },
+            { "label": "Fine-dining osuus F&B:stä",   "target": "vertailu", "hint": "vs. fast casual" },
+            { "label": "Sometapahtumien tiheys",      "target": "vertailu", "hint": "instagrammable -konseptit" },
+            { "label": "Kausitapahtumien skaala",     "target": "vertailu", "hint": "Ramadan, kesä-tax-free" }
+          ]
+        },
+        "uae-marina-community": {
+          "operator": "Emaar / Meraas", "isCompetitor": true,
+          "name": "Dubai Marina, yhteisökeskus (kilpailijaesimerkki)",
+          "context": "Asuinalueen sydän ekspattiyhteisölle. Premium-päivittäistavara, terveyspalvelut, fine-dining ja arjen mukavuus.",
+          "items": [
+            "Vertaa premium-päivittäistavaran osuus.",
+            "Mittaa terveys- ja wellness-tarjontaa.",
+            "Seuraa F&B-mixiä yhteisön tarpeisiin.",
+            "Tarkkaile lojaaliuusohjelma + delivery-integraatio.",
+            "Vertaa kierrätys- ja kestävyysohjelmia."
+          ],
+          "kpis": [
+            { "label": "Premium-päivittäistavaran osuus", "target": "vertailu", "hint": "yhteisön tarpeet" },
+            { "label": "Terveys- ja wellness-osuus",       "target": "vertailu", "hint": "klinikat, kuntoilu" },
+            { "label": "Lojaaliusohjelman aktivointi",     "target": "vertailu", "hint": "vs. pelkkä alennus" },
+            { "label": "F&B fine-dining vs. casual",       "target": "vertailu", "hint": "ekspatti-segmentti" }
+          ]
+        }
+      }
+    },
+    "en": {
+      "title": "United Arab Emirates diversification",
+      "intro": "IMF projects UAE GDP growing 4.8% in 2025 and 5.0% in 2026. Growth leans more on non-oil sectors: tourism, foreign capital, technology. Dubai-type super-regional centres run on tourism and luxury, while community centres serve the everyday lives of expat communities.",
+      "redString": "Red string: in the UAE, 'value' does not mean discount; it means better-segmented convenience. Premium and convenience layers are separate stories within the same market.",
+      "pathsLabel": "Three paths to 2035",
+      "paths": [
+        { "id": "a", "title": "Path A: Stable growth", "tone": "neutral", "summary": "Growth continues at 4-5%. Premium centres benefit from tourism flow; community centres serve expats.", "macro": "GDP grows 4.5-5% 2026-2030. Inflation 2-3%. Foreign capital continues into property. Super-regional rents rose 14.9% in 2024.", "consumer": "Income classes polarise. Expat communities value convenience and services. Tourists seek premium luxury and entertainment.", "retail": "Luxury, beauty and wellness lead. Family entertainment grows. Convenience formats in community centres grow 8-10%.", "property": "Yields stay low in A-tier. International investor demand continues.", "mallImpact": "The Dubai Mall and Mall of the Emirates extend their premium leadership. Community centres in Dubai and Abu Dhabi grow service and health layer 10-15%.",
+          "keyNumbers": [ { "label": "GDP growth", "value": "4.5-5%", "hint": "per year 2026-2030" }, { "label": "Prime rents", "value": "+10-15%", "hint": "per year in super-regionals" }, { "label": "Tourist flow", "value": "+8%", "hint": "per year" }, { "label": "Occupancy", "value": "strong", "hint": "in A-tier" } ],
+          "evidenceCharts": [ { "label": "GDP growth, %", "unit": "%", "series": [{"p":"2024","v":3.5},{"p":"2025","v":4.8},{"p":"2026","v":5.0},{"p":"2027","v":4.8},{"p":"2028","v":4.5},{"p":"2029","v":4.5},{"p":"2030","v":4.5}] } ] },
+        { "id": "b", "title": "Path B: Oil price shock", "tone": "dark", "summary": "An oil price collapse or geopolitical shock slows growth. Premium centres hold better than regional ones.", "macro": "Oil price falls, regional flow weakens. GDP 2-3% in 2027-2029. Foreign tourist flow falls 15-20%. World events postponed.", "consumer": "Expat purchasing power holds, but the drop in tourist flow hits luxury stores. Premium consumers shift to 'reachable luxury'.", "retail": "Luxury falls 10-15%. Convenience and community-centre health grow. F&B holds.", "property": "Yields rise 25-50bps in secondary. A-tier holds.", "mallImpact": "Premium tenants renegotiate leases. Service share grows in community centres.",
+          "keyNumbers": [ { "label": "GDP growth", "value": "2-3%", "hint": "2027-2029" }, { "label": "Luxury", "value": "−10-15%", "hint": "sales vs. baseline" }, { "label": "Tourist flow", "value": "−15-20%", "hint": "international" }, { "label": "Yields", "value": "+25-50bps", "hint": "in secondary" } ],
+          "evidenceCharts": [ { "label": "GDP growth, %", "unit": "%", "series": [{"p":"2024","v":3.5},{"p":"2025","v":4.8},{"p":"2026","v":4.2},{"p":"2027","v":2.5},{"p":"2028","v":2.0},{"p":"2029","v":3.0},{"p":"2030","v":3.5}] } ] },
+        { "id": "c", "title": "Path C: Tech-and-tourism boom", "tone": "bright", "summary": "AI, fintech and luxury tourism push growth to 6%. Dubai and Abu Dhabi scale into global destinations.", "macro": "GDP grows 5.5-6% in the 2030s. Diversification succeeds, foreign capital keeps growing. Sustainability/EXPO events anchor tourist flow.", "consumer": "Purchasing power grows. Premium segments explode. Wellness, beauty and experiences lead.", "retail": "Luxury and premium grow 12-15% per year. Branded resale and high-end dining move into community centres.", "property": "Yields fall 50bps. New mixed-use construction recovers. Hotel-mall mixes grow.", "mallImpact": "Dubai Mall-type flagships grow 20%. Community centres add 15% of area in wellness/clinic.",
+          "keyNumbers": [ { "label": "GDP growth", "value": "5.5-6%", "hint": "in the 2030s" }, { "label": "Luxury growth", "value": "+12-15%", "hint": "per year" }, { "label": "Tourism", "value": "+12%", "hint": "visitors per year" }, { "label": "Yields", "value": "−50bps", "hint": "A-tier" } ],
+          "evidenceCharts": [ { "label": "GDP growth, %", "unit": "%", "series": [{"p":"2024","v":3.5},{"p":"2025","v":4.8},{"p":"2026","v":5.5},{"p":"2027","v":5.8},{"p":"2028","v":6.0},{"p":"2029","v":6.0},{"p":"2030","v":5.8}] } ] }
+      ],
+      "actionsLabel": "Property action recommendations",
+      "actionsGeneralLabel": "Across all properties",
+      "actionsGeneral": [ "Separate premium and convenience layers clearly — don't try to be both on the same floor.", "In community centres: health, wellness, expat-friendly everyday services.", "In super-regionals: flagships, food halls, entertainment for tourist flow.", "Invest in branded resale and traceability in premium categories.", "Measure tourist vs. local visitor conversion separately." ],
+      "actionsPerMallLabel": "Property-specific recommendations",
+      "actionsPerMall": {
+        "uae-dubai-mall": { "operator": "Emaar Malls", "isCompetitor": true, "name": "The Dubai Mall (competitor, super-regional)", "context": "Global tourist destination, Emaar Malls. 80M+ annual visits. Highest rents, flagship and luxury leadership.",
+          "items": [ "Compare luxury brand density and rotation.", "Measure tourist visitor share (currency segments).", "Track F&B fine-dining share vs. fast casual.", "Watch social-media 'instagrammable' concept calendar.", "Watch seasonal events (Ramadan, summer tax-free)." ],
+          "kpis": [ { "label": "Luxury brand density", "target": "benchmark", "hint": "vs. own A-tier" }, { "label": "Tourist visitor share", "target": "benchmark", "hint": "by currency segment" }, { "label": "Fine-dining share of F&B", "target": "benchmark", "hint": "vs. fast casual" }, { "label": "Social-event density", "target": "benchmark", "hint": "instagrammable concepts" }, { "label": "Seasonal-event scale", "target": "benchmark", "hint": "Ramadan, summer tax-free" } ]
+        },
+        "uae-marina-community": { "operator": "Emaar / Meraas", "isCompetitor": true, "name": "Dubai Marina community centre (competitor example)", "context": "Heart of an expat residential area. Premium grocery, health services, fine dining, everyday convenience.",
+          "items": [ "Compare premium grocery share.", "Measure health and wellness offer.", "Track F&B mix to community needs.", "Watch loyalty + delivery integration.", "Compare circular and sustainability programs." ],
+          "kpis": [ { "label": "Premium grocery share", "target": "benchmark", "hint": "community needs" }, { "label": "Health and wellness share", "target": "benchmark", "hint": "clinics, fitness" }, { "label": "Loyalty activation", "target": "benchmark", "hint": "vs. pure discount" }, { "label": "Fine-dining vs. casual F&B", "target": "benchmark", "hint": "expat segment" } ]
+        }
+      }
+    },
+    "sv": {
+      "title": "Förenade Arabemiratens diversifiering",
+      "intro": "IMF räknar med att UAE:s BNP växer 4,8 % 2025 och 5,0 % 2026. Tillväxten lutar mer på icke-oljesektorer: turism, utländskt kapital, teknik. Dubai-typ super-regional drivs på turism och lyx, medan community-centrum betjänar expat-samhällets vardag.",
+      "redString": "Röd tråd: i UAE betyder 'värde' inte rabatt utan bättre segmenterad bekvämlighet. Premium och bekvämlighet är separata berättelser på samma marknad.",
+      "pathsLabel": "Tre vägar till 2035",
+      "paths": [
+        { "id": "a", "title": "Väg A: Stabil tillväxt", "tone": "neutral", "summary": "Tillväxt fortsätter på 4-5 %. Premium-centrum gynnas av turismflöde; community-centrum betjänar expater.", "macro": "BNP växer 4,5-5 % 2026-2030. Inflation 2-3 %. Utländskt kapital fortsätter strömma. Super-regional-hyror steg 14,9 % 2024.", "consumer": "Inkomstklasser polariseras. Expat-samhällen värdesätter bekvämlighet och tjänster. Turister söker premium-lyx och underhållning.", "retail": "Lyx, skönhet och välmående leder. Familjeunderhållning växer. Bekvämlighetsformat i community-centrum växer 8-10 %.", "property": "Avkastningskrav låga i A-läge. Internationell investerarefterfrågan fortsätter.", "mallImpact": "The Dubai Mall och Mall of the Emirates förlänger sitt premium-ledarskap. Community-centrum i Dubai och Abu Dhabi växer service- och hälsolagret 10-15 %.",
+          "keyNumbers": [ { "label": "BNP-tillväxt", "value": "4,5-5 %", "hint": "per år 2026-2030" }, { "label": "Premium-hyror", "value": "+10-15 %", "hint": "per år i super-regional" }, { "label": "Turistflöde", "value": "+8 %", "hint": "per år" }, { "label": "Uthyrningsgrad", "value": "stark", "hint": "i A-läge" } ],
+          "evidenceCharts": [ { "label": "BNP-tillväxt, %", "unit": "%", "series": [{"p":"2024","v":3.5},{"p":"2025","v":4.8},{"p":"2026","v":5.0},{"p":"2027","v":4.8},{"p":"2028","v":4.5},{"p":"2029","v":4.5},{"p":"2030","v":4.5}] } ] },
+        { "id": "b", "title": "Väg B: Oljepris-chock", "tone": "dark", "summary": "Oljepriskollaps eller geopolitisk chock bromsar tillväxt. Premium-centrum klarar bättre.", "macro": "Oljepris faller, regionalt flöde försvagas. BNP 2-3 % 2027-2029. Internationellt turistflöde faller 15-20 %.", "consumer": "Expat-köpkraft håller, men minskat turistflöde slår mot lyxbutiker.", "retail": "Lyx faller 10-15 %. Bekvämlighet och hälsa i community-centrum växer. F&B håller.", "property": "Avkastningskrav stiger 25-50bps i sekundärt. A-läge håller.", "mallImpact": "Premium-hyresgäster omförhandlar avtal. Servicedelen växer i community-centrum.",
+          "keyNumbers": [ { "label": "BNP-tillväxt", "value": "2-3 %", "hint": "2027-2029" }, { "label": "Lyx", "value": "−10-15 %", "hint": "försäljning vs. baseline" }, { "label": "Turistflöde", "value": "−15-20 %", "hint": "internationellt" } ],
+          "evidenceCharts": [ { "label": "BNP-tillväxt, %", "unit": "%", "series": [{"p":"2024","v":3.5},{"p":"2025","v":4.8},{"p":"2026","v":4.2},{"p":"2027","v":2.5},{"p":"2028","v":2.0},{"p":"2029","v":3.0},{"p":"2030","v":3.5}] } ] },
+        { "id": "c", "title": "Väg C: Teknik-och-turism-boom", "tone": "bright", "summary": "AI, fintech och lyxturism driver tillväxten till 6 %. Dubai och Abu Dhabi skalar till globala destinationer.", "macro": "BNP växer 5,5-6 % på 2030-talet. Diversifiering lyckas. Hållbarhet/EXPO-event ankrar turistflöde.", "consumer": "Köpkraft växer. Premium-segment exploderar. Välmående, skönhet och upplevelser leder.", "retail": "Lyx och premium växer 12-15 % per år. Branded resale och high-end mat flyttar till community-centrum.", "property": "Avkastningskrav faller 50bps. Ny blandanvändning återhämtar.", "mallImpact": "Dubai Mall-typ flaggskepp växer 20 %. Community-centrum lägger till 15 % av yta i wellness/klinik.",
+          "keyNumbers": [ { "label": "BNP-tillväxt", "value": "5,5-6 %", "hint": "på 2030-talet" }, { "label": "Lyx-tillväxt", "value": "+12-15 %", "hint": "per år" } ],
+          "evidenceCharts": [ { "label": "BNP-tillväxt, %", "unit": "%", "series": [{"p":"2024","v":3.5},{"p":"2025","v":4.8},{"p":"2026","v":5.5},{"p":"2027","v":5.8},{"p":"2028","v":6.0},{"p":"2029","v":6.0},{"p":"2030","v":5.8}] } ] }
+      ],
+      "actionsLabel": "Åtgärdsförslag för fastigheter",
+      "actionsGeneralLabel": "Gäller alla fastigheter",
+      "actionsGeneral": [ "Separera premium och bekvämlighet tydligt - försök inte vara bägge på samma yta.", "I community-centrum: hälsa, välmående, expat-vänliga vardagstjänster.", "I super-regional: flaggskepp, food halls, underhållning för turistflöde.", "Investera i branded resale och spårbarhet i premium-kategorier.", "Mät turist vs. lokal besökarkonvertering separat." ],
+      "actionsPerMallLabel": "Fastighetsspecifika rekommendationer",
+      "actionsPerMall": {
+        "uae-dubai-mall": { "operator": "Emaar Malls", "isCompetitor": true, "name": "The Dubai Mall (konkurrent, super-regional)", "context": "Globalt turistmål, Emaar Malls. 80M+ årliga besök.",
+          "items": [ "Jämför lyxvarumärkesdensitet och rotation.", "Mät turistbesökarandel (valutasegment).", "Följ F&B fine-dining-andel vs. fast casual." ],
+          "kpis": [ { "label": "Lyxvarumärkesdensitet", "target": "benchmark", "hint": "vs. egen A-läge" }, { "label": "Turistbesökarandel", "target": "benchmark", "hint": "per valutasegment" } ]
+        },
+        "uae-marina-community": { "operator": "Emaar / Meraas", "isCompetitor": true, "name": "Dubai Marina community-centrum (konkurrent-exempel)", "context": "Hjärtat av expat-bostadsområde. Premium dagligvaror, hälsotjänster, fine dining, vardaglig bekvämlighet.",
+          "items": [ "Jämför premium-dagligvarors andel.", "Mät hälso- och välmående-erbjudande.", "Följ F&B-mix till samhällets behov." ],
+          "kpis": [ { "label": "Premium-dagligvarors andel", "target": "benchmark", "hint": "samhällsbehov" }, { "label": "Hälso- och välmåendeandel", "target": "benchmark", "hint": "kliniker, fitness" } ]
+        }
+      }
+    }
+  },
+  "glossary": { "fi": {}, "en": {}, "sv": {} },
+  "sources": [
+    { "id": "imf-uae-2026", "url": "https://www.imf.org/en/Countries/ARE", "publisher": "IMF", "title": { "fi": "IMF: UAE:n talousnäkymä", "en": "IMF: UAE economic outlook", "sv": "IMF: UAE:s ekonomiska utsikter" } },
+    { "id": "savills-dubai-rents", "url": "https://www.savills.ae/research_articles/256884/377013-0", "publisher": "Savills", "title": { "fi": "Savills: Dubain ostoskeskusvuokrat", "en": "Savills: Dubai retail rents", "sv": "Savills: Dubai detaljhandelshyror" } },
+    { "id": "dubai-mall-official", "url": "https://thedubaimall.com", "publisher": "Emaar Malls", "title": { "fi": "The Dubai Mall, viralliset sivut", "en": "The Dubai Mall official", "sv": "The Dubai Mall officiella" } }
+  ]
+}
