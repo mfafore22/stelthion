@@ -79,28 +79,32 @@ export function PropertyActionBoard({
 
   return (
     <section className="rounded-2xl border-2 border-bo-primary-200/70 bg-white p-5 shadow-bo-glass">
-      <div className="mb-5 flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
-        <div>
-          <div className="mb-1 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-bo-primary-700">
-            <Target size={14} />
-            {t('shoppermind.actionBoard.weeklyHeader')}
-          </div>
-          <h2 className="text-xl font-semibold tracking-tight text-bo-neutral-950">
-            {t('shoppermind.actionBoard.title', { propertyName: data.property.name })}
-          </h2>
-          <p className="mt-1 max-w-3xl text-sm text-bo-neutral-600">{t('shoppermind.actionBoard.subtitle')}</p>
-        </div>
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-start">
-          {onSelectProperty && (
-            <div className="w-full min-w-0 lg:w-[360px]">
-              <PropertySegmentedSelector
-                label={t('shoppermind.actions.selectProperty')}
-                options={propertyOptions}
-                value={selectedPropertyId}
-                onChange={onSelectProperty}
-              />
+      <div className="mb-5 grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_240px] xl:items-start">
+        <div className="min-w-0">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-end">
+            <div className="min-w-0">
+              <div className="mb-1 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-bo-primary-700">
+                <Target size={14} />
+                {t('shoppermind.actionBoard.weeklyHeader')}
+              </div>
+              <h2 className="text-xl font-semibold tracking-tight text-bo-neutral-950">
+                {t('shoppermind.actionBoard.title', { propertyName: data.property.name })}
+              </h2>
+              <p className="mt-1 max-w-3xl text-sm text-bo-neutral-600">{t('shoppermind.actionBoard.subtitle')}</p>
             </div>
-          )}
+            {onSelectProperty && (
+              <div className="min-w-0">
+                <PropertySegmentedSelector
+                  label={t('shoppermind.actions.selectProperty')}
+                  options={propertyOptions}
+                  value={selectedPropertyId}
+                  onChange={onSelectProperty}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="xl:justify-self-end">
           <EvidenceMeter
             verifiedShare={verifiedShare}
             claims={data.evidenceClaims.length}
