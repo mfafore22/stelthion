@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronRight } from 'lucide-react';
+import Link from 'next/link';
+import { ChevronRight, Megaphone, MessageSquareText } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { CuratedCampaign } from '@/lib/shoppermind/megaScenario';
 import { CuratedCampaignDetails } from './CuratedCampaignDetails';
@@ -37,7 +38,25 @@ export function CuratedCampaignList({ campaigns }: { campaigns: CuratedCampaign[
         })}
       </div>
       {openIndex !== null && campaigns[openIndex] && (
-        <CuratedCampaignDetails campaign={campaigns[openIndex]} />
+        <div>
+          <CuratedCampaignDetails campaign={campaigns[openIndex]} />
+          <div className="mt-2 flex flex-wrap gap-2">
+            <Link
+              href="/mall/campaigns"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-bo-primary-700 px-2.5 py-1.5 text-[11px] font-semibold text-white hover:bg-bo-primary-800"
+            >
+              <Megaphone size={13} />
+              {t('shoppermind.curatedTrends.draftCampaign')}
+            </Link>
+            <Link
+              href="/mall/assistants"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-bo-neutral-300 bg-white px-2.5 py-1.5 text-[11px] font-semibold text-bo-neutral-700 hover:bg-bo-neutral-50"
+            >
+              <MessageSquareText size={13} />
+              {t('shoppermind.curatedTrends.discussCampaign')}
+            </Link>
+          </div>
+        </div>
       )}
     </section>
   );

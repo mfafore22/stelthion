@@ -6,15 +6,30 @@ import { useTranslation } from 'react-i18next';
 import { useSession } from '@/contexts/SessionContext';
 import { MallTopBar } from '@/components/mall/shell/MallTopBar';
 import { MallLeftNav } from '@/components/mall/shell/MallLeftNav';
-import type { MarketDetail, PhenomenonSummary, SignalOfTheDay } from '@stelthion/shoppermind-client-types';
+import type {
+  MarketDetail,
+  PhenomenonSummary,
+  PropertyActionsResponse,
+  SignalOfTheDay,
+} from '@stelthion/shoppermind-client-types';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ShopperMindHeader } from '@/components/mall/shoppermind/ShopperMindHeader';
-import { MegaScenarioSection } from '@/components/mall/shoppermind/MegaScenarioSection';
-import { HorizonSection } from '@/components/mall/shoppermind/HorizonSection';
 import { MacroDashboard } from '@/components/mall/shoppermind/MacroDashboard';
-import { SignalOfTheDayCard } from '@/components/mall/shoppermind/SignalOfTheDayCard';
-import { CuratedTrendStrip } from '@/components/mall/shoppermind/CuratedTrendStrip';
-import { getMegaScenario, getCuratedTrendsByHorizon, SUPPORTED_COUNTRIES } from '@/lib/shoppermind/megaScenario';
+import {
+  ShopperMindTabPanels,
+  type MallActionSet,
+  type MallTrendSet,
+  type ShopperMindTab,
+} from '@/components/mall/shoppermind/ShopperMindTabPanels';
+import {
+  getMegaScenario,
+  getCuratedTrendsByHorizon,
+  SUPPORTED_COUNTRIES,
+  type MallActions,
+} from '@/lib/shoppermind/megaScenario';
 import { groupByHorizon } from '@/lib/shoppermind/horizon';
+import { getStaticSignalOfMonth } from '@/lib/shoppermind/staticSignals';
+import { buildScenarioActionFallback } from '@/lib/shoppermind/scenarioActionFallback';
 
 interface OverviewResponse {
   configured: boolean;
@@ -22,10 +37,18 @@ interface OverviewResponse {
   market: MarketDetail | null;
   phenomena: PhenomenonSummary[];
   signalOfTheDay: SignalOfTheDay | null;
+  propertyActions?: PropertyActionsResponse | null;
   error?: string;
 }
 
 const SUPPORTED_SET = new Set<string>(SUPPORTED_COUNTRIES);
+const SHOPPERMIND_TABS: Array<{ value: ShopperMindTab; labelKey: string; fallback: string }> = [
+  { value: 'overview', labelKey: 'shoppermind.tabs.overview', fallback: 'Päänäkymä' },
+  { value: 'actions', labelKey: 'shoppermind.tabs.actions', fallback: 'Toimenpiteet' },
+  { value: 'trends', labelKey: 'shoppermind.tabs.trends', fallback: 'Trendit' },
+  { value: 'competitors', labelKey: 'shoppermind.tabs.competitors', fallback: 'Kilpailijat' },
+  { value: 'decision-support', labelKey: 'shoppermind.tabs.decisionSupport', fallback: 'Päätöksen tuki' },
+];
 
 export default function ShopperMindPage() {
   const { user, loading } = useSession();
@@ -37,6 +60,7 @@ export default function ShopperMindPage() {
   const [gated, setGated] = useState(false);
   const [country, setCountry] = useState<string>('FI');
   const [selectedMallId, setSelectedMallId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<ShopperMindTab>('overview');
 
   useEffect(() => {
     if (!loading && !user) router.replace('/mall/login');
@@ -45,9 +69,13 @@ export default function ShopperMindPage() {
   useEffect(() => {
     if (!user?.mallId) return;
     let cancelled = false;
-    setFetching(true);
-    setError(null);
-    setGated(false);
+    queueMicrotask(() => {
+      if (!cancelled) {
+        setFetching(true);
+        setError(null);
+        setGated(false);
+      }
+    });
     fetch(`/api/shoppermind/overview?mallId=${encodeURIComponent(user.mallId)}`, { credentials: 'include' })
       .then(async (res) => {
         const body = (await res.json()) as OverviewResponse & { error?: string };
@@ -61,25 +89,114 @@ export default function ShopperMindPage() {
       .catch((err) => { if (!cancelled) setError(err instanceof Error ? err.message : t('shoppermind.errors.network')); })
       .finally(() => { if (!cancelled) setFetching(false); });
     return () => { cancelled = true; };
-  }, [user?.mallId]);
+  }, [user?.mallId, t]);
 
   useEffect(() => {
-    if (user?.mallId) setSelectedMallId(user.mallId);
+    if (!user?.mallId) return;
+    queueMicrotask(() => setSelectedMallId(user.mallId));
   }, [user?.mallId]);
 
-  const grouped = useMemo(() => groupByHorizon(data?.phenomena ?? []), [data?.phenomena]);
-  const megaScenario = useMemo(
+  const overviewCountry = data?.market?.country ?? data?.propertyActions?.property.country ?? null;
+  const overviewMatchesCountry = !overviewCountry || overviewCountry === country;
+  const grouped = useMemo(
+    () => groupByHorizon(overviewMatchesCountry ? (data?.phenomena ?? []) : []),
+    [data?.phenomena, overviewMatchesCountry],
+  );
+  const rawMegaScenario = useMemo(
     () => getMegaScenario(country, i18n.language, selectedMallId),
     [country, i18n.language, selectedMallId],
   );
+  const effectiveMallId = useMemo(() => {
+    if (!rawMegaScenario?.perMallOptions.length) return null;
+    const selectedIsValid = selectedMallId
+      ? rawMegaScenario.perMallOptions.some((option) => option.id === selectedMallId)
+      : false;
+    return selectedIsValid ? selectedMallId : rawMegaScenario.perMallOptions[0]?.id ?? null;
+  }, [rawMegaScenario, selectedMallId]);
+  const megaScenario = useMemo(
+    () => getMegaScenario(country, i18n.language, effectiveMallId),
+    [country, i18n.language, effectiveMallId],
+  );
   const curated = useMemo(() => ({
-    short:  getCuratedTrendsByHorizon(country, i18n.language, 'short',  selectedMallId),
-    medium: getCuratedTrendsByHorizon(country, i18n.language, 'medium', selectedMallId),
-    long:   getCuratedTrendsByHorizon(country, i18n.language, 'long',   selectedMallId),
-  }), [country, i18n.language, selectedMallId]);
+    short:  getCuratedTrendsByHorizon(country, i18n.language, 'short',  effectiveMallId),
+    medium: getCuratedTrendsByHorizon(country, i18n.language, 'medium', effectiveMallId),
+    long:   getCuratedTrendsByHorizon(country, i18n.language, 'long',   effectiveMallId),
+  }), [country, i18n.language, effectiveMallId]);
   const selectedMallName = megaScenario?.perMall?.name;
+  const ownMallOptions = useMemo(
+    () => (megaScenario?.perMallOptions ?? []).filter((option) => !option.isCompetitor),
+    [megaScenario?.perMallOptions],
+  );
+  const competitorBenchmarks = useMemo(() => {
+    if (!megaScenario) return [];
+    return megaScenario.perMallOptions
+      .filter((option) => option.isCompetitor)
+      .map((option) => ({
+        id: option.id,
+        actions: getMegaScenario(country, i18n.language, option.id)?.perMall ?? null,
+      }))
+      .filter((item): item is { id: string; actions: MallActions } => Boolean(item.actions));
+  }, [country, i18n.language, megaScenario]);
 
   const isSupported = SUPPORTED_SET.has(country);
+  const trendSets = useMemo<MallTrendSet[]>(() => {
+    return ownMallOptions.map((option) => ({
+      mallId: option.id,
+      mallName: option.name,
+      curated: {
+        short: getCuratedTrendsByHorizon(country, i18n.language, 'short', option.id),
+        medium: getCuratedTrendsByHorizon(country, i18n.language, 'medium', option.id),
+        long: getCuratedTrendsByHorizon(country, i18n.language, 'long', option.id),
+      },
+    }));
+  }, [country, i18n.language, ownMallOptions]);
+  const fallbackPropertyActions = useMemo(
+    () => buildScenarioActionFallback({
+      scenario: megaScenario,
+      benchmarks: competitorBenchmarks,
+      marketId: data?.marketId ?? `${country.toLowerCase()}-demo`,
+      country,
+      trendIds: [...curated.short, ...curated.medium, ...curated.long].map((trend) => trend.id),
+    }),
+    [country, curated.long, curated.medium, curated.short, data?.marketId, megaScenario, competitorBenchmarks],
+  );
+  const servicePropertyActions = overviewMatchesCountry ? data?.propertyActions : null;
+  const activePropertyActions = servicePropertyActions?.recommendations?.length
+    ? servicePropertyActions
+    : fallbackPropertyActions;
+  const actionSets = useMemo<MallActionSet[]>(() => {
+    return ownMallOptions.map((option) => {
+      const mallScenario = getMegaScenario(country, i18n.language, option.id);
+      const mallCurated = {
+        short: getCuratedTrendsByHorizon(country, i18n.language, 'short', option.id),
+        medium: getCuratedTrendsByHorizon(country, i18n.language, 'medium', option.id),
+        long: getCuratedTrendsByHorizon(country, i18n.language, 'long', option.id),
+      };
+      const trendIds = [...mallCurated.short, ...mallCurated.medium, ...mallCurated.long].map((trend) => trend.id);
+      const fallbackActions = buildScenarioActionFallback({
+        scenario: mallScenario,
+        benchmarks: competitorBenchmarks,
+        marketId: data?.marketId ?? `${country.toLowerCase()}-demo`,
+        country,
+        trendIds,
+      });
+      const serviceActions = servicePropertyActions?.property.id === option.id ? servicePropertyActions : null;
+      return {
+        mallId: option.id,
+        mallName: option.name,
+        actions: serviceActions?.recommendations?.length ? serviceActions : fallbackActions,
+      };
+    });
+  }, [competitorBenchmarks, country, data?.marketId, i18n.language, ownMallOptions, servicePropertyActions]);
+  const activeSignalOfTheDay = overviewMatchesCountry
+    ? (data?.signalOfTheDay ?? getStaticSignalOfMonth(country))
+    : getStaticSignalOfMonth(country);
+
+  useEffect(() => {
+    if (effectiveMallId && effectiveMallId !== selectedMallId) {
+      queueMicrotask(() => setSelectedMallId(effectiveMallId));
+    }
+  }, [effectiveMallId, selectedMallId]);
 
   if (loading) {
     return (
@@ -113,35 +230,39 @@ export default function ShopperMindPage() {
                     {t('shoppermind.macro.notSupported', { defaultValue: 'Makroindikaattorit eivät ole vielä saatavilla tälle markkinalle.' })}
                   </div>
                 )}
-                {megaScenario && (
-                  <MegaScenarioSection
+                <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as ShopperMindTab)} className="space-y-4">
+                  <div className="overflow-x-auto pb-1">
+                    <TabsList className="min-w-max">
+                      {SHOPPERMIND_TABS.map((tab) => (
+                        <TabsTrigger
+                          key={tab.value}
+                          id={`shoppermind-tab-${tab.value}`}
+                          value={tab.value}
+                          onClick={() => setActiveTab(tab.value)}
+                        >
+                          {t(tab.labelKey, { defaultValue: tab.fallback })}
+                        </TabsTrigger>
+                      ))}
+                    </TabsList>
+                  </div>
+
+                  <ShopperMindTabPanels
+                    activeTab={activeTab}
+                    signal={activeSignalOfTheDay}
                     scenario={megaScenario}
-                    selectedMallId={selectedMallId}
+                    selectedMallId={effectiveMallId}
                     onSelectMall={setSelectedMallId}
+                    actions={activePropertyActions}
+                    actionSets={actionSets}
+                    isSupported={isSupported}
+                    grouped={grouped}
+                    curated={curated}
+                    trendSets={trendSets}
+                    userMallId={user?.mallId ?? null}
+                    selectedMallName={selectedMallName}
+                    competitorBenchmarks={competitorBenchmarks}
                   />
-                )}
-                {!megaScenario && (
-                  <div className="rounded-lg border border-dashed border-bo-neutral-300 bg-bo-neutral-50/50 p-6 text-sm text-bo-neutral-600">
-                    {t('shoppermind.markets.noScenario', { defaultValue: 'Tämän markkinan päänäkymää kerätään parhaillaan.' })}
-                  </div>
-                )}
-                {isSupported ? (
-                  <>
-                    <HorizonSection horizon="short" phenomena={grouped.short} mallId={user?.mallId ?? null}
-                                    defaultOpen topSlot={<>
-                                      <CuratedTrendStrip trends={curated.short} mallName={selectedMallName} />
-                                      <SignalOfTheDayCard sotd={data.signalOfTheDay} />
-                                    </>} />
-                    <HorizonSection horizon="medium" phenomena={grouped.medium} mallId={user?.mallId ?? null}
-                                    topSlot={<CuratedTrendStrip trends={curated.medium} mallName={selectedMallName} />} />
-                    <HorizonSection horizon="long" phenomena={grouped.long} mallId={user?.mallId ?? null}
-                                    topSlot={<CuratedTrendStrip trends={curated.long} mallName={selectedMallName} />} />
-                  </>
-                ) : (
-                  <div className="rounded-lg border border-dashed border-bo-neutral-300 bg-bo-neutral-50/50 p-6 text-sm text-bo-neutral-600">
-                    {t('shoppermind.markets.horizonsComingSoon', { defaultValue: 'Aikajaksokohtaiset trendit saatavilla pian.' })}
-                  </div>
-                )}
+                </Tabs>
               </>
             )}
           </div>

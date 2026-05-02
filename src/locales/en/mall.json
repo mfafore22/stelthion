@@ -412,7 +412,34 @@
     "description": "AI Assistants for property operations",
     "comingSoon": "AI Assistants Integration",
     "integrationDescription": "AI Assistants use your property's isolated data to produce property-specific simulations and forecasts. With them, you can test the impact of your chosen actions or prepare for situations. Stelthion AI models bring broader insights and alternatives to simulations and forecasts.",
-    "tryScenarios": "Try Scenarios Calculator Now"
+    "tryScenarios": "Try Scenarios Calculator Now",
+    "controlTitle": "Assistants for closed environments",
+    "closedEnvironment": "Customer-scoped environment",
+    "controlBody": "Assistants are designed to use only the selected customer, operator, and property data. The demo shows the control model: which agents are available, which tools they may use, and when human approval is required.",
+    "agentCatalog": "Assistants",
+    "securityTitle": "Security boundaries",
+    "dataTitle": "Data sources",
+    "ragTitle": "RAG readiness",
+    "ragBody": "RAG will use customer- and property-specific namespaces. Sources, documents, and answers remain traceable, and another customer’s material is never retrieved into the same context.",
+    "workflowTitle": "Workflows",
+    "workflowBody": "Write actions such as creating a campaign brief or preparing tenant messages pass through approval gates. Chat may propose actions, but it does not publish or alter data without permission.",
+    "agents": {
+      "trend": { "title": "Trend specialist", "body": "Explains ShopperMind trends using only sourced claims." },
+      "campaign": { "title": "Campaign assistant", "body": "Turns a trend into a campaign brief and suggested KPIs." },
+      "operations": { "title": "Operations assistant", "body": "Supports zone, visitor, and service-level decisions." }
+    },
+    "guards": {
+      "scope": { "title": "Customer and property scope", "body": "Every request is bound to customerId and mallId." },
+      "sources": { "title": "Citation requirement", "body": "Factual claims need a source or are marked as assumptions." },
+      "approval": { "title": "Approval gates", "body": "Publishing, messaging, and budget actions require human approval." },
+      "audit": { "title": "Audit trail", "body": "Tool calls, sources, and decisions are stored for review." }
+    },
+    "data": {
+      "rag": { "title": "Documents", "body": "Leases, brand rules, and reports are scoped to the customer." },
+      "pos": { "title": "POS", "body": "Sales data is masked and aggregated by permission level." },
+      "footfall": { "title": "Footfall", "body": "Visitor flows are linked to time, zone, and campaign period." },
+      "tenant": { "title": "Tenants", "body": "Tenant and category data shapes recommendations." }
+    }
   },
   "shoppermind": {
     "title": "ShopperMind",
@@ -424,6 +451,71 @@
     "marketPrefix": "Market",
     "snapshot": {
       "section": "Trend snapshot"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "actions": "Actions",
+      "trends": "Trends",
+      "competitors": "Competitors",
+      "decisionSupport": "Decision support",
+      "emptyActionsTitle": "Actions in preparation",
+      "emptyActionsBody": "No sourced action recommendations have been published yet for this selected market or property."
+    },
+    "competitors": {
+      "emptyTitle": "Competitor benchmarks in preparation",
+      "emptyBody": "No validated competitor examples have been published for this market yet.",
+      "title": "Market-specific benchmarks",
+      "body": "Benchmarks stay in the same market as the selected view. Sources are shown where each example is used."
+    },
+    "decisionSupport": {
+      "title": "Why these recommendations are justified",
+      "body": "This view shows how trends, market signals, the selected property, and competitor examples become concrete actions.",
+      "logicTitle": "How recommendations are formed",
+      "logicTrend": "{{count}} market-specific trends",
+      "logicScenario": "Three alternative scenario paths",
+      "logicProperty": "Selected property profile and benchmarks",
+      "usedTitle": "What information was used",
+      "usedSources": "{{count}} sourced market or property sources",
+      "usedClaims": "{{count}} action-linked claims",
+      "usedEvidence": "Evidence is shown directly in action, trend, and competitor cards",
+      "missingTitle": "What customer data improves",
+      "missingSales": "Sales, tenant mix, and lease structure",
+      "missingFootfall": "Footfall, zones, and campaign results",
+      "missingBudget": "Budget, timing, and delivery constraints",
+      "aiTitle": "Tailored AI model as the next layer",
+      "aiBody": "A tailored AI model can connect to the customer’s tenant, footfall, sales, and campaign data. The model does not replace sourced analysis; it explains recommendations, generates alternative actions, and helps prioritize them by property, market, and budget."
+    },
+    "actionBoard": {
+      "weeklyHeader": "Weekly action recommendations",
+      "title": "Action plan: {{propertyName}}",
+      "subtitle": "Verified trend signals translated into concrete mall actions, benchmark examples, and decision support.",
+      "verifiedEvidence": "Verified evidence",
+      "evidenceSummary": "{{claims}} claims · {{sources}} sources · decision support ready",
+      "impactVsEffort": "Impact vs. effort",
+      "highImpact": "High impact",
+      "highEffort": "High effort",
+      "actionCoverage": "Action coverage",
+      "decisionContext": "Decision support",
+      "decisionContextBody": "The recommendations include {{count}} verified citations that can later ground a tailored AI model.",
+      "effort": "Effort",
+      "impact": "Impact",
+      "whyNow": "Why now",
+      "expectedKpi": "Expected KPI",
+      "competitorExample": "Competitor example",
+      "noCompetitorExample": "No competitor example linked.",
+      "showEvidence": "Show verified evidence ({{count}})",
+      "benchmark": "Benchmark",
+      "openCampaign": "Draft in Campaigns",
+      "discussAssistant": "Discuss with Assistant",
+      "priority": "Priority",
+      "property": "Property",
+      "actionTypes": {
+        "operations": "Activate daily visits",
+        "campaign": "Launch targeted campaign",
+        "tenantMix": "Tune tenant mix",
+        "benchmark": "Benchmark next move",
+        "retailMedia": "Package mall attention"
+      }
     },
     "countries": {
       "FI": "Finland",
@@ -462,7 +554,8 @@
     },
     "signalOfTheDay": {
       "title": "Signal of the Day",
-      "empty": "No signal published yet for this market today."
+      "empty": "No signal published yet for this market today.",
+      "comingSoon": "The monthly signal is being prepared for this market and will appear once sources are validated."
     },
     "states": {
       "EMERGING": "Emerging",
@@ -732,6 +825,7 @@
     },
     "megaScenario": {
       "label": "Headline view",
+      "finlandStructuralTitle": "Overview: Finland’s structural shift",
       "pathBlocks": {
         "macro": "Macroeconomy",
         "consumer": "Consumer",
@@ -780,6 +874,8 @@
       "opportunities": "Opportunities",
       "campaigns": "Campaign ideas",
       "playAtMall": "Use this trend",
+      "draftCampaign": "Draft in Campaigns",
+      "discussCampaign": "Refine with Assistant",
       "marketsNote": "{{- defaultValue}}",
       "audience": "Audience",
       "whyNow": "Why now",
@@ -826,6 +922,34 @@
     "runSimilarScenario": "Run Similar Scenario",
     "campaignHistory": "Campaign History",
     "visitors": "visitors"
+  },
+  "campaignWorkspace": {
+    "title": "Campaigns",
+    "subtitle": "Turn ShopperMind trends into campaign briefs that can be tested against visitor, POS, and tenant data.",
+    "builder": "Campaign brief draft",
+    "createBrief": "Create test brief",
+    "flowTitle": "Workflow once connected to live data",
+    "aiTitle": "Demo now, customer data later",
+    "aiBody": "A tailored AI model uses only data scoped to the customer environment. The demo shows the workflow with seeded and trend data, while the same view can later connect to POS, visitor, tenant, and campaign-result data.",
+    "fields": {
+      "mall": { "label": "Property", "value": "Sello or Mall of Tripla" },
+      "zone": { "label": "Zone", "value": "Everyday retail, station, restaurants, or services" },
+      "audience": { "label": "Audience", "value": "Daily visitors, families, or wellness customers" },
+      "budget": { "label": "Budget", "value": "Light / standard / broad" },
+      "duration": { "label": "Duration", "value": "7, 14, or 30 days" }
+    },
+    "kpis": {
+      "visits": { "label": "Visitor forecast", "value": "+3.8%", "hint": "Demo estimate for the selected zone" },
+      "sales": { "label": "Sales signal", "value": "+2.4%", "hint": "POS connection in full implementation" },
+      "tenants": { "label": "Tenants", "value": "12", "hint": "Matched participants from seed data" }
+    },
+    "steps": {
+      "brief": { "title": "Brief", "body": "Select trend, property, zone, and audience." },
+      "model": { "title": "Model", "body": "Estimate expected visitor and sales impact." },
+      "approval": { "title": "Approval", "body": "Confirm budget, channels, and tenant participation." },
+      "live": { "title": "Live tracking", "body": "Track visits, redemptions, and anomalies." },
+      "learning": { "title": "Learning", "body": "Save measured impact for future campaigns." }
+    }
   },
   "properties": {
     "myProperties": "My Properties",
@@ -1340,6 +1464,10 @@
   "spaceOptimizer": {
     "title": "Space Optimizer",
     "subtitle": "Tangible rental-space moves driven by ShopperMind trends and operational signals",
+    "futureConnection": {
+      "title": "ShopperMind connection planned",
+      "body": "In the next phase, a trend signal becomes a zone and category hypothesis whose impact is estimated with visitor, sales, rent, and lease data."
+    },
     "header": {
       "summary": "{{count}} suggestion across {{zones}} zones",
       "summary_other": "{{count}} suggestions across {{zones}} zones",

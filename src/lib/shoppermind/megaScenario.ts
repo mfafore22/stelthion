@@ -125,6 +125,15 @@ export function getCuratedTrends(country: string, lang: string, mallId?: string 
     .map((t) => {
       const impl = (t.mallImplications as Record<string, Record<Lang, string[]>>);
       const mallImpl = mallId && impl[mallId] ? impl[mallId][L] : [];
+      const trendWithOverrides = t as typeof t & {
+        marketOverrides?: Record<string, {
+          marketsNote?: Record<Lang, string>;
+          body?: Record<Lang, string>;
+          opportunities?: Record<Lang, string[]>;
+          sourceIds?: string[];
+        }>;
+      };
+      const marketOverride = trendWithOverrides.marketOverrides?.[upper];
       const category = (t as { category?: Record<Lang, string> }).category;
       return {
         id: t.id,
@@ -135,10 +144,10 @@ export function getCuratedTrends(country: string, lang: string, mallId?: string 
         confidence: t.confidence,
         label: t.label[L],
         category: category ? category[L] : '',
-        marketsNote: t.marketsNote[L],
-        body: t.body[L],
+        marketsNote: marketOverride?.marketsNote?.[L] ?? t.marketsNote[L],
+        body: marketOverride?.body?.[L] ?? t.body[L],
         mallImplications: mallImpl,
-        opportunities: (t.opportunities as Record<Lang, string[]>)[L],
+        opportunities: marketOverride?.opportunities?.[L] ?? (t.opportunities as Record<Lang, string[]>)[L],
         campaigns: (t.campaigns as unknown as Array<unknown>).map((c) => {
           const cc = c as {
             name: string | Record<Lang, string>;
@@ -157,7 +166,7 @@ export function getCuratedTrends(country: string, lang: string, mallId?: string 
             mallIds: cc.mallIds,
           };
         }),
-        sources: resolveSourceIds(t.sourceIds, L),
+        sources: resolveSourceIds(marketOverride?.sourceIds ?? t.sourceIds, L),
       };
     });
 }

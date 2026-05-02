@@ -4,8 +4,9 @@ import { MiniSparkline } from './MiniSparkline';
 
 export interface MacroTileData {
   code: string;
+  slot?: string;
   name: string;
-  unit: 'index' | 'percent' | 'percent-of-gdp' | 'volume-index';
+  unit: 'index' | 'percent' | 'percent-of-gdp' | 'volume-index' | 'currency';
   publisher: string;
   sourceUrl: string;
   latestValue: number | null;
@@ -19,6 +20,7 @@ function formatValue(v: number | null, unit: MacroTileData['unit']): string {
   const fixed = unit === 'index' || unit === 'volume-index' ? 1 : 1;
   const formatted = new Intl.NumberFormat('fi-FI', { maximumFractionDigits: fixed }).format(v);
   if (unit === 'percent' || unit === 'percent-of-gdp') return `${formatted} %`;
+  if (unit === 'currency') return formatted;
   return formatted;
 }
 
@@ -54,6 +56,9 @@ export function MacroTile({ data }: { data: MacroTileData }) {
       </div>
       {data.history.length >= 2 && (
         <MiniSparkline scores={series as never} height={24} />
+      )}
+      {data.history.length < 2 && (
+        <div className="h-6 rounded bg-bo-neutral-100/70" />
       )}
       <div className="mt-2 pt-2 border-t border-bo-neutral-100 flex items-center justify-between text-[10px] text-bo-neutral-500">
         <a

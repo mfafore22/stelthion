@@ -1,19 +1,30 @@
 import { useTranslation } from 'react-i18next';
 import type { SignalOfTheDay } from '@stelthion/shoppermind-client-types';
-import { MallCard } from '@/components/mall/ui/MallCard';
 import { SourceLogos } from './SourceLogos';
+import { CollapsibleSection } from './CollapsibleSection';
 import { localizeSotdNarrative, localizeSotdSections } from '@/lib/shoppermind/localize';
 
-export function SignalOfTheDayCard({ sotd }: { sotd: SignalOfTheDay | null }) {
+export function SignalOfTheDayCard({
+  sotd,
+  defaultOpen = false,
+}: {
+  sotd: SignalOfTheDay | null;
+  defaultOpen?: boolean;
+}) {
   const { t, i18n } = useTranslation('mall');
   if (!sotd) {
     return (
-      <MallCard variant="glass" padding="md" className="mb-4">
-        <div className="text-xs uppercase tracking-wider text-bo-neutral-400 mb-2 font-medium">
-          {t('shoppermind.signalSections.monthly')}
+      <CollapsibleSection
+        title={t('shoppermind.signalSections.monthly')}
+        defaultOpen={defaultOpen}
+        toneClassName="ring-1 ring-bo-neutral-200/60"
+      >
+        <div className="text-sm text-bo-neutral-500">
+          {t('shoppermind.signalOfTheDay.comingSoon', {
+            defaultValue: t('shoppermind.signalOfTheDay.empty'),
+          })}
         </div>
-        <div className="text-sm text-bo-neutral-500">{t('shoppermind.signalOfTheDay.empty')}</div>
-      </MallCard>
+      </CollapsibleSection>
     );
   }
   const sections = localizeSotdSections(sotd, i18n.language);
@@ -30,12 +41,14 @@ export function SignalOfTheDayCard({ sotd }: { sotd: SignalOfTheDay | null }) {
     }
   })();
   return (
-    <MallCard variant="glass" padding="md" className="mb-4">
-      <div className="text-xs uppercase tracking-wider text-bo-neutral-400 mb-3 font-medium">
-        {t('shoppermind.signalSections.monthly')} · {monthLabel}
-      </div>
+    <CollapsibleSection
+      title={t('shoppermind.signalSections.monthly')}
+      timespan={monthLabel}
+      defaultOpen={defaultOpen}
+      toneClassName="ring-1 ring-bo-neutral-200/60"
+    >
       {sections ? <SignalSections sections={sections} /> : (
-        <p className="text-bo-neutral-900 leading-relaxed whitespace-pre-wrap">{narrative}</p>
+        <p className="text-sm text-bo-neutral-800 leading-relaxed whitespace-pre-wrap">{narrative}</p>
       )}
       <div className="mt-5 pt-3 border-t border-bo-neutral-200/60">
         <div className="text-[10px] uppercase tracking-wider text-bo-neutral-400 mb-1.5 font-medium">
@@ -43,7 +56,7 @@ export function SignalOfTheDayCard({ sotd }: { sotd: SignalOfTheDay | null }) {
         </div>
         <SourceLogos contributingSources={sotd.contributingSources} />
       </div>
-    </MallCard>
+    </CollapsibleSection>
   );
 }
 
@@ -52,7 +65,7 @@ function SignalSections({ sections }: { sections: NonNullable<ReturnType<typeof 
   return (
     <div className="space-y-5">
       {sections.headline && (
-        <h3 className="text-lg font-semibold text-bo-neutral-950 leading-snug tracking-tight">{sections.headline}</h3>
+        <h3 className="text-base font-semibold text-bo-neutral-950 leading-snug tracking-tight">{sections.headline}</h3>
       )}
       {sections.keyFindings && sections.keyFindings.length > 0 && (
         <Bullets label={t('shoppermind.signalSections.keyFindings')} items={sections.keyFindings} />

@@ -53,9 +53,13 @@ export function SpaceOptimizerView({
   useEffect(() => {
     if (!mallId) return;
     const ctrl = new AbortController();
-    setLoading(true);
-    setError(null);
-    setGated(false);
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (cancelled || ctrl.signal.aborted) return;
+      setLoading(true);
+      setError(null);
+      setGated(false);
+    });
 
     const promise =
       mode === 'demo'
@@ -76,7 +80,10 @@ export function SpaceOptimizerView({
         if (!ctrl.signal.aborted) setLoading(false);
       });
 
-    return () => ctrl.abort();
+    return () => {
+      cancelled = true;
+      ctrl.abort();
+    };
   }, [mallId, mode]);
 
   const trendIndex = useMemo(() => {
@@ -173,6 +180,15 @@ export function SpaceOptimizerView({
             )}
           </p>
         </div>
+      </div>
+
+      <div className="rounded-xl border border-bo-primary-200 bg-white p-4 shadow-bo-sm">
+        <div className="text-sm font-semibold text-bo-neutral-950">
+          {t('spaceOptimizer.futureConnection.title')}
+        </div>
+        <p className="mt-1 text-sm leading-relaxed text-bo-neutral-600">
+          {t('spaceOptimizer.futureConnection.body')}
+        </p>
       </div>
 
       {loading && (

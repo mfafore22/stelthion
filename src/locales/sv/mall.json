@@ -421,7 +421,34 @@
     "description": "AI-assistenter för fastighetsförvaltning",
     "comingSoon": "AI-assistentintegration",
     "integrationDescription": "AI-assistenter använder din fastighets isolerade data för att producera fastighetsspecifika simuleringar och prognoser. Med dem kan du testa effekten av dina valda åtgärder eller förbereda dig för situationer. Stelthion AI-modeller ger bredare insikter och alternativ till simuleringar och prognoser.",
-    "tryScenarios": "Prova scenariokalkylator nu"
+    "tryScenarios": "Prova scenariokalkylator nu",
+    "controlTitle": "Assistenter för slutna miljöer",
+    "closedEnvironment": "Kundavgränsad miljö",
+    "controlBody": "Assistenterna utformas för att endast använda vald kunds, operatörs och fastighets data. Demon visar styrmodellen: vilka agenter som finns, vilka verktyg de får använda och när mänskligt godkännande krävs.",
+    "agentCatalog": "Assistenter",
+    "securityTitle": "Säkerhetsgränser",
+    "dataTitle": "Datakällor",
+    "ragTitle": "RAG-beredskap",
+    "ragBody": "RAG byggs med kund- och fastighetsspecifika namnrymder. Källor, dokument och svar förblir spårbara, och en annan kunds material hämtas aldrig in i samma kontext.",
+    "workflowTitle": "Arbetsflöden",
+    "workflowBody": "Skrivande åtgärder som kampanjbriefar eller hyresgästmeddelanden går via godkännandeportar. Chatten kan föreslå åtgärder, men publicerar eller ändrar inte data utan tillstånd.",
+    "agents": {
+      "trend": { "title": "Trendspecialist", "body": "Förklarar ShopperMind-trender med endast källbelagda påståenden." },
+      "campaign": { "title": "Kampanjassistent", "body": "Gör en trend till en kampanjbrief och föreslagna KPI:er." },
+      "operations": { "title": "Operativ assistent", "body": "Stödjer beslut om zoner, besökare och servicenivå." }
+    },
+    "guards": {
+      "scope": { "title": "Kund- och fastighetsgräns", "body": "Varje begäran binds till customerId och mallId." },
+      "sources": { "title": "Källkrav", "body": "Faktapåståenden behöver källa eller markeras som antaganden." },
+      "approval": { "title": "Godkännandeportar", "body": "Publicering, meddelanden och budgetåtgärder kräver mänskligt godkännande." },
+      "audit": { "title": "Audit trail", "body": "Verktygsanrop, källor och beslut sparas för granskning." }
+    },
+    "data": {
+      "rag": { "title": "Dokument", "body": "Hyresavtal, varumärkesregler och rapporter avgränsas till kunden." },
+      "pos": { "title": "POS", "body": "Försäljningsdata maskeras och aggregeras efter behörighet." },
+      "footfall": { "title": "Besöksdata", "body": "Besöksflöden kopplas till tid, zon och kampanjperiod." },
+      "tenant": { "title": "Hyresgäster", "body": "Hyresgäst- och kategoridata styr rekommendationerna." }
+    }
   },
   "shoppermind": {
     "title": "ShopperMind",
@@ -433,6 +460,71 @@
     "marketPrefix": "Marknad",
     "snapshot": {
       "section": "Trendöversikt"
+    },
+    "tabs": {
+      "overview": "Huvudvy",
+      "actions": "Åtgärder",
+      "trends": "Trender",
+      "competitors": "Konkurrenter",
+      "decisionSupport": "Beslutsstöd",
+      "emptyActionsTitle": "Åtgärder förbereds",
+      "emptyActionsBody": "Inga källbelagda åtgärdsrekommendationer har ännu publicerats för den valda marknaden eller fastigheten."
+    },
+    "competitors": {
+      "emptyTitle": "Konkurrentjämförelser förbereds",
+      "emptyBody": "Inga validerade konkurrentexempel har ännu publicerats för denna marknad.",
+      "title": "Marknadsspecifika jämförelseobjekt",
+      "body": "Jämförelserna hålls i samma marknad som den valda vyn. Källor visas där respektive exempel används."
+    },
+    "decisionSupport": {
+      "title": "Varför rekommendationerna är motiverade",
+      "body": "Denna vy visar hur trender, marknadssignaler, den valda fastigheten och konkurrentexempel blir konkreta åtgärder.",
+      "logicTitle": "Hur rekommendationer bildas",
+      "logicTrend": "{{count}} marknadsspecifika trender",
+      "logicScenario": "Tre alternativa scenariovägar",
+      "logicProperty": "Vald fastighetsprofil och jämförelseobjekt",
+      "usedTitle": "Vilken information som användes",
+      "usedSources": "{{count}} källbelagda marknads- eller fastighetskällor",
+      "usedClaims": "{{count}} åtgärdskopplade påståenden",
+      "usedEvidence": "Belägg visas direkt i åtgärds-, trend- och konkurrentkort",
+      "missingTitle": "Vad kunddata förbättrar",
+      "missingSales": "Försäljning, hyresgästmix och hyresavtalens struktur",
+      "missingFootfall": "Besöksflöden, zoner och kampanjresultat",
+      "missingBudget": "Budget-, tids- och genomförandebegränsningar",
+      "aiTitle": "Skräddarsydd AI-modell som nästa lager",
+      "aiBody": "En skräddarsydd AI-modell kan kopplas till kundens egna hyresgäst-, besöks-, försäljnings- och kampanjdata. Modellen ersätter inte källbelagd analys, utan förklarar rekommendationer, tar fram alternativa åtgärder och hjälper till att prioritera dem per fastighet, marknad och budget."
+    },
+    "actionBoard": {
+      "weeklyHeader": "Veckans åtgärdsförslag",
+      "title": "Åtgärdsplan: {{propertyName}}",
+      "subtitle": "Verifierade trendsignaler översatta till konkreta köpcentrumåtgärder, jämförelseexempel och beslutsstöd.",
+      "verifiedEvidence": "Verifierade belägg",
+      "evidenceSummary": "{{claims}} påståenden · {{sources}} källor · beslutsstöd klart",
+      "impactVsEffort": "Effekt jämfört med arbetsinsats",
+      "highImpact": "Hög effekt",
+      "highEffort": "Stor arbetsinsats",
+      "actionCoverage": "Åtgärdernas täckning",
+      "decisionContext": "Beslutsstöd",
+      "decisionContextBody": "Rekommendationerna innehåller {{count}} verifierade hänvisningar som senare kan ligga till grund för en skräddarsydd AI-modell.",
+      "effort": "Arbetsinsats",
+      "impact": "Effekt",
+      "whyNow": "Varför nu",
+      "expectedKpi": "Förväntat nyckeltal",
+      "competitorExample": "Konkurrentexempel",
+      "noCompetitorExample": "Inget konkurrentexempel kopplat.",
+      "showEvidence": "Visa verifierade belägg ({{count}})",
+      "benchmark": "Jämförelse",
+      "openCampaign": "Öppna som kampanjidé",
+      "discussAssistant": "Diskutera med assistenten",
+      "priority": "Prioritet",
+      "property": "Fastighet",
+      "actionTypes": {
+        "operations": "Aktivera vardagsbesök",
+        "campaign": "Starta riktad kampanj",
+        "tenantMix": "Justera hyresgästmixen",
+        "benchmark": "Jämför nästa steg",
+        "retailMedia": "Paketera uppmärksamhet"
+      }
     },
     "countries": {
       "FI": "Finland",
@@ -463,7 +555,8 @@
     },
     "signalOfTheDay": {
       "title": "Dagens signal",
-      "empty": "Ingen signal har publicerats för den här marknaden idag."
+      "empty": "Ingen signal har publicerats för den här marknaden idag.",
+      "comingSoon": "Månadens signal förbereds för denna marknad och visas när källorna har validerats."
     },
     "signalSections": {
       "monthly": "Månadens signal",
@@ -741,6 +834,7 @@
     },
     "megaScenario": {
       "label": "Huvudvy",
+      "finlandStructuralTitle": "Huvudvy: Finlands strukturella omställning",
       "pathBlocks": {
         "macro": "Makroekonomi",
         "consumer": "Konsument",
@@ -789,6 +883,8 @@
       "opportunities": "Möjligheter",
       "campaigns": "Kampanjidéer",
       "playAtMall": "Använd denna trend",
+      "draftCampaign": "Skissa i Kampanjer",
+      "discussCampaign": "Finslipa med assistenten",
       "marketsNote": "{{- defaultValue}}",
       "audience": "Målgrupp",
       "whyNow": "Varför nu",
@@ -835,6 +931,34 @@
     "runSimilarScenario": "Kör liknande scenario",
     "campaignHistory": "Kampanjhistorik",
     "visitors": "besökare"
+  },
+  "campaignWorkspace": {
+    "title": "Kampanjer",
+    "subtitle": "Gör ShopperMind-trender till kampanjbriefar som kan testas mot besöks-, POS- och hyresgästdata.",
+    "builder": "Utkast till kampanjbrief",
+    "createBrief": "Skapa testbrief",
+    "flowTitle": "Arbetsflöde när live-data är ansluten",
+    "aiTitle": "Demo nu, kunddata senare",
+    "aiBody": "En skräddarsydd AI-modell använder endast data som är avgränsad till kundens egen miljö. Demon visar arbetsflödet med seedad data och trenddata, medan samma vy senare kan kopplas till POS-, besöks-, hyresgäst- och kampanjresultat.",
+    "fields": {
+      "mall": { "label": "Fastighet", "value": "Sello eller Mall of Tripla" },
+      "zone": { "label": "Zon", "value": "Vardagsärenden, station, restauranger eller tjänster" },
+      "audience": { "label": "Målgrupp", "value": "Vardagsbesökare, familjer eller wellnesskunder" },
+      "budget": { "label": "Budget", "value": "Lätt / standard / bred" },
+      "duration": { "label": "Längd", "value": "7, 14 eller 30 dagar" }
+    },
+    "kpis": {
+      "visits": { "label": "Besöksprognos", "value": "+3,8 %", "hint": "Demoestimat för vald zon" },
+      "sales": { "label": "Försäljningssignal", "value": "+2,4 %", "hint": "POS-koppling i full implementation" },
+      "tenants": { "label": "Hyresgäster", "value": "12", "hint": "Matchade deltagare från seedad data" }
+    },
+    "steps": {
+      "brief": { "title": "Brief", "body": "Välj trend, fastighet, zon och målgrupp." },
+      "model": { "title": "Modell", "body": "Beräkna förväntad besöks- och försäljningseffekt." },
+      "approval": { "title": "Godkännande", "body": "Bekräfta budget, kanaler och hyresgäster." },
+      "live": { "title": "Uppföljning", "body": "Följ besök, inlösen och avvikelser." },
+      "learning": { "title": "Lärdomar", "body": "Spara uppmätt effekt för framtida kampanjer." }
+    }
   },
   "properties": {
     "myProperties": "Mina fastigheter",
@@ -1369,6 +1493,10 @@
   "spaceOptimizer": {
     "title": "Yt-Optimerare",
     "subtitle": "Konkreta hyresytsförändringar drivna av ShopperMind-trender och operativa signaler",
+    "futureConnection": {
+      "title": "ShopperMind-koppling planerad",
+      "body": "I nästa fas blir en trendsignal en zon- och kategorihypotes vars effekt uppskattas med besöks-, försäljnings-, hyres- och avtalsdata."
+    },
     "header": {
       "summary": "{{count}} förslag över {{zones}} zoner",
       "summary_other": "{{count}} förslag över {{zones}} zoner",

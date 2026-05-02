@@ -108,7 +108,7 @@ export function MallLeftNav({
   const { data: features } = useSWR<PlanFeatures>('/api/mall/my-features', fetcher);
 
   // Base active items — always enabled
-  const ALWAYS_ACTIVE = new Set(['portfolio', 'properties']);
+  const ALWAYS_ACTIVE = new Set(['portfolio', 'properties', 'campaigns']);
   // Plan-gated items
   const planActive = new Set<string>([
     ...(features?.shoppermind ? ['shoppermind'] : []),

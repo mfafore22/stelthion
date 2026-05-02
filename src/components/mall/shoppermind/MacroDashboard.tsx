@@ -16,7 +16,9 @@ export function MacroDashboard({ country }: { country: string }) {
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
+    queueMicrotask(() => {
+      if (!cancelled) setLoading(true);
+    });
     fetch(`/api/shoppermind/macro?country=${encodeURIComponent(country)}&lang=${i18n.language}`, {
       credentials: 'include',
     })
@@ -41,8 +43,6 @@ export function MacroDashboard({ country }: { country: string }) {
     );
   }
   if (!data || data.indicators.length === 0) return null;
-  const hasAnyData = data.indicators.some((i) => i.latestValue != null);
-  if (!hasAnyData) return null;
 
   return (
     <section>
