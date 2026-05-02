@@ -523,6 +523,95 @@ export interface InsightsChatResponse {
   citations: InsightsChatCitation[];
 }
 
+export type VerificationStatus = 'verified' | 'needs_rewrite' | 'unsupported' | 'retired';
+export type EvidenceSourceType = 'official' | 'statistical' | 'operator' | 'research' | 'trade';
+export type EvidenceAuthorityTier = 'primary' | 'trusted_research' | 'trade_reference';
+export type PropertyActionPriority = 'critical' | 'high' | 'medium';
+export type PropertyActionEffort = 'low' | 'medium' | 'high';
+export type PropertyActionImpact = 'low' | 'medium' | 'high';
+export type PropertyActionTimeHorizon = 'this_week' | '30_days' | '90_days';
+
+export interface PropertyProfile {
+  id: string;
+  marketId: string;
+  name: string;
+  operator: string;
+  propertyType: 'shopping_mall';
+  format: 'transit_hub' | 'regional_mall' | 'destination_mall' | 'urban_mall';
+  country: string;
+  city: string;
+  isCompetitor: boolean;
+  summary: string;
+  sourceIds: string[];
+}
+
+export interface VerifiedEvidenceSource {
+  id: string;
+  publisher: string;
+  title: string;
+  url: string;
+  retrievedAt: string;
+  sourceType: EvidenceSourceType;
+  authorityTier: EvidenceAuthorityTier;
+  verificationStatus: VerificationStatus;
+}
+
+export interface EvidenceClaim {
+  id: string;
+  sourceId: string;
+  text: string;
+  metricValue?: number;
+  metricUnit?: string;
+  appliesTo: {
+    marketId?: string;
+    propertyId?: string;
+    trendId?: string;
+  };
+  verificationStatus: VerificationStatus;
+}
+
+export interface CompetitorExample {
+  propertyId: string;
+  propertyName: string;
+  operator: string;
+  observedMove: string;
+  whyItMatters: string;
+  evidenceClaimIds: string[];
+}
+
+export interface PropertyActionRecommendation {
+  id: string;
+  propertyId: string;
+  marketId: string;
+  title: string;
+  actionType: 'tenant_mix' | 'campaign' | 'operations' | 'benchmark' | 'retail_media';
+  priority: PropertyActionPriority;
+  impact: PropertyActionImpact;
+  effort: PropertyActionEffort;
+  timeHorizon: PropertyActionTimeHorizon;
+  expectedKpi: string;
+  whyNow: string;
+  action: string;
+  relatedTrendIds: string[];
+  relatedPhenomenonIds: string[];
+  evidenceClaimIds: string[];
+  competitorExamples: CompetitorExample[];
+  zoneTags: string[];
+  verificationStatus: VerificationStatus;
+}
+
+export interface PropertyActionsResponse {
+  property: PropertyProfile;
+  recommendations: PropertyActionRecommendation[];
+  evidenceClaims: EvidenceClaim[];
+  sources: VerifiedEvidenceSource[];
+  llmReadyContext: {
+    enabled: false;
+    instruction: string;
+    citationIds: string[];
+  };
+}
+
 export interface CronRunRequest {
   stages?: Array<'ingest' | 'cluster' | 'score' | 'publish'>;
   markets?: string[];

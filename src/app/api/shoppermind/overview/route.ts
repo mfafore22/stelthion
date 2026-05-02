@@ -40,12 +40,14 @@ export async function GET(req: NextRequest) {
       client.listPhenomena({ marketId, limit: 25 }),
       client.getSignalOfTheDay({ marketId }),
     ]);
+    const actions = await client.getPropertyActions(mallId, { marketId }).catch(() => null);
     return NextResponse.json({
       configured: true,
       marketId,
       market,
       phenomena: phenomenaRes.phenomena,
       signalOfTheDay: sotdRes.signalOfTheDay,
+      propertyActions: actions,
     });
   } catch (err) {
     return NextResponse.json(

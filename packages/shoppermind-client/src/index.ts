@@ -25,6 +25,7 @@ import type {
   PhenomenonMarketsResponse,
   PhenomenonStateValue,
   PredictedEventResponse,
+  PropertyActionsResponse,
   ResonanceResponse,
   ReviewApproveResponse,
   ReviewListResponse,
@@ -242,6 +243,18 @@ export class ShopperMindClient {
       'POST',
       `v1/phenomena/${encodeURIComponent(phenomenonId)}/campaign-idea`,
       { body },
+    );
+  }
+
+  getPropertyActions(
+    propertyId: string,
+    args: { marketId?: string } = {},
+  ): Promise<PropertyActionsResponse> {
+    return request<PropertyActionsResponse>(
+      this.opts,
+      'GET',
+      `v1/properties/${encodeURIComponent(propertyId)}/actions`,
+      { query: { marketId: args.marketId } },
     );
   }
 }

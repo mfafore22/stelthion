@@ -41,6 +41,24 @@ Content crawled from public sources (news, RSS, social APIs). Stored in
 - **Training reuse:** allowed. Derived analytics are attributable to the
   service's own computation, not to any user.
 
+### 1.2.1 Verified property action data
+`PropertyProfile`, `EvidenceSource`, `EvidenceClaim`,
+`PropertyActionRecommendation`, and `CompetitorExample` are the MVP demo
+contract for turning verified trends into tangible mall actions.
+- **Market scope:** every property action is scoped by `propertyId` and
+  `marketId`. A request for a property under the wrong market returns no
+  action payload.
+- **Verification:** quoted numbers, competitor facts, and action rationales
+  must reference `EvidenceClaim` rows with `verificationStatus = verified`.
+  Each claim points to a source URL, publisher, retrieval date, source type,
+  and authority tier. Unsupported claims are rewritten or retired before
+  they are rendered.
+- **LLM reuse:** LLM prompts may include only verified claim IDs and action
+  text already present in the response. LLMs may summarize or rephrase; they
+  must not introduce new claims or uncited numbers.
+- **Retention:** follows derived analytics retention. These rows do not
+  contain customer identity or user-authored chat content.
+
 ### 1.3 Reviewer actions
 `ReviewItem.resolvedBy`, `ReviewItem.resolutionNote`, and the corresponding
 audit trail. The reviewer is a named operator inside the Stelthion
