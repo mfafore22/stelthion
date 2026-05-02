@@ -8,7 +8,8 @@
       "horizon": "short",
       "countries": [
         "FI",
-        "SE"
+        "SE",
+        "US"
       ],
       "mallFormat": "all",
       "state": "ACCELERATING",
@@ -111,6 +112,34 @@
           "sv": [
             "Lyft fram kuraterade värdeval för familjer och lokala besökare.",
             "Knyt lojalitet till prisklarhet."
+          ]
+        },
+        "us-dc-urban": {
+          "fi": [
+            "Käännä trendi konkreettiseksi USA-demo-toimenpiteeksi valitulle kohteelle.",
+            "Näytä lähde- ja KPI-perustelu ennen vuokralais- tai kampanjapäätöstä."
+          ],
+          "en": [
+            "Translate the trend into a concrete US demo action for the selected property.",
+            "Show source and KPI rationale before tenant or campaign decisions."
+          ],
+          "sv": [
+            "Översätt trenden till en konkret USA-demoåtgärd för vald fastighet.",
+            "Visa käll- och KPI-motivering före hyresgäst- eller kampanjbeslut."
+          ]
+        },
+        "us-mall-of-america": {
+          "fi": [
+            "Käännä trendi konkreettiseksi USA-demo-toimenpiteeksi valitulle kohteelle.",
+            "Näytä lähde- ja KPI-perustelu ennen vuokralais- tai kampanjapäätöstä."
+          ],
+          "en": [
+            "Translate the trend into a concrete US demo action for the selected property.",
+            "Show source and KPI rationale before tenant or campaign decisions."
+          ],
+          "sv": [
+            "Översätt trenden till en konkret USA-demoåtgärd för vald fastighet.",
+            "Visa käll- och KPI-motivering före hyresgäst- eller kampanjbeslut."
           ]
         }
       },
@@ -227,6 +256,42 @@
         "fi": "älykäs arvo",
         "en": "smart value",
         "sv": "smart värde"
+      },
+      "marketOverrides": {
+        "US": {
+          "sourceIds": [
+            "deloitte-cp-2026",
+            "nrf-us-retail-2026",
+            "oecd-us-2026"
+          ],
+          "marketsNote": {
+            "fi": "Yhdysvalloissa arvohaku ei tarkoita kulutuksen pysähtymistä: NRF ennustaa vähittäiskaupalle kasvua, mutta Deloitte pitää vastinetta rahalle pysyvänä kuluttajavaatimuksena.",
+            "en": "In the US, value-seeking does not mean spending disappears: NRF forecasts retail growth, while Deloitte frames value-seeking as a structural consumer behavior.",
+            "sv": "I USA betyder värdesökande inte att konsumtionen försvinner: NRF prognostiserar detaljhandelstillväxt medan Deloitte beskriver värdesökande som strukturellt beteende."
+          },
+          "body": {
+            "fi": "Yhdysvaltalainen asiakas käyttää yhä rahaa, mutta haluaa nähdä selvästi, mistä maksaa. Kauppakeskuksen pitää tehdä arvo näkyväksi: helppo arjen asiointi, selkeät palautukset, palvelupaketit, ruokatarjoukset ja helposti löydettävät edut. Arvo ei saa näyttää halvalta, vaan hyödylliseltä ja vaivattomalta.",
+            "en": "US shoppers are still spending, but they expect visible value for money. The mall has to prove value concretely: everyday convenience, clear returns, service bundles, food value, and findable offers. This works in both urban centres and Mall of America-type destinations when value feels useful rather than cheap.",
+            "sv": "Amerikanska kunder fortsätter konsumera men kräver synligt värde för pengarna. Köpcentrumet måste bevisa värde konkret: vardagsbekvämlighet, tydliga returer, servicepaket, matvärde och lättfunna erbjudanden. Det fungerar både i urbana centrum och Mall of America-liknande destinationer när värde känns användbart, inte billigt."
+          },
+          "opportunities": {
+            "fi": [
+              "Viikoittaiset arkiarvon ja palvelujen nostot",
+              "Yhteinen kartta tarjouksille, ruoalle ja palveluille",
+              "Palautus-, korjaus- ja vaihtopisteet käynnin syyksi"
+            ],
+            "en": [
+              "Weekly value-and-service bundles",
+              "Shared map for off-price, food, and service offers",
+              "Returns, repair, and trade-in points as everyday trip reasons"
+            ],
+            "sv": [
+              "Veckovisa värde- och servicepaket",
+              "Gemensam karta för off-price, mat och tjänster",
+              "Retur-, reparations- och inbytespunkter som vardagsskäl till besök"
+            ]
+          }
+        }
       }
     },
     {
@@ -234,7 +299,8 @@
       "horizon": "medium",
       "countries": [
         "FI",
-        "SE"
+        "SE",
+        "US"
       ],
       "mallFormat": "all",
       "state": "ACCELERATING",
@@ -337,6 +403,34 @@
           "sv": [
             "Sömlös mobil-UX och hämtinfrastruktur för familjekunder.",
             "Lojalitetskopplade leveranstjänster, inte bara rabatter."
+          ]
+        },
+        "us-dc-urban": {
+          "fi": [
+            "Käännä trendi konkreettiseksi USA-demo-toimenpiteeksi valitulle kohteelle.",
+            "Näytä lähde- ja KPI-perustelu ennen vuokralais- tai kampanjapäätöstä."
+          ],
+          "en": [
+            "Translate the trend into a concrete US demo action for the selected property.",
+            "Show source and KPI rationale before tenant or campaign decisions."
+          ],
+          "sv": [
+            "Översätt trenden till en konkret USA-demoåtgärd för vald fastighet.",
+            "Visa käll- och KPI-motivering före hyresgäst- eller kampanjbeslut."
+          ]
+        },
+        "us-mall-of-america": {
+          "fi": [
+            "Käännä trendi konkreettiseksi USA-demo-toimenpiteeksi valitulle kohteelle.",
+            "Näytä lähde- ja KPI-perustelu ennen vuokralais- tai kampanjapäätöstä."
+          ],
+          "en": [
+            "Translate the trend into a concrete US demo action for the selected property.",
+            "Show source and KPI rationale before tenant or campaign decisions."
+          ],
+          "sv": [
+            "Översätt trenden till en konkret USA-demoåtgärd för vald fastighet.",
+            "Visa käll- och KPI-motivering före hyresgäst- eller kampanjbeslut."
           ]
         }
       },
@@ -450,6 +544,42 @@
         "fi": "saumaton monikanavaisuus",
         "en": "frictionless omnichannel",
         "sv": "friktionsfri omnikanal"
+      },
+      "marketOverrides": {
+        "US": {
+          "sourceIds": [
+            "census-us-ecommerce-2025",
+            "deloitte-cp-2026",
+            "nrf-us-retail-2026"
+          ],
+          "marketsNote": {
+            "fi": "Yhdysvalloissa verkkokauppa on pysyvästi merkittävä osa vähittäiskauppaa. Fyysisen käynnin pitää siksi olla joko nopea, hyödyllinen tai elämyksellinen.",
+            "en": "In the US, e-commerce remains a large part of retail, so the physical trip must be efficient, useful, or experiential.",
+            "sv": "I USA är e-handel fortsatt en stor del av handeln, så det fysiska besöket måste vara effektivt, nyttigt eller upplevelsebaserat."
+          },
+          "body": {
+            "fi": "Kauppakeskuksen ei kannata kilpailla verkkokaupan kanssa samoilla ehdoilla. Sen tehtävä on yhdistää nouto, palautukset, tuotteiden kokeilu, palvelu ja heti mukaan saatava ostos. Yhdysvalloissa tämä korostuu, koska asiakas odottaa verkon vaivattomuutta myös paikan päällä.",
+            "en": "The mall should not compete with e-commerce on the same terms; it should connect pickup, returns, product trial, service, and immediate purchase. In the US this matters because shoppers expect online convenience in the physical visit.",
+            "sv": "Köpcentrumet ska inte konkurrera med e-handeln på samma villkor. Det ska koppla ihop hämtning, returer, produktprovning, service och köp direkt på plats. I USA är detta viktigt eftersom kunder väntar sig nätets smidighet även i det fysiska besöket."
+          },
+          "opportunities": {
+            "fi": [
+              "Nouto- ja palautuspisteet sisäänkäyntien lähelle",
+              "Kokeilupäivät verkosta tutuille ja kauneusbrändeille",
+              "Lounas, nouto ja palvelu samalle nopealle asiointireitille"
+            ],
+            "en": [
+              "Pickup and return points near entrances",
+              "Trial days for digital-native and beauty brands",
+              "Lunch, pickup, and service on one fast visit path"
+            ],
+            "sv": [
+              "Hämt- och returpunkter nära entréer",
+              "Prova-på-dagar för digitala varumärken och skönhet",
+              "Lunch, hämtning och service på samma snabba besöksväg"
+            ]
+          }
+        }
       }
     },
     {
@@ -457,7 +587,8 @@
       "horizon": "medium",
       "countries": [
         "FI",
-        "SE"
+        "SE",
+        "US"
       ],
       "mallFormat": "all",
       "state": "EMERGING",
@@ -560,6 +691,34 @@
           "sv": [
             "Familjelivsstil, välmående och bättre vardag regionalt.",
             "Balansera mode, caféer och tjänster för helgmissionen."
+          ]
+        },
+        "us-dc-urban": {
+          "fi": [
+            "Käännä trendi konkreettiseksi USA-demo-toimenpiteeksi valitulle kohteelle.",
+            "Näytä lähde- ja KPI-perustelu ennen vuokralais- tai kampanjapäätöstä."
+          ],
+          "en": [
+            "Translate the trend into a concrete US demo action for the selected property.",
+            "Show source and KPI rationale before tenant or campaign decisions."
+          ],
+          "sv": [
+            "Översätt trenden till en konkret USA-demoåtgärd för vald fastighet.",
+            "Visa käll- och KPI-motivering före hyresgäst- eller kampanjbeslut."
+          ]
+        },
+        "us-mall-of-america": {
+          "fi": [
+            "Käännä trendi konkreettiseksi USA-demo-toimenpiteeksi valitulle kohteelle.",
+            "Näytä lähde- ja KPI-perustelu ennen vuokralais- tai kampanjapäätöstä."
+          ],
+          "en": [
+            "Translate the trend into a concrete US demo action for the selected property.",
+            "Show source and KPI rationale before tenant or campaign decisions."
+          ],
+          "sv": [
+            "Översätt trenden till en konkret USA-demoåtgärd för vald fastighet.",
+            "Visa käll- och KPI-motivering före hyresgäst- eller kampanjbeslut."
           ]
         }
       },
@@ -673,6 +832,42 @@
         "fi": "kuratoitu vapaa-aika",
         "en": "curated discretionary",
         "sv": "kuraterad sällanhandel"
+      },
+      "marketOverrides": {
+        "US": {
+          "sourceIds": [
+            "mall-of-america-flagship-2025",
+            "nrf-us-retail-2026",
+            "circana-us-beauty-2025"
+          ],
+          "marketsNote": {
+            "fi": "Yhdysvalloissa vapaa-ajan ostaminen kasvaa valikoivasti. Mall of America näyttää, miten mittakaava, vetonaulat ja lippulaivamyymälät voidaan yhdistää kohdekäynniksi.",
+            "en": "US discretionary growth is selective: Mall of America shows how scale, attractions, and flagship stores can turn retail into a destination visit.",
+            "sv": "Amerikansk sällanhandel växer selektivt: Mall of America visar hur skala, attraktioner och flaggskeppsbutiker kan göra handel till ett destinationsbesök."
+          },
+          "body": {
+            "fi": "Pelkkä yleinen muoti- ja vapaa-ajan tarjonta ei riitä yhdysvaltalaisessa kauppakeskuksessa. Kasvu pitää paketoida selkeiksi käynnin syiksi: nopea arkiostos, perheen viihde, ruoka, kauneus, lippulaivamyymälä tai tapahtuma. Keskus voittaa, kun se antaa asiakkaalle syyn tulla paikalle eikä vain lisää valikoimaa.",
+            "en": "Generic discretionary retail is not enough in US malls. Growth has to be curated into clear missions: fast everyday use, family entertainment, food, beauty, flagship stores, or events. A centre wins when it sells a clear reason to visit, not just more assortment.",
+            "sv": "Generisk sällanhandel räcker inte i amerikanska köpcentrum. Tillväxt måste kurateras till tydliga uppdrag: snabb vardag, familjeunderhållning, mat, skönhet, flaggskepp eller event. Centrumet vinner när det säljer en tydlig anledning att besöka, inte bara mer sortiment."
+          },
+          "opportunities": {
+            "fi": [
+              "Perheviihteen ja ruokailun yhteispaketit",
+              "Lippulaivamyymälöiden ja uusien brändien kokeilualueet",
+              "Tapahtumakalenterin mittaaminen käynteinä ja myyntinä"
+            ],
+            "en": [
+              "Family entertainment + food bundles",
+              "Flagship and DTC test zones",
+              "Measure event calendar as visit conversion"
+            ],
+            "sv": [
+              "Familjeunderhållning + mat-paket",
+              "Flaggskepps- och DTC-testzoner",
+              "Mät eventkalendern som besökskonvertering"
+            ]
+          }
+        }
       }
     },
     {
@@ -680,7 +875,8 @@
       "horizon": "short",
       "countries": [
         "FI",
-        "SE"
+        "SE",
+        "US"
       ],
       "mallFormat": "all",
       "state": "ACCELERATING",
@@ -783,6 +979,34 @@
           "sv": [
             "Premium resale och reparation för familjer; cirkulära belöningar i lojalitetsprogrammet.",
             "Koppla cirkularitet till kuraterad vardagslivsstil."
+          ]
+        },
+        "us-dc-urban": {
+          "fi": [
+            "Käännä trendi konkreettiseksi USA-demo-toimenpiteeksi valitulle kohteelle.",
+            "Näytä lähde- ja KPI-perustelu ennen vuokralais- tai kampanjapäätöstä."
+          ],
+          "en": [
+            "Translate the trend into a concrete US demo action for the selected property.",
+            "Show source and KPI rationale before tenant or campaign decisions."
+          ],
+          "sv": [
+            "Översätt trenden till en konkret USA-demoåtgärd för vald fastighet.",
+            "Visa käll- och KPI-motivering före hyresgäst- eller kampanjbeslut."
+          ]
+        },
+        "us-mall-of-america": {
+          "fi": [
+            "Käännä trendi konkreettiseksi USA-demo-toimenpiteeksi valitulle kohteelle.",
+            "Näytä lähde- ja KPI-perustelu ennen vuokralais- tai kampanjapäätöstä."
+          ],
+          "en": [
+            "Translate the trend into a concrete US demo action for the selected property.",
+            "Show source and KPI rationale before tenant or campaign decisions."
+          ],
+          "sv": [
+            "Översätt trenden till en konkret USA-demoåtgärd för vald fastighet.",
+            "Visa käll- och KPI-motivering före hyresgäst- eller kampanjbeslut."
           ]
         }
       },
@@ -897,6 +1121,42 @@
         "fi": "kiertokauppa",
         "en": "circular commerce",
         "sv": "cirkulär handel"
+      },
+      "marketOverrides": {
+        "US": {
+          "sourceIds": [
+            "deloitte-cp-2026",
+            "census-us-ecommerce-2025",
+            "nrf-us-retail-2026"
+          ],
+          "marketsNote": {
+            "fi": "Yhdysvalloissa kiertokauppa kannattaa esittää ensin säästönä, palautusten helpottamisena ja tuotteen käyttöiän pidentämisenä, ei pelkkänä vastuullisuusviestinä.",
+            "en": "In the US, circular commerce is primarily a value, returns, and product-life-extension service, not only a sustainability message.",
+            "sv": "I USA är cirkulär handel främst en tjänst för värde, returer och längre produktlivslängd, inte bara ett hållbarhetsbudskap."
+          },
+          "body": {
+            "fi": "Kun asiakas hakee vastinetta rahalle ja verkkokaupan palautukset ovat arkea, kauppakeskus voi tehdä kiertokaupasta näkyvän palvelun: korjaus, vaihto, uudelleenmyynti, pakkaaminen ja palautus. Yhdysvalloissa viestin pitää alkaa hyödystä ja vaivattomuudesta; vastuullisuus vahvistaa sitä vasta toisessa vaiheessa.",
+            "en": "When consumers seek value and e-commerce returns are routine, the mall can make circular commerce a physical service: repair, trade-in, resale drops, packaging, and returns. In the US, tie the trend to cost saving and convenience before sustainability storytelling.",
+            "sv": "När konsumenter söker värde och e-handelsreturer är vardag kan köpcentrumet göra cirkulär handel till en fysisk tjänst: reparation, inbyte, resale-drop, paketering och returer. I USA bör trenden kopplas till kostnadsbesparing och bekvämlighet före hållbarhetsberättelsen."
+          },
+          "opportunities": {
+            "fi": [
+              "Korjaus- ja vaihtoviikonloput",
+              "Palautusten ja uudelleenmyynnin yhteiset pisteet",
+              "Kodin, elektroniikan ja vaatteiden kiertopalvelut samaan paikkaan"
+            ],
+            "en": [
+              "Repair and trade-in weekends",
+              "Return + resale drops",
+              "Home, electronics, and apparel resale in one place"
+            ],
+            "sv": [
+              "Reparations- och inbyteshelger",
+              "Retur + resale-drops",
+              "Hem, elektronik och mode-resale på samma plats"
+            ]
+          }
+        }
       }
     },
     {
@@ -904,7 +1164,8 @@
       "horizon": "long",
       "countries": [
         "FI",
-        "SE"
+        "SE",
+        "US"
       ],
       "mallFormat": "all",
       "state": "EMERGING",
@@ -1007,6 +1268,34 @@
           "sv": [
             "Förorts­bekvämlighet och samhällstjänster med åldersinkluderande design.",
             "Medlemskap kopplat till tjänster, inte bara rabatter."
+          ]
+        },
+        "us-dc-urban": {
+          "fi": [
+            "Käännä trendi konkreettiseksi USA-demo-toimenpiteeksi valitulle kohteelle.",
+            "Näytä lähde- ja KPI-perustelu ennen vuokralais- tai kampanjapäätöstä."
+          ],
+          "en": [
+            "Translate the trend into a concrete US demo action for the selected property.",
+            "Show source and KPI rationale before tenant or campaign decisions."
+          ],
+          "sv": [
+            "Översätt trenden till en konkret USA-demoåtgärd för vald fastighet.",
+            "Visa käll- och KPI-motivering före hyresgäst- eller kampanjbeslut."
+          ]
+        },
+        "us-mall-of-america": {
+          "fi": [
+            "Käännä trendi konkreettiseksi USA-demo-toimenpiteeksi valitulle kohteelle.",
+            "Näytä lähde- ja KPI-perustelu ennen vuokralais- tai kampanjapäätöstä."
+          ],
+          "en": [
+            "Translate the trend into a concrete US demo action for the selected property.",
+            "Show source and KPI rationale before tenant or campaign decisions."
+          ],
+          "sv": [
+            "Översätt trenden till en konkret USA-demoåtgärd för vald fastighet.",
+            "Visa käll- och KPI-motivering före hyresgäst- eller kampanjbeslut."
           ]
         }
       },
@@ -1120,6 +1409,399 @@
         "fi": "palveluvetoinen ikääntyminen",
         "en": "service-led ageing",
         "sv": "servicedrivet åldrande"
+      },
+      "marketOverrides": {
+        "US": {
+          "sourceIds": [
+            "mckinsey-wellness-2025",
+            "deloitte-cp-2026",
+            "nrf-us-retail-2026"
+          ],
+          "marketsNote": {
+            "fi": "Yhdysvalloissa palveluvetoisuus koskee sekä ikääntyviä kotitalouksia että kiireisiä työikäisiä: terveys, apteekin lähipalvelut, nopea hoiva ja arjen asiointi lisäävät toistuvia käyntejä.",
+            "en": "In the US, service-led retail applies to both ageing households and busy working-age shoppers: health, pharmacy-adjacent care, quick care, and everyday errands increase repeat use.",
+            "sv": "I USA gäller servicedriven handel både äldre hushåll och stressade yrkesaktiva: hälsa, apoteksnära vård, snabbvård och vardagsärenden ökar återbesök."
+          },
+          "body": {
+            "fi": "Yhdysvaltalaisen kauppakeskuksen pitkän aikavälin puolustus ei ole lisää tavarakauppaa vaan vahva palvelukerros: terveys, kauneus, hyvinvointi, perhepalvelut, apteekin lähellä olevat palvelut ja esteettömät arjen reitit. Näin keskus pysyy hyödyllisenä myös silloin, kun osa tavaraostoista siirtyy verkkoon.",
+            "en": "The long-term defence for a US mall is not more retail; it is a service layer: health, beauty, wellness, family services, pharmacy-adjacent concepts, and accessible everyday routes. This keeps the centre useful even when product purchases move online.",
+            "sv": "Det långsiktiga försvaret för ett amerikanskt köpcentrum är inte mer handel utan ett servicelager: hälsa, skönhet, wellness, familjetjänster, apoteksnära koncept och tillgängliga vardagsstråk. Det gör centrumet användbart även när varuköp flyttar online."
+          },
+          "opportunities": {
+            "fi": [
+              "Nopeat terveys-, optikko- ja fysiopalvelut",
+              "Esteetön arjen asiointireitti",
+              "Seniori- ja perhepalvelujen yhteiskampanjat"
+            ],
+            "en": [
+              "Quick-care, optical, and physiotherapy services",
+              "Accessible everyday errand route",
+              "Joint senior and family service campaigns"
+            ],
+            "sv": [
+              "Snabbvård, optik och fysiotjänster",
+              "Tillgängligt vardagsstråk",
+              "Gemensamma senior- och familjeservicekampanjer"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "retail-media-and-mall-attention",
+      "horizon": "short",
+      "countries": [
+        "FI",
+        "SE",
+        "US"
+      ],
+      "mallFormat": "all",
+      "state": "EMERGING",
+      "confidence": 86,
+      "label": {
+        "fi": "Kauppakeskus huomio- ja kaupan media -alustana",
+        "en": "Mall attention and retail media platform",
+        "sv": "Köpcentret som uppmärksamhets- och retail media-plattform"
+      },
+      "marketsNote": {
+        "fi": "Soveltuu erityisesti keskuksiin, joilla on näyttöpintoja, sovellus, kanta-asiakasdataa tai vahva tapahtumavirta.",
+        "en": "Most relevant for centres with screens, app inventory, loyalty data, or strong event traffic.",
+        "sv": "Mest relevant för centrum med skärmar, appytor, lojalitetsdata eller starkt evenemangsflöde."
+      },
+      "body": {
+        "fi": "kaupan media ei ole enää vain verkkokaupan mainospintaa. Kauppakeskuksen näytöt, sovellus, tapahtumat, pysäköinti, reittidata ja vuokralaisten kampanjat voidaan paketoida mitattavaksi huomioalustaksi. Vuokralaisille hyöty syntyy, kun kampanja yhdistää fyysisen sijainnin, digitaalisen muistutuksen ja todennettavan lunastuksen.",
+        "en": "Retail media is no longer only e-commerce ad inventory. Mall screens, app placements, events, parking, route data, and tenant campaigns can be packaged into measurable attention products. Tenants benefit when a campaign connects physical location, digital reminder, and traceable redemption.",
+        "sv": "Retail media är inte längre bara e-handelsyta. Köpcentrets skärmar, appytor, evenemang, parkering, ruttdata och hyresgästkampanjer kan paketeras till mätbara uppmärksamhetsprodukter. Hyresgäster gynnas när kampanjen kopplar fysisk plats, digital påminnelse och spårbar inlösen."
+      },
+      "mallImplications": {
+        "realidea-tripla": {
+          "fi": [
+            "Paketoi asemavirta, näytöt ja sovelluspaikat viikkokampanjatuotteeksi.",
+            "Aloita vuokralaisista, joilla on nopea ostomissio: ruoka, päivittäistavara, kauneus ja palvelut."
+          ],
+          "en": [
+            "Package station flow, screens, and app slots into a weekly campaign product.",
+            "Start with tenants tied to fast missions: food, grocery, beauty, and services."
+          ],
+          "sv": [
+            "Paketera stationsflöde, skärmar och appytor till en veckokampanjprodukt.",
+            "Börja med hyresgäster kopplade till snabba ärenden: mat, dagligvaror, skönhet och tjänster."
+          ]
+        },
+        "realidea-sello": {
+          "fi": [
+            "Rakenna alueellisen asioinnin kaupan media -paketti: perhe, palvelut, ruoka ja kauneus.",
+            "Mittaa kampanjat lunastuksina, ei pelkkinä näyttökertoina."
+          ],
+          "en": [
+            "Build a regional-mission retail media package across family, services, food, and beauty.",
+            "Measure campaigns by redemption, not only impressions."
+          ],
+          "sv": [
+            "Bygg ett regionalt retail media-paket kring familj, tjänster, mat och skönhet.",
+            "Mät kampanjer i inlösen, inte bara visningar."
+          ]
+        },
+        "us-dc-urban": {
+          "fi": [
+            "Käännä trendi konkreettiseksi USA-demo-toimenpiteeksi valitulle kohteelle.",
+            "Näytä lähde- ja KPI-perustelu ennen vuokralais- tai kampanjapäätöstä."
+          ],
+          "en": [
+            "Translate the trend into a concrete US demo action for the selected property.",
+            "Show source and KPI rationale before tenant or campaign decisions."
+          ],
+          "sv": [
+            "Översätt trenden till en konkret USA-demoåtgärd för vald fastighet.",
+            "Visa käll- och KPI-motivering före hyresgäst- eller kampanjbeslut."
+          ]
+        },
+        "us-mall-of-america": {
+          "fi": [
+            "Käännä trendi konkreettiseksi USA-demo-toimenpiteeksi valitulle kohteelle.",
+            "Näytä lähde- ja KPI-perustelu ennen vuokralais- tai kampanjapäätöstä."
+          ],
+          "en": [
+            "Translate the trend into a concrete US demo action for the selected property.",
+            "Show source and KPI rationale before tenant or campaign decisions."
+          ],
+          "sv": [
+            "Översätt trenden till en konkret USA-demoåtgärd för vald fastighet.",
+            "Visa käll- och KPI-motivering före hyresgäst- eller kampanjbeslut."
+          ]
+        }
+      },
+      "opportunities": {
+        "fi": [
+          "Vuokralaisten yhteiskampanjat näytöillä ja sovelluksessa",
+          "kaupan media -tuotepaketit ankkurivuokralaisille",
+          "Kampanjakohtainen lunastus- ja käyntimittaus"
+        ],
+        "en": [
+          "Tenant joint campaigns across screens and app",
+          "Retail media packages for anchor tenants",
+          "Campaign-level redemption and visit measurement"
+        ],
+        "sv": [
+          "Gemensamma hyresgästkampanjer på skärmar och i app",
+          "Retail media-paket för ankare",
+          "Kampanjvis inlösen- och besöksmätning"
+        ]
+      },
+      "campaigns": [
+        {
+          "name": {
+            "fi": "Viikon reitti",
+            "en": "Route of the Week",
+            "sv": "Veckans rutt"
+          },
+          "audience": {
+            "fi": "Toistuvat kävijät ja nopeat asioijat",
+            "en": "Repeat visitors and fast-mission shoppers",
+            "sv": "Återkommande besökare och snabba ärenden"
+          },
+          "whyNow": {
+            "fi": "Vuokralaiset tarvitsevat mitattavaa kävijäohjausta ja kampanjanäyttöä.",
+            "en": "Tenants need measurable visit steering and campaign visibility.",
+            "sv": "Hyresgäster behöver mätbar besöksstyrning och kampanjsynlighet."
+          },
+          "channels": [
+            "screens",
+            "app",
+            "signage",
+            "tenant media"
+          ],
+          "successMetric": {
+            "fi": "Lunastukset, kampanjareitin kävijät ja vuokralaisten osallistumisaste",
+            "en": "Redemptions, route visitors, and tenant participation",
+            "sv": "Inlösen, ruttbesökare och hyresgästdeltagande"
+          }
+        }
+      ],
+      "sourceIds": [
+        "niq-consumer-outlook-2026",
+        "nepa-nordic-fmcg-2026",
+        "capgemini-consumer-2026"
+      ],
+      "category": {
+        "fi": "kaupan media",
+        "en": "retail media",
+        "sv": "retail media"
+      },
+      "marketOverrides": {
+        "US": {
+          "sourceIds": [
+            "emarketer-retail-media-2026",
+            "coresight-instore-retail-media-2026",
+            "nrf-us-retail-2026"
+          ],
+          "marketsNote": {
+            "fi": "Yhdysvallat on kaupan median kehittyneimpiä markkinoita. Kauppakeskuksen mahdollisuus on myydä mitattavaa näkyvyyttä fyysisissä kohtaamispisteissä, ei yleistä mainostilaa.",
+            "en": "The US is the most mature retail media market; the mall opportunity is commercial attention in physical touchpoints, not generic advertising.",
+            "sv": "USA är den mest mogna retail media-marknaden; köpcentrumets möjlighet är kommersiell uppmärksamhet i fysiska kontaktpunkter, inte allmän reklam."
+          },
+          "body": {
+            "fi": "Kaupan media kasvaa Yhdysvalloissa, ja myös myymäläympäristön digitaaliset pinnat kiinnostavat mainostajia. Kauppakeskuksen kannattaa tuotteistaa näytöt, tapahtumat, pysäköinti, ravintola-alue, sovellus ja kanta-asiakasdata yleisöksi. Se toimii vain, jos vaikutus voidaan todentaa: näyttökerrat, reitit, viipymä, kupongit ja myynti.",
+            "en": "Retail media is growing strongly in the US, and in-store media is attracting investment. The mall should productise screens, events, parking, food court, app, and loyalty as an audience, but only with measurable proof: impressions, path, dwell, coupon, and sales.",
+            "sv": "Retail media växer starkt i USA och in-store media får investeringar. Köpcentrumet bör produktifiera skärmar, event, parkering, food court, app och lojalitet som publik, men bara med mätbar bevisning: visningar, väg, dwell, kupong och försäljning."
+          },
+          "opportunities": {
+            "fi": [
+              "Hinnasto näytöille, tapahtumille ja kampanjapaikoille",
+              "Brändin sponsoroima perheviikonloppu",
+              "Ravintola-alueen ja pysäköinnin yleisömittaus"
+            ],
+            "en": [
+              "Retail media rate card for screens and events",
+              "Brand-sponsored family weekend",
+              "Food court and parking audience measurement"
+            ],
+            "sv": [
+              "Retail media-rate card för skärmar och event",
+              "Varumärkessponsrad familjehelg",
+              "Publikmätning i food court och parkering"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "health-beauty-wellness-frequency",
+      "horizon": "medium",
+      "countries": [
+        "FI",
+        "SE",
+        "US"
+      ],
+      "mallFormat": "all",
+      "state": "ACCELERATING",
+      "confidence": 88,
+      "label": {
+        "fi": "Terveys, kauneus ja hyvinvointi käyntitiheyden ajurina",
+        "en": "Health, beauty, and wellness as frequency drivers",
+        "sv": "Hälsa, skönhet och välmående som frekvensdrivare"
+      },
+      "marketsNote": {
+        "fi": "Toimii sekä arjen keskuksissa että liikennekeskuksissa, jos palvelut ovat helposti löydettävissä.",
+        "en": "Works in both everyday centres and transit centres when services are easy to find.",
+        "sv": "Fungerar i både vardagscentrum och transitcentrum när tjänsterna är lätta att hitta."
+      },
+      "body": {
+        "fi": "Terveys, kauneus, hyvinvointi ja kevyemmät arkiruokaratkaisut muodostavat käyntitiheyttä nostavan kokonaisuuden. Kauppakeskukselle arvo syntyy, kun apteekki-, kauneus-, hoiva-, liikunta- ja ravintolapalvelut eivät ole irrallisia yksiköitä vaan selkeä reitti ja toistuva asiointisyy.",
+        "en": "Health, beauty, wellness, and lighter everyday food missions form a frequency-building cluster. For malls, value appears when pharmacy-adjacent, beauty, care, fitness, and food services are not isolated units but a visible route and repeated reason to visit.",
+        "sv": "Hälsa, skönhet, välmående och lättare vardagsmat skapar ett frekvensdrivande kluster. För köpcentrum uppstår värde när apoteksnära tjänster, skönhet, omsorg, träning och mat inte är separata enheter utan en tydlig rutt och återkommande besöksorsak."
+      },
+      "mallImplications": {
+        "realidea-tripla": {
+          "fi": [
+            "Ryhmittele hyvinvointi, kauneus ja kevyet ruokaratkaisut asema- ja työmatkavirran ympärille.",
+            "Lisää ajanvaraus- ja muistutuspolku sovellukseen."
+          ],
+          "en": [
+            "Cluster wellness, beauty, and lighter food around station and commuter flow.",
+            "Add appointment and reminder journeys in the app."
+          ],
+          "sv": [
+            "Klustrera välmående, skönhet och lättare mat kring stations- och pendlingsflödet.",
+            "Lägg till boknings- och påminnelseresor i appen."
+          ]
+        },
+        "realidea-sello": {
+          "fi": [
+            "Tee palveluista viikoittainen asiointiohjelma perheille ja 50+ kävijöille.",
+            "Mittaa terveys- ja kauneuspalveluiden vaikutus toistuviin käynteihin."
+          ],
+          "en": [
+            "Turn services into a weekly visit program for families and 50+ visitors.",
+            "Measure how health and beauty services affect repeat visits."
+          ],
+          "sv": [
+            "Gör tjänsterna till ett veckoprogram för familjer och 50+ besökare.",
+            "Mät hur hälso- och skönhetstjänster påverkar återbesök."
+          ]
+        },
+        "us-dc-urban": {
+          "fi": [
+            "Käännä trendi konkreettiseksi USA-demo-toimenpiteeksi valitulle kohteelle.",
+            "Näytä lähde- ja KPI-perustelu ennen vuokralais- tai kampanjapäätöstä."
+          ],
+          "en": [
+            "Translate the trend into a concrete US demo action for the selected property.",
+            "Show source and KPI rationale before tenant or campaign decisions."
+          ],
+          "sv": [
+            "Översätt trenden till en konkret USA-demoåtgärd för vald fastighet.",
+            "Visa käll- och KPI-motivering före hyresgäst- eller kampanjbeslut."
+          ]
+        },
+        "us-mall-of-america": {
+          "fi": [
+            "Käännä trendi konkreettiseksi USA-demo-toimenpiteeksi valitulle kohteelle.",
+            "Näytä lähde- ja KPI-perustelu ennen vuokralais- tai kampanjapäätöstä."
+          ],
+          "en": [
+            "Translate the trend into a concrete US demo action for the selected property.",
+            "Show source and KPI rationale before tenant or campaign decisions."
+          ],
+          "sv": [
+            "Översätt trenden till en konkret USA-demoåtgärd för vald fastighet.",
+            "Visa käll- och KPI-motivering före hyresgäst- eller kampanjbeslut."
+          ]
+        }
+      },
+      "opportunities": {
+        "fi": [
+          "Apteekki- ja hyvinvointipalveluiden ympärille rakennettu reitti",
+          "Kauneus- ja hoivapalveluiden yhteiskampanjat",
+          "Kevyen ruoan ja hyvinvoinnin arkikokonaisuudet"
+        ],
+        "en": [
+          "Routes built around pharmacy and wellness services",
+          "Joint beauty and care service campaigns",
+          "Everyday bundles linking lighter food and wellness"
+        ],
+        "sv": [
+          "Rutter kring apoteks- och välmåendetjänster",
+          "Gemensamma skönhets- och omsorgskampanjer",
+          "Vardagspaket som kopplar lättare mat och välmående"
+        ]
+      },
+      "campaigns": [
+        {
+          "name": {
+            "fi": "Hyvinvointitunti",
+            "en": "The Wellness Hour",
+            "sv": "Välmåendetimmen"
+          },
+          "audience": {
+            "fi": "Työmatkalaiset, perheet ja 50+ kävijät",
+            "en": "Commuters, families, and 50+ visitors",
+            "sv": "Pendlare, familjer och 50+ besökare"
+          },
+          "whyNow": {
+            "fi": "Hyvinvointi ja arjen palvelut tuovat toistuvia käyntisyitä.",
+            "en": "Wellness and everyday services create repeat visit reasons.",
+            "sv": "Välmående och vardagstjänster skapar återkommande besöksorsaker."
+          },
+          "channels": [
+            "app",
+            "screens",
+            "tenant media",
+            "event"
+          ],
+          "successMetric": {
+            "fi": "Ajanvarausten määrä ja palvelukäyntien osuus",
+            "en": "Appointment volume and service-visit share",
+            "sv": "Bokningsvolym och andel servicebesök"
+          }
+        }
+      ],
+      "sourceIds": [
+        "niq-consumer-outlook-2026",
+        "nepa-nordic-fmcg-2026",
+        "capgemini-consumer-2026",
+        "bof-longterm-aging"
+      ],
+      "category": {
+        "fi": "hyvinvointi",
+        "en": "wellness",
+        "sv": "välmående"
+      },
+      "marketOverrides": {
+        "US": {
+          "sourceIds": [
+            "circana-us-beauty-2025",
+            "mckinsey-wellness-2025",
+            "nrf-us-retail-2026"
+          ],
+          "marketsNote": {
+            "fi": "Yhdysvalloissa kauneus ja hyvinvointi ovat todistettuja käyntitiheyden ajureita: Circana raportoi kasvua sekä korkeamman hintaluokan että päivittäiskaupan kauneustuotteissa vuonna 2025.",
+            "en": "In the US, beauty and wellness are proven frequency drivers: Circana reported growth in both prestige and mass beauty in 2025.",
+            "sv": "I USA är beauty och wellness bevisade frekvensdrivare: Circana rapporterade tillväxt i både prestige och mass beauty 2025."
+          },
+          "body": {
+            "fi": "Kauneus, hyvinvointi ja nopeat terveyspalvelut toimivat Yhdysvalloissa, koska ne yhdistävät arjen tarpeen ja pienen palkinnon. Kauppakeskuksen pitää tehdä palvelut näkyviksi reitteinä: kauneus, ihonhoito, optikko, nopeat terveyspalvelut, liikunta, ravitsemus ja ruoka. Tämä lisää käyntejä myös silloin, kun muotiostokset ovat valikoivia.",
+            "en": "Beauty, wellness, and quick health services work in the US because they combine everyday need with small indulgence. The mall should make services visible as routes: beauty, skincare, optical, quick care, fitness, nutrition, and food. This increases frequency even when fashion is selective.",
+            "sv": "Beauty, wellness och snabb hälsa fungerar i USA eftersom de kombinerar vardagsbehov med liten belöning. Köpcentrumet bör göra tjänster synliga som rutter: skönhet, skincare, optik, snabbvård, fitness, nutrition och mat. Det ökar frekvensen även när mode är selektivt."
+          },
+          "opportunities": {
+            "fi": [
+              "Kauneuden ja hyvinvoinnin palvelukäytävä",
+              "Nopeat terveyspalvelut ja ihonhoito samalle reitille",
+              "Kuukausittainen hyvinvointipassi usean vuokralaisen käyttöön"
+            ],
+            "en": [
+              "Beauty + wellness service corridor",
+              "Quick-care and skincare on the same route",
+              "Monthly wellness pass across tenants"
+            ],
+            "sv": [
+              "Beauty + wellness-servicekorridor",
+              "Snabbvård och skincare på samma rutt",
+              "Månatligt wellness-pass över hyresgäster"
+            ]
+          }
+        }
       }
     }
   ]

@@ -20,10 +20,26 @@
                 "Hidas palautuminen muodissa ja kodin kategorioissa."
               ],
               "sensitivities": [
-                { "label": "Kuluttajaluottamus",  "impact": "medium", "note": "Transit pohja vaimentaa." },
-                { "label": "Hybridityö",          "impact": "medium", "note": "Joitakin toimistovirtoja menetetään." },
-                { "label": "Verkkokauppa",        "impact": "medium", "note": "Käännetään noutoeduksi." },
-                { "label": "Energia ja inflaatio","impact": "high",   "note": "Suomen kysynnälle suora osuma." }
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "medium",
+                  "note": "Transit pohja vaimentaa."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "medium",
+                  "note": "Joitakin toimistovirtoja menetetään."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "medium",
+                  "note": "Käännetään noutoeduksi."
+                },
+                {
+                  "label": "Energia ja inflaatio",
+                  "impact": "high",
+                  "note": "Suomen kysynnälle suora osuma."
+                }
               ]
             },
             "b": {
@@ -38,28 +54,60 @@
                 "Diskretionaarinen kulutus painaa muotia ja viihdettä alas."
               ],
               "sensitivities": [
-                { "label": "Kuluttajaluottamus",  "impact": "high",   "note": "Sosiaaliturvan leikkaukset osuvat suoraan." },
-                { "label": "Hybridityö",          "impact": "medium", "note": "Pasilan asema kestää, toimistovirta laskee." },
-                { "label": "Verkkokauppa",        "impact": "medium", "note": "Kanavoidaan noutopalveluiksi." },
-                { "label": "Energia ja inflaatio","impact": "high",   "note": "Reaalitulot supistuvat 10–20 %." }
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "high",
+                  "note": "Sosiaaliturvan leikkaukset osuvat suoraan."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "medium",
+                  "note": "Pasilan asema kestää, toimistovirta laskee."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "medium",
+                  "note": "Kanavoidaan noutopalveluiksi."
+                },
+                {
+                  "label": "Energia ja inflaatio",
+                  "impact": "high",
+                  "note": "Reaalitulot supistuvat 10–20 %."
+                }
               ]
             },
             "c": {
               "headline": "Maltillinen kasvu transit-formaatissa",
               "operationalChanges": [
-                "Yhdistä retail, palvelut ja kokemukset 'arjen alustaksi'.",
-                "Rakenna retail media -verkosto Pasilan kävijävirtojen ympärille.",
-                "Kasvata premiumia ja kansainvälisiä brändejä monikulttuuriselle alueelle."
+                "Yhdistä kauppa, palvelut ja kokemukset 'arjen alustaksi'.",
+                "Rakenna kaupan median verkosto Pasilan kävijävirtojen ympärille.",
+                "Kasvata korkeamman hintaluokan tarjontaa ja kansainvälisiä brändejä monikulttuuriselle alueelle."
               ],
               "keyRisks": [
-                "Upside on katto: transit-formaatti rajoittaa premium-skaalaa.",
-                "Kilpailija-MoS skaalautuu nopeammin discretionary-kategorioissa."
+                "Kasvulle on katto: joukkoliikennepainotteinen muoto rajoittaa korkeamman hintaluokan mittakaavaa.",
+                "Kilpailija-MoS skaalautuu nopeammin harkinnanvaraisissa kategorioissa."
               ],
               "sensitivities": [
-                { "label": "Kuluttajaluottamus",  "impact": "medium", "note": "Asemavirta antaa pohjan." },
-                { "label": "Hybridityö",          "impact": "low",    "note": "Pasilan tiivistyminen puskuroi." },
-                { "label": "Verkkokauppa",        "impact": "low",    "note": "Saumaton omnikanava on baseline." },
-                { "label": "Energia ja inflaatio","impact": "low",    "note": "Vihreä siirtymä lievittää." }
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "medium",
+                  "note": "Asemavirta antaa pohjan."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "low",
+                  "note": "Pasilan tiivistyminen puskuroi."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "low",
+                  "note": "Saumaton omnikanava on perustaso."
+                },
+                {
+                  "label": "Energia ja inflaatio",
+                  "impact": "low",
+                  "note": "Vihreä siirtymä lievittää."
+                }
               ]
             }
           }
@@ -69,35 +117,104 @@
           "paths": {
             "a": {
               "headline": "Stable transit-led flow",
-              "operationalChanges": ["Lean into convenience and everyday journeys around station flow.", "Keep specialty retail leases flexible.", "Grow pickup and returns inside the station hall."],
-              "keyRisks": ["Spend per visit stays below pre-2024 levels.", "Slow recovery in fashion and home categories."],
+              "operationalChanges": [
+                "Lean into convenience and everyday journeys around station flow.",
+                "Keep specialty retail leases flexible.",
+                "Grow pickup and returns inside the station hall."
+              ],
+              "keyRisks": [
+                "Spend per visit stays below pre-2024 levels.",
+                "Slow recovery in fashion and home categories."
+              ],
               "sensitivities": [
-                { "label": "Consumer confidence", "impact": "medium", "note": "Transit floor cushions it." },
-                { "label": "Hybrid work",          "impact": "medium", "note": "Some office-driven trips lost." },
-                { "label": "E-commerce growth",    "impact": "medium", "note": "Convert into pickup advantage." },
-                { "label": "Energy and inflation", "impact": "high",   "note": "Direct hit on Finnish demand." }
+                {
+                  "label": "Consumer confidence",
+                  "impact": "medium",
+                  "note": "Transit floor cushions it."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "medium",
+                  "note": "Some office-driven trips lost."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "medium",
+                  "note": "Convert into pickup advantage."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "high",
+                  "note": "Direct hit on Finnish demand."
+                }
               ]
             },
             "b": {
               "headline": "Defensive strength",
-              "operationalChanges": ["Add grocery, health and everyday services.", "Shorten specialty leases; grow turnover-linked share.", "Use station flow to launch value-priced concepts."],
-              "keyRisks": ["Specialty retail thins fast; vacancies appear.", "Discretionary spending pushes fashion and entertainment down."],
+              "operationalChanges": [
+                "Add grocery, health and everyday services.",
+                "Shorten specialty leases; grow turnover-linked share.",
+                "Use station flow to launch value-priced concepts."
+              ],
+              "keyRisks": [
+                "Specialty retail thins fast; vacancies appear.",
+                "discretionary spending pushes fashion and entertainment down."
+              ],
               "sensitivities": [
-                { "label": "Consumer confidence", "impact": "high",   "note": "Welfare cuts hit directly." },
-                { "label": "Hybrid work",          "impact": "medium", "note": "Pasila station holds; office flow drops." },
-                { "label": "E-commerce growth",    "impact": "medium", "note": "Channel into pickup services." },
-                { "label": "Energy and inflation", "impact": "high",   "note": "Real income shrinks 10-20%." }
+                {
+                  "label": "Consumer confidence",
+                  "impact": "high",
+                  "note": "Welfare cuts hit directly."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "medium",
+                  "note": "Pasila station holds; office flow drops."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "medium",
+                  "note": "Channel into pickup services."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "high",
+                  "note": "Real income shrinks 10-20%."
+                }
               ]
             },
             "c": {
               "headline": "Moderate growth in transit format",
-              "operationalChanges": ["Combine retail, services and experiences as a daily-life platform.", "Build a retail media network around Pasila flows.", "Grow premium and international brands for the multicultural catchment."],
-              "keyRisks": ["Upside is capped by the transit format vs. destination peers.", "Competitor MoS scales discretionary faster."],
+              "operationalChanges": [
+                "Combine retail, services and experiences as a daily-life platform.",
+                "Build a retail media network around Pasila flows.",
+                "Grow premium and international brands for the multicultural catchment."
+              ],
+              "keyRisks": [
+                "upside is capped by the transit format vs. destination peers.",
+                "Competitor MoS scales discretionary faster."
+              ],
               "sensitivities": [
-                { "label": "Consumer confidence", "impact": "medium", "note": "Station flow provides a floor." },
-                { "label": "Hybrid work",          "impact": "low",    "note": "Pasila densification cushions." },
-                { "label": "E-commerce growth",    "impact": "low",    "note": "Seamless omnichannel is baseline." },
-                { "label": "Energy and inflation", "impact": "low",    "note": "Green transition softens." }
+                {
+                  "label": "Consumer confidence",
+                  "impact": "medium",
+                  "note": "Station flow provides a floor."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "low",
+                  "note": "Pasila densification cushions."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "low",
+                  "note": "Seamless omnichannel is baseline."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "low",
+                  "note": "Green transition softens."
+                }
               ]
             }
           }
@@ -107,35 +224,104 @@
           "paths": {
             "a": {
               "headline": "Stabilt transit-drivet flöde",
-              "operationalChanges": ["Satsa på bekvämlighet och vardagsstråk runt stationsflödet.", "Håll specialhandelns hyresavtal flexibla.", "Väx hämtning och returer i stationshallen."],
-              "keyRisks": ["Snittköp per besök stannar under pre-2024.", "Långsam återhämtning i mode och hem."],
+              "operationalChanges": [
+                "Satsa på bekvämlighet och vardagsstråk runt stationsflödet.",
+                "Håll specialhandelns hyresavtal flexibla.",
+                "Väx hämtning och returer i stationshallen."
+              ],
+              "keyRisks": [
+                "Snittköp per besök stannar under pre-2024.",
+                "Långsam återhämtning i mode och hem."
+              ],
               "sensitivities": [
-                { "label": "Konsumentförtroende", "impact": "medium", "note": "Transit-golvet dämpar." },
-                { "label": "Hybridarbete",         "impact": "medium", "note": "En del kontorsbesök tappas." },
-                { "label": "E-handelstillväxt",    "impact": "medium", "note": "Vänd till hämtfördel." },
-                { "label": "Energi och inflation", "impact": "high",   "note": "Direkt träff på finsk efterfrågan." }
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "medium",
+                  "note": "Transit-golvet dämpar."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "medium",
+                  "note": "En del kontorsbesök tappas."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "medium",
+                  "note": "Vänd till hämtfördel."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "high",
+                  "note": "Direkt träff på finsk efterfrågan."
+                }
               ]
             },
             "b": {
               "headline": "Defensiv styrka",
-              "operationalChanges": ["Lägg till dagligvaror, hälsa och vardagsservice.", "Korta specialhandelns avtal; öka omsättningsbaserad andel.", "Använd stationsflödet för prisvärda koncept."],
-              "keyRisks": ["Specialhandel tunnas snabbt; vakanser syns.", "Sällanhandel pressar mode och underhållning."],
+              "operationalChanges": [
+                "Lägg till dagligvaror, hälsa och vardagsservice.",
+                "Korta specialhandelns avtal; öka omsättningsbaserad andel.",
+                "Använd stationsflödet för prisvärda koncept."
+              ],
+              "keyRisks": [
+                "Specialhandel tunnas snabbt; vakanser syns.",
+                "Sällanhandel pressar mode och underhållning."
+              ],
               "sensitivities": [
-                { "label": "Konsumentförtroende", "impact": "high",   "note": "Välfärdsnedskärningar slår direkt." },
-                { "label": "Hybridarbete",         "impact": "medium", "note": "Pasilas station håller; kontorsflöde tappar." },
-                { "label": "E-handelstillväxt",    "impact": "medium", "note": "Kanalisera till hämtning." },
-                { "label": "Energi och inflation", "impact": "high",   "note": "Real inkomst minskar 10-20%." }
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "high",
+                  "note": "Välfärdsnedskärningar slår direkt."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "medium",
+                  "note": "Pasilas station håller; kontorsflöde tappar."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "medium",
+                  "note": "Kanalisera till hämtning."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "high",
+                  "note": "Real inkomst minskar 10-20%."
+                }
               ]
             },
             "c": {
               "headline": "Måttlig tillväxt i transitformat",
-              "operationalChanges": ["Kombinera handel, tjänster och upplevelser som vardagsplattform.", "Bygg ett handelsmedianätverk runt Pasilas flöden.", "Väx premium och internationella varumärken för det mångkulturella upptagningsområdet."],
-              "keyRisks": ["Uppsidan begränsad av transitformat vs. destinationspartner.", "Konkurrent MoS skalar sällanhandel snabbare."],
+              "operationalChanges": [
+                "Kombinera handel, tjänster och upplevelser som vardagsplattform.",
+                "Bygg ett handelsmedianätverk runt Pasilas flöden.",
+                "Väx premium och internationella varumärken för det mångkulturella upptagningsområdet."
+              ],
+              "keyRisks": [
+                "Uppsidan begränsad av transitformat vs. destinationspartner.",
+                "Konkurrent MoS skalar sällanhandel snabbare."
+              ],
               "sensitivities": [
-                { "label": "Konsumentförtroende", "impact": "medium", "note": "Stationsflödet ger golv." },
-                { "label": "Hybridarbete",         "impact": "low",    "note": "Pasilas förtätning dämpar." },
-                { "label": "E-handelstillväxt",    "impact": "low",    "note": "Sömlös omnikanal är baseline." },
-                { "label": "Energi och inflation", "impact": "low",    "note": "Grön omställning mildrar." }
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "medium",
+                  "note": "Stationsflödet ger golv."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "low",
+                  "note": "Pasilas förtätning dämpar."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "low",
+                  "note": "Sömlös omnikanal är baseline."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "low",
+                  "note": "Grön omställning mildrar."
+                }
               ]
             }
           }
@@ -150,35 +336,104 @@
           "paths": {
             "a": {
               "headline": "Vakaa palvelukeskus",
-              "operationalChanges": ["Vahvista terveys-, hyvinvointi- ja arjen palveluita.", "Pidä senioriystävällinen reitti johtoasemassa.", "Hyödynnä LEED Platinum vastuullisuusviestinnässä."],
-              "keyRisks": ["Erikoiskaupan vuokrausaste hidastuu.", "Espoon väestönkasvu painottaa eri segmenttejä eri tahtiin."],
+              "operationalChanges": [
+                "Vahvista terveys-, hyvinvointi- ja arjen palveluita.",
+                "Pidä senioriystävällinen reitti johtoasemassa.",
+                "Hyödynnä LEED Platinum vastuullisuusviestinnässä."
+              ],
+              "keyRisks": [
+                "Erikoiskaupan vuokrausaste hidastuu.",
+                "Espoon väestönkasvu painottaa eri segmenttejä eri tahtiin."
+              ],
               "sensitivities": [
-                { "label": "Kuluttajaluottamus",  "impact": "medium", "note": "Vakiokävijät puskuroivat." },
-                { "label": "Hybridityö",          "impact": "low",    "note": "Alueellinen rooli ei riipu virrasta." },
-                { "label": "Verkkokauppa",        "impact": "medium", "note": "Palautuspisteet ja terveys kestävät." },
-                { "label": "Energia ja inflaatio","impact": "medium", "note": "Senioritaloudet herkkiä." }
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "medium",
+                  "note": "Vakiokävijät puskuroivat."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "low",
+                  "note": "Alueellinen rooli ei riipu virrasta."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "medium",
+                  "note": "Palautuspisteet ja terveys kestävät."
+                },
+                {
+                  "label": "Energia ja inflaatio",
+                  "impact": "medium",
+                  "note": "Senioritaloudet herkkiä."
+                }
               ]
             },
             "b": {
               "headline": "Vaatii puolustusta",
-              "operationalChanges": ["Lisää päivittäistavaraa ja arjen palveluita erikoiskaupan kustannuksella.", "Mittaa erikseen seniori-NPS ja esteettömän asioinnin onnistuminen.", "Lyhennä erikoiskaupan sopimuksia."],
-              "keyRisks": ["Kuntien hoivamenoleikkaukset siirtävät kustannuksia kävijöille.", "Senioritaloudet vähentävät kulutusta."],
+              "operationalChanges": [
+                "Lisää päivittäistavaraa ja arjen palveluita erikoiskaupan kustannuksella.",
+                "Mittaa erikseen seniori-NPS ja esteettömän asioinnin onnistuminen.",
+                "Lyhennä erikoiskaupan sopimuksia."
+              ],
+              "keyRisks": [
+                "Kuntien hoivamenoleikkaukset siirtävät kustannuksia kävijöille.",
+                "Senioritaloudet vähentävät kulutusta."
+              ],
               "sensitivities": [
-                { "label": "Kuluttajaluottamus",  "impact": "high",   "note": "Eläkeindeksien jäädytys puree suoraan." },
-                { "label": "Hybridityö",          "impact": "low",    "note": "Ei keskeinen ajuri." },
-                { "label": "Verkkokauppa",        "impact": "medium", "note": "Yksityinen terveys voi kasvaa." },
-                { "label": "Energia ja inflaatio","impact": "high",   "note": "Yksinasuvien seniorien arjen kuluerä kasvaa." }
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "high",
+                  "note": "Eläkeindeksien jäädytys puree suoraan."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "low",
+                  "note": "Ei keskeinen ajuri."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "medium",
+                  "note": "Yksityinen terveys voi kasvaa."
+                },
+                {
+                  "label": "Energia ja inflaatio",
+                  "impact": "high",
+                  "note": "Yksinasuvien seniorien arjen kuluerä kasvaa."
+                }
               ]
             },
             "c": {
               "headline": "Kiihdyttäjä palveluvetoisesti",
-              "operationalChanges": ["Laajenna palvelukeskeisesti: yksityisterveys, kuntoilu, työtilat.", "Aktivoi senioritapahtumat ja sukupolvet ristiin -ohjelmat.", "Tarkenna Leppävaaranaukion laajennuksen palvelusisältöä."],
-              "keyRisks": ["Tarjonnan laajennus syö pinta-alaa perinteiseltä retailtilta.", "Kilpailu palveluista yksityisten klinikoiden kanssa kovenee."],
+              "operationalChanges": [
+                "Laajenna palvelukeskeisesti: yksityisterveys, kuntoilu, työtilat.",
+                "Aktivoi senioritapahtumat ja sukupolvet ristiin -ohjelmat.",
+                "Tarkenna Leppävaaranaukion laajennuksen palvelusisältöä."
+              ],
+              "keyRisks": [
+                "Tarjonnan laajennus syö pinta-alaa perinteiseltä retailtilta.",
+                "Kilpailu palveluista yksityisten klinikoiden kanssa kovenee."
+              ],
               "sensitivities": [
-                { "label": "Kuluttajaluottamus",  "impact": "low",    "note": "Vahva pohja palautuu." },
-                { "label": "Hybridityö",          "impact": "low",    "note": "Yhteisötilojen kysyntä kasvaa." },
-                { "label": "Verkkokauppa",        "impact": "low",    "note": "Palvelut suojaavat verkkohyökyltä." },
-                { "label": "Energia ja inflaatio","impact": "low",    "note": "Vihreä sertifiointi alentaa kustannuksia." }
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "low",
+                  "note": "Vahva pohja palautuu."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "low",
+                  "note": "Yhteisötilojen kysyntä kasvaa."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "low",
+                  "note": "Palvelut suojaavat verkkohyökyltä."
+                },
+                {
+                  "label": "Energia ja inflaatio",
+                  "impact": "low",
+                  "note": "Vihreä sertifiointi alentaa kustannuksia."
+                }
               ]
             }
           }
@@ -188,35 +443,104 @@
           "paths": {
             "a": {
               "headline": "Stable service hub",
-              "operationalChanges": ["Strengthen health, wellness and everyday services.", "Keep senior-friendly routes leading the design.", "Use LEED Platinum in sustainability messaging."],
-              "keyRisks": ["Specialty occupancy slows.", "Espoo population growth tilts segments unevenly."],
+              "operationalChanges": [
+                "Strengthen health, wellness and everyday services.",
+                "Keep senior-friendly routes leading the design.",
+                "Use LEED Platinum in sustainability messaging."
+              ],
+              "keyRisks": [
+                "Specialty occupancy slows.",
+                "Espoo population growth tilts segments unevenly."
+              ],
               "sensitivities": [
-                { "label": "Consumer confidence", "impact": "medium", "note": "Regulars cushion the dip." },
-                { "label": "Hybrid work",          "impact": "low",    "note": "Regional role is independent." },
-                { "label": "E-commerce growth",    "impact": "medium", "note": "Returns and health categories hold." },
-                { "label": "Energy and inflation", "impact": "medium", "note": "Senior households are sensitive." }
+                {
+                  "label": "Consumer confidence",
+                  "impact": "medium",
+                  "note": "Regulars cushion the dip."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "low",
+                  "note": "Regional role is independent."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "medium",
+                  "note": "Returns and health categories hold."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "medium",
+                  "note": "Senior households are sensitive."
+                }
               ]
             },
             "b": {
               "headline": "Needs defence",
-              "operationalChanges": ["Add grocery and everyday services at the expense of specialty retail.", "Measure senior NPS and accessible-journey completion separately.", "Shorten specialty leases."],
-              "keyRisks": ["Municipal care cuts shift costs to visitors.", "Senior households reduce spending."],
+              "operationalChanges": [
+                "Add grocery and everyday services at the expense of specialty retail.",
+                "Measure senior NPS and accessible-journey completion separately.",
+                "Shorten specialty leases."
+              ],
+              "keyRisks": [
+                "Municipal care cuts shift costs to visitors.",
+                "Senior households reduce spending."
+              ],
               "sensitivities": [
-                { "label": "Consumer confidence", "impact": "high",   "note": "Pension-index freeze hits directly." },
-                { "label": "Hybrid work",          "impact": "low",    "note": "Not a core driver." },
-                { "label": "E-commerce growth",    "impact": "medium", "note": "Private health can grow." },
-                { "label": "Energy and inflation", "impact": "high",   "note": "Single-living seniors face higher daily costs." }
+                {
+                  "label": "Consumer confidence",
+                  "impact": "high",
+                  "note": "Pension-index freeze hits directly."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "low",
+                  "note": "Not a core driver."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "medium",
+                  "note": "Private health can grow."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "high",
+                  "note": "Single-living seniors face higher daily costs."
+                }
               ]
             },
             "c": {
               "headline": "Service-led accelerator",
-              "operationalChanges": ["Expand into private health, fitness, work spaces.", "Activate senior events and cross-generation programs.", "Refine the Leppävaaranaukio extension toward services."],
-              "keyRisks": ["Service expansion eats traditional retail floor area.", "Private clinic competition intensifies."],
+              "operationalChanges": [
+                "Expand into private health, fitness, work spaces.",
+                "Activate senior events and cross-generation programs.",
+                "Refine the Leppävaaranaukio extension toward services."
+              ],
+              "keyRisks": [
+                "Service expansion eats traditional retail floor area.",
+                "Private clinic competition intensifies."
+              ],
               "sensitivities": [
-                { "label": "Consumer confidence", "impact": "low",    "note": "Strong base recovers." },
-                { "label": "Hybrid work",          "impact": "low",    "note": "Demand for community space grows." },
-                { "label": "E-commerce growth",    "impact": "low",    "note": "Services protect against online disruption." },
-                { "label": "Energy and inflation", "impact": "low",    "note": "Green certification reduces costs." }
+                {
+                  "label": "Consumer confidence",
+                  "impact": "low",
+                  "note": "Strong base recovers."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "low",
+                  "note": "Demand for community space grows."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "low",
+                  "note": "Services protect against online disruption."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "low",
+                  "note": "Green certification reduces costs."
+                }
               ]
             }
           }
@@ -226,35 +550,104 @@
           "paths": {
             "a": {
               "headline": "Stabilt servicenav",
-              "operationalChanges": ["Stärk hälsa, välmående och vardagstjänster.", "Behåll seniorvänliga stråk i designledningen.", "Använd LEED Platinum i hållbarhetskommunikation."],
-              "keyRisks": ["Specialhandelns uthyrning saktar in.", "Esbos befolkningstillväxt lutar segment ojämnt."],
+              "operationalChanges": [
+                "Stärk hälsa, välmående och vardagstjänster.",
+                "Behåll seniorvänliga stråk i designledningen.",
+                "Använd LEED Platinum i hållbarhetskommunikation."
+              ],
+              "keyRisks": [
+                "Specialhandelns uthyrning saktar in.",
+                "Esbos befolkningstillväxt lutar segment ojämnt."
+              ],
               "sensitivities": [
-                { "label": "Konsumentförtroende", "impact": "medium", "note": "Stamkunder dämpar." },
-                { "label": "Hybridarbete",         "impact": "low",    "note": "Regional roll oberoende." },
-                { "label": "E-handelstillväxt",    "impact": "medium", "note": "Returer och hälsa håller." },
-                { "label": "Energi och inflation", "impact": "medium", "note": "Seniorhushåll är känsliga." }
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "medium",
+                  "note": "Stamkunder dämpar."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "low",
+                  "note": "Regional roll oberoende."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "medium",
+                  "note": "Returer och hälsa håller."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "medium",
+                  "note": "Seniorhushåll är känsliga."
+                }
               ]
             },
             "b": {
               "headline": "Behöver försvar",
-              "operationalChanges": ["Lägg till dagligvaror på specialhandelns bekostnad.", "Mät senior-NPS och tillgänglig kundresa separat.", "Korta specialhandelns avtal."],
-              "keyRisks": ["Kommunala vårdnedskärningar förflyttar kostnader till besökare.", "Seniorhushåll minskar konsumtionen."],
+              "operationalChanges": [
+                "Lägg till dagligvaror på specialhandelns bekostnad.",
+                "Mät senior-NPS och tillgänglig kundresa separat.",
+                "Korta specialhandelns avtal."
+              ],
+              "keyRisks": [
+                "Kommunala vårdnedskärningar förflyttar kostnader till besökare.",
+                "Seniorhushåll minskar konsumtionen."
+              ],
               "sensitivities": [
-                { "label": "Konsumentförtroende", "impact": "high",   "note": "Pensionsfrysning slår direkt." },
-                { "label": "Hybridarbete",         "impact": "low",    "note": "Inte en kärndrivkraft." },
-                { "label": "E-handelstillväxt",    "impact": "medium", "note": "Privat hälsa kan växa." },
-                { "label": "Energi och inflation", "impact": "high",   "note": "Ensamboende seniorer pressas." }
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "high",
+                  "note": "Pensionsfrysning slår direkt."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "low",
+                  "note": "Inte en kärndrivkraft."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "medium",
+                  "note": "Privat hälsa kan växa."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "high",
+                  "note": "Ensamboende seniorer pressas."
+                }
               ]
             },
             "c": {
               "headline": "Servicedriven accelerator",
-              "operationalChanges": ["Utöka till privat hälsa, kondition, arbetsutrymmen.", "Aktivera seniorevenemang och tvärgenerationsprogram.", "Förfina Leppävaaratorgets utbyggnad mot tjänster."],
-              "keyRisks": ["Serviceutbyggnad äter traditionell handelsyta.", "Privat klinikkonkurrens skärps."],
+              "operationalChanges": [
+                "Utöka till privat hälsa, kondition, arbetsutrymmen.",
+                "Aktivera seniorevenemang och tvärgenerationsprogram.",
+                "Förfina Leppävaaratorgets utbyggnad mot tjänster."
+              ],
+              "keyRisks": [
+                "Serviceutbyggnad äter traditionell handelsyta.",
+                "Privat klinikkonkurrens skärps."
+              ],
               "sensitivities": [
-                { "label": "Konsumentförtroende", "impact": "low",    "note": "Stark bas återhämtar." },
-                { "label": "Hybridarbete",         "impact": "low",    "note": "Efterfrågan på gemenskapsyta växer." },
-                { "label": "E-handelstillväxt",    "impact": "low",    "note": "Tjänster skyddar mot näthandel." },
-                { "label": "Energi och inflation", "impact": "low",    "note": "Grön certifiering sänker kostnader." }
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "low",
+                  "note": "Stark bas återhämtar."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "low",
+                  "note": "Efterfrågan på gemenskapsyta växer."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "low",
+                  "note": "Tjänster skyddar mot näthandel."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "low",
+                  "note": "Grön certifiering sänker kostnader."
+                }
               ]
             }
           }
@@ -267,25 +660,322 @@
         "fi": {
           "mallName": "Itis (kilpailija, Citycon)",
           "paths": {
-            "a": { "headline": "Vakaa kilpailija arvon eturintamassa", "operationalChanges": ["Seuraa Itiksen arjen palvelumixin tasapainoa.", "Vertaa metro-asioinnin konversioastetta.", "Tarkista palautuspisteiden tiheys."], "keyRisks": ["Voi viedä omilta kohteilta arjen-mission käyntejä.", "Hintapaineen kestävä paine pakottaa benchmark-mukautukseen."], "sensitivities": [ { "label": "Kuluttajaluottamus","impact": "medium","note": "Laaja kateliikenne suojaa." }, { "label": "Hybridityö","impact": "medium","note": "Itäkeskus säilyttää virran." }, { "label": "Verkkokauppa","impact": "medium","note": "Kilpailee samalla noutoyhtälöllä." }, { "label": "Energia ja inflaatio","impact": "high","note": "Ostovoima vähenee samoin." } ] },
-          "b": { "headline": "Voimakas kilpailija sokkitilanteessa", "operationalChanges": ["Tarkkaile Itiksen edullisuuspainotteisten kampanjoiden taajuutta.", "Vertaa kierrätys- ja korjauspalveluiden lanseerauksia.", "Mittaa Itiksen tyhjien tilojen täyttöaste."], "keyRisks": ["Värbänyt arjen kävijöitä omilta kohteilta.", "Discount-positio kovenee, oma premium puristuu."], "sensitivities": [ { "label": "Kuluttajaluottamus","impact": "high","note": "Edullisuusvetoinen kävijäkunta hauras." }, { "label": "Hybridityö","impact": "low","note": "Ei keskeinen ajuri." }, { "label": "Verkkokauppa","impact": "high","note": "Kilpailija kanavoi nopeasti noutoon." }, { "label": "Energia ja inflaatio","impact": "high","note": "Pienituloisten kokonaisbudjetti supistuu." } ] },
-          "c": { "headline": "Mukautuva kilpailija kasvuvaiheessa", "operationalChanges": ["Vertaa monikulttuuristen brändien houkuttelua.", "Mittaa palvelukerroksen laajennuksia.", "Seuraa Itiksen tapahtumakalenterin tiheyttä."], "keyRisks": ["Voi laajentaa palvelutarjonnan ennen omaa portfolioasi.", "Kasvavat tapahtumat houkuttelevat sukupolvien yli."], "sensitivities": [ { "label": "Kuluttajaluottamus","impact": "low","note": "Yleinen palautuminen tukee." }, { "label": "Hybridityö","impact": "low","note": "Itäkeskuksen rooli vahvistuu." }, { "label": "Verkkokauppa","impact": "low","note": "Saumaton omnikanava on baseline." }, { "label": "Energia ja inflaatio","impact": "low","note": "Vihreä siirtymä lievittää." } ] }
+            "a": {
+              "headline": "Vakaa kilpailija arvon eturintamassa",
+              "operationalChanges": [
+                "Seuraa Itiksen arjen palvelumixin tasapainoa.",
+                "Vertaa metro-asioinnin konversioastetta.",
+                "Tarkista palautuspisteiden tiheys."
+              ],
+              "keyRisks": [
+                "Voi viedä omilta kohteilta arjen-mission käyntejä.",
+                "Hintapaineen kestävä paine pakottaa vertailun mukaiseen sopeutukseen."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "medium",
+                  "note": "Laaja kateliikenne suojaa."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "medium",
+                  "note": "Itäkeskus säilyttää virran."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "medium",
+                  "note": "Kilpailee samalla noutoyhtälöllä."
+                },
+                {
+                  "label": "Energia ja inflaatio",
+                  "impact": "high",
+                  "note": "Ostovoima vähenee samoin."
+                }
+              ]
+            },
+            "b": {
+              "headline": "Voimakas kilpailija sokkitilanteessa",
+              "operationalChanges": [
+                "Tarkkaile Itiksen edullisuuspainotteisten kampanjoiden taajuutta.",
+                "Vertaa kierrätys- ja korjauspalveluiden lanseerauksia.",
+                "Mittaa Itiksen tyhjien tilojen täyttöaste."
+              ],
+              "keyRisks": [
+                "Värbänyt arjen kävijöitä omilta kohteilta.",
+                "Edullisuusasema kovenee, oma korkeampi hintaluokka puristuu."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "high",
+                  "note": "Edullisuusvetoinen kävijäkunta hauras."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "low",
+                  "note": "Ei keskeinen ajuri."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "high",
+                  "note": "Kilpailija kanavoi nopeasti noutoon."
+                },
+                {
+                  "label": "Energia ja inflaatio",
+                  "impact": "high",
+                  "note": "Pienituloisten kokonaisbudjetti supistuu."
+                }
+              ]
+            },
+            "c": {
+              "headline": "Mukautuva kilpailija kasvuvaiheessa",
+              "operationalChanges": [
+                "Vertaa monikulttuuristen brändien houkuttelua.",
+                "Mittaa palvelukerroksen laajennuksia.",
+                "Seuraa Itiksen tapahtumakalenterin tiheyttä."
+              ],
+              "keyRisks": [
+                "Voi laajentaa palvelutarjonnan ennen omaa portfolioasi.",
+                "Kasvavat tapahtumat houkuttelevat sukupolvien yli."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "low",
+                  "note": "Yleinen palautuminen tukee."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "low",
+                  "note": "Itäkeskuksen rooli vahvistuu."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "low",
+                  "note": "Saumaton omnikanava on perustaso."
+                },
+                {
+                  "label": "Energia ja inflaatio",
+                  "impact": "low",
+                  "note": "Vihreä siirtymä lievittää."
+                }
+              ]
+            }
           }
         },
         "en": {
           "mallName": "Itis (competitor, Citycon)",
           "paths": {
-            "a": { "headline": "Stable value-front competitor", "operationalChanges": ["Track Itis essentials mix balance.", "Compare metro-flow conversion.", "Check return-point density."], "keyRisks": ["Can divert everyday-mission visits from your assets.", "Sustained price pressure forces benchmark response."], "sensitivities": [ { "label": "Consumer confidence","impact": "medium","note": "Wide catchment shields it." }, { "label": "Hybrid work","impact": "medium","note": "Itäkeskus keeps flow." }, { "label": "E-commerce growth","impact": "medium","note": "Competes on the same pickup story." }, { "label": "Energy and inflation","impact": "high","note": "Spending power dips equally." } ] },
-            "b": { "headline": "Strong competitor in shock", "operationalChanges": ["Watch frequency of value-led campaigns.", "Compare circular and repair launches.", "Measure Itis vacancy fill rate."], "keyRisks": ["Captures everyday visitors from your assets.", "Discount positioning intensifies; squeezes your premium."], "sensitivities": [ { "label": "Consumer confidence","impact": "high","note": "Value-driven visitor base is fragile." }, { "label": "Hybrid work","impact": "low","note": "Not a core driver." }, { "label": "E-commerce growth","impact": "high","note": "Competitor channels into pickup fast." }, { "label": "Energy and inflation","impact": "high","note": "Lower-income budgets shrink." } ] },
-            "c": { "headline": "Adaptive competitor in growth", "operationalChanges": ["Compare multicultural brand attraction.", "Measure service-layer expansions.", "Track event calendar density."], "keyRisks": ["May expand services ahead of your portfolio.", "Growing events attract cross-generation."], "sensitivities": [ { "label": "Consumer confidence","impact": "low","note": "Broad recovery supports." }, { "label": "Hybrid work","impact": "low","note": "East-Helsinki role strengthens." }, { "label": "E-commerce growth","impact": "low","note": "Seamless omnichannel is baseline." }, { "label": "Energy and inflation","impact": "low","note": "Green transition softens." } ] }
+            "a": {
+              "headline": "Stable value-front competitor",
+              "operationalChanges": [
+                "Track Itis essentials mix balance.",
+                "Compare metro-flow conversion.",
+                "Check return-point density."
+              ],
+              "keyRisks": [
+                "Can divert everyday-mission visits from your assets.",
+                "Sustained price pressure forces benchmark response."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Consumer confidence",
+                  "impact": "medium",
+                  "note": "Wide catchment shields it."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "medium",
+                  "note": "Itäkeskus keeps flow."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "medium",
+                  "note": "Competes on the same pickup story."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "high",
+                  "note": "Spending power dips equally."
+                }
+              ]
+            },
+            "b": {
+              "headline": "Strong competitor in shock",
+              "operationalChanges": [
+                "Watch frequency of value-led campaigns.",
+                "Compare circular and repair launches.",
+                "Measure Itis vacancy fill rate."
+              ],
+              "keyRisks": [
+                "Captures everyday visitors from your assets.",
+                "Discount positioning intensifies; squeezes your premium."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Consumer confidence",
+                  "impact": "high",
+                  "note": "value-driven visitor base is fragile."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "low",
+                  "note": "Not a core driver."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "high",
+                  "note": "Competitor channels into pickup fast."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "high",
+                  "note": "Lower-income budgets shrink."
+                }
+              ]
+            },
+            "c": {
+              "headline": "Adaptive competitor in growth",
+              "operationalChanges": [
+                "Compare multicultural brand attraction.",
+                "Measure service-layer expansions.",
+                "Track event calendar density."
+              ],
+              "keyRisks": [
+                "May expand services ahead of your portfolio.",
+                "Growing events attract cross-generation."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Consumer confidence",
+                  "impact": "low",
+                  "note": "Broad recovery supports."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "low",
+                  "note": "East-Helsinki role strengthens."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "low",
+                  "note": "Seamless omnichannel is baseline."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "low",
+                  "note": "Green transition softens."
+                }
+              ]
+            }
           }
         },
         "sv": {
           "mallName": "Itis (konkurrent, Citycon)",
           "paths": {
-            "a": { "headline": "Stabil konkurrent i värdefronten", "operationalChanges": ["Följ Itis basvarumix.", "Jämför metro-flödets konvertering.", "Kontrollera returpunkternas täthet."], "keyRisks": ["Kan ta vardagsbesök från dina objekt.", "Ihållande pristryck tvingar fram benchmark-svar."], "sensitivities": [ { "label": "Konsumentförtroende","impact": "medium","note": "Brett upptagningsområde skyddar." }, { "label": "Hybridarbete","impact": "medium","note": "Itäkeskus håller flödet." }, { "label": "E-handelstillväxt","impact": "medium","note": "Konkurrerar med samma hämtning." }, { "label": "Energi och inflation","impact": "high","note": "Köpkraften minskar lika." } ] },
-            "b": { "headline": "Stark konkurrent i chock", "operationalChanges": ["Bevaka frekvensen av värdedrivna kampanjer.", "Jämför cirkulära och reparationssatsningar.", "Mät Itis vakansfyllnad."], "keyRisks": ["Tar vardagsbesökare från dina objekt.", "Discount-position skärps; din premium pressas."], "sensitivities": [ { "label": "Konsumentförtroende","impact": "high","note": "Värdedriven bas bräcklig." }, { "label": "Hybridarbete","impact": "low","note": "Inte en kärndrivkraft." }, { "label": "E-handelstillväxt","impact": "high","note": "Konkurrent kanaliserar snabbt." }, { "label": "Energi och inflation","impact": "high","note": "Låginkomsts budgetar krymper." } ] },
-            "c": { "headline": "Anpassningsbar konkurrent i tillväxt", "operationalChanges": ["Jämför mångkulturell varumärkesattraktion.", "Mät servicelagerns utbyggnad.", "Följ eventkalenderns densitet."], "keyRisks": ["Kan utöka tjänster före din portfölj.", "Växande evenemang lockar tvärgenerationer."], "sensitivities": [ { "label": "Konsumentförtroende","impact": "low","note": "Bred återhämtning stöder." }, { "label": "Hybridarbete","impact": "low","note": "Östra Helsingfors stärks." }, { "label": "E-handelstillväxt","impact": "low","note": "Sömlös omnikanal är baseline." }, { "label": "Energi och inflation","impact": "low","note": "Grön omställning mildrar." } ] }
+            "a": {
+              "headline": "Stabil konkurrent i värdefronten",
+              "operationalChanges": [
+                "Följ Itis basvarumix.",
+                "Jämför metro-flödets konvertering.",
+                "Kontrollera returpunkternas täthet."
+              ],
+              "keyRisks": [
+                "Kan ta vardagsbesök från dina objekt.",
+                "Ihållande pristryck tvingar fram benchmark-svar."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "medium",
+                  "note": "Brett upptagningsområde skyddar."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "medium",
+                  "note": "Itäkeskus håller flödet."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "medium",
+                  "note": "Konkurrerar med samma hämtning."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "high",
+                  "note": "Köpkraften minskar lika."
+                }
+              ]
+            },
+            "b": {
+              "headline": "Stark konkurrent i chock",
+              "operationalChanges": [
+                "Bevaka frekvensen av värdedrivna kampanjer.",
+                "Jämför cirkulära och reparationssatsningar.",
+                "Mät Itis vakansfyllnad."
+              ],
+              "keyRisks": [
+                "Tar vardagsbesökare från dina objekt.",
+                "Discount-position skärps; din premium pressas."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "high",
+                  "note": "Värdedriven bas bräcklig."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "low",
+                  "note": "Inte en kärndrivkraft."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "high",
+                  "note": "Konkurrent kanaliserar snabbt."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "high",
+                  "note": "Låginkomsts budgetar krymper."
+                }
+              ]
+            },
+            "c": {
+              "headline": "Anpassningsbar konkurrent i tillväxt",
+              "operationalChanges": [
+                "Jämför mångkulturell varumärkesattraktion.",
+                "Mät servicelagerns utbyggnad.",
+                "Följ eventkalenderns densitet."
+              ],
+              "keyRisks": [
+                "Kan utöka tjänster före din portfölj.",
+                "Växande evenemang lockar tvärgenerationer."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "low",
+                  "note": "Bred återhämtning stöder."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "low",
+                  "note": "Östra Helsingfors stärks."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "low",
+                  "note": "Sömlös omnikanal är baseline."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "low",
+                  "note": "Grön omställning mildrar."
+                }
+              ]
+            }
           }
         }
       }
@@ -296,25 +986,322 @@
         "fi": {
           "mallName": "Jumbo-Flamingo (kilpailija, Citycon)",
           "paths": {
-            "a": { "headline": "Vakaa kohdekilpailija", "operationalChanges": ["Vertaa keskimääräistä viipymäaikaa omiin kohteisiin.", "Mittaa Flamingon ankarointi-vaikutus retailiin.", "Seuraa pysäköinnin saatavuutta benchmarkina."], "keyRisks": ["Vapaa-ajan + ostosten paketti vetää viikonloppuvirran.", "Auto-pohjaiset perheryhmät polttavat omaa pysäköintipainetta."], "sensitivities": [ { "label": "Kuluttajaluottamus","impact": "medium","note": "Discretionary kohdekäynti on herkkä." }, { "label": "Hybridityö","impact": "low","note": "Auto + viikonloppu = ei riippuva." }, { "label": "Verkkokauppa","impact": "medium","note": "Pre-booking helpottaa." }, { "label": "Energia ja inflaatio","impact": "high","note": "Polttoaine ja perheen budjetti." } ] },
-            "b": { "headline": "Vahva kohdekilpailija paineessa", "operationalChanges": ["Vertaa edullisuuspainotteisia perhepaketteja.", "Mittaa kierrätystapahtumien (lasten vaatevaihto) frekvenssi.", "Seuraa pysäköinti-tarjouksia."], "keyRisks": ["Pakkaa value-perheasiakkaat omaa kohdekohdetta nopeammin.", "Discount-vapaa-aika voi puristaa omaa premiumia."], "sensitivities": [ { "label": "Kuluttajaluottamus","impact": "high","note": "Discretionary käynnit lykkääntyvät." }, { "label": "Hybridityö","impact": "low","note": "Ei merkittävä." }, { "label": "Verkkokauppa","impact": "medium","note": "Family-mission-paketit kestävät." }, { "label": "Energia ja inflaatio","impact": "high","note": "Polttoaine ja perheen budjetti puristavat." } ] },
-            "c": { "headline": "Skaalautuva kilpailija kasvussa", "operationalChanges": ["Vertaa Flamingon premium-tapahtumien vetovoimaa.", "Mittaa kohdekohteen retail media -tuottoja.", "Seuraa kansainvälisten brändien lisäyksiä."], "keyRisks": ["Suuri mittakaava antaa kasvuvaiheessa lisävoimaa.", "Kohdekäynnin muunnos premiumiin on Jumbon vahvuus."], "sensitivities": [ { "label": "Kuluttajaluottamus","impact": "low","note": "Kohdekäynti palautuu." }, { "label": "Hybridityö","impact": "low","note": "Ei riippuva." }, { "label": "Verkkokauppa","impact": "low","note": "Family-paketit eivät korvaudu verkossa." }, { "label": "Energia ja inflaatio","impact": "low","note": "Vihreä siirtymä helpottaa." } ] }
+            "a": {
+              "headline": "Vakaa kohdekilpailija",
+              "operationalChanges": [
+                "Vertaa keskimääräistä viipymäaikaa omiin kohteisiin.",
+                "Mittaa Flamingon ankarointi-vaikutus kauppaan.",
+                "Seuraa pysäköinnin saatavuutta vertailukohtana."
+              ],
+              "keyRisks": [
+                "Vapaa-ajan + ostosten paketti vetää viikonloppuvirran.",
+                "Auto-pohjaiset perheryhmät polttavat omaa pysäköintipainetta."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "medium",
+                  "note": "Harkinnanvarainen kohdekäynti on herkkä."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "low",
+                  "note": "Auto + viikonloppu = ei riippuva."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "medium",
+                  "note": "Ennakkovaraus helpottaa."
+                },
+                {
+                  "label": "Energia ja inflaatio",
+                  "impact": "high",
+                  "note": "Polttoaine ja perheen budjetti."
+                }
+              ]
+            },
+            "b": {
+              "headline": "Vahva kohdekilpailija paineessa",
+              "operationalChanges": [
+                "Vertaa edullisuuspainotteisia perhepaketteja.",
+                "Mittaa kierrätystapahtumien (lasten vaatevaihto) frekvenssi.",
+                "Seuraa pysäköinti-tarjouksia."
+              ],
+              "keyRisks": [
+                "Pakkaa arvo-perheasiakkaat omaa kohdekohdetta nopeammin.",
+                "Discount-vapaa-aika voi puristaa omaa korkeamman hintaluokan tarjontaa."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "high",
+                  "note": "Harkinnanvarainen käynnit lykkääntyvät."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "low",
+                  "note": "Ei merkittävä."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "medium",
+                  "note": "Family-mission-paketit kestävät."
+                },
+                {
+                  "label": "Energia ja inflaatio",
+                  "impact": "high",
+                  "note": "Polttoaine ja perheen budjetti puristavat."
+                }
+              ]
+            },
+            "c": {
+              "headline": "Skaalautuva kilpailija kasvussa",
+              "operationalChanges": [
+                "Vertaa Flamingon korkeamman hintaluokan tapahtumien vetovoimaa.",
+                "Mittaa kohdekohteen kaupan median tuottoja.",
+                "Seuraa kansainvälisten brändien lisäyksiä."
+              ],
+              "keyRisks": [
+                "Suuri mittakaava antaa kasvuvaiheessa lisävoimaa.",
+                "Kohdekäynnin muunnos korkeampaan hintaluokkaan on Jumbon vahvuus."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "low",
+                  "note": "Kohdekäynti palautuu."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "low",
+                  "note": "Ei riippuva."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "low",
+                  "note": "Perhepaketit eivät korvaudu verkossa."
+                },
+                {
+                  "label": "Energia ja inflaatio",
+                  "impact": "low",
+                  "note": "Vihreä siirtymä helpottaa."
+                }
+              ]
+            }
           }
         },
         "en": {
           "mallName": "Jumbo-Flamingo (competitor, Citycon)",
           "paths": {
-            "a": { "headline": "Stable destination competitor", "operationalChanges": ["Compare average dwell time to your destinations.", "Measure Flamingo anchor effect on retail.", "Track parking availability as benchmark."], "keyRisks": ["Leisure + shopping bundle pulls weekend flow.", "Car-borne families pressure your own parking."], "sensitivities": [ { "label": "Consumer confidence","impact": "medium","note": "Discretionary destination is sensitive." }, { "label": "Hybrid work","impact": "low","note": "Car + weekend = independent." }, { "label": "E-commerce growth","impact": "medium","note": "Pre-booking helps." }, { "label": "Energy and inflation","impact": "high","note": "Fuel and family budget." } ] },
-            "b": { "headline": "Strong destination competitor under pressure", "operationalChanges": ["Compare value-led family bundles.", "Measure circular event frequency (kids clothing swap).", "Track parking offers."], "keyRisks": ["Captures value-family customers ahead of you.", "Discount leisure may squeeze your premium."], "sensitivities": [ { "label": "Consumer confidence","impact": "high","note": "Discretionary visits get postponed." }, { "label": "Hybrid work","impact": "low","note": "Not material." }, { "label": "E-commerce growth","impact": "medium","note": "Family-mission bundles hold." }, { "label": "Energy and inflation","impact": "high","note": "Fuel and family budget squeeze." } ] },
-            "c": { "headline": "Scalable competitor in growth", "operationalChanges": ["Compare Flamingo premium-event pull.", "Measure destination retail-media revenue.", "Track international brand additions."], "keyRisks": ["Scale gives extra leverage in growth.", "Destination-to-premium conversion is Jumbo's strength."], "sensitivities": [ { "label": "Consumer confidence","impact": "low","note": "Destination visits recover." }, { "label": "Hybrid work","impact": "low","note": "Independent." }, { "label": "E-commerce growth","impact": "low","note": "Family bundles don't substitute online." }, { "label": "Energy and inflation","impact": "low","note": "Green transition helps." } ] }
+            "a": {
+              "headline": "Stable destination competitor",
+              "operationalChanges": [
+                "Compare average dwell time to your destinations.",
+                "Measure Flamingo anchor effect on retail.",
+                "Track parking availability as benchmark."
+              ],
+              "keyRisks": [
+                "Leisure + shopping bundle pulls weekend flow.",
+                "Car-borne families pressure your own parking."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Consumer confidence",
+                  "impact": "medium",
+                  "note": "discretionary destination is sensitive."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "low",
+                  "note": "Car + weekend = independent."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "medium",
+                  "note": "Ennakkovaraus helps."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "high",
+                  "note": "Fuel and family budget."
+                }
+              ]
+            },
+            "b": {
+              "headline": "Strong destination competitor under pressure",
+              "operationalChanges": [
+                "Compare value-led family bundles.",
+                "Measure circular event frequency (kids clothing swap).",
+                "Track parking offers."
+              ],
+              "keyRisks": [
+                "Captures value-family customers ahead of you.",
+                "Discount leisure may squeeze your premium."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Consumer confidence",
+                  "impact": "high",
+                  "note": "discretionary visits get postponed."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "low",
+                  "note": "Not material."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "medium",
+                  "note": "Family-mission bundles hold."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "high",
+                  "note": "Fuel and family budget squeeze."
+                }
+              ]
+            },
+            "c": {
+              "headline": "Scalable competitor in growth",
+              "operationalChanges": [
+                "Compare Flamingo premium-event pull.",
+                "Measure destination retail-media revenue.",
+                "Track international brand additions."
+              ],
+              "keyRisks": [
+                "Scale gives extra leverage in growth.",
+                "destination-to-premium conversion is Jumbo's strength."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Consumer confidence",
+                  "impact": "low",
+                  "note": "destination visits recover."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "low",
+                  "note": "Independent."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "low",
+                  "note": "Family bundles don't substitute online."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "low",
+                  "note": "Green transition helps."
+                }
+              ]
+            }
           }
         },
         "sv": {
           "mallName": "Jumbo-Flamingo (konkurrent, Citycon)",
           "paths": {
-            "a": { "headline": "Stabil destinationskonkurrent", "operationalChanges": ["Jämför genomsnittlig vistelsetid med dina destinationer.", "Mät Flamingo-ankarens effekt på handel.", "Följ parkeringstillgång som benchmark."], "keyRisks": ["Fritid + handel-paket drar helgflödet.", "Bilfamiljer pressar din parkering."], "sensitivities": [ { "label": "Konsumentförtroende","impact": "medium","note": "Sällan-destination är känslig." }, { "label": "Hybridarbete","impact": "low","note": "Bil + helg = oberoende." }, { "label": "E-handelstillväxt","impact": "medium","note": "Förbokning hjälper." }, { "label": "Energi och inflation","impact": "high","note": "Bränsle och familjebudget." } ] },
-            "b": { "headline": "Stark destinationskonkurrent under press", "operationalChanges": ["Jämför värdedrivna familjepaket.", "Mät frekvens av cirkulära event (barnkläder-byte).", "Följ parkeringserbjudanden."], "keyRisks": ["Tar värdefamiljer före dig.", "Rabattfritid kan pressa din premium."], "sensitivities": [ { "label": "Konsumentförtroende","impact": "high","note": "Sällanbesök skjuts upp." }, { "label": "Hybridarbete","impact": "low","note": "Ingen materiell effekt." }, { "label": "E-handelstillväxt","impact": "medium","note": "Familjemission-paket håller." }, { "label": "Energi och inflation","impact": "high","note": "Bränsle och familjebudget pressar." } ] },
-            "c": { "headline": "Skalbar konkurrent i tillväxt", "operationalChanges": ["Jämför Flamingo premium-events dragningskraft.", "Mät destinationens handelsmedia-intäkter.", "Följ internationella varumärkesadderingar."], "keyRisks": ["Skala ger extra hävstång i tillväxt.", "Destination-till-premium är Jumbos styrka."], "sensitivities": [ { "label": "Konsumentförtroende","impact": "low","note": "Destinationsbesök återhämtar." }, { "label": "Hybridarbete","impact": "low","note": "Oberoende." }, { "label": "E-handelstillväxt","impact": "low","note": "Familjepaket ersätts inte online." }, { "label": "Energi och inflation","impact": "low","note": "Grön omställning hjälper." } ] }
+            "a": {
+              "headline": "Stabil destinationskonkurrent",
+              "operationalChanges": [
+                "Jämför genomsnittlig vistelsetid med dina destinationer.",
+                "Mät Flamingo-ankarens effekt på handel.",
+                "Följ parkeringstillgång som benchmark."
+              ],
+              "keyRisks": [
+                "Fritid + handel-paket drar helgflödet.",
+                "Bilfamiljer pressar din parkering."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "medium",
+                  "note": "Sällan-destination är känslig."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "low",
+                  "note": "Bil + helg = oberoende."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "medium",
+                  "note": "Förbokning hjälper."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "high",
+                  "note": "Bränsle och familjebudget."
+                }
+              ]
+            },
+            "b": {
+              "headline": "Stark destinationskonkurrent under press",
+              "operationalChanges": [
+                "Jämför värdedrivna familjepaket.",
+                "Mät frekvens av cirkulära event (barnkläder-byte).",
+                "Följ parkeringserbjudanden."
+              ],
+              "keyRisks": [
+                "Tar värdefamiljer före dig.",
+                "Rabattfritid kan pressa din premium."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "high",
+                  "note": "Sällanbesök skjuts upp."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "low",
+                  "note": "Ingen materiell effekt."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "medium",
+                  "note": "Familjemission-paket håller."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "high",
+                  "note": "Bränsle och familjebudget pressar."
+                }
+              ]
+            },
+            "c": {
+              "headline": "Skalbar konkurrent i tillväxt",
+              "operationalChanges": [
+                "Jämför Flamingo premium-events dragningskraft.",
+                "Mät destinationens handelsmedia-intäkter.",
+                "Följ internationella varumärkesadderingar."
+              ],
+              "keyRisks": [
+                "Skala ger extra hävstång i tillväxt.",
+                "destination-till-premium är Jumbos styrka."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "low",
+                  "note": "destinationsbesök återhämtar."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "low",
+                  "note": "Oberoende."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "low",
+                  "note": "Familjepaket ersätts inte online."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "low",
+                  "note": "Grön omställning hjälper."
+                }
+              ]
+            }
           }
         }
       }
@@ -325,25 +1312,322 @@
         "fi": {
           "mallName": "Westfield Mall of Scandinavia",
           "paths": {
-            "a": { "headline": "Vakaa premium-vetoinen", "operationalChanges": ["Säilytä muoti, kauneus, ravintolat ja viihde johtoasemassa.", "Pidä saumaton omnikanava perustasona.", "Suuntaa 'reachable premium' viestintää."], "keyRisks": ["Discretionary baskets jäävät alle pre-2024 tason.", "Premium-positio voi tuntua etäiseltä varovaiselle kuluttajalle."], "sensitivities": [ { "label": "Kuluttajaluottamus","impact": "high","note": "Discretionary kategoriat ovat keskeisiä." }, { "label": "Hybridityö","impact": "low","note": "Destination, ei commuter-vetoinen." }, { "label": "Verkkokauppa","impact": "medium","note": "Premium-ympäristö puolustaa." }, { "label": "Energia ja inflaatio","impact": "medium","note": "Ruotsin tausta on vahvempi." } ] },
-            "b": { "headline": "Voimakas paine paineen alla", "operationalChanges": ["Tasapainota markkinointi 'saavutettavaan premiumiin' luksuksen sijaan.", "Vahvista food hall ja perheviihde defensiivisempinä ankkureina.", "Pidä omnikanava ja palvelut etujäsenelle ehjänä."], "keyRisks": ["Muoti, ravintola ja vapaa-aika painuvat nopeasti.", "Vuokrausaste pitää, mutta basket-mix ohenee."], "sensitivities": [ { "label": "Kuluttajaluottamus","impact": "high","note": "Erittäin tärkeä, discretionary-painotteinen." }, { "label": "Hybridityö","impact": "low","note": "Vähäinen riippuvuus." }, { "label": "Verkkokauppa","impact": "high","note": "Discretionary verkkoon herkemmin." }, { "label": "Energia ja inflaatio","impact": "medium","note": "Ruotsi pärjää paremmin kuin FI." } ] },
-            "c": { "headline": "Suurin upside vahvassa palautumisessa", "operationalChanges": ["Skaalaa muoti, ravintola, kauneus, kokemukset aggressiivisesti.", "Korosta tapahtuma-ohjelmaa ja brand theatre -kokemuksia.", "Käytä premium-ympäristön kerrosta retail media -tuloihin."], "keyRisks": ["Ylikuumeneva premium voi puristaa value-segmentit ulos.", "Liiallinen luksusratkaisu voi karkottaa nuoret kävijät."], "sensitivities": [ { "label": "Kuluttajaluottamus","impact": "low","note": "Vahvistuva luottamus = upside-vipuvarsi." }, { "label": "Hybridityö","impact": "low","note": "Destination kasvaa vahvasti." }, { "label": "Verkkokauppa","impact": "low","note": "Premium-ympäristö ei substituoidu verkkoon." }, { "label": "Energia ja inflaatio","impact": "low","note": "Ruotsi vakaammin." } ] }
+            "a": {
+              "headline": "Vakaa korkeamman hintaluokan vetämä",
+              "operationalChanges": [
+                "Säilytä muoti, kauneus, ravintolat ja viihde johtoasemassa.",
+                "Pidä saumaton omnikanava perustasona.",
+                "Suuntaa 'saavutettava korkeampi hintaluokka' viestintää."
+              ],
+              "keyRisks": [
+                "Harkinnanvaraiset ostoskorit jäävät alle pre-2024 tason.",
+                "Korkeamman hintaluokan asema voi tuntua etäiseltä varovaiselle kuluttajalle."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "high",
+                  "note": "Harkinnanvaraiset kategoriat ovat keskeisiä."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "low",
+                  "note": "Kohdekeskus, ei työmatkavirtaan perustuva."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "medium",
+                  "note": "Korkeamman hintaluokan ympäristö puolustaa."
+                },
+                {
+                  "label": "Energia ja inflaatio",
+                  "impact": "medium",
+                  "note": "Ruotsin tausta on vahvempi."
+                }
+              ]
+            },
+            "b": {
+              "headline": "Voimakas paine paineen alla",
+              "operationalChanges": [
+                "Tasapainota markkinointi 'saavutettavaan korkeampaan hintaluokkaan' luksuksen sijaan.",
+                "Vahvista food hall ja perheviihde defensiivisempinä ankkureina.",
+                "Pidä omnikanava ja palvelut etujäsenelle ehjänä."
+              ],
+              "keyRisks": [
+                "Muoti, ravintola ja vapaa-aika painuvat nopeasti.",
+                "Vuokrausaste pitää, mutta basket-mix ohenee."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "high",
+                  "note": "Erittäin tärkeä, harkinnanvaraisiin ostoksiin painottuva."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "low",
+                  "note": "Vähäinen riippuvuus."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "high",
+                  "note": "Harkinnanvarainen ostaminen verkkoon herkemmin."
+                },
+                {
+                  "label": "Energia ja inflaatio",
+                  "impact": "medium",
+                  "note": "Ruotsi pärjää paremmin kuin FI."
+                }
+              ]
+            },
+            "c": {
+              "headline": "Suurin kasvu vahvassa palautumisessa",
+              "operationalChanges": [
+                "Skaalaa muoti, ravintola, kauneus, kokemukset aggressiivisesti.",
+                "Korosta tapahtuma-ohjelmaa ja brändielämyksiä.",
+                "Käytä korkeamman hintaluokan ympäristön kerrosta kaupan median tuloihin."
+              ],
+              "keyRisks": [
+                "Ylikuumeneva korkeampi hintaluokka voi puristaa arvotietoiset asiakasryhmät ulos.",
+                "Liiallinen luksusratkaisu voi karkottaa nuoret kävijät."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "low",
+                  "note": "Vahvistuva luottamus = kasvun vipuvarsi."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "low",
+                  "note": "Kohdekeskus kasvaa vahvasti."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "low",
+                  "note": "Korkeamman hintaluokan ympäristö ei korvaudu verkkoon."
+                },
+                {
+                  "label": "Energia ja inflaatio",
+                  "impact": "low",
+                  "note": "Ruotsi vakaammin."
+                }
+              ]
+            }
           }
         },
         "en": {
           "mallName": "Westfield Mall of Scandinavia",
           "paths": {
-            "a": { "headline": "Stable premium-led", "operationalChanges": ["Keep fashion, beauty, dining and entertainment leading.", "Keep seamless omnichannel as baseline.", "Direct messaging to 'reachable premium'."], "keyRisks": ["Discretionary baskets stay below pre-2024.", "Premium positioning can feel distant to cautious shoppers."], "sensitivities": [ { "label": "Consumer confidence","impact": "high","note": "Discretionary categories matter most." }, { "label": "Hybrid work","impact": "low","note": "Destination, not commuter." }, { "label": "E-commerce growth","impact": "medium","note": "Premium environment defends." }, { "label": "Energy and inflation","impact": "medium","note": "Sweden's backdrop is stronger." } ] },
-            "b": { "headline": "Strong pressure under stress", "operationalChanges": ["Rebalance toward 'reachable premium' over luxury-only.", "Strengthen food hall and family entertainment as defensive anchors.", "Keep omnichannel and member services intact."], "keyRisks": ["Fashion, dining and leisure decline fast.", "Occupancy holds; basket mix thins."], "sensitivities": [ { "label": "Consumer confidence","impact": "high","note": "Critical due to discretionary mix." }, { "label": "Hybrid work","impact": "low","note": "Low dependency." }, { "label": "E-commerce growth","impact": "high","note": "Discretionary shifts online faster." }, { "label": "Energy and inflation","impact": "medium","note": "Sweden fares better than FI." } ] },
-            "c": { "headline": "Greatest upside in strong recovery", "operationalChanges": ["Scale fashion, dining, beauty and experiences aggressively.", "Lift event programming and brand theatre.", "Use the premium environment for retail-media revenue."], "keyRisks": ["Overheating premium can squeeze value segments.", "Excess luxury can alienate younger visitors."], "sensitivities": [ { "label": "Consumer confidence","impact": "low","note": "Rising confidence = upside leverage." }, { "label": "Hybrid work","impact": "low","note": "Destination grows strongly." }, { "label": "E-commerce growth","impact": "low","note": "Premium environment doesn't substitute online." }, { "label": "Energy and inflation","impact": "low","note": "Sweden more stable." } ] }
+            "a": {
+              "headline": "Stable premium-led",
+              "operationalChanges": [
+                "Keep fashion, beauty, dining and entertainment leading.",
+                "Keep seamless omnichannel as baseline.",
+                "Direct messaging to 'reachable premium'."
+              ],
+              "keyRisks": [
+                "discretionary baskets stay below pre-2024.",
+                "premium positioning can feel distant to cautious shoppers."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Consumer confidence",
+                  "impact": "high",
+                  "note": "discretionary categories matter most."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "low",
+                  "note": "destination, not commuter."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "medium",
+                  "note": "premium environment defends."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "medium",
+                  "note": "Sweden's backdrop is stronger."
+                }
+              ]
+            },
+            "b": {
+              "headline": "Strong pressure under stress",
+              "operationalChanges": [
+                "Rebalance toward 'reachable premium' over luxury-only.",
+                "Strengthen food hall and family entertainment as defensive anchors.",
+                "Keep omnichannel and member services intact."
+              ],
+              "keyRisks": [
+                "Fashion, dining and leisure decline fast.",
+                "Occupancy holds; basket mix thins."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Consumer confidence",
+                  "impact": "high",
+                  "note": "Critical due to discretionary mix."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "low",
+                  "note": "Low dependency."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "high",
+                  "note": "discretionary shifts online faster."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "medium",
+                  "note": "Sweden fares better than FI."
+                }
+              ]
+            },
+            "c": {
+              "headline": "Greatest upside in strong recovery",
+              "operationalChanges": [
+                "Scale fashion, dining, beauty and experiences aggressively.",
+                "Lift event programming and brand theatre.",
+                "Use the premium environment for retail-media revenue."
+              ],
+              "keyRisks": [
+                "Overheating premium can squeeze value segments.",
+                "Excess luxury can alienate younger visitors."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Consumer confidence",
+                  "impact": "low",
+                  "note": "Rising confidence = upside leverage."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "low",
+                  "note": "destination grows strongly."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "low",
+                  "note": "premium environment doesn't substitute online."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "low",
+                  "note": "Sweden more stable."
+                }
+              ]
+            }
           }
         },
         "sv": {
           "mallName": "Westfield Mall of Scandinavia",
           "paths": {
-            "a": { "headline": "Stabil premium-ledd", "operationalChanges": ["Behåll mode, skönhet, restaurang och underhållning i ledning.", "Sömlös omnikanal som baseline.", "Rikta budskap till 'åtkomlig premium'."], "keyRisks": ["Sällanhandel under pre-2024 nivå.", "Premium kan kännas avlägsen för försiktiga kunder."], "sensitivities": [ { "label": "Konsumentförtroende","impact": "high","note": "Sällanhandel-kategorier viktigast." }, { "label": "Hybridarbete","impact": "low","note": "Destination, inte pendlare." }, { "label": "E-handelstillväxt","impact": "medium","note": "Premium-miljö försvarar." }, { "label": "Energi och inflation","impact": "medium","note": "Sveriges bas är starkare." } ] },
-            "b": { "headline": "Stark press under stress", "operationalChanges": ["Balansera mot 'åtkomlig premium' istället för enbart lyx.", "Stärk food hall och familjeunderhållning som defensiva ankare.", "Håll omnikanal och medlemstjänster intakta."], "keyRisks": ["Mode, restaurang och fritid faller snabbt.", "Uthyrning håller; korgmix tunnas."], "sensitivities": [ { "label": "Konsumentförtroende","impact": "high","note": "Kritisk pga sällanhandel-fokus." }, { "label": "Hybridarbete","impact": "low","note": "Låg beroende." }, { "label": "E-handelstillväxt","impact": "high","note": "Sällanhandel rör sig snabbare online." }, { "label": "Energi och inflation","impact": "medium","note": "Sverige klarar sig bättre än FI." } ] },
-            "c": { "headline": "Största uppsidan i stark återhämtning", "operationalChanges": ["Skala mode, restaurang, skönhet och upplevelser aggressivt.", "Lyft eventprogram och varumärkesteater.", "Använd premium-miljön för handelsmedia-intäkter."], "keyRisks": ["Överhettad premium kan pressa värdesegment.", "För mycket lyx kan stöta bort yngre besökare."], "sensitivities": [ { "label": "Konsumentförtroende","impact": "low","note": "Stigande förtroende = uppside-hävstång." }, { "label": "Hybridarbete","impact": "low","note": "Destination växer starkt." }, { "label": "E-handelstillväxt","impact": "low","note": "Premium-miljö substitueras inte online." }, { "label": "Energi och inflation","impact": "low","note": "Sverige stabilare." } ] }
+            "a": {
+              "headline": "Stabil premium-ledd",
+              "operationalChanges": [
+                "Behåll mode, skönhet, restaurang och underhållning i ledning.",
+                "Sömlös omnikanal som baseline.",
+                "Rikta budskap till 'åtkomlig premium'."
+              ],
+              "keyRisks": [
+                "Sällanhandel under pre-2024 nivå.",
+                "premium kan kännas avlägsen för försiktiga kunder."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "high",
+                  "note": "Sällanhandel-kategorier viktigast."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "low",
+                  "note": "destination, inte pendlare."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "medium",
+                  "note": "premium-miljö försvarar."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "medium",
+                  "note": "Sveriges bas är starkare."
+                }
+              ]
+            },
+            "b": {
+              "headline": "Stark press under stress",
+              "operationalChanges": [
+                "Balansera mot 'åtkomlig premium' istället för enbart lyx.",
+                "Stärk food hall och familjeunderhållning som defensiva ankare.",
+                "Håll omnikanal och medlemstjänster intakta."
+              ],
+              "keyRisks": [
+                "Mode, restaurang och fritid faller snabbt.",
+                "Uthyrning håller; korgmix tunnas."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "high",
+                  "note": "Kritisk pga sällanhandel-fokus."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "low",
+                  "note": "Låg beroende."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "high",
+                  "note": "Sällanhandel rör sig snabbare online."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "medium",
+                  "note": "Sverige klarar sig bättre än FI."
+                }
+              ]
+            },
+            "c": {
+              "headline": "Största uppsidan i stark återhämtning",
+              "operationalChanges": [
+                "Skala mode, restaurang, skönhet och upplevelser aggressivt.",
+                "Lyft eventprogram och varumärkesteater.",
+                "Använd premium-miljön för handelsmedia-intäkter."
+              ],
+              "keyRisks": [
+                "Överhettad premium kan pressa värdesegment.",
+                "För mycket lyx kan stöta bort yngre besökare."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "low",
+                  "note": "Stigande förtroende = uppside-hävstång."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "low",
+                  "note": "destination växer starkt."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "low",
+                  "note": "premium-miljö substitueras inte online."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "low",
+                  "note": "Sverige stabilare."
+                }
+              ]
+            }
           }
         }
       }
@@ -354,25 +1638,974 @@
         "fi": {
           "mallName": "Westfield Täby Centrum",
           "paths": {
-            "a": { "headline": "Vakaa esikaupunkielämäntyyli", "operationalChanges": ["Pidä perheen ja elämäntyylin kuratointi keskiössä.", "Vahvista uskollisuusohjelma sidottuna palveluihin.", "Tarjoa kestäviä 'fika'-kokemuksia ja ruokaa."], "keyRisks": ["Esikaupungin ostovoima ei kestä isoa shokkia yhtä hyvin kuin keskusta.", "Premium-vetoinen asiakaskunta voi karsia muotia paineen alla."], "sensitivities": [ { "label": "Kuluttajaluottamus","impact": "medium","note": "Stamkunder pehmentävät." }, { "label": "Hybridityö","impact": "low","note": "Esikaupungin asukkaat virrana." }, { "label": "Verkkokauppa","impact": "medium","note": "Helppo nouto auttaa." }, { "label": "Energia ja inflaatio","impact": "medium","note": "Ruotsin tausta vakaa." } ] },
-            "b": { "headline": "Tarvitsee defensiivisemmän mixin", "operationalChanges": ["Vahvista päivittäistavaraa ja terveyttä esikaupunkimissioon.", "Tarjoa kierrätys ja korjaus perheystävällisesti.", "Mittaa lojaliteetti palveluihin sidottuna, ei pelkkiä alennuksia."], "keyRisks": ["Esikaupungin discretionary-kulutus heikkenee.", "Mode ja kauneus voivat painua merkittävästi."], "sensitivities": [ { "label": "Kuluttajaluottamus","impact": "medium","note": "Lievempi vaikutus kuin MoS:lla." }, { "label": "Hybridityö","impact": "medium","note": "Etätyö lisää paikallista käyttöä." }, { "label": "Verkkokauppa","impact": "medium","note": "Lähinouto pelastaa." }, { "label": "Energi och inflation","impact": "medium","note": "Ruotsi pärjää, mutta paine näkyy." } ] },
-            "c": { "headline": "Maltillinen mutta vakaa kasvu", "operationalChanges": ["Laajenna palveluvetoinen kerros perheille.", "Korosta vastuullisuus ja kiertotalous esikaupungissa.", "Vahvista yhteisöllisyyttä ja tapahtumia."], "keyRisks": ["Upside maltillinen vs. MoS, koska skaala pienempi.", "Premium-kasvu vaatii kuratointityötä."], "sensitivities": [ { "label": "Konsumentförtroende","impact": "low","note": "Stark bas återhämtar." }, { "label": "Hybridarbete","impact": "low","note": "Förorts-närhet ökar." }, { "label": "E-handelstillväxt","impact": "low","note": "Familjefokus försvarar." }, { "label": "Energi och inflation","impact": "low","note": "Sverige stabilare." } ] }
+            "a": {
+              "headline": "Vakaa esikaupunkielämäntyyli",
+              "operationalChanges": [
+                "Pidä perheen ja elämäntyylin kuratointi keskiössä.",
+                "Vahvista uskollisuusohjelma sidottuna palveluihin.",
+                "Tarjoa kestäviä 'fika'-kokemuksia ja ruokaa."
+              ],
+              "keyRisks": [
+                "Esikaupungin ostovoima ei kestä isoa shokkia yhtä hyvin kuin keskusta.",
+                "Korkeamman hintaluokan vetämä asiakaskunta voi karsia muotia paineen alla."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "medium",
+                  "note": "Stamkunder pehmentävät."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "low",
+                  "note": "Esikaupungin asukkaat virrana."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "medium",
+                  "note": "Helppo nouto auttaa."
+                },
+                {
+                  "label": "Energia ja inflaatio",
+                  "impact": "medium",
+                  "note": "Ruotsin tausta vakaa."
+                }
+              ]
+            },
+            "b": {
+              "headline": "Tarvitsee defensiivisemmän mixin",
+              "operationalChanges": [
+                "Vahvista päivittäistavaraa ja terveyttä esikaupunkimissioon.",
+                "Tarjoa kierrätys ja korjaus perheystävällisesti.",
+                "Mittaa lojaliteetti palveluihin sidottuna, ei pelkkiä alennuksia."
+              ],
+              "keyRisks": [
+                "Esikaupungin harkinnanvarainen kulutus heikkenee.",
+                "Muoti ja kauneus voivat painua merkittävästi."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "medium",
+                  "note": "Lievempi vaikutus kuin MoS:lla."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "medium",
+                  "note": "Etätyö lisää paikallista käyttöä."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "medium",
+                  "note": "Lähinouto pelastaa."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "medium",
+                  "note": "Ruotsi pärjää, mutta paine näkyy."
+                }
+              ]
+            },
+            "c": {
+              "headline": "Maltillinen mutta vakaa kasvu",
+              "operationalChanges": [
+                "Laajenna palveluvetoinen kerros perheille.",
+                "Korosta vastuullisuus ja kiertotalous esikaupungissa.",
+                "Vahvista yhteisöllisyyttä ja tapahtumia."
+              ],
+              "keyRisks": [
+                "Kasvu jää maltilliseksi vs. MoS, koska skaala pienempi.",
+                "Korkeampi hintaluokka-kasvu vaatii valikointityötä."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "low",
+                  "note": "Stark bas återhämtar."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "low",
+                  "note": "Förorts-närhet ökar."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "low",
+                  "note": "Familjefokus försvarar."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "low",
+                  "note": "Sverige stabilare."
+                }
+              ]
+            }
           }
         },
         "en": {
           "mallName": "Westfield Täby Centrum",
           "paths": {
-            "a": { "headline": "Stable suburban lifestyle", "operationalChanges": ["Keep family and lifestyle curation central.", "Strengthen loyalty tied to services.", "Offer durable 'fika' and food experiences."], "keyRisks": ["Suburban spend power is less shock-resilient than city centre.", "Premium-leaning base can prune fashion under pressure."], "sensitivities": [ { "label": "Consumer confidence","impact": "medium","note": "Regulars cushion." }, { "label": "Hybrid work","impact": "low","note": "Suburban residents flow in." }, { "label": "E-commerce growth","impact": "medium","note": "Easy pickup helps." }, { "label": "Energy and inflation","impact": "medium","note": "Swedish backdrop stable." } ] },
-            "b": { "headline": "Needs a more defensive mix", "operationalChanges": ["Strengthen grocery and health for the suburban mission.", "Offer circular and repair in family-friendly format.", "Tie loyalty to services, not just discounts."], "keyRisks": ["Suburban discretionary spending weakens.", "Fashion and beauty can slide significantly."], "sensitivities": [ { "label": "Consumer confidence","impact": "medium","note": "Less than MoS." }, { "label": "Hybrid work","impact": "medium","note": "Remote work increases local use." }, { "label": "E-commerce growth","impact": "medium","note": "Local pickup saves." }, { "label": "Energy and inflation","impact": "medium","note": "Sweden manages but pressure shows." } ] },
-            "c": { "headline": "Moderate but stable growth", "operationalChanges": ["Expand a service-led layer for families.", "Highlight sustainability and circularity in the suburb.", "Strengthen community and events."], "keyRisks": ["Upside moderate vs. MoS due to smaller scale.", "Premium growth requires curation work."], "sensitivities": [ { "label": "Consumer confidence","impact": "low","note": "Strong base recovers." }, { "label": "Hybrid work","impact": "low","note": "Suburban proximity grows." }, { "label": "E-commerce growth","impact": "low","note": "Family focus defends." }, { "label": "Energy and inflation","impact": "low","note": "Sweden more stable." } ] }
+            "a": {
+              "headline": "Stable suburban lifestyle",
+              "operationalChanges": [
+                "Keep family and lifestyle curation central.",
+                "Strengthen loyalty tied to services.",
+                "Offer durable 'fika' and food experiences."
+              ],
+              "keyRisks": [
+                "Suburban spend power is less shock-resilient than city centre.",
+                "premium-leaning base can prune fashion under pressure."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Consumer confidence",
+                  "impact": "medium",
+                  "note": "Regulars cushion."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "low",
+                  "note": "Suburban residents flow in."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "medium",
+                  "note": "Easy pickup helps."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "medium",
+                  "note": "Swedish backdrop stable."
+                }
+              ]
+            },
+            "b": {
+              "headline": "Needs a more defensive mix",
+              "operationalChanges": [
+                "Strengthen grocery and health for the suburban mission.",
+                "Offer circular and repair in family-friendly format.",
+                "Tie loyalty to services, not just discounts."
+              ],
+              "keyRisks": [
+                "Suburban discretionary spending weakens.",
+                "Fashion and beauty can slide significantly."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Consumer confidence",
+                  "impact": "medium",
+                  "note": "Less than MoS."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "medium",
+                  "note": "Remote work increases local use."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "medium",
+                  "note": "Local pickup saves."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "medium",
+                  "note": "Sweden manages but pressure shows."
+                }
+              ]
+            },
+            "c": {
+              "headline": "Moderate but stable growth",
+              "operationalChanges": [
+                "Expand a service-led layer for families.",
+                "Highlight sustainability and circularity in the suburb.",
+                "Strengthen community and events."
+              ],
+              "keyRisks": [
+                "upside moderate vs. MoS due to smaller scale.",
+                "premium growth requires curation work."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Consumer confidence",
+                  "impact": "low",
+                  "note": "Strong base recovers."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "low",
+                  "note": "Suburban proximity grows."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "low",
+                  "note": "Family focus defends."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "low",
+                  "note": "Sweden more stable."
+                }
+              ]
+            }
           }
         },
         "sv": {
           "mallName": "Westfield Täby Centrum",
           "paths": {
-            "a": { "headline": "Stabil förortslivsstil", "operationalChanges": ["Behåll familje- och livsstilskurateringen i centrum.", "Stärk lojalitet kopplat till tjänster.", "Erbjud hållbara fika- och matupplevelser."], "keyRisks": ["Förortens köpkraft tål inte stor chock lika väl som centrum.", "Premium-bas kan beskära mode under press."], "sensitivities": [ { "label": "Konsumentförtroende","impact": "medium","note": "Stamkunder dämpar." }, { "label": "Hybridarbete","impact": "low","note": "Förortsbor flödar in." }, { "label": "E-handelstillväxt","impact": "medium","note": "Enkel hämtning hjälper." }, { "label": "Energi och inflation","impact": "medium","note": "Sveriges bas stabil." } ] },
-            "b": { "headline": "Behöver en mer defensiv mix", "operationalChanges": ["Stärk dagligvaror och hälsa för förorten.", "Erbjud cirkulärt och reparation i familjeformat.", "Koppla lojalitet till tjänster, inte bara rabatter."], "keyRisks": ["Förortens sällanhandel försvagas.", "Mode och skönhet kan minska markant."], "sensitivities": [ { "label": "Konsumentförtroende","impact": "medium","note": "Mindre än MoS." }, { "label": "Hybridarbete","impact": "medium","note": "Distansarbete ökar lokal användning." }, { "label": "E-handelstillväxt","impact": "medium","note": "Lokal hämtning räddar." }, { "label": "Energi och inflation","impact": "medium","note": "Sverige hanterar men press märks." } ] },
-            "c": { "headline": "Måttlig men stabil tillväxt", "operationalChanges": ["Utöka servicedrivet lager för familjer.", "Lyft hållbarhet och cirkularitet i förorten.", "Stärk gemenskap och evenemang."], "keyRisks": ["Måttlig uppside vs. MoS pga mindre skala.", "Premium-tillväxt kräver kuraterat arbete."], "sensitivities": [ { "label": "Konsumentförtroende","impact": "low","note": "Stark bas återhämtar." }, { "label": "Hybridarbete","impact": "low","note": "Förortsnärhet växer." }, { "label": "E-handelstillväxt","impact": "low","note": "Familjefokus försvarar." }, { "label": "Energi och inflation","impact": "low","note": "Sverige stabilare." } ] }
+            "a": {
+              "headline": "Stabil förortslivsstil",
+              "operationalChanges": [
+                "Behåll familje- och livsstilskurateringen i centrum.",
+                "Stärk lojalitet kopplat till tjänster.",
+                "Erbjud hållbara fika- och matupplevelser."
+              ],
+              "keyRisks": [
+                "Förortens köpkraft tål inte stor chock lika väl som centrum.",
+                "premium-bas kan beskära mode under press."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "medium",
+                  "note": "Stamkunder dämpar."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "low",
+                  "note": "Förortsbor flödar in."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "medium",
+                  "note": "Enkel hämtning hjälper."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "medium",
+                  "note": "Sveriges bas stabil."
+                }
+              ]
+            },
+            "b": {
+              "headline": "Behöver en mer defensiv mix",
+              "operationalChanges": [
+                "Stärk dagligvaror och hälsa för förorten.",
+                "Erbjud cirkulärt och reparation i familjeformat.",
+                "Koppla lojalitet till tjänster, inte bara rabatter."
+              ],
+              "keyRisks": [
+                "Förortens sällanhandel försvagas.",
+                "Mode och skönhet kan minska markant."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "medium",
+                  "note": "Mindre än MoS."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "medium",
+                  "note": "Distansarbete ökar lokal användning."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "medium",
+                  "note": "Lokal hämtning räddar."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "medium",
+                  "note": "Sverige hanterar men press märks."
+                }
+              ]
+            },
+            "c": {
+              "headline": "Måttlig men stabil tillväxt",
+              "operationalChanges": [
+                "Utöka servicedrivet lager för familjer.",
+                "Lyft hållbarhet och cirkularitet i förorten.",
+                "Stärk gemenskap och evenemang."
+              ],
+              "keyRisks": [
+                "Måttlig uppside vs. MoS pga mindre skala.",
+                "premium-tillväxt kräver kuraterat arbete."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "low",
+                  "note": "Stark bas återhämtar."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "low",
+                  "note": "Förortsnärhet växer."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "low",
+                  "note": "Familjefokus försvarar."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "low",
+                  "note": "Sverige stabilare."
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "mallId": "us-dc-urban",
+      "i18n": {
+        "fi": {
+          "mallName": "Washington D.C., urbaani keskus",
+          "paths": {
+            "a": {
+              "headline": "Arjen ja toimistovirran keskus",
+              "operationalChanges": [
+                "Painota lounasta, kahvia, terveyttä ja nopeita palveluita.",
+                "Pidä arvo- ja vaivaton asiointi-tarjonta näkyvänä.",
+                "Myy näytöt ja sovellus työmatkavirralle."
+              ],
+              "keyRisks": [
+                "Toimistovirta jää hybridityön vuoksi epätasaiseksi.",
+                "Liian korkeamman hintaluokan asema ohittaa arvotietoisen kävijän."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "medium",
+                  "note": "Arjen tarve puskuroi."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "high",
+                  "note": "Toimistopäivät määräävät lounasvirran."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "medium",
+                  "note": "Nouto ja palautukset voi kääntää eduksi."
+                },
+                {
+                  "label": "Energia ja inflaatio",
+                  "impact": "medium",
+                  "note": "Hintaviestinnän pitää olla selkeä."
+                }
+              ]
+            },
+            "b": {
+              "headline": "Puolustava arvokeskus",
+              "operationalChanges": [
+                "Lisää edullisia ateria- ja palvelupaketteja.",
+                "Varaa tyhjät tilat terveyteen, koulutukseen tai nouto- ja toimituspalveluiin.",
+                "Lyhennä riskialttiiden vaatekauppa-vuokrien kestoa."
+              ],
+              "keyRisks": [
+                "Harkinnanvaraiset ostoskäynnit siirtyvät verkkoon tai halvempiin formaatteihin.",
+                "Ilta- ja viikonloppukäyttö jää ohueksi."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "high",
+                  "note": "Arvohaku korostuu nopeasti."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "high",
+                  "note": "Heikko toimistopäivä näkyy suoraan."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "medium",
+                  "note": "Palautuspalvelu tuo syyn käyntiin."
+                },
+                {
+                  "label": "Energia ja inflaatio",
+                  "impact": "high",
+                  "note": "Lounas ja arjen ostokset joustavat."
+                }
+              ]
+            },
+            "c": {
+              "headline": "Palvelu- ja media-alusta",
+              "operationalChanges": [
+                "Rakenna sponsorointia työmatka-, lounas- ja tapahtumavirran ympärille.",
+                "Lisää kauneus-/, hyvinvointi-/ ja nopeita terveyspalveluita.",
+                "Käytä toimistovirtaa ilta-ravintoloiden käynnistimenä."
+              ],
+              "keyRisks": [
+                "Kasvu jää arkipäiviin, ellei iltakäyttöä aktivoida.",
+                "Kokemuksellinen tarjonta voi olla liian ohutta."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "low",
+                  "note": "Palvelut palautuvat ensin."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "medium",
+                  "note": "Joustava ohjelmointi auttaa."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "low",
+                  "note": "Palvelut eivät korvaudu verkossa."
+                },
+                {
+                  "label": "Energia ja inflaatio",
+                  "impact": "low",
+                  "note": "Kasvu kestää paremmin."
+                }
+              ]
+            }
+          }
+        },
+        "en": {
+          "mallName": "Washington D.C. urban centre",
+          "paths": {
+            "a": {
+              "headline": "Everyday and office-flow hub",
+              "operationalChanges": [
+                "Lead with lunch, coffee, health, and fast services.",
+                "Keep value and convenience visible.",
+                "Sell screens and app inventory against commuter flow."
+              ],
+              "keyRisks": [
+                "Hybrid work keeps office flow uneven.",
+                "Too much premium positioning misses value-aware visitors."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Consumer confidence",
+                  "impact": "medium",
+                  "note": "Everyday need cushions demand."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "high",
+                  "note": "Office days set lunch traffic."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "medium",
+                  "note": "Pickup and returns can become an advantage."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "medium",
+                  "note": "Price communication must be clear."
+                }
+              ]
+            },
+            "b": {
+              "headline": "Defensive value hub",
+              "operationalChanges": [
+                "Add value-priced meal and service bundles.",
+                "Pre-plan vacant units for health, education, or fulfilment.",
+                "Shorten exposed apparel leases."
+              ],
+              "keyRisks": [
+                "discretionary trips move online or to cheaper formats.",
+                "Evening and weekend use stays thin."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Consumer confidence",
+                  "impact": "high",
+                  "note": "value-seeking rises quickly."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "high",
+                  "note": "Weak office days show directly."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "medium",
+                  "note": "Return services create a trip reason."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "high",
+                  "note": "Lunch and everyday purchases flex."
+                }
+              ]
+            },
+            "c": {
+              "headline": "Service and media platform",
+              "operationalChanges": [
+                "Build sponsorship around commute, lunch, and event flow.",
+                "Add beauty, wellness, and quick-care services.",
+                "Use office flow to start evening F&B demand."
+              ],
+              "keyRisks": [
+                "Growth stays weekday-heavy unless evening use is activated.",
+                "Experience offer may be too thin."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Consumer confidence",
+                  "impact": "low",
+                  "note": "Services recover first."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "medium",
+                  "note": "Flexible programming helps."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "low",
+                  "note": "Services are not substituted online."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "low",
+                  "note": "upside path holds better."
+                }
+              ]
+            }
+          }
+        },
+        "sv": {
+          "mallName": "Washington D.C. urbant centrum",
+          "paths": {
+            "a": {
+              "headline": "Vardags- och kontorsflödeshub",
+              "operationalChanges": [
+                "Led med lunch, kaffe, hälsa och snabba tjänster.",
+                "Gör värde och bekvämlighet synligt.",
+                "Sälj skärmar och app-inventarier mot pendlingsflöde."
+              ],
+              "keyRisks": [
+                "Hybridarbete gör kontorsflödet ojämnt.",
+                "För mycket premium missar värdemedvetna besökare."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "medium",
+                  "note": "Vardagsbehov dämpar."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "high",
+                  "note": "Kontorsdagar styr lunchflödet."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "medium",
+                  "note": "Hämtning och returer kan bli fördel."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "medium",
+                  "note": "Priskommunikation måste vara tydlig."
+                }
+              ]
+            },
+            "b": {
+              "headline": "Defensivt värdenav",
+              "operationalChanges": [
+                "Lägg till prisvärda måltids- och servicepaket.",
+                "Planera vakanser för hälsa, utbildning eller fulfilment.",
+                "Korta exponerade modeavtal."
+              ],
+              "keyRisks": [
+                "Sällanbesök går online eller till billigare format.",
+                "Kvälls- och helganvändning förblir tunn."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "high",
+                  "note": "Värdesökning ökar snabbt."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "high",
+                  "note": "Svaga kontorsdagar syns direkt."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "medium",
+                  "note": "Returer skapar besöksorsak."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "high",
+                  "note": "Lunch och vardagsköp flexar."
+                }
+              ]
+            },
+            "c": {
+              "headline": "Service- och mediaplattform",
+              "operationalChanges": [
+                "Bygg sponsorering runt pendling, lunch och evenemang.",
+                "Lägg till skönhet, välmående och snabbvård.",
+                "Använd kontorsflöde för kvälls-F&B."
+              ],
+              "keyRisks": [
+                "Tillväxt blir vardagstung utan kvällsaktivering.",
+                "Upplevelseutbudet kan vara tunt."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "low",
+                  "note": "Tjänster återhämtar först."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "medium",
+                  "note": "Flexibel programmering hjälper."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "low",
+                  "note": "Tjänster ersätts inte online."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "low",
+                  "note": "Uppsidan håller bättre."
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "mallId": "us-mall-of-america",
+      "i18n": {
+        "fi": {
+          "mallName": "Mall of America",
+          "paths": {
+            "a": {
+              "headline": "Vakaa kohdekeskuksen vertailukohta",
+              "operationalChanges": [
+                "Vertaa lippulaivamyymälöiden ja vetonaulojen konversiota.",
+                "Mittaa tapahtumakalenterin tiheyttä.",
+                "Seuraa perheviihteen ja ravintoloiden yhteiskäyttöä."
+              ],
+              "keyRisks": [
+                "Kohdekäynti on herkkä matkailulle.",
+                "Liian suuri pinta-ala vaatii jatkuvaa aktivointia."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "medium",
+                  "note": "Kokemus perustelee käynnin."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "low",
+                  "note": "Ei toimistoriippuvainen."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "low",
+                  "note": "Vetonaulat eivät siirry verkkoon."
+                },
+                {
+                  "label": "Energia ja inflaatio",
+                  "impact": "medium",
+                  "note": "Matkailubudjetti joustaa."
+                }
+              ]
+            },
+            "b": {
+              "headline": "Kohdearvo testissä",
+              "operationalChanges": [
+                "Paketoi perheviihde, ruoka ja tarjousarvo.",
+                "Muuta heikot isot tilat kokemuksiksi tai palveluiksi.",
+                "Pidä liputus ja pysäköinti osana arvolupausta."
+              ],
+              "keyRisks": [
+                "Pitkän matkan käynnit vähenevät.",
+                "Yksittäinen viihdeankkuri ei riitä."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "high",
+                  "note": "Kohdematka lykätään ensin."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "low",
+                  "note": "Vähäinen vaikutus."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "medium",
+                  "note": "Retail ilman elämystä haavoittuu."
+                },
+                {
+                  "label": "Energia ja inflaatio",
+                  "impact": "high",
+                  "note": "Matka- ja perhekulut korostuvat."
+                }
+              ]
+            },
+            "c": {
+              "headline": "Lippulaiva- ja kaupan media -alusta",
+              "operationalChanges": [
+                "Myy brändeille testaus- ja lippulaivapaikkoja.",
+                "Nosta kaupan media tapahtumiin ja vetonauloihin.",
+                "Käytä 32M+ kävijää yleisömyynnin lähtökohtana."
+              ],
+              "keyRisks": [
+                "Liiallinen bränditeatteri ohittaa arjen ostot.",
+                "Kävijädata pitää tuotteistaa läpinäkyvästi."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Kuluttajaluottamus",
+                  "impact": "low",
+                  "note": "Elämyskysyntä vahvistuu."
+                },
+                {
+                  "label": "Hybridityö",
+                  "impact": "low",
+                  "note": "Ei ydindriveri."
+                },
+                {
+                  "label": "Verkkokauppa",
+                  "impact": "low",
+                  "note": "Kokeilumyymälä ja kokemus täydentävät."
+                },
+                {
+                  "label": "Energia ja inflaatio",
+                  "impact": "low",
+                  "note": "Kasvu kestää parhaiten."
+                }
+              ]
+            }
+          }
+        },
+        "en": {
+          "mallName": "Mall of America",
+          "paths": {
+            "a": {
+              "headline": "Stable destination benchmark",
+              "operationalChanges": [
+                "Compare flagship and attraction conversion.",
+                "Measure event-calendar density.",
+                "Track family entertainment and F&B bundling."
+              ],
+              "keyRisks": [
+                "destination visits are travel-sensitive.",
+                "Very large floor area requires constant activation."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Consumer confidence",
+                  "impact": "medium",
+                  "note": "Experience justifies the trip."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "low",
+                  "note": "Not office dependent."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "low",
+                  "note": "Attractions do not move online."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "medium",
+                  "note": "Travel budgets flex."
+                }
+              ]
+            },
+            "b": {
+              "headline": "destination value under test",
+              "operationalChanges": [
+                "Bundle family entertainment, food, and value offers.",
+                "Convert weak large boxes into experiences or services.",
+                "Make ticketing and parking part of the value promise."
+              ],
+              "keyRisks": [
+                "Long-distance visits decline.",
+                "A single entertainment anchor is not enough."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Consumer confidence",
+                  "impact": "high",
+                  "note": "destination trips are postponed first."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "low",
+                  "note": "Limited effect."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "medium",
+                  "note": "Retail without experience is exposed."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "high",
+                  "note": "Travel and family cost matter."
+                }
+              ]
+            },
+            "c": {
+              "headline": "Flagship and retail-media platform",
+              "operationalChanges": [
+                "Sell testing and flagship space to brands.",
+                "Tie retail media to events and attractions.",
+                "Use 32M+ annual visitors as the audience-sales base."
+              ],
+              "keyRisks": [
+                "Too much brand theatre can miss everyday purchases.",
+                "Visitor data must be productised transparently."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Consumer confidence",
+                  "impact": "low",
+                  "note": "Experience demand strengthens."
+                },
+                {
+                  "label": "Hybrid work",
+                  "impact": "low",
+                  "note": "Not a core driver."
+                },
+                {
+                  "label": "E-commerce growth",
+                  "impact": "low",
+                  "note": "Showroom and experience complement online."
+                },
+                {
+                  "label": "Energy and inflation",
+                  "impact": "low",
+                  "note": "upside path holds best."
+                }
+              ]
+            }
+          }
+        },
+        "sv": {
+          "mallName": "Mall of America",
+          "paths": {
+            "a": {
+              "headline": "Stabil destinationsbenchmark",
+              "operationalChanges": [
+                "Jämför flaggskepps- och attraktionskonvertering.",
+                "Mät eventkalenderns täthet.",
+                "Följ paketering av familjeunderhållning och F&B."
+              ],
+              "keyRisks": [
+                "destinationsbesök är resekänsliga.",
+                "Mycket stor yta kräver ständig aktivering."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "medium",
+                  "note": "Upplevelse motiverar resan."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "low",
+                  "note": "Inte kontorsberoende."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "low",
+                  "note": "Attraktioner flyttar inte online."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "medium",
+                  "note": "Resebudgeten flexar."
+                }
+              ]
+            },
+            "b": {
+              "headline": "destinationsvärde testas",
+              "operationalChanges": [
+                "Paketera familjeunderhållning, mat och värdeerbjudanden.",
+                "Konvertera svaga stora ytor till upplevelser eller tjänster.",
+                "Gör biljetter och parkering till del av värdelöftet."
+              ],
+              "keyRisks": [
+                "Långväga besök minskar.",
+                "En ensam underhållningsankare räcker inte."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "high",
+                  "note": "destinationsresor skjuts upp först."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "low",
+                  "note": "Begränsad effekt."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "medium",
+                  "note": "Handel utan upplevelse exponeras."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "high",
+                  "note": "Rese- och familjekostnader väger."
+                }
+              ]
+            },
+            "c": {
+              "headline": "Flaggskepps- och handelsmedia-plattform",
+              "operationalChanges": [
+                "Sälj test- och flaggskeppsytor till varumärken.",
+                "Knyt handelsmedia till event och attraktioner.",
+                "Använd 32M+ årliga besökare som publikbas."
+              ],
+              "keyRisks": [
+                "För mycket brand theatre kan missa vardagsköp.",
+                "Besökardata måste produktifieras transparent."
+              ],
+              "sensitivities": [
+                {
+                  "label": "Konsumentförtroende",
+                  "impact": "low",
+                  "note": "Upplevelseefterfrågan stärks."
+                },
+                {
+                  "label": "Hybridarbete",
+                  "impact": "low",
+                  "note": "Inte kärndrivare."
+                },
+                {
+                  "label": "E-handelstillväxt",
+                  "impact": "low",
+                  "note": "Showroom och upplevelse kompletterar online."
+                },
+                {
+                  "label": "Energi och inflation",
+                  "impact": "low",
+                  "note": "Uppsidan håller bäst."
+                }
+              ]
+            }
           }
         }
       }
