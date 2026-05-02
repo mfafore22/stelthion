@@ -1,5 +1,5 @@
 /**
- * Sync macroeconomic indicators from public APIs (StatFin/SCB PxWeb) into
+ * Sync macroeconomic indicators from public APIs (StatFin/SCB/KI/FRED) into
  * the MacroIndicatorPoint table. Idempotent: upserts on (indicatorCode, period).
  *
  * Usage:
@@ -23,9 +23,10 @@ async function main() {
   console.log(`Syncing ${summary.results.length} indicator(s)...`)
   for (const r of summary.results) {
     if (r.error) console.error(`[${r.code}] FAILED: ${r.error}`)
+    else if (r.skipped) console.log(`[${r.code}] skipped: no fetch adapter configured`)
     else console.log(`[${r.code}] ${r.count} points`)
   }
-  console.log(`\nDone: ${summary.ok} OK, ${summary.failed} failed.`)
+  console.log(`\nDone: ${summary.ok} OK, ${summary.skipped} skipped, ${summary.failed} failed.`)
   if (summary.failed > 0) process.exit(2)
 }
 

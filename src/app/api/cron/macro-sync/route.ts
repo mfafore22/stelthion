@@ -24,6 +24,7 @@ async function run(req: NextRequest) {
   const summary = await syncAllIndicators(prisma, only);
   return NextResponse.json({
     ok: summary.ok,
+    skipped: summary.skipped,
     failed: summary.failed,
     results: summary.results,
   });

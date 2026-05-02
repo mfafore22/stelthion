@@ -37,6 +37,7 @@ export async function GET(req: NextRequest) {
     const latest = series.length > 0 ? series[series.length - 1] : null;
     const langKey = (lang === 'fi' || lang === 'sv') ? lang : 'en';
     return {
+      slot: m.slot,
       code: m.code,
       name: m.i18n[langKey],
       unit: m.unit,
