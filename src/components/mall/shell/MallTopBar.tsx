@@ -28,6 +28,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useTranslation } from 'react-i18next';
+import { canonicalizeMallId } from '@/lib/mall/ids';
+import { getMallIdentity } from '@/lib/mall/mallIdentity';
 
 export interface MallTopBarProps {
   onExport?: (format: 'pdf' | 'csv' | 'excel') => void;
@@ -41,6 +43,10 @@ export function MallTopBar({
   const { user } = useSession();
   const concierge = useConciergeOptional();
   const { t, i18n } = useTranslation('mall');
+  const activeMallId = canonicalizeMallId(user?.mallId);
+  const activePropertyName = activeMallId
+    ? getMallIdentity(activeMallId).name
+    : (user?.mallDisplayName ?? user?.companyName ?? 'your property');
 
   const [now, setNow] = useState(new Date());
   useEffect(() => {
@@ -104,7 +110,7 @@ export function MallTopBar({
             isOpen={concierge.state?.panelOpen ?? false}
             unreadCount={concierge.state?.conversations?.length ?? 0}
             onClick={() => concierge.togglePanel()}
-            propertyName="Ideapark"
+            propertyName={activePropertyName}
           />
         )}
 

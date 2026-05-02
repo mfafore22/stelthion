@@ -12,6 +12,7 @@ import React from 'react';
 import { Sun, Users, Calendar, Car, Train, ClipboardList, TrendingUp, BarChart3 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useConcierge } from './ConciergeContext';
+import { isMallId } from '@/lib/mall/ids';
 
 interface QuickActionChipsProps {
   onSend: (message: string) => void;
@@ -33,6 +34,15 @@ const BRIEFING_CHIP: Chip = {
     fi: 'Anna päiväkatsaus: sää, kävijämäärät, tapahtumat ja liikenne.',
     en: 'Give me today\'s briefing: weather, footfall, events, and transport.',
     sv: 'Ge mig dagens briefing: väder, besökare, evenemang och transport.',
+  },
+};
+
+const BRIEFING_WITHOUT_TRANSPORT_CHIP: Chip = {
+  ...BRIEFING_CHIP,
+  query: {
+    fi: 'Anna päiväkatsaus: sää, kävijämäärät ja tapahtumat.',
+    en: 'Give me today\'s briefing: weather, footfall, and events.',
+    sv: 'Ge mig dagens briefing: väder, besökare och evenemang.',
   },
 };
 
@@ -260,11 +270,17 @@ const AGENT_CHIPS: Record<string, Chip[]> = {
 
 export function QuickActionChips({ onSend, disabled = false }: QuickActionChipsProps) {
   const { t, i18n } = useTranslation('mall');
-  const { activeConversation } = useConcierge();
+  const { activeConversation, mallId } = useConcierge();
   const lang = (i18n.language || 'en') as 'en' | 'fi' | 'sv';
 
   const agentRole = activeConversation?.agentRole;
-  const chips = (agentRole && AGENT_CHIPS[agentRole]) || GENERAL_CHIPS;
+  const baseChips = (agentRole && AGENT_CHIPS[agentRole]) || GENERAL_CHIPS;
+  const hasIdeaparkTransportData = isMallId(mallId, 'ideapark-lempaala');
+  const chips = hasIdeaparkTransportData
+    ? baseChips
+    : baseChips
+      .filter((chip) => chip.labelKey !== 'concierge.quickAction.parking' && chip.labelKey !== 'concierge.quickAction.transport')
+      .map((chip) => chip === BRIEFING_CHIP ? BRIEFING_WITHOUT_TRANSPORT_CHIP : chip);
 
   return (
     <div className="flex gap-2 overflow-x-auto px-4 py-2 scrollbar-hide">

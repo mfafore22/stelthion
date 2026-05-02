@@ -8,7 +8,7 @@
 'use client';
 
 import React from 'react';
-import { ConversationMessage, ToolExecution } from '@/services/concierge/types';
+import { ConversationMessage } from '@/services/concierge/types';
 import { ToolExecutionPanel } from './ToolExecutionPanel';
 import { Bot, User } from 'lucide-react';
 import { WeatherCard } from './attachments/WeatherCard';
@@ -63,7 +63,7 @@ export function MessageBubble({ message, isStreaming, streamingContent }: Messag
         <div className="flex flex-col gap-0.5">
           {/* Header */}
           <div className={`flex items-center gap-2 text-[10px] text-bo-neutral-400 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
-            <span>{isUser ? 'You' : message.agentRole?.replace(/-/g, ' ') || 'Ideapark'}</span>
+            <span>{isUser ? 'You' : message.agentRole?.replace(/-/g, ' ') || 'Concierge'}</span>
             <span>{timeStr}</span>
           </div>
 

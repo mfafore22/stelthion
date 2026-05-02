@@ -25,10 +25,12 @@ export function PropertySpeechBubble({
   isOpen,
   unreadCount = 0,
   onClick,
-  propertyName = 'Ideapark',
+  propertyName = 'your property',
 }: PropertySpeechBubbleProps) {
   const { t } = useTranslation('mall');
-  const [hasAnimatedWave, setHasAnimatedWave] = useState(false);
+  const [hasAnimatedWave, setHasAnimatedWave] = useState(() => (
+    typeof window !== 'undefined' && sessionStorage.getItem('concierge_wave_shown') === '1'
+  ));
   const [showWave, setShowWave] = useState(false);
 
   // First-visit wave animation (plays once per session)
@@ -44,8 +46,6 @@ export function PropertySpeechBubble({
         }, 1200);
       }, 1000);
       return () => clearTimeout(timer);
-    } else {
-      setHasAnimatedWave(true);
     }
   }, []);
 

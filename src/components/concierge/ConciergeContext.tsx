@@ -33,6 +33,9 @@ interface ConciergeContextValue {
   streamingMessage: string;
   activeToolExecutions: ToolExecution[];
   agentSuggestion: AgentSuggestion | null;
+  mallId: string;
+  propertyName: string;
+  propertyLogoUrl?: string;
 
   openPanel: () => void;
   closePanel: () => void;
@@ -58,6 +61,8 @@ interface ConciergeProviderProps {
   tenantId: string;
   userId: string;
   mallId: string;
+  propertyName?: string;
+  propertyLogoUrl?: string;
 }
 
 const DEFAULT_PREFERENCES: ConciergePreferences = {
@@ -76,6 +81,8 @@ export function ConciergeProvider({
   tenantId,
   userId,
   mallId,
+  propertyName = 'your property',
+  propertyLogoUrl,
 }: ConciergeProviderProps) {
   const { t, i18n } = useTranslation('mall');
   const viewContextStore = useViewContext();
@@ -169,7 +176,7 @@ export function ConciergeProvider({
       setActiveConversation(newConversation);
       setState((prev) => ({ ...prev, activeConversationId: conversationId, panelOpen: true }));
     },
-    [tenantId, userId, preferences.defaultAgent]
+    [tenantId, userId, preferences.defaultAgent, t]
   );
 
   // Load conversation
@@ -447,6 +454,9 @@ export function ConciergeProvider({
     streamingMessage,
     activeToolExecutions,
     agentSuggestion,
+    mallId,
+    propertyName,
+    propertyLogoUrl,
     openPanel,
     closePanel,
     togglePanel,

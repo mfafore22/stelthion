@@ -33,6 +33,8 @@ export function ConversationPanel() {
     closePanel,
     minimizePanel,
     deleteActiveConversation,
+    propertyName,
+    propertyLogoUrl,
   } = useConcierge();
   const { t } = useTranslation('mall');
   const { value: viewContext } = useViewContext();
@@ -75,7 +77,11 @@ export function ConversationPanel() {
 
         {/* Greeting — trend-aware if viewing a ShopperMind trend, else generic */}
         <div className="flex-1 flex flex-col items-center justify-center">
-          {viewContext?.kind === 'shoppermind_trend' ? <TrendGreeting /> : <PropertyGreeting />}
+          {viewContext?.kind === 'shoppermind_trend' ? (
+            <TrendGreeting />
+          ) : (
+            <PropertyGreeting propertyName={propertyName} logoUrl={propertyLogoUrl} />
+          )}
         </div>
 
         {/* Quick action chips + input */}
