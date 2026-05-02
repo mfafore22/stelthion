@@ -79,32 +79,26 @@ export function PropertyActionBoard({
 
   return (
     <section className="rounded-2xl border-2 border-bo-primary-200/70 bg-white p-5 shadow-bo-glass">
-      <div className="mb-5 grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_240px] xl:items-start">
+      <div className="mb-5 grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_320px] xl:items-start">
         <div className="min-w-0">
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-end">
-            <div className="min-w-0">
-              <div className="mb-1 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-bo-primary-700">
-                <Target size={14} />
-                {t('shoppermind.actionBoard.weeklyHeader')}
-              </div>
-              <h2 className="text-xl font-semibold tracking-tight text-bo-neutral-950">
-                {t('shoppermind.actionBoard.title', { propertyName: data.property.name })}
-              </h2>
-              <p className="mt-1 max-w-3xl text-sm text-bo-neutral-600">{t('shoppermind.actionBoard.subtitle')}</p>
-            </div>
-            {onSelectProperty && (
-              <div className="min-w-0">
-                <PropertySegmentedSelector
-                  label={t('shoppermind.actions.selectProperty')}
-                  options={propertyOptions}
-                  value={selectedPropertyId}
-                  onChange={onSelectProperty}
-                />
-              </div>
-            )}
+          <div className="mb-1 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-bo-primary-700">
+            <Target size={14} />
+            {t('shoppermind.actionBoard.weeklyHeader')}
           </div>
+          <h2 className="text-xl font-semibold tracking-tight text-bo-neutral-950">
+            {t('shoppermind.actionBoard.title', { propertyName: data.property.name })}
+          </h2>
+          <p className="mt-1 max-w-3xl text-sm text-bo-neutral-600">{t('shoppermind.actionBoard.subtitle')}</p>
         </div>
-        <div className="xl:justify-self-end">
+        <div className="w-full space-y-3 xl:w-[320px]">
+          {onSelectProperty && (
+            <PropertySegmentedSelector
+              label={t('shoppermind.actions.selectProperty')}
+              options={propertyOptions}
+              value={selectedPropertyId}
+              onChange={onSelectProperty}
+            />
+          )}
           <EvidenceMeter
             verifiedShare={verifiedShare}
             claims={data.evidenceClaims.length}
@@ -161,7 +155,7 @@ export function PropertyActionBoard({
 function EvidenceMeter({ verifiedShare, claims, sources }: { verifiedShare: number; claims: number; sources: number }) {
   const { t } = useTranslation('mall');
   return (
-    <div className="min-w-[220px] rounded-lg border border-bo-neutral-200 bg-bo-neutral-50 p-3">
+    <div className="w-full rounded-lg border border-bo-neutral-200 bg-bo-neutral-50 p-3">
       <div className="mb-2 flex items-center justify-between text-xs font-medium text-bo-neutral-600">
         <span className="flex items-center gap-1.5">
           <CheckCircle2 size={13} className="text-bo-success" />
