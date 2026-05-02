@@ -48,6 +48,26 @@ export function PropertyActionBoard({
     discussAssistant: t('shoppermind.actionBoard.discussAssistant'),
     priority: t('shoppermind.actionBoard.priority'),
     property: t('shoppermind.actionBoard.property'),
+    priorityLabels: {
+      critical: t('shoppermind.actionBoard.priorities.critical'),
+      high: t('shoppermind.actionBoard.priorities.high'),
+      medium: t('shoppermind.actionBoard.priorities.medium'),
+    },
+    effortLabels: {
+      low: t('shoppermind.actionBoard.efforts.low'),
+      medium: t('shoppermind.actionBoard.efforts.medium'),
+      high: t('shoppermind.actionBoard.efforts.high'),
+    },
+    impactLabels: {
+      low: t('shoppermind.actionBoard.impacts.low'),
+      medium: t('shoppermind.actionBoard.impacts.medium'),
+      high: t('shoppermind.actionBoard.impacts.high'),
+    },
+    timeHorizonLabels: {
+      this_week: t('shoppermind.actionBoard.timeHorizons.thisWeek'),
+      '30_days': t('shoppermind.actionBoard.timeHorizons.thirtyDays'),
+      '90_days': t('shoppermind.actionBoard.timeHorizons.ninetyDays'),
+    },
     actionTypeLabels: {
       operations: t('shoppermind.actionBoard.actionTypes.operations'),
       campaign: t('shoppermind.actionBoard.actionTypes.campaign'),
@@ -59,7 +79,7 @@ export function PropertyActionBoard({
 
   return (
     <section className="rounded-2xl border-2 border-bo-primary-200/70 bg-white p-5 shadow-bo-glass">
-      <div className="mb-5 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+      <div className="mb-5 flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
         <div>
           <div className="mb-1 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-bo-primary-700">
             <Target size={14} />
@@ -70,22 +90,24 @@ export function PropertyActionBoard({
           </h2>
           <p className="mt-1 max-w-3xl text-sm text-bo-neutral-600">{t('shoppermind.actionBoard.subtitle')}</p>
         </div>
-        <EvidenceMeter
-          verifiedShare={verifiedShare}
-          claims={data.evidenceClaims.length}
-          sources={data.sources.length}
-        />
-      </div>
-      {onSelectProperty && (
-        <div className="mb-5">
-          <PropertySegmentedSelector
-            label={t('shoppermind.actions.selectProperty')}
-            options={propertyOptions}
-            value={selectedPropertyId}
-            onChange={onSelectProperty}
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-start">
+          {onSelectProperty && (
+            <div className="w-full min-w-0 lg:w-[360px]">
+              <PropertySegmentedSelector
+                label={t('shoppermind.actions.selectProperty')}
+                options={propertyOptions}
+                value={selectedPropertyId}
+                onChange={onSelectProperty}
+              />
+            </div>
+          )}
+          <EvidenceMeter
+            verifiedShare={verifiedShare}
+            claims={data.evidenceClaims.length}
+            sources={data.sources.length}
           />
         </div>
-      )}
+      </div>
 
       <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
         <div className="space-y-3">
@@ -110,13 +132,21 @@ export function PropertyActionBoard({
           actions={data.recommendations}
           labels={{
             impactVsEffort: t('shoppermind.actionBoard.impactVsEffort'),
-            highImpact: t('shoppermind.actionBoard.highImpact'),
-            highEffort: t('shoppermind.actionBoard.highEffort'),
+            prioritySummary: t('shoppermind.actionBoard.prioritySummary'),
             actionCoverage: t('shoppermind.actionBoard.actionCoverage'),
             decisionContext: t('shoppermind.actionBoard.decisionContext'),
             decisionContextBody: t('shoppermind.actionBoard.decisionContextBody', {
               count: data.llmReadyContext.citationIds.length,
             }),
+            priorityLabels: actionLabels.priorityLabels,
+            zoneLabels: {
+              food: t('shoppermind.actionBoard.zones.food'),
+              health: t('shoppermind.actionBoard.zones.health'),
+              campaign: t('shoppermind.actionBoard.zones.campaign'),
+              services: t('shoppermind.actionBoard.zones.services'),
+              leisure: t('shoppermind.actionBoard.zones.leisure'),
+              'mall-wide': t('shoppermind.actionBoard.zones.mallWide'),
+            },
           }}
         />
       </div>

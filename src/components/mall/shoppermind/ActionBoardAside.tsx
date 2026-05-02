@@ -1,22 +1,16 @@
 'use client';
 
-import { BarChart3, Gauge, Sparkles } from 'lucide-react';
+import { BarChart3, ListChecks, Sparkles } from 'lucide-react';
 import type { PropertyActionRecommendation } from '@stelthion/shoppermind-client-types';
-
-const impactRank: Record<string, number> = { low: 1, medium: 2, high: 3 };
-const effortRank: Record<string, number> = { low: 1, medium: 2, high: 3 };
 
 export interface ActionBoardAsideLabels {
   impactVsEffort: string;
-  highImpact: string;
-  highEffort: string;
+  prioritySummary: string;
   actionCoverage: string;
   decisionContext: string;
   decisionContextBody: string;
-}
-
-function label(value: string): string {
-  return value.replace(/_/g, ' ');
+  priorityLabels: Record<PropertyActionRecommendation['priority'], string>;
+  zoneLabels: Record<string, string>;
 }
 
 function zoneCounts(actions: PropertyActionRecommendation[]) {
@@ -30,18 +24,17 @@ function zoneCounts(actions: PropertyActionRecommendation[]) {
     .slice(0, 6);
 }
 
-function bubblePosition(action: PropertyActionRecommendation, index: number, actions: PropertyActionRecommendation[]) {
-  const sameCell = actions.filter((candidate) => candidate.effort === action.effort && candidate.impact === action.impact);
-  const cellIndex = sameCell.findIndex((candidate) => candidate.id === action.id);
-  const offsets = [
-    [0, 0], [6, 0], [-6, 0], [0, 6], [0, -6], [6, 6], [-6, -6], [6, -6], [-6, 6],
-  ];
-  const [xOffset, yOffset] = offsets[cellIndex] ?? [((cellIndex % 3) - 1) * 8, Math.floor(cellIndex / 3) * 7];
-  return {
-    left: `${18 + (effortRank[action.effort] - 1) * 34 + xOffset}%`,
-    bottom: `${18 + (impactRank[action.impact] - 1) * 34 + yOffset}%`,
-    label: index + 1,
-  };
+function priorityCounts(actions: PropertyActionRecommendation[]) {
+  return (['critical', 'high', 'medium'] as const).map((priority) => ({
+    priority,
+    count: actions.filter((action) => action.priority === priority).length,
+  }));
+}
+
+function priorityTone(priority: PropertyActionRecommendation['priority']): string {
+  if (priority === 'critical') return 'bg-bo-error';
+  if (priority === 'high') return 'bg-bo-warning';
+  return 'bg-bo-primary-600';
 }
 
 export function ActionBoardAside({
@@ -53,30 +46,28 @@ export function ActionBoardAside({
 }) {
   const zones = zoneCounts(actions);
   const maxZone = Math.max(1, ...zones.map((zone) => zone.count));
+  const priorities = priorityCounts(actions);
+  const maxPriority = Math.max(1, ...priorities.map((priority) => priority.count));
 
   return (
     <aside className="space-y-4">
       <div className="rounded-xl border border-bo-neutral-200 bg-bo-neutral-50/80 p-4">
         <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-bo-neutral-950">
-          <Gauge size={16} className="text-bo-primary-600" />
-          {labels.impactVsEffort}
+          <ListChecks size={16} className="text-bo-primary-600" />
+          {labels.prioritySummary}
         </div>
-        <div className="relative h-56 overflow-hidden rounded-lg border border-bo-neutral-200 bg-white">
-          <div className="absolute left-3 top-3 text-[10px] uppercase tracking-wider text-bo-neutral-400">{labels.highImpact}</div>
-          <div className="absolute bottom-3 right-3 text-[10px] uppercase tracking-wider text-bo-neutral-400">{labels.highEffort}</div>
-          {actions.map((action, index) => {
-            const position = bubblePosition(action, index, actions);
-            return (
-              <div
-                key={action.id}
-                title={action.title}
-                className="absolute flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-bo-primary-600 text-[11px] font-semibold text-white shadow"
-                style={{ left: position.left, bottom: position.bottom }}
-              >
-                {position.label}
+        <div className="space-y-2">
+          {priorities.map((item) => (
+            <div key={item.priority}>
+              <div className="mb-1 flex justify-between gap-2 text-xs text-bo-neutral-600">
+                <span>{labels.priorityLabels[item.priority]}</span>
+                <span className="tabular-nums">{item.count}</span>
               </div>
-            );
-          })}
+              <div className="h-2.5 overflow-hidden rounded-full border border-bo-neutral-200 bg-white">
+                <div className={`h-full ${priorityTone(item.priority)}`} style={{ width: `${(item.count / maxPriority) * 100}%` }} />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -89,11 +80,11 @@ export function ActionBoardAside({
           {zones.map((zone) => (
             <div key={zone.zone}>
               <div className="mb-1 flex justify-between gap-2 text-xs text-bo-neutral-600">
-                <span className="capitalize">{label(zone.zone)}</span>
+                <span>{labels.zoneLabels[zone.zone] ?? zone.zone}</span>
                 <span className="tabular-nums">{zone.count}</span>
               </div>
-              <div className="h-2 overflow-hidden rounded-full border border-bo-neutral-200 bg-white">
-                <div className="h-full bg-bo-accent" style={{ width: `${(zone.count / maxZone) * 100}%` }} />
+              <div className="h-2.5 overflow-hidden rounded-full border border-bo-neutral-200 bg-white">
+                <div className="h-full bg-bo-primary-600" style={{ width: `${(zone.count / maxZone) * 100}%` }} />
               </div>
             </div>
           ))}

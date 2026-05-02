@@ -495,6 +495,7 @@
       "highImpact": "High impact",
       "highEffort": "High effort",
       "actionCoverage": "Action coverage",
+      "prioritySummary": "Priority mix",
       "decisionContext": "Decision support",
       "decisionContextBody": "The recommendations include {{count}} verified citations that can later ground a tailored AI model.",
       "effort": "Effort",
@@ -509,6 +510,34 @@
       "discussAssistant": "Discuss with Assistant",
       "priority": "Priority",
       "property": "Property",
+      "priorities": {
+        "critical": "Critical",
+        "high": "High",
+        "medium": "Medium"
+      },
+      "efforts": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "impacts": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "timeHorizons": {
+        "thisWeek": "This week",
+        "thirtyDays": "30 days",
+        "ninetyDays": "90 days"
+      },
+      "zones": {
+        "food": "Food and restaurants",
+        "health": "Health and wellness",
+        "campaign": "Campaigns and media",
+        "services": "Services",
+        "leisure": "Leisure",
+        "mallWide": "Mall-wide"
+      },
       "actionTypes": {
         "operations": "Activate daily visits",
         "campaign": "Launch targeted campaign",

@@ -504,6 +504,7 @@
       "highImpact": "Hög effekt",
       "highEffort": "Stor arbetsinsats",
       "actionCoverage": "Åtgärdernas täckning",
+      "prioritySummary": "Prioritetsfördelning",
       "decisionContext": "Beslutsstöd",
       "decisionContextBody": "Rekommendationerna innehåller {{count}} verifierade hänvisningar som senare kan ligga till grund för en skräddarsydd AI-modell.",
       "effort": "Arbetsinsats",
@@ -518,6 +519,34 @@
       "discussAssistant": "Diskutera med assistenten",
       "priority": "Prioritet",
       "property": "Fastighet",
+      "priorities": {
+        "critical": "Kritisk",
+        "high": "Hög",
+        "medium": "Medel"
+      },
+      "efforts": {
+        "low": "Låg",
+        "medium": "Medel",
+        "high": "Hög"
+      },
+      "impacts": {
+        "low": "Låg",
+        "medium": "Medel",
+        "high": "Hög"
+      },
+      "timeHorizons": {
+        "thisWeek": "Denna vecka",
+        "thirtyDays": "30 dagar",
+        "ninetyDays": "90 dagar"
+      },
+      "zones": {
+        "food": "Mat och restauranger",
+        "health": "Hälsa och wellness",
+        "campaign": "Kampanjer och media",
+        "services": "Tjänster",
+        "leisure": "Fritid",
+        "mallWide": "Hela köpcentrumet"
+      },
       "actionTypes": {
         "operations": "Aktivera vardagsbesök",
         "campaign": "Starta riktad kampanj",
