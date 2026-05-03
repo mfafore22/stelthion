@@ -4,7 +4,6 @@
  * Allows users to create tailored agents by combining capabilities.
  */
 
-import { AgentRole } from '@/lib/gcm-types';
 import { CustomAgentConfig, AgentCapability } from './types';
 
 /**
@@ -237,10 +236,6 @@ export class CustomAgentBuilder {
         }
       : undefined;
 
-    // Collect all tools
-    const allTools = capabilities.flatMap((c) => c.tools);
-    const uniqueTools = [...new Set(allTools)];
-
     return {
       id: `custom-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       name: config.name,
@@ -398,7 +393,7 @@ Available tools: ${uniqueTools.join(', ')}
 Guidelines:
 - Always provide accurate, data-driven insights
 - Use tools extensively to retrieve and analyze data
-- Tailor your responses to the Finnish retail context (Ideapark, etc.)
+- Tailor your responses to the scoped property's market, customer, and operating context
 - Be aware of Finnish holidays and seasons (Vappu, Juhannus, Christmas, etc.)
 - Provide actionable recommendations
 - If you're uncertain, acknowledge it and suggest alternatives

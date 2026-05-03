@@ -12,7 +12,7 @@ import React from 'react';
 import { Sun, Users, Calendar, Car, Train, ClipboardList, TrendingUp, BarChart3 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useConcierge } from './ConciergeContext';
-import { isMallId } from '@/lib/mall/ids';
+import { canonicalizeMallId } from '@/lib/mall/ids';
 
 interface QuickActionChipsProps {
   onSend: (message: string) => void;
@@ -275,8 +275,11 @@ export function QuickActionChips({ onSend, disabled = false }: QuickActionChipsP
 
   const agentRole = activeConversation?.agentRole;
   const baseChips = (agentRole && AGENT_CHIPS[agentRole]) || GENERAL_CHIPS;
-  const hasIdeaparkTransportData = isMallId(mallId, 'ideapark-lempaala');
-  const chips = hasIdeaparkTransportData
+  const canonicalMallId = canonicalizeMallId(mallId);
+  const hasLocationData = canonicalMallId
+    ? ['ideapark-lempaala', 'realidea-sello', 'realidea-tripla'].includes(canonicalMallId)
+    : false;
+  const chips = hasLocationData
     ? baseChips
     : baseChips
       .filter((chip) => chip.labelKey !== 'concierge.quickAction.parking' && chip.labelKey !== 'concierge.quickAction.transport')
