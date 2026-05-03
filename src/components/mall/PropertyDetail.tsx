@@ -27,7 +27,7 @@ import { EventsCalendar } from './EventsCalendar';
 import { MallKPICard } from './ui/MallKPICard';
 import { useMallDetail } from '@/hooks/mall/useMallData';
 import { useMallIdentity } from '@/hooks/mall/useMallIdentity';
-import { isMallId } from '@/lib/mall/ids';
+import { canonicalizeMallId } from '@/lib/mall/ids';
 import type { HSLAccessibility, NysseAccessibility, VRConnections, CatchmentDemographics, ParkingData, LiveDepartures } from '@/lib/types/transport';
 import type { EventsData } from '@/lib/types/events';
 import { getCurrentFootfall } from '@/lib/data/footfall';
@@ -40,6 +40,15 @@ const BASE_DELTAS = {
   dwellDelta: 12,
   conversionDelta: 5.2,
 };
+
+type PropertyAlert = { time: string; level: 'warning' | 'info'; message: string };
+
+const LOCATION_DATA_MALLS = new Set(['ideapark-lempaala', 'realidea-sello', 'realidea-tripla']);
+
+function hasLocationData(mallId: string): boolean {
+  const canonical = canonicalizeMallId(mallId);
+  return canonical ? LOCATION_DATA_MALLS.has(canonical) : false;
+}
 
 interface PropertyDetailProps {
   mallId: string;
@@ -72,7 +81,7 @@ export function PropertyDetail({ mallId: mallIdProp, showPredicted = false }: Pr
       dwellTime: f.dwellTimeMinutes,
       conversionRate: f.conversionRate,
       ...BASE_DELTAS,
-      alerts: [] as any[],
+      alerts: [] as PropertyAlert[],
     };
   }, []);
 
@@ -159,7 +168,7 @@ export function PropertyDetail({ mallId: mallIdProp, showPredicted = false }: Pr
     }
 
     // Check each parking level for high utilization during operating hours
-    parkingData.levels.forEach((level: any) => {
+    parkingData.levels.forEach((level) => {
       const utilization = (level.currentOccupancy / level.capacity) * 100;
       if (utilization >= 90) {
         generatedAlerts.push({
@@ -185,7 +194,7 @@ export function PropertyDetail({ mallId: mallIdProp, showPredicted = false }: Pr
   // Fetch transport, demographics, and parking data
   useEffect(() => {
     const fetchLocationData = async () => {
-      if (!isMallId(mallId, 'ideapark-lempaala')) return;
+      if (!hasLocationData(mallId)) return;
 
       setLocationDataLoading(true);
       try {
@@ -225,7 +234,7 @@ export function PropertyDetail({ mallId: mallIdProp, showPredicted = false }: Pr
 
   // Fetch live departures (updates every 30 seconds)
   useEffect(() => {
-    if (!isMallId(mallId, 'ideapark-lempaala')) return;
+    if (!hasLocationData(mallId)) return;
 
     const fetchDepartures = async () => {
       try {
@@ -496,7 +505,7 @@ export function PropertyDetail({ mallId: mallIdProp, showPredicted = false }: Pr
                   selectedZone={selectedZone}
                   onZoneSelect={setSelectedZone}
                   mallId={mallId}
-                  mallName={mallName || 'Ideapark Lempäälä'}
+                  mallName={mallName || mallId}
                 />
               )}
 

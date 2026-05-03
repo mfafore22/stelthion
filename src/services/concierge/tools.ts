@@ -9,18 +9,22 @@
 import { fetchFmiObservation, fetchFmiForecast, classifyCondition, classifyForecastCondition } from '@/lib/weather/fmi';
 import { getMallCoordinates } from '@/lib/weather/utils';
 import { getIdeaparkUpcomingEvents } from '@/lib/data/ideaparkEvents';
+import { getRealideaUpcomingEvents } from '@/lib/data/realideaEvents';
 import { getZoneVisitors, IDEAPARK_ZONES, IDEAPARK_UPPER_ZONES } from '@/lib/data/ideaparkZones';
-import { IDEAPARK_ADJACENCY, getAllZoneIds, areAdjacent } from '@/lib/data/ideaparkAdjacency';
+import { IDEAPARK_ADJACENCY, getAllZoneIds } from '@/lib/data/ideaparkAdjacency';
 import { GROUND_FLOOR_STORES, GROUND_FLOOR_ENTRANCES } from '@/lib/data/ideaparkStorePositions';
 import {
   getIdeaparkParkingSnapshot,
   getIdeaparkLiveDepartures,
   ideaparkCatchmentDemographics,
 } from '@/lib/data/ideaparkTransport';
+import { getRealideaLiveDepartures } from '@/lib/data/realideaDepartures';
+import { realideaCatchments, getRealideaParkingSnapshot } from '@/lib/data/realideaLocationMetrics';
 import prisma from '@/app/lib/prisma';
 import { getCounterProfile, getLiveFootfall } from '@/lib/data/liveFootfall';
 import { getShopperMindClient, resolveMarketIdFromMall } from '@/lib/shoppermind-client';
 import { tServer, weekdayName } from './tool-i18n';
+import { canonicalizeMallId, isMallId } from '@/lib/mall/ids';
 
 // ── Types ─────────────────────────────────────────────────
 
@@ -47,7 +51,28 @@ export interface ToolDefinition {
 
 // ── Tool Implementations ──────────────────────────────────
 
+function ideaparkOnly(mallId: string, feature: string): ToolResult | null {
+  if (isMallId(mallId, 'ideapark-lempaala')) return null;
+  return {
+    text: `${feature} data is not connected for this property yet. I will not use another property's demo data for this customer.`,
+  };
+}
+
+const LOCATION_DATA_MALLS = new Set(['ideapark-lempaala', 'realidea-sello', 'realidea-tripla']);
+
+function resolveLocationMallId(mallId: string): string | null {
+  const canonical = canonicalizeMallId(mallId);
+  return canonical && LOCATION_DATA_MALLS.has(canonical) ? canonical : null;
+}
+
+function locationDataUnavailable(feature: string): ToolResult {
+  return {
+    text: `${feature} data is not connected for this property yet. I will not use another property's demo data for this customer.`,
+  };
+}
+
 async function getCurrentWeather(_params: Record<string, unknown>, mallId: string, language?: string): Promise<ToolResult> {
+  if (!canonicalizeMallId(mallId)) return locationDataUnavailable('Weather');
   const coords = getMallCoordinates(mallId);
   const obs = await fetchFmiObservation(coords.lat, coords.lon, coords.fmiPlace);
 
@@ -76,6 +101,7 @@ async function getCurrentWeather(_params: Record<string, unknown>, mallId: strin
 }
 
 async function getWeatherForecast(params: Record<string, unknown>, mallId: string, language?: string): Promise<ToolResult> {
+  if (!canonicalizeMallId(mallId)) return locationDataUnavailable('Weather forecast');
   const coords = getMallCoordinates(mallId);
   const hours = typeof params.hours === 'number' ? params.hours : 120;
   const forecast = await fetchFmiForecast(coords.lat, coords.lon, hours, coords.fmiPlace);
@@ -194,8 +220,13 @@ async function getFootfallForDate(params: Record<string, unknown>, mallId: strin
   };
 }
 
-async function getEvents(_params: Record<string, unknown>, _mallId: string, language?: string): Promise<ToolResult> {
-  const data = getIdeaparkUpcomingEvents();
+async function getEvents(_params: Record<string, unknown>, mallId: string, language?: string): Promise<ToolResult> {
+  const locationMallId = resolveLocationMallId(mallId);
+  if (!locationMallId) return locationDataUnavailable('Events');
+  const data = isMallId(locationMallId, 'ideapark-lempaala')
+    ? getIdeaparkUpcomingEvents()
+    : getRealideaUpcomingEvents(locationMallId);
+  if (!data) return locationDataUnavailable('Events');
   const events = data.upcomingEvents;
 
   const summary = events.slice(0, 5).map(e => {
@@ -204,7 +235,7 @@ async function getEvents(_params: Record<string, unknown>, _mallId: string, lang
   }).join('\n');
 
   return {
-    text: `${events.length} upcoming events near Ideapark:\n${summary}`,
+    text: `${events.length} upcoming events near this property:\n${summary}`,
     attachment: {
       type: 'event_card',
       title: tServer(language, 'concierge.attachments.events.title'),
@@ -219,8 +250,13 @@ async function getEvents(_params: Record<string, unknown>, _mallId: string, lang
   };
 }
 
-async function getParkingStatus(_params: Record<string, unknown>, _mallId: string, language?: string): Promise<ToolResult> {
-  const snapshot = getIdeaparkParkingSnapshot(new Date());
+async function getParkingStatus(_params: Record<string, unknown>, mallId: string, language?: string): Promise<ToolResult> {
+  const locationMallId = resolveLocationMallId(mallId);
+  if (!locationMallId) return locationDataUnavailable('Parking');
+  const snapshot = isMallId(locationMallId, 'ideapark-lempaala')
+    ? getIdeaparkParkingSnapshot(new Date())
+    : getRealideaParkingSnapshot(locationMallId, new Date());
+  if (!snapshot) return locationDataUnavailable('Parking');
 
   const levelSummary = snapshot.levels.map(l =>
     `${l.id}: ${l.currentOccupancy}/${l.capacity} (${Math.round(l.currentOccupancy / l.capacity * 100)}%)`
@@ -241,8 +277,13 @@ async function getParkingStatus(_params: Record<string, unknown>, _mallId: strin
   };
 }
 
-async function getTransport(_params: Record<string, unknown>, _mallId: string, language?: string): Promise<ToolResult> {
-  const departures = getIdeaparkLiveDepartures(new Date());
+async function getTransport(_params: Record<string, unknown>, mallId: string, language?: string): Promise<ToolResult> {
+  const locationMallId = resolveLocationMallId(mallId);
+  if (!locationMallId) return locationDataUnavailable('Transport');
+  const departures = isMallId(locationMallId, 'ideapark-lempaala')
+    ? getIdeaparkLiveDepartures(new Date())
+    : getRealideaLiveDepartures(locationMallId, new Date());
+  if (!departures) return locationDataUnavailable('Transport');
 
   const nextTrains = departures.vrTrains?.slice(0, 3).map(d =>
     `${d.scheduledTime} ${d.destination}${d.delayMinutes ? ` (${d.delayMinutes} min late)` : ''}`
@@ -267,8 +308,13 @@ async function getTransport(_params: Record<string, unknown>, _mallId: string, l
   };
 }
 
-async function getDemographics(_params: Record<string, unknown>, _mallId: string): Promise<ToolResult> {
-  const demo = ideaparkCatchmentDemographics;
+async function getDemographics(_params: Record<string, unknown>, mallId: string): Promise<ToolResult> {
+  const locationMallId = resolveLocationMallId(mallId);
+  if (!locationMallId) return locationDataUnavailable('Demographics');
+  const demo = isMallId(locationMallId, 'ideapark-lempaala')
+    ? ideaparkCatchmentDemographics
+    : realideaCatchments[locationMallId as keyof typeof realideaCatchments];
+  if (!demo) return locationDataUnavailable('Demographics');
   const primary = demo.zones[0];
 
   return {
@@ -318,6 +364,8 @@ async function getCurrentVisitors(_params: Record<string, unknown>, mallId: stri
 }
 
 async function getZoneInfo(params: Record<string, unknown>, mallId: string): Promise<ToolResult> {
+  const blocked = ideaparkOnly(mallId, 'Zone');
+  if (blocked) return blocked;
   const zoneId = params.zoneId as string | undefined;
   const allZones = [...IDEAPARK_ZONES, ...IDEAPARK_UPPER_ZONES];
 
@@ -338,7 +386,9 @@ async function getZoneInfo(params: Record<string, unknown>, mallId: string): Pro
   };
 }
 
-async function getStoreInfo(params: Record<string, unknown>, _mallId: string): Promise<ToolResult> {
+async function getStoreInfo(params: Record<string, unknown>, mallId: string): Promise<ToolResult> {
+  const blocked = ideaparkOnly(mallId, 'Store');
+  if (blocked) return blocked;
   const query = (params.name as string || '').toLowerCase();
 
   if (query) {
@@ -357,7 +407,9 @@ async function getStoreInfo(params: Record<string, unknown>, _mallId: string): P
   };
 }
 
-async function getZoneFlow(params: Record<string, unknown>, _mallId: string): Promise<ToolResult> {
+async function getZoneFlow(params: Record<string, unknown>, mallId: string): Promise<ToolResult> {
+  const blocked = ideaparkOnly(mallId, 'Zone flow');
+  if (blocked) return blocked;
   const zoneId = params.zoneId as string | undefined;
 
   if (zoneId) {
@@ -612,7 +664,7 @@ export const CONCIERGE_TOOLS: ToolDefinition[] = [
   },
   {
     name: 'get_shoppermind_trends',
-    description: 'Query Stelthion ShopperMind for current industry trends and phenomena. For Finland/Ideapark: retail and consumer trends, tenancy shifts, footfall drivers. For UAE/Dubai: property-industry trends — real estate, hospitality, commercial, residential. Returns scored phenomena with velocity/acceleration and the daily Signal of the Day narrative. Use this when the user asks about trends, market signals, what is emerging/fading, industry momentum, or competitive landscape.',
+    description: 'Query Stelthion ShopperMind for current industry trends and phenomena. Finland returns retail and consumer trends, tenancy shifts, and footfall drivers. UAE/Dubai returns property-industry trends such as real estate, hospitality, commercial, and residential signals. Returns scored phenomena with velocity/acceleration and the daily Signal of the Day narrative. Use this when the user asks about trends, market signals, what is emerging/fading, industry momentum, or competitive landscape.',
     parameters: {
       country: { type: 'string', description: 'Country code: "FI" for Finland/retail or "AE" for UAE/property (auto-detected from property if omitted)', required: false },
       query: { type: 'string', description: 'Search term to filter phenomena (e.g. "fashion", "off-plan", "hospitality")', required: false },

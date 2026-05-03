@@ -43,7 +43,7 @@ export async function GET(request: Request) {
     condition = classified.condition;
     description = classified.description;
     icon = classified.icon;
-    source = `FMI Open Data — ${coords.fmiPlace || mallId} (${coords.lat}°N, ${coords.lon}°E)`;
+    source = `FMI Open Data — ${coords.label || coords.fmiPlace || mallId} (${coords.lat}°N, ${coords.lon}°E)`;
   } else {
     const SEASON_TEMP: Record<string, number> = { spring: 8, summer: 20, autumn: 6, winter: -4 };
     const SEASON_CONDITIONS: Record<string, { condition: string; description: string; icon: string }> = {
@@ -64,7 +64,7 @@ export async function GET(request: Request) {
     description = seasonCond.description;
     icon = seasonCond.icon;
     precipitation = condition === 'Rain' ? 1.2 : condition === 'Snow' ? 0.8 : 0;
-    source = `Stelthion Simulation — ${mallId} (${coords.lat}°N, ${coords.lon}°E)`;
+    source = `Stelthion Simulation — ${coords.label || mallId} (${coords.lat}°N, ${coords.lon}°E)`;
   }
 
   return NextResponse.json({
