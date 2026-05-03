@@ -2,187 +2,1117 @@
   "id": "uae-diversification",
   "country": "UAE",
   "timespan": "2030+",
-  "updatedAt": "2026-05-01",
+  "updatedAt": "2026-05-03",
   "placeholder": false,
   "i18n": {
     "fi": {
-      "title": "Arabiemiirikuntien diversifikaatio",
-      "intro": "IMF arvioi UAE:n BKT:n kasvavan 4,8 prosenttia 2025 ja 5,0 prosenttia 2026. Kasvu nojaa yhä enemmän öljyn ulkopuolisiin sektoreihin: turismi, ulkomainen pääoma ja teknologia. Dubai-tyyppiset super-regional-keskukset elävät turismin ja luksuksen ehdoilla, kun taas yhteisökeskukset palvelevat ekspatti­yhteisöjen arkea.",
-      "redString": "Punainen lanka: UAE:ssa 'value' ei tarkoita halpaa, vaan paremmin segmentoitua mukavuutta. Premium ja convenience -kerrokset ovat erilliset tarinat samalla markkinalla.",
+      "title": "Arabiemiirikuntien monipuolistuminen",
+      "intro": "UAE:n kasvu nojaa ei-öljysektoreihin, matkailuun, kiinteistöihin ja globaaliin pääomaan. Toukokuun 2026 Päänäkymässä Iranin konflikti ja Hormuzin häiriö ovat kriittinen riski: ne vaikuttavat energiakustannuksiin, vakuutuksiin, lentoyhteyksiin, tapahtumiin ja premium-tuonnin saatavuuteen. Reutersin mukaan UAE jätti OPECin ja OPEC+:n 1.5.2026, mikä lisää energia-autonomian mahdollisuutta mutta myös alueellisen kitkan riskiä.",
+      "redString": "Punainen lanka: UAE:n kauppakeskuksen pitää olla samaan aikaan turvallinen hubi ja kriisinkestävä operaatio. Polku A on hallittu kasvu, polku B on Hormuz- ja energia-sokki, polku C on OPEC-eron jälkeinen turvallisen hubin investointi- ja matkailuvoitto.",
       "pathsLabel": "Kolme polkua vuoteen 2035",
       "paths": [
         {
-          "id": "a", "title": "Polku A: Vakaa kasvu", "tone": "neutraali",
-          "summary": "Kasvu jatkuu 4–5 prosentissa. Premium-keskukset hyötyvät turistivirrasta, yhteisökeskukset palvelevat ekspatteja.",
-          "macro": "BKT kasvaa 4,5–5 prosenttia 2026–2030. Inflaatio 2–3 prosenttia. Ulkomainen pääoma jatkaa virtaa kiinteistöihin. Vuokrahinnat super-regional-keskuksissa nousivat 14,9 prosenttia 2024.",
-          "consumer": "Tuloluokat polarisoituvat. Ekspattiyhteisöt arvostavat conveniencea ja palveluita. Turistit etsivät korkealuokkaista luksusta ja viihdettä.",
-          "retail": "Luksus, beauty ja wellness johtavat. Family entertainment kasvaa. Convenience-formaatit yhteisökeskuksissa kasvavat 8–10 prosenttia.",
-          "property": "Tuottovaateet pysyvät matalina A-luokan kohteissa. Sijoittajakysyntä jatkuu kansainvälisesti.",
-          "mallImpact": "The Dubai Mall ja Mall of the Emirates pidentävät premium-johtoasemaansa. Yhteisökeskukset Dubaissa ja Abu Dhabissa kasvattavat 10–15 prosenttia palvelu- ja terveyskerrosta.",
+          "id": "a",
+          "title": "Polku A: Hallittu kasvu riskipreemion alla",
+          "tone": "neutraali",
+          "summary": "Kasvu jatkuu, mutta jokaisessa päätöksessä hinnoitellaan Hormuzin, vakuutusten ja energian riskipreemio.",
+          "macro": "CBUAE arvioi vahvaa 5,6 prosentin kasvua 2025-2026 ja maltillista inflaatiota. OPEC-eron jälkeen tuotanto- ja energiapolitiikka voi olla joustavampaa, mutta Hormuzin häiriö pitää logistiikka- ja energiakustannukset tarkkailussa.",
+          "consumer": "Turistit, ekspatit ja paikalliset ostavat edelleen, jos turvallisuus, saavutettavuus ja palvelu ovat näkyviä. Arvo tarkoittaa luotettavaa saatavuutta, ei halpuutta.",
+          "retail": "Premium, kauneus, wellness, F&B ja perheviihde pitävät vetovoiman. Tuontituotteissa ja tapahtumissa tarvitaan varastosuunnitelma ja vaihtoehtoiset kampanjat.",
+          "property": "A-luokan tuottovaateet kestävät, mutta vakuutus-, energia- ja rahoituspreemio pitää kirjata vuokralais- ja investointipäätöksiin.",
+          "mallImpact": "Päänäkymässä polku A tarkoittaa toimintamallia: seuraa turistivirtaa, energiahintaa, vakuutuspreemiota, varastoriskiä ja tapahtumakalenterin peruutusriskiä samassa päätösnäkymässä.",
           "keyNumbers": [
-            { "label": "BKT-kasvu",         "value": "4,5–5 %",  "hint": "vuodessa 2026–2030" },
-            { "label": "Prime-vuokrat",     "value": "+10–15 %", "hint": "vuodessa super-regionaaleissa" },
-            { "label": "Turistivirta",      "value": "+8 %",     "hint": "vuodessa" },
-            { "label": "Vuokrausaste",      "value": "vahva",    "hint": "A-luokassa" }
+            {
+              "label": "BKT-kasvu",
+              "value": "5,6 %",
+              "hint": "2025e ja 2026f"
+            },
+            {
+              "label": "Ei-öljy-BKT",
+              "value": "6,1 %",
+              "hint": "tammi–syyskuu 2025"
+            },
+            {
+              "label": "Inflaatio",
+              "value": "1,8 %",
+              "hint": "2026f"
+            },
+            {
+              "label": "Dubain kävijät",
+              "value": "19,59m",
+              "hint": "2025, +5 % v/v"
+            },
+            {
+              "label": "Prime-vuokrat",
+              "value": "+9–15 %",
+              "hint": "Dubai superalueelliset / Fashion Avenue"
+            },
+            {
+              "label": "UAE PMI",
+              "value": "54,9",
+              "hint": "tammikuu 2026"
+            }
           ],
           "evidenceCharts": [
-            { "label": "BKT-kasvu, %", "unit": "%", "series": [{"p":"2024","v":3.5},{"p":"2025","v":4.8},{"p":"2026","v":5.0},{"p":"2027","v":4.8},{"p":"2028","v":4.5},{"p":"2029","v":4.5},{"p":"2030","v":4.5}] }
+            {
+              "label": "BKT-kasvu, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2022",
+                  "v": 7.5
+                },
+                {
+                  "p": "2023",
+                  "v": 4.3
+                },
+                {
+                  "p": "2024",
+                  "v": 4
+                },
+                {
+                  "p": "2025e",
+                  "v": 5.6
+                },
+                {
+                  "p": "2026f",
+                  "v": 5.6
+                },
+                {
+                  "p": "2027f",
+                  "v": 4.4
+                }
+              ]
+            },
+            {
+              "label": "Inflaatio, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2023",
+                  "v": 1.6
+                },
+                {
+                  "p": "2024",
+                  "v": 1.7
+                },
+                {
+                  "p": "2025",
+                  "v": 1.3
+                },
+                {
+                  "p": "2026f",
+                  "v": 1.8
+                },
+                {
+                  "p": "2027f",
+                  "v": 2
+                }
+              ]
+            },
+            {
+              "label": "Dubain kansainväliset kävijät, miljoonaa",
+              "unit": "m",
+              "series": [
+                {
+                  "p": "2023",
+                  "v": 17.15
+                },
+                {
+                  "p": "2024",
+                  "v": 18.72
+                },
+                {
+                  "p": "2025",
+                  "v": 19.59
+                }
+              ]
+            }
           ]
         },
         {
-          "id": "b", "title": "Polku B: Öljyn hintasokki", "tone": "synkkä",
-          "summary": "Öljyn hinnan romahdus tai geopoliittinen sokki hidastaa kasvua. Premium-keskukset kestävät paremmin kuin alueelliset.",
-          "macro": "Öljyn hinta laskee, alueellinen liikuttaminen heikkenee. BKT 2–3 prosenttia 2027–2029. Ulkomainen turistivirta laskee 15–20 prosenttia. Kruunaajaiset/maailmantapahtumat siirtyvät.",
-          "consumer": "Ekspattiyhteisöjen ostovoima säilyy, mutta turistivirran vähentyminen vaikuttaa luksusmyymälöihin. Premium-kuluttajat siirtyvät 'reachable luxury' -kategorioihin.",
-          "retail": "Luksus painuu 10–15 prosenttia. Convenience ja yhteisökeskuksissa terveys kasvaa. F&B kestää.",
-          "property": "Tuottovaateet nousevat 25–50 korkoyksikköä sekundääreissä. A-luokan kohteet säilyttävät tuottovaateensa.",
-          "mallImpact": "Premium-vuokralaiset uudelleenneuvottelevat sopimuksia. Yhteisökeskuksissa palvelu-osuus kasvaa.",
+          "id": "b",
+          "title": "Polku B: Hormuz- ja energia-sokki",
+          "tone": "synkkä",
+          "summary": "Iranin konfliktin pitkittyminen nostaa kuljetus-, vakuutus- ja energiakustannuksia ja heikentää matkailijan varmuutta.",
+          "macro": "Hormuzin sulku tai de facto -sulku nostaa öljy- ja kaasuhintoja, viivästyttää toimituksia ja kiristää rahoitusehtoja. OPEC-ero voi lisätä markkinaosuusmahdollisuutta myöhemmin, mutta sokkivaiheessa se lisää alueellisen koordinaation epävarmuutta.",
+          "consumer": "Matkailijat lyhentävät käyntiä tai lykkäävät ostoksia, jos lentoyhteydet ja turvallisuusviesti horjuvat. Paikalliset ja ekspatit siirtyvät käytännöllisiin palveluihin, ruokaan, terveyteen ja arjen mukavuuteen.",
+          "retail": "Luksus ja korkean hinnan tuontikategoriat kärsivät ensin. F&B, päivittäiset palvelut, klinikat, apteekit, lasten palvelut ja paikallinen premium kestävät paremmin.",
+          "property": "Toissijaisissa kohteissa tuottovaateet voivat nousta 25-50 korkopistettä. A-luokan kohteet säilyvät, jos käyttöaste, vakuutukset ja energiansuojaus pidetään kurissa.",
+          "mallImpact": "Päänäkymässä polku B nostaa kriittiset toimenpiteet: vuokralaisten toimitusriski, tapahtumien peruutusehdot, energian suojaus ja matkailijakampanjoiden varasuunnitelmat.",
           "keyNumbers": [
-            { "label": "BKT-kasvu",         "value": "2–3 %",     "hint": "2027–2029" },
-            { "label": "Luksus",            "value": "−10–15 %",  "hint": "myynti vs. baseline" },
-            { "label": "Turistivirta",      "value": "−15–20 %",  "hint": "ulkomailta" },
-            { "label": "Tuottovaateet",     "value": "+25–50 bps","hint": "sekundäärisissä" }
+            {
+              "label": "BKT-kasvu",
+              "value": "2–3 %",
+              "hint": "2027–2029"
+            },
+            {
+              "label": "Luksus",
+              "value": "−10–15 %",
+              "hint": "myynti suhteessa lähtötasoon"
+            },
+            {
+              "label": "Turistivirta",
+              "value": "−15–20 %",
+              "hint": "ulkomailta"
+            },
+            {
+              "label": "Tuottovaateet",
+              "value": "+25–50 kp",
+              "hint": "toissijaisissa kohteissa"
+            }
           ],
           "evidenceCharts": [
-            { "label": "BKT-kasvu, %", "unit": "%", "series": [{"p":"2024","v":3.5},{"p":"2025","v":4.8},{"p":"2026","v":4.2},{"p":"2027","v":2.5},{"p":"2028","v":2.0},{"p":"2029","v":3.0},{"p":"2030","v":3.5}] }
+            {
+              "label": "BKT-kasvu, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 3.5
+                },
+                {
+                  "p": "2025",
+                  "v": 4.8
+                },
+                {
+                  "p": "2026",
+                  "v": 4.2
+                },
+                {
+                  "p": "2027",
+                  "v": 2.5
+                },
+                {
+                  "p": "2028",
+                  "v": 2
+                },
+                {
+                  "p": "2029",
+                  "v": 3
+                },
+                {
+                  "p": "2030",
+                  "v": 3.5
+                }
+              ]
+            }
           ]
         },
         {
-          "id": "c", "title": "Polku C: Tekno-ja-turismi-veto", "tone": "valoisa",
-          "summary": "AI, fintech ja luksusturismi nostavat kasvun 6 prosenttiin. Dubai- ja Abu Dhabi -alueet skaalautuvat globaaleiksi destinaatioiksi.",
-          "macro": "BKT kasvaa 5,5–6 prosenttia 2030-luvulla. Diversifikaatio onnistuu, ulkomainen pääoma kasvaa edelleen. Kestävät-/EXPO-tapahtumat ankkuroivat turistivirran.",
-          "consumer": "Ostovoima kasvaa. Premium-segmentit räjähtävät. Wellness, beauty ja kokemukset johtavat.",
-          "retail": "Luksus ja premium kasvavat 12–15 prosenttia vuodessa. Branded resale ja korkealaatuinen ravintola siirtyy yhteisökeskuksiin.",
-          "property": "Tuottovaateet laskevat 50 korkoyksikköä. Uusi rakentaminen monikäyttöisesti elpyy. Riad-/hotel-sekoitukset kasvavat.",
-          "mallImpact": "Dubai Mall -tyyppisten lippulaivat kasvavat 20 prosenttia. Yhteisökeskuksissa wellness-/klinikka-osuus kasvaa 15 prosenttia pinta-alasta.",
+          "id": "c",
+          "title": "Polku C: Turvallinen hubi ja energia-autonomia",
+          "tone": "valoisa",
+          "summary": "Konfliktin rauhoittuessa UAE hyödyntää turvallisen keskuksen asemaa, OPEC-eron tuomaa joustavuutta ja matkailu-/pääomavirtoja.",
+          "macro": "Jos Hormuz avautuu ja öljymarkkina normalisoituu, OPECin ulkopuolinen tuotantostrategia voi tukea investointeja, vientituloja ja globaalin energiapartnerin asemaa. Ei-öljysektorit, matkailu ja kiinteistöt vahvistuvat.",
+          "consumer": "Turistit ja kansainvälinen pääoma suosivat vakaata, palveluvalmista ja turvallista hubia. Premium-asiakas odottaa helppoa kokonaispalvelua: kuljetus, hotelli, tax-free, concierge ja varaukset.",
+          "retail": "Luksus, hotellit, wellness, viihde, sijoittajapalvelut ja huippuravintolat kasvavat. Yhteisökeskuksissa premium-arjen palvelut leviävät ekspattien kysynnän mukana.",
+          "property": "A-luokan tuottovaateet voivat laskea 25-50 korkopistettä, jos turvallisuuspreemio muuttuu sijoittajakysynnäksi ja rahoitus pysyy saatavilla.",
+          "mallImpact": "Päänäkymässä polku C tarkoittaa kasvun priorisointia: turvallinen asiointipolku, hotellikumppanuudet, premium-varaukset, tapahtumakalenteri ja mitattu turistikonversio.",
           "keyNumbers": [
-            { "label": "BKT-kasvu",         "value": "5,5–6 %",  "hint": "2030-luvulla" },
-            { "label": "Luksus-kasvu",      "value": "+12–15 %", "hint": "vuodessa" },
-            { "label": "Turismi",            "value": "+12 %",   "hint": "kävijät vuodessa" },
-            { "label": "Tuottovaateet",      "value": "−50 bps", "hint": "A-luokan kohteet" }
+            {
+              "label": "BKT-kasvu",
+              "value": "5,5–6 %",
+              "hint": "2030-luvulla"
+            },
+            {
+              "label": "Luksus-kasvu",
+              "value": "+12–15 %",
+              "hint": "vuodessa"
+            },
+            {
+              "label": "Turismi",
+              "value": "+12 %",
+              "hint": "kävijät vuodessa"
+            },
+            {
+              "label": "Tuottovaateet",
+              "value": "−50 kp",
+              "hint": "A-luokan kohteet"
+            }
           ],
           "evidenceCharts": [
-            { "label": "BKT-kasvu, %", "unit": "%", "series": [{"p":"2024","v":3.5},{"p":"2025","v":4.8},{"p":"2026","v":5.5},{"p":"2027","v":5.8},{"p":"2028","v":6.0},{"p":"2029","v":6.0},{"p":"2030","v":5.8}] }
+            {
+              "label": "BKT-kasvu, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 3.5
+                },
+                {
+                  "p": "2025",
+                  "v": 4.8
+                },
+                {
+                  "p": "2026",
+                  "v": 5.5
+                },
+                {
+                  "p": "2027",
+                  "v": 5.8
+                },
+                {
+                  "p": "2028",
+                  "v": 6
+                },
+                {
+                  "p": "2029",
+                  "v": 6
+                },
+                {
+                  "p": "2030",
+                  "v": 5.8
+                }
+              ]
+            }
           ]
         }
       ],
       "actionsLabel": "Toimenpide-ehdotukset kiinteistöille",
       "actionsGeneralLabel": "Kaikkia kiinteistöjä koskevat",
       "actionsGeneral": [
-        "Erotat selvästi premium-kerroksen ja convenience-kerroksen — älä yritä olla molempia samalla pinta-alalla.",
-        "Yhteisökeskuksissa: terveys, wellness, ekspatti-ystävälliset arjen palvelut.",
-        "Super-regionaaleissa: lippulaivat, food halls, viihde turistivirran ehdoilla.",
-        "Investoi sähköiseen jälleenmyyntiin ja jäljitettävyyteen premium-kategorioissa.",
+        "Erota selvästi premium-kerros ja arjen mukavuuden kerros — älä yritä olla molempia samalla pinta-alalla.",
+        "Yhteisökeskuksissa: terveys, hyvinvointi, ekspattiystävälliset arjen palvelut.",
+        "Superalueellisissa keskuksissa: lippulaivat, ruokahallit ja viihde turistivirran ehdoilla.",
+        "Investoi merkkituotteiden jälleenmyyntiin ja jäljitettävyyteen premium-kategorioissa.",
         "Mittaa erikseen turistien ja paikallisten kävijöiden konversioita."
       ],
       "actionsPerMallLabel": "Kiinteistökohtaiset ehdotukset",
       "actionsPerMall": {
         "uae-dubai-mall": {
-          "operator": "Emaar Malls", "isCompetitor": true,
-          "name": "The Dubai Mall (kilpailija, super-regional)",
+          "operator": "Emaar Malls",
+          "isCompetitor": true,
+          "name": "The Dubai Mall (kilpailija, superalueellinen)",
           "context": "Globaali turistikohde, Emaar Malls. Yli 80 miljoonaa vuosikävijää. Korkein vuokrataso, lippulaiva- ja luksusbrändien johto.",
           "items": [
             "Vertaa luksusbrändien tiheys ja kierto.",
             "Mittaa turistikävijöiden osuus (eri valuutta-segmentit).",
-            "Seuraa F&B fine-dining osuus vs. fast casual.",
-            "Tarkkaile sosiaalisen median 'instagrammable' -konseptien kalenteri.",
-            "Tarkkaile kausitapahtumia (Ramadan, kesä-tax-free)."
+            "Seuraa F&B:n fine dining -osuutta suhteessa fast casualiin.",
+            "Tarkkaile sosiaalisen median somekelpoisten konseptien kalenteria.",
+            "Tarkkaile kausitapahtumia (Ramadan, kesän tax-free-kausi)."
           ],
           "kpis": [
-            { "label": "Luksusbrändien tiheys",       "target": "vertailu", "hint": "vs. omat A-luokan kohteet" },
-            { "label": "Turistikävijöiden osuus",      "target": "vertailu", "hint": "valuutta-segmenteittäin" },
-            { "label": "Fine-dining osuus F&B:stä",   "target": "vertailu", "hint": "vs. fast casual" },
-            { "label": "Sometapahtumien tiheys",      "target": "vertailu", "hint": "instagrammable -konseptit" },
-            { "label": "Kausitapahtumien skaala",     "target": "vertailu", "hint": "Ramadan, kesä-tax-free" }
+            {
+              "label": "Luksusbrändien tiheys",
+              "target": "vertailu",
+              "hint": "vs. omat A-luokan kohteet"
+            },
+            {
+              "label": "Turistikävijöiden osuus",
+              "target": "vertailu",
+              "hint": "valuutta-segmenteittäin"
+            },
+            {
+              "label": "Fine dining -osuus F&B:stä",
+              "target": "vertailu",
+              "hint": "suhteessa fast casualiin"
+            },
+            {
+              "label": "Sometapahtumien tiheys",
+              "target": "vertailu",
+              "hint": "somekelpoiset konseptit"
+            },
+            {
+              "label": "Kausitapahtumien skaala",
+              "target": "vertailu",
+              "hint": "Ramadan, kesän tax-free-kausi"
+            }
           ]
         },
         "uae-marina-community": {
-          "operator": "Emaar / Meraas", "isCompetitor": true,
+          "operator": "Emaar / Meraas",
+          "isCompetitor": true,
           "name": "Dubai Marina, yhteisökeskus (kilpailijaesimerkki)",
-          "context": "Asuinalueen sydän ekspattiyhteisölle. Premium-päivittäistavara, terveyspalvelut, fine-dining ja arjen mukavuus.",
+          "context": "Asuinalueen sydän ekspattiyhteisölle. Premium-päivittäistavara, terveyspalvelut, fine dining ja arjen mukavuus.",
           "items": [
             "Vertaa premium-päivittäistavaran osuus.",
-            "Mittaa terveys- ja wellness-tarjontaa.",
+            "Mittaa terveys- ja hyvinvointitarjontaa.",
             "Seuraa F&B-mixiä yhteisön tarpeisiin.",
-            "Tarkkaile lojaaliuusohjelma + delivery-integraatio.",
+            "Tarkkaile kanta-asiakasohjelman ja toimitusten integraatiota.",
             "Vertaa kierrätys- ja kestävyysohjelmia."
           ],
           "kpis": [
-            { "label": "Premium-päivittäistavaran osuus", "target": "vertailu", "hint": "yhteisön tarpeet" },
-            { "label": "Terveys- ja wellness-osuus",       "target": "vertailu", "hint": "klinikat, kuntoilu" },
-            { "label": "Lojaaliusohjelman aktivointi",     "target": "vertailu", "hint": "vs. pelkkä alennus" },
-            { "label": "F&B fine-dining vs. casual",       "target": "vertailu", "hint": "ekspatti-segmentti" }
+            {
+              "label": "Premium-päivittäistavaran osuus",
+              "target": "vertailu",
+              "hint": "yhteisön tarpeet"
+            },
+            {
+              "label": "Terveys- ja hyvinvointiosuus",
+              "target": "vertailu",
+              "hint": "klinikat, kuntoilu"
+            },
+            {
+              "label": "Lojaaliusohjelman aktivointi",
+              "target": "vertailu",
+              "hint": "vs. pelkkä alennus"
+            },
+            {
+              "label": "F&B: fine dining vs. casual",
+              "target": "vertailu",
+              "hint": "ekspatti-segmentti"
+            }
           ]
         }
       }
     },
     "en": {
       "title": "United Arab Emirates diversification",
-      "intro": "IMF projects UAE GDP growing 4.8% in 2025 and 5.0% in 2026. Growth leans more on non-oil sectors: tourism, foreign capital, technology. Dubai-type super-regional centres run on tourism and luxury, while community centres serve the everyday lives of expat communities.",
-      "redString": "Red string: in the UAE, 'value' does not mean discount; it means better-segmented convenience. Premium and convenience layers are separate stories within the same market.",
+      "intro": "UAE growth is anchored in non-oil sectors, tourism, real estate and global capital. In the May 2026 overview the Iran conflict and Hormuz disruption are the critical risk: they affect energy costs, insurance, air links, events and imported premium availability. Reuters reports that the UAE left OPEC and OPEC+ on May 1, 2026, adding energy-autonomy upside but also regional-friction risk.",
+      "redString": "Red string: a UAE mall must be both a safe hub and a resilient operation. Path A is managed growth, path B is a Hormuz and energy shock, path C is a post-OPEC safe-hub investment and tourism win.",
       "pathsLabel": "Three paths to 2035",
       "paths": [
-        { "id": "a", "title": "Path A: Stable growth", "tone": "neutral", "summary": "Growth continues at 4-5%. Premium centres benefit from tourism flow; community centres serve expats.", "macro": "GDP grows 4.5-5% 2026-2030. Inflation 2-3%. Foreign capital continues into property. Super-regional rents rose 14.9% in 2024.", "consumer": "Income classes polarise. Expat communities value convenience and services. Tourists seek premium luxury and entertainment.", "retail": "Luxury, beauty and wellness lead. Family entertainment grows. Convenience formats in community centres grow 8-10%.", "property": "Yields stay low in A-tier. International investor demand continues.", "mallImpact": "The Dubai Mall and Mall of the Emirates extend their premium leadership. Community centres in Dubai and Abu Dhabi grow service and health layer 10-15%.",
-          "keyNumbers": [ { "label": "GDP growth", "value": "4.5-5%", "hint": "per year 2026-2030" }, { "label": "Prime rents", "value": "+10-15%", "hint": "per year in super-regionals" }, { "label": "Tourist flow", "value": "+8%", "hint": "per year" }, { "label": "Occupancy", "value": "strong", "hint": "in A-tier" } ],
-          "evidenceCharts": [ { "label": "GDP growth, %", "unit": "%", "series": [{"p":"2024","v":3.5},{"p":"2025","v":4.8},{"p":"2026","v":5.0},{"p":"2027","v":4.8},{"p":"2028","v":4.5},{"p":"2029","v":4.5},{"p":"2030","v":4.5}] } ] },
-        { "id": "b", "title": "Path B: Oil price shock", "tone": "dark", "summary": "An oil price collapse or geopolitical shock slows growth. Premium centres hold better than regional ones.", "macro": "Oil price falls, regional flow weakens. GDP 2-3% in 2027-2029. Foreign tourist flow falls 15-20%. World events postponed.", "consumer": "Expat purchasing power holds, but the drop in tourist flow hits luxury stores. Premium consumers shift to 'reachable luxury'.", "retail": "Luxury falls 10-15%. Convenience and community-centre health grow. F&B holds.", "property": "Yields rise 25-50bps in secondary. A-tier holds.", "mallImpact": "Premium tenants renegotiate leases. Service share grows in community centres.",
-          "keyNumbers": [ { "label": "GDP growth", "value": "2-3%", "hint": "2027-2029" }, { "label": "Luxury", "value": "−10-15%", "hint": "sales vs. baseline" }, { "label": "Tourist flow", "value": "−15-20%", "hint": "international" }, { "label": "Yields", "value": "+25-50bps", "hint": "in secondary" } ],
-          "evidenceCharts": [ { "label": "GDP growth, %", "unit": "%", "series": [{"p":"2024","v":3.5},{"p":"2025","v":4.8},{"p":"2026","v":4.2},{"p":"2027","v":2.5},{"p":"2028","v":2.0},{"p":"2029","v":3.0},{"p":"2030","v":3.5}] } ] },
-        { "id": "c", "title": "Path C: Tech-and-tourism boom", "tone": "bright", "summary": "AI, fintech and luxury tourism push growth to 6%. Dubai and Abu Dhabi scale into global destinations.", "macro": "GDP grows 5.5-6% in the 2030s. Diversification succeeds, foreign capital keeps growing. Sustainability/EXPO events anchor tourist flow.", "consumer": "Purchasing power grows. Premium segments explode. Wellness, beauty and experiences lead.", "retail": "Luxury and premium grow 12-15% per year. Branded resale and high-end dining move into community centres.", "property": "Yields fall 50bps. New mixed-use construction recovers. Hotel-mall mixes grow.", "mallImpact": "Dubai Mall-type flagships grow 20%. Community centres add 15% of area in wellness/clinic.",
-          "keyNumbers": [ { "label": "GDP growth", "value": "5.5-6%", "hint": "in the 2030s" }, { "label": "Luxury growth", "value": "+12-15%", "hint": "per year" }, { "label": "Tourism", "value": "+12%", "hint": "visitors per year" }, { "label": "Yields", "value": "−50bps", "hint": "A-tier" } ],
-          "evidenceCharts": [ { "label": "GDP growth, %", "unit": "%", "series": [{"p":"2024","v":3.5},{"p":"2025","v":4.8},{"p":"2026","v":5.5},{"p":"2027","v":5.8},{"p":"2028","v":6.0},{"p":"2029","v":6.0},{"p":"2030","v":5.8}] } ] }
+        {
+          "id": "a",
+          "title": "Path A: Managed growth under a risk premium",
+          "tone": "neutral",
+          "summary": "Growth continues, but every decision prices the Hormuz, insurance and energy risk premium.",
+          "macro": "CBUAE projects strong 5.6% growth in 2025-2026 and moderate inflation. After the OPEC exit, production and energy policy may be more flexible, but Hormuz disruption keeps logistics and energy costs under watch.",
+          "consumer": "Tourists, expats and locals keep spending when safety, access and service are visible. Value means reliable availability, not cheapness.",
+          "retail": "Premium, beauty, wellness, F&B and family entertainment keep demand. Imported goods and events need stock plans and alternative campaigns.",
+          "property": "A-tier yields hold, but insurance, energy and financing premia must be written into tenant and investment decisions.",
+          "mallImpact": "In the overview, path A means one operating view for tourist flow, energy price, insurance premium, stock risk and event cancellation risk.",
+          "keyNumbers": [
+            {
+              "label": "GDP growth",
+              "value": "5.6%",
+              "hint": "2025e and 2026f"
+            },
+            {
+              "label": "Non-oil GDP",
+              "value": "6.1%",
+              "hint": "Jan-Sep 2025"
+            },
+            {
+              "label": "Inflation",
+              "value": "1.8%",
+              "hint": "2026f"
+            },
+            {
+              "label": "Dubai visitors",
+              "value": "19.59m",
+              "hint": "2025, +5% YoY"
+            },
+            {
+              "label": "Prime rents",
+              "value": "+9-15%",
+              "hint": "Dubai super-regional / Fashion Avenue"
+            },
+            {
+              "label": "UAE PMI",
+              "value": "54.9",
+              "hint": "January 2026"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "GDP growth, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2022",
+                  "v": 7.5
+                },
+                {
+                  "p": "2023",
+                  "v": 4.3
+                },
+                {
+                  "p": "2024",
+                  "v": 4
+                },
+                {
+                  "p": "2025e",
+                  "v": 5.6
+                },
+                {
+                  "p": "2026f",
+                  "v": 5.6
+                },
+                {
+                  "p": "2027f",
+                  "v": 4.4
+                }
+              ]
+            },
+            {
+              "label": "Inflation, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2023",
+                  "v": 1.6
+                },
+                {
+                  "p": "2024",
+                  "v": 1.7
+                },
+                {
+                  "p": "2025",
+                  "v": 1.3
+                },
+                {
+                  "p": "2026f",
+                  "v": 1.8
+                },
+                {
+                  "p": "2027f",
+                  "v": 2
+                }
+              ]
+            },
+            {
+              "label": "Dubai international visitors, million",
+              "unit": "m",
+              "series": [
+                {
+                  "p": "2023",
+                  "v": 17.15
+                },
+                {
+                  "p": "2024",
+                  "v": 18.72
+                },
+                {
+                  "p": "2025",
+                  "v": 19.59
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "title": "Path B: Hormuz and energy shock",
+          "tone": "dark",
+          "summary": "A prolonged Iran conflict raises logistics, insurance and energy costs and weakens visitor certainty.",
+          "macro": "A Hormuz closure or de facto closure lifts oil and gas prices, delays deliveries and tightens financing. The OPEC exit may create later market-share upside, but in the shock phase it adds uncertainty about regional coordination.",
+          "consumer": "Tourists shorten visits or defer spending if air links and safety messaging weaken. Locals and expats shift toward practical services, food, health and convenience.",
+          "retail": "Luxury and high-ticket imported categories are hit first. F&B, everyday services, clinics, pharmacies, children’s services and local premium hold better.",
+          "property": "Secondary yields can rise 25-50bps. A-tier holds if occupancy, insurance and energy hedging are controlled.",
+          "mallImpact": "In the overview, path B surfaces critical actions: tenant supply risk, event cancellation terms, energy hedging and backup plans for tourist campaigns.",
+          "keyNumbers": [
+            {
+              "label": "GDP growth",
+              "value": "2-3%",
+              "hint": "2027-2029"
+            },
+            {
+              "label": "Luxury",
+              "value": "−10-15%",
+              "hint": "sales vs. baseline"
+            },
+            {
+              "label": "Tourist flow",
+              "value": "−15-20%",
+              "hint": "international"
+            },
+            {
+              "label": "Yields",
+              "value": "+25-50bps",
+              "hint": "in secondary"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "GDP growth, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 3.5
+                },
+                {
+                  "p": "2025",
+                  "v": 4.8
+                },
+                {
+                  "p": "2026",
+                  "v": 4.2
+                },
+                {
+                  "p": "2027",
+                  "v": 2.5
+                },
+                {
+                  "p": "2028",
+                  "v": 2
+                },
+                {
+                  "p": "2029",
+                  "v": 3
+                },
+                {
+                  "p": "2030",
+                  "v": 3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "title": "Path C: Safe hub and energy autonomy",
+          "tone": "bright",
+          "summary": "As conflict calms, the UAE converts safe-hub status, OPEC-exit flexibility and tourism/capital flows into upside.",
+          "macro": "If Hormuz reopens and oil normalises, a non-OPEC production strategy can support investment, export income and the UAE energy-partner role. Non-oil sectors, tourism and real estate strengthen.",
+          "consumer": "Tourists and global capital favour a stable, service-ready safe hub. Premium customers expect one smooth service: transport, hotel, tax-free, concierge and bookings.",
+          "retail": "Luxury, hotels, wellness, entertainment, investor services and high-end dining grow. In community centres, premium everyday services expand with expat demand.",
+          "property": "A-tier yields can compress 25-50bps if the safety premium becomes investor demand and financing remains available.",
+          "mallImpact": "In the overview, path C prioritises growth: safe visit path, hotel partnerships, premium bookings, event calendar and measured tourist conversion.",
+          "keyNumbers": [
+            {
+              "label": "GDP growth",
+              "value": "5.5-6%",
+              "hint": "in the 2030s"
+            },
+            {
+              "label": "Luxury growth",
+              "value": "+12-15%",
+              "hint": "per year"
+            },
+            {
+              "label": "Tourism",
+              "value": "+12%",
+              "hint": "visitors per year"
+            },
+            {
+              "label": "Yields",
+              "value": "−50bps",
+              "hint": "A-tier"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "GDP growth, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 3.5
+                },
+                {
+                  "p": "2025",
+                  "v": 4.8
+                },
+                {
+                  "p": "2026",
+                  "v": 5.5
+                },
+                {
+                  "p": "2027",
+                  "v": 5.8
+                },
+                {
+                  "p": "2028",
+                  "v": 6
+                },
+                {
+                  "p": "2029",
+                  "v": 6
+                },
+                {
+                  "p": "2030",
+                  "v": 5.8
+                }
+              ]
+            }
+          ]
+        }
       ],
       "actionsLabel": "Property action recommendations",
       "actionsGeneralLabel": "Across all properties",
-      "actionsGeneral": [ "Separate premium and convenience layers clearly — don't try to be both on the same floor.", "In community centres: health, wellness, expat-friendly everyday services.", "In super-regionals: flagships, food halls, entertainment for tourist flow.", "Invest in branded resale and traceability in premium categories.", "Measure tourist vs. local visitor conversion separately." ],
+      "actionsGeneral": [
+        "Separate premium and convenience layers clearly — don't try to be both on the same floor.",
+        "In community centres: health, wellness, expat-friendly everyday services.",
+        "In super-regionals: flagships, food halls, entertainment for tourist flow.",
+        "Invest in branded resale and traceability in premium categories.",
+        "Measure tourist vs. local visitor conversion separately."
+      ],
       "actionsPerMallLabel": "Property-specific recommendations",
       "actionsPerMall": {
-        "uae-dubai-mall": { "operator": "Emaar Malls", "isCompetitor": true, "name": "The Dubai Mall (competitor, super-regional)", "context": "Global tourist destination, Emaar Malls. 80M+ annual visits. Highest rents, flagship and luxury leadership.",
-          "items": [ "Compare luxury brand density and rotation.", "Measure tourist visitor share (currency segments).", "Track F&B fine-dining share vs. fast casual.", "Watch social-media 'instagrammable' concept calendar.", "Watch seasonal events (Ramadan, summer tax-free)." ],
-          "kpis": [ { "label": "Luxury brand density", "target": "benchmark", "hint": "vs. own A-tier" }, { "label": "Tourist visitor share", "target": "benchmark", "hint": "by currency segment" }, { "label": "Fine-dining share of F&B", "target": "benchmark", "hint": "vs. fast casual" }, { "label": "Social-event density", "target": "benchmark", "hint": "instagrammable concepts" }, { "label": "Seasonal-event scale", "target": "benchmark", "hint": "Ramadan, summer tax-free" } ]
+        "uae-dubai-mall": {
+          "operator": "Emaar Malls",
+          "isCompetitor": true,
+          "name": "The Dubai Mall (competitor, super-regional)",
+          "context": "Global tourist destination, Emaar Malls. 80M+ annual visits. Highest rents, flagship and luxury leadership.",
+          "items": [
+            "Compare luxury brand density and rotation.",
+            "Measure tourist visitor share (currency segments).",
+            "Track F&B fine-dining share vs. fast casual.",
+            "Watch social-media 'instagrammable' concept calendar.",
+            "Watch seasonal events (Ramadan, summer tax-free)."
+          ],
+          "kpis": [
+            {
+              "label": "Luxury brand density",
+              "target": "benchmark",
+              "hint": "vs. own A-tier"
+            },
+            {
+              "label": "Tourist visitor share",
+              "target": "benchmark",
+              "hint": "by currency segment"
+            },
+            {
+              "label": "Fine-dining share of F&B",
+              "target": "benchmark",
+              "hint": "vs. fast casual"
+            },
+            {
+              "label": "Social-event density",
+              "target": "benchmark",
+              "hint": "instagrammable concepts"
+            },
+            {
+              "label": "Seasonal-event scale",
+              "target": "benchmark",
+              "hint": "Ramadan, summer tax-free"
+            }
+          ]
         },
-        "uae-marina-community": { "operator": "Emaar / Meraas", "isCompetitor": true, "name": "Dubai Marina community centre (competitor example)", "context": "Heart of an expat residential area. Premium grocery, health services, fine dining, everyday convenience.",
-          "items": [ "Compare premium grocery share.", "Measure health and wellness offer.", "Track F&B mix to community needs.", "Watch loyalty + delivery integration.", "Compare circular and sustainability programs." ],
-          "kpis": [ { "label": "Premium grocery share", "target": "benchmark", "hint": "community needs" }, { "label": "Health and wellness share", "target": "benchmark", "hint": "clinics, fitness" }, { "label": "Loyalty activation", "target": "benchmark", "hint": "vs. pure discount" }, { "label": "Fine-dining vs. casual F&B", "target": "benchmark", "hint": "expat segment" } ]
+        "uae-marina-community": {
+          "operator": "Emaar / Meraas",
+          "isCompetitor": true,
+          "name": "Dubai Marina community centre (competitor example)",
+          "context": "Heart of an expat residential area. Premium grocery, health services, fine dining, everyday convenience.",
+          "items": [
+            "Compare premium grocery share.",
+            "Measure health and wellness offer.",
+            "Track F&B mix to community needs.",
+            "Watch loyalty + delivery integration.",
+            "Compare circular and sustainability programs."
+          ],
+          "kpis": [
+            {
+              "label": "Premium grocery share",
+              "target": "benchmark",
+              "hint": "community needs"
+            },
+            {
+              "label": "Health and wellness share",
+              "target": "benchmark",
+              "hint": "clinics, fitness"
+            },
+            {
+              "label": "Loyalty activation",
+              "target": "benchmark",
+              "hint": "vs. pure discount"
+            },
+            {
+              "label": "Fine-dining vs. casual F&B",
+              "target": "benchmark",
+              "hint": "expat segment"
+            }
+          ]
         }
       }
     },
     "sv": {
       "title": "Förenade Arabemiratens diversifiering",
-      "intro": "IMF räknar med att UAE:s BNP växer 4,8 % 2025 och 5,0 % 2026. Tillväxten lutar mer på icke-oljesektorer: turism, utländskt kapital, teknik. Dubai-typ super-regional drivs på turism och lyx, medan community-centrum betjänar expat-samhällets vardag.",
-      "redString": "Röd tråd: i UAE betyder 'värde' inte rabatt utan bättre segmenterad bekvämlighet. Premium och bekvämlighet är separata berättelser på samma marknad.",
+      "intro": "UAE:s tillväxt bärs av icke-oljesektorer, turism, fastigheter och globalt kapital. I översikten för maj 2026 är Irankonflikten och Hormuzstörningen den kritiska risken: de påverkar energikostnader, försäkringar, flygförbindelser, event och tillgången på importerade premiumvaror. Reuters rapporterar att UAE lämnade OPEC och OPEC+ den 1 maj 2026, vilket ger potential för energisjälvständighet men också risk för regional friktion.",
+      "redString": "Röd tråd: ett UAE-köpcentrum måste vara både trygg hubb och resilient drift. Väg A är hanterad tillväxt, väg B är Hormuz- och energichock, väg C är en investerings- och turismvinst efter OPEC-utträdet.",
       "pathsLabel": "Tre vägar till 2035",
       "paths": [
-        { "id": "a", "title": "Väg A: Stabil tillväxt", "tone": "neutral", "summary": "Tillväxt fortsätter på 4-5 %. Premium-centrum gynnas av turismflöde; community-centrum betjänar expater.", "macro": "BNP växer 4,5-5 % 2026-2030. Inflation 2-3 %. Utländskt kapital fortsätter strömma. Super-regional-hyror steg 14,9 % 2024.", "consumer": "Inkomstklasser polariseras. Expat-samhällen värdesätter bekvämlighet och tjänster. Turister söker premium-lyx och underhållning.", "retail": "Lyx, skönhet och välmående leder. Familjeunderhållning växer. Bekvämlighetsformat i community-centrum växer 8-10 %.", "property": "Avkastningskrav låga i A-läge. Internationell investerarefterfrågan fortsätter.", "mallImpact": "The Dubai Mall och Mall of the Emirates förlänger sitt premium-ledarskap. Community-centrum i Dubai och Abu Dhabi växer service- och hälsolagret 10-15 %.",
-          "keyNumbers": [ { "label": "BNP-tillväxt", "value": "4,5-5 %", "hint": "per år 2026-2030" }, { "label": "Premium-hyror", "value": "+10-15 %", "hint": "per år i super-regional" }, { "label": "Turistflöde", "value": "+8 %", "hint": "per år" }, { "label": "Uthyrningsgrad", "value": "stark", "hint": "i A-läge" } ],
-          "evidenceCharts": [ { "label": "BNP-tillväxt, %", "unit": "%", "series": [{"p":"2024","v":3.5},{"p":"2025","v":4.8},{"p":"2026","v":5.0},{"p":"2027","v":4.8},{"p":"2028","v":4.5},{"p":"2029","v":4.5},{"p":"2030","v":4.5}] } ] },
-        { "id": "b", "title": "Väg B: Oljepris-chock", "tone": "dark", "summary": "Oljepriskollaps eller geopolitisk chock bromsar tillväxt. Premium-centrum klarar bättre.", "macro": "Oljepris faller, regionalt flöde försvagas. BNP 2-3 % 2027-2029. Internationellt turistflöde faller 15-20 %.", "consumer": "Expat-köpkraft håller, men minskat turistflöde slår mot lyxbutiker.", "retail": "Lyx faller 10-15 %. Bekvämlighet och hälsa i community-centrum växer. F&B håller.", "property": "Avkastningskrav stiger 25-50bps i sekundärt. A-läge håller.", "mallImpact": "Premium-hyresgäster omförhandlar avtal. Servicedelen växer i community-centrum.",
-          "keyNumbers": [ { "label": "BNP-tillväxt", "value": "2-3 %", "hint": "2027-2029" }, { "label": "Lyx", "value": "−10-15 %", "hint": "försäljning vs. baseline" }, { "label": "Turistflöde", "value": "−15-20 %", "hint": "internationellt" } ],
-          "evidenceCharts": [ { "label": "BNP-tillväxt, %", "unit": "%", "series": [{"p":"2024","v":3.5},{"p":"2025","v":4.8},{"p":"2026","v":4.2},{"p":"2027","v":2.5},{"p":"2028","v":2.0},{"p":"2029","v":3.0},{"p":"2030","v":3.5}] } ] },
-        { "id": "c", "title": "Väg C: Teknik-och-turism-boom", "tone": "bright", "summary": "AI, fintech och lyxturism driver tillväxten till 6 %. Dubai och Abu Dhabi skalar till globala destinationer.", "macro": "BNP växer 5,5-6 % på 2030-talet. Diversifiering lyckas. Hållbarhet/EXPO-event ankrar turistflöde.", "consumer": "Köpkraft växer. Premium-segment exploderar. Välmående, skönhet och upplevelser leder.", "retail": "Lyx och premium växer 12-15 % per år. Branded resale och high-end mat flyttar till community-centrum.", "property": "Avkastningskrav faller 50bps. Ny blandanvändning återhämtar.", "mallImpact": "Dubai Mall-typ flaggskepp växer 20 %. Community-centrum lägger till 15 % av yta i wellness/klinik.",
-          "keyNumbers": [ { "label": "BNP-tillväxt", "value": "5,5-6 %", "hint": "på 2030-talet" }, { "label": "Lyx-tillväxt", "value": "+12-15 %", "hint": "per år" } ],
-          "evidenceCharts": [ { "label": "BNP-tillväxt, %", "unit": "%", "series": [{"p":"2024","v":3.5},{"p":"2025","v":4.8},{"p":"2026","v":5.5},{"p":"2027","v":5.8},{"p":"2028","v":6.0},{"p":"2029","v":6.0},{"p":"2030","v":5.8}] } ] }
+        {
+          "id": "a",
+          "title": "Väg A: Hanterad tillväxt under riskpremie",
+          "tone": "neutral",
+          "summary": "Tillväxten fortsätter, men varje beslut prissätter Hormuz-, försäkrings- och energipremien.",
+          "macro": "CBUAE räknar med stark tillväxt på 5,6 % 2025-2026 och måttlig inflation. Efter OPEC-utträdet kan produktions- och energipolitiken bli mer flexibel, men Hormuzstörningen håller logistik- och energikostnader under bevakning.",
+          "consumer": "Turister, expater och lokala kunder fortsätter handla när trygghet, tillgänglighet och service är synliga. Värde betyder pålitlig tillgång, inte billighet.",
+          "retail": "Premium, beauty, wellness, F&B och familjeunderhållning håller efterfrågan. Importvaror och event behöver lagerplaner och alternativa kampanjer.",
+          "property": "A-läges avkastningskrav håller, men försäkrings-, energi- och finansieringspremier måste in i hyresgäst- och investeringsbeslut.",
+          "mallImpact": "I översikten betyder väg A en driftsvy för turistflöde, energipris, försäkringspremie, lagerrisk och eventavbokningsrisk.",
+          "keyNumbers": [
+            {
+              "label": "BNP-tillväxt",
+              "value": "5,6 %",
+              "hint": "2025e och 2026f"
+            },
+            {
+              "label": "Icke-olje-BNP",
+              "value": "6,1 %",
+              "hint": "jan-sep 2025"
+            },
+            {
+              "label": "Inflation",
+              "value": "1,8 %",
+              "hint": "2026f"
+            },
+            {
+              "label": "Dubai-besökare",
+              "value": "19,59m",
+              "hint": "2025, +5 % YoY"
+            },
+            {
+              "label": "Prime-hyror",
+              "value": "+9-15 %",
+              "hint": "Dubai superregional / Fashion Avenue"
+            },
+            {
+              "label": "UAE PMI",
+              "value": "54,9",
+              "hint": "januari 2026"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "BNP-tillväxt, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2022",
+                  "v": 7.5
+                },
+                {
+                  "p": "2023",
+                  "v": 4.3
+                },
+                {
+                  "p": "2024",
+                  "v": 4
+                },
+                {
+                  "p": "2025e",
+                  "v": 5.6
+                },
+                {
+                  "p": "2026f",
+                  "v": 5.6
+                },
+                {
+                  "p": "2027f",
+                  "v": 4.4
+                }
+              ]
+            },
+            {
+              "label": "Inflation, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2023",
+                  "v": 1.6
+                },
+                {
+                  "p": "2024",
+                  "v": 1.7
+                },
+                {
+                  "p": "2025",
+                  "v": 1.3
+                },
+                {
+                  "p": "2026f",
+                  "v": 1.8
+                },
+                {
+                  "p": "2027f",
+                  "v": 2
+                }
+              ]
+            },
+            {
+              "label": "Dubais internationella besökare, miljoner",
+              "unit": "m",
+              "series": [
+                {
+                  "p": "2023",
+                  "v": 17.15
+                },
+                {
+                  "p": "2024",
+                  "v": 18.72
+                },
+                {
+                  "p": "2025",
+                  "v": 19.59
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "title": "Väg B: Hormuz- och energichock",
+          "tone": "dark",
+          "summary": "En utdragen Irankonflikt höjer logistik-, försäkrings- och energikostnader och försvagar besökartrygghet.",
+          "macro": "En Hormuzstängning eller de facto-stängning lyfter olje- och gaspriser, försenar leveranser och stramar åt finansiering. OPEC-utträdet kan ge marknadsandelsuppsida senare, men i chockfasen ökar det osäkerheten om regional samordning.",
+          "consumer": "Turister kortar besök eller skjuter upp köp om flygförbindelser och trygghetsbudskap försvagas. Lokala kunder och expater skiftar mot praktiska tjänster, mat, hälsa och bekvämlighet.",
+          "retail": "Lyx och dyra importkategorier träffas först. F&B, vardagstjänster, kliniker, apotek, barnservice och lokal premium håller bättre.",
+          "property": "Sekundära avkastningskrav kan stiga 25-50 rp. A-läge håller om beläggning, försäkring och energisäkring kontrolleras.",
+          "mallImpact": "I översikten lyfter väg B kritiska åtgärder: hyresgästers leveransrisk, eventvillkor, energisäkring och reservplaner för turistkampanjer.",
+          "keyNumbers": [
+            {
+              "label": "BNP-tillväxt",
+              "value": "2-3 %",
+              "hint": "2027-2029"
+            },
+            {
+              "label": "Lyx",
+              "value": "−10-15 %",
+              "hint": "försäljning mot utgångsläge"
+            },
+            {
+              "label": "Turistflöde",
+              "value": "−15-20 %",
+              "hint": "internationellt"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "BNP-tillväxt, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 3.5
+                },
+                {
+                  "p": "2025",
+                  "v": 4.8
+                },
+                {
+                  "p": "2026",
+                  "v": 4.2
+                },
+                {
+                  "p": "2027",
+                  "v": 2.5
+                },
+                {
+                  "p": "2028",
+                  "v": 2
+                },
+                {
+                  "p": "2029",
+                  "v": 3
+                },
+                {
+                  "p": "2030",
+                  "v": 3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "title": "Väg C: Trygg hubb och energisjälvständighet",
+          "tone": "bright",
+          "summary": "När konflikten lugnar sig omvandlar UAE trygg hubb-status, OPEC-flexibilitet och turism-/kapitalflöden till uppsida.",
+          "macro": "Om Hormuz öppnas och oljemarknaden normaliseras kan en produktionsstrategi utanför OPEC stödja investeringar, exportintäkter och rollen som energipartner. Icke-oljesektorer, turism och fastigheter stärks.",
+          "consumer": "Turister och globalt kapital föredrar en stabil, serviceklar trygg hubb. Premiumkunder förväntar sig en smidig helhet: transport, hotell, tax-free, concierge och bokningar.",
+          "retail": "Lyx, hotell, wellness, underhållning, investerartjänster och högklassig mat växer. I community-centrum expanderar premiumvardagstjänster med expatefterfrågan.",
+          "property": "A-läges avkastningskrav kan falla 25-50 rp om trygghetspremien blir investerarefterfrågan och finansiering finns kvar.",
+          "mallImpact": "I översikten prioriterar väg C tillväxt: trygg besöksväg, hotellpartnerskap, premiumbokningar, eventkalender och mätt turistkonvertering.",
+          "keyNumbers": [
+            {
+              "label": "BNP-tillväxt",
+              "value": "5,5-6 %",
+              "hint": "på 2030-talet"
+            },
+            {
+              "label": "Lyx-tillväxt",
+              "value": "+12-15 %",
+              "hint": "per år"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "BNP-tillväxt, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 3.5
+                },
+                {
+                  "p": "2025",
+                  "v": 4.8
+                },
+                {
+                  "p": "2026",
+                  "v": 5.5
+                },
+                {
+                  "p": "2027",
+                  "v": 5.8
+                },
+                {
+                  "p": "2028",
+                  "v": 6
+                },
+                {
+                  "p": "2029",
+                  "v": 6
+                },
+                {
+                  "p": "2030",
+                  "v": 5.8
+                }
+              ]
+            }
+          ]
+        }
       ],
       "actionsLabel": "Åtgärdsförslag för fastigheter",
       "actionsGeneralLabel": "Gäller alla fastigheter",
-      "actionsGeneral": [ "Separera premium och bekvämlighet tydligt - försök inte vara bägge på samma yta.", "I community-centrum: hälsa, välmående, expat-vänliga vardagstjänster.", "I super-regional: flaggskepp, food halls, underhållning för turistflöde.", "Investera i branded resale och spårbarhet i premium-kategorier.", "Mät turist vs. lokal besökarkonvertering separat." ],
+      "actionsGeneral": [
+        "Separera premium och bekvämlighet tydligt - försök inte vara bägge på samma yta.",
+        "I community-centrum: hälsa, välmående, expat-vänliga vardagstjänster.",
+        "I superregionala centrum: flaggskepp, mathallar och underhållning för turistflöde.",
+        "Investera i varumärkt second hand och spårbarhet i premium-kategorier.",
+        "Mät turistbesökares och lokala besökares konvertering separat."
+      ],
       "actionsPerMallLabel": "Fastighetsspecifika rekommendationer",
       "actionsPerMall": {
-        "uae-dubai-mall": { "operator": "Emaar Malls", "isCompetitor": true, "name": "The Dubai Mall (konkurrent, super-regional)", "context": "Globalt turistmål, Emaar Malls. 80M+ årliga besök.",
-          "items": [ "Jämför lyxvarumärkesdensitet och rotation.", "Mät turistbesökarandel (valutasegment).", "Följ F&B fine-dining-andel vs. fast casual." ],
-          "kpis": [ { "label": "Lyxvarumärkesdensitet", "target": "benchmark", "hint": "vs. egen A-läge" }, { "label": "Turistbesökarandel", "target": "benchmark", "hint": "per valutasegment" } ]
+        "uae-dubai-mall": {
+          "operator": "Emaar Malls",
+          "isCompetitor": true,
+          "name": "The Dubai Mall (konkurrent, superregional)",
+          "context": "Globalt turistmål, Emaar Malls. 80M+ årliga besök.",
+          "items": [
+            "Jämför lyxvarumärkesdensitet och rotation.",
+            "Mät turistbesökarandel (valutasegment).",
+            "Följ F&B fine-dining-andel vs. fast casual."
+          ],
+          "kpis": [
+            {
+              "label": "Lyxvarumärkesdensitet",
+              "target": "benchmark",
+              "hint": "vs. egen A-läge"
+            },
+            {
+              "label": "Turistbesökarandel",
+              "target": "benchmark",
+              "hint": "per valutasegment"
+            }
+          ]
         },
-        "uae-marina-community": { "operator": "Emaar / Meraas", "isCompetitor": true, "name": "Dubai Marina community-centrum (konkurrent-exempel)", "context": "Hjärtat av expat-bostadsområde. Premium dagligvaror, hälsotjänster, fine dining, vardaglig bekvämlighet.",
-          "items": [ "Jämför premium-dagligvarors andel.", "Mät hälso- och välmående-erbjudande.", "Följ F&B-mix till samhällets behov." ],
-          "kpis": [ { "label": "Premium-dagligvarors andel", "target": "benchmark", "hint": "samhällsbehov" }, { "label": "Hälso- och välmåendeandel", "target": "benchmark", "hint": "kliniker, fitness" } ]
+        "uae-marina-community": {
+          "operator": "Emaar / Meraas",
+          "isCompetitor": true,
+          "name": "Dubai Marina community-centrum (konkurrent-exempel)",
+          "context": "Hjärtat av expat-bostadsområde. Premium dagligvaror, hälsotjänster, fine dining, vardaglig bekvämlighet.",
+          "items": [
+            "Jämför premium-dagligvarors andel.",
+            "Mät hälso- och välmående-erbjudande.",
+            "Följ F&B-mix till samhällets behov."
+          ],
+          "kpis": [
+            {
+              "label": "Premium-dagligvarors andel",
+              "target": "benchmark",
+              "hint": "samhällsbehov"
+            },
+            {
+              "label": "Hälso- och välmåendeandel",
+              "target": "benchmark",
+              "hint": "kliniker, fitness"
+            }
+          ]
         }
       }
     }
   },
-  "glossary": { "fi": {}, "en": {}, "sv": {} },
+  "glossary": {
+    "fi": {},
+    "en": {},
+    "sv": {}
+  },
   "sources": [
-    { "id": "imf-uae-2026", "url": "https://www.imf.org/en/Countries/ARE", "publisher": "IMF", "title": { "fi": "IMF: UAE:n talousnäkymä", "en": "IMF: UAE economic outlook", "sv": "IMF: UAE:s ekonomiska utsikter" } },
-    { "id": "savills-dubai-rents", "url": "https://www.savills.ae/research_articles/256884/377013-0", "publisher": "Savills", "title": { "fi": "Savills: Dubain ostoskeskusvuokrat", "en": "Savills: Dubai retail rents", "sv": "Savills: Dubai detaljhandelshyror" } },
-    { "id": "dubai-mall-official", "url": "https://thedubaimall.com", "publisher": "Emaar Malls", "title": { "fi": "The Dubai Mall, viralliset sivut", "en": "The Dubai Mall official", "sv": "The Dubai Mall officiella" } }
+    {
+      "id": "cbuae-qer-2026",
+      "url": "https://www.centralbank.ae/media/lgnfakgc/qer-march_2026.pdf",
+      "publisher": "Central Bank of the UAE",
+      "title": {
+        "fi": "UAE:n keskuspankki: Quarterly Economic Review, March 2026",
+        "en": "Central Bank of the UAE: Quarterly Economic Review, March 2026",
+        "sv": "UAE:s centralbank: Quarterly Economic Review, March 2026"
+      }
+    },
+    {
+      "id": "dubai-det-tourism-2025",
+      "url": "https://www.dubaidet.gov.ae/en/newsroom/press-releases/dubais-tourism-industry-achieves-third-successive-record-breaking-year?print=",
+      "publisher": "Dubai Department of Economy and Tourism",
+      "title": {
+        "fi": "Dubai DET: 19,59 miljoonaa kansainvälistä kävijää 2025",
+        "en": "Dubai DET: 19.59 million international visitors in 2025",
+        "sv": "Dubai DET: 19,59 miljoner internationella besökare 2025"
+      }
+    },
+    {
+      "id": "imf-uae-2026",
+      "url": "https://www.imf.org/en/Countries/ARE",
+      "publisher": "IMF",
+      "title": {
+        "fi": "IMF: UAE:n talousnäkymä",
+        "en": "IMF: UAE economic outlook",
+        "sv": "IMF: UAE:s ekonomiska utsikter"
+      }
+    },
+    {
+      "id": "savills-dubai-rents",
+      "url": "https://www.savills.ae/research_articles/256884/377013-0",
+      "publisher": "Savills",
+      "title": {
+        "fi": "Savills: Dubain ostoskeskusvuokrat",
+        "en": "Savills: Dubai retail rents",
+        "sv": "Savills: Dubai detaljhandelshyror"
+      }
+    },
+    {
+      "id": "dubai-mall-official",
+      "url": "https://thedubaimall.com",
+      "publisher": "Emaar Malls",
+      "title": {
+        "fi": "The Dubai Mall, viralliset sivut",
+        "en": "The Dubai Mall official",
+        "sv": "The Dubai Mall officiella"
+      }
+    },
+    {
+      "id": "reuters-uae-opec-exit-2026",
+      "url": "https://www.gmanetwork.com/news/money/economy/985698/uae-opec-energy-crisis/story/",
+      "publisher": "Reuters via GMA News Online",
+      "title": {
+        "fi": "Reuters: UAE ilmoitti jättävänsä OPECin ja OPEC+:n 1.5.2026",
+        "en": "Reuters: UAE says it is leaving OPEC and OPEC+ on May 1, 2026",
+        "sv": "Reuters: UAE lämnar OPEC och OPEC+ den 1 maj 2026"
+      }
+    },
+    {
+      "id": "reuters-hormuz-shipping-2026",
+      "url": "https://www.investing.com/news/commodities-news/iran-conflict-disrupts-global-shipping-as-tankers-are-stranded-damaged-4534475",
+      "publisher": "Reuters via Investing.com",
+      "title": {
+        "fi": "Reuters: Iranin konflikti häiritsee Hormuzin laivaliikennettä ja vakuutuksia",
+        "en": "Reuters: Iran conflict disrupts Hormuz shipping and insurance",
+        "sv": "Reuters: Irankonflikten stör sjöfart och försäkringar i Hormuz"
+      }
+    },
+    {
+      "id": "reuters-iran-war-deadlock-2026",
+      "url": "https://www.investing.com/news/world-news/uae-says-iran-cannot-be-trusted-over-hormuz-peace-efforts-at-an-impasse-4652305",
+      "publisher": "Reuters via Investing.com",
+      "title": {
+        "fi": "Reuters: Iranin sodan neuvottelut jumissa, Hormuz edelleen riskitekijä",
+        "en": "Reuters: Iran war talks remain stuck, Hormuz remains a risk factor",
+        "sv": "Reuters: Samtalen om Irankriget fastlåsta, Hormuz fortsatt riskfaktor"
+      }
+    },
+    {
+      "id": "reuters-uae-autonomy-2026",
+      "url": "https://www.investing.com/news/commodities-news/uae-reviewing-multilateral-ties-after-opec-exit-but-rules-out-more-departures-official-says-4644628",
+      "publisher": "Reuters via Investing.com",
+      "title": {
+        "fi": "Reuters: UAE arvioi monenvälisiä suhteitaan OPEC-eron jälkeen",
+        "en": "Reuters: UAE reviews multilateral ties after OPEC exit",
+        "sv": "Reuters: UAE granskar multilaterala band efter OPEC-utträdet"
+      }
+    }
   ]
 }

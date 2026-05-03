@@ -4,13 +4,16 @@ import { useTranslation } from 'react-i18next';
 import type { MallActions, MegaScenarioResolved } from '@/lib/shoppermind/megaScenario';
 import { SourceLinkList } from './SourceLinkList';
 import { EmptyTabState } from './EmptyTabState';
+import { PathReferenceText, type ScenarioPathId } from './PathReferenceText';
 
 export function CompetitorBenchmarkPanel({
   scenario,
   benchmarks,
+  onSelectScenarioPath,
 }: {
   scenario: MegaScenarioResolved | null | undefined;
   benchmarks: Array<{ id: string; actions: MallActions }>;
+  onSelectScenarioPath?: (pathId: ScenarioPathId) => void;
 }) {
   const { t } = useTranslation('mall');
   if (!scenario || benchmarks.length === 0) {
@@ -23,7 +26,7 @@ export function CompetitorBenchmarkPanel({
   }
 
   return (
-    <section className="rounded-2xl border-2 border-bo-neutral-300/60 bg-white p-5 shadow-bo-glass">
+    <section className="bo-surface rounded-2xl border-2 p-5">
       <div className="mb-4">
         <div className="text-xs font-semibold uppercase tracking-[0.14em] text-bo-primary-700">
           {t('shoppermind.tabs.competitors', { defaultValue: 'Kilpailijat' })}
@@ -40,7 +43,7 @@ export function CompetitorBenchmarkPanel({
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {benchmarks.map(({ id, actions }) => (
-          <article key={id} className="rounded-xl border border-bo-neutral-200 bg-bo-neutral-50/70 p-4">
+          <article key={id} className="bo-surface-subtle bo-surface-hover rounded-xl border p-4">
             <div className="flex flex-wrap items-center gap-2">
               <h3 className="text-base font-semibold text-bo-neutral-950">{actions.name}</h3>
               {actions.operator && (
@@ -49,9 +52,15 @@ export function CompetitorBenchmarkPanel({
                 </span>
               )}
             </div>
-            <p className="mt-2 text-sm leading-relaxed text-bo-neutral-700">{actions.context}</p>
+            <p className="mt-2 text-sm leading-relaxed text-bo-neutral-700">
+              <PathReferenceText text={actions.context} onSelectPath={onSelectScenarioPath} />
+            </p>
             <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-bo-neutral-800">
-              {actions.items.slice(0, 5).map((item, index) => <li key={index}>{item}</li>)}
+              {actions.items.slice(0, 5).map((item, index) => (
+                <li key={index}>
+                  <PathReferenceText text={item} onSelectPath={onSelectScenarioPath} />
+                </li>
+              ))}
             </ul>
           </article>
         ))}

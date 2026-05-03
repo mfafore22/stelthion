@@ -117,14 +117,14 @@ export function TrajectoryChart({ scores }: { scores: PhenomenonScoreRow[] }) {
 
   if (scores.length === 0) {
     return (
-      <div className="rounded-xl bg-bo-glass border-2 border-bo-neutral-300/60 shadow-bo-glass-strong backdrop-blur-xl p-6 text-sm text-bo-neutral-500">
+      <div className="bo-surface rounded-xl border-2 border-bo-neutral-300/60 p-6 text-sm text-bo-neutral-500">
         {t('shoppermind.trajectory.empty')}
       </div>
     );
   }
 
   return (
-    <div className="rounded-xl bg-bo-glass border-2 border-bo-neutral-300/60 shadow-bo-glass-strong backdrop-blur-xl p-6 space-y-4">
+    <div className="bo-surface rounded-xl border-2 border-bo-neutral-300/60 p-6 space-y-4">
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <h3 className="text-lg font-semibold text-bo-neutral-950 tracking-tight">
@@ -134,7 +134,7 @@ export function TrajectoryChart({ scores }: { scores: PhenomenonScoreRow[] }) {
             {t('shoppermind.trajectory.subtitle')}
           </p>
         </div>
-        <div className="flex gap-1 bg-bo-neutral-100 rounded-lg p-1">
+        <div className="bo-surface-subtle flex gap-1 rounded-lg border p-1">
           {WINDOWS.map((w) => (
             <button
               key={w.key}
@@ -143,7 +143,7 @@ export function TrajectoryChart({ scores }: { scores: PhenomenonScoreRow[] }) {
               className={cn(
                 'px-3 py-1 rounded-md text-xs font-medium transition-colors',
                 windowKey === w.key
-                  ? 'bg-white text-bo-neutral-950 shadow-bo-sm'
+                  ? 'bg-white/70 text-bo-neutral-950 shadow-bo-sm'
                   : 'text-bo-neutral-500 hover:text-bo-neutral-800',
               )}
             >
@@ -162,7 +162,7 @@ export function TrajectoryChart({ scores }: { scores: PhenomenonScoreRow[] }) {
             className={cn(
               'inline-flex items-center gap-2 px-2.5 py-1 rounded-md text-xs border transition-colors',
               enabled[s.key]
-                ? 'bg-white border-bo-neutral-300 text-bo-neutral-800'
+                ? 'bg-white/70 border-bo-neutral-300 text-bo-neutral-800'
                 : 'bg-transparent border-bo-neutral-200 text-bo-neutral-400',
             )}
           >

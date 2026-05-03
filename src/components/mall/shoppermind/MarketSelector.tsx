@@ -18,7 +18,7 @@ export function MarketSelector({ value, onChange }: Props) {
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="rounded-md border border-bo-neutral-300 bg-white px-2.5 py-1 text-sm text-bo-neutral-900 focus:outline-none focus:ring-2 focus:ring-bo-primary-500/30 focus:border-bo-primary-500"
+        className="bo-surface-subtle rounded-md border px-2.5 py-1 text-sm text-bo-neutral-900 focus:outline-none focus:ring-2 focus:ring-bo-primary-500/30 focus:border-bo-primary-500"
       >
         {ALL_COUNTRIES.map((code) => {
           const isSupported = SUPPORTED_SET.has(code);

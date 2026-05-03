@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-30",
-  "report": "Integrated FI/SE consumer-trends report",
+  "updatedAt": "2026-05-03",
+  "report": "Integrated FI/SE/US/UAE market-trends report",
   "trends": [
     {
       "id": "smart-value-low-risk",
@@ -594,7 +594,7 @@
       "state": "EMERGING",
       "confidence": 88,
       "label": {
-        "fi": "Kuratoitu vapaa-ajan kulutuksen palautuminen",
+        "fi": "Kuratoitu harkinnanvaraisen kulutuksen palautuminen",
         "en": "Curated discretionary recovery",
         "sv": "Kuraterad återhämtning av sällanhandeln"
       },
@@ -604,7 +604,7 @@
         "sv": "Sverige tidigare, Finland senare."
       },
       "body": {
-        "fi": "Vapaa-ajan vähittäiskauppa ei katoa, mutta muuttuu valikoivammaksi, kategorisoituneemmaksi ja tunneperäisemmäksi. Kokemus, muoti, kauneus, ruoka ja koti voivat palautua, mutta vain jos ne tuntuvat kuratoiduilta, ajantasaisilta ja sopivasti hinnoitelluilta.",
+        "fi": "Harkinnanvarainen vähittäiskauppa ei katoa, mutta muuttuu valikoivammaksi, kategorisoituneemmaksi ja tunneperäisemmäksi. Kokemus, muoti, kauneus, ruoka ja koti voivat palautua, mutta vain jos ne tuntuvat kuratoiduilta, ajantasaisilta ja sopivasti hinnoitelluilta.",
         "en": "Discretionary retail is not vanishing; it is becoming more selective, more category-specific, and more dependent on emotional legitimacy. Experience, fashion, beauty, food, and home can recover, but only if they feel edited, current, and appropriately priced.",
         "sv": "Sällanhandeln försvinner inte; den blir mer selektiv, mer kategorispecifik och mer beroende av emotionell legitimitet. Upplevelse, mode, skönhet, mat och hem kan återhämta sig, men bara om de känns kuraterade, aktuella och rätt prissatta."
       },
@@ -829,7 +829,7 @@
         "scb-retail-mar-2026"
       ],
       "category": {
-        "fi": "kuratoitu vapaa-aika",
+        "fi": "kuratoitu harkinnanvarainen kulutus",
         "en": "curated discretionary",
         "sv": "kuraterad sällanhandel"
       },
@@ -1802,6 +1802,255 @@
             ]
           }
         }
+      }
+    },
+    {
+      "id": "uae-hormuz-risk-premium",
+      "horizon": "short",
+      "countries": [
+        "UAE"
+      ],
+      "mallFormat": "all",
+      "state": "ACCELERATING",
+      "confidence": 88,
+      "label": {
+        "fi": "Hormuzin riskipreemio ja toimitusvarmuus",
+        "en": "Hormuz risk premium and supply resilience",
+        "sv": "Hormuz-riskpremie och leveransresiliens"
+      },
+      "marketsNote": {
+        "fi": "UAE:n keskukset toimivat kasvumarkkinassa, mutta Hormuzin häiriö muuttaa hinnoittelua, varastointia ja matkailun varmuutta nopeasti.",
+        "en": "UAE centres operate in a growth market, but Hormuz disruption is quickly changing pricing, stock buffers and tourism certainty.",
+        "sv": "UAE:s centrum verkar på en tillväxtmarknad, men Hormuzstörningen ändrar snabbt prissättning, lagerbuffertar och turismens säkerhet."
+      },
+      "body": {
+        "fi": "Iranin konfliktin aiheuttama Hormuzin sulku- ja vakuutusriski nostaa kuljetus- ja energiakustannusten preemiota. Kauppakeskuksissa tämä näkyy premium-tuontituotteiden saatavuudessa, tapahtumien riskivarauksissa ja matkailijoiden ostoluottamuksessa. Polku A kestää, jos häiriö pysyy hallittuna; polku B aktivoituu, jos kuljetusvakuutukset ja lentoyhteydet kiristyvät uudelleen.",
+        "en": "The Iran conflict and Hormuz closure/insurance risk add a premium to logistics and energy costs. In malls this shows up in imported premium goods availability, event contingency budgets and tourist confidence. Path A holds if disruption stays managed; path B activates if shipping insurance and air links tighten again.",
+        "sv": "Irankonflikten och riskerna kring Hormuzstängning och försäkringar lägger en premie på logistik- och energikostnader. I köpcentrum syns det i tillgången på importerade premiumvaror, eventbuffertar och turisternas förtroende. Väg A håller om störningen förblir hanterad; väg B aktiveras om sjöfartsförsäkring och flygförbindelser stramas åt igen."
+      },
+      "mallImplications": {},
+      "opportunities": {
+        "fi": [
+          "Polku B -varoituslista: kriittiset vuokralaiskategoriat, varastoriski ja tapahtumien peruutusehdot samaan näkymään.",
+          "Korosta paikallista saatavuutta, turvallista asiointia ja vaihtoehtoisia premium-valikoimia matkailijoille.",
+          "Sovi avainvuokralaisten kanssa kahden viikon kampanja- ja varastobufferit Ramadanin, kesän ja lentoliikennehäiriöiden varalle."
+        ],
+        "en": [
+          "Path B watchlist: critical tenant categories, stock risk and event cancellation terms in one operating view.",
+          "Promote local availability, safe visits and alternative premium assortments for tourists.",
+          "Agree two-week campaign and stock buffers with key tenants for Ramadan, summer and flight disruptions."
+        ],
+        "sv": [
+          "Väg B-bevakning: kritiska hyresgästkategorier, lagerrisk och avbokningsvillkor för event i samma driftsvy.",
+          "Lyft lokal tillgång, trygga besök och alternativa premiumsortiment för turister.",
+          "Säkra två veckors kampanj- och lagerbuffert med nyckelhyresgäster inför Ramadan, sommar och flygstörningar."
+        ]
+      },
+      "campaigns": [
+        {
+          "name": {
+            "fi": "Saatavuus taattu",
+            "en": "Availability Assured",
+            "sv": "Tillgång säkrad"
+          },
+          "audience": {
+            "fi": "Turistit, premium-ostajat ja ekspattiperheet",
+            "en": "Tourists, premium shoppers and expat families",
+            "sv": "Turister, premiumkunder och expatfamiljer"
+          },
+          "whyNow": {
+            "fi": "Kuljetus- ja vakuutusriski tekee saatavuudesta ostamisen perusteen.",
+            "en": "Logistics and insurance risk make availability a reason to buy.",
+            "sv": "Logistik- och försäkringsrisk gör tillgång till ett köpskäl."
+          },
+          "channels": [
+            "app",
+            "screens",
+            "concierge",
+            "tenant CRM"
+          ],
+          "successMetric": {
+            "fi": "Premium-kategorioiden konversio ja loppuunmyytyjen tuotteiden osuus",
+            "en": "Premium-category conversion and out-of-stock share",
+            "sv": "Premiumkategoriers konvertering och slutsåld andel"
+          }
+        }
+      ],
+      "sourceIds": [
+        "reuters-hormuz-shipping-2026",
+        "reuters-iran-war-deadlock-2026",
+        "cbuae-qer-mar-2026"
+      ],
+      "category": {
+        "fi": "geopolitiikka",
+        "en": "geopolitics",
+        "sv": "geopolitik"
+      }
+    },
+    {
+      "id": "uae-opec-autonomy-retail",
+      "horizon": "medium",
+      "countries": [
+        "UAE"
+      ],
+      "mallFormat": "all",
+      "state": "EMERGING",
+      "confidence": 82,
+      "label": {
+        "fi": "OPEC-ero ja energia-autonomian kulutusvaikutus",
+        "en": "OPEC exit and energy-autonomy retail impact",
+        "sv": "OPEC-utträde och energisjälvständighetens retaileffekt"
+      },
+      "marketsNote": {
+        "fi": "Reutersin mukaan UAE:n OPEC/OPEC+ -ero astui voimaan 1.5.2026. Ostoskeskuksille se on enemmän investointi- ja kustannuspolku kuin pelkkä öljyuutinen.",
+        "en": "Reuters reports the UAE OPEC/OPEC+ exit took effect on May 1, 2026. For malls this is more an investment and cost path than just an oil headline.",
+        "sv": "Reuters rapporterar att UAE:s utträde ur OPEC/OPEC+ trädde i kraft 1 maj 2026. För köpcentrum är detta mer en investerings- och kostnadsbana än bara en oljenyhet."
+      },
+      "body": {
+        "fi": "OPEC-eron jälkeen UAE voi pyrkiä joustavampaan tuotanto- ja energiakumppanirooliin. Jos geopoliittinen tilanne normalisoituu, polku C saa tukea investoinneista, alhaisista pääomakustannuksista ja turvallisen keskuksen maineesta. Jos ero lisää alueellista kitkaa tai öljyn hintavaihtelua, polku B nostaa energia-, vakuutus- ja rahoituskustannuksia myös kauppakeskuksille.",
+        "en": "After leaving OPEC, the UAE can pursue a more flexible production and energy-partner role. If geopolitics normalise, path C gains support from investment, lower capital costs and the UAE safe-hub reputation. If the exit adds regional friction or oil volatility, path B raises energy, insurance and financing costs for malls too.",
+        "sv": "Efter OPEC-utträdet kan UAE söka en mer flexibel roll som producent och energipartner. Om geopolitiken normaliseras stärks väg C av investeringar, lägre kapitalkostnader och bilden av UAE som trygg hubb. Om utträdet ökar regional friktion eller oljevolatilitet höjer väg B energi-, försäkrings- och finansieringskostnader även för köpcentrum."
+      },
+      "mallImplications": {},
+      "opportunities": {
+        "fi": [
+          "Päivitä vuokralais- ja budjettiskenaariot kahdella muuttujalla: energiaindeksi ja vakuutus-/rahoituspreemio.",
+          "Polku C: myy UAE:n turvallinen hubi -asema kansainvälisille brändeille, tapahtumille ja sijoittajille.",
+          "Polku B: tee energiakustannusten jakamisesta läpinäkyvä vuokralaisneuvotteluissa."
+        ],
+        "en": [
+          "Update tenant and budget scenarios with two variables: energy index and insurance/financing premium.",
+          "Path C: sell the UAE safe-hub position to global brands, events and investors.",
+          "Path B: make energy-cost sharing transparent in tenant negotiations."
+        ],
+        "sv": [
+          "Uppdatera hyresgäst- och budgetscenarier med två variabler: energiindex och försäkrings-/finansieringspremie.",
+          "Väg C: sälj UAE:s trygga hubbposition till globala varumärken, event och investerare.",
+          "Väg B: gör energikostnadsdelning transparent i hyresgästdialoger."
+        ]
+      },
+      "campaigns": [
+        {
+          "name": {
+            "fi": "Turvallisen hubin viikko",
+            "en": "Safe Hub Week",
+            "sv": "Trygg hubb-vecka"
+          },
+          "audience": {
+            "fi": "Kansainväliset brändit, premium-asiakkaat ja tapahtumakumppanit",
+            "en": "International brands, premium customers and event partners",
+            "sv": "Internationella varumärken, premiumkunder och eventpartners"
+          },
+          "whyNow": {
+            "fi": "Energia-autonomia voi parantaa UAE:n erottautumista, jos arjen turvallisuus ja palvelut näkyvät asiakkaalle.",
+            "en": "Energy autonomy can strengthen UAE differentiation if everyday safety and service are visible to customers.",
+            "sv": "Energisjälvständighet kan stärka UAE:s differentiering om vardaglig trygghet och service syns för kunden."
+          },
+          "channels": [
+            "PR",
+            "B2B leasing",
+            "screens",
+            "concierge"
+          ],
+          "successMetric": {
+            "fi": "Uusien brändikeskustelujen määrä ja tapahtumavaraukset",
+            "en": "New brand conversations and event bookings",
+            "sv": "Nya varumärkesdialoger och eventbokningar"
+          }
+        }
+      ],
+      "sourceIds": [
+        "reuters-uae-opec-exit-2026",
+        "reuters-uae-autonomy-2026",
+        "cbuae-qer-mar-2026"
+      ],
+      "category": {
+        "fi": "energia-autonomia",
+        "en": "energy autonomy",
+        "sv": "energisjälvständighet"
+      }
+    },
+    {
+      "id": "uae-safe-hub-tourism",
+      "horizon": "long",
+      "countries": [
+        "UAE"
+      ],
+      "mallFormat": "destination",
+      "state": "STABLE",
+      "confidence": 86,
+      "label": {
+        "fi": "Turvallisen hubin matkailu ja pääomavirrat",
+        "en": "Safe-hub tourism and capital flows",
+        "sv": "Trygg hubb-turism och kapitalflöden"
+      },
+      "marketsNote": {
+        "fi": "Dubain 19,59 miljoonan kävijän lähtötaso antaa vahvan pohjan, mutta konfliktin aikana matkailu tarvitsee selkeän turvallisuus- ja palvelulupauksen.",
+        "en": "Dubai’s 19.59 million visitor base is strong, but during conflict tourism needs a clear safety and service promise.",
+        "sv": "Dubais bas på 19,59 miljoner besökare är stark, men under konflikt kräver turismen ett tydligt löfte om trygghet och service."
+      },
+      "body": {
+        "fi": "UAE voi hyötyä turvasatama-asemasta, jos lentoyhteydet, vakuutukset ja tapahtumakalenteri pysyvät toimivina. Päänäkymässä tämä kääntyy polku C:n mahdollisuudeksi: premium-brändit, hotellit, wellness, viihde ja sijoittajapalvelut vahvistuvat. Samalla polku A edellyttää jatkuvaa näyttöä siitä, että arjen saavutettavuus ja tapahtumien laatu eivät heikkene konfliktin vuoksi.",
+        "en": "The UAE can benefit from safe-haven positioning if air links, insurance and the event calendar remain functional. In the overview this becomes a path C opportunity: premium brands, hotels, wellness, entertainment and investor services strengthen. Path A still requires proof that everyday access and event quality are not weakened by the conflict.",
+        "sv": "UAE kan gynnas av sin position som trygg hamn om flygförbindelser, försäkringar och eventkalender förblir fungerande. I översikten blir detta en väg C-möjlighet: premiumvarumärken, hotell, wellness, nöje och investerartjänster stärks. Väg A kräver ändå bevis på att vardaglig tillgänglighet och eventkvalitet inte försvagas av konflikten."
+      },
+      "mallImplications": {},
+      "opportunities": {
+        "fi": [
+          "Rakenna turistille yhden näkymän palvelulupaus: kuljetus, tapahtumat, tax-free, premium-varaukset ja concierge.",
+          "Kytke hotellit, lentoyhtiöt ja luksusvuokralaiset yhteisiin turvallisiin asiointipolkuihin.",
+          "Mittaa paikallisten, ekspattien ja turistien konversio erikseen, jotta polku C ei peitä polku B:n riskejä."
+        ],
+        "en": [
+          "Build one service promise for tourists: transport, events, tax-free, premium bookings and concierge.",
+          "Connect hotels, airlines and luxury tenants into safe visit paths.",
+          "Measure local, expat and tourist conversion separately so path C does not hide path B risks."
+        ],
+        "sv": [
+          "Bygg ett samlat servicelöfte för turister: transport, event, tax-free, premiumbokningar och concierge.",
+          "Koppla hotell, flygbolag och lyxhyresgäster till trygga besöksvägar.",
+          "Mät lokal-, expat- och turistkonvertering separat så att väg C inte döljer väg B-risker."
+        ]
+      },
+      "campaigns": [
+        {
+          "name": {
+            "fi": "Dubai Safe Visit",
+            "en": "Dubai Safe Visit",
+            "sv": "Dubai Safe Visit"
+          },
+          "audience": {
+            "fi": "Luksusmatkailijat, perheet ja stopover-kävijät",
+            "en": "Luxury tourists, families and stopover visitors",
+            "sv": "Lyxturister, familjer och stopover-besökare"
+          },
+          "whyNow": {
+            "fi": "Konfliktin aikana turvallisuuden konkretisointi voi ratkaista matkailijan kauppakeskusvalinnan.",
+            "en": "During conflict, making safety concrete can decide which mall a visitor chooses.",
+            "sv": "Under konflikt kan konkret trygghet avgöra vilket köpcentrum besökaren väljer."
+          },
+          "channels": [
+            "hotel partners",
+            "airport media",
+            "concierge",
+            "social"
+          ],
+          "successMetric": {
+            "fi": "Hotelli- ja lentokenttäkanavien kävijäkonversio",
+            "en": "Hotel and airport-channel visitor conversion",
+            "sv": "Besökskonvertering från hotell- och flygplatskanaler"
+          }
+        }
+      ],
+      "sourceIds": [
+        "dubai-det-visitors-2025",
+        "reuters-iran-war-deadlock-2026",
+        "cbuae-qer-mar-2026"
+      ],
+      "category": {
+        "fi": "turvasatama",
+        "en": "safe hub",
+        "sv": "trygg hubb"
       }
     }
   ]

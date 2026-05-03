@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-05-01",
+  "updatedAt": "2026-05-03",
   "sources": [
     {
       "id": "stat-fi-confidence-feb-2026",
@@ -439,13 +439,13 @@
     {
       "id": "stat-fi-confidence-apr-2026",
       "publisher": "Tilastokeskus",
-      "url": "https://stat.fi/en/statistics/kbar",
+      "url": "https://stat.fi/en/publication/cmf5gvuji3lk707upnalliarx",
       "title": {
-        "fi": "Tilastokeskus: Kuluttajien luottamus huhtikuussa 2026",
-        "en": "Statistics Finland: Consumer confidence, April 2026",
-        "sv": "Statistikcentralen: Konsumentförtroende april 2026"
+        "fi": "Tilastokeskus: Kuluttajien luottamus heikkeni edelleen huhtikuussa 2026",
+        "en": "Statistics Finland: Consumer confidence sank further in April 2026",
+        "sv": "Statistikcentralen: Konsumentförtroendet sjönk ytterligare i april 2026"
       },
-      "retrievedAt": "2026-05-01",
+      "retrievedAt": "2026-05-03",
       "sourceType": "statistical",
       "authorityTier": "primary",
       "verificationStatus": "verified"
@@ -588,6 +588,104 @@
       "retrievedAt": "2026-05-02",
       "sourceType": "research",
       "authorityTier": "trusted_research",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "cbuae-qer-mar-2026",
+      "publisher": "Central Bank of the UAE",
+      "url": "https://www.centralbank.ae/media/lgnfakgc/qer-march_2026.pdf",
+      "title": {
+        "fi": "UAE:n keskuspankki: Quarterly Economic Review, maaliskuu 2026",
+        "en": "Central Bank of the UAE: Quarterly Economic Review, March 2026",
+        "sv": "UAE:s centralbank: Quarterly Economic Review, mars 2026"
+      },
+      "retrievedAt": "2026-05-03",
+      "sourceType": "statistical",
+      "authorityTier": "primary",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "dubai-det-visitors-2025",
+      "publisher": "Dubai Department of Economy and Tourism",
+      "url": "https://www.dubaidet.gov.ae/en/newsroom/press-releases/dubais-tourism-industry-achieves-third-successive-record-breaking-year?print=",
+      "title": {
+        "fi": "Dubai DET: 19,59 miljoonaa kansainvälistä kävijää vuonna 2025",
+        "en": "Dubai DET: 19.59 million international visitors in 2025",
+        "sv": "Dubai DET: 19,59 miljoner internationella besökare 2025"
+      },
+      "retrievedAt": "2026-05-03",
+      "sourceType": "statistical",
+      "authorityTier": "primary",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "reuters-uae-opec-exit-2026",
+      "publisher": "Reuters via GMA News Online",
+      "url": "https://www.gmanetwork.com/news/money/economy/985698/uae-opec-energy-crisis/story/",
+      "title": {
+        "fi": "Reuters: UAE ilmoitti jättävänsä OPECin ja OPEC+:n 1.5.2026",
+        "en": "Reuters: UAE says it is leaving OPEC and OPEC+ on May 1, 2026",
+        "sv": "Reuters: UAE lämnar OPEC och OPEC+ den 1 maj 2026"
+      },
+      "retrievedAt": "2026-05-03",
+      "sourceType": "news",
+      "authorityTier": "authoritative",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "reuters-hormuz-shipping-2026",
+      "publisher": "Reuters via Investing.com",
+      "url": "https://www.investing.com/news/commodities-news/iran-conflict-disrupts-global-shipping-as-tankers-are-stranded-damaged-4534475",
+      "title": {
+        "fi": "Reuters: Iranin konflikti häiritsee Hormuzin laivaliikennettä ja vakuutuksia",
+        "en": "Reuters: Iran conflict disrupts Hormuz shipping and insurance",
+        "sv": "Reuters: Irankonflikten stör sjöfart och försäkringar i Hormuz"
+      },
+      "retrievedAt": "2026-05-03",
+      "sourceType": "news",
+      "authorityTier": "authoritative",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "reuters-iran-war-deadlock-2026",
+      "publisher": "Reuters via Investing.com",
+      "url": "https://www.investing.com/news/world-news/uae-says-iran-cannot-be-trusted-over-hormuz-peace-efforts-at-an-impasse-4652305",
+      "title": {
+        "fi": "Reuters: Iranin sodan neuvottelut jumissa, Hormuz edelleen riskitekijä",
+        "en": "Reuters: Iran war talks remain stuck, Hormuz remains a risk factor",
+        "sv": "Reuters: Samtalen om Irankriget fastlåsta, Hormuz fortsatt riskfaktor"
+      },
+      "retrievedAt": "2026-05-03",
+      "sourceType": "news",
+      "authorityTier": "authoritative",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "reuters-uae-autonomy-2026",
+      "publisher": "Reuters via Investing.com",
+      "url": "https://www.investing.com/news/commodities-news/uae-reviewing-multilateral-ties-after-opec-exit-but-rules-out-more-departures-official-says-4644628",
+      "title": {
+        "fi": "Reuters: UAE arvioi monenvälisiä suhteitaan OPEC-eron jälkeen",
+        "en": "Reuters: UAE reviews multilateral ties after OPEC exit",
+        "sv": "Reuters: UAE granskar multilaterala band efter OPEC-utträdet"
+      },
+      "retrievedAt": "2026-05-03",
+      "sourceType": "news",
+      "authorityTier": "authoritative",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "stat-fi-trade-mar-2026",
+      "publisher": "Tilastokeskus",
+      "url": "https://stat.fi/en/publication/cmg538tyvolfd07w05fp8axq9",
+      "title": {
+        "fi": "Tilastokeskus: Kaupan liikevaihto kasvoi maaliskuussa 2026",
+        "en": "Statistics Finland: Turnover in trade grew in March 2026",
+        "sv": "Statistikcentralen: Handelns omsättning ökade i mars 2026"
+      },
+      "retrievedAt": "2026-05-03",
+      "sourceType": "statistical",
+      "authorityTier": "primary",
       "verificationStatus": "verified"
     }
   ]

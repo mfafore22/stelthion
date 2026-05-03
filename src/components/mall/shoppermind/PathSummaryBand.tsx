@@ -15,7 +15,7 @@ export function PathSummaryBand({ paths }: { paths: MegaPath[] }) {
         return (
           <div
             key={p.id}
-            className="rounded-lg border border-bo-neutral-200/60 bg-white/60 p-2.5 flex items-start gap-2"
+            className="bo-surface-subtle rounded-lg border p-2.5 flex items-start gap-2"
           >
             <span className={`w-2 h-2 rounded-full ${dot} shrink-0 mt-1.5`} />
             <div className="min-w-0">

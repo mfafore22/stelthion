@@ -2,7 +2,7 @@
   "id": "finland-suuri-murros",
   "country": "FI",
   "timespan": "2030+",
-  "updatedAt": "2026-04-29",
+  "updatedAt": "2026-05-03",
   "i18n": {
     "fi": {
       "title": "Suomen suuri murros",
@@ -34,7 +34,7 @@
             {
               "label": "Velkasuhde",
               "value": "96–98 %",
-              "hint": "BKT:sta, plateau"
+              "hint": "BKT:sta, tasaantuminen"
             },
             {
               "label": "Vuokrausaste",
@@ -159,8 +159,8 @@
           "summary": "Markkinat pakottavat Suomen rajuun sopeutukseen. Sosiaaliturvan ja kuntatalouden leikkaukset osuvat suoraan kulutukseen.",
           "macro": "Velkasuhde lähestyy 100 prosenttia bruttokansantuotteesta ja korkomenot syövät julkisia menoja. Joko markkinapaine, luottoluokituksen lasku tai EU:n vakaussopimuksen tiukennus pakottaa uuden hallituksen 8–10 miljardin euron kumulatiiviseen sopeutuspakettiin vuosille 2027–2030. Sopeutus tehdään suurimmaksi osaksi menoleikkauksin, koska kuluttajaverojen korotuksilla on suora osuma jo heikkoon kysyntään.",
           "consumer": "Sosiaaliturvan leikkaukset osuvat ensin: työttömyysturva 15–20 prosenttia alas, asumistuki 10–15 prosenttia alas, toimeentulotuen myöntämiskriteerit tiukkenevat, lapsilisien ja eläkeindeksien tarkistukset jäädytetään. Pienituloisen kolmanneksen käytettävissä olevat tulot supistuvat reaalisesti 10–20 prosenttia. Kuntien hoiva- ja terveysmaksut nousevat samanaikaisesti, jolloin etenkin yksinasuvien seniorien arjen kuluerä kasvaa.",
-          "retail": "Diskretionaariset menot, eli vaatteet, viihde ja ulkona syöminen, supistuvat 15–25 prosenttia. Päivittäistavara siirtyy halpaketjuihin ja omiin merkkeihin. Käytettyjen tuotteiden myynti kasvaa 30–40 prosenttia, korjauspalveluiden kysyntä lisääntyy, vuokra- ja jakamismallit yleistyvät. Maksujen myöhästymiset ja velkakierre kasvavat, mikä heikentää kuluttajaluottoja myöntäviä toimijoita.",
-          "property": "Liikekiinteistöjen tuottovaateet nousevat 50–100 korkoyksikköä, mikä tarkoittaa noin 0,5–1,0 prosenttiyksikköä korkeampaa tuottovaadetta. Toissijaisten sijaintien arvostus laskee 15–25 prosenttia. Pääkaupunkiseudun ykkössijainnit kestävät, mutta maakuntien aluekeskukset kärsivät rajusti, koska julkisen sektorin työpaikkojen 15 000–25 000 vähennys osuu juuri sinne. Rahoituksen saatavuus heikkenee ja jälleenrahoitus kallistuu.",
+          "retail": "Harkinnanvaraiset menot, eli vaatteet, viihde ja ulkona syöminen, supistuvat 15–25 prosenttia. Päivittäistavara siirtyy halpaketjuihin ja omiin merkkeihin. Käytettyjen tuotteiden myynti kasvaa 30–40 prosenttia, korjauspalveluiden kysyntä lisääntyy, vuokra- ja jakamismallit yleistyvät. Maksujen myöhästymiset ja velkakierre kasvavat, mikä heikentää kuluttajaluottoja myöntäviä toimijoita.",
+          "property": "Liikekiinteistöjen tuottovaateet nousevat 50–100 korkopistettä, mikä tarkoittaa noin 0,5–1,0 prosenttiyksikköä korkeampaa tuottovaadetta. Toissijaisten sijaintien arvostus laskee 15–25 prosenttia. Pääkaupunkiseudun ykkössijainnit kestävät, mutta maakuntien aluekeskukset kärsivät rajusti, koska julkisen sektorin työpaikkojen 15 000–25 000 vähennys osuu juuri sinne. Rahoituksen saatavuus heikkenee ja jälleenrahoitus kallistuu.",
           "mallImpact": "Vuokrausaste laskee 5–10 prosenttiyksikköä, tyhjät tilat näkyvät käytävillä. Vuokrasopimusten kesto lyhenee 5–7 vuodesta 2–3 vuoteen, liikevaihtosidonnaiset vuokrat yleistyvät kiinteiden sijaan. Erikoiskauppa ja muoti karsiutuvat aggressiivisesti, kun taas päivittäistavara, terveyspalvelut, kierrätys ja edullisuuspainotteiset konseptit nousevat ankkureiksi. Väliaikaiskonseptit täyttävät tyhjiä liiketiloja. Kauppakeskuksesta tulee yhteisötila ja palvelukeskus, ei pelkkä ostospaikka.",
           "keyNumbers": [
             {
@@ -307,7 +307,7 @@
           "macro": "Kolme tekijää yhdistyy: tuottavuusinvestoinnit dataan, ohjelmistoihin ja automaatioon tuottavat tulosta, työperäinen maahanmuutto kasvaa 30 000–40 000 hengellä vuosittain, ja vihreä siirtymä synnyttää uutta teollisuutta vetytaloudessa, akkukemikaaleissa ja biotaloudessa. Bruttokansantuote kasvaa 2,5–3,5 prosenttia vuodessa 2030-luvulla, mikä on selvästi Suomen Pankin perusskenaarion 1,8 prosentin yläpuolella.",
           "consumer": "Maahanmuuton ansiosta työikäinen väestö pysähtyy supistumasta ja kääntyy lievään kasvuun. Nuorten aikuisten 25–39 ikäluokka monimuotoistuu, kosmopolisoituu ja kuluttaa palveluja aiempaa enemmän. Aktiivisten seniorien 65–79 ikäluokka on hyvin koulutettu ja maksaa palveluista. Polarisaatio jatkuu, mutta yläpää kasvaa nopeammin. Vastuullisuus ja kotimaisuus arvotetaan korkeammalle, hintavetoisuus kevenee.",
           "retail": "Palvelut kasvavat tavarakulutusta nopeammin. Terveys, hyvinvointi, koulutus ja kokemukset ottavat kuluttajan euroista entistä isomman osuuden. Digitaaliset palvelut sulautuvat fyysiseen asiointiin saumattomasti, ja monikanavaisuus on enää lähtötaso, ei kilpailuetu. Vihreät sertifikaatit kuten LEED Platinum (rakennuksen ympäristöluokitus, korkein taso) ja BREEAM (eurooppalainen vastine) muuttuvat institutionaalisen sijoittajan vähimmäisvaatimukseksi.",
-          "property": "Tuottovaateet laskevat 25–50 korkoyksikköä, sijoittajakysyntä palaa. Uusi rakentaminen elpyy, erityisesti monikäyttöinen ja palvelukeskeinen. Pääkaupunkiseutu ja kasvavat aluekeskukset Tampere, Turku ja Oulu hyötyvät eniten. Toissijaisten sijaintien arvostuserot pysyvät, mutta vahvat aluekeskukset elpyvät.",
+          "property": "Tuottovaateet laskevat 25–50 korkopistettä, sijoittajakysyntä palaa. Uusi rakentaminen elpyy, erityisesti monikäyttöinen ja palvelukeskeinen. Pääkaupunkiseutu ja kasvavat aluekeskukset Tampere, Turku ja Oulu hyötyvät eniten. Toissijaisten sijaintien arvostuserot pysyvät, mutta vahvat aluekeskukset elpyvät.",
           "mallImpact": "Kauppakeskuksesta tulee monikäyttöinen kaupunkitila, jossa vähittäiskauppa, palvelut, työtilat ja asuminen ovat lähellä toisiaan. 30–40 prosenttia vuokralaismixistä on ei-perinteistä vähittäiskauppaa: terveyspalveluja, yhteistyötiloja, kuntoilua, kulttuuria. Tapahtumat ja kokemukset muodostavat 15–20 prosenttia kävijäarvosta. Kierrätys ja korjauspalvelut ovat osa normaalia tarjontaa. Kauppakeskuksen oma medianäyttöverkosto ja kanta-asiakasdata muuttuvat merkittäväksi tulonlähteeksi.",
           "keyNumbers": [
             {
@@ -446,6 +446,7 @@
       "actionsGeneralLabel": "Kaikkia kiinteistöjä koskevat",
       "actionsGeneral": [
         "Rakenna halpa, hyvä ja parempi -valikoimalogiikka, jossa hintamielikuva on jatkuvassa hallinnassa kaikissa kolmessa polussa.",
+        "Lisää toukokuun 2026 energiariski toimintamalliin: seuraa vuokralaisten energia- ja logistiikkalisää, ajoita kampanjat palkka- ja etuusviikoille ja viesti kalliit ostokset matalan riskin päätöksinä.",
         "Investoi dataan, ohjelmistoihin ja personointiin: Suomen kaupan tuottavuusvaje on juuri täällä, ja tämä investointi tuottaa kaikissa skenaarioissa.",
         "Lisää terveys-, hyvinvointi- ja arjen palveluita, joiden kysyntä kasvaa väestön ikääntyessä riippumatta kasvupolusta.",
         "Vahvista monikanavaista asiointia: noutopisteet, verkkotilaus ja nouto, sovellus ja fyysinen tila yhdessä.",
@@ -461,6 +462,7 @@
           "items": [
             "Tee Sellosta seniorien arjen olohuone: levähdyspaikat, selkeät opasteet, valaistus ja äänielementit. Tämä kestää kaikissa kolmessa polussa.",
             "Sijoita terveys- ja hyvinvointipalvelut näkyville reiteille, ei kuolleisiin nurkkiin. Polussa B kuntien hoivamenojen leikkaukset siirtävät kysyntää yksityisiin palveluihin.",
+            "Toukokuun energiasokki: rakenna perheille ja senioreille \"kuluta varmemmin\" -asiointipolku, jossa apteekki, ruoka, korjauspalvelut ja maltilliset kestohankinnat näkyvät samalla reitillä.",
             "Tasapainota Polun B varalta: vahvista päivittäistavaraa ja arjen palveluita erikoiskaupan kustannuksella, lyhennä erikoiskauppojen vuokrasopimuksia.",
             "Hyödynnä LEED Platinum -sertifiointi (rakennuksen ympäristöluokitus, korkein taso) ja hiilineutraalius vastuullisuusviestinnässä erityisesti Polkua C silmällä pitäen.",
             "Mittaa erikseen seniori-NPS-arvo (Net Promoter Score, asiakkaan suositteluhalukkuus) ja esteettömän asioinnin onnistuminen, ei vain yleistä NPS-lukua.",
@@ -517,6 +519,7 @@
           "items": [
             "Painota asemakeskeistä mukavuutta: nopea ruoka, ota mukaan -annokset ja palvelut työmatkalaisille. Pasilan kävijävirta kestää, vaikka diskretionaarinen kulutus heikkenisi.",
             "Kasvata faniyhteisö- ja popkulttuuritapahtumia nuoren kaupunkilaisen sosiaaliseksi tilaksi. Ne ovat halpa tapa täyttää kävijäaikaa ja kasvattavat ostoa myöhemmin.",
+            "Toukokuun energiasokki: hyödynnä Pasilan välttämätön asiointivirta nopeilla ruoka-, nouto-, huolto- ja arvolupauksilla. Älä nojaa pelkkään harkinnanvaraiseen vapaa-aikaan.",
             "Polun B varalta reagoi nopeasti: lyhytaikaiset väliaikaiskonseptit ja edullisuuspainotteiset konseptit pitkien jäykkien vuokrasopimusten sijaan. Älä lukitse pinta-alaa pitkillä kiinteillä vuokrilla.",
             "Hyödynnä monikulttuurinen alue: kansainvälisen ruoan, kauneuden ja pienpalveluiden kerros toimii kaikissa kolmessa polussa.",
             "Rakenna Triplasta vähittäiskaupan media-alusta: Pasilan kävijävirrat ovat itsessään myytävää media-arvoa. Tämä on pieni mutta vakaa lisätulo Polussa A ja räjähtävä mahdollisuus Polussa C."
@@ -616,10 +619,10 @@
           "operator": "Citycon",
           "isCompetitor": true,
           "name": "Jumbo-Flamingo, Vantaa",
-          "context": "Citycon-omisteinen kohdekauppakeskus yhdessä Flamingo-vapaa-ajan kanssa. Vertaile suuren kohdekäynnin strategioita: pitkä viipymäaika, perheen ostokorit ja vapaa-ajan ankkurien kytkös retail-myyntiin.",
+          "context": "Citycon-omisteinen kohdekauppakeskus yhdessä Flamingo-vapaa-ajan kanssa. Vertaile suuren kohdekäynnin strategioita: pitkä viipymäaika, perheen ostokorit ja vapaa-ajan ankkurien kytkös vähittäismyyntiin.",
           "items": [
             "Vertaa keskimääräistä viipymäaikaa: Jumbon kohdekäynti vs. omien kohteiden vastaava.",
-            "Mittaa vapaa-ajan ankkurien (kylpylä, elokuvat) konversio retail-myyntiin saman käynnin aikana.",
+            "Mittaa vapaa-ajan ankkurien (kylpylä, elokuvat) konversio vähittäismyyntiin saman käynnin aikana.",
             "Seuraa perheryhmäkävijöiden osuutta ja peilaa Sellon ja Triplan vastaaviin lukuihin.",
             "Vertaa kiertotaloustapahtumia (lasten vaatevaihto, urheilun second hand) oman kalenterin vastaaviin.",
             "Tarkista pysäköintialueiden saatavuus ruuhka-aikana, käytä benchmarkina.",
@@ -637,7 +640,7 @@
               "hint": "2+ kävijää, joista 1+ alle 18 v"
             },
             {
-              "label": "Vapaa-aika -> retail -konversio",
+              "label": "Vapaa-aika -> vähittäismyyntikonversio",
               "target": "vertailu",
               "hint": "samasta käynnistä"
             },
@@ -1102,6 +1105,7 @@
       "actionsGeneralLabel": "Across all properties",
       "actionsGeneral": [
         "Build a cheap-good-better assortment logic with continuous price-image management. Works in all three paths.",
+        "Add the May 2026 energy-risk layer to operations: track tenant energy and logistics surcharges, time campaigns to salary and benefit weeks, and frame big purchases as lower-risk decisions.",
         "Invest in data, software and personalisation: the Finnish retail productivity gap is exactly here, and the investment pays off in every scenario.",
         "Add health, wellness and everyday-life services as the population ages, regardless of the growth path.",
         "Strengthen omnichannel: pickup points, click-and-collect, app and physical space together.",
@@ -1117,6 +1121,7 @@
           "items": [
             "Make Sello the seniors' everyday living room: rest stops, clear wayfinding, lighting and audio cues. This holds in all three paths.",
             "Place health and wellness services on visible routes, not in dead corners. Path B shifts demand from cut municipal care into private services.",
+            "May energy shock: build a \"spend with more certainty\" path for families and seniors, linking pharmacy, grocery, repair services and moderate durable purchases on one visible route.",
             "Hedge for Path B: strengthen grocery and everyday services at the expense of specialty retail; shorten specialty leases.",
             "Leverage LEED Platinum (highest building environmental rating) and carbon neutrality in sustainability messaging. Strongest upside in Path C.",
             "Measure senior NPS (Net Promoter Score, customer recommendation likelihood) and accessible-journey success separately, not just overall NPS.",
@@ -1172,6 +1177,7 @@
           "items": [
             "Lean into transit-driven convenience: fast food, take-away portions and services for commuters. Pasila flows hold even when discretionary spending weakens.",
             "Grow fan-community and pop-culture events as a young urban social space. Cheap way to fill dwell time and lifts later spending.",
+            "May energy shock: use Pasila’s necessary-trip flow with fast food, pickup, repair and value-proof offers. Do not rely only on discretionary leisure demand.",
             "Hedge for Path B: short temporary concepts and value-priced formats instead of rigid long leases. Don't lock floor area into long fixed rents.",
             "Use the multicultural catchment: international food, beauty and small-services layer works in all three paths.",
             "Build Tripla as a retail media platform: Pasila's flows are sellable media value in themselves. A small steady upside in Path A, an explosive opportunity in Path C."
@@ -1757,6 +1763,7 @@
       "actionsGeneralLabel": "Gäller alla fastigheter",
       "actionsGeneral": [
         "Bygg en billig-bra-bättre-sortimentlogik med kontinuerlig prisbildshantering.",
+        "Lägg in maj 2026 års energirisk i driften: följ hyresgästers energi- och logistiktillägg, tajma kampanjer till löne- och bidragsveckor och rama in större köp som lägre risk.",
         "Investera i data, mjukvara och personalisering.",
         "Lägg till hälsa, välmående och vardagsservice när befolkningen åldras.",
         "Stärk omnikanal: hämtpunkter, beställning online och hämtning, app och fysisk plats tillsammans.",
@@ -1772,6 +1779,7 @@
           "items": [
             "Gör Sello till seniorernas vardagsvardagsrum: vilopunkter, tydliga skyltar, belysning och ljudvägledning.",
             "Placera hälso- och välmåendetjänster vid synliga stråk, inte i döda hörn.",
+            "Majs energichock: bygg en \"handla med större trygghet\"-väg för familjer och seniorer där apotek, mat, reparation och måttliga sällanköp syns på samma stråk.",
             "Häcka för Väg B: stärk dagligvaror och vardagstjänster på bekostnad av specialhandel.",
             "Använd LEED Platinum-certifiering (högsta miljöbetyg för byggnader) och koldioxidneutralitet i hållbarhetsmarknadsföringen.",
             "Mät senior-NPS (Net Promoter Score, kundens rekommendationsbenägenhet) och tillgänglig kundresa separat, inte bara övergripande NPS.",
@@ -1827,6 +1835,7 @@
           "items": [
             "Satsa på stationsnära bekvämlighet: snabbmat, take-away och tjänster för pendlare.",
             "Väx fanbaserade och popkulturella evenemang som ung urban social plats.",
+            "Majs energichock: använd Pasilas nödvändiga besöksflöde med snabbmat, hämtning, reparation och värdebevis. Luta dig inte enbart mot sällanbesök och nöje.",
             "Häcka för Väg B: korta tillfälliga koncept och prisvärda format istället för stela långa hyresavtal.",
             "Använd det mångkulturella upptagningsområdet: internationell mat, skönhet och småservicelager.",
             "Bygg Tripla som en handelsmediaplattform: Pasilas flöden är säljbart mediavärde i sig själva."
@@ -1976,7 +1985,7 @@
       "NPS": "Net Promoter Score, asiakkaan suositteluhalukkuutta mittaava luku.",
       "LEED Platinum": "Maailmanlaajuinen rakennusten ympäristösertifiointi, korkein taso.",
       "BREEAM": "Eurooppalainen rakennusten ympäristösertifiointi, vastaa LEED-järjestelmää.",
-      "korkoyksikkö": "0,01 prosenttiyksikköä, käytetään korkojen ja tuottojen muutoksen ilmaisuun."
+      "korkopiste": "0,01 prosenttiyksikköä, käytetään korkojen ja tuottojen muutoksen ilmaisuun."
     },
     "en": {
       "NPS": "Net Promoter Score, a customer recommendation-likelihood metric.",

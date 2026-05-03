@@ -21,6 +21,7 @@ import {
   type MallTrendSet,
   type ShopperMindTab,
 } from '@/components/mall/shoppermind/ShopperMindTabPanels';
+import type { ScenarioPathId } from '@/components/mall/shoppermind/PathReferenceText';
 import {
   getMegaScenario,
   getCuratedTrendsByHorizon,
@@ -28,6 +29,10 @@ import {
   type MallActions,
 } from '@/lib/shoppermind/megaScenario';
 import { groupByHorizon } from '@/lib/shoppermind/horizon';
+import {
+  getOperatingCountries,
+  getShopperMindMarketCapabilities,
+} from '@/lib/shoppermind/marketCapabilities';
 import { getStaticSignalOfMonth } from '@/lib/shoppermind/staticSignals';
 import { buildScenarioActionFallback } from '@/lib/shoppermind/scenarioActionFallback';
 
@@ -48,7 +53,17 @@ const SHOPPERMIND_TABS: Array<{ value: ShopperMindTab; labelKey: string; fallbac
   { value: 'trends', labelKey: 'shoppermind.tabs.trends', fallback: 'Trendit' },
   { value: 'competitors', labelKey: 'shoppermind.tabs.competitors', fallback: 'Kilpailijat' },
   { value: 'decision-support', labelKey: 'shoppermind.tabs.decisionSupport', fallback: 'Päätöksen tuki' },
+  { value: 'market-lessons', labelKey: 'shoppermind.tabs.marketLessons', fallback: 'Markkinaopit' },
 ];
+
+function withFallbackSources(
+  signal: SignalOfTheDay | null,
+  fallback: SignalOfTheDay | null,
+): SignalOfTheDay | null {
+  if (!signal) return fallback;
+  if (signal.contributingSources?.length) return signal;
+  return fallback ?? signal;
+}
 
 export default function ShopperMindPage() {
   const { user, loading } = useSession();
@@ -61,6 +76,7 @@ export default function ShopperMindPage() {
   const [country, setCountry] = useState<string>('FI');
   const [selectedMallId, setSelectedMallId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<ShopperMindTab>('overview');
+  const [selectedScenarioPathId, setSelectedScenarioPathId] = useState<ScenarioPathId | null>(null);
 
   useEffect(() => {
     if (!loading && !user) router.replace('/mall/login');
@@ -98,6 +114,20 @@ export default function ShopperMindPage() {
 
   const overviewCountry = data?.market?.country ?? data?.propertyActions?.property.country ?? null;
   const overviewMatchesCountry = !overviewCountry || overviewCountry === country;
+  const operatingCountries = useMemo(() => getOperatingCountries(user?.properties), [user?.properties]);
+  const capabilities = useMemo(
+    () => getShopperMindMarketCapabilities(country, operatingCountries),
+    [country, operatingCountries],
+  );
+  const visibleTabs = useMemo(
+    () => SHOPPERMIND_TABS.filter((tab) => {
+      if (tab.value === 'actions') return capabilities.actionsEnabled;
+      if (tab.value === 'decision-support') return capabilities.decisionSupportEnabled;
+      if (tab.value === 'market-lessons') return !capabilities.decisionSupportEnabled;
+      return true;
+    }),
+    [capabilities.actionsEnabled, capabilities.decisionSupportEnabled],
+  );
   const grouped = useMemo(
     () => groupByHorizon(overviewMatchesCountry ? (data?.phenomena ?? []) : []),
     [data?.phenomena, overviewMatchesCountry],
@@ -107,12 +137,13 @@ export default function ShopperMindPage() {
     [country, i18n.language, selectedMallId],
   );
   const effectiveMallId = useMemo(() => {
+    if (!capabilities.propertySelectorsEnabled) return null;
     if (!rawMegaScenario?.perMallOptions.length) return null;
     const selectedIsValid = selectedMallId
       ? rawMegaScenario.perMallOptions.some((option) => option.id === selectedMallId)
       : false;
     return selectedIsValid ? selectedMallId : rawMegaScenario.perMallOptions[0]?.id ?? null;
-  }, [rawMegaScenario, selectedMallId]);
+  }, [capabilities.propertySelectorsEnabled, rawMegaScenario, selectedMallId]);
   const megaScenario = useMemo(
     () => getMegaScenario(country, i18n.language, effectiveMallId),
     [country, i18n.language, effectiveMallId],
@@ -124,8 +155,10 @@ export default function ShopperMindPage() {
   }), [country, i18n.language, effectiveMallId]);
   const selectedMallName = megaScenario?.perMall?.name;
   const ownMallOptions = useMemo(
-    () => (megaScenario?.perMallOptions ?? []).filter((option) => !option.isCompetitor),
-    [megaScenario?.perMallOptions],
+    () => capabilities.propertySelectorsEnabled
+      ? (megaScenario?.perMallOptions ?? []).filter((option) => !option.isCompetitor)
+      : [],
+    [capabilities.propertySelectorsEnabled, megaScenario?.perMallOptions],
   );
   const competitorBenchmarks = useMemo(() => {
     if (!megaScenario) return [];
@@ -151,20 +184,24 @@ export default function ShopperMindPage() {
     }));
   }, [country, i18n.language, ownMallOptions]);
   const fallbackPropertyActions = useMemo(
-    () => buildScenarioActionFallback({
-      scenario: megaScenario,
-      benchmarks: competitorBenchmarks,
-      marketId: data?.marketId ?? `${country.toLowerCase()}-demo`,
-      country,
-      trendIds: [...curated.short, ...curated.medium, ...curated.long].map((trend) => trend.id),
-    }),
-    [country, curated.long, curated.medium, curated.short, data?.marketId, megaScenario, competitorBenchmarks],
+    () => {
+      if (!capabilities.actionsEnabled) return null;
+      return buildScenarioActionFallback({
+        scenario: megaScenario,
+        benchmarks: competitorBenchmarks,
+        marketId: data?.marketId ?? `${country.toLowerCase()}-demo`,
+        country,
+        trendIds: [...curated.short, ...curated.medium, ...curated.long].map((trend) => trend.id),
+      });
+    },
+    [capabilities.actionsEnabled, country, curated.long, curated.medium, curated.short, data?.marketId, megaScenario, competitorBenchmarks],
   );
-  const servicePropertyActions = overviewMatchesCountry ? data?.propertyActions : null;
+  const servicePropertyActions = overviewMatchesCountry && capabilities.actionsEnabled ? (data?.propertyActions ?? null) : null;
   const activePropertyActions = servicePropertyActions?.recommendations?.length
     ? servicePropertyActions
     : fallbackPropertyActions;
   const actionSets = useMemo<MallActionSet[]>(() => {
+    if (!capabilities.actionsEnabled) return [];
     return ownMallOptions.map((option) => {
       const mallScenario = getMegaScenario(country, i18n.language, option.id);
       const mallCurated = {
@@ -187,16 +224,38 @@ export default function ShopperMindPage() {
         actions: serviceActions?.recommendations?.length ? serviceActions : fallbackActions,
       };
     });
-  }, [competitorBenchmarks, country, data?.marketId, i18n.language, ownMallOptions, servicePropertyActions]);
+  }, [capabilities.actionsEnabled, competitorBenchmarks, country, data?.marketId, i18n.language, ownMallOptions, servicePropertyActions]);
+  const fallbackSignalOfTheDay = getStaticSignalOfMonth(country);
   const activeSignalOfTheDay = overviewMatchesCountry
-    ? (data?.signalOfTheDay ?? getStaticSignalOfMonth(country))
-    : getStaticSignalOfMonth(country);
+    ? withFallbackSources(data?.signalOfTheDay ?? null, fallbackSignalOfTheDay)
+    : fallbackSignalOfTheDay;
+
+  useEffect(() => {
+    if (!visibleTabs.some((tab) => tab.value === activeTab)) {
+      queueMicrotask(() => setActiveTab('overview'));
+    }
+  }, [activeTab, visibleTabs]);
 
   useEffect(() => {
     if (effectiveMallId && effectiveMallId !== selectedMallId) {
       queueMicrotask(() => setSelectedMallId(effectiveMallId));
     }
   }, [effectiveMallId, selectedMallId]);
+
+  useEffect(() => {
+    if (activeTab !== 'overview' || !selectedScenarioPathId) return;
+    const timer = window.setTimeout(() => {
+      document
+        .getElementById(`shoppermind-path-${selectedScenarioPathId}`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 80);
+    return () => window.clearTimeout(timer);
+  }, [activeTab, selectedScenarioPathId]);
+
+  const handleScenarioPathSelect = (pathId: ScenarioPathId) => {
+    setSelectedScenarioPathId(pathId);
+    setActiveTab('overview');
+  };
 
   if (loading) {
     return (
@@ -233,7 +292,7 @@ export default function ShopperMindPage() {
                 <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as ShopperMindTab)} className="space-y-4">
                   <div className="overflow-x-auto pb-1">
                     <TabsList className="min-w-max">
-                      {SHOPPERMIND_TABS.map((tab) => (
+                      {visibleTabs.map((tab) => (
                         <TabsTrigger
                           key={tab.value}
                           id={`shoppermind-tab-${tab.value}`}
@@ -261,6 +320,9 @@ export default function ShopperMindPage() {
                     userMallId={user?.mallId ?? null}
                     selectedMallName={selectedMallName}
                     competitorBenchmarks={competitorBenchmarks}
+                    capabilities={capabilities}
+                    selectedScenarioPathId={selectedScenarioPathId}
+                    onSelectScenarioPath={handleScenarioPathSelect}
                   />
                 </Tabs>
               </>

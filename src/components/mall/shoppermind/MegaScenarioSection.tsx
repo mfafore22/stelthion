@@ -4,13 +4,15 @@ import { CollapsibleSection } from './CollapsibleSection';
 import { PathSummaryBand } from './PathSummaryBand';
 import { PathCollapsible } from './PathCollapsible';
 import { SourceLinkList } from './SourceLinkList';
+import type { ScenarioPathId } from './PathReferenceText';
 
 interface Props {
   scenario: MegaScenarioResolved;
   defaultOpen?: boolean;
+  selectedPathId?: ScenarioPathId | null;
 }
 
-export function MegaScenarioSection({ scenario, defaultOpen = false }: Props) {
+export function MegaScenarioSection({ scenario, defaultOpen = false, selectedPathId = null }: Props) {
   const { t } = useTranslation('mall');
   const title = scenario.country === 'FI'
     ? t('shoppermind.megaScenario.finlandStructuralTitle')
@@ -24,7 +26,7 @@ export function MegaScenarioSection({ scenario, defaultOpen = false }: Props) {
         defaultOpen={defaultOpen}
       >
         <p className="text-sm text-bo-neutral-700 leading-relaxed mb-2">{scenario.intro}</p>
-        <div className="rounded-lg border border-dashed border-bo-neutral-300 bg-bo-neutral-50/50 p-4 text-sm text-bo-neutral-600">
+        <div className="bo-surface-subtle rounded-lg border border-dashed border-bo-neutral-300 p-4 text-sm text-bo-neutral-600">
           {t('shoppermind.markets.comingSoonBody', { defaultValue: 'Markkinaa kerätään parhaillaan.' })}
         </div>
       </CollapsibleSection>
@@ -46,7 +48,9 @@ export function MegaScenarioSection({ scenario, defaultOpen = false }: Props) {
         <h3 className="text-xs font-semibold text-bo-neutral-700 uppercase tracking-wider mb-2">
           {scenario.pathsLabel}
         </h3>
-        {scenario.paths.map((path) => <PathCollapsible key={path.id} path={path} />)}
+        {scenario.paths.map((path) => (
+          <PathCollapsible key={path.id} path={path} selected={path.id === selectedPathId} />
+        ))}
       </div>
       <SourceLinkList sources={scenario.sources} />
     </CollapsibleSection>

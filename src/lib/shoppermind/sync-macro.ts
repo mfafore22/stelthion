@@ -8,13 +8,14 @@ import {
   FI_INDICATORS,
   SE_INDICATORS,
   US_INDICATORS,
+  UAE_INDICATORS,
   type FredQuery,
   type MacroFetch,
   type MacroIndicatorMeta,
 } from './macro-indicators';
 import type { PrismaClient } from '@prisma/client';
 
-const ALL_INDICATORS: MacroIndicatorMeta[] = [...FI_INDICATORS, ...SE_INDICATORS, ...US_INDICATORS];
+const ALL_INDICATORS: MacroIndicatorMeta[] = [...FI_INDICATORS, ...SE_INDICATORS, ...US_INDICATORS, ...UAE_INDICATORS];
 
 export interface SyncResult { code: string; count: number; error: string | null; skipped?: boolean }
 export interface SyncSummary { ok: number; failed: number; skipped: number; results: SyncResult[] }

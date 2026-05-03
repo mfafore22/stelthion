@@ -41,6 +41,7 @@ export function PhenomenonCard({
       label: localized.label,
       state: phenomenon.state,
       primaryCountry: phenomenon.culturalLocality ?? phenomenon.footTrafficLocality ?? '',
+      returnTarget: { label: localized.label, href: detailHref },
     });
     concierge?.openPanel();
   };

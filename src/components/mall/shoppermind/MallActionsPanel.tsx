@@ -15,7 +15,7 @@ export function MallActionsPanel({ options, selectedMallId, onSelectMall, perMal
     <div className="space-y-3">
       <PropertySelector options={options} value={selectedMallId} onChange={onSelectMall} />
       {perMall ? (
-        <div className={`rounded-xl border p-4 ${perMall.isCompetitor ? 'bg-bo-warning-light/40 border-bo-warning/30' : 'bg-bo-neutral-50/60 border-bo-neutral-200/60'}`}>
+        <div className={`bo-surface-subtle rounded-xl border p-4 ${perMall.isCompetitor ? 'border-bo-warning/30' : 'border-bo-neutral-200/60'}`}>
           <div className="flex items-center gap-2 mb-1 flex-wrap">
             <h4 className="text-sm font-semibold text-bo-neutral-950">{perMall.name}</h4>
             {perMall.operator && (

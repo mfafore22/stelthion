@@ -183,6 +183,48 @@
       "sourceId": "nrf-us-retail-2026",
       "text": "NRF forecasts 2026 US retail sales growth, supporting a selective growth rather than no-growth mall planning baseline.",
       "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-uae-hormuz-reuters-shipping",
+      "trendId": "uae-hormuz-risk-premium",
+      "sourceId": "reuters-hormuz-shipping-2026",
+      "text": "Reuters reports Hormuz shipping disruption, stranded tankers and cancelled war-risk cover, supporting logistics and insurance risk for UAE malls.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-uae-hormuz-cbuae-growth",
+      "trendId": "uae-hormuz-risk-premium",
+      "sourceId": "cbuae-qer-mar-2026",
+      "text": "CBUAE forecasts strong UAE growth but identifies regional conflicts, commodity prices and risk premia as downside risks.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-uae-opec-reuters-exit",
+      "trendId": "uae-opec-autonomy-retail",
+      "sourceId": "reuters-uae-opec-exit-2026",
+      "text": "Reuters reports the UAE said it would leave OPEC and OPEC+ from May 1, 2026, supporting the energy-autonomy scenario.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-uae-opec-reuters-autonomy",
+      "trendId": "uae-opec-autonomy-retail",
+      "sourceId": "reuters-uae-autonomy-2026",
+      "text": "Reuters reports UAE officials framing strategic autonomy and a review of multilateral ties after the OPEC exit.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-uae-safe-hub-det-visitors",
+      "trendId": "uae-safe-hub-tourism",
+      "sourceId": "dubai-det-visitors-2025",
+      "text": "Dubai DET reports 19.59 million international visitors in 2025, supporting tourism as a UAE mall demand base.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-uae-safe-hub-reuters-deadlock",
+      "trendId": "uae-safe-hub-tourism",
+      "sourceId": "reuters-iran-war-deadlock-2026",
+      "text": "Reuters reports continued Iran-war negotiation deadlock and Hormuz risk, supporting the need to make safe-hub operations explicit.",
+      "verificationStatus": "verified"
     }
   ]
 }

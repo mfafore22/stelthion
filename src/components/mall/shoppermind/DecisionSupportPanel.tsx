@@ -21,7 +21,7 @@ export function DecisionSupportPanel({
   const claimCount = actions?.evidenceClaims.length ?? 0;
 
   return (
-    <section className="rounded-2xl border-2 border-bo-neutral-300/60 bg-white p-5 shadow-bo-glass">
+    <section className="bo-surface rounded-2xl border-2 p-5">
       <div className="mb-5">
         <div className="text-xs font-semibold uppercase tracking-[0.14em] text-bo-primary-700">
           {t('shoppermind.tabs.decisionSupport', { defaultValue: 'Päätöksen tuki' })}
@@ -61,7 +61,7 @@ export function DecisionSupportPanel({
         />
       </div>
 
-      <div className="mt-5 rounded-xl border border-bo-primary-200 bg-bo-primary-50/50 p-4">
+      <div className="bo-surface-subtle mt-5 rounded-xl border border-bo-primary-200 p-4">
         <h3 className="text-sm font-semibold text-bo-neutral-950">{t('shoppermind.decisionSupport.aiTitle')}</h3>
         <p className="mt-1 max-w-4xl text-sm leading-relaxed text-bo-neutral-700">
           {t('shoppermind.decisionSupport.aiBody')}
@@ -73,7 +73,7 @@ export function DecisionSupportPanel({
 
 function SupportBlock({ title, items }: { title: string; items: string[] }) {
   return (
-    <div className="rounded-xl border border-bo-neutral-200 bg-bo-neutral-50/70 p-4">
+    <div className="bo-surface-subtle rounded-xl border p-4">
       <h3 className="text-sm font-semibold text-bo-neutral-950">{title}</h3>
       <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-bo-neutral-700">
         {items.map((item, index) => <li key={index}>{item}</li>)}

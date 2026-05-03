@@ -17,7 +17,7 @@ const IMPACT_DOT: Record<StressImpact, string> = {
 function PathColumn({ pathId, path }: { pathId: 'a' | 'b' | 'c'; path: StressPath }) {
   const { t } = useTranslation('mall');
   return (
-    <div className={`rounded-lg border-l-4 ${TONE_BORDER[pathId]} bg-white/70 p-3`}>
+    <div className={`bo-surface-subtle rounded-lg border-l-4 ${TONE_BORDER[pathId]} p-3`}>
       <div className="flex items-center gap-1.5 mb-2">
         <span className="text-[10px] font-semibold uppercase tracking-wider text-bo-neutral-500">{TONE_LABEL[pathId]}</span>
         <h5 className="text-sm font-semibold text-bo-neutral-950 leading-snug">{path.headline}</h5>

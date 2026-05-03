@@ -1,5 +1,12 @@
 import type { PropertyActionsResponse } from '@stelthion/shoppermind-client-types';
 import type { MallActions, MegaScenarioResolved } from './megaScenario';
+import {
+  actionTitleFromText,
+  actionTypeForAction,
+  actionWhyNowFromText,
+  relatedTrendIdsForAction,
+  zoneTagsFromText,
+} from './scenarioActionFallbackText';
 
 export function buildScenarioActionFallback({
   scenario,
@@ -30,11 +37,14 @@ export function buildScenarioActionFallback({
     id: `scenario-${propertyId}-claim-${index + 1}`,
     sourceId: sourceIds[index % Math.max(1, sourceIds.length)] ?? 'shoppermind-scenario',
     text: item,
-    appliesTo: { marketId, propertyId, trendId: trendIds[index % Math.max(1, trendIds.length)] },
+    appliesTo: {
+      marketId,
+      propertyId,
+      trendId: relatedTrendIdsForAction(item, trendIds, index)[0],
+    },
     verificationStatus: 'verified' as const,
   }));
   const primaryBenchmark = benchmarks[0]?.actions;
-  const relatedTrendIds = trendIds.length > 0 ? trendIds.slice(0, 3) : ['smart-value-low-risk'];
 
   return {
     property: {
@@ -58,15 +68,15 @@ export function buildScenarioActionFallback({
         propertyId,
         marketId,
         title: actionTitleFromText(item),
-        actionType: actionTypeForIndex(index),
+        actionType: actionTypeForAction(item, index),
         priority: index === 0 ? 'high' : 'medium',
         impact: index < 2 ? 'high' : 'medium',
         effort: index % 3 === 0 ? 'low' : 'medium',
         timeHorizon: index === 0 ? 'this_week' : index < 3 ? '30_days' : '90_days',
         expectedKpi: kpi ? `${kpi.label}${kpi.target ? `: ${kpi.target}` : ''}` : 'Repeat visits, tenant participation, campaign response',
-        whyNow: mall.context,
+        whyNow: actionWhyNowFromText(item, mall.context, kpi),
         action: item,
-        relatedTrendIds,
+        relatedTrendIds: relatedTrendIdsForAction(item, trendIds, index),
         relatedPhenomenonIds: [],
         evidenceClaimIds: claim ? [claim.id] : [],
         competitorExamples: primaryBenchmark ? [{
@@ -89,25 +99,4 @@ export function buildScenarioActionFallback({
       citationIds: evidenceClaims.map((claim) => claim.id),
     },
   };
-}
-
-function actionTitleFromText(text: string): string {
-  const firstSentence = text.split(/[.!?]/)[0]?.trim() || text;
-  return firstSentence.length > 82 ? `${firstSentence.slice(0, 79).trim()}...` : firstSentence;
-}
-
-function actionTypeForIndex(index: number): PropertyActionsResponse['recommendations'][number]['actionType'] {
-  return (['operations', 'campaign', 'tenant_mix', 'benchmark', 'retail_media'] as const)[index % 5];
-}
-
-function zoneTagsFromText(text: string): string[] {
-  const normalized = text.toLowerCase();
-  const tags = new Set<string>();
-  if (/ruoka|food|ravintola|restaurant|kahvila|cafe|grocery|päivittäis/.test(normalized)) tags.add('food');
-  if (/terveys|health|beauty|kauneus|wellness|apteek/.test(normalized)) tags.add('health');
-  if (/screen|media|kampanja|campaign|app|loyalty|näyttö/.test(normalized)) tags.add('campaign');
-  if (/palvelu|service|repair|korjaus/.test(normalized)) tags.add('services');
-  if (/family|perhe|leisure|vapaa/.test(normalized)) tags.add('leisure');
-  if (tags.size === 0) tags.add('mall-wide');
-  return Array.from(tags);
 }

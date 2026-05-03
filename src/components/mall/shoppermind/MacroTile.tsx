@@ -6,7 +6,7 @@ export interface MacroTileData {
   code: string;
   slot?: string;
   name: string;
-  unit: 'index' | 'percent' | 'percent-of-gdp' | 'volume-index' | 'currency';
+  unit: 'index' | 'percent' | 'percent-of-gdp' | 'volume-index' | 'currency' | 'million';
   publisher: string;
   sourceUrl: string;
   latestValue: number | null;
@@ -20,6 +20,7 @@ function formatValue(v: number | null, unit: MacroTileData['unit']): string {
   const fixed = unit === 'index' || unit === 'volume-index' ? 1 : 1;
   const formatted = new Intl.NumberFormat('fi-FI', { maximumFractionDigits: fixed }).format(v);
   if (unit === 'percent' || unit === 'percent-of-gdp') return `${formatted} %`;
+  if (unit === 'million') return `${formatted}m`;
   if (unit === 'currency') return formatted;
   return formatted;
 }
@@ -39,7 +40,7 @@ export function MacroTile({ data }: { data: MacroTileData }) {
     : null;
   const series = data.history.map((p) => ({ compositeScore: p.value }));
   return (
-    <div className="rounded-xl border border-bo-neutral-200/60 bg-white/70 backdrop-blur-xl p-4">
+    <div className="bo-surface-subtle bo-surface-hover rounded-xl border p-4">
       <div className="text-xs font-medium text-bo-neutral-600 mb-1 leading-snug">{data.name}</div>
       <div className="flex items-baseline gap-2">
         <div className="text-2xl font-semibold text-bo-neutral-950 tabular-nums">

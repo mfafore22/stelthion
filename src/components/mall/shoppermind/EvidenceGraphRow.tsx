@@ -23,7 +23,7 @@ export function EvidenceGraphRow({ charts, label }: { charts: MegaEvidenceChart[
           const delta = last && first ? last.v - first.v : 0;
           const deltaClass = delta > 0 ? 'text-bo-success' : delta < 0 ? 'text-bo-error' : 'text-bo-neutral-500';
           return (
-            <div key={i} className="rounded-lg border border-bo-neutral-200/60 bg-white/70 p-2.5">
+            <div key={i} className="bo-surface-subtle rounded-lg border p-2.5">
               <div className="text-[11px] font-medium text-bo-neutral-700 leading-tight mb-1 line-clamp-2">{c.label}</div>
               <div className="flex items-baseline gap-2 mb-1">
                 <span className="text-sm font-semibold text-bo-neutral-950 tabular-nums">

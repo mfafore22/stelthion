@@ -4,18 +4,21 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { PropertyActionsResponse, PhenomenonSummary, SignalOfTheDay } from '@stelthion/shoppermind-client-types';
 import type { Horizon } from '@/lib/shoppermind/horizon';
+import type { ShopperMindMarketCapabilities } from '@/lib/shoppermind/marketCapabilities';
 import type { CuratedTrendResolved, MallActions, MegaScenarioResolved } from '@/lib/shoppermind/megaScenario';
 import { CompetitorBenchmarkPanel } from './CompetitorBenchmarkPanel';
 import { CuratedTrendStrip } from './CuratedTrendStrip';
 import { DecisionSupportPanel } from './DecisionSupportPanel';
 import { EmptyTabState } from './EmptyTabState';
 import { HorizonSection } from './HorizonSection';
+import { MarketLessonsPanel } from './MarketLessonsPanel';
 import { MegaScenarioSection } from './MegaScenarioSection';
 import { PropertySegmentedSelector } from './PropertySegmentedSelector';
 import { PropertyActionBoard } from './PropertyActionBoard';
 import { SignalOfTheDayCard } from './SignalOfTheDayCard';
+import type { ScenarioPathId } from './PathReferenceText';
 
-export type ShopperMindTab = 'overview' | 'actions' | 'trends' | 'competitors' | 'decision-support';
+export type ShopperMindTab = 'overview' | 'actions' | 'trends' | 'competitors' | 'decision-support' | 'market-lessons';
 export type MallTrendSet = {
   mallId: string;
   mallName: string;
@@ -42,6 +45,9 @@ export function ShopperMindTabPanels({
   userMallId,
   selectedMallName,
   competitorBenchmarks,
+  capabilities,
+  selectedScenarioPathId,
+  onSelectScenarioPath,
 }: {
   activeTab: ShopperMindTab;
   signal: SignalOfTheDay | null;
@@ -57,6 +63,9 @@ export function ShopperMindTabPanels({
   userMallId: string | null;
   selectedMallName?: string;
   competitorBenchmarks: Array<{ id: string; actions: MallActions }>;
+  capabilities: ShopperMindMarketCapabilities;
+  selectedScenarioPathId?: ScenarioPathId | null;
+  onSelectScenarioPath?: (pathId: ScenarioPathId) => void;
 }) {
   const { t } = useTranslation('mall');
   const firstActionMall = actionSets[0]?.mallId ?? selectedMallId;
@@ -94,7 +103,7 @@ export function ShopperMindTabPanels({
       <div role="tabpanel" aria-labelledby="shoppermind-tab-overview" className="space-y-4">
         <SignalOfTheDayCard sotd={signal} />
         {scenario ? (
-          <MegaScenarioSection scenario={scenario} />
+          <MegaScenarioSection scenario={scenario} selectedPathId={selectedScenarioPathId} />
         ) : (
           <EmptyTabState title={t('shoppermind.tabs.overview')} body={t('shoppermind.markets.noScenario')} />
         )}
@@ -103,6 +112,13 @@ export function ShopperMindTabPanels({
   }
 
   if (activeTab === 'actions') {
+    if (!capabilities.actionsEnabled) {
+      return (
+        <div role="tabpanel" aria-labelledby="shoppermind-tab-actions" className="space-y-4">
+          <EmptyTabState title={t('shoppermind.tabs.emptyActionsTitle')} body={t('shoppermind.tabs.benchmarkActionsBody')} />
+        </div>
+      );
+    }
     return (
       <div role="tabpanel" aria-labelledby="shoppermind-tab-actions" className="space-y-4">
         <PropertyActionBoard
@@ -110,6 +126,7 @@ export function ShopperMindTabPanels({
           propertyOptions={actionOptions}
           selectedPropertyId={actionMallId}
           onSelectProperty={handleActionMallChange}
+          onSelectScenarioPath={onSelectScenarioPath}
         />
         {!(selectedActionSet?.actions ?? actions) && (
           <EmptyTabState
@@ -126,12 +143,16 @@ export function ShopperMindTabPanels({
       <div role="tabpanel" aria-labelledby="shoppermind-tab-trends" className="space-y-4">
         {isSupported ? (
           <>
-            <PropertySegmentedSelector
-              label={t('shoppermind.actions.selectProperty')}
-              options={trendOptions}
-              value={trendMallId}
-              onChange={handleTrendMallChange}
-            />
+            {capabilities.propertySelectorsEnabled && trendOptions.length > 0 && (
+              <div className="w-full xl:w-[320px]">
+                <PropertySegmentedSelector
+                  label={t('shoppermind.actions.selectProperty')}
+                  options={trendOptions}
+                  value={trendMallId}
+                  onChange={handleTrendMallChange}
+                />
+              </div>
+            )}
             {(['short', 'medium', 'long'] as const).map((horizon) => (
               <HorizonSection
                 key={horizon}
@@ -154,7 +175,24 @@ export function ShopperMindTabPanels({
   if (activeTab === 'competitors') {
     return (
       <div role="tabpanel" aria-labelledby="shoppermind-tab-competitors" className="space-y-4">
-        <CompetitorBenchmarkPanel scenario={scenario} benchmarks={competitorBenchmarks} />
+        <CompetitorBenchmarkPanel
+          scenario={scenario}
+          benchmarks={competitorBenchmarks}
+          onSelectScenarioPath={onSelectScenarioPath}
+        />
+      </div>
+    );
+  }
+
+  if (activeTab === 'market-lessons') {
+    return (
+      <div role="tabpanel" aria-labelledby="shoppermind-tab-market-lessons" className="space-y-4">
+        <MarketLessonsPanel
+          scenario={scenario}
+          trends={[...curated.short, ...curated.medium, ...curated.long]}
+          benchmarks={competitorBenchmarks}
+          onSelectScenarioPath={onSelectScenarioPath}
+        />
       </div>
     );
   }

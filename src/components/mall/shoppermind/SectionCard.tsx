@@ -50,7 +50,7 @@ export function SectionCard({
   return (
     <div
       className={cn(
-        'rounded-xl bg-bo-glass border-2 shadow-bo-glass-strong backdrop-blur-xl p-5',
+        'bo-surface bo-surface-hover rounded-xl border-2 p-5',
         a.border,
         className,
       )}

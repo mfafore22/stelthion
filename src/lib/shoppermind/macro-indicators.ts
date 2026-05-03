@@ -1,17 +1,23 @@
 import { parseMonth, parseQuarter, type StatFinQuery } from './statfin';
+import { UAE_INDICATORS } from './uae-macro-indicators';
+
+export { UAE_INDICATORS };
 
 export type MacroIndicatorSlot =
   | 'consumer-confidence'
   | 'retail-trade'
   | 'gdp'
-  | 'debt-to-gdp';
+  | 'debt-to-gdp'
+  | 'inflation'
+  | 'tourism';
 
 export type MacroUnit =
   | 'index'
   | 'percent'
   | 'percent-of-gdp'
   | 'volume-index'
-  | 'currency';
+  | 'currency'
+  | 'million';
 
 export interface FredQuery {
   seriesId: string;
@@ -33,18 +39,21 @@ export interface MacroIndicatorMeta {
   slot: MacroIndicatorSlot;
   code: string;
   country: string;
-  cadence: 'monthly' | 'quarterly';
+  cadence: 'monthly' | 'quarterly' | 'yearly';
   unit: MacroUnit;
   publisher: string;
   sourceUrl: string;
   i18n: { fi: string; en: string; sv: string };
   fetch?: MacroFetch;
+  fallbackHistory?: Array<{ period: string; value: number; periodDate: string }>;
 }
 
 export const MACRO_SLOT_ORDER: MacroIndicatorSlot[] = [
   'consumer-confidence',
   'retail-trade',
   'gdp',
+  'inflation',
+  'tourism',
   'debt-to-gdp',
 ];
 
@@ -314,7 +323,7 @@ export const US_INDICATORS: MacroIndicatorMeta[] = [
   },
 ];
 
-const ALL_INDICATORS = [...FI_INDICATORS, ...SE_INDICATORS, ...US_INDICATORS];
+const ALL_INDICATORS = [...FI_INDICATORS, ...SE_INDICATORS, ...US_INDICATORS, ...UAE_INDICATORS];
 
 export function getIndicatorsForCountry(country: string): MacroIndicatorMeta[] {
   return ALL_INDICATORS

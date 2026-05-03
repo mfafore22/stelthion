@@ -1,6 +1,10 @@
 import type { SignalOfTheDay } from '@stelthion/shoppermind-client-types';
+import { finlandSignal } from './staticSignals.fi';
+import { swedenSignal } from './staticSignals.se';
+import { uaeSignal } from './staticSignals.uae';
 
 const SIGNALS: Record<string, SignalOfTheDay> = {
+  FI: finlandSignal,
   US: {
     id: 'static-us-2026-05',
     marketId: 'newyork-us',
@@ -108,6 +112,8 @@ const SIGNALS: Record<string, SignalOfTheDay> = {
       { type: 'TRADE_PUB', authority: 'authoritative', signalCount: 4, lastSignalAt: '2026-05-02T00:00:00.000Z' },
     ],
   },
+  SE: swedenSignal,
+  UAE: uaeSignal,
 };
 
 export function getStaticSignalOfMonth(country: string): SignalOfTheDay | null {

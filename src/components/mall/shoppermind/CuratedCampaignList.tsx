@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ChevronRight, Megaphone, MessageSquareText } from 'lucide-react';
+import { ChevronRight, Megaphone } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { ChatBubbleIcon } from '@/components/concierge/ChatBubbleButton';
 import type { CuratedCampaign } from '@/lib/shoppermind/megaScenario';
 import { CuratedCampaignDetails } from './CuratedCampaignDetails';
 
@@ -50,9 +51,9 @@ export function CuratedCampaignList({ campaigns }: { campaigns: CuratedCampaign[
             </Link>
             <Link
               href="/mall/assistants"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-bo-neutral-300 bg-white px-2.5 py-1.5 text-[11px] font-semibold text-bo-neutral-700 hover:bg-bo-neutral-50"
+              className="inline-flex items-center gap-2 rounded-full border border-bo-neutral-200 bg-white/70 px-2.5 py-1.5 text-[11px] font-semibold text-bo-neutral-800 shadow-bo-sm backdrop-blur-md hover:border-bo-primary-200 hover:bg-white"
             >
-              <MessageSquareText size={13} />
+              <ChatBubbleIcon />
               {t('shoppermind.curatedTrends.discussCampaign')}
             </Link>
           </div>

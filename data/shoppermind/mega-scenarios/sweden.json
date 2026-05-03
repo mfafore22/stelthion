@@ -7,7 +7,7 @@
   "i18n": {
     "fi": {
       "title": "Ruotsin rakenteellinen siirtymä",
-      "intro": "Ruotsi astuu 2026 vahvemmasta lähtökohdasta kuin Suomi: kotitalouksien talous paranee enemmistöllä ja vähittäiskaupan volyymi on kasvussa. Painopiste siirtyy varovaisesta toipumisesta kuratoituun discretionary-palautumiseen, samalla kun ikääntyminen, palvelujen rooli ja kiertotalous muokkaavat kauppakeskusten roolia 2030-luvulle.",
+      "intro": "Ruotsi astuu 2026 vahvemmasta lähtökohdasta kuin Suomi: kotitalouksien talous paranee enemmistöllä ja vähittäiskaupan volyymi on kasvussa. Painopiste siirtyy varovaisesta toipumisesta kuratoituun harkinnanvaraisen kulutuksen palautumiseen, samalla kun ikääntyminen, palvelujen rooli ja kiertotalous muokkaavat kauppakeskusten roolia 2030-luvulle.",
       "redString": "Punainen lanka: Ruotsalainen kauppakeskus voittaa, kun se yhdistää saavutettavan premiumin, saumattoman omnikanavan ja vastuullisuuden. Operatiivinen riski tulee enemmän ulkoisista shokeista kuin julkisen talouden romahduksesta.",
       "pathsLabel": "Kolme polkua vuoteen 2035",
       "paths": [
@@ -15,17 +15,17 @@
           "id": "a",
           "title": "Polku A: Vakaa toipuminen",
           "tone": "neutraali",
-          "summary": "Ruotsi etenee terveellä pohjalla. Discretionary palautuu kuratoidusti, kuluttaja pysyy hintatietoisena mutta ostaa paremmin.",
+          "summary": "Ruotsi etenee terveellä pohjalla. Harkinnanvarainen kulutus palautuu kuratoidusti, kuluttaja pysyy hintatietoisena mutta ostaa paremmin.",
           "macro": "BKT kasvaa 1,5–2,5 prosenttia vuodessa 2026–2030. Inflaatio palautuu 2 prosentin tuntumaan, korot laskevat asteittain, kotitalouksien talous paranee enemmistöllä SCB:n mukaan. Velkasuhde pysyy vakaana.",
-          "consumer": "Konsumentförtroende toipuu pohjoismaisen keskiarvon yläpuolelle. Hintaherkkyys säilyy, mutta ostokorin laatu paranee. Verkkokauppa kasvoi 5 prosenttia 2025 ja kuluttaja olettaa saumatonta omnikanavaa.",
-          "retail": "Vähittäiskaupan volyymi kasvoi maaliskuussa 2026. Muoti, kauneus, ravintolat ja viihde palautuvat ensimmäisinä. Discount-ketjut ja oman merkin tuotteet säilyttävät paikkansa, mutta paine 'reachable premium' -kuratointiin kasvaa.",
+          "consumer": "Kuluttajaluottamus toipuu pohjoismaisen keskiarvon yläpuolelle. Hintaherkkyys säilyy, mutta ostokorin laatu paranee. Verkkokauppa kasvoi 5 prosenttia 2025 ja kuluttaja olettaa saumatonta omnikanavaa.",
+          "retail": "Vähittäiskaupan volyymi kasvoi maaliskuussa 2026. Muoti, kauneus, ravintolat ja viihde palautuvat ensimmäisinä. Halpaketjut ja oman merkin tuotteet säilyttävät paikkansa, mutta paine saavutettavan premiumin kuratointiin kasvaa.",
           "property": "Liikekiinteistöjen tuottovaateet pysyvät vakaana. Ykkössijaintien arvostus kestää ja vahvat aluekeskukset palautuvat. Sijoittajakysyntä on terveempi kuin Suomessa.",
-          "mallImpact": "Ruotsalaiset kauppakeskukset voivat skaalata kuratoitua discretionary-tarjontaa. Vuokralaismixistä premium-mukavuus, terveys, ravintolat ja kokemukset johtavat. 5–10 prosenttia pinta-alasta siirtyy palveluihin ja yhteistyötiloihin.",
+          "mallImpact": "Ruotsalaiset kauppakeskukset voivat skaalata kuratoitua harkinnanvaraista tarjontaa. Vuokralaisjakaumassa premium-tason arjen mukavuus, terveys, ravintolat ja kokemukset johtavat. 5–10 prosenttia pinta-alasta siirtyy palveluihin ja yhteistyötiloihin.",
           "keyNumbers": [
             { "label": "BKT-kasvu",          "value": "1,5–2,5 %",  "hint": "vuodessa 2026–2030" },
             { "label": "Vähittäiskauppa",     "value": "+3–5 %",     "hint": "volyymi vuosittain" },
             { "label": "Verkkokauppa",        "value": "+5 %",       "hint": "2025 toteuma" },
-            { "label": "Vuokrausaste",        "value": "vahva",      "hint": "URW-portfolion baseline" }
+            { "label": "Vuokrausaste",        "value": "vahva",      "hint": "URW-portfolion lähtötaso" }
           ],
           "evidenceCharts": [
             { "label": "Vähittäiskauppa, indeksi", "unit": "indeksi", "series": [{"p":"2024","v":98},{"p":"2025","v":100},{"p":"2026","v":102.5},{"p":"2027","v":105},{"p":"2028","v":107.5},{"p":"2029","v":110},{"p":"2030","v":112}] },
@@ -37,18 +37,18 @@
           "id": "b",
           "title": "Polku B: Ulkoinen sokki",
           "tone": "synkkä",
-          "summary": "Vientivetoinen viilennys ja energiahintojen nousu pakottavat kuluttajan defensiivisemmäksi. Discretionary kärsii nopeammin kuin Suomessa.",
-          "macro": "Ulkoinen kysyntä heikkenee, kruunu heikentyy, vientikate pienenee. BKT:n kasvu jää 0–1 prosenttiin 2027–2029. Inflaatio nousee tilapäisesti, korot pitkittyvät korkealla. Velkasuhde säilyy alle 40 prosentin BKT:sta — fiskaalinen liikkumavara on edelleen olemassa.",
-          "consumer": "Konsumentförtroende putoaa pitkän ajan keskiarvon alle. Discretionary supistuu 10–15 prosenttia. Premium- ja luksuskategoriat painuvat suhteellisesti enemmän kuin arjen palvelut. Verkkokauppa hyötyy hintavertailusta.",
-          "retail": "Muoti, ravintolat ja vapaa-aika painuvat 8–12 prosenttia. Päivittäistavara, terveys ja edullisuuspainotteiset konseptit kestävät. Lågpriskedjor (Lidl, Willys) kasvattavat osuutta.",
-          "property": "Tuottovaateet nousevat 30–50 korkoyksikköä destinaatiossa, vähemmän palvelukeskeisissä kohteissa. Vuokrausaste kestää, mutta basket-mix ohenee. Vuokranantaja joutuu kasvattamaan liikevaihtosidonnaisten vuokrien osuutta.",
-          "mallImpact": "Premium-vetoiset kohteet kuten MoS painuvat nopeammin discretionary-puolella. Esikaupungin ja palvelukeskukset (Täby) selviävät paremmin. Tasapainota markkinointi 'saavutettavaan premiumiin', älä nojaa puhtaaseen luksukseen.",
+          "summary": "Vientivetoinen viilennys ja energiahintojen nousu pakottavat kuluttajan defensiivisemmäksi. Harkinnanvarainen kulutus kärsii nopeammin kuin Suomessa.",
+          "macro": "Ulkoinen kysyntä heikkenee, kruunu heikentyy, vientikate pienenee. BKT:n kasvu jää 0–1 prosenttiin 2027–2029. Inflaatio nousee tilapäisesti, korot pitkittyvät korkealla. Velkasuhde säilyy alle 40 prosentin BKT:sta — julkisen talouden liikkumavara on edelleen olemassa.",
+          "consumer": "Kuluttajaluottamus putoaa pitkän ajan keskiarvon alle. Harkinnanvarainen kulutus supistuu 10–15 prosenttia. Premium- ja luksuskategoriat painuvat suhteellisesti enemmän kuin arjen palvelut. Verkkokauppa hyötyy hintavertailusta.",
+          "retail": "Muoti, ravintolat ja vapaa-aika painuvat 8–12 prosenttia. Päivittäistavara, terveys ja edullisuuspainotteiset konseptit kestävät. Halpaketjut (Lidl, Willys) kasvattavat osuutta.",
+          "property": "Tuottovaateet nousevat 30–50 korkopistettä kohdekeskuksissa, vähemmän palvelukeskeisissä kohteissa. Vuokrausaste kestää, mutta ostoskorin rakenne ohenee. Vuokranantaja joutuu kasvattamaan liikevaihtosidonnaisten vuokrien osuutta.",
+          "mallImpact": "Premium-vetoiset kohteet kuten MoS painuvat nopeammin harkinnanvaraisessa kulutuksessa. Esikaupungin ja palvelukeskukset (Täby) selviävät paremmin. Tasapainota markkinointi saavutettavaan premiumiin, älä nojaa puhtaaseen luksukseen.",
           "keyNumbers": [
             { "label": "BKT-kasvu",          "value": "0–1 %",       "hint": "2027–2029" },
-            { "label": "Discretionary supistus","value": "−10…−15 %", "hint": "huippua kohti" },
+            { "label": "Harkinnanvarainen kulutus","value": "−10…−15 %", "hint": "huipusta pohjaan" },
             { "label": "Velkasuhde",          "value": "<40 %",       "hint": "BKT:sta, edelleen vakaa" },
-            { "label": "Tuottovaateet",       "value": "+30–50 bps",  "hint": "destinaatiossa" },
-            { "label": "Premium-paine",       "value": "korkea",      "hint": "MoS-tyyppinen format" }
+            { "label": "Tuottovaateet",       "value": "+30–50 kp",   "hint": "kohdekeskuksissa" },
+            { "label": "Premium-paine",       "value": "korkea",      "hint": "MoS-tyyppinen muoto" }
           ],
           "evidenceCharts": [
             { "label": "Vähittäiskauppa, indeksi", "unit": "indeksi", "series": [{"p":"2024","v":98},{"p":"2025","v":100},{"p":"2026","v":102},{"p":"2027","v":99},{"p":"2028","v":98},{"p":"2029","v":99},{"p":"2030","v":101}] },
@@ -62,16 +62,16 @@
           "tone": "valoisa",
           "summary": "Ruotsi yhdistää terveen pohjan, vihreän siirtymän ja vahvan brändi-Ruotsin: muoti, kauneus, ruoka ja kokemukset johtavat kasvua.",
           "macro": "BKT kasvaa 2,5–3 prosenttia 2030-luvulla. Tuottavuusinvestoinnit dataan ja teknologiaan tuottavat. Vihreä siirtymä avaa uutta vientiteollisuutta. Velkasuhde laskee 30 prosentin tuntumaan.",
-          "consumer": "Konsumentförtroende nousee selvästi pitkän ajan keskiarvon yläpuolelle. Discretionary kasvaa: muoti, kauneus, food hall, viihde ja matkailu. Vastuullisuus ja jäljitettävyys ovat ostopäätöksen ajureita.",
-          "retail": "Curated discretionary kasvaa 5–8 prosenttia vuodessa. Premium ja accessible premium hyötyvät eniten. Kiertokauppa skaalautuu sekä pikamuodissa että huoneessa: branded resale ja jäljitettävyys siirtyvät premiumin perusvaatimukseksi.",
-          "property": "Tuottovaateet laskevat 25–50 korkoyksikköä. Sijoittajakysyntä palaa ja uusi rakentaminen monikäyttöiseen suuntaan elpyy. Premium-destinaatiot saavat eniten tuottoa.",
-          "mallImpact": "MoS johtaa muotia, ravintolaa, kauneutta ja tapahtumia. Täby skaalaa palvelukeskeistä mukavuutta. Yli 30 prosenttia vuokralaismixistä on ei-perinteistä retailia. Retail media -tulot kasvavat.",
+          "consumer": "Kuluttajaluottamus nousee selvästi pitkän ajan keskiarvon yläpuolelle. Harkinnanvarainen kulutus kasvaa: muoti, kauneus, ruokahallit, viihde ja matkailu. Vastuullisuus ja jäljitettävyys ovat ostopäätöksen ajureita.",
+          "retail": "Kuratoitu harkinnanvarainen kauppa kasvaa 5–8 prosenttia vuodessa. Premium ja saavutettava premium hyötyvät eniten. Kiertokauppa skaalautuu sekä pikamuodissa että kodissa: merkkituotteiden jälleenmyynti ja jäljitettävyys siirtyvät premiumin perusvaatimukseksi.",
+          "property": "Tuottovaateet laskevat 25–50 korkopistettä. Sijoittajakysyntä palaa ja uusi rakentaminen monikäyttöiseen suuntaan elpyy. Premium-kohdekeskukset saavat eniten tuottoa.",
+          "mallImpact": "MoS johtaa muotia, ravintolaa, kauneutta ja tapahtumia. Täby skaalaa palvelukeskeistä mukavuutta. Yli 30 prosenttia vuokralaisjakaumasta on ei-perinteistä kauppaa. Retail media -tulot kasvavat.",
           "keyNumbers": [
             { "label": "BKT-kasvu",                "value": "2,5–3 %",   "hint": "2030-luvulla" },
-            { "label": "Curated discretionary",    "value": "+5–8 %",    "hint": "vuosikasvu" },
+            { "label": "Kuratoitu harkinnanvarainen kauppa", "value": "+5–8 %", "hint": "vuosikasvu" },
             { "label": "Velkasuhde",               "value": "~30 %",     "hint": "BKT:sta" },
-            { "label": "Tuottovaateet",            "value": "−25…−50 bps","hint": "destinaatiossa" },
-            { "label": "Palvelut vuokralaismixistä","value": "30–40 %",   "hint": "ei-perinteistä retailia" }
+            { "label": "Tuottovaateet",            "value": "−25–50 kp", "hint": "kohdekeskuksissa" },
+            { "label": "Palvelut vuokralaisjakaumasta","value": "30–40 %", "hint": "ei-perinteistä kauppaa" }
           ],
           "evidenceCharts": [
             { "label": "Vähittäiskauppa, indeksi", "unit": "indeksi", "series": [{"p":"2024","v":98},{"p":"2025","v":100},{"p":"2026","v":103},{"p":"2027","v":107},{"p":"2028","v":111},{"p":"2029","v":115},{"p":"2030","v":120}] },
@@ -96,17 +96,17 @@
           "operator": "Westfield (URW)",
           "isCompetitor": true,
           "name": "Westfield Mall of Scandinavia (kilpailija)",
-          "context": "URW-omisteinen super-regional destinaatio Solnassa. Skaalan ja brändien johto. Käytä vertailupohjana premium-skaalautumisen ja tapahtuma-ohjelman strategioissa.",
+          "context": "URW-omisteinen laaja alueellinen kohdekeskus Solnassa. Skaalan ja brändien johto. Käytä vertailupohjana premium-skaalautumisen ja tapahtuma-ohjelman strategioissa.",
           "items": [
             "Vertaa vuokralaismixin premium-osuutta omiin kohteisiin.",
-            "Mittaa tapahtumakalenterin tiheyttä ja sen vaikutusta retail-konversioon.",
+            "Mittaa tapahtumakalenterin tiheyttä ja sen vaikutusta myyntikonversioon.",
             "Seuraa, miten URW käsittelee 'reachable premium' -viestintää sokkitilanteessa.",
-            "Tarkista omnikanava-baseline (sovellus, nouto, tekoälyavusteinen navigointi).",
+            "Tarkista omnikanavan perustaso (sovellus, nouto, tekoälyavusteinen navigointi).",
             "Mittaa retail media -tulot ja niiden osuus liikevaihdosta.",
             "Vertaa kansainvälisten brändien lisäystä ja kokemustarjontaa."
           ],
           "kpis": [
-            { "label": "Premiumvuokralaisten osuus",          "target": "vertailu", "hint": "vs. oma portfolio" },
+            { "label": "Premiumvuokralaisten osuus",          "target": "vertailu", "hint": "omaan kiinteistökantaan" },
             { "label": "Tapahtumakalenterin tiheys",          "target": "vertailu", "hint": "kuukauden tapahtumat" },
             { "label": "Retail media -tulot",                  "target": "vertailu", "hint": "absoluuttinen ja %-LV" },
             { "label": "Kansainvälisten brändien osuus",       "target": "vertailu", "hint": "tenant mixistä" },
@@ -185,15 +185,15 @@
       "redString": "Röd tråd: ett svenskt köpcentrum vinner genom att kombinera åtkomlig premium, sömlös omnikanal och trovärdig hållbarhet. Operativ risk kommer mer från externa chocker än från offentlig-finansiell kollaps.",
       "pathsLabel": "Tre vägar till 2035",
       "paths": [
-        { "id": "a", "title": "Väg A: Stabil återhämtning", "tone": "neutral", "summary": "Sverige växer från en sund grund. Sällanhandel återhämtar sig selektivt; konsumenten förblir prismedveten men handlar bättre.", "macro": "BNP växer 1,5-2,5% per år 2026-2030. Inflation återgår mot 2%, räntor lättar, hushållsekonomin förbättras enligt SCB. Skuldkvoten håller sig stadig.", "consumer": "Förtroendet stiger över nordiska genomsnittet. Priskänsligheten kvarstår, varukorgens kvalitet höjs. E-handeln växte 5% 2025; konsumenter förväntar sömlös omnikanal.", "retail": "Detaljhandelsvolymen växte i mars 2026. Mode, skönhet, restaurang och underhållning återhämtar sig först. Discount och egenmärken håller men trycket ökar mot åtkomlig-premium-kuratering.", "property": "Avkastningskraven håller. A-lägen behåller värdet; starka regionala centrum återhämtar. Investerarefterfrågan friskare än i Finland.", "mallImpact": "Svenska köpcentrum kan skala kuraterad sällanhandel. Mixledning till premium-bekvämlighet, hälsa, restaurang och upplevelser. 5-10% av yta flyttar till tjänster och samarbetsutrymmen.",
-          "keyNumbers": [ { "label": "BNP-tillväxt", "value": "1,5-2,5%", "hint": "per år 2026-2030" }, { "label": "Detaljhandelsvolym", "value": "+3-5%", "hint": "årligen" }, { "label": "E-handel", "value": "+5%", "hint": "2025 utfall" }, { "label": "Uthyrningsgrad", "value": "stark", "hint": "URW-portfölj baseline" } ],
+        { "id": "a", "title": "Väg A: Stabil återhämtning", "tone": "neutral", "summary": "Sverige växer från en sund grund. Sällanhandel återhämtar sig selektivt; konsumenten förblir prismedveten men handlar bättre.", "macro": "BNP växer 1,5-2,5% per år 2026-2030. Inflation återgår mot 2%, räntor lättar, hushållsekonomin förbättras enligt SCB. Skuldkvoten håller sig stadig.", "consumer": "Förtroendet stiger över nordiska genomsnittet. Priskänsligheten kvarstår, varukorgens kvalitet höjs. E-handeln växte 5% 2025; konsumenter förväntar sömlös omnikanal.", "retail": "Detaljhandelsvolymen växte i mars 2026. Mode, skönhet, restaurang och underhållning återhämtar sig först. Lågpris och egenmärken håller men trycket ökar mot åtkomlig-premium-kuratering.", "property": "Avkastningskraven håller. A-lägen behåller värdet; starka regionala centrum återhämtar. Investerarefterfrågan friskare än i Finland.", "mallImpact": "Svenska köpcentrum kan skala kuraterad sällanhandel. Mixledning till premium-bekvämlighet, hälsa, restaurang och upplevelser. 5-10% av yta flyttar till tjänster och samarbetsutrymmen.",
+          "keyNumbers": [ { "label": "BNP-tillväxt", "value": "1,5-2,5%", "hint": "per år 2026-2030" }, { "label": "Detaljhandelsvolym", "value": "+3-5%", "hint": "årligen" }, { "label": "E-handel", "value": "+5%", "hint": "2025 utfall" }, { "label": "Uthyrningsgrad", "value": "stark", "hint": "URW-portföljens basnivå" } ],
           "evidenceCharts": [ { "label": "Detaljhandelsindex", "unit": "index", "series": [{"p":"2024","v":98},{"p":"2025","v":100},{"p":"2026","v":102.5},{"p":"2027","v":105},{"p":"2028","v":107.5},{"p":"2029","v":110},{"p":"2030","v":112}] }, { "label": "Konsumentförtroende", "unit": "saldo", "series": [{"p":"2024","v":-5},{"p":"2025","v":-2},{"p":"2026","v":1},{"p":"2027","v":3},{"p":"2028","v":4},{"p":"2029","v":5},{"p":"2030","v":5}] }, { "label": "Skuldkvot, % av BNP", "unit": "%", "series": [{"p":"2024","v":33},{"p":"2025","v":33},{"p":"2026","v":33},{"p":"2027","v":33.5},{"p":"2028","v":34},{"p":"2029","v":34},{"p":"2030","v":34}] } ]
         },
         { "id": "b", "title": "Väg B: Extern chock", "tone": "dark", "summary": "Exportledd avmattning och stigande energipriser tvingar konsumenten defensiv. Sällanhandel pressas snabbare än i Finland.", "macro": "Extern efterfrågan försvagas, kronan tappar, exportmarginaler krymper. BNP-tillväxten stannar 0-1% 2027-2029. Inflation stiger tillfälligt, räntor stannar höga. Skuld under 40% av BNP.", "consumer": "Förtroende faller under långtidsgenomsnittet. Sällanhandel krymper 10-15%. Premium och lyx faller hårdare än vardagstjänster. E-handeln gynnas av prisjämförelse.", "retail": "Mode, restaurang och fritid faller 8-12%. Dagligvaror, hälsa och prisvärda koncept håller. Lågpriskedjor vinner andelar.", "property": "Avkastningskraven stiger 30-50 räntepunkter i destinationer, mindre i servicedrivna centrum. Uthyrning håller; korgmix tunnas. Hyresvärdar ökar omsättningsbaserade hyror.", "mallImpact": "Premium-ledda centrum som MoS pressas snabbare på sällanhandel. Förorts- och servicenav (Täby) försvarar bättre. Balansera mot åtkomlig premium, undvik renodlad lyx.",
           "keyNumbers": [ { "label": "BNP-tillväxt", "value": "0-1%", "hint": "2027-2029" }, { "label": "Sällanhandel-fall", "value": "−10 till −15%", "hint": "botten" }, { "label": "Skuldkvot", "value": "<40%", "hint": "av BNP, fortsatt stabil" }, { "label": "Avkastningskrav", "value": "+30-50 rp", "hint": "i destinationer" }, { "label": "Premium-press", "value": "hög", "hint": "MoS-typ format" } ],
           "evidenceCharts": [ { "label": "Detaljhandelsindex", "unit": "index", "series": [{"p":"2024","v":98},{"p":"2025","v":100},{"p":"2026","v":102},{"p":"2027","v":99},{"p":"2028","v":98},{"p":"2029","v":99},{"p":"2030","v":101}] }, { "label": "Konsumentförtroende", "unit": "saldo", "series": [{"p":"2024","v":-5},{"p":"2025","v":-2},{"p":"2026","v":-1},{"p":"2027","v":-6},{"p":"2028","v":-8},{"p":"2029","v":-5},{"p":"2030","v":-3}] }, { "label": "Skuldkvot, % av BNP", "unit": "%", "series": [{"p":"2024","v":33},{"p":"2025","v":33},{"p":"2026","v":33},{"p":"2027","v":35},{"p":"2028","v":37},{"p":"2029","v":37},{"p":"2030","v":36}] } ]
         },
-        { "id": "c", "title": "Väg C: Premiumledd tillväxt", "tone": "bright", "summary": "Sverige kombinerar en sund grund, grön omställning och varumärket Sverige: mode, skönhet, mat och upplevelser leder tillväxten.", "macro": "BNP växer 2,5-3% på 2030-talet. Produktivitetsinvesteringar i data och teknik ger utdelning. Grön omställning öppnar ny exportindustri. Skuldkvoten faller mot 30%.", "consumer": "Förtroende stiger tydligt över långtidsgenomsnittet. Sällanhandel växer: mode, skönhet, food halls, underhållning, resor. Hållbarhet och spårbarhet driver köpbeslut.", "retail": "Kuraterad sällanhandel växer 5-8% per år. Premium och åtkomlig premium tjänar mest. Cirkulärt skalar i snabbmode och hem: branded resale och spårbarhet blir premium-baseline.", "property": "Avkastningskraven faller 25-50 räntepunkter. Investerarefterfrågan återvänder och blandanvändning tar fart. Premium-destinationer vinner mest.", "mallImpact": "MoS leder mode, restaurang, skönhet och evenemang. Täby skalar servicedriven bekvämlighet. Över 30% av hyresmixen är icke-traditionell handel. Handelsmedia-intäkter växer.",
+        { "id": "c", "title": "Väg C: Premiumledd tillväxt", "tone": "bright", "summary": "Sverige kombinerar en sund grund, grön omställning och varumärket Sverige: mode, skönhet, mat och upplevelser leder tillväxten.", "macro": "BNP växer 2,5-3% på 2030-talet. Produktivitetsinvesteringar i data och teknik ger utdelning. Grön omställning öppnar ny exportindustri. Skuldkvoten faller mot 30%.", "consumer": "Förtroende stiger tydligt över långtidsgenomsnittet. Sällanhandel växer: mode, skönhet, mathallar, underhållning, resor. Hållbarhet och spårbarhet driver köpbeslut.", "retail": "Kuraterad sällanhandel växer 5-8% per år. Premium och åtkomlig premium tjänar mest. Cirkulärt skalar i snabbmode och hem: varumärkt second hand och spårbarhet blir grundkrav i premium.", "property": "Avkastningskraven faller 25-50 räntepunkter. Investerarefterfrågan återvänder och blandanvändning tar fart. Premium-destinationer vinner mest.", "mallImpact": "MoS leder mode, restaurang, skönhet och evenemang. Täby skalar servicedriven bekvämlighet. Över 30% av hyresmixen är icke-traditionell handel. Handelsmedia-intäkter växer.",
           "keyNumbers": [ { "label": "BNP-tillväxt", "value": "2,5-3%", "hint": "på 2030-talet" }, { "label": "Kuraterad sällanhandel", "value": "+5-8%", "hint": "årligen" }, { "label": "Skuldkvot", "value": "~30%", "hint": "av BNP" }, { "label": "Avkastningskrav", "value": "−25 till −50 rp", "hint": "i destinationer" }, { "label": "Tjänster i hyresmix", "value": "30-40%", "hint": "icke-traditionell handel" } ],
           "evidenceCharts": [ { "label": "Detaljhandelsindex", "unit": "index", "series": [{"p":"2024","v":98},{"p":"2025","v":100},{"p":"2026","v":103},{"p":"2027","v":107},{"p":"2028","v":111},{"p":"2029","v":115},{"p":"2030","v":120}] }, { "label": "Konsumentförtroende", "unit": "saldo", "series": [{"p":"2024","v":-5},{"p":"2025","v":-2},{"p":"2026","v":2},{"p":"2027","v":5},{"p":"2028","v":7},{"p":"2029","v":8},{"p":"2030","v":9}] }, { "label": "Skuldkvot, % av BNP", "unit": "%", "series": [{"p":"2024","v":33},{"p":"2025","v":33},{"p":"2026","v":32.5},{"p":"2027","v":32},{"p":"2028","v":31.5},{"p":"2029","v":31},{"p":"2030","v":30}] } ]
         }
@@ -201,7 +201,7 @@
       "actionsLabel": "Åtgärdsförslag för fastigheter",
       "actionsGeneralLabel": "Gäller alla fastigheter",
       "actionsGeneral": [
-        "Led med sömlös omnikanal: hämtning, returer och app som baseline.",
+        "Led med sömlös omnikanal: hämtning, returer och app som basnivå.",
         "Investera i data, personalisering och ett handelsmediasystem.",
         "Skala åtkomlig premium under kuraterad sortimentlogik.",
         "Bygg cirkularitet och spårbarhet som standard i premium-erbjudandet.",
@@ -210,8 +210,8 @@
       ],
       "actionsPerMallLabel": "Fastighetsspecifika rekommendationer",
       "actionsPerMall": {
-        "westfield-mos": { "operator": "Westfield (URW)", "isCompetitor": true, "name": "Westfield Mall of Scandinavia (konkurrent)", "context": "URW-ägd super-regional destination i Solna. Skala och varumärkesledarskap. Använd som benchmark för premium-skalning och eventprogram.",
-          "items": [ "Jämför premium-hyresgästers andel mot egen portfölj.", "Mät eventkalenderns densitet och dess konvertering till handel.", "Bevaka hur URW hanterar åtkomlig-premium-kommunikation i chock.", "Granska omnikanal-baseline (app, hämtning, AI-navigering).", "Följ handelsmedia-intäkter och dess andel av omsättning.", "Jämför tillägg av internationella varumärken och upplevelseutbud." ],
+        "westfield-mos": { "operator": "Westfield (URW)", "isCompetitor": true, "name": "Westfield Mall of Scandinavia (konkurrent)", "context": "URW-ägd superregional destination i Solna. Skala och varumärkesledarskap. Använd som jämförelse för premium-skalning och eventprogram.",
+          "items": [ "Jämför premium-hyresgästers andel mot egen portfölj.", "Mät eventkalenderns densitet och dess konvertering till handel.", "Bevaka hur URW hanterar åtkomlig-premium-kommunikation i chock.", "Granska omnikanalens basnivå (app, hämtning, AI-navigering).", "Följ handelsmedia-intäkter och dess andel av omsättning.", "Jämför tillägg av internationella varumärken och upplevelseutbud." ],
           "kpis": [ { "label": "Premium-hyresgästers andel", "target": "benchmark", "hint": "vs. egen portfölj" }, { "label": "Eventkalenderns densitet", "target": "benchmark", "hint": "månadsevenemang" }, { "label": "Handelsmedia-intäkter", "target": "benchmark", "hint": "absolut och % omsättning" }, { "label": "Internationella varumärkens andel", "target": "benchmark", "hint": "av hyresmix" }, { "label": "App- och hämtintensitet", "target": "benchmark", "hint": "DAU/MAU + hämtandel" }, { "label": "Premium-zonens uthyrning", "target": "benchmark", "hint": "mode + skönhet + restaurang" } ]
         },
         "westfield-taby": { "operator": "Westfield (URW)", "isCompetitor": true, "name": "Westfield Täby Centrum (konkurrent)", "context": "URW-ägd förortscentrum, stark familje-/livsstilsprofil. Använd som benchmark för servicedriven bekvämlighet och samhällsorienterad familjeunderhållning.",
@@ -222,7 +222,7 @@
     }
   },
   "glossary": {
-    "fi": { "NPS": "Net Promoter Score, asiakkaan suositteluhalukkuus.", "korkoyksikkö": "0,01 prosenttiyksikköä." },
+    "fi": { "NPS": "Net Promoter Score, asiakkaan suositteluhalukkuus.", "korkopiste": "0,01 prosenttiyksikköä." },
     "en": { "NPS": "Net Promoter Score, customer recommendation likelihood.", "basis points": "0.01 percentage points." },
     "sv": { "NPS": "Net Promoter Score, kundens rekommendationsbenägenhet.", "räntepunkter": "0,01 procentenheter." }
   },

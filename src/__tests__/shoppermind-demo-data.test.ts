@@ -62,7 +62,7 @@ describe('ShopperMind demo data verification', () => {
   const usaMegaScenario = readJson<unknown>('data/shoppermind/mega-scenarios/usa.json');
   const stressScenarios = readJson<unknown>('data/shoppermind/scenario-stress.json');
 
-  it('keeps the original trend IDs and adds exactly two MVP trends', () => {
+  it('keeps the original trend IDs and adds UAE market trends', () => {
     const ids = curated.trends.map((trend) => trend.id);
     expect(ids).toEqual(
       expect.arrayContaining([
@@ -73,9 +73,12 @@ describe('ShopperMind demo data verification', () => {
         'service-led-ageing',
         'retail-media-and-mall-attention',
         'health-beauty-wellness-frequency',
+        'uae-hormuz-risk-premium',
+        'uae-opec-autonomy-retail',
+        'uae-safe-hub-tourism',
       ]),
     );
-    expect(ids).toHaveLength(7);
+    expect(ids).toHaveLength(10);
   });
 
   it('requires at least two verified sources for every curated trend', () => {

@@ -3,7 +3,7 @@ import type { MegaKeyNumber } from '@/lib/shoppermind/megaScenario';
 export function KeyNumbersGrid({ numbers, label }: { numbers: MegaKeyNumber[]; label: string }) {
   if (!numbers || numbers.length === 0) return null;
   return (
-    <div className="mt-4 rounded-lg bg-bo-neutral-50/60 border border-bo-neutral-200/60 p-3">
+    <div className="bo-surface-subtle mt-4 rounded-lg border p-3">
       <div className="text-[10px] uppercase tracking-[0.12em] font-semibold text-bo-neutral-500 mb-2">
         {label}
       </div>

@@ -16,7 +16,7 @@ export function MallKpiGrid({ kpis }: { kpis: MallKpi[] | undefined }) {
         {list.map((k, i) => (
           <div
             key={i}
-            className="rounded-lg border border-bo-neutral-200/60 bg-white/70 p-2.5 min-w-0"
+            className="bo-surface-subtle rounded-lg border p-2.5 min-w-0"
           >
             <div className="text-[11px] font-medium text-bo-neutral-700 leading-snug line-clamp-2">
               {k.label}

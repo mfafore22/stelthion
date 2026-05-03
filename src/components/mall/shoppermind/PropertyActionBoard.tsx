@@ -9,6 +9,7 @@ import type {
 } from '@stelthion/shoppermind-client-types';
 import { ActionBoardAside } from './ActionBoardAside';
 import { ActionCard } from './ActionCard';
+import type { ScenarioPathId } from './PathReferenceText';
 import { PropertySegmentedSelector, type PropertySegmentOption } from './PropertySegmentedSelector';
 
 function claimsForAction(action: PropertyActionRecommendation, claims: EvidenceClaim[]) {
@@ -24,11 +25,13 @@ export function PropertyActionBoard({
   propertyOptions = [],
   selectedPropertyId = null,
   onSelectProperty,
+  onSelectScenarioPath,
 }: {
   data: PropertyActionsResponse | null | undefined;
   propertyOptions?: PropertySegmentOption[];
   selectedPropertyId?: string | null;
   onSelectProperty?: (id: string) => void;
+  onSelectScenarioPath?: (pathId: ScenarioPathId) => void;
 }) {
   const { t } = useTranslation('mall');
   if (!data || data.recommendations.length === 0) return null;
@@ -46,6 +49,7 @@ export function PropertyActionBoard({
     benchmark: t('shoppermind.actionBoard.benchmark'),
     openCampaign: t('shoppermind.actionBoard.openCampaign'),
     discussAssistant: t('shoppermind.actionBoard.discussAssistant'),
+    assistantPrompt: t('shoppermind.actionBoard.assistantPrompt'),
     priority: t('shoppermind.actionBoard.priority'),
     property: t('shoppermind.actionBoard.property'),
     priorityLabels: {
@@ -78,7 +82,7 @@ export function PropertyActionBoard({
   };
 
   return (
-    <section className="rounded-2xl border-2 border-bo-primary-200/70 bg-white p-5 shadow-bo-glass">
+    <section className="bo-surface rounded-2xl border-2 border-bo-primary-200/70 p-5">
       <div className="mb-5 grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_320px] xl:items-start">
         <div className="min-w-0">
           <div className="mb-1 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-bo-primary-700">
@@ -122,6 +126,7 @@ export function PropertyActionBoard({
                   showEvidence: t('shoppermind.actionBoard.showEvidence', { count: claims.length }),
                 }}
                 propertyName={data.property.name}
+                onSelectScenarioPath={onSelectScenarioPath}
               />
             );
           })}
@@ -155,7 +160,7 @@ export function PropertyActionBoard({
 function EvidenceMeter({ verifiedShare, claims, sources }: { verifiedShare: number; claims: number; sources: number }) {
   const { t } = useTranslation('mall');
   return (
-    <div className="w-full rounded-lg border border-bo-neutral-200 bg-bo-neutral-50 p-3">
+    <div className="bo-surface-subtle w-full rounded-lg border p-3">
       <div className="mb-2 flex items-center justify-between text-xs font-medium text-bo-neutral-600">
         <span className="flex items-center gap-1.5">
           <CheckCircle2 size={13} className="text-bo-success" />

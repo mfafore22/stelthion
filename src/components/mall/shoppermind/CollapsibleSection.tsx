@@ -27,13 +27,13 @@ export function CollapsibleSection({
   const { t } = useTranslation('mall');
   const aria = open ? t('shoppermind.section.collapse') : t('shoppermind.section.expand');
   return (
-    <section className={`rounded-2xl border-2 border-bo-neutral-300/60 bg-bo-glass shadow-bo-glass backdrop-blur-xl ${toneClassName ?? ''}`}>
+    <section className={`bo-surface rounded-2xl border-2 ${toneClassName ?? ''}`}>
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-label={aria}
-        className="w-full flex items-center justify-between gap-3 px-5 py-4 text-left"
+        className="w-full flex items-center justify-between gap-3 rounded-2xl px-5 py-4 text-left transition-colors hover:bg-white/30"
       >
         <div className="min-w-0">
           <div className="flex items-baseline gap-2 flex-wrap">

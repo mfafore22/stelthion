@@ -24,7 +24,7 @@ export function ShopperMindHeader({ country, onCountryChange }: Props) {
   })();
 
   return (
-    <header className="sticky top-0 z-20 bg-bo-neutral-50 border-b-2 border-bo-neutral-300/60 shadow-bo-glass">
+    <header className="bo-surface sticky top-0 z-20 border-b-2 border-bo-neutral-300/60">
       <div className="px-8 max-w-[1600px] mx-auto py-3 flex items-start justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3 min-w-0">
           <div className="w-10 h-10 rounded-xl bg-bo-primary-100 flex items-center justify-center shrink-0">

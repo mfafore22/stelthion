@@ -5,6 +5,7 @@ import type {
   SourceAuthority,
   SourceType,
 } from '@stelthion/shoppermind-client-types';
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 
 const ALL_SOURCES: SourceType[] = [
@@ -25,32 +26,39 @@ const AUTHORITATIVE: ReadonlySet<SourceType> = new Set([
 ]);
 
 interface BadgeMeta {
-  label: string;
   short: string;
   active: string;
 }
 
 const META: Record<SourceType, BadgeMeta> = {
-  STATFIN: { label: 'StatFin', short: 'SF', active: 'bg-emerald-600 text-white' },
-  FRED: { label: 'FRED', short: 'FR', active: 'bg-emerald-700 text-white' },
-  TRADE_PUB: { label: 'Trade press', short: 'TP', active: 'bg-emerald-500 text-white' },
-  RSS: { label: 'RSS / News', short: 'RS', active: 'bg-orange-500 text-white' },
-  GOOGLE_TRENDS: { label: 'Google Trends', short: 'GT', active: 'bg-blue-500 text-white' },
-  REDDIT: { label: 'Reddit', short: 'RD', active: 'bg-rose-500 text-white' },
-  X: { label: 'X / Twitter', short: 'X', active: 'bg-bo-neutral-900 text-white' },
-  TIKTOK: { label: 'TikTok', short: 'TT', active: 'bg-fuchsia-600 text-white' },
+  STATFIN: { short: 'SF', active: 'bg-emerald-600 text-white' },
+  FRED: { short: 'FR', active: 'bg-emerald-700 text-white' },
+  TRADE_PUB: { short: 'TP', active: 'bg-emerald-500 text-white' },
+  RSS: { short: 'RS', active: 'bg-orange-500 text-white' },
+  GOOGLE_TRENDS: { short: 'GT', active: 'bg-blue-500 text-white' },
+  REDDIT: { short: 'RD', active: 'bg-rose-500 text-white' },
+  X: { short: 'X', active: 'bg-bo-neutral-900 text-white' },
+  TIKTOK: { short: 'TT', active: 'bg-fuchsia-600 text-white' },
 };
 
 function classify(type: SourceType): SourceAuthority {
   return AUTHORITATIVE.has(type) ? 'authoritative' : 'opinion';
 }
 
-function tooltip(active: ContributingSource | undefined, type: SourceType): string {
-  const m = META[type];
-  if (!active) return `${m.label}: not contributing`;
+function tooltip(
+  active: ContributingSource | undefined,
+  type: SourceType,
+  t: (key: string, options?: Record<string, unknown>) => string,
+): string {
+  const label = t(`shoppermind.sourceBadges.names.${type}`);
+  if (!active) return t('shoppermind.sourceBadges.inactive', { source: label });
   const date = new Date(active.lastSignalAt);
-  const ts = isNaN(date.getTime()) ? '–' : date.toISOString().slice(0, 10);
-  return `${m.label} · ${active.signalCount} signal${active.signalCount === 1 ? '' : 's'} · last ${ts}`;
+  const last = isNaN(date.getTime()) ? '-' : date.toISOString().slice(0, 10);
+  return t('shoppermind.sourceBadges.active', {
+    source: label,
+    count: active.signalCount,
+    last,
+  });
 }
 
 export interface SourceLogosProps {
@@ -64,6 +72,7 @@ export function SourceLogos({
   size = 'sm',
   className,
 }: SourceLogosProps) {
+  const { t } = useTranslation('mall');
   const activeMap = new Map<SourceType, ContributingSource>();
   for (const s of contributingSources ?? []) activeMap.set(s.type, s);
 
@@ -74,13 +83,14 @@ export function SourceLogos({
       {ALL_SOURCES.map((type) => {
         const active = activeMap.get(type);
         const m = META[type];
+        const title = tooltip(active, type, t);
         const isAuthoritative = classify(type) === 'authoritative';
         const isActive = !!active;
         return (
           <span
             key={type}
-            title={tooltip(active, type)}
-            aria-label={tooltip(active, type)}
+            title={title}
+            aria-label={title}
             className={cn(
               dim,
               'rounded-md font-semibold flex items-center justify-center select-none transition',

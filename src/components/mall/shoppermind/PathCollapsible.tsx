@@ -24,20 +24,24 @@ function toneLabel(t: (k: string) => string, tone: string): string {
   return tone;
 }
 
-export function PathCollapsible({ path }: { path: MegaPath }) {
+export function PathCollapsible({ path, selected }: { path: MegaPath; selected?: boolean }) {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation('mall');
   const border = TONE_BORDER[path.tone] ?? 'border-bo-neutral-300';
   const chip = TONE_CHIP[path.tone] ?? 'bg-bo-neutral-100 text-bo-neutral-700';
   const heroNumbers = (path.keyNumbers ?? []).slice(0, 2);
+  const visibleOpen = open || selected;
 
   return (
-    <article className={`rounded-xl border ${border} bg-white/70 backdrop-blur-xl mb-2.5`}>
+    <article
+      id={`shoppermind-path-${path.id}`}
+      className={`bo-surface-subtle bo-surface-hover mb-2.5 rounded-xl border ${border} ${selected ? 'ring-2 ring-bo-primary-300' : ''}`}
+    >
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-        className="w-full flex items-start justify-between gap-3 p-3 text-left"
+        aria-expanded={visibleOpen}
+        className="w-full flex items-start justify-between gap-3 rounded-xl p-3 text-left"
       >
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 flex-wrap mb-1">
@@ -46,7 +50,7 @@ export function PathCollapsible({ path }: { path: MegaPath }) {
               {toneLabel(t, path.tone)}
             </span>
           </div>
-          {!open && (
+          {!visibleOpen && (
             <>
               <p className="text-xs text-bo-neutral-600 leading-snug line-clamp-2">{path.summary}</p>
               {heroNumbers.length > 0 && (
@@ -62,9 +66,9 @@ export function PathCollapsible({ path }: { path: MegaPath }) {
             </>
           )}
         </div>
-        <ChevronDown size={16} className={`text-bo-neutral-400 shrink-0 mt-0.5 transition-transform ${open ? 'rotate-180' : ''}`} />
+        <ChevronDown size={16} className={`text-bo-neutral-400 shrink-0 mt-0.5 transition-transform ${visibleOpen ? 'rotate-180' : ''}`} />
       </button>
-      {open && (
+      {visibleOpen && (
         <div className="px-3 pb-3 pt-0">
           <PathBody path={path} />
         </div>

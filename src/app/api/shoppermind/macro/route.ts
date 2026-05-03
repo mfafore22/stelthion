@@ -33,7 +33,17 @@ export async function GET(req: NextRequest) {
   }
 
   const indicators = meta.map((m) => {
-    const series = (byCode.get(m.code) ?? []).slice(0, 24).reverse();
+    const dbSeries = (byCode.get(m.code) ?? []).slice(0, 24).reverse();
+    const series = dbSeries.length > 0
+      ? dbSeries
+      : (m.fallbackHistory ?? []).map((p) => ({
+          indicatorCode: m.code,
+          country: m.country,
+          period: p.period,
+          periodDate: new Date(p.periodDate),
+          value: p.value,
+          fetchedAt: new Date('2026-05-03T00:00:00.000Z'),
+        }));
     const latest = series.length > 0 ? series[series.length - 1] : null;
     const langKey = (lang === 'fi' || lang === 'sv') ? lang : 'en';
     return {

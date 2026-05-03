@@ -51,7 +51,7 @@ export function ActionBoardAside({
 
   return (
     <aside className="space-y-4">
-      <div className="rounded-xl border border-bo-neutral-200 bg-bo-neutral-50/80 p-4">
+      <div className="bo-surface-subtle rounded-xl border p-4">
         <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-bo-neutral-950">
           <ListChecks size={16} className="text-bo-primary-600" />
           {labels.prioritySummary}
@@ -63,7 +63,7 @@ export function ActionBoardAside({
                 <span>{labels.priorityLabels[item.priority]}</span>
                 <span className="tabular-nums">{item.count}</span>
               </div>
-              <div className="h-2.5 overflow-hidden rounded-full border border-bo-neutral-200 bg-white">
+              <div className="h-2.5 overflow-hidden rounded-full border border-bo-neutral-200 bg-white/60">
                 <div className={`h-full ${priorityTone(item.priority)}`} style={{ width: `${(item.count / maxPriority) * 100}%` }} />
               </div>
             </div>
@@ -71,7 +71,7 @@ export function ActionBoardAside({
         </div>
       </div>
 
-      <div className="rounded-xl border border-bo-neutral-200 bg-bo-neutral-50/80 p-4">
+      <div className="bo-surface-subtle rounded-xl border p-4">
         <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-bo-neutral-950">
           <BarChart3 size={16} className="text-bo-primary-600" />
           {labels.actionCoverage}
@@ -83,7 +83,7 @@ export function ActionBoardAside({
                 <span>{labels.zoneLabels[zone.zone] ?? zone.zone}</span>
                 <span className="tabular-nums">{zone.count}</span>
               </div>
-              <div className="h-2.5 overflow-hidden rounded-full border border-bo-neutral-200 bg-white">
+              <div className="h-2.5 overflow-hidden rounded-full border border-bo-neutral-200 bg-white/60">
                 <div className="h-full bg-bo-primary-600" style={{ width: `${(zone.count / maxZone) * 100}%` }} />
               </div>
             </div>
@@ -91,7 +91,7 @@ export function ActionBoardAside({
         </div>
       </div>
 
-      <div className="rounded-xl border border-bo-neutral-200 bg-white p-4">
+      <div className="bo-surface-subtle rounded-xl border p-4">
         <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-bo-neutral-950">
           <Sparkles size={16} className="text-bo-primary-600" />
           {labels.decisionContext}

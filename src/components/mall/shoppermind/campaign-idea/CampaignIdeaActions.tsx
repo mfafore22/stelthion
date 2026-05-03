@@ -1,8 +1,9 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
-import { RotateCcw, MessageSquare, ArrowUpRight } from 'lucide-react';
+import { RotateCcw, ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ChatBubbleIcon } from '@/components/concierge/ChatBubbleButton';
 
 interface Props {
   loading: boolean;
@@ -26,7 +27,7 @@ export function CampaignIdeaActions({
       </ActionButton>
       {onRefineInChat && (
         <ActionButton onClick={onRefineInChat} variant="primary">
-          <MessageSquare className="w-3.5 h-3.5" />
+          <ChatBubbleIcon />
           {t('shoppermind.campaignIdea.refineInChat')}
         </ActionButton>
       )}
@@ -61,11 +62,11 @@ function ActionButton({
       }}
       disabled={disabled}
       className={cn(
-        'inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors',
+        'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-all',
         'disabled:opacity-50 disabled:cursor-not-allowed',
         variant === 'primary'
-          ? 'bg-bo-neutral-950 text-white hover:bg-bo-neutral-900'
-          : 'border border-bo-neutral-200 text-bo-neutral-700 hover:bg-bo-neutral-50',
+          ? 'rounded-full border border-bo-neutral-200 bg-white/70 text-bo-neutral-800 shadow-bo-sm backdrop-blur-md hover:border-bo-primary-200 hover:bg-white'
+          : 'bo-interactive-box text-bo-neutral-700',
       )}
     >
       {children}
