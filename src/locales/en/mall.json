@@ -1365,16 +1365,16 @@
     "loading": "Loading...",
     "noConversations": "No conversations yet. Start a new one!",
     "viewAll": "View all conversations",
-    "selectAgent": "Select Agent",
-    "chooseAgent": "Choose the best agent for your task:",
+    "selectAgent": "Select assistant",
+    "chooseAgent": "Choose the best assistant for your task:",
     "notSure": "Not sure?",
-    "generalAssistantSuggestion": "Start with General Assistant. It can help with any question and automatically route to specialised agents when needed.",
+    "generalAssistantSuggestion": "Start with General Assistant. It can help with any question and automatically route to specialised assistants when needed.",
     "startWithGeneral": "Start with General Assistant",
     "startConversation": "Start a Conversation",
     "startConversationDesc": "Ask me about sales, footfall, events, parking, or trends. I'm here to help you make better decisions for your mall.",
     "askAnything": "Ask me anything...",
     "typeMessage": "Type your message...",
-    "agentLabel": "Agent",
+    "agentLabel": "Assistant",
     "noBackendStub": "This is a UI preview. The AI backend is not yet connected. Once the Concierge service is configured, I will respond in real time.",
     "select": "Select",
     "bestFor": "Best for:",
@@ -1527,7 +1527,7 @@
     },
     "assistants": {
       "label": "Assistants",
-      "description": "AI agents for mall operations"
+      "description": "AI assistants for mall operations"
     },
     "shoppermind": {
       "label": "ShopperMind",

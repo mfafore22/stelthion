@@ -1372,16 +1372,16 @@
     "loading": "Laddar...",
     "noConversations": "Inga konversationer ännu. Starta en ny!",
     "viewAll": "Visa alla konversationer",
-    "selectAgent": "Välj agent",
-    "chooseAgent": "Välj den bästa agenten för din uppgift:",
+    "selectAgent": "Välj assistent",
+    "chooseAgent": "Välj den bästa assistenten för din uppgift:",
     "notSure": "Osäker?",
-    "generalAssistantSuggestion": "Börja med Generell assistent. Den kan hjälpa till med alla frågor och dirigerar automatiskt till specialiserade agenter vid behov.",
+    "generalAssistantSuggestion": "Börja med Generell assistent. Den kan hjälpa till med alla frågor och dirigerar automatiskt till specialiserade assistenter vid behov.",
     "startWithGeneral": "Börja med Generell assistent",
     "startConversation": "Starta en konversation",
     "startConversationDesc": "Fråga mig om försäljning, besöksflöde, evenemang, parkering eller trender. Jag finns här för att hjälpa dig fatta bättre beslut för ditt köpcentrum.",
     "askAnything": "Fråga mig vad som helst...",
     "typeMessage": "Skriv ditt meddelande...",
-    "agentLabel": "Agent",
+    "agentLabel": "Assistent",
     "noBackendStub": "Detta är en UI-förhandsvisning. AI-backend är ännu ej ansluten. När Concierge-tjänsten är konfigurerad svarar jag i realtid.",
     "select": "Välj",
     "bestFor": "Bäst för:",
@@ -1534,7 +1534,7 @@
     },
     "assistants": {
       "label": "Assistenter",
-      "description": "AI-agenter för köpcentrumdrift"
+      "description": "AI-assistenter för köpcentrumdrift"
     },
     "shoppermind": {
       "label": "ShopperMind",
