@@ -209,6 +209,8 @@
     "peakHours": "Peak Hours",
     "averageStay": "Average Stay",
     "outdoorSurfaceLotFree": "{{count}} spaces · outdoor surface lot · free",
+    "capacityFree": "{{count}} spaces · parking capacity · free",
+    "capacityPaid": "{{count}} spaces · parking capacity · paid",
     "full": "Full",
     "availableNow": "Available Now",
     "occupiedPublic": "{{occupied}} occupied · {{public}} public spaces",
@@ -223,6 +225,8 @@
     "dailyMax": "Daily Max",
     "monthly": "Monthly",
     "paymentInfo": "Free · Payment: Card, EasyPark, ParkMan, Autopay",
+    "paymentInfoFree": "Free customer parking · monthly spaces managed separately",
+    "paymentInfoPaid": "Payment: card, mobile payment and parking apps · contract spaces managed separately",
     "visitorArrivalModes": "Visitor Arrival Modes",
     "car": "Car",
     "publicTransitWalking": "Public Transit / Walking"
@@ -413,9 +417,64 @@
     "comingSoon": "AI Assistants Integration",
     "integrationDescription": "AI Assistants use your property's isolated data to produce property-specific simulations and forecasts. With them, you can test the impact of your chosen actions or prepare for situations. Stelthion AI models bring broader insights and alternatives to simulations and forecasts.",
     "tryScenarios": "Try Scenarios Calculator Now",
+    "actions": {
+      "startChat": "Start chat",
+      "askInChat": "Ask in chat"
+    },
+    "demo": {
+      "owner-copilot": {
+        "title": "Property Owner Copilot",
+        "body": "Turns strategy, risk, and weekly decisions into a concise owner view.",
+        "tools": { "0": "KPIs", "1": "Briefing", "2": "Approvals" },
+        "prompts": { "0": "Give me the owner decision queue for this week.", "1": "What needs approval before Friday?" }
+      },
+      "trend-analyst": {
+        "title": "ShopperMind Trend Analyst",
+        "body": "Explains paths, actions, competitors, and sourced market signals.",
+        "tools": { "0": "ShopperMind", "1": "Sources", "2": "Campaign idea" },
+        "prompts": { "0": "Which path should we prioritize and why?", "1": "Turn the strongest trend into two actions." }
+      },
+      "campaign-designer": {
+        "title": "Campaign Designer",
+        "body": "Drafts briefs, audiences, tenants, channels, KPIs, and approval steps.",
+        "tools": { "0": "Campaigns", "1": "Events", "2": "Footfall" },
+        "prompts": { "0": "Draft a campaign brief from the current trend.", "1": "Which tenants should participate?" }
+      },
+      "space-optimizer": {
+        "title": "Space and Leasing Optimizer",
+        "body": "Connects trends, lease timing, zone flow, and projected rent impact.",
+        "tools": { "0": "Space optimizer", "1": "Tenant mix", "2": "Sales" },
+        "prompts": { "0": "Which zone conversion has the best risk-adjusted upside?", "1": "Explain this space suggestion for leasing." }
+      }
+    },
+    "panels": {
+      "security": {
+        "title": "Security and approvals",
+        "prompt": "Explain our assistant security boundaries, approvals, and customer isolation.",
+        "rows": {
+          "0": "Customer boundary: customerId + mallId",
+          "1": "No cross-customer retrieval",
+          "2": "Write actions require approval",
+          "3": "Audit trail for tools",
+          "4": "Fine-tune data exported per customer"
+        }
+      },
+      "data": {
+        "title": "Data readiness",
+        "prompt": "Show which data sources are live, demo, or ready for integration.",
+        "rows": {
+          "0": "ShopperMind: live/demo",
+          "1": "Footfall: scoped by mall",
+          "2": "POS: aggregate demo",
+          "3": "Leases: schema-ready",
+          "4": "RAG: namespace-ready"
+        }
+      }
+    },
     "controlTitle": "Assistants for closed environments",
     "closedEnvironment": "Customer-scoped environment",
-    "controlBody": "Assistants are designed to use only the selected customer, operator, and property data. The demo shows the control model: which agents are available, which tools they may use, and when human approval is required.",
+    "controlBody": "Assistants are designed to use only the selected customer, operator, and property data. The demo shows the control model: which assistants are available, which tools they may use, and when human approval is required.",
+    "mallFocus": "Mall focus",
     "agentCatalog": "Assistants",
     "securityTitle": "Security boundaries",
     "dataTitle": "Data sources",
@@ -458,8 +517,10 @@
       "trends": "Trends",
       "competitors": "Competitors",
       "decisionSupport": "Decision support",
+      "marketLessons": "Market lessons",
       "emptyActionsTitle": "Actions in preparation",
-      "emptyActionsBody": "No sourced action recommendations have been published yet for this selected market or property."
+      "emptyActionsBody": "No sourced action recommendations have been published yet for this selected market or property.",
+      "benchmarkActionsBody": "This is a benchmark and analysis market for the customer. Property-specific actions are shown only in the customer’s own operating markets."
     },
     "competitors": {
       "emptyTitle": "Competitor benchmarks in preparation",
@@ -508,6 +569,7 @@
       "benchmark": "Benchmark",
       "openCampaign": "Draft in Campaigns",
       "discussAssistant": "Discuss with Assistant",
+      "assistantPrompt": "Help me evaluate this ShopperMind recommendation and turn it into a decision-ready next step: {{action}}",
       "priority": "Priority",
       "property": "Property",
       "priorities": {
@@ -546,6 +608,17 @@
         "retailMedia": "Package mall attention"
       }
     },
+    "marketLessons": {
+      "kicker": "Benchmark and analysis market",
+      "title": "Market lessons",
+      "body": "This view collects local market shifts, benchmark examples, and ideas that can be adapted back to the customer’s operating markets. It is not a property-specific action plan.",
+      "empty": "Benchmark content for this market is in preparation.",
+      "whatChanges": "What is changing",
+      "lessonsForOperator": "What a mall operator can learn",
+      "evidenceConfidence": "Sources and confidence",
+      "benchmarkIdeas": "Benchmark ideas",
+      "noScenario": "The market scenario narrative is in preparation."
+    },
     "countries": {
       "FI": "Finland",
       "JP": "Japan",
@@ -580,6 +653,21 @@
       "byCity": "Merchants in {{city}}",
       "alsoVisible": "Also visible",
       "watching": "Watching"
+    },
+    "sourceBadges": {
+      "active_one": "{{source}} · {{count}} signal · last {{last}}",
+      "active_other": "{{source}} · {{count}} signals · last {{last}}",
+      "inactive": "{{source}}: not contributing",
+      "names": {
+        "STATFIN": "Official statistics / StatFin",
+        "FRED": "Federal Reserve Economic Data",
+        "TRADE_PUB": "Research and trade publications",
+        "RSS": "RSS and news sources",
+        "GOOGLE_TRENDS": "Google Trends",
+        "REDDIT": "Reddit",
+        "X": "X / Twitter",
+        "TIKTOK": "TikTok"
+      }
     },
     "signalOfTheDay": {
       "title": "Signal of the Day",
@@ -957,15 +1045,32 @@
     "subtitle": "Turn ShopperMind trends into campaign briefs that can be tested against visitor, POS, and tenant data.",
     "builder": "Campaign brief draft",
     "createBrief": "Create test brief",
+    "assistantPrompt": "Create a test campaign brief with the selected settings.",
     "flowTitle": "Workflow once connected to live data",
     "aiTitle": "Demo now, customer data later",
     "aiBody": "A tailored AI model uses only data scoped to the customer environment. The demo shows the workflow with seeded and trend data, while the same view can later connect to POS, visitor, tenant, and campaign-result data.",
     "fields": {
       "mall": { "label": "Property", "value": "Sello or Mall of Tripla" },
-      "zone": { "label": "Zone", "value": "Everyday retail, station, restaurants, or services" },
-      "audience": { "label": "Audience", "value": "Daily visitors, families, or wellness customers" },
-      "budget": { "label": "Budget", "value": "Light / standard / broad" },
-      "duration": { "label": "Duration", "value": "7, 14, or 30 days" }
+      "zone": {
+        "label": "Zone",
+        "value": "Everyday retail, station, restaurants, or services",
+        "options": { "everyday": "Everyday retail", "station": "Station", "restaurants": "Restaurants", "services": "Services" }
+      },
+      "audience": {
+        "label": "Audience",
+        "value": "Daily visitors, families, or wellness customers",
+        "options": { "daily": "Daily visitors", "families": "Families", "wellness": "Wellness customers", "commuters": "Commuters" }
+      },
+      "budget": {
+        "label": "Budget",
+        "value": "Light / standard / broad",
+        "options": { "light": "Light", "standard": "Standard", "broad": "Broad" }
+      },
+      "duration": {
+        "label": "Duration",
+        "value": "7, 14, or 30 days",
+        "options": { "7": "7 days", "14": "14 days", "30": "30 days" }
+      }
     },
     "kpis": {
       "visits": { "label": "Visitor forecast", "value": "+3.8%", "hint": "Demo estimate for the selected zone" },
@@ -1184,16 +1289,16 @@
     "loading": "Loading...",
     "noConversations": "No conversations yet. Start a new one!",
     "viewAll": "View all conversations",
-    "selectAgent": "Select Agent",
-    "chooseAgent": "Choose the best agent for your task:",
+    "selectAgent": "Select Assistant",
+    "chooseAgent": "Choose the best assistant for your task:",
     "notSure": "Not sure?",
-    "generalAssistantSuggestion": "Start with General Assistant. It can help with any question and automatically route to specialised agents when needed.",
+    "generalAssistantSuggestion": "Start with General Assistant. It can help with any question and automatically route to specialised assistants when needed.",
     "startWithGeneral": "Start with General Assistant",
     "startConversation": "Start a Conversation",
     "startConversationDesc": "Ask me about sales, footfall, events, parking, or trends. I'm here to help you make better decisions for your mall.",
     "askAnything": "Ask me anything...",
     "typeMessage": "Type your message...",
-    "agentLabel": "Agent",
+    "agentLabel": "Assistant",
     "noBackendStub": "This is a UI preview. The AI backend is not yet connected. Once the Concierge service is configured, I will respond in real time.",
     "select": "Select",
     "bestFor": "Best for:",
@@ -1346,7 +1451,7 @@
     },
     "assistants": {
       "label": "Assistants",
-      "description": "AI agents for mall operations"
+      "description": "AI assistants for mall operations"
     },
     "shoppermind": {
       "label": "ShopperMind",
@@ -1496,6 +1601,12 @@
     "futureConnection": {
       "title": "ShopperMind connection planned",
       "body": "In the next phase, a trend signal becomes a zone and category hypothesis whose impact is estimated with visitor, sales, rent, and lease data."
+    },
+    "assistant": {
+      "discuss": "Discuss with assistant",
+      "ask": "Ask assistant",
+      "summaryPrompt": "Summarize the current space optimization run and identify the highest-utility next leasing action.",
+      "suggestionPrompt": "Explain this leasing recommendation and prepare the next decision: {{zone}}."
     },
     "header": {
       "summary": "{{count}} suggestion across {{zones}} zones",

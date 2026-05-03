@@ -209,6 +209,8 @@
     "peakHours": "Rusningstid",
     "averageStay": "Genomsnittligt besök",
     "outdoorSurfaceLotFree": "{{count}} platser · utomhusparkering · gratis",
+    "capacityFree": "{{count}} platser · parkeringskapacitet · gratis",
+    "capacityPaid": "{{count}} platser · parkeringskapacitet · avgiftsbelagd",
     "full": "Fullt",
     "availableNow": "Ledigt nu",
     "occupiedPublic": "{{occupied}} upptagna · {{public}} publika platser",
@@ -223,6 +225,8 @@
     "dailyMax": "Dagligt max",
     "monthly": "Månadskort",
     "paymentInfo": "Gratis · Betalning: Kort, EasyPark, ParkMan, Autopay",
+    "paymentInfoFree": "Gratis kundparkering · månadsplatser hanteras separat",
+    "paymentInfoPaid": "Betalning: kort, mobilbetalning och parkeringsappar · avtalsplatser hanteras separat",
     "visitorArrivalModes": "Besökarnas ankomstmedel",
     "car": "Bil",
     "publicTransitWalking": "Kollektivtrafik / Promenad",
@@ -422,9 +426,64 @@
     "comingSoon": "AI-assistentintegration",
     "integrationDescription": "AI-assistenter använder din fastighets isolerade data för att producera fastighetsspecifika simuleringar och prognoser. Med dem kan du testa effekten av dina valda åtgärder eller förbereda dig för situationer. Stelthion AI-modeller ger bredare insikter och alternativ till simuleringar och prognoser.",
     "tryScenarios": "Prova scenariokalkylator nu",
+    "actions": {
+      "startChat": "Starta chatt",
+      "askInChat": "Fråga i chatten"
+    },
+    "demo": {
+      "owner-copilot": {
+        "title": "Ägarens Copilot",
+        "body": "Samlar strategi, risker och veckans beslut till en tydlig ägarvy.",
+        "tools": { "0": "Nyckeltal", "1": "Daglig briefing", "2": "Godkännanden" },
+        "prompts": { "0": "Ge mig ägarens beslutslista för den här veckan.", "1": "Vad behöver godkännas före fredag?" }
+      },
+      "trend-analyst": {
+        "title": "ShopperMind-trendanalytiker",
+        "body": "Förklarar vägar, åtgärder, konkurrenter och källbelagda marknadssignaler.",
+        "tools": { "0": "ShopperMind", "1": "Källor", "2": "Kampanjidé" },
+        "prompts": { "0": "Vilken väg ska prioriteras och varför?", "1": "Gör den starkaste trenden till två åtgärder." }
+      },
+      "campaign-designer": {
+        "title": "Kampanjdesigner",
+        "body": "Skissar briefar, målgrupper, hyresgäster, kanaler, KPI:er och godkännanden.",
+        "tools": { "0": "Kampanjer", "1": "Evenemang", "2": "Besöksflöden" },
+        "prompts": { "0": "Skissa en kampanjbrief från den aktuella trenden.", "1": "Vilka hyresgäster bör ingå?" }
+      },
+      "space-optimizer": {
+        "title": "Yt- och uthyrningsoptimerare",
+        "body": "Kopplar trender, hyresavtalstiming, zonflöden och hyrespåverkan.",
+        "tools": { "0": "Ytoptimering", "1": "Hyresgästmix", "2": "Försäljning" },
+        "prompts": { "0": "Vilken ytförändring har bäst riskjusterad effekt?", "1": "Förklara den här ytrekommendationen för uthyrningsteamet." }
+      }
+    },
+    "panels": {
+      "security": {
+        "title": "Säkerhet och godkännanden",
+        "prompt": "Förklara assistenternas säkerhetsgränser, godkännanden och kundisolering.",
+        "rows": {
+          "0": "Varje begäran binds till kund, fastighet och användarroll.",
+          "1": "Skrivande åtgärder kräver ett separat godkännande.",
+          "2": "Kunddata blandas inte mellan Ideapark, Realidea eller andra konton.",
+          "3": "Verktygsanrop och källor loggas för granskning.",
+          "4": "Auth, 2FA och OTP ändras inte av assistentflödet."
+        }
+      },
+      "data": {
+        "title": "Datakort och anslutningar",
+        "prompt": "Visa vilka datakällor som kan anslutas till assistenterna och vad demon använder tills live-data finns.",
+        "rows": {
+          "0": "ShopperMind-trender, vägar och åtgärder används som beslutsunderlag.",
+          "1": "Kampanjbriefar kan senare kopplas till POS-, besöks- och hyresgästdata.",
+          "2": "Ytoptimeraren väntar på avtal, hyror och zonflöden.",
+          "3": "Briefingar och chattsvar sparar prompt-svar-par för kundspecifik modellträning.",
+          "4": "Demo-innehåll är märkt så att det kan ersättas med livekopplingar."
+        }
+      }
+    },
     "controlTitle": "Assistenter för slutna miljöer",
     "closedEnvironment": "Kundavgränsad miljö",
-    "controlBody": "Assistenterna utformas för att endast använda vald kunds, operatörs och fastighets data. Demon visar styrmodellen: vilka agenter som finns, vilka verktyg de får använda och när mänskligt godkännande krävs.",
+    "controlBody": "Assistenterna utformas för att endast använda vald kunds, operatörs och fastighets data. Demon visar styrmodellen: vilka assistenter som finns, vilka verktyg de får använda och när mänskligt godkännande krävs.",
+    "mallFocus": "Fastighetsfokus",
     "agentCatalog": "Assistenter",
     "securityTitle": "Säkerhetsgränser",
     "dataTitle": "Datakällor",
@@ -467,8 +526,10 @@
       "trends": "Trender",
       "competitors": "Konkurrenter",
       "decisionSupport": "Beslutsstöd",
+      "marketLessons": "Marknadslärdomar",
       "emptyActionsTitle": "Åtgärder förbereds",
-      "emptyActionsBody": "Inga källbelagda åtgärdsrekommendationer har ännu publicerats för den valda marknaden eller fastigheten."
+      "emptyActionsBody": "Inga källbelagda åtgärdsrekommendationer har ännu publicerats för den valda marknaden eller fastigheten.",
+      "benchmarkActionsBody": "Denna marknad är en jämförelse- och analysmarknad för kunden. Fastighetsspecifika åtgärder visas endast i kundens egna operativa marknader."
     },
     "competitors": {
       "emptyTitle": "Konkurrentjämförelser förbereds",
@@ -517,6 +578,7 @@
       "benchmark": "Jämförelse",
       "openCampaign": "Öppna som kampanjidé",
       "discussAssistant": "Diskutera med assistenten",
+      "assistantPrompt": "Bedöm ShopperMind-åtgärden \"{{action}}\" och beskriv hur den bör genomföras som kampanj, ytförändring eller ägarbeslut.",
       "priority": "Prioritet",
       "property": "Fastighet",
       "priorities": {
@@ -554,6 +616,17 @@
         "benchmark": "Jämför nästa steg",
         "retailMedia": "Paketera uppmärksamhet"
       }
+    },
+    "marketLessons": {
+      "kicker": "Jämförelse- och analysmarknad",
+      "title": "Marknadslärdomar",
+      "body": "Denna vy samlar lokala marknadsskiften, jämförelseexempel och idéer som kan anpassas till kundens operativa marknader. Det är inte en fastighetsspecifik åtgärdsplan.",
+      "empty": "Jämförelseinnehåll för denna marknad förbereds.",
+      "whatChanges": "Vad som förändras",
+      "lessonsForOperator": "Vad en köpcentrumoperatör kan lära sig",
+      "evidenceConfidence": "Källor och tillförlitlighet",
+      "benchmarkIdeas": "Jämförelseidéer",
+      "noScenario": "Marknadens scenarioberättelse förbereds."
     },
     "countries": {
       "FI": "Finland",
@@ -594,6 +667,21 @@
       "byCity": "Handlare i {{city}}",
       "alsoVisible": "Även synligt",
       "watching": "Bevakning"
+    },
+    "sourceBadges": {
+      "active_one": "{{source}} · {{count}} signal · senaste {{last}}",
+      "active_other": "{{source}} · {{count}} signaler · senaste {{last}}",
+      "inactive": "{{source}}: bidrar inte till denna signal",
+      "names": {
+        "STATFIN": "Officiell statistik / StatFin",
+        "FRED": "Federal Reserve Economic Data",
+        "TRADE_PUB": "Analys- och branschpublikationer",
+        "RSS": "RSS- och nyhetskällor",
+        "GOOGLE_TRENDS": "Google Trends",
+        "REDDIT": "Reddit",
+        "X": "X / Twitter",
+        "TIKTOK": "TikTok"
+      }
     },
     "states": {
       "EMERGING": "Framväxande",
@@ -966,15 +1054,32 @@
     "subtitle": "Gör ShopperMind-trender till kampanjbriefar som kan testas mot besöks-, POS- och hyresgästdata.",
     "builder": "Utkast till kampanjbrief",
     "createBrief": "Skapa testbrief",
+    "assistantPrompt": "Skapa en testkampanjbrief med de valda inställningarna.",
     "flowTitle": "Arbetsflöde när live-data är ansluten",
     "aiTitle": "Demo nu, kunddata senare",
     "aiBody": "En skräddarsydd AI-modell använder endast data som är avgränsad till kundens egen miljö. Demon visar arbetsflödet med seedad data och trenddata, medan samma vy senare kan kopplas till POS-, besöks-, hyresgäst- och kampanjresultat.",
     "fields": {
       "mall": { "label": "Fastighet", "value": "Sello eller Mall of Tripla" },
-      "zone": { "label": "Zon", "value": "Vardagsärenden, station, restauranger eller tjänster" },
-      "audience": { "label": "Målgrupp", "value": "Vardagsbesökare, familjer eller wellnesskunder" },
-      "budget": { "label": "Budget", "value": "Lätt / standard / bred" },
-      "duration": { "label": "Längd", "value": "7, 14 eller 30 dagar" }
+      "zone": {
+        "label": "Zon",
+        "value": "Vardagsärenden, station, restauranger eller tjänster",
+        "options": { "everyday": "Vardagsärenden", "station": "Station", "restaurants": "Restauranger", "services": "Tjänster" }
+      },
+      "audience": {
+        "label": "Målgrupp",
+        "value": "Vardagsbesökare, familjer eller wellnesskunder",
+        "options": { "daily": "Vardagsbesökare", "families": "Familjer", "wellness": "Wellnesskunder", "commuters": "Pendlare" }
+      },
+      "budget": {
+        "label": "Budget",
+        "value": "Lätt / standard / bred",
+        "options": { "light": "Lätt", "standard": "Standard", "broad": "Bred" }
+      },
+      "duration": {
+        "label": "Längd",
+        "value": "7, 14 eller 30 dagar",
+        "options": { "7": "7 dagar", "14": "14 dagar", "30": "30 dagar" }
+      }
     },
     "kpis": {
       "visits": { "label": "Besöksprognos", "value": "+3,8 %", "hint": "Demoestimat för vald zon" },
@@ -1108,6 +1213,10 @@
       "Cloudy": "Mestadels molnigt",
       "Clear": "Klart",
       "Rain": "Lätt regn",
+      "Partly Cloudy": "Delvis molnigt",
+      "Overcast": "Mulet",
+      "Heavy Rain": "Kraftigt regn",
+      "Sleet": "Snöblandat regn",
       "Snow": "Lätt snöfall",
       "Optimal conditions": "Optimala förhållanden"
     },
@@ -1191,16 +1300,16 @@
     "loading": "Laddar...",
     "noConversations": "Inga konversationer ännu. Starta en ny!",
     "viewAll": "Visa alla konversationer",
-    "selectAgent": "Välj agent",
-    "chooseAgent": "Välj den bästa agenten för din uppgift:",
+    "selectAgent": "Välj assistent",
+    "chooseAgent": "Välj den bästa assistenten för din uppgift:",
     "notSure": "Osäker?",
-    "generalAssistantSuggestion": "Börja med Generell assistent. Den kan hjälpa till med alla frågor och dirigerar automatiskt till specialiserade agenter vid behov.",
+    "generalAssistantSuggestion": "Börja med Generell assistent. Den kan hjälpa till med alla frågor och dirigerar automatiskt till specialiserade assistenter vid behov.",
     "startWithGeneral": "Börja med Generell assistent",
     "startConversation": "Starta en konversation",
     "startConversationDesc": "Fråga mig om försäljning, besöksflöde, evenemang, parkering eller trender. Jag finns här för att hjälpa dig fatta bättre beslut för ditt köpcentrum.",
     "askAnything": "Fråga mig vad som helst...",
     "typeMessage": "Skriv ditt meddelande...",
-    "agentLabel": "Agent",
+    "agentLabel": "Assistent",
     "noBackendStub": "Detta är en UI-förhandsvisning. AI-backend är ännu ej ansluten. När Concierge-tjänsten är konfigurerad svarar jag i realtid.",
     "select": "Välj",
     "bestFor": "Bäst för:",
@@ -1353,7 +1462,7 @@
     },
     "assistants": {
       "label": "Assistenter",
-      "description": "AI-agenter för köpcentrumdrift"
+      "description": "AI-assistenter för köpcentrumdrift"
     },
     "shoppermind": {
       "label": "ShopperMind",
@@ -1380,6 +1489,7 @@
       "zoneCount": "Områdesräkning",
       "abTracking": "A → B-flöde",
       "journeyMap": "Resekarta",
+      "flowQuery": "Flödesanalys",
       "storeBehavior": "Butiksbeteende"
     },
     "modesDescription": {
@@ -1525,6 +1635,12 @@
     "futureConnection": {
       "title": "ShopperMind-koppling planerad",
       "body": "I nästa fas blir en trendsignal en zon- och kategorihypotes vars effekt uppskattas med besöks-, försäljnings-, hyres- och avtalsdata."
+    },
+    "assistant": {
+      "summaryPrompt": "Bedöm ytportföljen och lyft tre beslut där ShopperMind-trender blir uthyrnings- eller ytplansåtgärder.",
+      "suggestionPrompt": "Förklara ytrekommendationen för zonen {{zone}}: kommersiell logik, hyresgästeffekt, risker och nästa steg.",
+      "discuss": "Diskutera med assistenten",
+      "ask": "Fråga assistenten"
     },
     "header": {
       "summary": "{{count}} förslag över {{zones}} zoner",

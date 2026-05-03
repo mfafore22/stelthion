@@ -1,14 +1,30 @@
 'use client';
 
-import { BarChart3, CheckCircle2, Megaphone, PlayCircle, SlidersHorizontal } from 'lucide-react';
+import { BarChart3, CheckCircle2, Megaphone } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { AgentRole } from '@/lib/gcm-types';
+import { useAssistantLaunch } from '@/lib/assistant-flow/useAssistantLaunch';
+import { CampaignBriefBuilder, type CampaignBriefSelection } from './CampaignBriefBuilder';
+import { getCampaignMallOptions } from './campaignMallOptions';
 
-const BRIEF_FIELDS = ['mall', 'zone', 'audience', 'budget', 'duration'] as const;
 const KPI_CARDS = ['visits', 'sales', 'tenants'] as const;
 const STEPS = ['brief', 'model', 'approval', 'live', 'learning'] as const;
 
 export function CampaignsWorkspace() {
   const { t } = useTranslation('mall');
+  const launch = useAssistantLaunch();
+  const mallOptions = getCampaignMallOptions();
+  const createBrief = (selection: CampaignBriefSelection) => launch({
+    agentRole: AgentRole.EVENT_COORDINATOR,
+    starterPrompt: t('campaignWorkspace.assistantPrompt', selection.labels),
+    viewContext: {
+      kind: 'campaign_brief',
+      label: t('campaignWorkspace.title'),
+      source: 'campaigns',
+      payload: { values: selection.values, labels: selection.labels },
+      returnTarget: { label: t('campaignWorkspace.title'), href: '/mall/campaigns' },
+    },
+  });
   return (
     <div className="space-y-5">
       <div className="flex items-center gap-3">
@@ -22,31 +38,8 @@ export function CampaignsWorkspace() {
           <p className="text-sm text-bo-neutral-600">{t('campaignWorkspace.subtitle')}</p>
         </div>
       </div>
-
       <section className="grid grid-cols-1 gap-5 xl:grid-cols-[360px_minmax(0,1fr)]">
-        <div className="rounded-2xl border-2 border-bo-neutral-200 bg-white p-5 shadow-bo-glass">
-          <div className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-bo-primary-700">
-            <SlidersHorizontal size={14} />
-            {t('campaignWorkspace.builder')}
-          </div>
-          <div className="space-y-3">
-            {BRIEF_FIELDS.map((field) => (
-              <label key={field} className="block">
-                <span className="mb-1 block text-xs font-semibold text-bo-neutral-600">
-                  {t(`campaignWorkspace.fields.${field}.label`)}
-                </span>
-                <div className="rounded-lg border border-bo-neutral-200 bg-bo-neutral-50 px-3 py-2 text-sm font-medium text-bo-neutral-950">
-                  {t(`campaignWorkspace.fields.${field}.value`)}
-                </div>
-              </label>
-            ))}
-          </div>
-          <button className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-bo-primary-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-bo-primary-800">
-            <PlayCircle size={16} />
-            {t('campaignWorkspace.createBrief')}
-          </button>
-        </div>
-
+        <CampaignBriefBuilder mallOptions={mallOptions} onCreate={createBrief} />
         <div className="space-y-5">
           <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
             {KPI_CARDS.map((kpi) => (
@@ -63,7 +56,6 @@ export function CampaignsWorkspace() {
               </div>
             ))}
           </div>
-
           <div className="rounded-2xl border-2 border-bo-neutral-200 bg-white p-5 shadow-bo-glass">
             <div className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-bo-primary-700">
               <BarChart3 size={14} />
@@ -85,7 +77,6 @@ export function CampaignsWorkspace() {
               ))}
             </div>
           </div>
-
           <div className="rounded-xl border border-bo-success/30 bg-bo-success-light/40 p-4 text-sm text-bo-success-dark">
             <div className="mb-1 flex items-center gap-2 font-semibold">
               <CheckCircle2 size={16} />
