@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
 import { auth } from '@/auth';
+import { resolveScopedMall } from '@/lib/customer-scope/requireMallScope';
 
 /** GET — Fetch user's briefing subscription */
 export async function GET(req: NextRequest) {
@@ -15,9 +16,11 @@ export async function GET(req: NextRequest) {
   if (!mallId) {
     return NextResponse.json({ error: 'mallId required' }, { status: 400 });
   }
+  const scope = await resolveScopedMall(mallId);
+  if (scope.error) return scope.error;
 
   const sub = await prisma.conciergeBriefingSubscription.findUnique({
-    where: { mallId_userId: { mallId, userId: session.user.id } },
+    where: { mallId_userId: { mallId: scope.mall!.mallId, userId: session.user.id } },
   });
 
   return NextResponse.json(sub || { enabled: false, timeUtc: '06:00', sections: ['weather', 'footfall', 'events', 'transport'] });
@@ -36,11 +39,14 @@ export async function PUT(req: NextRequest) {
   if (!mallId) {
     return NextResponse.json({ error: 'mallId required' }, { status: 400 });
   }
+  const scope = await resolveScopedMall(mallId);
+  if (scope.error) return scope.error;
+  const scopedMallId = scope.mall!.mallId;
 
   const sub = await prisma.conciergeBriefingSubscription.upsert({
-    where: { mallId_userId: { mallId, userId: session.user.id } },
+    where: { mallId_userId: { mallId: scopedMallId, userId: session.user.id } },
     create: {
-      mallId,
+      mallId: scopedMallId,
       userId: session.user.id,
       enabled: enabled ?? true,
       timeUtc: timeUtc ?? '06:00',
