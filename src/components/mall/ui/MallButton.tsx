@@ -60,11 +60,9 @@ const variantStyles: Record<ButtonVariant, string> = {
     'shadow-bo-md transition-all duration-300 ease-bo-out-expo'
   ),
   secondary: cn(
-    'bg-transparent text-bo-neutral-700 border border-bo-neutral-300',
-    'hover:bg-bo-neutral-100 hover:border-bo-neutral-400',
+    'bo-interactive-box text-bo-neutral-700',
     'focus:outline-none focus:ring-2 focus:ring-bo-primary-600 focus:ring-opacity-20',
-    'disabled:bg-transparent disabled:text-bo-neutral-400 disabled:border-bo-neutral-200',
-    'transition-all duration-200 ease-bo-out'
+    'disabled:bg-transparent disabled:text-bo-neutral-400 disabled:border-bo-neutral-200'
   ),
   success: cn(
     'bg-bo-success text-white',
@@ -82,7 +80,7 @@ const variantStyles: Record<ButtonVariant, string> = {
   ),
   ghost: cn(
     'bg-transparent text-bo-neutral-700',
-    'hover:text-bo-neutral-950',
+    'hover:bg-white/35 hover:text-bo-neutral-950',
     'focus:outline-none focus:ring-2 focus:ring-bo-neutral-400 focus:ring-opacity-20',
     'disabled:text-bo-neutral-400',
     'transition-colors duration-200 ease-bo-out'

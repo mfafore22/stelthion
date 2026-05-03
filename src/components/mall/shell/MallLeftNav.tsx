@@ -78,6 +78,8 @@ const NAV_ITEMS: MallNavItem[] = [
   { id: 'space-optimizer', label: 'Space Optimizer', icon: LayoutPanelTop, route: '/mall/space-optimizer' },
 ];
 
+const ALWAYS_ACTIVE = new Set(['portfolio', 'properties', 'campaigns']);
+
 export interface MallLeftNavProps {
   /**
    * Management company ID for filtering properties
@@ -107,14 +109,11 @@ export function MallLeftNav({
   const { t } = useTranslation();
   const { data: features } = useSWR<PlanFeatures>('/api/mall/my-features', fetcher);
 
-  // Base active items — always enabled
-  const ALWAYS_ACTIVE = new Set(['portfolio', 'properties', 'campaigns']);
-  // Plan-gated items
-  const planActive = new Set<string>([
+  const planActive = React.useMemo(() => new Set<string>([
     ...(features?.shoppermind ? ['shoppermind'] : []),
     ...(features?.concierge ? ['assistants'] : []),
     ...(features?.spaceAllocation ? ['space-optimizer'] : []),
-  ]);
+  ]), [features]);
 
   // Generate tenant-specific navigation items
   const navItems = React.useMemo(() => {
@@ -152,7 +151,7 @@ export function MallLeftNav({
 
         return { ...item, disabled };
       });
-  }, [user]);
+  }, [planActive, user]);
 
   // Determine active item from pathname
   const activeItemId = navItems.find(item =>
@@ -178,13 +177,13 @@ export function MallLeftNav({
         )}
         aria-label="Mall portfolio navigation"
       >
-        {/* Swirl logo — vertically centered in the 80px top bar row */}
+        {/* Stelthion icon — vertically centered in the 80px top bar row */}
         <div className="h-[80px] w-full flex items-center justify-center shrink-0">
           <Image
-            src="/stelthion-swirl-v2.png"
+            src="/stelthion-brand-s.png"
             alt="Stelthion"
             width={26}
-            height={26}
+            height={28}
             className="object-contain"
             priority
           />
@@ -215,11 +214,11 @@ export function MallLeftNav({
                 >
                   {item.disabled && !ALWAYS_ACTIVE.has(item.id) ? (
                     <span className="relative">
-                      <Icon className="h-6 w-6" />
+                      <Icon className="h-8 w-8" />
                       <Lock className="h-3 w-3 absolute -bottom-1 -right-1 text-bo-neutral-400" />
                     </span>
                   ) : (
-                    <Icon className="h-6 w-6" />
+                    <Icon className="h-8 w-8" />
                   )}
                 </button>
               </TooltipTrigger>
