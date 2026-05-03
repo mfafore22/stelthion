@@ -56,8 +56,7 @@ export async function generateAndSendOTP(email: string): Promise<void> {
     });
 
     if (!process.env.RESEND_API_KEY) {
-      console.log(`\n📧 [OTP DEV MODE]\nTo: ${email}\nCode: ${code}\nExpires in 10 minutes\n`);
-      return;
+      throw new Error('OTP email provider is not configured');
     }
 
     const from = process.env.OTP_FROM_EMAIL || 'noreply@stelthion.com';
