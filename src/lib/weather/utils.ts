@@ -1,7 +1,9 @@
 /**
  * Weather utilities for mall footfall impact calculations
- * Location data is Ideapark Lempäälä specific.
+ * Location data is selected by canonical mall id.
  */
+import { canonicalizeMallId } from '@/lib/mall/ids';
+import { getMall } from '@/lib/mall/mallDatabase';
 
 export interface WeatherData {
   temperature: number;       // °C
@@ -22,20 +24,57 @@ export interface MallCoordinates {
   lat: number;
   lon: number;
   timezone: string;
+  fmiPlace?: string;
+  label?: string;
 }
 
-/** Ideapark Lempäälä coordinates */
-export const MALL_COORDINATES: Record<string, MallCoordinates & { fmiPlace?: string }> = {
-  ideapark: {
-    lat: 61.316,
-    lon: 23.757,
+export const MALL_COORDINATES: Record<string, MallCoordinates> = {
+  'ideapark-lempaala': {
+    lat: 61.3615,
+    lon: 23.7987,
     timezone: 'Europe/Helsinki',
     fmiPlace: 'Lempäälä',
+    label: 'Ideapark Lempäälä',
+  },
+  ideapark: {
+    lat: 61.3615,
+    lon: 23.7987,
+    timezone: 'Europe/Helsinki',
+    fmiPlace: 'Lempäälä',
+    label: 'Ideapark Lempäälä',
+  },
+  'realidea-sello': {
+    lat: 60.2176,
+    lon: 24.8092,
+    timezone: 'Europe/Helsinki',
+    fmiPlace: 'Espoo',
+    label: 'Sello',
+  },
+  'realidea-tripla': {
+    lat: 60.1992,
+    lon: 24.9318,
+    timezone: 'Europe/Helsinki',
+    fmiPlace: 'Helsinki',
+    label: 'Mall of Tripla',
   },
 };
 
-export function getMallCoordinates(mallId: string): MallCoordinates & { fmiPlace?: string } {
-  return MALL_COORDINATES[mallId] ?? MALL_COORDINATES.ideapark;
+export function getMallCoordinates(mallId: string): MallCoordinates {
+  const canonical = canonicalizeMallId(mallId);
+  if (canonical && MALL_COORDINATES[canonical]) return MALL_COORDINATES[canonical];
+  if (MALL_COORDINATES[mallId]) return MALL_COORDINATES[mallId];
+
+  const mall = getMall(canonical || mallId);
+  if (mall) {
+    return {
+      lat: mall.coordinates.lat,
+      lon: mall.coordinates.lon,
+      timezone: 'Europe/Helsinki',
+      fmiPlace: mall.city,
+      label: mall.name,
+    };
+  }
+  return MALL_COORDINATES['ideapark-lempaala'];
 }
 
 /**
