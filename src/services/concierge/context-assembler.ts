@@ -11,6 +11,7 @@ import { getLLMClient, type LLMMessage, type LLMToolCall } from './llm-client';
 import { getPropertyPersona } from './property-persona';
 import { getToolSchemas } from './tools';
 import { routeToAgent } from './agent-router';
+import type { AssistantViewContext } from '@/lib/assistant-flow/types';
 
 // ── Types ─────────────────────────────────────────────────
 
@@ -18,15 +19,7 @@ export interface ChatRequest {
   mallId: string;
   messages: LLMMessage[];
   language?: string;
-  viewContext?: ShopperMindTrendViewContext | null;
-}
-
-export interface ShopperMindTrendViewContext {
-  kind: 'shoppermind_trend';
-  phenomenonId: string;
-  label: string;
-  state: string;
-  primaryCountry: string;
+  viewContext?: AssistantViewContext | null;
 }
 
 export interface ToolExecutionResult {
@@ -237,7 +230,7 @@ export async function* orchestrateChat(
 // ── View context ──────────────────────────────────────────
 
 function renderViewContextBlock(
-  viewContext: ShopperMindTrendViewContext | null | undefined,
+  viewContext: AssistantViewContext | null | undefined,
 ): string | null {
   if (!viewContext) return null;
   if (viewContext.kind === 'shoppermind_trend') {
@@ -255,7 +248,33 @@ function renderViewContextBlock(
       'pass this phenomenonId. Keep responses in the user\'s language.',
     ].join('\n');
   }
-  return null;
+  if (viewContext.kind === 'campaign_brief') {
+    const labels = viewContext.payload?.labels as Record<string, string> | undefined;
+    return [
+      'CURRENT WORK CONTEXT',
+      'The user is creating a campaign brief from the Campaigns workspace.',
+      labels?.mall ? `- Property: ${labels.mall}` : null,
+      labels?.zone ? `- Zone: ${labels.zone}` : null,
+      labels?.audience ? `- Audience: ${labels.audience}` : null,
+      labels?.budget ? `- Budget: ${labels.budget}` : null,
+      labels?.duration ? `- Duration: ${labels.duration}` : null,
+      '',
+      'Use these selected settings to draft a practical campaign brief. Do not ask the user to re-select them.',
+    ].filter(Boolean).join('\n');
+  }
+  const payload = 'payload' in viewContext && viewContext.payload
+    ? `- Payload: ${JSON.stringify(viewContext.payload).slice(0, 1200)}`
+    : null;
+  return [
+    'CURRENT WORK CONTEXT',
+    `- Kind: ${viewContext.kind}`,
+    `- Label: ${viewContext.label}`,
+    'source' in viewContext ? `- Source module: ${viewContext.source}` : null,
+    viewContext.returnTarget ? `- Return target: ${viewContext.returnTarget.label} (${viewContext.returnTarget.href})` : null,
+    payload,
+    '',
+    'Use this context when the user asks follow-up questions. Keep customer data isolated and never infer data from another customer.',
+  ].filter(Boolean).join('\n');
 }
 
 // ── Tool/agent helpers ────────────────────────────────────
