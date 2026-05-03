@@ -15,7 +15,7 @@ const TabsList = React.forwardRef<
     ref={ref}
     data-slot="tabs-list"
     className={cn(
-      "inline-flex h-auto items-center justify-start overflow-hidden rounded-xl border border-bo-neutral-200 bg-white shadow-bo-glass",
+      "bo-surface-subtle inline-flex h-auto items-center justify-start overflow-hidden rounded-xl border border-bo-neutral-200 shadow-bo-glass",
       className
     )}
     {...props}
@@ -66,7 +66,7 @@ const TabsTrigger = React.forwardRef<
         "inline-flex items-center justify-center whitespace-nowrap rounded-xl px-3 py-2 text-sm font-semibold",
         "transition-all duration-200 ease-bo-out-expo",
         "disabled:pointer-events-none disabled:opacity-50",
-        "text-bo-neutral-700 hover:bg-bo-neutral-50",
+        "text-bo-neutral-700 hover:bg-white/45",
         "data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-bo-neutral-900/15 data-[state=active]:translate-y-[-1px]",
         className
       )}

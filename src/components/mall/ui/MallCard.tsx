@@ -101,7 +101,7 @@ export const MallCard = React.forwardRef<HTMLDivElement, MallCardProps>(
           // Variant styles
           variantStyles[variant],
           // Hover styles (B&O lift effect)
-          hover && 'hover:shadow-bo-xl hover:-translate-y-1',
+          hover && 'bo-surface-hover',
           // Clickable styles
           isClickable && 'cursor-pointer active:translate-y-0 active:duration-100',
           // Custom className

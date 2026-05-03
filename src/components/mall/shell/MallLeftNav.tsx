@@ -217,11 +217,11 @@ export function MallLeftNav({
                 >
                   {item.disabled && !ALWAYS_ACTIVE.has(item.id) ? (
                     <span className="relative">
-                      <Icon className="h-6 w-6" />
+                      <Icon className="h-8 w-8" />
                       <Lock className="h-3 w-3 absolute -bottom-1 -right-1 text-bo-neutral-400" />
                     </span>
                   ) : (
-                    <Icon className="h-6 w-6" />
+                    <Icon className="h-8 w-8" />
                   )}
                 </button>
               </TooltipTrigger>

@@ -75,7 +75,7 @@ export function MetricCard({
 
   return (
     <div className={cn(
-      "rounded-lg border bg-white dark:bg-gray-900 transition-all duration-200",
+      "bo-surface bo-surface-hover rounded-lg border",
       styles.container,
       compact ? "p-3" : "p-4",
       className
