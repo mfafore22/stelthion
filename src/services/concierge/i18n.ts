@@ -14,7 +14,7 @@ const TRANSLATIONS: Translation[] = [
   { key: 'concierge', en: 'Concierge', fi: 'Concierge' },
   { key: 'newConversation', en: 'New Conversation', fi: 'Uusi keskustelu' },
   { key: 'recent', en: 'Recent', fi: 'Viimeisimmät' },
-  { key: 'agent', en: 'Agent', fi: 'Agentti' },
+  { key: 'agent', en: 'Assistant', fi: 'Assistentti' },
   { key: 'tenant', en: 'Tenant', fi: 'Vuokralainen' },
   { key: 'you', en: 'You', fi: 'Sinä' },
 
@@ -43,14 +43,14 @@ const TRANSLATIONS: Translation[] = [
   { key: 'startConversation', en: 'Start a Conversation', fi: 'Aloita keskustelu' },
   { key: 'askAnything', en: 'Ask me anything...', fi: 'Kysy mitä vain...' },
 
-  // Agent Selection
-  { key: 'selectAgent', en: 'Select Agent', fi: 'Valitse agentti' },
-  { key: 'chooseAgent', en: 'Choose the best agent for your task:', fi: 'Valitse paras agentti tehtävällesi:' },
+  // Assistant Selection
+  { key: 'selectAgent', en: 'Select Assistant', fi: 'Valitse assistentti' },
+  { key: 'chooseAgent', en: 'Choose the best assistant for your task:', fi: 'Valitse paras assistentti tehtävällesi:' },
   { key: 'notSure', en: 'Not sure?', fi: 'Etkö ole varma?' },
   { key: 'generalAssistantSuggestion', en: 'Start with General Assistant', fi: 'Aloita yleisavustajalla' },
   { key: 'bestFor', en: 'Best for:', fi: 'Parhaiten soveltuu:' },
 
-  // Agent Names
+  // Assistant Names
   { key: 'salesOptimizer', en: 'Sales Optimizer', fi: 'Myyntioptimija' },
   { key: 'footfallAnalyst', en: 'Footfall Analyst', fi: 'Kävijämääräanalyytikko' },
   { key: 'eventCoordinator', en: 'Event Coordinator', fi: 'Tapahtumakoordinaattori' },

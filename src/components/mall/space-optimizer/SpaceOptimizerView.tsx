@@ -24,6 +24,9 @@ import {
   type SortMode,
 } from './SuggestionFilterBar';
 import { FloorplanHighlight } from './FloorplanHighlight';
+import { AgentRole } from '@/lib/gcm-types';
+import { useAssistantLaunch } from '@/lib/assistant-flow/useAssistantLaunch';
+import { ChatBubbleButton } from '@/components/concierge/ChatBubbleButton';
 
 interface SpaceOptimizerViewProps {
   mallId: string;
@@ -39,6 +42,7 @@ export function SpaceOptimizerView({
   mode = 'live',
 }: SpaceOptimizerViewProps) {
   const { t, i18n } = useTranslation('mall');
+  const launch = useAssistantLaunch();
   const lang = (i18n.language?.split('-')[0] ?? 'en') as LanguageCode;
 
   const [data, setData] = useState<SpaceSuggestionsResponse | null>(null);
@@ -189,6 +193,23 @@ export function SpaceOptimizerView({
         <p className="mt-1 text-sm leading-relaxed text-bo-neutral-600">
           {t('spaceOptimizer.futureConnection.body')}
         </p>
+        <ChatBubbleButton
+          onClick={() => launch({
+            agentRole: AgentRole.SALES_OPTIMIZER,
+            starterPrompt: t('spaceOptimizer.assistant.summaryPrompt'),
+            viewContext: {
+              kind: 'property_snapshot',
+              label: t('spaceOptimizer.title'),
+              source: 'space-optimizer',
+              payload: { mallId, mallName },
+              returnTarget: { label: t('spaceOptimizer.title'), href: '/mall/space-optimizer' },
+            },
+          })}
+          tone="violet"
+          className="mt-3"
+        >
+          {t('spaceOptimizer.assistant.discuss')}
+        </ChatBubbleButton>
       </div>
 
       {loading && (

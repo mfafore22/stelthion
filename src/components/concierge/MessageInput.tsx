@@ -1,13 +1,8 @@
-/**
- * Message Input Component
- *
- * Text input for sending messages
- */
-
 'use client';
 
-import React, { useState, useRef, KeyboardEvent } from 'react';
+import React, { useEffect, useState, useRef, KeyboardEvent } from 'react';
 import { Send, Paperclip, Mic, Square } from 'lucide-react';
+import { DRAFT_KEY } from '@/lib/assistant-flow/useAssistantLaunch';
 
 interface MessageInputProps {
   placeholder?: string;
@@ -25,16 +20,24 @@ export function MessageInput({
   const [message, setMessage] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  useEffect(() => {
+    const applyDraft = (draft: string | null) => {
+      if (!draft) return;
+      setMessage(draft);
+      window.sessionStorage.removeItem(DRAFT_KEY);
+    };
+    applyDraft(window.sessionStorage.getItem(DRAFT_KEY));
+    const listener = (event: Event) => applyDraft((event as CustomEvent<string>).detail);
+    window.addEventListener('concierge:draft-message', listener);
+    return () => window.removeEventListener('concierge:draft-message', listener);
+  }, []);
+
   const handleSend = () => {
     const trimmed = message.trim();
     if (trimmed && !disabled) {
       onSend(trimmed);
       setMessage('');
-
-      // Reset textarea height
-      if (textareaRef.current) {
-        textareaRef.current.style.height = 'auto';
-      }
+      if (textareaRef.current) textareaRef.current.style.height = 'auto';
     }
   };
 
@@ -47,8 +50,6 @@ export function MessageInput({
 
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
-
-    // Auto-resize textarea; show scrollbar only when capped at max height
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
       const newHeight = Math.min(textareaRef.current.scrollHeight, 200);
@@ -59,7 +60,6 @@ export function MessageInput({
 
   return (
     <div className="flex items-end gap-2">
-      {/* Attachment button (disabled for now) */}
       <button
         disabled
         className="p-2 text-bo-neutral-400 transition-colors disabled:opacity-60"
@@ -68,7 +68,6 @@ export function MessageInput({
         <Paperclip className="w-5 h-5" />
       </button>
 
-      {/* Text input */}
       <div className="flex-1 relative">
         <textarea
           ref={textareaRef}
@@ -83,7 +82,6 @@ export function MessageInput({
         />
       </div>
 
-      {/* Voice button (disabled for now) */}
       <button
         disabled
         className="p-2 text-bo-neutral-400 transition-colors disabled:opacity-60"
@@ -92,7 +90,6 @@ export function MessageInput({
         <Mic className="w-5 h-5" />
       </button>
 
-      {/* Send or Stop button */}
       {onStop && disabled ? (
         <button
           onClick={onStop}

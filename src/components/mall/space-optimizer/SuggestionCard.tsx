@@ -24,6 +24,9 @@ import type {
   DrivingTrendRef,
 } from '@/lib/space-optimizer/types';
 import { cn } from '@/lib/utils';
+import { AgentRole } from '@/lib/gcm-types';
+import { useAssistantLaunch } from '@/lib/assistant-flow/useAssistantLaunch';
+import { ChatBubbleIcon } from '@/components/concierge/ChatBubbleButton';
 
 interface SuggestionCardProps {
   suggestion: SpaceSuggestion;
@@ -69,6 +72,7 @@ export function SuggestionCard({
   onDismiss,
 }: SuggestionCardProps) {
   const { t, i18n } = useTranslation('mall');
+  const launch = useAssistantLaunch();
   const lang = (i18n.language?.split('-')[0] ?? 'en') as LanguageCode;
 
   const config = ACTION_CONFIG[suggestion.action];
@@ -231,6 +235,25 @@ export function SuggestionCard({
           )}
           <MallButton variant="secondary" size="sm">
             {t('spaceOptimizer.card.accept')}
+          </MallButton>
+          <MallButton
+            variant="secondary"
+            size="sm"
+            onClick={() => launch({
+              agentRole: AgentRole.SALES_OPTIMIZER,
+              starterPrompt: t('spaceOptimizer.assistant.suggestionPrompt', { zone: suggestion.zoneName }),
+              viewContext: {
+                kind: 'space_suggestion',
+                suggestionId: suggestion.id,
+                label: suggestion.zoneName,
+                source: 'space-optimizer',
+                payload: { action: suggestion.action, zoneId: suggestion.zoneId, tenantName: suggestion.tenantName },
+                returnTarget: { label: suggestion.zoneName, href: '/mall/space-optimizer' },
+              },
+            })}
+          >
+            <ChatBubbleIcon tone="violet" />
+            {t('spaceOptimizer.assistant.ask')}
           </MallButton>
         </div>
       )}

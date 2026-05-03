@@ -27,13 +27,13 @@ export function AgentSuggestionBanner({ suggestion, onDismiss }: AgentSuggestion
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-sm font-medium text-blue-300">Agent Selected</span>
+            <span className="text-sm font-medium text-blue-300">Assistant selected</span>
             <span className={`text-xs ${confidenceColor}`}>{confidencePercent}% confident</span>
           </div>
 
           <p className="text-sm text-gray-300">{suggestion.reasoning}</p>
 
-          {/* Alternative agents */}
+          {/* Alternative assistants */}
           {suggestion.alternativeAgents && suggestion.alternativeAgents.length > 0 && (
             <div className="mt-2 flex items-center gap-2 text-xs text-gray-400">
               <Info className="w-3 h-3" />
