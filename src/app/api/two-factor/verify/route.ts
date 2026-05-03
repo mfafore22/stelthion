@@ -38,16 +38,6 @@ export async function POST(req: Request) {
       )
     }
 
-    // Dev-only bypass: set SKIP_OTP_IN_DEV=true in .env.local to skip OTP
-    // verification locally. Never committed — .env.local is gitignored.
-    if (process.env.SKIP_OTP_IN_DEV === 'true') {
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { twoFactorVerifiedAt: new Date(), failedOtpAttempts: 0, otpLockedUntil: null },
-      })
-      return NextResponse.json({ success: true })
-    }
-
     // Find valid OTP
     const otp = await prisma.emailOtp.findFirst({
       where: {
