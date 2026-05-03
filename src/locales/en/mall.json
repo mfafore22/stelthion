@@ -413,9 +413,92 @@
     "comingSoon": "AI Assistants Integration",
     "integrationDescription": "AI Assistants use your property's isolated data to produce property-specific simulations and forecasts. With them, you can test the impact of your chosen actions or prepare for situations. Stelthion AI models bring broader insights and alternatives to simulations and forecasts.",
     "tryScenarios": "Try Scenarios Calculator Now",
+    "actions": {
+      "startChat": "Start chat",
+      "askInChat": "Ask in chat"
+    },
+    "demo": {
+      "owner-copilot": {
+        "title": "Property Owner Copilot",
+        "body": "Turns strategy, risk, and weekly decisions into a concise owner view.",
+        "tools": {
+          "0": "KPIs",
+          "1": "Briefing",
+          "2": "Approvals"
+        },
+        "prompts": {
+          "0": "Give me the owner decision queue for this week.",
+          "1": "What needs approval before Friday?"
+        }
+      },
+      "trend-analyst": {
+        "title": "ShopperMind Trend Analyst",
+        "body": "Explains paths, actions, competitors, and sourced market signals.",
+        "tools": {
+          "0": "ShopperMind",
+          "1": "Sources",
+          "2": "Campaign idea"
+        },
+        "prompts": {
+          "0": "Which path should we prioritize and why?",
+          "1": "Turn the strongest trend into two actions."
+        }
+      },
+      "campaign-designer": {
+        "title": "Campaign Designer",
+        "body": "Drafts briefs, audiences, tenants, channels, KPIs, and approval steps.",
+        "tools": {
+          "0": "Campaigns",
+          "1": "Events",
+          "2": "Footfall"
+        },
+        "prompts": {
+          "0": "Draft a campaign brief from the current trend.",
+          "1": "Which tenants should participate?"
+        }
+      },
+      "space-optimizer": {
+        "title": "Space and Leasing Optimizer",
+        "body": "Connects trends, lease timing, zone flow, and projected rent impact.",
+        "tools": {
+          "0": "Space optimizer",
+          "1": "Tenant mix",
+          "2": "Sales"
+        },
+        "prompts": {
+          "0": "Which zone conversion has the best risk-adjusted upside?",
+          "1": "Explain this space suggestion for leasing."
+        }
+      }
+    },
+    "panels": {
+      "security": {
+        "title": "Security and approvals",
+        "prompt": "Explain our assistant security boundaries, approvals, and customer isolation.",
+        "rows": {
+          "0": "Customer boundary: customerId + mallId",
+          "1": "No cross-customer retrieval",
+          "2": "Write actions require approval",
+          "3": "Audit trail for tools",
+          "4": "Fine-tune data exported per customer"
+        }
+      },
+      "data": {
+        "title": "Data readiness",
+        "prompt": "Show which data sources are live, demo, or ready for integration.",
+        "rows": {
+          "0": "ShopperMind: live/demo",
+          "1": "Footfall: scoped by mall",
+          "2": "POS: aggregate demo",
+          "3": "Leases: schema-ready",
+          "4": "RAG: namespace-ready"
+        }
+      }
+    },
     "controlTitle": "Assistants for closed environments",
     "closedEnvironment": "Customer-scoped environment",
-    "controlBody": "Assistants are designed to use only the selected customer, operator, and property data. The demo shows the control model: which agents are available, which tools they may use, and when human approval is required.",
+    "controlBody": "Assistants are designed to use only the selected customer, operator, and property data. The demo shows the control model: which assistants are available, which tools they may use, and when human approval is required.",
+    "mallFocus": "Mall focus",
     "agentCatalog": "Assistants",
     "securityTitle": "Security boundaries",
     "dataTitle": "Data sources",
@@ -424,21 +507,54 @@
     "workflowTitle": "Workflows",
     "workflowBody": "Write actions such as creating a campaign brief or preparing tenant messages pass through approval gates. Chat may propose actions, but it does not publish or alter data without permission.",
     "agents": {
-      "trend": { "title": "Trend specialist", "body": "Explains ShopperMind trends using only sourced claims." },
-      "campaign": { "title": "Campaign assistant", "body": "Turns a trend into a campaign brief and suggested KPIs." },
-      "operations": { "title": "Operations assistant", "body": "Supports zone, visitor, and service-level decisions." }
+      "trend": {
+        "title": "Trend specialist",
+        "body": "Explains ShopperMind trends using only sourced claims."
+      },
+      "campaign": {
+        "title": "Campaign assistant",
+        "body": "Turns a trend into a campaign brief and suggested KPIs."
+      },
+      "operations": {
+        "title": "Operations assistant",
+        "body": "Supports zone, visitor, and service-level decisions."
+      }
     },
     "guards": {
-      "scope": { "title": "Customer and property scope", "body": "Every request is bound to customerId and mallId." },
-      "sources": { "title": "Citation requirement", "body": "Factual claims need a source or are marked as assumptions." },
-      "approval": { "title": "Approval gates", "body": "Publishing, messaging, and budget actions require human approval." },
-      "audit": { "title": "Audit trail", "body": "Tool calls, sources, and decisions are stored for review." }
+      "scope": {
+        "title": "Customer and property scope",
+        "body": "Every request is bound to customerId and mallId."
+      },
+      "sources": {
+        "title": "Citation requirement",
+        "body": "Factual claims need a source or are marked as assumptions."
+      },
+      "approval": {
+        "title": "Approval gates",
+        "body": "Publishing, messaging, and budget actions require human approval."
+      },
+      "audit": {
+        "title": "Audit trail",
+        "body": "Tool calls, sources, and decisions are stored for review."
+      }
     },
     "data": {
-      "rag": { "title": "Documents", "body": "Leases, brand rules, and reports are scoped to the customer." },
-      "pos": { "title": "POS", "body": "Sales data is masked and aggregated by permission level." },
-      "footfall": { "title": "Footfall", "body": "Visitor flows are linked to time, zone, and campaign period." },
-      "tenant": { "title": "Tenants", "body": "Tenant and category data shapes recommendations." }
+      "rag": {
+        "title": "Documents",
+        "body": "Leases, brand rules, and reports are scoped to the customer."
+      },
+      "pos": {
+        "title": "POS",
+        "body": "Sales data is masked and aggregated by permission level."
+      },
+      "footfall": {
+        "title": "Footfall",
+        "body": "Visitor flows are linked to time, zone, and campaign period."
+      },
+      "tenant": {
+        "title": "Tenants",
+        "body": "Tenant and category data shapes recommendations."
+      }
     }
   },
   "shoppermind": {
@@ -957,27 +1073,92 @@
     "subtitle": "Turn ShopperMind trends into campaign briefs that can be tested against visitor, POS, and tenant data.",
     "builder": "Campaign brief draft",
     "createBrief": "Create test brief",
+    "assistantPrompt": "Create a test campaign brief with the selected settings.",
     "flowTitle": "Workflow once connected to live data",
     "aiTitle": "Demo now, customer data later",
     "aiBody": "A tailored AI model uses only data scoped to the customer environment. The demo shows the workflow with seeded and trend data, while the same view can later connect to POS, visitor, tenant, and campaign-result data.",
     "fields": {
-      "mall": { "label": "Property", "value": "Sello or Mall of Tripla" },
-      "zone": { "label": "Zone", "value": "Everyday retail, station, restaurants, or services" },
-      "audience": { "label": "Audience", "value": "Daily visitors, families, or wellness customers" },
-      "budget": { "label": "Budget", "value": "Light / standard / broad" },
-      "duration": { "label": "Duration", "value": "7, 14, or 30 days" }
+      "mall": {
+        "label": "Property",
+        "value": "Sello or Mall of Tripla"
+      },
+      "zone": {
+        "label": "Zone",
+        "value": "Everyday retail, station, restaurants, or services",
+        "options": {
+          "everyday": "Everyday retail",
+          "station": "Station",
+          "restaurants": "Restaurants",
+          "services": "Services"
+        }
+      },
+      "audience": {
+        "label": "Audience",
+        "value": "Daily visitors, families, or wellness customers",
+        "options": {
+          "daily": "Daily visitors",
+          "families": "Families",
+          "wellness": "Wellness customers",
+          "commuters": "Commuters"
+        }
+      },
+      "budget": {
+        "label": "Budget",
+        "value": "Light / standard / broad",
+        "options": {
+          "light": "Light",
+          "standard": "Standard",
+          "broad": "Broad"
+        }
+      },
+      "duration": {
+        "label": "Duration",
+        "value": "7, 14, or 30 days",
+        "options": {
+          "7": "7 days",
+          "14": "14 days",
+          "30": "30 days"
+        }
+      }
     },
     "kpis": {
-      "visits": { "label": "Visitor forecast", "value": "+3.8%", "hint": "Demo estimate for the selected zone" },
-      "sales": { "label": "Sales signal", "value": "+2.4%", "hint": "POS connection in full implementation" },
-      "tenants": { "label": "Tenants", "value": "12", "hint": "Matched participants from seed data" }
+      "visits": {
+        "label": "Visitor forecast",
+        "value": "+3.8%",
+        "hint": "Demo estimate for the selected zone"
+      },
+      "sales": {
+        "label": "Sales signal",
+        "value": "+2.4%",
+        "hint": "POS connection in full implementation"
+      },
+      "tenants": {
+        "label": "Tenants",
+        "value": "12",
+        "hint": "Matched participants from seed data"
+      }
     },
     "steps": {
-      "brief": { "title": "Brief", "body": "Select trend, property, zone, and audience." },
-      "model": { "title": "Model", "body": "Estimate expected visitor and sales impact." },
-      "approval": { "title": "Approval", "body": "Confirm budget, channels, and tenant participation." },
-      "live": { "title": "Live tracking", "body": "Track visits, redemptions, and anomalies." },
-      "learning": { "title": "Learning", "body": "Save measured impact for future campaigns." }
+      "brief": {
+        "title": "Brief",
+        "body": "Select trend, property, zone, and audience."
+      },
+      "model": {
+        "title": "Model",
+        "body": "Estimate expected visitor and sales impact."
+      },
+      "approval": {
+        "title": "Approval",
+        "body": "Confirm budget, channels, and tenant participation."
+      },
+      "live": {
+        "title": "Live tracking",
+        "body": "Track visits, redemptions, and anomalies."
+      },
+      "learning": {
+        "title": "Learning",
+        "body": "Save measured impact for future campaigns."
+      }
     }
   },
   "properties": {

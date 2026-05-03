@@ -2,16 +2,10 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import type React from 'react';
+import type { AssistantViewContext } from '@/lib/assistant-flow/types';
 
-export interface ShopperMindTrendViewContext {
-  kind: 'shoppermind_trend';
-  phenomenonId: string;
-  label: string;
-  state: string;
-  primaryCountry: string;
-}
-
-export type ViewContextValue = ShopperMindTrendViewContext | null;
+export type ShopperMindTrendViewContext = Extract<AssistantViewContext, { kind: 'shoppermind_trend' }>;
+export type ViewContextValue = AssistantViewContext | null;
 
 interface ViewContextStore {
   value: ViewContextValue;
@@ -42,12 +36,17 @@ export function useViewContext(): ViewContextStore {
 
 export function useSetTrendViewContext(ctx: Omit<ShopperMindTrendViewContext, 'kind'> | null) {
   const { setValue, clear } = useViewContext();
+  const phenomenonId = ctx?.phenomenonId;
+  const label = ctx?.label;
+  const state = ctx?.state;
+  const primaryCountry = ctx?.primaryCountry;
+  const returnTarget = ctx?.returnTarget;
   useEffect(() => {
-    if (!ctx) {
+    if (!phenomenonId || !label || !state || !primaryCountry) {
       clear();
       return;
     }
-    setValue({ kind: 'shoppermind_trend', ...ctx });
+    setValue({ kind: 'shoppermind_trend', phenomenonId, label, state, primaryCountry, returnTarget });
     return () => clear();
-  }, [ctx?.phenomenonId, ctx?.label, ctx?.state, ctx?.primaryCountry, setValue, clear]);
+  }, [phenomenonId, label, state, primaryCountry, returnTarget, setValue, clear]);
 }

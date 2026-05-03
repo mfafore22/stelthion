@@ -422,9 +422,92 @@
     "comingSoon": "AI-assistentintegration",
     "integrationDescription": "AI-assistenter använder din fastighets isolerade data för att producera fastighetsspecifika simuleringar och prognoser. Med dem kan du testa effekten av dina valda åtgärder eller förbereda dig för situationer. Stelthion AI-modeller ger bredare insikter och alternativ till simuleringar och prognoser.",
     "tryScenarios": "Prova scenariokalkylator nu",
+    "actions": {
+      "startChat": "Starta chatt",
+      "askInChat": "Fråga i chatten"
+    },
+    "demo": {
+      "owner-copilot": {
+        "title": "Ägarens Copilot",
+        "body": "Samlar strategi, risker och veckans beslut till en tydlig ägarvy.",
+        "tools": {
+          "0": "Nyckeltal",
+          "1": "Daglig briefing",
+          "2": "Godkännanden"
+        },
+        "prompts": {
+          "0": "Ge mig ägarens beslutslista för den här veckan.",
+          "1": "Vad behöver godkännas före fredag?"
+        }
+      },
+      "trend-analyst": {
+        "title": "ShopperMind-trendanalytiker",
+        "body": "Förklarar vägar, åtgärder, konkurrenter och källbelagda marknadssignaler.",
+        "tools": {
+          "0": "ShopperMind",
+          "1": "Källor",
+          "2": "Kampanjidé"
+        },
+        "prompts": {
+          "0": "Vilken väg ska prioriteras och varför?",
+          "1": "Gör den starkaste trenden till två åtgärder."
+        }
+      },
+      "campaign-designer": {
+        "title": "Kampanjdesigner",
+        "body": "Skissar briefar, målgrupper, hyresgäster, kanaler, KPI:er och godkännanden.",
+        "tools": {
+          "0": "Kampanjer",
+          "1": "Evenemang",
+          "2": "Besöksflöden"
+        },
+        "prompts": {
+          "0": "Skissa en kampanjbrief från den aktuella trenden.",
+          "1": "Vilka hyresgäster bör ingå?"
+        }
+      },
+      "space-optimizer": {
+        "title": "Yt- och uthyrningsoptimerare",
+        "body": "Kopplar trender, hyresavtalstiming, zonflöden och hyrespåverkan.",
+        "tools": {
+          "0": "Ytoptimering",
+          "1": "Hyresgästmix",
+          "2": "Försäljning"
+        },
+        "prompts": {
+          "0": "Vilken ytförändring har bäst riskjusterad effekt?",
+          "1": "Förklara den här ytrekommendationen för uthyrningsteamet."
+        }
+      }
+    },
+    "panels": {
+      "security": {
+        "title": "Säkerhet och godkännanden",
+        "prompt": "Förklara assistenternas säkerhetsgränser, godkännanden och kundisolering.",
+        "rows": {
+          "0": "Varje begäran binds till kund, fastighet och användarroll.",
+          "1": "Skrivande åtgärder kräver ett separat godkännande.",
+          "2": "Kunddata blandas inte mellan Ideapark, Realidea eller andra konton.",
+          "3": "Verktygsanrop och källor loggas för granskning.",
+          "4": "Auth, 2FA och OTP ändras inte av assistentflödet."
+        }
+      },
+      "data": {
+        "title": "Datakort och anslutningar",
+        "prompt": "Visa vilka datakällor som kan anslutas till assistenterna och vad demon använder tills live-data finns.",
+        "rows": {
+          "0": "ShopperMind-trender, vägar och åtgärder används som beslutsunderlag.",
+          "1": "Kampanjbriefar kan senare kopplas till POS-, besöks- och hyresgästdata.",
+          "2": "Ytoptimeraren väntar på avtal, hyror och zonflöden.",
+          "3": "Briefingar och chattsvar sparar prompt-svar-par för kundspecifik modellträning.",
+          "4": "Demo-innehåll är märkt så att det kan ersättas med livekopplingar."
+        }
+      }
+    },
     "controlTitle": "Assistenter för slutna miljöer",
     "closedEnvironment": "Kundavgränsad miljö",
-    "controlBody": "Assistenterna utformas för att endast använda vald kunds, operatörs och fastighets data. Demon visar styrmodellen: vilka agenter som finns, vilka verktyg de får använda och när mänskligt godkännande krävs.",
+    "controlBody": "Assistenterna utformas för att endast använda vald kunds, operatörs och fastighets data. Demon visar styrmodellen: vilka assistenter som finns, vilka verktyg de får använda och när mänskligt godkännande krävs.",
+    "mallFocus": "Fastighetsfokus",
     "agentCatalog": "Assistenter",
     "securityTitle": "Säkerhetsgränser",
     "dataTitle": "Datakällor",
@@ -433,21 +516,54 @@
     "workflowTitle": "Arbetsflöden",
     "workflowBody": "Skrivande åtgärder som kampanjbriefar eller hyresgästmeddelanden går via godkännandeportar. Chatten kan föreslå åtgärder, men publicerar eller ändrar inte data utan tillstånd.",
     "agents": {
-      "trend": { "title": "Trendspecialist", "body": "Förklarar ShopperMind-trender med endast källbelagda påståenden." },
-      "campaign": { "title": "Kampanjassistent", "body": "Gör en trend till en kampanjbrief och föreslagna KPI:er." },
-      "operations": { "title": "Operativ assistent", "body": "Stödjer beslut om zoner, besökare och servicenivå." }
+      "trend": {
+        "title": "Trendspecialist",
+        "body": "Förklarar ShopperMind-trender med endast källbelagda påståenden."
+      },
+      "campaign": {
+        "title": "Kampanjassistent",
+        "body": "Gör en trend till en kampanjbrief och föreslagna KPI:er."
+      },
+      "operations": {
+        "title": "Operativ assistent",
+        "body": "Stödjer beslut om zoner, besökare och servicenivå."
+      }
     },
     "guards": {
-      "scope": { "title": "Kund- och fastighetsgräns", "body": "Varje begäran binds till customerId och mallId." },
-      "sources": { "title": "Källkrav", "body": "Faktapåståenden behöver källa eller markeras som antaganden." },
-      "approval": { "title": "Godkännandeportar", "body": "Publicering, meddelanden och budgetåtgärder kräver mänskligt godkännande." },
-      "audit": { "title": "Audit trail", "body": "Verktygsanrop, källor och beslut sparas för granskning." }
+      "scope": {
+        "title": "Kund- och fastighetsgräns",
+        "body": "Varje begäran binds till customerId och mallId."
+      },
+      "sources": {
+        "title": "Källkrav",
+        "body": "Faktapåståenden behöver källa eller markeras som antaganden."
+      },
+      "approval": {
+        "title": "Godkännandeportar",
+        "body": "Publicering, meddelanden och budgetåtgärder kräver mänskligt godkännande."
+      },
+      "audit": {
+        "title": "Audit trail",
+        "body": "Verktygsanrop, källor och beslut sparas för granskning."
+      }
     },
     "data": {
-      "rag": { "title": "Dokument", "body": "Hyresavtal, varumärkesregler och rapporter avgränsas till kunden." },
-      "pos": { "title": "POS", "body": "Försäljningsdata maskeras och aggregeras efter behörighet." },
-      "footfall": { "title": "Besöksdata", "body": "Besöksflöden kopplas till tid, zon och kampanjperiod." },
-      "tenant": { "title": "Hyresgäster", "body": "Hyresgäst- och kategoridata styr rekommendationerna." }
+      "rag": {
+        "title": "Dokument",
+        "body": "Hyresavtal, varumärkesregler och rapporter avgränsas till kunden."
+      },
+      "pos": {
+        "title": "POS",
+        "body": "Försäljningsdata maskeras och aggregeras efter behörighet."
+      },
+      "footfall": {
+        "title": "Besöksdata",
+        "body": "Besöksflöden kopplas till tid, zon och kampanjperiod."
+      },
+      "tenant": {
+        "title": "Hyresgäster",
+        "body": "Hyresgäst- och kategoridata styr rekommendationerna."
+      }
     }
   },
   "shoppermind": {
@@ -966,27 +1082,92 @@
     "subtitle": "Gör ShopperMind-trender till kampanjbriefar som kan testas mot besöks-, POS- och hyresgästdata.",
     "builder": "Utkast till kampanjbrief",
     "createBrief": "Skapa testbrief",
+    "assistantPrompt": "Skapa en testkampanjbrief med de valda inställningarna.",
     "flowTitle": "Arbetsflöde när live-data är ansluten",
     "aiTitle": "Demo nu, kunddata senare",
     "aiBody": "En skräddarsydd AI-modell använder endast data som är avgränsad till kundens egen miljö. Demon visar arbetsflödet med seedad data och trenddata, medan samma vy senare kan kopplas till POS-, besöks-, hyresgäst- och kampanjresultat.",
     "fields": {
-      "mall": { "label": "Fastighet", "value": "Sello eller Mall of Tripla" },
-      "zone": { "label": "Zon", "value": "Vardagsärenden, station, restauranger eller tjänster" },
-      "audience": { "label": "Målgrupp", "value": "Vardagsbesökare, familjer eller wellnesskunder" },
-      "budget": { "label": "Budget", "value": "Lätt / standard / bred" },
-      "duration": { "label": "Längd", "value": "7, 14 eller 30 dagar" }
+      "mall": {
+        "label": "Fastighet",
+        "value": "Sello eller Mall of Tripla"
+      },
+      "zone": {
+        "label": "Zon",
+        "value": "Vardagsärenden, station, restauranger eller tjänster",
+        "options": {
+          "everyday": "Vardagsärenden",
+          "station": "Station",
+          "restaurants": "Restauranger",
+          "services": "Tjänster"
+        }
+      },
+      "audience": {
+        "label": "Målgrupp",
+        "value": "Vardagsbesökare, familjer eller wellnesskunder",
+        "options": {
+          "daily": "Vardagsbesökare",
+          "families": "Familjer",
+          "wellness": "Wellnesskunder",
+          "commuters": "Pendlare"
+        }
+      },
+      "budget": {
+        "label": "Budget",
+        "value": "Lätt / standard / bred",
+        "options": {
+          "light": "Lätt",
+          "standard": "Standard",
+          "broad": "Bred"
+        }
+      },
+      "duration": {
+        "label": "Längd",
+        "value": "7, 14 eller 30 dagar",
+        "options": {
+          "7": "7 dagar",
+          "14": "14 dagar",
+          "30": "30 dagar"
+        }
+      }
     },
     "kpis": {
-      "visits": { "label": "Besöksprognos", "value": "+3,8 %", "hint": "Demoestimat för vald zon" },
-      "sales": { "label": "Försäljningssignal", "value": "+2,4 %", "hint": "POS-koppling i full implementation" },
-      "tenants": { "label": "Hyresgäster", "value": "12", "hint": "Matchade deltagare från seedad data" }
+      "visits": {
+        "label": "Besöksprognos",
+        "value": "+3,8 %",
+        "hint": "Demoestimat för vald zon"
+      },
+      "sales": {
+        "label": "Försäljningssignal",
+        "value": "+2,4 %",
+        "hint": "POS-koppling i full implementation"
+      },
+      "tenants": {
+        "label": "Hyresgäster",
+        "value": "12",
+        "hint": "Matchade deltagare från seedad data"
+      }
     },
     "steps": {
-      "brief": { "title": "Brief", "body": "Välj trend, fastighet, zon och målgrupp." },
-      "model": { "title": "Modell", "body": "Beräkna förväntad besöks- och försäljningseffekt." },
-      "approval": { "title": "Godkännande", "body": "Bekräfta budget, kanaler och hyresgäster." },
-      "live": { "title": "Uppföljning", "body": "Följ besök, inlösen och avvikelser." },
-      "learning": { "title": "Lärdomar", "body": "Spara uppmätt effekt för framtida kampanjer." }
+      "brief": {
+        "title": "Brief",
+        "body": "Välj trend, fastighet, zon och målgrupp."
+      },
+      "model": {
+        "title": "Modell",
+        "body": "Beräkna förväntad besöks- och försäljningseffekt."
+      },
+      "approval": {
+        "title": "Godkännande",
+        "body": "Bekräfta budget, kanaler och hyresgäster."
+      },
+      "live": {
+        "title": "Uppföljning",
+        "body": "Följ besök, inlösen och avvikelser."
+      },
+      "learning": {
+        "title": "Lärdomar",
+        "body": "Spara uppmätt effekt för framtida kampanjer."
+      }
     }
   },
   "properties": {
