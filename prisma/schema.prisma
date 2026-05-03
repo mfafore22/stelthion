@@ -580,6 +580,25 @@ model ConciergeBriefingSubscription {
   @@unique([mallId, userId])
 }
 
+model LlmTrainingPair {
+  id             String   @id @default(cuid())
+  customerId     String
+  mallId         String
+  conversationId String?
+  source         String
+  language       String?
+  agentRole      String?
+  prompt         String   @db.Text
+  answer         String   @db.Text
+  viewContext    Json?
+  toolCalls      Json?
+  attachments    Json?
+  createdAt      DateTime @default(now())
+
+  @@index([customerId, createdAt])
+  @@index([customerId, mallId])
+}
+
 // ─── ShopperMind macro indicators ──────────────────────────────────────────
 // Public macroeconomic series fetched from open APIs (e.g. Tilastokeskus PxWeb).
 // One row per (indicator, period). Sync script upserts on conflict.
