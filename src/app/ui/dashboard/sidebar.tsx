@@ -41,13 +41,13 @@ export function Sidebar() {
 
   return (
     <aside className="w-[80px] bg-white border-r border-gray-200 flex flex-col items-center">
-      {/* Swirl logo — same position as mall side */}
+      {/* Stelthion icon — same position as mall side */}
       <div className="h-[80px] w-full flex items-center justify-center shrink-0">
         <Image
-          src="/stelthion-swirl-v2.png"
+          src="/stelthion-brand-s.png"
           alt="Stelthion"
           width={26}
-          height={26}
+          height={28}
           className="object-contain"
           priority
         />
