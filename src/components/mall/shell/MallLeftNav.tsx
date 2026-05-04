@@ -27,27 +27,9 @@ import {
   LayoutPanelTop,
   Lock,
 } from 'lucide-react';
-
-function ShopperMindIcon({ className }: { className?: string }) {
-  return (
-    <span
-      className={cn(
-        'relative inline-block h-8 w-8',
-        className && className.replace(/\bh-\d+\b|\bw-\d+\b/g, '').trim(),
-      )}
-    >
-      <Image
-        src="/ShopperMind_icon_vector.svg"
-        alt=""
-        fill
-        sizes="32px"
-        className="object-contain group-aria-[current=page]:invert"
-      />
-    </span>
-  );
-}
 import { cn } from '@/lib/utils';
 import { useSession } from '@/contexts/SessionContext';
+import { ShopperMindIcon } from '@/components/mall/shoppermind/ShopperMindIcon';
 import useSWR from 'swr';
 import type { PlanFeatures } from '@/lib/plan-gate';
 import {

@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import type {
@@ -13,6 +12,7 @@ import { MallCard } from '@/components/mall/ui/MallCard';
 import { StateBadge } from '@/components/mall/shoppermind/StateBadge';
 import { LifecycleContinuumCompact } from '@/components/mall/shoppermind/LifecycleContinuum';
 import { MiniSparkline } from '@/components/mall/shoppermind/MiniSparkline';
+import { ShopperMindIcon } from '@/components/mall/shoppermind/ShopperMindIcon';
 import { localizePhenomenon, localizeSotdNarrative } from '@/lib/shoppermind/localize';
 import { cn } from '@/lib/utils';
 
@@ -38,7 +38,9 @@ export default function ShopperMindDemoPage() {
 
   useEffect(() => {
     let cancelled = false;
-    setFetching(true);
+    queueMicrotask(() => {
+      if (!cancelled) setFetching(true);
+    });
     fetch(`/api/demo/shoppermind?marketId=${encodeURIComponent(marketId)}`)
       .then((r) => r.json())
       .then((d) => {
@@ -58,13 +60,7 @@ export default function ShopperMindDemoPage() {
       <header className="h-[72px] bg-bo-glass border-b-2 border-bo-neutral-300/60 backdrop-blur-xl flex items-center justify-between px-8 shadow-bo-md">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-bo-primary-100 flex items-center justify-center">
-            <Image
-              src="/ShopperMind_icon_vector.svg"
-              alt=""
-              width={24}
-              height={24}
-              className="object-contain"
-            />
+            <ShopperMindIcon className="h-7 w-7" />
           </div>
           <span className="font-semibold text-bo-neutral-950 text-lg tracking-tight">
             {t('shoppermind.title')}

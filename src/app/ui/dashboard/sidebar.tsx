@@ -12,16 +12,11 @@ import {
   HandPlatter,
   Settings,
 } from 'lucide-react'
+import { ShopperMindIcon } from '@/components/mall/shoppermind/ShopperMindIcon'
 
-function ShopperMindIcon({ size = 20 }: { size?: number }) {
+function DashboardShopperMindIcon({ size = 20 }: { size?: number }) {
   return (
-    <Image
-      src="/ShopperMind_icon_vector.svg"
-      alt=""
-      width={size + 8}
-      height={size + 8}
-      className="object-contain"
-    />
+    <ShopperMindIcon className={size > 20 ? 'h-7 w-7' : 'h-6 w-6'} />
   )
 }
 
@@ -32,7 +27,7 @@ const navItems = [
   { href: '/dashboard/analytics', icon: BarChart3, label: 'Analytics' },
   { href: '/dashboard/insights', icon: TrendingUpDown, label: 'Scenarios' },
   { href: '/dashboard/messages', icon: HandPlatter, label: 'Assistants' },
-  { href: '/dashboard/shoppermind', icon: ShopperMindIcon, label: 'ShopperMind' },
+  { href: '/dashboard/shoppermind', icon: DashboardShopperMindIcon, label: 'ShopperMind' },
   { href: '/dashboard/settings', icon: Settings, label: 'Settings' },
 ]
 

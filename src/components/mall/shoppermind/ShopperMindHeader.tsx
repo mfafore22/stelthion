@@ -1,8 +1,8 @@
 'use client';
 
-import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 import { MarketSelector } from './MarketSelector';
+import { ShopperMindIcon } from './ShopperMindIcon';
 
 interface Props {
   country: string;
@@ -24,17 +24,11 @@ export function ShopperMindHeader({ country, onCountryChange }: Props) {
   })();
 
   return (
-    <header className="bo-surface sticky top-0 z-20 border-b-2 border-bo-neutral-300/60">
+    <header className="sticky top-0 z-20 border-b border-bo-neutral-200/60 bg-white/55 shadow-[0_4px_24px_rgba(17,24,39,0.08),inset_0_1px_0_rgba(255,255,255,0.85)] backdrop-blur-2xl saturate-150">
       <div className="px-8 max-w-[1600px] mx-auto py-3 flex items-start justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3 min-w-0">
           <div className="w-10 h-10 rounded-xl bg-bo-primary-100 flex items-center justify-center shrink-0">
-            <Image
-              src="/ShopperMind_icon_vector.svg"
-              alt=""
-              width={24}
-              height={24}
-              className="object-contain"
-            />
+            <ShopperMindIcon className="h-7 w-7 text-bo-primary-700" />
           </div>
           <div className="min-w-0">
             <h1 className="text-xl tracking-tight leading-tight">
