@@ -1322,7 +1322,17 @@
       "foodCourt": "Restaurangavdelningen"
     },
     "estimated": "Uppskattat",
-    "noData": "Ingen räknardata uppladdad ännu"
+    "noData": "Ingen räknardata uppladdad ännu",
+    "floorplanAlt": {
+      "ground": "Generisk bottenplanritning för stort köpcentrum",
+      "upper": "Generisk övre planritning för stort köpcentrum"
+    },
+    "entrances": {
+      "west": "Västra ingången",
+      "central": "Kollektivtrafikingång",
+      "east": "Östra ingången",
+      "transit": "Parkeringsingång"
+    }
   },
   "topbar": {
     "concierge": "Stelthion Concierge",
@@ -1382,6 +1392,9 @@
     "askAnything": "Fråga mig vad som helst...",
     "typeMessage": "Skriv ditt meddelande...",
     "agentLabel": "Assistent",
+    "assistantSelected": "Assistent vald",
+    "confidence": "{{percent}} % säker",
+    "alternativeAssistants": "Alternativa assistenter",
     "noBackendStub": "Detta är en UI-förhandsvisning. AI-backend är ännu ej ansluten. När Concierge-tjänsten är konfigurerad svarar jag i realtid.",
     "select": "Välj",
     "bestFor": "Bäst för:",

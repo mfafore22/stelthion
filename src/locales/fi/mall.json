@@ -1315,7 +1315,17 @@
       "foodCourt": "Ravintolamaailma"
     },
     "estimated": "Arvioitu",
-    "noData": "Laskuridataa ei vielä ladattu"
+    "noData": "Laskuridataa ei vielä ladattu",
+    "floorplanAlt": {
+      "ground": "Yleinen suuren kauppakeskuksen pohjakerroksen pohjapiirros",
+      "upper": "Yleinen suuren kauppakeskuksen yläkerroksen pohjapiirros"
+    },
+    "entrances": {
+      "west": "Läntinen sisäänkäynti",
+      "central": "Joukkoliikenteen sisäänkäynti",
+      "east": "Itäinen sisäänkäynti",
+      "transit": "Pysäköinnin sisäänkäynti"
+    }
   },
   "topbar": {
     "concierge": "Stelthion Concierge",
@@ -1375,6 +1385,9 @@
     "askAnything": "Kysy mitä tahansa...",
     "typeMessage": "Kirjoita viestisi...",
     "agentLabel": "Assistentti",
+    "assistantSelected": "Assistentti valittu",
+    "confidence": "{{percent}} % varmuus",
+    "alternativeAssistants": "Vaihtoehtoiset assistentit",
     "noBackendStub": "Tämä on käyttöliittymäesikatselu. AI-taustapalvelu ei ole vielä yhteydessä. Kun Concierge-palvelu on konfiguroitu, vastaan reaaliajassa.",
     "select": "Valitse",
     "bestFor": "Parhaiten soveltuu:",

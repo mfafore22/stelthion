@@ -48,7 +48,7 @@ export default async function AdminLayout({
       })
     : null;
 
-  const identity = getMallIdentity(firstMall?.mallId ?? '');
+  const identity = getMallIdentity(firstMall?.mallId ?? '', active?.id);
   const textColor = getContrastTextColor(identity.colors.primary);
   const tenantLabel = active?.name ?? identity.name;
   const cityLabel = firstMall?.city ?? '';

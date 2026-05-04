@@ -1315,7 +1315,17 @@
       "foodCourt": "Food Court"
     },
     "estimated": "Estimated",
-    "noData": "No counter data uploaded yet"
+    "noData": "No counter data uploaded yet",
+    "floorplanAlt": {
+      "ground": "Generic large shopping mall ground floor plan",
+      "upper": "Generic large shopping mall upper floor plan"
+    },
+    "entrances": {
+      "west": "West entrance",
+      "central": "Transit entrance",
+      "east": "East entrance",
+      "transit": "Parking entrance"
+    }
   },
   "topbar": {
     "concierge": "Stelthion Concierge",
@@ -1375,6 +1385,9 @@
     "askAnything": "Ask me anything...",
     "typeMessage": "Type your message...",
     "agentLabel": "Assistant",
+    "assistantSelected": "Assistant selected",
+    "confidence": "{{percent}}% confident",
+    "alternativeAssistants": "Alternative assistants",
     "noBackendStub": "This is a UI preview. The AI backend is not yet connected. Once the Concierge service is configured, I will respond in real time.",
     "select": "Select",
     "bestFor": "Best for:",

@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import '@/lib/i18n';
 import { FloorplanEditor, type ZoneData, type CameraData } from '@/components/admin/FloorplanEditor';
+import { getGenericLargeMallFloorplan } from '@/lib/mall/floorplanAssets';
 
 const FLOOR_CONFIG: Record<string, { viewBox: string }> = {
   ground: { viewBox: '0 0 1504 704' },
@@ -20,19 +21,26 @@ export default function FloorplanPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-    Promise.all([
-      fetch(`/api/admin/floorplan/${mallId}/zones?floor=${floor}`).then((r) => r.json()),
-      fetch(`/api/admin/floorplan/${mallId}/cameras?floor=${floor}`).then((r) => r.json()),
-    ]).then(([z, c]) => {
-      setZones(Array.isArray(z) ? z : []);
-      setCameras(Array.isArray(c) ? c : []);
-      setLoading(false);
-    });
+    let cancelled = false;
+    Promise.resolve()
+      .then(() => {
+        if (!cancelled) setLoading(true);
+        return Promise.all([
+          fetch(`/api/admin/floorplan/${mallId}/zones?floor=${floor}`).then((r) => r.json()),
+          fetch(`/api/admin/floorplan/${mallId}/cameras?floor=${floor}`).then((r) => r.json()),
+        ]);
+      })
+      .then(([z, c]) => {
+        if (cancelled) return;
+        setZones(Array.isArray(z) ? z : []);
+        setCameras(Array.isArray(c) ? c : []);
+        setLoading(false);
+      });
+    return () => { cancelled = true; };
   }, [mallId, floor]);
 
   const cfg = FLOOR_CONFIG[floor];
-  const floorplanSrc = `/assets/malls/${mallId}/floorplan-${floor}.png`;
+  const floorplanSrc = getGenericLargeMallFloorplan(floor);
 
   return (
     <div className="flex flex-col" style={{ height: 'calc(100vh - 120px)' }}>
