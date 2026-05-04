@@ -1195,7 +1195,8 @@
     "notFound": "Property not found",
     "locationLoading": "Loading location data...",
     "locationNotAvailable": "Location and accessibility data is not yet available for this property.",
-    "eventsNotAvailable": "Events calendar is not yet available for this property."
+    "eventsNotAvailable": "Events calendar is not yet available for this property.",
+    "propertyBody": "Inspect operating performance, tenant mix, location context, and property-level supporting signals in the same visual system as ShopperMind."
   },
   "kpi": {
     "currentVisitors": "Current Visitors",

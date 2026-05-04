@@ -12,7 +12,9 @@ import { MiniSparkline } from './MiniSparkline';
 import { PhenomenonCardFooter } from './PhenomenonCardFooter';
 import { PhenomenonSourceStrip } from './PhenomenonSourceStrip';
 import { CampaignIdeaInline } from './campaign-idea';
+import { VisualBanner } from '@/components/mall/visuals/VisualBanner';
 import { localizePhenomenon } from '@/lib/shoppermind/localize';
+import { trendBannerSrc } from '@/lib/shoppermind/visualTheme';
 import { useViewContext } from '@/lib/shoppermind/view-context';
 import { useConciergeOptional } from '@/components/concierge/ConciergeContext';
 
@@ -50,6 +52,11 @@ export function PhenomenonCard({
     <div>
       <Link href={detailHref} className="block">
         <MallCard variant="glass" padding="md" hover className="h-full">
+          <VisualBanner
+            src={trendBannerSrc(localized.label, localized.parsed.summary, localized.parsed.retailerImpact)}
+            alt={localized.label}
+            className="mb-3"
+          />
           <div className="flex items-start justify-between gap-3 mb-3">
             <h3 className="font-semibold text-bo-neutral-950 leading-snug tracking-tight">
               {localized.label}

@@ -3,6 +3,7 @@
 import React from 'react';
 import { Sun, Cloud, CloudRain, CloudSnow, CloudDrizzle, Wind, Droplets } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { AttachmentShell } from './AttachmentShell';
 
 interface WeatherCardProps {
   data: unknown;
@@ -41,8 +42,7 @@ export function WeatherCard({ data, title }: WeatherCardProps) {
     const Icon = CONDITION_ICONS[d.condition || ''] || Cloud;
 
     return (
-      <div className="bg-bo-glass-subtle border border-bo-neutral-200/30 rounded-xl p-3 mt-2">
-        <div className="text-[10px] font-medium text-bo-neutral-500 uppercase tracking-wider mb-2">{title}</div>
+      <AttachmentShell title={title} tone="blue">
         <div className="flex items-center gap-3">
           <Icon className="h-8 w-8 text-bo-primary-500 flex-shrink-0" />
           <div>
@@ -58,7 +58,7 @@ export function WeatherCard({ data, title }: WeatherCardProps) {
             </div>
           </div>
         </div>
-      </div>
+      </AttachmentShell>
     );
   }
 
@@ -66,8 +66,7 @@ export function WeatherCard({ data, title }: WeatherCardProps) {
   const forecast = (data as Array<{ time: string; temperature: number; condition: string }>).slice(0, 6);
 
   return (
-    <div className="bg-bo-glass-subtle border border-bo-neutral-200/30 rounded-xl p-3 mt-2">
-      <div className="text-[10px] font-medium text-bo-neutral-500 uppercase tracking-wider mb-2">{title}</div>
+    <AttachmentShell title={title} tone="blue">
       <div className="flex gap-2 overflow-x-auto">
         {forecast.map((f, i) => {
           const Icon = CONDITION_ICONS[f.condition] || Cloud;
@@ -81,6 +80,6 @@ export function WeatherCard({ data, title }: WeatherCardProps) {
           );
         })}
       </div>
-    </div>
+    </AttachmentShell>
   );
 }

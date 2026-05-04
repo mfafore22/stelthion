@@ -1,4 +1,6 @@
 import type { MegaPath } from '@/lib/shoppermind/megaScenario';
+import { VisualBanner } from '@/components/mall/visuals/VisualBanner';
+import { pathBannerSrc } from '@/lib/shoppermind/visualTheme';
 
 const TONE_DOT: Record<string, string> = {
   neutraali: 'bg-bo-neutral-400', neutral: 'bg-bo-neutral-400',
@@ -15,16 +17,19 @@ export function PathSummaryBand({ paths }: { paths: MegaPath[] }) {
         return (
           <div
             key={p.id}
-            className="bo-surface-subtle rounded-lg border p-2.5 flex items-start gap-2"
+            className="bo-surface-subtle overflow-hidden rounded-lg border p-2.5"
           >
-            <span className={`w-2 h-2 rounded-full ${dot} shrink-0 mt-1.5`} />
-            <div className="min-w-0">
-              <div className="text-xs font-semibold text-bo-neutral-950 leading-tight truncate">
-                {p.title}
+            <VisualBanner src={pathBannerSrc(p.tone)} alt={p.title} compact className="mb-2" />
+            <div className="flex items-start gap-2">
+              <span className={`w-2 h-2 rounded-full ${dot} shrink-0 mt-1.5`} />
+              <div className="min-w-0">
+                <div className="text-xs font-semibold text-bo-neutral-950 leading-tight truncate">
+                  {p.title}
+                </div>
+                <p className="text-[11px] text-bo-neutral-600 leading-snug line-clamp-2 mt-0.5">
+                  {p.summary}
+                </p>
               </div>
-              <p className="text-[11px] text-bo-neutral-600 leading-snug line-clamp-2 mt-0.5">
-                {p.summary}
-              </p>
             </div>
           </div>
         );

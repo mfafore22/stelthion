@@ -90,6 +90,7 @@ export const MALLS: Record<string, MallProperty> = {
     annualVisitors: 22600000,
     annualSales: 298000000,
     gla: 58000,
+    brandColors: { primary: '#67a93b', secondary: '#2f6f34', accent: '#19311d' },
   },
   'realidea-tripla': {
     id: 'realidea-tripla',
@@ -102,6 +103,7 @@ export const MALLS: Record<string, MallProperty> = {
     annualVisitors: 27300000,
     annualSales: 342000000,
     gla: 74000,
+    brandColors: { primary: '#db4c64', secondary: '#f0c24c', accent: '#2fa866' },
   },
   'realidea-itis': {
     id: 'realidea-itis',
@@ -113,6 +115,7 @@ export const MALLS: Record<string, MallProperty> = {
     coordinates: { lat: 60.2108, lon: 25.0816 },
     annualVisitors: 18500000,
     annualSales: 245000000,
+    brandColors: { primary: '#f25f5c', secondary: '#2563eb', accent: '#f3c969' },
   },
   'realidea-jumbo': {
     id: 'realidea-jumbo',
@@ -124,6 +127,7 @@ export const MALLS: Record<string, MallProperty> = {
     coordinates: { lat: 60.2929, lon: 25.0406 },
     annualVisitors: 16200000,
     annualSales: 218000000,
+    brandColors: { primary: '#53a548', secondary: '#234d95', accent: '#f2c24d' },
   },
   'realidea-kamp-galleria': {
     id: 'realidea-kamp-galleria',
@@ -135,6 +139,7 @@ export const MALLS: Record<string, MallProperty> = {
     coordinates: { lat: 60.1674, lon: 24.945 },
     annualVisitors: 3500000,
     annualSales: 85000000,
+    brandColors: { primary: '#566542', secondary: '#8f9a77', accent: '#2c3622' },
   },
   'realidea-karuselli': {
     id: 'realidea-karuselli',
@@ -146,6 +151,7 @@ export const MALLS: Record<string, MallProperty> = {
     coordinates: { lat: 60.404, lon: 25.105 },
     annualVisitors: 4200000,
     annualSales: 62000000,
+    brandColors: { primary: '#08a5b5', secondary: '#0d6d77', accent: '#f1c550' },
   },
   'realidea-plaza': {
     id: 'realidea-plaza',
@@ -157,6 +163,7 @@ export const MALLS: Record<string, MallProperty> = {
     coordinates: { lat: 60.3833, lon: 23.1261 },
     annualVisitors: 3800000,
     annualSales: 54000000,
+    brandColors: { primary: '#2463b8', secondary: '#5e91d6', accent: '#f1bf62' },
   },
   'realidea-arabia': {
     id: 'realidea-arabia',
@@ -168,6 +175,7 @@ export const MALLS: Record<string, MallProperty> = {
     coordinates: { lat: 60.205, lon: 24.979 },
     annualVisitors: 6500000,
     annualSales: 92000000,
+    brandColors: { primary: '#8a4c3a', secondary: '#d2ad82', accent: '#2f241f' },
   },
   'realidea-columbus': {
     id: 'realidea-columbus',
@@ -179,6 +187,7 @@ export const MALLS: Record<string, MallProperty> = {
     coordinates: { lat: 60.1834, lon: 24.934 },
     annualVisitors: 8200000,
     annualSales: 118000000,
+    brandColors: { primary: '#0d6ab3', secondary: '#5aa8e0', accent: '#f0b94f' },
   },
   'realidea-duo': {
     id: 'realidea-duo',
@@ -190,6 +199,7 @@ export const MALLS: Record<string, MallProperty> = {
     coordinates: { lat: 61.4978, lon: 23.761 },
     annualVisitors: 7600000,
     annualSales: 105000000,
+    brandColors: { primary: '#7b36bf', secondary: '#b486df', accent: '#1d3557' },
   },
   'realidea-grani': {
     id: 'realidea-grani',
@@ -201,6 +211,7 @@ export const MALLS: Record<string, MallProperty> = {
     coordinates: { lat: 60.2124, lon: 24.7272 },
     annualVisitors: 2800000,
     annualSales: 42000000,
+    brandColors: { primary: '#2f7d5d', secondary: '#97c6b2', accent: '#18372a' },
   },
   'realidea-dixi': {
     id: 'realidea-dixi',
@@ -212,6 +223,7 @@ export const MALLS: Record<string, MallProperty> = {
     coordinates: { lat: 60.2935, lon: 25.0343 },
     annualVisitors: 5100000,
     annualSales: 68000000,
+    brandColors: { primary: '#ef5a29', secondary: '#f7a463', accent: '#28323f' },
   },
   'realidea-entresse': {
     id: 'realidea-entresse',
@@ -223,6 +235,7 @@ export const MALLS: Record<string, MallProperty> = {
     coordinates: { lat: 60.2046, lon: 24.6597 },
     annualVisitors: 11200000,
     annualSales: 148000000,
+    brandColors: { primary: '#f27023', secondary: '#f6c04e', accent: '#7a2f0e' },
   },
   'realidea-fresko': {
     id: 'realidea-fresko',
@@ -234,6 +247,7 @@ export const MALLS: Record<string, MallProperty> = {
     coordinates: { lat: 60.2775, lon: 25.041 },
     annualVisitors: 5800000,
     annualSales: 78000000,
+    brandColors: { primary: '#4ea84c', secondary: '#b4d67c', accent: '#1c4a31' },
   },
   'realidea-kale': {
     id: 'realidea-kale',
@@ -245,6 +259,7 @@ export const MALLS: Record<string, MallProperty> = {
     coordinates: { lat: 61.4981, lon: 23.7804 },
     annualVisitors: 3400000,
     annualSales: 48000000,
+    brandColors: { primary: '#efc230', secondary: '#ef8e0c', accent: '#4b3d10' },
   },
   'realidea-kivis': {
     id: 'realidea-kivis',
@@ -256,6 +271,7 @@ export const MALLS: Record<string, MallProperty> = {
     coordinates: { lat: 60.2862, lon: 25.039 },
     annualVisitors: 5600000,
     annualSales: 72000000,
+    brandColors: { primary: '#f57a21', secondary: '#efb15f', accent: '#4c2e10' },
   },
   'realidea-liila': {
     id: 'realidea-liila',
@@ -267,17 +283,19 @@ export const MALLS: Record<string, MallProperty> = {
     coordinates: { lat: 60.2197, lon: 24.7442 },
     annualVisitors: 4100000,
     annualSales: 58000000,
+    brandColors: { primary: '#7f4acb', secondary: '#c49eff', accent: '#302145' },
   },
   'realidea-lansikeskus': {
     id: 'realidea-lansikeskus',
     name: 'Länsikeskus',
     operator: 'realidea',
-    city: 'Espoo',
+    city: 'Turku',
     country: 'FI',
     status: 'live',
-    coordinates: { lat: 60.223, lon: 24.8018 },
+    coordinates: { lat: 60.4859, lon: 22.2398 },
     annualVisitors: 6900000,
     annualSales: 96000000,
+    brandColors: { primary: '#1f70b7', secondary: '#53b1e5', accent: '#0f334e' },
   },
 };
 

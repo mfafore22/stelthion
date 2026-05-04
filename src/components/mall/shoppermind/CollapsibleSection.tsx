@@ -9,6 +9,7 @@ interface Props {
   subtitle?: string;
   timespan?: string;
   defaultOpen?: boolean;
+  topMedia?: ReactNode;
   rightSlot?: ReactNode;
   children: ReactNode;
   toneClassName?: string;
@@ -19,6 +20,7 @@ export function CollapsibleSection({
   subtitle,
   timespan,
   defaultOpen = false,
+  topMedia,
   rightSlot,
   children,
   toneClassName,
@@ -28,6 +30,7 @@ export function CollapsibleSection({
   const aria = open ? t('shoppermind.section.collapse') : t('shoppermind.section.expand');
   return (
     <section className={`bo-surface rounded-2xl border-2 ${toneClassName ?? ''}`}>
+      {topMedia && <div className="px-4 pt-4">{topMedia}</div>}
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}

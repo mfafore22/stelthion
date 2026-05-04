@@ -11,6 +11,8 @@ import { ActionBoardAside } from './ActionBoardAside';
 import { ActionCard } from './ActionCard';
 import type { ScenarioPathId } from './PathReferenceText';
 import { PropertySegmentedSelector, type PropertySegmentOption } from './PropertySegmentedSelector';
+import { VisualBanner } from '@/components/mall/visuals/VisualBanner';
+import { sectionBannerSrc } from '@/lib/shoppermind/visualTheme';
 
 function claimsForAction(action: PropertyActionRecommendation, claims: EvidenceClaim[]) {
   const ids = new Set([
@@ -83,6 +85,11 @@ export function PropertyActionBoard({
 
   return (
     <section className="bo-surface rounded-2xl border-2 border-bo-primary-200/70 p-5">
+      <VisualBanner
+        src={sectionBannerSrc('actions')}
+        alt={t('shoppermind.actionBoard.title', { propertyName: data.property.name })}
+        className="mb-5"
+      />
       <div className="mb-5 grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_320px] xl:items-start">
         <div className="min-w-0">
           <div className="mb-1 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-bo-primary-700">

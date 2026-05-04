@@ -4,6 +4,7 @@ import { Bot } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAssistantLaunch } from '@/lib/assistant-flow/useAssistantLaunch';
 import { ChatBubbleButton } from '@/components/concierge/ChatBubbleButton';
+import { MallIdentityBanner } from '@/components/mall/visuals/MallIdentityBanner';
 import type { AssistantDemoCard } from './assistantCatalog';
 
 function promptsFor(t: ReturnType<typeof useTranslation>['t'], id: string): string[] {
@@ -15,21 +16,25 @@ const toneClasses = {
     card: 'border-bo-primary-200/80 bg-bo-primary-50/25',
     icon: 'bg-bo-primary-100 text-bo-primary-700',
     tool: 'border-bo-primary-200/70 bg-bo-primary-50/70 text-bo-primary-800',
+    banner: { primary: '#214990', secondary: '#328d2e', accent: '#f3c978' },
   },
   teal: {
     card: 'border-teal-200/80 bg-teal-50/35',
     icon: 'bg-teal-100 text-teal-700',
     tool: 'border-teal-200/70 bg-teal-50/80 text-teal-800',
+    banner: { primary: '#0f766e', secondary: '#14b8a6', accent: '#214990' },
   },
   amber: {
     card: 'border-amber-200/80 bg-amber-50/35',
     icon: 'bg-amber-100 text-amber-700',
     tool: 'border-amber-200/70 bg-amber-50/80 text-amber-800',
+    banner: { primary: '#b45309', secondary: '#f3c978', accent: '#214990' },
   },
   violet: {
     card: 'border-violet-200/80 bg-violet-50/35',
     icon: 'bg-violet-100 text-violet-700',
     tool: 'border-violet-200/70 bg-violet-50/80 text-violet-800',
+    banner: { primary: '#6d28d9', secondary: '#a78bfa', accent: '#328d2e' },
   },
 };
 
@@ -54,6 +59,9 @@ export function AssistantCommandCard({ item }: { item: AssistantDemoCard }) {
 
   return (
     <article className={`bo-surface bo-surface-hover flex h-full flex-col rounded-xl border-2 p-4 ${tone.card}`}>
+      <div className="mb-4">
+        <MallIdentityBanner title={title} {...tone.banner} />
+      </div>
       <div className="flex min-h-[132px] items-start gap-3">
         <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${tone.icon}`}>
           <Bot className="h-5 w-5" />

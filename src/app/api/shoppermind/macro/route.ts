@@ -50,6 +50,7 @@ export async function GET(req: NextRequest) {
       slot: m.slot,
       code: m.code,
       name: m.i18n[langKey],
+      scaleNote: m.scaleNote?.[langKey] ?? null,
       unit: m.unit,
       cadence: m.cadence,
       publisher: m.publisher,

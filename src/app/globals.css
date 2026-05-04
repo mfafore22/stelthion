@@ -229,12 +229,17 @@
                 box-shadow 300ms cubic-bezier(0.16, 1, 0.3, 1),
                 background 300ms cubic-bezier(0.16, 1, 0.3, 1),
                 border-color 300ms cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
   }
   .bo-surface-hover:hover {
     background: rgba(255, 255, 255, 0.62);
     border-color: rgba(50, 141, 46, 0.25);
     box-shadow: 0 12px 32px rgba(26, 26, 26, 0.10);
     transform: translateY(-2px);
+  }
+  .bo-surface-hover:active {
+    transform: translateY(0);
+    transition-duration: 120ms;
   }
   .bg-bo-gradient-muted {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(33, 73, 144, 0.12) 100%);

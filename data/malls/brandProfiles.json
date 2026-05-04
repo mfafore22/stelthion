@@ -22,18 +22,38 @@
     },
     "realidea-sello": {
       "name": "Sello",
-      "logo": "",
+      "logo": "/assets/mall-operators/Sello_logo.svg",
       "colors": {
-        "primary": "#c4007f",
-        "secondary": "#7a004f",
-        "accent": "#1a1a1a",
+        "primary": "#67a93b",
+        "secondary": "#2f6f34",
+        "accent": "#19311d",
         "warning": "#f7966b",
         "error": "#f04e54",
-        "background": "#FAF7FA"
+        "background": "#f3f8f1"
       },
       "gradient": {
-        "from": "#c4007f",
-        "to": "#7a004f"
+        "from": "#67a93b",
+        "to": "#2f6f34"
+      },
+      "typography": {
+        "fontFamily": "Inter, sans-serif",
+        "headingWeight": 700
+      }
+    },
+    "realidea-tripla": {
+      "name": "Mall of Tripla",
+      "logo": "/assets/mall-operators/MallofTripla_logo.png",
+      "colors": {
+        "primary": "#db4c64",
+        "secondary": "#f0c24c",
+        "accent": "#2fa866",
+        "warning": "#f7966b",
+        "error": "#f04e54",
+        "background": "#fbf4f5"
+      },
+      "gradient": {
+        "from": "#db4c64",
+        "to": "#f0c24c"
       },
       "typography": {
         "fontFamily": "Inter, sans-serif",

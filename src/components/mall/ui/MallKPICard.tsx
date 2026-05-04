@@ -67,6 +67,7 @@ export interface MallKPICardProps extends React.HTMLAttributes<HTMLDivElement> {
    * Example: 6.2, -3.2, 0
    */
   trendPercentage?: number;
+  surfaceAccent?: { primary: string; secondary: string };
 }
 
 const deltaStyles: Record<DeltaType, string> = {
@@ -125,12 +126,13 @@ export const MallKPICard = React.forwardRef<HTMLDivElement, MallKPICardProps>(
       accent,
       accentColor,
       trendPercentage,
+      surfaceAccent,
       ...props
     },
     ref
   ) => {
     const Icon = TrendIcon[deltaType];
-    const useCustomColor = !!accentColor;
+    const useCustomColor = !!accentColor && !surfaceAccent;
     const showTrendShape = trendPercentage !== undefined;
     const accentStyle = accent ? accentStyles[accent] : null;
 
@@ -139,16 +141,18 @@ export const MallKPICard = React.forwardRef<HTMLDivElement, MallKPICardProps>(
         ref={ref}
         className={cn(
           'rounded-xl relative overflow-hidden',
+          surfaceAccent && 'bo-surface-subtle border-2 backdrop-blur-xl',
           // Apply glass background for non-custom-color cards
-          !useCustomColor && !accent && 'bg-bo-glass border-2 border-bo-neutral-300/60 backdrop-blur-xl',
+          !surfaceAccent && !useCustomColor && !accent && 'bg-bo-glass border-2 border-bo-neutral-300/60 backdrop-blur-xl',
           // Accent cards get subtle tinted glass
-          !useCustomColor && accentStyle && accentStyle.wrapper,
-          'p-6 transition-all duration-300 ease-bo-out-expo shadow-bo-glass-strong',
-          'hover:shadow-bo-xl hover:-translate-y-0.5',
+          !surfaceAccent && !useCustomColor && accentStyle && accentStyle.wrapper,
+          'bo-surface-hover p-6 shadow-bo-glass-strong',
           className
         )}
         style={
-          useCustomColor
+          surfaceAccent
+            ? { borderColor: `${surfaceAccent.primary}38` }
+            : useCustomColor
             ? {
                 background: `rgba(248, 246, 243, 0.88)`,
                 backdropFilter: 'blur(18px)',
@@ -159,6 +163,12 @@ export const MallKPICard = React.forwardRef<HTMLDivElement, MallKPICardProps>(
         }
         {...props}
       >
+        {surfaceAccent && (
+          <div
+            className="absolute inset-x-0 top-0 h-1.5"
+            style={{ background: `linear-gradient(90deg, ${surfaceAccent.primary}, ${surfaceAccent.secondary})` }}
+          />
+        )}
         {/* Dynamic Trend Background Shape */}
         {showTrendShape && <TrendShape percentageChange={trendPercentage} />}
 

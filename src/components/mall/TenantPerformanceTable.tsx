@@ -25,7 +25,7 @@ const TENANT_DATA = [
   { category: 'Palvelut', visits: 2770, dwell: 22, sales: 12400, outlook: -3 },
 ];
 
-export function TenantPerformanceTable({ mallId, expanded = false }: TenantPerformanceTableProps) {
+export function TenantPerformanceTable({ expanded = false }: TenantPerformanceTableProps) {
   const { t } = useTranslation('mall');
 
   const formatNumber = (num: number) => {
@@ -53,7 +53,8 @@ export function TenantPerformanceTable({ mallId, expanded = false }: TenantPerfo
   };
 
   return (
-    <Card className="p-6 bg-bo-glass border-bo-neutral-200/30 shadow-bo-glass">
+    <Card className="bo-surface rounded-xl border-2 border-bo-primary-200/50 p-6 shadow-bo-glass">
+      <div className="mb-4 h-1.5 rounded-full bg-gradient-to-r from-bo-primary-700 via-bo-success-dark to-bo-warning-dark" />
       <h3 className="mb-4 text-lg font-semibold text-bo-neutral-950 tracking-tight">{t('tenants.performanceByCategory')}</h3>
       <div className="overflow-x-auto">
         <table className="w-full">
@@ -91,15 +92,15 @@ export function TenantPerformanceTable({ mallId, expanded = false }: TenantPerfo
         <div className="mt-6 space-y-4 border-t border-bo-neutral-200/50 pt-4">
           <h4 className="font-semibold text-bo-neutral-950">{t('tenants.topTenants')}</h4>
           <div className="space-y-2 text-sm">
-            <div className="flex items-center justify-between rounded-lg bg-bo-glass-subtle p-2 border border-bo-neutral-200/30">
+            <div className="bo-surface-subtle flex items-center justify-between rounded-lg border border-bo-neutral-200/60 p-2">
               <span className="text-bo-neutral-700">H&M (Muoti)</span>
               <span className="text-bo-success-dark font-medium">+18% {t('tenants.vsPlan')}</span>
             </div>
-            <div className="flex items-center justify-between rounded-lg bg-bo-glass-subtle p-2 border border-bo-neutral-200/30">
+            <div className="bo-surface-subtle flex items-center justify-between rounded-lg border border-bo-neutral-200/60 p-2">
               <span className="text-bo-neutral-700">Hesburger (Ravintolat)</span>
               <span className="text-bo-success-dark font-medium">+15% {t('tenants.vsPlan')}</span>
             </div>
-            <div className="flex items-center justify-between rounded-lg bg-bo-glass-subtle p-2 border border-bo-neutral-200/30">
+            <div className="bo-surface-subtle flex items-center justify-between rounded-lg border border-bo-neutral-200/60 p-2">
               <span className="text-bo-neutral-700">Prisma (Ruokakauppa)</span>
               <span className="text-bo-success-dark font-medium">+12% {t('tenants.vsPlan')}</span>
             </div>

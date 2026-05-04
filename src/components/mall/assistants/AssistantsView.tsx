@@ -7,7 +7,9 @@ import { AgentRole } from '@/lib/gcm-types';
 import { useAssistantLaunch } from '@/lib/assistant-flow/useAssistantLaunch';
 import { useConciergeOptional } from '@/components/concierge/ConciergeContext';
 import { PropertySegmentedSelector } from '@/components/mall/shoppermind/PropertySegmentedSelector';
+import { VisualBanner } from '@/components/mall/visuals/VisualBanner';
 import type { AssistantSource } from '@/lib/assistant-flow/types';
+import { assistantBannerSrc } from '@/lib/shoppermind/visualTheme';
 import { AssistantCommandCard } from './AssistantCommandCard';
 import { AssistantControlPanel } from './AssistantControlPanel';
 import { ASSISTANT_DEMOS } from './assistantCatalog';
@@ -60,6 +62,7 @@ export function AssistantsView() {
   return (
     <div className="space-y-5">
       <section className="bo-surface rounded-2xl border-2 border-bo-primary-200/60 p-6">
+        <VisualBanner src={assistantBannerSrc('overview')} alt={t('assistants.title')} className="mb-5" />
         <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
           <div className="flex items-start gap-4">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-bo-primary-100">

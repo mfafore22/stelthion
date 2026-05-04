@@ -22,8 +22,16 @@ export interface SyncSummary { ok: number; failed: number; skipped: number; resu
 
 export async function syncOneIndicator(prisma: PrismaClient, meta: MacroIndicatorMeta): Promise<SyncResult> {
   try {
-    if (!meta.fetch) return { code: meta.code, count: 0, error: null, skipped: true };
-    const points = await fetchPoints(meta.fetch);
+    const points = meta.fetch
+      ? await fetchPoints(meta.fetch)
+      : (meta.fallbackHistory ?? []).map((p) => ({
+          period: p.period,
+          value: p.value,
+          periodDate: new Date(p.periodDate),
+        }));
+    if (!meta.fetch && points.length === 0) {
+      return { code: meta.code, count: 0, error: null, skipped: true };
+    }
     if (points.length === 0) return { code: meta.code, count: 0, error: 'no-points' };
     let upserted = 0;
     for (const p of points) {

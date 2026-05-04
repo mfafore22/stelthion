@@ -44,6 +44,7 @@ export interface MacroIndicatorMeta {
   publisher: string;
   sourceUrl: string;
   i18n: { fi: string; en: string; sv: string };
+  scaleNote?: { fi: string; en: string; sv: string };
   fetch?: MacroFetch;
   fallbackHistory?: Array<{ period: string; value: number; periodDate: string }>;
 }
@@ -80,6 +81,11 @@ export const FI_INDICATORS: MacroIndicatorMeta[] = [
     publisher: 'Tilastokeskus',
     sourceUrl: 'https://stat.fi/fi/tilasto/kbar',
     i18n: { fi: 'Kuluttajien luottamus', en: 'Consumer confidence', sv: 'Konsumenternas förtroende' },
+    scaleNote: {
+      fi: 'Saldoindikaattori: 0 on neutraali, negatiivinen tarkoittaa heikkoa luottamusta.',
+      en: 'Balance indicator: 0 is neutral, negative means weak confidence.',
+      sv: 'Saldoindikator: 0 är neutral, negativt värde betyder svagt förtroende.',
+    },
     fetch: { provider: 'pxweb', query: {
       table: 'https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/statfin_kbar_pxt_11cc.px',
       query: {
@@ -168,6 +174,11 @@ export const SE_INDICATORS: MacroIndicatorMeta[] = [
     publisher: 'Konjunkturinstitutet',
     sourceUrl: 'https://www.konj.se/en/statistics/swedish-economic-tendency-survey.html',
     i18n: { fi: 'Kuluttajien luottamus', en: 'Consumer confidence', sv: 'Konsumentförtroende' },
+    scaleNote: {
+      fi: 'Indeksi: 100 on normaali taso, alle 100 on normaalia heikompi.',
+      en: 'Index: 100 is normal, below 100 is weaker than normal.',
+      sv: 'Index: 100 är normalläge, under 100 är svagare än normalt.',
+    },
     fetch: { provider: 'pxweb', query: {
       table: 'https://statistik.konj.se/PxWeb/api/v1/sv/KonjBar/indikatorer/Indikatorm.px',
       query: {
@@ -270,6 +281,11 @@ export const US_INDICATORS: MacroIndicatorMeta[] = [
     publisher: 'FRED / University of Michigan',
     sourceUrl: 'https://fred.stlouisfed.org/series/UMCSENT',
     i18n: { fi: 'Kuluttajien luottamus', en: 'Consumer confidence', sv: 'Konsumentförtroende' },
+    scaleNote: {
+      fi: 'Indeksi: 1966 Q1 = 100.',
+      en: 'Index: 1966 Q1 = 100.',
+      sv: 'Index: 1966 Q1 = 100.',
+    },
     fetch: { provider: 'fred', query: {
       seriesId: 'UMCSENT',
       url: 'https://fred.stlouisfed.org/graph/fredgraph.csv?id=UMCSENT',

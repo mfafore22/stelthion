@@ -36,7 +36,7 @@ export const finlandSignal: SignalOfTheDay = {
     fi: {
       narrative: 'Suomen toukokuun signaali: puolustava arvo on edelleen laajaa elpymistä vahvempi. Kaupan volyymit paranivat maaliskuussa, mutta huhtikuun luottamus heikkeni lisää ja Iranin sodan energiasokki pitää ostoriskin korkeana.',
       sections: {
-        headline: 'Suomalaisen kauppakeskuksen pitää käsitellä elpyminen valikoivana: todista arvo, pienennä riskiä ja suojaa arjen asiointitiheys.',
+        headline: 'Suomalaisen kauppakeskuksen on käsitettävä elpyminen valikoivana: todista arvo, vähennä riskiä ja varmista arjen asiointitiheys.',
         keyFindings: [
           'Tilastokeskuksen mukaan huhtikuun 2026 kuluttajaluottamus laski -12,5:een maaliskuun -11,5:stä; pitkän ajan keskiarvo on -2,9.',
           'Huhtikuussa kalliiden ostosten aika nähtiin yhä hyvin epäedullisena; vain 13 % piti ajankohtaa hyvänä.',

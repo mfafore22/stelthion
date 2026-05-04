@@ -39,6 +39,11 @@ export const UAE_INDICATORS: MacroIndicatorMeta[] = [
     publisher: 'S&P Global / CBUAE',
     sourceUrl: CBUAE_QER,
     i18n: { fi: 'Ei-öljysektorin PMI', en: 'Non-oil PMI', sv: 'Icke-olje-PMI' },
+    scaleNote: {
+      fi: 'PMI-indeksi: 50 on ennallaan, yli 50 tarkoittaa kasvua.',
+      en: 'PMI index: 50 is unchanged, above 50 means expansion.',
+      sv: 'PMI-index: 50 är oförändrat, över 50 betyder expansion.',
+    },
     fallbackHistory: [
       { period: '2025-12', value: 54.2, periodDate: '2025-12-01T00:00:00.000Z' },
       { period: '2026-01', value: 54.9, periodDate: '2026-01-01T00:00:00.000Z' },

@@ -44,9 +44,9 @@ export function BriefingCard({ sections, date }: BriefingCardProps) {
   };
 
   return (
-    <div className="bg-bo-glass border border-bo-neutral-200/40 rounded-xl overflow-hidden">
-      {/* Header */}
-      <div className="px-4 py-3 bg-bo-primary-50/50 border-b border-bo-neutral-200/30">
+    <div className="bo-surface-subtle overflow-hidden rounded-xl border border-bo-primary-200/50 shadow-bo-glass">
+      <div className="h-1.5 bg-gradient-to-r from-bo-primary-700 via-bo-success-dark to-bo-warning-dark" />
+      <div className="px-4 py-3 border-b border-bo-neutral-200/50">
         <div className="text-xs font-semibold text-bo-primary-700 uppercase tracking-wider">
           {t('concierge.briefing.title', 'Daily Briefing')}
         </div>
@@ -55,7 +55,6 @@ export function BriefingCard({ sections, date }: BriefingCardProps) {
         </div>
       </div>
 
-      {/* Sections */}
       <div className="divide-y divide-bo-neutral-200/30">
         {sections.map((section) => {
           const Icon = SECTION_ICONS[section.key] || Sun;
@@ -65,7 +64,7 @@ export function BriefingCard({ sections, date }: BriefingCardProps) {
             <div key={section.key}>
               <button
                 onClick={() => toggle(section.key)}
-                className="w-full flex items-center gap-2 px-4 py-2.5 hover:bg-bo-neutral-50/50 transition-colors"
+                className="w-full flex items-center gap-2 px-4 py-2.5 transition-colors hover:bg-white/55"
               >
                 <Icon className="h-3.5 w-3.5 text-bo-neutral-500" />
                 <span className="text-xs font-medium text-bo-neutral-800 flex-1 text-left">

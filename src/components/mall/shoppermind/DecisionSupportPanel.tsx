@@ -3,6 +3,8 @@
 import { useTranslation } from 'react-i18next';
 import type { PropertyActionsResponse } from '@stelthion/shoppermind-client-types';
 import type { MegaScenarioResolved } from '@/lib/shoppermind/megaScenario';
+import { VisualBanner } from '@/components/mall/visuals/VisualBanner';
+import { sectionBannerSrc } from '@/lib/shoppermind/visualTheme';
 
 export function DecisionSupportPanel({
   scenario,
@@ -22,6 +24,11 @@ export function DecisionSupportPanel({
 
   return (
     <section className="bo-surface rounded-2xl border-2 p-5">
+      <VisualBanner
+        src={sectionBannerSrc('decision')}
+        alt={t('shoppermind.tabs.decisionSupport', { defaultValue: 'Päätöksen tuki' })}
+        className="mb-5"
+      />
       <div className="mb-5">
         <div className="text-xs font-semibold uppercase tracking-[0.14em] text-bo-primary-700">
           {t('shoppermind.tabs.decisionSupport', { defaultValue: 'Päätöksen tuki' })}

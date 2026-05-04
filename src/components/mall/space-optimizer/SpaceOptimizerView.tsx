@@ -27,6 +27,7 @@ import { FloorplanHighlight } from './FloorplanHighlight';
 import { AgentRole } from '@/lib/gcm-types';
 import { useAssistantLaunch } from '@/lib/assistant-flow/useAssistantLaunch';
 import { ChatBubbleButton } from '@/components/concierge/ChatBubbleButton';
+import { PageHero } from '@/components/mall/visuals/PageHero';
 
 interface SpaceOptimizerViewProps {
   mallId: string;
@@ -149,42 +150,15 @@ export function SpaceOptimizerView({
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center gap-3">
-        <div className="w-12 h-12 rounded-xl bg-bo-primary-100 flex items-center justify-center">
-          <LayoutPanelTop className="w-6 h-6 text-bo-primary" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <h1 className="text-2xl font-semibold text-bo-neutral-950 tracking-tight">
-            {t('spaceOptimizer.title')} · {mallName}
-          </h1>
-          <p className="text-sm text-bo-neutral-500">
-            {data
-              ? t('spaceOptimizer.header.summary', {
-                  count: data.suggestions.length,
-                  zones: data.suggestions.length,
-                })
-              : t('spaceOptimizer.subtitle')}
-            {data && data.drivingTrends.length > 0 && (
-              <>
-                {' · '}
-                {t('spaceOptimizer.header.drivenBy', {
-                  count: data.drivingTrends.length,
-                })}
-              </>
-            )}
-            {data && (
-              <>
-                {' · '}
-                <span className="text-bo-neutral-400">
-                  {t('spaceOptimizer.header.lastRun', {
-                    date: formatDate(data.generatedAt, lang, 'medium'),
-                  })}
-                </span>
-              </>
-            )}
-          </p>
-        </div>
-      </div>
+      <PageHero
+        icon={<LayoutPanelTop className="h-6 w-6 text-bo-primary-700" />}
+        title={`${t('spaceOptimizer.title')} · ${mallName}`}
+        body={data
+          ? `${t('spaceOptimizer.header.summary', { count: data.suggestions.length, zones: data.suggestions.length })}${data.drivingTrends.length > 0 ? ` · ${t('spaceOptimizer.header.drivenBy', { count: data.drivingTrends.length })}` : ''} · ${t('spaceOptimizer.header.lastRun', { date: formatDate(data.generatedAt, lang, 'medium') })}`
+          : t('spaceOptimizer.subtitle')}
+        bannerSrc={{ title: t('spaceOptimizer.title'), primary: '#6d28d9', secondary: '#a78bfa', accent: '#328d2e' }}
+        bannerAlt={t('spaceOptimizer.title')}
+      />
 
       <div className="rounded-xl border border-bo-primary-200 bg-white p-4 shadow-bo-sm">
         <div className="text-sm font-semibold text-bo-neutral-950">

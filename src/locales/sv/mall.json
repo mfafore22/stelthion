@@ -1204,7 +1204,8 @@
     "notFound": "Fastighet hittades ej",
     "locationLoading": "Laddar platsinformation...",
     "locationNotAvailable": "Plats- och tillgänglighetsdata är ännu ej tillgänglig för denna fastighet.",
-    "eventsNotAvailable": "Evenemangskalendern är ännu ej tillgänglig för denna fastighet."
+    "eventsNotAvailable": "Evenemangskalendern är ännu ej tillgänglig för denna fastighet.",
+    "propertyBody": "Granska operativ prestanda, hyresgästmix, lägeskontext och stödjande signaler på fastighetsnivå i samma visuella system som ShopperMind."
   },
   "kpi": {
     "currentVisitors": "Aktuella besökare",

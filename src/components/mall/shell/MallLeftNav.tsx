@@ -162,13 +162,13 @@ export function MallLeftNav({
         )}
         aria-label="Mall portfolio navigation"
       >
-        {/* Stelthion icon — vertically centered in the 80px top bar row */}
+        {/* Stelthion icon - vertically centered in the 80px top bar row */}
         <div className="h-[80px] w-full flex items-center justify-center shrink-0">
           <Image
             src="/stelthion-brand-s.png"
             alt="Stelthion"
-            width={26}
-            height={28}
+            width={42}
+            height={44}
             className="object-contain"
             priority
           />

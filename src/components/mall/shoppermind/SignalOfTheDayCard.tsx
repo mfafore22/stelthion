@@ -2,7 +2,9 @@ import { useTranslation } from 'react-i18next';
 import type { SignalOfTheDay } from '@stelthion/shoppermind-client-types';
 import { SourceLogos } from './SourceLogos';
 import { CollapsibleSection } from './CollapsibleSection';
+import { VisualBanner } from '@/components/mall/visuals/VisualBanner';
 import { localizeSotdNarrative, localizeSotdSections } from '@/lib/shoppermind/localize';
+import { signalBannerSrc } from '@/lib/shoppermind/visualTheme';
 
 export function SignalOfTheDayCard({
   sotd,
@@ -18,6 +20,7 @@ export function SignalOfTheDayCard({
         title={t('shoppermind.signalSections.monthly')}
         defaultOpen={defaultOpen}
         toneClassName="ring-1 ring-bo-neutral-200/60"
+        topMedia={<VisualBanner src={signalBannerSrc()} alt={t('shoppermind.signalSections.monthly')} />}
       >
         <div className="text-sm text-bo-neutral-500">
           {t('shoppermind.signalOfTheDay.comingSoon', {
@@ -40,12 +43,14 @@ export function SignalOfTheDayCard({
       return sotd.date.slice(0, 10);
     }
   })();
+  const headline = sections?.headline ?? '';
   return (
     <CollapsibleSection
       title={t('shoppermind.signalSections.monthly')}
       timespan={monthLabel}
       defaultOpen={defaultOpen}
       toneClassName="ring-1 ring-bo-neutral-200/60"
+      topMedia={<VisualBanner src={signalBannerSrc(headline, narrative)} alt={headline || t('shoppermind.signalSections.monthly')} />}
     >
       {sections ? <SignalSections sections={sections} /> : (
         <p className="text-sm text-bo-neutral-800 leading-relaxed whitespace-pre-wrap">{narrative}</p>

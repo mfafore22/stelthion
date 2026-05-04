@@ -5,6 +5,8 @@ import { ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { MegaPath } from '@/lib/shoppermind/megaScenario';
 import { PathBody } from './PathBody';
+import { VisualBanner } from '@/components/mall/visuals/VisualBanner';
+import { pathBannerSrc } from '@/lib/shoppermind/visualTheme';
 
 const TONE_BORDER: Record<string, string> = {
   neutraali: 'border-bo-neutral-300', neutral: 'border-bo-neutral-300',
@@ -70,6 +72,7 @@ export function PathCollapsible({ path, selected }: { path: MegaPath; selected?:
       </button>
       {visibleOpen && (
         <div className="px-3 pb-3 pt-0">
+          <VisualBanner src={pathBannerSrc(path.tone)} alt={path.title} className="mb-3" />
           <PathBody path={path} />
         </div>
       )}

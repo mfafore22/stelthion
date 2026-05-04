@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Calendar, MapPin, Users } from 'lucide-react';
+import { MapPin, Users } from 'lucide-react';
+import { AttachmentShell } from './AttachmentShell';
 
 interface EventCardProps {
   data: unknown;
@@ -21,12 +22,10 @@ export function EventCard({ data, title }: EventCardProps) {
   }>).slice(0, 4);
 
   return (
-    <div className="bg-bo-glass-subtle border border-bo-neutral-200/30 rounded-xl p-3 mt-2">
-      <div className="text-[10px] font-medium text-bo-neutral-500 uppercase tracking-wider mb-2">{title}</div>
+    <AttachmentShell title={title} tone="orange">
       <div className="space-y-2">
         {events.map((e, i) => {
           const date = new Date(e.date);
-          const dateStr = date.toLocaleDateString('fi-FI', { weekday: 'short', day: 'numeric', month: 'short' });
           return (
             <div key={i} className="flex items-start gap-2">
               <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-bo-accent-50 flex flex-col items-center justify-center">
@@ -54,6 +53,6 @@ export function EventCard({ data, title }: EventCardProps) {
           );
         })}
       </div>
-    </div>
+    </AttachmentShell>
   );
 }

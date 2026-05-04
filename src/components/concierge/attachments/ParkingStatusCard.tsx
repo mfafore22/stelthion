@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Car } from 'lucide-react';
+import { AttachmentShell } from './AttachmentShell';
 
 interface ParkingStatusCardProps {
   data: unknown;
@@ -18,9 +18,9 @@ export function ParkingStatusCard({ data, title }: ParkingStatusCardProps) {
   };
 
   return (
-    <div className="bg-bo-glass-subtle border border-bo-neutral-200/30 rounded-xl p-3 mt-2">
+    <AttachmentShell title={title} tone="green">
       <div className="flex items-center justify-between mb-2">
-        <div className="text-[10px] font-medium text-bo-neutral-500 uppercase tracking-wider">{title}</div>
+        <div className="text-xs font-medium text-bo-neutral-600">{d.totalCapacity.toLocaleString()}</div>
         <div className="text-xs font-semibold text-bo-neutral-900">
           {Math.round(d.currentUtilization)}%
         </div>
@@ -43,6 +43,6 @@ export function ParkingStatusCard({ data, title }: ParkingStatusCardProps) {
           );
         })}
       </div>
-    </div>
+    </AttachmentShell>
   );
 }

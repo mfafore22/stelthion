@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { AttachmentShell } from './AttachmentShell';
 
 interface FootfallSparklineProps {
   data: unknown;
@@ -22,8 +23,7 @@ export function FootfallSparkline({ data, title }: FootfallSparklineProps) {
   if (chartData.length === 0) return null;
 
   return (
-    <div className="bg-bo-glass-subtle border border-bo-neutral-200/30 rounded-xl p-3 mt-2">
-      <div className="text-[10px] font-medium text-bo-neutral-500 uppercase tracking-wider mb-2">{title}</div>
+    <AttachmentShell title={title} tone="green">
       <div className="h-24">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={chartData} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
@@ -71,6 +71,6 @@ export function FootfallSparkline({ data, title }: FootfallSparklineProps) {
           </AreaChart>
         </ResponsiveContainer>
       </div>
-    </div>
+    </AttachmentShell>
   );
 }

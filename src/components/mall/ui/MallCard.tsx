@@ -66,7 +66,7 @@ const variantStyles = {
 export const MallCard = React.forwardRef<HTMLDivElement, MallCardProps>(
   (
     {
-      hover = false,
+      hover = true,
       onClick,
       padding = 'md',
       variant = 'elevated',

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 120">
+  <rect width="420" height="120" rx="28" fill="#fff"/>
+  <circle cx="80" cy="60" r="26" fill="#22c55e" opacity=".16"/>
+  <text x="46" y="72" fill="#15803d" font-size="30" font-family="Inter, Arial, sans-serif" font-weight="800">J</text>
+  <text x="102" y="58" fill="#111827" font-size="34" font-family="Inter, Arial, sans-serif" font-weight="800">JUMBO</text>
+  <text x="102" y="88" fill="#ef4444" font-size="24" font-family="Inter, Arial, sans-serif" font-weight="700">FLAMINGO</text>
+</svg>

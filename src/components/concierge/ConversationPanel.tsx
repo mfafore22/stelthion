@@ -17,6 +17,7 @@ import { QuickActionChips } from './QuickActionChips';
 import { SpecialistIndicator } from './SpecialistIndicator';
 import { ViewContextChip } from './ViewContextChip';
 import { TrendGreeting } from './TrendGreeting';
+import { ConciergeBanner } from './ConciergeBanner';
 import { useViewContext } from '@/lib/shoppermind/view-context';
 import { PropertySegmentedSelector } from '@/components/mall/shoppermind/PropertySegmentedSelector';
 import { Bot, MoreVertical, Minimize2, X } from 'lucide-react';
@@ -79,6 +80,7 @@ export function ConversationPanel() {
           onClose={closePanel}
           onDelete={deleteActiveConversation}
         />
+        <ConciergeBanner title={t('topbar.concierge', 'Concierge')} />
         <MallFocusSelector
           options={mallOptions}
           value={mallId}
@@ -119,6 +121,7 @@ export function ConversationPanel() {
         onClose={closePanel}
         onDelete={deleteActiveConversation}
       />
+      <ConciergeBanner title={t('topbar.concierge', 'Concierge')} />
       <MallFocusSelector
         options={mallOptions}
         value={mallId}

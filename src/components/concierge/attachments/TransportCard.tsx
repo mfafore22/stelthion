@@ -3,6 +3,7 @@
 import React from 'react';
 import { Train, Bus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { AttachmentShell } from './AttachmentShell';
 
 interface TransportCardProps {
   data: unknown;
@@ -20,9 +21,7 @@ export function TransportCard({ data, title }: TransportCardProps) {
   };
 
   return (
-    <div className="bg-bo-glass-subtle border border-bo-neutral-200/30 rounded-xl p-3 mt-2">
-      <div className="text-[10px] font-medium text-bo-neutral-500 uppercase tracking-wider mb-2">{title}</div>
-
+    <AttachmentShell title={title} tone="neutral">
       {d.trains.length > 0 && (
         <div className="mb-2">
           <div className="flex items-center gap-1 text-[10px] font-medium text-bo-neutral-700 mb-1">
@@ -61,6 +60,6 @@ export function TransportCard({ data, title }: TransportCardProps) {
           </div>
         </div>
       )}
-    </div>
+    </AttachmentShell>
   );
 }

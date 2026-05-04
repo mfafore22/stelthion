@@ -1195,7 +1195,8 @@
     "notFound": "Kiinteistöä ei löydy",
     "locationLoading": "Ladataan sijaintitietoja...",
     "locationNotAvailable": "Sijainti- ja saavutettavuustietoja ei vielä ole saatavilla tälle kiinteistölle.",
-    "eventsNotAvailable": "Tapahtumakalenteri ei vielä ole saatavilla tälle kiinteistölle."
+    "eventsNotAvailable": "Tapahtumakalenteri ei vielä ole saatavilla tälle kiinteistölle.",
+    "propertyBody": "Tarkastele operatiivista suorituskykyä, vuokralaisjakaumaa, sijaintikontekstia ja kiinteistötason tukisignaaleja samassa visuaalisessa järjestelmässä kuin ShopperMindissä."
   },
   "kpi": {
     "currentVisitors": "Nykyiset kävijät",

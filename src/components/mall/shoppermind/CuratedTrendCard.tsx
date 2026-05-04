@@ -10,6 +10,8 @@ import { MallFormatBadge } from './MallFormatBadge';
 import { ConfidencePip } from './ConfidencePip';
 import { MallImplicationsPanel } from './MallImplicationsPanel';
 import { CuratedCampaignList } from './CuratedCampaignList';
+import { VisualBanner } from '@/components/mall/visuals/VisualBanner';
+import { trendBannerSrc } from '@/lib/shoppermind/visualTheme';
 
 interface Props {
   trend: CuratedTrendResolved;
@@ -21,6 +23,11 @@ export function CuratedTrendCard({ trend, mallName }: Props) {
   const { t } = useTranslation('mall');
   return (
     <MallCard variant="glass" padding="md">
+      <VisualBanner
+        src={trendBannerSrc(trend.label, trend.body, trend.category, trend.marketsNote)}
+        alt={trend.label}
+        className="mb-3"
+      />
       <div className="flex items-start justify-between gap-3 mb-2">
         <h3 className="font-semibold text-bo-neutral-950 leading-snug tracking-tight text-base">
           {trend.label}

@@ -32,12 +32,19 @@ interface TrendShapeProps {
    * content (sparklines, badges, body text).
    */
   intensity?: TrendShapeIntensity;
+  /**
+   * Optional color override for semantic risk visuals where direction and
+   * color are separate concepts, e.g. high debt pressure should slope upward
+   * while still being red.
+   */
+  color?: string;
 }
 
 export function TrendShape({
   percentageChange,
   flatThreshold = 0.5,
   intensity = 'foreground',
+  color,
 }: TrendShapeProps) {
   const absChange = Math.abs(percentageChange);
   const isFlat = absChange < flatThreshold;
@@ -48,9 +55,16 @@ export function TrendShape({
     const isBg = intensity === 'background';
     if (isFlat) {
       return {
-        base: '#9ca3af',
+        base: color ?? '#9ca3af',
         startOpacity: isBg ? 0.08 : 0.3,
         endOpacity: isBg ? 0.08 : 0.3,
+      };
+    }
+    if (color) {
+      return {
+        base: color,
+        startOpacity: isBg ? 0.05 : 0.2,
+        endOpacity: isBg ? 0.22 : 0.6,
       };
     }
     if (isPositive) {

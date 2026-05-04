@@ -5,6 +5,8 @@ import { PathSummaryBand } from './PathSummaryBand';
 import { PathCollapsible } from './PathCollapsible';
 import { SourceLinkList } from './SourceLinkList';
 import type { ScenarioPathId } from './PathReferenceText';
+import { VisualBanner } from '@/components/mall/visuals/VisualBanner';
+import { sectionBannerSrc } from '@/lib/shoppermind/visualTheme';
 
 interface Props {
   scenario: MegaScenarioResolved;
@@ -24,6 +26,7 @@ export function MegaScenarioSection({ scenario, defaultOpen = false, selectedPat
         timespan={scenario.timespan}
         toneClassName="ring-1 ring-bo-neutral-200/60"
         defaultOpen={defaultOpen}
+        topMedia={<VisualBanner src={sectionBannerSrc('overview')} alt={title} />}
       >
         <p className="text-sm text-bo-neutral-700 leading-relaxed mb-2">{scenario.intro}</p>
         <div className="bo-surface-subtle rounded-lg border border-dashed border-bo-neutral-300 p-4 text-sm text-bo-neutral-600">
@@ -38,6 +41,7 @@ export function MegaScenarioSection({ scenario, defaultOpen = false, selectedPat
       timespan={scenario.timespan}
       toneClassName="ring-1 ring-bo-primary-200/60"
       defaultOpen={defaultOpen}
+      topMedia={<VisualBanner src={sectionBannerSrc('overview')} alt={title} />}
     >
       <p className="text-sm text-bo-neutral-800 leading-relaxed mb-2">{scenario.intro}</p>
       <p className="text-sm text-bo-neutral-700 leading-relaxed italic border-l-2 border-bo-primary-300 pl-3 mb-4">

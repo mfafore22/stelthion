@@ -6,6 +6,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { MallCard } from './ui/MallCard';
 import { Calendar, MapPin, Users, ExternalLink, Music, Trophy, Briefcase, Sparkles, Filter } from 'lucide-react';
 import type { EventsData, VenueEvent } from '@/lib/types/events';
@@ -74,6 +75,7 @@ export function EventsCalendar({ eventsData }: EventsCalendarProps) {
     <div className="space-y-6">
       {/* Nearby Venues */}
       <MallCard variant="glass">
+        <div className="mb-4 h-1.5 rounded-full bg-gradient-to-r from-bo-warning-dark via-bo-primary-700 to-bo-success-dark" />
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-bo-neutral-950 tracking-tight">
             {t('events.nearbyVenues')}
@@ -91,7 +93,7 @@ export function EventsCalendar({ eventsData }: EventsCalendarProps) {
               <button
                 key={`${venue.name}-${index}`}
                 onClick={() => setSelectedVenue(selectedVenue === venue.name ? null : venue.name)}
-                className={`rounded-lg overflow-hidden relative bg-white/85 backdrop-blur-md border-2 transition-all shadow-sm hover:shadow-md min-h-[140px] text-left w-full ${
+                className={`bo-surface-subtle bo-surface-hover relative min-h-[140px] w-full overflow-hidden rounded-xl border-2 text-left transition-all ${
                   selectedVenue === venue.name
                     ? 'border-bo-primary-600 ring-2 ring-bo-primary-300'
                     : 'border-bo-neutral-300/50 hover:border-bo-primary-400'
@@ -99,7 +101,7 @@ export function EventsCalendar({ eventsData }: EventsCalendarProps) {
               >
                 {venue.imageUrl && (
                   <div className="relative h-24 w-full overflow-hidden">
-                    <img src={venue.imageUrl} alt={venue.name} className="w-full h-full object-cover" />
+                    <Image src={venue.imageUrl} alt={venue.name} fill sizes="(max-width: 768px) 100vw, 360px" className="object-cover" />
                     {selectedVenue === venue.name && (
                       <div className="absolute inset-0 bg-bo-primary-600/20 flex items-center justify-center">
                         <div className="bg-white rounded-full p-2">
@@ -135,6 +137,7 @@ export function EventsCalendar({ eventsData }: EventsCalendarProps) {
 
       {/* Upcoming Events */}
       <MallCard variant="glass">
+        <div className="mb-4 h-1.5 rounded-full bg-gradient-to-r from-bo-primary-700 via-bo-success-dark to-bo-warning-dark" />
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className="text-lg font-semibold text-bo-neutral-950 tracking-tight">
@@ -151,7 +154,7 @@ export function EventsCalendar({ eventsData }: EventsCalendarProps) {
         <div className="space-y-6">
           {sortedDates.map((date) => (
             <div key={date}>
-              <div className="sticky top-0 bg-bo-glass-strong backdrop-blur-md rounded-lg px-4 py-2 mb-3 border border-bo-primary-200/30 shadow-sm z-10">
+              <div className="bo-surface-subtle sticky top-0 z-10 mb-3 rounded-lg border border-bo-primary-200/40 px-4 py-2 shadow-sm">
                 <div className="text-sm font-semibold text-bo-primary-700">{formatDate(date)}</div>
                 <div className="text-xs text-bo-neutral-600">
                   {new Date(date).toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric' })}
@@ -165,11 +168,11 @@ export function EventsCalendar({ eventsData }: EventsCalendarProps) {
                   return (
                     <div
                       key={event.id}
-                      className="rounded-lg bg-bo-glass-subtle p-4 border border-bo-neutral-200/30 hover:border-bo-primary-300 transition-all duration-200"
+                      className="bo-surface-subtle bo-surface-hover rounded-xl border border-bo-neutral-200/60 p-4 transition-all duration-200 hover:border-bo-primary-300"
                     >
                       {event.imageUrl && (
-                        <div className="mb-4 rounded-lg overflow-hidden border border-bo-neutral-300">
-                          <img src={event.imageUrl} alt={event.title} className="w-full h-48 object-cover" />
+                        <div className="relative mb-4 h-48 overflow-hidden rounded-lg border border-bo-neutral-300">
+                          <Image src={event.imageUrl} alt={event.title} fill sizes="(max-width: 768px) 100vw, 720px" className="object-cover" />
                         </div>
                       )}
                       <div className="flex gap-4">

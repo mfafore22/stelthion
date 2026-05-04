@@ -27,6 +27,14 @@ const MALL_CENTERS: Record<string, [number, number]> = {
   ideapark: [23.7592, 61.4033],
 };
 
+const ZONE_COLORS: Record<number, { color: string; opacity: number }> = {
+  5: { color: '#22c55e', opacity: 0.6 },
+  10: { color: '#3b82f6', opacity: 0.6 },
+  15: { color: '#f97316', opacity: 0.6 },
+  20: { color: '#f59e0b', opacity: 0.6 },
+  30: { color: '#ef4444', opacity: 0.6 },
+};
+
 export function CatchmentMap({ demographics, selectedZone, onZoneSelect, onPostalCodeClick, mallId, mallName }: CatchmentMapProps) {
   const { t } = useTranslation('mall');
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -36,25 +44,15 @@ export function CatchmentMap({ demographics, selectedZone, onZoneSelect, onPosta
   const [postalBoundaries, setPostalBoundaries] = useState<PostalCodeBoundary[]>([]);
   const [loadingBoundaries, setLoadingBoundaries] = useState(false);
   const [selectedPostalCode, setSelectedPostalCode] = useState<string | null>(null);
-  const [hasInitiallyFitted, setHasInitiallyFitted] = useState(false); // Track if we've done initial fit
+  const hasInitiallyFitted = useRef(false);
   const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
   const mmlApiKey = process.env.NEXT_PUBLIC_MML_API_KEY;
 
   const mallCenter: [number, number] = MALL_CENTERS[mallId] || MALL_CENTERS.ideapark;
 
-  // Zone colors - matching drive time zones
-  const zoneColors: Record<number, { color: string; opacity: number }> = {
-    5: { color: '#22c55e', opacity: 0.6 },   // Green - increased opacity
-    10: { color: '#3b82f6', opacity: 0.6 },  // Blue - increased opacity
-    15: { color: '#f97316', opacity: 0.6 },  // Orange - increased opacity
-    20: { color: '#f59e0b', opacity: 0.6 },  // Amber (between orange and red)
-    30: { color: '#ef4444', opacity: 0.6 },  // Red - increased opacity
-  };
-
-  // Helper to safely get zone color with fallback
-  const getZoneColor = (driveTimeMinutes: number): { color: string; opacity: number } => {
-    return zoneColors[driveTimeMinutes] || { color: '#9ca3af', opacity: 0.6 }; // Gray fallback
-  };
+  const getZoneColor = React.useCallback((driveTimeMinutes: number): { color: string; opacity: number } => {
+    return ZONE_COLORS[driveTimeMinutes] || { color: '#9ca3af', opacity: 0.6 };
+  }, []);
 
   // Memoize postal codes to prevent infinite loops
   const allPostalCodes = useMemo(
@@ -66,7 +64,7 @@ export function CatchmentMap({ demographics, selectedZone, onZoneSelect, onPosta
   useEffect(() => {
     if (!allPostalCodes.length) return;
 
-    setLoadingBoundaries(true);
+    queueMicrotask(() => setLoadingBoundaries(true));
     fetchPostalCodeBoundaries(allPostalCodes)
       .then(boundaries => {
         console.log('[CatchmentMap] Loaded', boundaries.length, 'postal boundaries');
@@ -262,7 +260,7 @@ export function CatchmentMap({ demographics, selectedZone, onZoneSelect, onPosta
     console.log('[CatchmentMap] Postal boundary layers added successfully');
 
     // Fit map to show all postal code boundaries - ONLY on initial load, not when switching zones
-    if (!hasInitiallyFitted) {
+    if (!hasInitiallyFitted.current) {
       try {
         const bounds = new mapboxgl.LngLatBounds();
         postalBoundaries.forEach(boundary => {
@@ -279,7 +277,7 @@ export function CatchmentMap({ demographics, selectedZone, onZoneSelect, onPosta
           }
         });
         map.fitBounds(bounds, { padding: 50, duration: 1000 });
-        setHasInitiallyFitted(true); // Mark that we've done the initial fit
+        hasInitiallyFitted.current = true;
       } catch (error) {
         console.error('[CatchmentMap] Error fitting bounds:', error);
       }
@@ -348,7 +346,7 @@ export function CatchmentMap({ demographics, selectedZone, onZoneSelect, onPosta
       map.off('mousemove', 'postal-fill', handleMouseMove);
       map.off('mouseleave', 'postal-fill', handleMouseLeavePopup);
     };
-  }, [mapLoaded, postalBoundaries, selectedZone, selectedPostalCode, onPostalCodeClick, demographics, zoneColors, hasInitiallyFitted]);
+  }, [mapLoaded, postalBoundaries, selectedZone, selectedPostalCode, onPostalCodeClick, demographics, getZoneColor]);
 
   // Update postal code highlighting when selection changes
   useEffect(() => {
@@ -393,7 +391,7 @@ export function CatchmentMap({ demographics, selectedZone, onZoneSelect, onPosta
 
   if (!token) {
     return (
-      <div className="flex h-[500px] w-full items-center justify-center bg-bo-neutral-100 text-bo-neutral-600 rounded-2xl border border-bo-neutral-200">
+      <div className="bo-surface flex h-[500px] w-full items-center justify-center rounded-2xl border-2 border-bo-primary-200/50 text-bo-neutral-600">
         <div className="text-center">
           <p className="font-medium mb-2">Map Unavailable</p>
           <p className="text-sm">Add NEXT_PUBLIC_MAPBOX_TOKEN to display catchment map</p>
@@ -403,12 +401,13 @@ export function CatchmentMap({ demographics, selectedZone, onZoneSelect, onPosta
   }
 
   return (
-    <div className="relative">
-      <div ref={containerRef} className="h-[500px] w-full rounded-2xl overflow-hidden shadow-bo border border-bo-neutral-200" />
+    <div className="bo-surface relative overflow-hidden rounded-2xl border-2 border-bo-primary-200/50 p-3 shadow-bo-glass">
+      <div className="mb-3 h-1.5 rounded-full bg-gradient-to-r from-bo-success-dark via-bo-primary-700 to-bo-warning-dark" />
+      <div ref={containerRef} className="h-[500px] w-full rounded-xl overflow-hidden border border-bo-neutral-200/60 shadow-bo" />
 
       {/* Loading indicator */}
       {loadingBoundaries && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-sm rounded-lg px-4 py-2 shadow-lg border border-bo-neutral-200">
+        <div className="bo-surface-subtle absolute top-8 left-1/2 -translate-x-1/2 rounded-lg border border-bo-neutral-200/60 px-4 py-2 shadow-lg">
           <div className="flex items-center gap-2 text-sm text-bo-neutral-700">
             <SwirlLoader size="sm" />
             <span>{t('analytics.loadingBoundaries')}</span>
@@ -417,7 +416,7 @@ export function CatchmentMap({ demographics, selectedZone, onZoneSelect, onPosta
       )}
 
       {/* Zone Legend */}
-      <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-bo-neutral-200 max-w-[280px]">
+      <div className="bo-surface-subtle absolute bottom-7 left-7 max-w-[280px] rounded-xl border border-bo-neutral-200/60 p-4 shadow-bo-glass">
         <div className="text-xs font-semibold text-bo-neutral-950 mb-3">Drive-Time Zones</div>
         <div className="space-y-2">
           {demographics.zones.map((zone, index) => {
@@ -435,7 +434,7 @@ export function CatchmentMap({ demographics, selectedZone, onZoneSelect, onPosta
                 className={`flex items-center gap-2 text-xs w-full text-left transition-all duration-200 p-2 rounded-lg ${
                   selectedZone === index
                     ? 'bg-bo-primary-50 ring-2 ring-bo-primary-300'
-                    : 'hover:bg-bo-neutral-50'
+                    : 'hover:bg-white/55'
                 }`}
               >
                 <div

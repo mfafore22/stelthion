@@ -10,6 +10,8 @@
  */
 
 import brandProfiles from '../../../data/malls/brandProfiles.json';
+import { getMall, getMallBrandColors } from './mallDatabase';
+import { getMallLogo } from './mallLogos';
 
 export interface MallColors {
   primary: string;
@@ -53,6 +55,28 @@ export function getMallIdentity(mallId: string, customerId?: string): MallIdenti
     if (tenantProfile) {
       return { id: customerId, ...tenantProfile } as MallIdentity;
     }
+  }
+
+  const mall = getMall(mallId);
+  if (mall) {
+    const colors = getMallBrandColors(mallId);
+    return {
+      id: mallId,
+      name: mall.name,
+      logo: getMallLogo(mallId) ?? '',
+      colors: {
+        ...colors,
+        background: '#F8F6F3',
+      },
+      gradient: {
+        from: colors.primary,
+        to: colors.secondary,
+      },
+      typography: {
+        fontFamily: 'Inter, sans-serif',
+        headingWeight: 700,
+      },
+    };
   }
 
   return { id: 'fallback', ...brandProfiles.fallback } as MallIdentity;
