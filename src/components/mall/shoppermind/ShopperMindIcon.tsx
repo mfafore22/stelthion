@@ -10,7 +10,7 @@ export function ShopperMindIcon({ className }: { className?: string }) {
       aria-hidden
     >
       <Image
-        src="/assets/icons/shoppermind-brain-basket.png"
+        src="/assets/icons/shoppermind-brain-basket-v2.png"
         alt=""
         fill
         sizes="32px"
