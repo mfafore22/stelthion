@@ -20,6 +20,7 @@ import 'dotenv/config'
 import bcrypt from 'bcrypt'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { PrismaClient, MallStatus } from '@prisma/client'
+import { getSelloTenantSummary } from '../src/lib/data/selloTenantMix'
 
 const adapter = new PrismaPg({
   connectionString: process.env.DIRECT_URL || process.env.DATABASE_URL!,
@@ -33,7 +34,7 @@ const REALIDEA_MALLS: Array<{
   status: MallStatus
   totalShops?: number
 }> = [
-  { mallId: 'realidea-sello', name: 'Sello', city: 'Espoo', status: 'LIVE', totalShops: 160 },
+  { mallId: 'realidea-sello', name: 'Sello', city: 'Espoo', status: 'LIVE', totalShops: 163 },
   { mallId: 'realidea-tripla', name: 'Mall of Tripla', city: 'Helsinki', status: 'LIVE' },
   { mallId: 'realidea-kamp-galleria', name: 'Kämp Galleria', city: 'Helsinki', status: 'LIVE' },
   { mallId: 'realidea-karuselli', name: 'Karuselli', city: 'Kerava', status: 'LIVE' },
@@ -69,6 +70,18 @@ async function seedSelloStub() {
     },
   })
   console.log('  Stats: realidea-sello (zeroed stub)')
+}
+
+async function seedSelloCategories() {
+  const summary = getSelloTenantSummary()
+  for (const cat of summary.topCategories) {
+    await prisma.mallCategory.upsert({
+      where: { mallId_name: { mallId: 'realidea-sello', name: cat.category } },
+      update: { shopCount: cat.count, percentage: cat.percentage },
+      create: { mallId: 'realidea-sello', name: cat.category, shopCount: cat.count, percentage: cat.percentage },
+    })
+  }
+  console.log('  Categories: realidea-sello tenant mix')
 }
 
 async function seedDemoUser(customerId: string) {
@@ -125,6 +138,7 @@ async function main() {
   }
 
   await seedSelloStub()
+  await seedSelloCategories()
   await seedDemoUser(customer.id)
 
   const count = await prisma.mall.count({ where: { customerId: customer.id } })

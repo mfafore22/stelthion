@@ -25,9 +25,15 @@ export async function GET(
     capacity: z.capacity,
     areaSqm: z.areaSqm,
   });
+  const floors = zones.reduce<Record<string, ReturnType<typeof mapZone>[]>>((acc, zone) => {
+    acc[zone.floor] = acc[zone.floor] ?? [];
+    acc[zone.floor].push(mapZone(zone));
+    return acc;
+  }, {});
 
   return NextResponse.json({
     groundZones: zones.filter((z) => z.floor === 'ground').map(mapZone),
     upperZones: zones.filter((z) => z.floor === 'upper').map(mapZone),
+    floors,
   });
 }
