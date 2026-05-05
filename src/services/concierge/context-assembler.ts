@@ -11,6 +11,7 @@ import { getLLMClient, type LLMMessage, type LLMToolCall } from './llm-client';
 import { getPropertyPersona } from './property-persona';
 import { getToolSchemas } from './tools';
 import { routeToAgent } from './agent-router';
+import { campaignBriefResponse } from './campaign-brief-response';
 import type { AssistantViewContext } from '@/lib/assistant-flow/types';
 
 // ── Types ─────────────────────────────────────────────────
@@ -105,6 +106,8 @@ export async function* orchestrateChat(
     const routing = routeToAgent(lastUserMsg.content);
     agentRole = routing.agentRole;
   }
+  const directCampaignResponse = campaignBriefResponse(messages, viewContext, language);
+  if (directCampaignResponse) agentRole = 'event-coordinator';
 
   const viewContextBlock = renderViewContextBlock(viewContext);
   const systemPrompt = viewContextBlock
@@ -121,6 +124,17 @@ export async function* orchestrateChat(
     type: 'message_start',
     data: { agentRole, mallId },
   };
+
+  if (directCampaignResponse) {
+    for (const chunk of chunkText(directCampaignResponse)) {
+      yield { type: 'message_chunk', data: { text: chunk } };
+    }
+    yield {
+      type: 'message_complete',
+      data: { content: directCampaignResponse, agentRole },
+    };
+    return;
+  }
 
   // Track tool calls across rounds to avoid duplicate execution / attachment spam
   const executedToolKeys = new Set<string>();
@@ -250,16 +264,36 @@ function renderViewContextBlock(
   }
   if (viewContext.kind === 'campaign_brief') {
     const labels = viewContext.payload?.labels as Record<string, string> | undefined;
+    const metrics = viewContext.payload?.metrics as Record<string, { value?: string; hint?: string }> | undefined;
+    const draft = viewContext.payload?.draft as {
+      tenantRoles?: Array<{ name?: string; location?: string; role?: string }>;
+      liveConnectors?: string[];
+      learningCapture?: string[];
+    } | null | undefined;
+    const workflow = viewContext.payload?.workflow as { steps?: Array<{ title?: string; body?: string; demoContent?: string }> } | undefined;
+    const steps = workflow?.steps?.map((step) => `${step.title}: ${step.body}${step.demoContent ? ` ${step.demoContent}` : ''}`);
     return [
       'CURRENT WORK CONTEXT',
       'The user is creating a campaign brief from the Campaigns workspace.',
       labels?.mall ? `- Property: ${labels.mall}` : null,
       labels?.zone ? `- Zone: ${labels.zone}` : null,
       labels?.audience ? `- Audience: ${labels.audience}` : null,
+      labels?.category ? `- Tenant category: ${labels.category}` : null,
+      labels?.stores ? `- Suggested tenant participants: ${labels.stores}` : null,
       labels?.budget ? `- Budget: ${labels.budget}` : null,
       labels?.duration ? `- Duration: ${labels.duration}` : null,
+      labels?.impact ? `- ShopperMind tenant-impact source: ${labels.impact}` : null,
+      metrics?.visits?.value ? `- Visitor estimate: ${metrics.visits.value} (${metrics.visits.hint ?? 'demo model'})` : null,
+      metrics?.sales?.value ? `- Sales signal: ${metrics.sales.value} (${metrics.sales.hint ?? 'demo model'})` : null,
+      metrics?.tenants?.value ? `- Tenant count: ${metrics.tenants.value} (${metrics.tenants.hint ?? 'demo model'})` : null,
+      draft?.tenantRoles?.length ? `- Tenant roles: ${draft.tenantRoles.map((tenant) => `${tenant.name} (${tenant.location}): ${tenant.role}`).join(' | ')}` : null,
+      steps?.length ? `- Workflow: ${steps.join(' | ')}` : null,
+      draft?.liveConnectors?.length ? `- Live data connectors: ${draft.liveConnectors.join(', ')}` : null,
+      draft?.learningCapture?.length ? `- Learning capture fields: ${draft.learningCapture.join(', ')}` : null,
       '',
       'Use these selected settings to draft a practical campaign brief. Do not ask the user to re-select them.',
+      'Answer as a campaign designer: include objective, customer need, tenant role, channel mix, activation concept, KPI plan, approval steps, and what data should be connected later.',
+      'Do not answer with unrelated demographics, events, or generic property information unless it directly supports this campaign brief.',
     ].filter(Boolean).join('\n');
   }
   const payload = 'payload' in viewContext && viewContext.payload
@@ -285,6 +319,12 @@ function stableArgsKey(args: unknown): string {
   } catch {
     return String(args);
   }
+}
+
+function chunkText(text: string) {
+  const chunks: string[] = [];
+  for (let i = 0; i < text.length; i += 180) chunks.push(text.slice(i, i + 180));
+  return chunks;
 }
 
 /** Map the dominant tool name to a display agent role. */

@@ -9,6 +9,8 @@ export interface TenantImpactStore {
   category: string;
   floor: string;
   location: string;
+  categoryIds?: string[];
+  insightIds?: string[];
 }
 
 export interface TenantImpactInsight {
@@ -198,9 +200,20 @@ export function getTenantImpactInsights(mallId: string, lang?: string | null): T
 
 export function getTenantCampaignSeed(mallId: string, lang?: string | null) {
   const insights = getTenantImpactInsights(mallId, lang);
+  const stores = new Map<string, TenantImpactStore>();
+  for (const insight of insights) {
+    for (const store of insight.stores) {
+      const existing = stores.get(store.name);
+      stores.set(store.name, {
+        ...store,
+        categoryIds: Array.from(new Set([...(existing?.categoryIds ?? []), ...insight.categoryIds])),
+        insightIds: Array.from(new Set([...(existing?.insightIds ?? []), insight.id])),
+      });
+    }
+  }
   return {
     categories: Array.from(new Set(insights.flatMap((insight) => insight.categoryIds))),
-    stores: Array.from(new Map(insights.flatMap((insight) => insight.stores).map((store) => [store.name, store])).values()),
+    stores: Array.from(stores.values()),
     insights,
   };
 }
