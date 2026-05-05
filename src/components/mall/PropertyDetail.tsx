@@ -37,6 +37,7 @@ import { useTranslation } from 'react-i18next';
 import { VideoAnalysis } from './video-analysis/VideoAnalysis';
 import { MallIdentityBanner } from '@/components/mall/visuals/MallIdentityBanner';
 import { getMallLogo } from '@/lib/mall/mallLogos';
+import { SelloTenantLocations } from './SelloTenantLocations';
 
 // Baseline deltas — static until real sensor comparison is available.
 const BASE_DELTAS = {
@@ -353,21 +354,21 @@ export function PropertyDetail({ mallId: mallIdProp, showPredicted = false }: Pr
           label={t('detail.topCategory')}
           value={topCategory ? t(`tenants.categoryNames.${topCategory.name}`, { defaultValue: topCategory.name }) : 'N/A'}
           delta={topCategory ? `${topCategory.shopCount} ${t('detail.shops')} (${topCategory.percentage.toFixed(1)}%)` : ''}
-          accentColor={identity.colors.secondary}
+          surfaceAccent={{ primary: identity.colors.secondary, secondary: identity.colors.accent }}
           trendPercentage={topCategory?.percentage ?? 0}
         />
         <MallKPICard
           label={t('detail.foodBeverage')}
           value={`${findCategory('Food & Beverage')?.percentage.toFixed(1) || 0}%`}
           delta={`${findCategory('Food & Beverage')?.shopCount || 0} ${t('detail.shops')}`}
-          accentColor={identity.colors.accent}
+          surfaceAccent={{ primary: identity.colors.accent, secondary: identity.colors.secondary }}
           trendPercentage={findCategory('Food & Beverage')?.percentage ?? 0}
         />
         <MallKPICard
           label={t('detail.homeLiving')}
           value={`${findCategory('Home & Living')?.percentage.toFixed(1) || 0}%`}
           delta={`${findCategory('Home & Living')?.shopCount || 0} ${t('detail.shops')}`}
-          accentColor={identity.colors.primary}
+          surfaceAccent={{ primary: identity.colors.primary, secondary: identity.colors.secondary }}
           trendPercentage={findCategory('Home & Living')?.percentage ?? 0}
         />
       </div>
@@ -518,6 +519,7 @@ export function PropertyDetail({ mallId: mallIdProp, showPredicted = false }: Pr
             />
             <TopCategoriesTable categories={categories.map(c => ({ category: c.name, count: c.shopCount, percentage: c.percentage }))} limit={15} />
           </div>
+          <SelloTenantLocations mallId={mallId} />
           <TenantPerformanceTable mallId={mallId} expanded />
         </TabsContent>
 

@@ -782,7 +782,7 @@
     },
     "trajectory": {
       "title": "Trendin kehitys",
-      "subtitle": "Yhdistelmäpisteet ajan mittaan — valitse aikaikkuna",
+      "subtitle": "Yhdistelmäpisteet ajan mittaan - valitse aikaikkuna",
       "empty": "Pisteytyshistoriaa ei ole vielä kertynyt.",
       "windows": {
         "7d": "7 pv",
@@ -808,10 +808,10 @@
       "relevance": "Yhdistelmäpisteet (0–1): kertoo kuinka merkittävä tämä trendi on juuri tälle markkinalle. Yhdistää volyymin, nopeuden, lähteiden monipuolisuuden ja kulttuurisen / jalankulun läheisyyden.",
       "velocity": "Trendin kasvuvauhti: kuinka nopeasti signaalimäärä muuttuu. Positiivinen = nousussa, negatiivinen = laskussa.",
       "acceleration": "Kasvuvauhdin muutos: kiihtyykö vai hidastuuko trendi. Positiivinen kiihtyvyys = nousu voimistuu.",
-      "volume": "Havaittujen signaalien määrä tällä jaksolla — kuinka monta kertaa trendistä on saatu mainintoja eri lähteistä.",
-      "cultural": "Kulttuurinen ulottuvuus: kuinka lähellä trendi on tämän markkinan kulttuurista keskustelua — esim. somessa, mediassa ja ihmisten arjen valinnoissa.",
-      "footTraffic": "Jalankulkuliikenne: kuinka lähellä trendi on todellista kävijävirtaa kauppakeskuksen ympärillä — paikallisia tapahtumia, liikennettä ja saavutettavuutta.",
-      "composite": "Yhdistelmä: kulttuurisen ja jalankulun signaalien painotettu yhdistelmä — kokonaiskuva trendin merkittävyydestä."
+      "volume": "Havaittujen signaalien määrä tällä jaksolla - kuinka monta kertaa trendistä on saatu mainintoja eri lähteistä.",
+      "cultural": "Kulttuurinen ulottuvuus: kuinka lähellä trendi on tämän markkinan kulttuurista keskustelua - esim. somessa, mediassa ja ihmisten arjen valinnoissa.",
+      "footTraffic": "Jalankulkuliikenne: kuinka lähellä trendi on todellista kävijävirtaa kauppakeskuksen ympärillä - paikallisia tapahtumia, liikennettä ja saavutettavuutta.",
+      "composite": "Yhdistelmä: kulttuurisen ja jalankulun signaalien painotettu yhdistelmä - kokonaiskuva trendin merkittävyydestä."
     },
     "sections": {
       "summary": "Tiivistelmä",
@@ -884,8 +884,8 @@
       "relatedTrendsEmpty": "Tälle trendille ei ole liitettyjä trendejä.",
       "linkGraph": "Linkkikartta",
       "linkGraphEmpty": "Pääteltyä linkkiä ei vielä ole.",
-      "upstream": "Ylävirta — trendit, jotka syöttävät tätä",
-      "downstream": "Alavirta — trendit, joihin tämä syöttää",
+      "upstream": "Ylävirta - trendit, jotka syöttävät tätä",
+      "downstream": "Alavirta - trendit, joihin tämä syöttää",
       "recentScoring": "Viimeisin pisteytys",
       "details": "Tiedot",
       "tags": "Tunnisteet",
@@ -974,7 +974,7 @@
       "defaultFocus": "Kaupan trendiäly",
       "loading": "Ladataan trendidataa…",
       "ctaTitle": "Näe ShopperMind kauppakeskuksesi omilla tiedoilla",
-      "ctaBody": "Kun yhdistetään Stelthioniin, ShopperMind korreloi nämä trendit kauppakeskuksesi todellisen kävijäliikenteen kanssa — näyttäen mitkä trendit jo vetävät liikennettä.",
+      "ctaBody": "Kun yhdistetään Stelthioniin, ShopperMind korreloi nämä trendit kauppakeskuksesi todellisen kävijäliikenteen kanssa - näyttäen mitkä trendit jo vetävät liikennettä.",
       "bookDemo": "Varaa demo"
     },
     "section": {
@@ -1235,7 +1235,13 @@
     "locationLoading": "Ladataan sijaintitietoja...",
     "locationNotAvailable": "Sijainti- ja saavutettavuustietoja ei vielä ole saatavilla tälle kiinteistölle.",
     "eventsNotAvailable": "Tapahtumakalenteri ei vielä ole saatavilla tälle kiinteistölle.",
-    "propertyBody": "Tarkastele operatiivista suorituskykyä, vuokralaisjakaumaa, sijaintikontekstia ja kiinteistötason tukisignaaleja samassa visuaalisessa järjestelmässä kuin ShopperMindissä."
+    "propertyBody": "Tarkastele operatiivista suorituskykyä, vuokralaisjakaumaa, sijaintikontekstia ja kiinteistötason tukisignaaleja samassa visuaalisessa järjestelmässä kuin ShopperMindissä.",
+    "selloTenantLocations": {
+      "title": "Sellon liiketilojen sijainnit",
+      "body": "Virallinen liiketilalista ryhmiteltynä P1-tasolle ja liikekerroksiin 1-4.",
+      "floor": "Kerros {{floor}}",
+      "source": "Lähde:"
+    }
   },
   "kpi": {
     "currentVisitors": "Nykyiset kävijät",

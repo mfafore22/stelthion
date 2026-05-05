@@ -22,7 +22,8 @@ import { ZoneStoreList } from './ZoneStoreList';
 import { CounterDataPanel } from './CounterDataPanel';
 import {
   GENERIC_LARGE_MALL_GROUND_ENTRANCES,
-  getGenericLargeMallFloorplan,
+  getMallFloorplan,
+  type FloorplanFloor,
 } from '@/lib/mall/floorplanAssets';
 import { usePublishedFloorplan } from '@/hooks/usePublishedFloorplan';
 import { decollidLabels, getPolygonBbox, type LabelInput } from '@/lib/utils/labelDecollision';
@@ -55,7 +56,7 @@ interface CounterApiResponse {
 
 /** Data snapshot exposed via ref for report export */
 export interface FootfallReportData {
-  floor: 'ground' | 'upper';
+  floor: FloorplanFloor;
   hour: number;
   dayOfWeek: number;
   zones: { zone: IdeaparkZone; visitors: ZoneVisitorData }[];
@@ -71,16 +72,14 @@ interface FootfallAnalysisProps {
   onToggleCamera?: (id: string) => void;
   onToggleZone?: (id: string) => void;
   /** Called when the user switches floor */
-  onFloorChange?: (floor: 'ground' | 'upper') => void;
+  onFloorChange?: (floor: FloorplanFloor) => void;
   /** Render prop for injecting an SVG overlay (e.g. flow arrows) on top of the floorplan */
-  overlayContent?: (floor: 'ground' | 'upper') => React.ReactNode;
+  overlayContent?: (floor: FloorplanFloor) => React.ReactNode;
   /** Ref that receives current state snapshot for report export */
   reportDataRef?: React.RefObject<FootfallReportData | null>;
   /** Hide the density colour legend at the bottom (e.g. when used inside analysis modes) */
   hideDensityLegend?: boolean;
 }
-
-type Floor = 'ground' | 'upper';
 
 const HOUR_LABELS: Record<number, string> = {
   10: '10:00', 11: '11:00', 12: '12:00', 13: '13:00', 14: '14:00',
@@ -107,7 +106,10 @@ export function FootfallAnalysis({
 }: FootfallAnalysisProps) {
   const { t } = useTranslation('mall');
   const [now] = useState(() => new Date());
-  const [floor, setFloor] = useState<Floor>('ground');
+  const floorOptions = useMemo<FloorplanFloor[]>(() => mallId === 'realidea-sello'
+    ? ['p1', 'floor1', 'floor2', 'floor3', 'floor4']
+    : ['ground', 'upper'], [mallId]);
+  const [floor, setFloor] = useState<FloorplanFloor>(floorOptions[0] ?? 'ground');
   const [hour, setHour] = useState<number>(now.getHours() >= 10 && now.getHours() <= 21 ? now.getHours() : 14);
   const [playing, setPlaying] = useState(false);
   const [selectedZone, setSelectedZone] = useState<IdeaparkZone | null>(null);
@@ -184,6 +186,20 @@ export function FootfallAnalysis({
     });
     return () => { cancelled = true; };
   }, [floor]);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!floorOptions.includes(floor)) {
+      const nextFloor = floorOptions[0] ?? 'ground';
+      Promise.resolve().then(() => {
+        if (cancelled) return;
+        setFloor(nextFloor);
+        setSelectedZone(null);
+        onFloorChange?.(nextFloor);
+      });
+    }
+    return () => { cancelled = true; };
+  }, [floor, floorOptions, onFloorChange]);
 
   // Wheel / trackpad zoom — non-passive listeners so preventDefault stops page scroll
   useEffect(() => {
@@ -268,20 +284,20 @@ export function FootfallAnalysis({
 
   // Prefer published floorplan data from DB; fall back to static imports
   const published = usePublishedFloorplan(mallId);
-  const activeCameras = floor === 'upper' ? published.upperCameras : published.groundCameras;
+  const activeCameras = published.byFloor[floor]?.cameras ?? [];
+  const floorplanViewBox = mallId === 'realidea-sello' ? { w: 2072, h: 1216 } : floor === 'upper' ? { w: 1518, h: 688 } : { w: 1504, h: 704 };
+  const floorplanAspect = mallId === 'realidea-sello' ? '58.7%' : floor === 'upper' ? '45.3%' : '46.8%';
 
   // Use only published DB data — no static fallback.
   // Show empty floorplan while loading; avoids stale static zones conflicting with live data.
   const hasPublishedGround = published.groundZones !== null;
-  const allZones = floor === 'upper'
-    ? (published.upperZones ?? [])
-    : (published.groundZones ?? []);
+  const allZones = published.byFloor[floor]?.zones ?? [];
 
   // Filter out store zones — they have capacity 0 and make the heat map look messy
   const activeZones = allZones;
 
   // De-collide zone/store name labels so they don't overlap
-  const viewBox = floor === 'upper' ? { w: 1518, h: 688 } : { w: 1504, h: 704 };
+  const viewBox = floorplanViewBox;
   const decollidedLabels = useMemo(() => {
     if (activeZones.length === 0) return [];
     const allInputs: LabelInput[] = activeZones.map((z) => {
@@ -371,7 +387,7 @@ export function FootfallAnalysis({
       <div className="flex items-center justify-between px-4 py-3 border-b border-bo-primary-100/60 bg-bo-glass-primary">
         {/* Floor selector */}
         <div className="flex items-center gap-1 bg-bo-primary-50/60 rounded-lg p-1">
-          {(['ground', 'upper'] as Floor[]).map((f) => (
+          {floorOptions.map((f) => (
             <button
               key={f}
               onClick={() => { setFloor(f); setSelectedZone(null); onFloorChange?.(f); }}
@@ -382,7 +398,7 @@ export function FootfallAnalysis({
                   : 'text-bo-neutral-500 hover:text-bo-neutral-700'
               )}
             >
-              {f === 'ground' ? t('heatmap.groundFloor') : t('heatmap.upperFloor')}
+              {floorLabel(f, t('heatmap.groundFloor'), t('heatmap.upperFloor'))}
             </button>
           ))}
         </div>
@@ -514,7 +530,7 @@ export function FootfallAnalysis({
       <div
         ref={mapContainerRef}
         className="relative w-full overflow-hidden"
-        style={{ paddingBottom: floor === 'upper' ? '45.3%' : '46.8%', cursor: zoom > 1 ? 'grab' : 'default', touchAction: 'none' }}
+        style={{ paddingBottom: floorplanAspect, cursor: zoom > 1 ? 'grab' : 'default', touchAction: 'none' }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -552,7 +568,7 @@ export function FootfallAnalysis({
         >
           {/* Floor plan image */}
           <Image
-            src={getGenericLargeMallFloorplan(floor)}
+            src={getMallFloorplan(mallId, floor)}
             alt={floor === 'upper'
               ? t('footfall.floorplanAlt.upper')
               : t('footfall.floorplanAlt.ground')}
@@ -566,7 +582,7 @@ export function FootfallAnalysis({
           <svg
             ref={svgRef}
             className="absolute inset-0 w-full h-full"
-            viewBox={floor === 'upper' ? '0 0 1518 688' : '0 0 1504 704'}
+            viewBox={`0 0 ${floorplanViewBox.w} ${floorplanViewBox.h}`}
             preserveAspectRatio="xMidYMid meet"
             style={{ pointerEvents: 'none' }}
           >
@@ -965,4 +981,11 @@ export function FootfallAnalysis({
       )}
     </Card>
   );
+}
+
+function floorLabel(floor: FloorplanFloor, groundLabel: string, upperLabel: string) {
+  if (floor === 'ground') return groundLabel;
+  if (floor === 'upper') return upperLabel;
+  if (floor === 'p1') return 'P1';
+  return floor.replace('floor', '');
 }

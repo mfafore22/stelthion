@@ -791,7 +791,7 @@
     },
     "trajectory": {
       "title": "Trendens utveckling",
-      "subtitle": "Sammansatt poäng över tid — välj ett fönster",
+      "subtitle": "Sammansatt poäng över tid - välj ett fönster",
       "empty": "Ingen poängshistorik ännu.",
       "windows": {
         "7d": "7 d",
@@ -817,10 +817,10 @@
       "relevance": "Kombinerat poäng (0–1): hur relevant trenden är för just denna marknad. Kombinerar volym, hastighet, källmangfald och kulturell / fotgängarnärhet.",
       "velocity": "Trendens tillväxttakt: hur snabbt signalvolymen förändras. Positivt = stigande, negativt = fallande.",
       "acceleration": "Förändring av tillväxttakten: om trenden accelererar eller avtar. Positivt = momentum byggs upp.",
-      "volume": "Antal observerade signaler under perioden — hur många gånger trenden har nämnts i olika källor.",
-      "cultural": "Kulturell dimension: hur nära trenden ligger marknadens kulturella samtal — sociala medier, nyheter och vardagliga val.",
-      "footTraffic": "Fotgängardimension: hur nära trenden ligger den faktiska besökströmmen runt köpcentrumet — lokala evenemang, transit och tillgänglighet.",
-      "composite": "Kombinerat: viktad blandning av de kulturella och fotgängarsignalerna — den övergripande bilden av trendens relevans."
+      "volume": "Antal observerade signaler under perioden - hur många gånger trenden har nämnts i olika källor.",
+      "cultural": "Kulturell dimension: hur nära trenden ligger marknadens kulturella samtal - sociala medier, nyheter och vardagliga val.",
+      "footTraffic": "Fotgängardimension: hur nära trenden ligger den faktiska besökströmmen runt köpcentrumet - lokala evenemang, transit och tillgänglighet.",
+      "composite": "Kombinerat: viktad blandning av de kulturella och fotgängarsignalerna - den övergripande bilden av trendens relevans."
     },
     "sections": {
       "summary": "Sammanfattning",
@@ -893,8 +893,8 @@
       "relatedTrendsEmpty": "Inga relaterade trender kopplade till den här ännu.",
       "linkGraph": "Länkkarta",
       "linkGraphEmpty": "Inga härledda länkar ännu.",
-      "upstream": "Uppströms — trender som matar in i den här",
-      "downstream": "Nedströms — trender som den här matar in i",
+      "upstream": "Uppströms - trender som matar in i den här",
+      "downstream": "Nedströms - trender som den här matar in i",
       "recentScoring": "Senaste poängsättning",
       "details": "Detaljer",
       "tags": "Taggar",
@@ -983,7 +983,7 @@
       "defaultFocus": "Detaljhandelns trendintelligens",
       "loading": "Laddar trenddata…",
       "ctaTitle": "Se ShopperMind med ditt köpcentrums data",
-      "ctaBody": "När det är anslutet till Stelthion korrelerar ShopperMind de här trenderna med verklig besökstrafik från ditt köpcentrum — och visar vilka trender som redan drar trafik.",
+      "ctaBody": "När det är anslutet till Stelthion korrelerar ShopperMind de här trenderna med verklig besökstrafik från ditt köpcentrum - och visar vilka trender som redan drar trafik.",
       "bookDemo": "Boka en demo"
     },
     "section": {
@@ -1244,7 +1244,13 @@
     "locationLoading": "Laddar platsinformation...",
     "locationNotAvailable": "Plats- och tillgänglighetsdata är ännu ej tillgänglig för denna fastighet.",
     "eventsNotAvailable": "Evenemangskalendern är ännu ej tillgänglig för denna fastighet.",
-    "propertyBody": "Granska operativ prestanda, hyresgästmix, lägeskontext och stödjande signaler på fastighetsnivå i samma visuella system som ShopperMind."
+    "propertyBody": "Granska operativ prestanda, hyresgästmix, lägeskontext och stödjande signaler på fastighetsnivå i samma visuella system som ShopperMind.",
+    "selloTenantLocations": {
+      "title": "Sellos hyresgästlägen",
+      "body": "Officiell hyresgästlista grupperad efter P1 och butiksvåningarna 1-4.",
+      "floor": "Våning {{floor}}",
+      "source": "Källa:"
+    }
   },
   "kpi": {
     "currentVisitors": "Aktuella besökare",

@@ -64,12 +64,9 @@ export function JourneyPlanner({ mallId }: { mallId: string }) {
 
   // All zones from both floors
   const allZones = useMemo(() => {
-    const zones = [
-      ...(published.groundZones ?? []),
-      ...(published.upperZones ?? []),
-    ];
-    return zones;
-  }, [published.groundZones, published.upperZones]);
+    const byFloor = Object.values(published.byFloor).flatMap((entry) => entry.zones);
+    return byFloor.length ? byFloor : [...(published.groundZones ?? []), ...(published.upperZones ?? [])];
+  }, [published.byFloor, published.groundZones, published.upperZones]);
 
   // Cameras for filtering by zone
   const { data: cameras = [] } = useSWR<Camera[]>(
@@ -111,7 +108,7 @@ export function JourneyPlanner({ mallId }: { mallId: string }) {
 
   // Compute results
   const session = journeyData?.sessions?.[0];
-  const paths = session?.paths ?? [];
+  const paths = useMemo(() => session?.paths ?? [], [session?.paths]);
   const destZoneId = journeyData?.destinationZoneId;
 
   const arrivedCount = useMemo(() => {

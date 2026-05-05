@@ -22,6 +22,7 @@ import type {
   JobWithResults, JourneyResponse,
 } from './types';
 import type { FlowQueryResponse } from '@/lib/types/flowQuery';
+import type { FloorplanFloor } from '@/lib/mall/floorplanAssets';
 
 const fetcher = async (url: string) => {
   const r = await fetch(url);
@@ -56,14 +57,15 @@ export function VideoAnalysis({ mallId }: VideoAnalysisProps) {
     fetcher,
   );
 
-  const { data: zonesData } = useSWR<{ groundZones: Zone[]; upperZones: Zone[] }>(
+  const { data: zonesData } = useSWR<{ groundZones: Zone[]; upperZones: Zone[]; floors?: Record<string, Zone[]> }>(
     `/api/floorplan/${mallId}/zones`,
     fetcher,
   );
-  const zones = useMemo(() => [
-    ...(zonesData?.groundZones ?? []),
-    ...(zonesData?.upperZones ?? []),
-  ], [zonesData]);
+  const zones = useMemo(() => (
+    zonesData?.floors
+      ? Object.values(zonesData.floors).flat()
+      : [...(zonesData?.groundZones ?? []), ...(zonesData?.upperZones ?? [])]
+  ), [zonesData]);
 
   const jobsKey = `/api/analysis/jobs?mallId=${mallId}`;
   const { data: jobs = [] } = useSWR<AnalysisJob[]>(jobsKey, fetcher, { refreshInterval: 15000 });
@@ -154,8 +156,9 @@ export function VideoAnalysis({ mallId }: VideoAnalysisProps) {
   }, [flowOrigin, flowDestination]);
 
   // Render prop for Sankey overlay on floorplan
-  const renderFlowOverlay = useCallback((floor: 'ground' | 'upper') => {
+  const renderFlowOverlay = useCallback((floor: FloorplanFloor) => {
     if (!flowResult) return null;
+    if (floor !== 'ground' && floor !== 'upper') return null;
     return <FlowSankeyOverlay data={flowResult} floor={floor} />;
   }, [flowResult]);
 

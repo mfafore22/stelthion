@@ -782,7 +782,7 @@
     },
     "trajectory": {
       "title": "Trend trajectory",
-      "subtitle": "Composite score over time — pick a window",
+      "subtitle": "Composite score over time - pick a window",
       "empty": "No scoring history recorded yet.",
       "windows": {
         "7d": "7d",
@@ -808,10 +808,10 @@
       "relevance": "Composite score (0–1): how relevant this trend is to this specific market. Combines volume, velocity, source diversity, and cultural / foot-traffic proximity.",
       "velocity": "Growth rate of the trend: how fast signal volume is changing. Positive = rising, negative = falling.",
       "acceleration": "Change in growth rate: whether the trend is speeding up or slowing down. Positive = momentum building.",
-      "volume": "Number of signals observed in the period — how many times this trend has been mentioned across sources.",
-      "cultural": "Cultural dimension: how close this trend is to this market's cultural conversation — social media, news and everyday choices.",
-      "footTraffic": "Foot-traffic dimension: how close this trend is to actual visitor flow around the mall — local events, transit, and accessibility.",
-      "composite": "Composite: weighted blend of the cultural and foot-traffic signals — the overall picture of the trend's relevance."
+      "volume": "Number of signals observed in the period - how many times this trend has been mentioned across sources.",
+      "cultural": "Cultural dimension: how close this trend is to this market's cultural conversation - social media, news and everyday choices.",
+      "footTraffic": "Foot-traffic dimension: how close this trend is to actual visitor flow around the mall - local events, transit, and accessibility.",
+      "composite": "Composite: weighted blend of the cultural and foot-traffic signals - the overall picture of the trend's relevance."
     },
     "sections": {
       "summary": "Summary",
@@ -884,8 +884,8 @@
       "relatedTrendsEmpty": "No related trends connected to this one yet.",
       "linkGraph": "Link graph",
       "linkGraphEmpty": "No inferred links yet.",
-      "upstream": "Upstream — trends that feed into this one",
-      "downstream": "Downstream — trends this one feeds into",
+      "upstream": "Upstream - trends that feed into this one",
+      "downstream": "Downstream - trends this one feeds into",
       "recentScoring": "Recent scoring",
       "details": "Details",
       "tags": "Tags",
@@ -974,7 +974,7 @@
       "defaultFocus": "Retail trend intelligence",
       "loading": "Loading trend data…",
       "ctaTitle": "See ShopperMind with your mall’s data",
-      "ctaBody": "When connected to Stelthion, ShopperMind correlates these trends with real footfall data from your mall — showing you which trends are already driving traffic.",
+      "ctaBody": "When connected to Stelthion, ShopperMind correlates these trends with real footfall data from your mall - showing you which trends are already driving traffic.",
       "bookDemo": "Book a demo"
     },
     "section": {
@@ -1235,7 +1235,13 @@
     "locationLoading": "Loading location data...",
     "locationNotAvailable": "Location and accessibility data is not yet available for this property.",
     "eventsNotAvailable": "Events calendar is not yet available for this property.",
-    "propertyBody": "Inspect operating performance, tenant mix, location context, and property-level supporting signals in the same visual system as ShopperMind."
+    "propertyBody": "Inspect operating performance, tenant mix, location context, and property-level supporting signals in the same visual system as ShopperMind.",
+    "selloTenantLocations": {
+      "title": "Sello tenant locations",
+      "body": "Official tenant list grouped by P1 and retail floors 1 to 4.",
+      "floor": "Floor {{floor}}",
+      "source": "Source:"
+    }
   },
   "kpi": {
     "currentVisitors": "Current Visitors",
