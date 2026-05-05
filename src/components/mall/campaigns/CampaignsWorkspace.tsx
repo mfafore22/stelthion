@@ -1,6 +1,7 @@
 'use client';
 
 import { BarChart3, CheckCircle2, Megaphone } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { AgentRole } from '@/lib/gcm-types';
 import { useAssistantLaunch } from '@/lib/assistant-flow/useAssistantLaunch';
@@ -20,8 +21,15 @@ const KPI_TRENDS: Record<(typeof KPI_CARDS)[number], number> = {
 
 export function CampaignsWorkspace() {
   const { t } = useTranslation('mall');
+  const searchParams = useSearchParams();
   const launch = useAssistantLaunch();
   const mallOptions = getCampaignMallOptions();
+  const initialBrief = {
+    mall: searchParams.get('mall') ?? undefined,
+    category: searchParams.get('category') ?? undefined,
+    stores: searchParams.get('stores')?.split(',').filter(Boolean) ?? [],
+    impact: searchParams.get('impact') ?? undefined,
+  };
   const createBrief = (selection: CampaignBriefSelection) => launch({
     agentRole: AgentRole.EVENT_COORDINATOR,
     starterPrompt: t('campaignWorkspace.assistantPrompt', selection.labels),
@@ -44,7 +52,7 @@ export function CampaignsWorkspace() {
       />
       <section className="grid grid-cols-1 gap-5 xl:grid-cols-[360px_minmax(0,1fr)]">
         <div className="bo-surface rounded-2xl border-2 border-bo-primary-200/60 p-3">
-          <CampaignBriefBuilder mallOptions={mallOptions} onCreate={createBrief} />
+          <CampaignBriefBuilder mallOptions={mallOptions} initialSelection={initialBrief} onCreate={createBrief} />
         </div>
         <div className="space-y-5">
           <div className="grid grid-cols-1 gap-3 md:grid-cols-3">

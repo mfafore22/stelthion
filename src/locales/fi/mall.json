@@ -851,6 +851,29 @@
         "absent_relevant": "aukko"
       }
     },
+    "tenantImpact": {
+      "eyebrow": "Vuokralaisvaikutus",
+      "title": "Miten trendit muuttuvat kategoriapäätöksiksi",
+      "body": "Tämä näkymä ei ole liiketilahakemisto. Se näyttää, mitkä kategoriat ja esimerkkivuokralaiset vastaavat trendin tarpeeseen, missä kannattaa kasvattaa, mitä kannattaa tarkentaa ja mistä kampanja voidaan aloittaa.",
+      "liveReady": "Demo nyt, live-data myöhemmin",
+      "recommendation": "Suositus",
+      "focus": "Kasvata",
+      "reduce": "Vähennä",
+      "storeExamples": "Esimerkkivuokralaiset",
+      "openCampaign": "Vie kampanjabriiffiin",
+      "moves": {
+        "increase": "kasvata",
+        "reposition": "asemoi uudelleen",
+        "reduce": "vähennä",
+        "test": "testaa",
+        "recruit": "rekrytoi"
+      },
+      "horizons": {
+        "short": "lyhyt",
+        "medium": "keskipitkä",
+        "long": "pitkä"
+      }
+    },
     "campaignIdea": {
       "generate": "Luo kampanjaidea",
       "generating": "Luonnostellaan ideaa…",
@@ -1112,7 +1135,7 @@
     "subtitle": "Muuta ShopperMindin trendit kampanjabriiffeiksi, joita voidaan testata kävijä-, POS- ja vuokralaisdatalla.",
     "builder": "Kampanjabriiffin luonnos",
     "createBrief": "Luo testibriiffi",
-    "assistantPrompt": "Luo testibriiffi valituilla asetuksilla.",
+    "assistantPrompt": "Luo testibriiffi kohteelle {{mall}}. Alue: {{zone}}. Kohderyhmä: {{audience}}. Kategoria: {{category}}. Ehdotetut vuokralaiset: {{stores}}. Budjetti: {{budget}}. Kesto: {{duration}}. Käytä ShopperMindin vuokralaisvaikutusta {{impact}} taustana, jos se on annettu.",
     "flowTitle": "Työnkulku live-dataan liitettynä",
     "aiTitle": "Demo nyt, asiakasdata myöhemmin",
     "aiBody": "Räätälöity tekoälymalli käyttää vain asiakkaan omaan ympäristöön rajattua dataa. Demo näyttää työnkulun siemen- ja trendidatalla, mutta sama näkymä voidaan liittää POS-, kävijä-, vuokralais- ja kampanjatuloksiin.",
@@ -1140,6 +1163,14 @@
           "wellness": "Hyvinvointiasiakkaat",
           "commuters": "Työmatkalaiset"
         }
+      },
+      "category": {
+        "label": "Kategoria",
+        "value": "ShopperMindin ehdottama kategoria"
+      },
+      "stores": {
+        "label": "Ehdotetut vuokralaiset",
+        "empty": "Ei valittuja vuokralaisia"
       },
       "budget": {
         "label": "Budjetti",

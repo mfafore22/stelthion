@@ -18,7 +18,7 @@ import { PropertyActionBoard } from './PropertyActionBoard';
 import { SignalOfTheDayCard } from './SignalOfTheDayCard';
 import type { ScenarioPathId } from './PathReferenceText';
 import { useShopperMindActivity } from './useShopperMindActivity';
-import { SelloTenantLocations } from '@/components/mall/SelloTenantLocations';
+import { TenantImpactPanel } from './TenantImpactPanel';
 
 export type ShopperMindTab = 'overview' | 'actions' | 'trends' | 'competitors' | 'decision-support' | 'market-lessons';
 export type MallTrendSet = {
@@ -114,7 +114,7 @@ export function ShopperMindTabPanels({
         ) : (
           <EmptyTabState title={t('shoppermind.tabs.overview')} body={t('shoppermind.markets.noScenario')} />
         )}
-        <SelloTenantLocations mallId={selectedMallId ?? userMallId ?? ''} />
+        <TenantImpactPanel mallId={selectedMallId ?? userMallId} marketId={marketId} />
       </div>
     );
   }

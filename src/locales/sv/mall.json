@@ -860,6 +860,29 @@
         "absent_relevant": "lucka"
       }
     },
+    "tenantImpact": {
+      "eyebrow": "Hyresgästeffekt",
+      "title": "Hur trender blir kategoribeslut",
+      "body": "Detta är inte en butikslista. Vyn visar vilka kategorier och exempelhyresgäster som möter trendens behov, var man bör växa, vad som bör skärpas och var en kampanj kan börja.",
+      "liveReady": "Demo nu, live-data senare",
+      "recommendation": "Rekommendation",
+      "focus": "Öka",
+      "reduce": "Minska",
+      "storeExamples": "Exempelhyresgäster",
+      "openCampaign": "Skicka till kampanjbrief",
+      "moves": {
+        "increase": "öka",
+        "reposition": "positionera om",
+        "reduce": "minska",
+        "test": "testa",
+        "recruit": "rekrytera"
+      },
+      "horizons": {
+        "short": "kort",
+        "medium": "medel",
+        "long": "lång"
+      }
+    },
     "campaignIdea": {
       "generate": "Skapa kampanjidé",
       "generating": "Skissar på en idé…",
@@ -1121,7 +1144,7 @@
     "subtitle": "Gör ShopperMind-trender till kampanjbriefar som kan testas mot besöks-, POS- och hyresgästdata.",
     "builder": "Utkast till kampanjbrief",
     "createBrief": "Skapa testbrief",
-    "assistantPrompt": "Skapa en testkampanjbrief med de valda inställningarna.",
+    "assistantPrompt": "Skapa en testkampanjbrief för {{mall}}. Zon: {{zone}}. Målgrupp: {{audience}}. Kategori: {{category}}. Föreslagna hyresgäster: {{stores}}. Budget: {{budget}}. Längd: {{duration}}. Använd ShopperMinds hyresgästeffekt {{impact}} som bakgrund om den finns.",
     "flowTitle": "Arbetsflöde när live-data är ansluten",
     "aiTitle": "Demo nu, kunddata senare",
     "aiBody": "En skräddarsydd AI-modell använder endast data som är avgränsad till kundens egen miljö. Demon visar arbetsflödet med seedad data och trenddata, medan samma vy senare kan kopplas till POS-, besöks-, hyresgäst- och kampanjresultat.",
@@ -1149,6 +1172,14 @@
           "wellness": "Wellnesskunder",
           "commuters": "Pendlare"
         }
+      },
+      "category": {
+        "label": "Kategori",
+        "value": "ShopperMind-föreslagen kategori"
+      },
+      "stores": {
+        "label": "Föreslagna hyresgäster",
+        "empty": "Inga hyresgäster valda"
       },
       "budget": {
         "label": "Budget",

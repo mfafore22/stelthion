@@ -851,6 +851,29 @@
         "absent_relevant": "gap"
       }
     },
+    "tenantImpact": {
+      "eyebrow": "Tenant impact",
+      "title": "How trends become category decisions",
+      "body": "This is not a store directory. It shows which categories and example tenants meet a trend need, where to grow, what to sharpen, and where a campaign can start.",
+      "liveReady": "Demo now, live data later",
+      "recommendation": "Recommendation",
+      "focus": "Increase",
+      "reduce": "Reduce",
+      "storeExamples": "Example tenants",
+      "openCampaign": "Send to campaign brief",
+      "moves": {
+        "increase": "increase",
+        "reposition": "reposition",
+        "reduce": "reduce",
+        "test": "test",
+        "recruit": "recruit"
+      },
+      "horizons": {
+        "short": "short",
+        "medium": "medium",
+        "long": "long"
+      }
+    },
     "campaignIdea": {
       "generate": "Generate campaign idea",
       "generating": "Drafting an idea…",
@@ -1112,7 +1135,7 @@
     "subtitle": "Turn ShopperMind trends into campaign briefs that can be tested against visitor, POS, and tenant data.",
     "builder": "Campaign brief draft",
     "createBrief": "Create test brief",
-    "assistantPrompt": "Create a test campaign brief with the selected settings.",
+    "assistantPrompt": "Create a test campaign brief for {{mall}}. Zone: {{zone}}. Audience: {{audience}}. Category: {{category}}. Suggested tenants: {{stores}}. Budget: {{budget}}. Duration: {{duration}}. Use ShopperMind tenant impact {{impact}} as background if provided.",
     "flowTitle": "Workflow once connected to live data",
     "aiTitle": "Demo now, customer data later",
     "aiBody": "A tailored AI model uses only data scoped to the customer environment. The demo shows the workflow with seeded and trend data, while the same view can later connect to POS, visitor, tenant, and campaign-result data.",
@@ -1140,6 +1163,14 @@
           "wellness": "Wellness customers",
           "commuters": "Commuters"
         }
+      },
+      "category": {
+        "label": "Category",
+        "value": "ShopperMind suggested category"
+      },
+      "stores": {
+        "label": "Suggested tenants",
+        "empty": "No tenants selected"
       },
       "budget": {
         "label": "Budget",
