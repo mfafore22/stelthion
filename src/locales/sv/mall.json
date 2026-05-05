@@ -819,7 +819,23 @@
       "edit": "Redigera",
       "submitting": "Skickar…",
       "submitted": "Tack för din feedback",
-      "error": "Kunde inte spara din feedback"
+      "error": "Kunde inte spara din feedback",
+      "reasons": {
+        "notPropertyRelevant": "Inte relevant för den här fastigheten",
+        "wrongCategory": "Fel kategori",
+        "outdated": "Data verkar föråldrad",
+        "notPractical": "Åtgärden är inte praktisk",
+        "missingEvidence": "Saknar evidens",
+        "alreadyHandled": "Redan hanterat"
+      }
+    },
+    "categoryImpact": {
+      "present": "Kategorin finns i den nuvarande hyresgästmixen.",
+      "absent_relevant": "Kategorin kan vara relevant även om den inte finns i köpcentrumet.",
+      "badges": {
+        "present": "i mix",
+        "absent_relevant": "lucka"
+      }
     },
     "campaignIdea": {
       "generate": "Skapa kampanjidé",

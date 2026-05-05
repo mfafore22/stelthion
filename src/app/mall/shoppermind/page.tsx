@@ -15,6 +15,7 @@ import type {
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ShopperMindHeader } from '@/components/mall/shoppermind/ShopperMindHeader';
 import { MacroDashboard } from '@/components/mall/shoppermind/MacroDashboard';
+import { useShopperMindActivity } from '@/components/mall/shoppermind/useShopperMindActivity';
 import {
   ShopperMindTabPanels,
   type MallActionSet,
@@ -77,6 +78,7 @@ export default function ShopperMindPage() {
   const [selectedMallId, setSelectedMallId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<ShopperMindTab>('overview');
   const [selectedScenarioPathId, setSelectedScenarioPathId] = useState<ScenarioPathId | null>(null);
+  const trackActivity = useShopperMindActivity({ mallId: selectedMallId ?? user?.mallId, marketId: data?.marketId });
 
   useEffect(() => {
     if (!loading && !user) router.replace('/mall/login');
@@ -255,6 +257,12 @@ export default function ShopperMindPage() {
   const handleScenarioPathSelect = (pathId: ScenarioPathId) => {
     setSelectedScenarioPathId(pathId);
     setActiveTab('overview');
+    trackActivity({ eventName: 'path_reference_click', tab: activeTab, entityType: 'path', entityId: pathId });
+  };
+
+  const handleTabChange = (tab: ShopperMindTab) => {
+    setActiveTab(tab);
+    trackActivity({ eventName: 'tab_open', tab });
   };
 
   if (loading) {
@@ -289,7 +297,7 @@ export default function ShopperMindPage() {
                     {t('shoppermind.macro.notSupported', { defaultValue: 'Makroindikaattorit eivät ole vielä saatavilla tälle markkinalle.' })}
                   </div>
                 )}
-                <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as ShopperMindTab)} className="space-y-4">
+                <Tabs value={activeTab} onValueChange={(value) => handleTabChange(value as ShopperMindTab)} className="space-y-4">
                   <div className="overflow-x-auto pb-1">
                     <TabsList className="min-w-max">
                       {visibleTabs.map((tab) => (
@@ -297,7 +305,6 @@ export default function ShopperMindPage() {
                           key={tab.value}
                           id={`shoppermind-tab-${tab.value}`}
                           value={tab.value}
-                          onClick={() => setActiveTab(tab.value)}
                         >
                           {t(tab.labelKey, { defaultValue: tab.fallback })}
                         </TabsTrigger>
@@ -319,6 +326,7 @@ export default function ShopperMindPage() {
                     trendSets={trendSets}
                     userMallId={user?.mallId ?? null}
                     selectedMallName={selectedMallName}
+                    marketId={data?.marketId}
                     competitorBenchmarks={competitorBenchmarks}
                     capabilities={capabilities}
                     selectedScenarioPathId={selectedScenarioPathId}

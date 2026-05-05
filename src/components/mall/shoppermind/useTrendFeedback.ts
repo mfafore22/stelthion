@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 export type Verdict = 'relevant' | 'not_relevant';
 export type FeedbackStatus = 'idle' | 'submitting' | 'submitted' | 'error';
+export type FeedbackEntityType = 'trend' | 'signal' | 'action' | 'path' | 'competitor' | 'macro';
 
 interface FeedbackRow {
   verdict: string;
@@ -11,7 +12,19 @@ interface FeedbackRow {
   createdAt: string;
 }
 
-export function useTrendFeedback(phenomenonId: string, mallId: string | null) {
+export function useTrendFeedback(
+  phenomenonId: string,
+  mallId: string | null,
+  context?: {
+    entityType?: FeedbackEntityType;
+    entityLabel?: string;
+    categoryIds?: string[];
+    reasonCodes?: string[];
+    promptContext?: string;
+    generatedAnswer?: string;
+    language?: string;
+  },
+) {
   const [verdict, setVerdict] = useState<Verdict | null>(null);
   const [note, setNote] = useState('');
   const [status, setStatus] = useState<FeedbackStatus>('idle');
@@ -46,7 +59,12 @@ export function useTrendFeedback(phenomenonId: string, mallId: string | null) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ mallId, verdict: next, note: note.trim() || undefined }),
+        body: JSON.stringify({
+          mallId,
+          verdict: next,
+          note: note.trim() || undefined,
+          ...context,
+        }),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setVerdict(next);
@@ -58,5 +76,5 @@ export function useTrendFeedback(phenomenonId: string, mallId: string | null) {
     }
   }
 
-  return { verdict, note, setNote, status, editing, setEditing, error, submit };
+  return { verdict, setVerdict, note, setNote, status, editing, setEditing, error, submit };
 }

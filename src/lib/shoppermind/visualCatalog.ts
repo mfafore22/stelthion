@@ -4,7 +4,7 @@ export type TaggedVisual = { src: BannerVisual; tags: string[] };
 const trend = (title: string, primary: string, secondary: string, accent: string) => ({ title, primary, secondary, accent });
 
 export const TREND_VISUALS: TaggedVisual[] = [
-  { src: trend('GLP-1 basket shift', '#256f5b', '#9bcf8a', '#214990'), tags: ['ozempic', 'glp-1', 'glp1', 'weight-loss', 'painonhallinta', 'laihdutus'] },
+  { src: trend('New weight management', '#256f5b', '#9bcf8a', '#214990'), tags: ['ozempic', 'glp-1', 'glp1', 'weight-loss', 'weight management', 'painonhallinta', 'laihdutus'] },
   { src: trend('Digital grocery', '#1f4f8f', '#5eb8a8', '#f3c978'), tags: ['web grocery', 'e-commerce grocery', 'online grocery', 'q-commerce', 'pikatoimit', 'verkkoruoka', 'ruokaverkko'] },
   { src: trend('Physical return', '#db4c64', '#f0c24c', '#2fa866'), tags: ['gen z', 'z generation', 'z-generation', 'zoomer', 'young adult', 'nuoret aikuiset', 'nuoret'] },
   { src: trend('Challenger brands', '#7b36bf', '#f7966b', '#214990'), tags: ['challenger brand', 'indie brand', 'direct-to-consumer', 'dtc', 'emerging brand', 'uusi brändi'] },
@@ -16,6 +16,9 @@ export const TREND_VISUALS: TaggedVisual[] = [
   { src: trend('Grocery frequency', '#328d2e', '#7cb928', '#214990'), tags: ['grocery', 'supermarket', 'daily', 'essentials', 'convenience', 'basket', 'päivittäi', 'arjen', 'dagligvar', 'vardag'] },
   { src: trend('Health and wellness', '#0f766e', '#9bd2c7', '#214990'), tags: ['health', 'wellness', 'pharmacy', 'clinic', 'care', 'terveys', 'hyvinvointi', 'apteek', 'hälsa', 'vård'] },
   { src: trend('Food and dining', '#b45309', '#f3c978', '#328d2e'), tags: ['food', 'dining', 'restaurant', 'lunch', 'cafe', 'kahvi', 'ravint', 'ruoka', 'mat', 'server'] },
+  { src: trend('Convenience food', '#a15c16', '#f2c24d', '#2f7d5d'), tags: ['take-away', 'takeaway', 'fast food', 'quick food', 'convenience food', 'pikaruoka', 'noutoruoka'] },
+  { src: trend('Outdoor leisure', '#2f6f34', '#9bbf72', '#214990'), tags: ['nordic outdoor', 'outdoor culture', 'ulkoilu', 'outdoor leisure', 'friluftsliv'] },
+  { src: trend('Circular commerce', '#2f6f34', '#8fcf8a', '#1f4f8f'), tags: ['circular', 'sustainability', 'recycling', 'repair', 'resale', 'reuse', 'kierto', 'kierrät', 'korjaus', 'vastuull', 'cirkulär', 'hållbar', 'återvin', 'reparation'] },
   { src: trend('Family missions', '#f27023', '#f6c04e', '#214990'), tags: ['family', 'kids', 'children', 'play', 'event', 'community', 'perhe', 'lapset', 'harrastus', 'tapahtuma', 'familj', 'barn'] },
   { src: trend('Premium destination', '#1f3d74', '#f3c978', '#4567a6'), tags: ['premium', 'luxury', 'destination', 'tourism', 'hospitality', 'travel', 'visitor', 'kohdekäynti', 'matkail'] },
   { src: trend('Smart value', '#566542', '#d2ad82', '#214990'), tags: ['value', 'price', 'discount', 'budget', 'saving', 'edull', 'tarjous', 'pris', 'låg risk', 'low-risk'] },

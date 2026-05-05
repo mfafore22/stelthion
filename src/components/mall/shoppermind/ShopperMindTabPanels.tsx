@@ -17,6 +17,7 @@ import { PropertySegmentedSelector } from './PropertySegmentedSelector';
 import { PropertyActionBoard } from './PropertyActionBoard';
 import { SignalOfTheDayCard } from './SignalOfTheDayCard';
 import type { ScenarioPathId } from './PathReferenceText';
+import { useShopperMindActivity } from './useShopperMindActivity';
 
 export type ShopperMindTab = 'overview' | 'actions' | 'trends' | 'competitors' | 'decision-support' | 'market-lessons';
 export type MallTrendSet = {
@@ -44,6 +45,7 @@ export function ShopperMindTabPanels({
   trendSets,
   userMallId,
   selectedMallName,
+  marketId,
   competitorBenchmarks,
   capabilities,
   selectedScenarioPathId,
@@ -62,12 +64,14 @@ export function ShopperMindTabPanels({
   trendSets: MallTrendSet[];
   userMallId: string | null;
   selectedMallName?: string;
+  marketId?: string | null;
   competitorBenchmarks: Array<{ id: string; actions: MallActions }>;
   capabilities: ShopperMindMarketCapabilities;
   selectedScenarioPathId?: ScenarioPathId | null;
   onSelectScenarioPath?: (pathId: ScenarioPathId) => void;
 }) {
   const { t } = useTranslation('mall');
+  const track = useShopperMindActivity({ mallId: selectedMallId ?? userMallId, marketId });
   const firstActionMall = actionSets[0]?.mallId ?? selectedMallId;
   const firstTrendMall = trendSets[0]?.mallId ?? selectedMallId;
   const [actionMallId, setActionMallId] = useState<string | null>(firstActionMall);
@@ -92,10 +96,12 @@ export function ShopperMindTabPanels({
   const handleActionMallChange = (id: string) => {
     setActionMallId(id);
     onSelectMall(id);
+    track({ eventName: 'property_focus_change', mallId: id, tab: 'actions', entityType: 'property', entityId: id });
   };
   const handleTrendMallChange = (id: string) => {
     setTrendMallId(id);
     onSelectMall(id);
+    track({ eventName: 'property_focus_change', mallId: id, tab: 'trends', entityType: 'property', entityId: id });
   };
 
   if (activeTab === 'overview') {
@@ -161,7 +167,14 @@ export function ShopperMindTabPanels({
                 mallId={trendMallId ?? userMallId}
                 defaultOpen={horizon === 'short'}
                 curatedCount={selectedCurated[horizon].length}
-                topSlot={<CuratedTrendStrip trends={selectedCurated[horizon]} mallName={selectedTrendSet?.mallName ?? selectedMallName} />}
+                topSlot={(
+                  <CuratedTrendStrip
+                    trends={selectedCurated[horizon]}
+                    mallName={selectedTrendSet?.mallName ?? selectedMallName}
+                    mallId={trendMallId ?? userMallId}
+                    marketId={marketId}
+                  />
+                )}
               />
             ))}
           </>

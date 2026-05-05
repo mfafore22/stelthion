@@ -810,7 +810,23 @@
       "edit": "Muokkaa",
       "submitting": "Lähetetään…",
       "submitted": "Kiitos palautteestasi",
-      "error": "Palautteen tallennus epäonnistui"
+      "error": "Palautteen tallennus epäonnistui",
+      "reasons": {
+        "notPropertyRelevant": "Ei relevantti tälle kohteelle",
+        "wrongCategory": "Väärä kategoria",
+        "outdated": "Data vaikuttaa vanhentuneelta",
+        "notPractical": "Toimenpide ei ole käytännöllinen",
+        "missingEvidence": "Näyttö puuttuu",
+        "alreadyHandled": "Jo hoidettu"
+      }
+    },
+    "categoryImpact": {
+      "present": "Kategoria on nykyisessä vuokralaiskokonaisuudessa.",
+      "absent_relevant": "Kategoria voi olla relevantti, vaikka sitä ei vielä ole kohteessa.",
+      "badges": {
+        "present": "mukana",
+        "absent_relevant": "aukko"
+      }
     },
     "campaignIdea": {
       "generate": "Luo kampanjaidea",

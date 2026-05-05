@@ -41,6 +41,7 @@ import { canonicalCity } from '@/lib/shoppermind/cities';
 import { MetricTerm } from '@/components/mall/shoppermind/MetricTerm';
 import { useSetTrendViewContext, useViewContext } from '@/lib/shoppermind/view-context';
 import { useConciergeOptional } from '@/components/concierge/ConciergeContext';
+import { inferRetailCategoryImpacts } from '@/lib/shoppermind/retailCategories';
 
 interface DetailResponse {
   configured: boolean;
@@ -67,8 +68,12 @@ export default function PhenomenonDetailPage({
 
   useEffect(() => {
     let cancelled = false;
-    setFetching(true);
-    setError(null);
+    queueMicrotask(() => {
+      if (!cancelled) {
+        setFetching(true);
+        setError(null);
+      }
+    });
     fetch(`/api/shoppermind/phenomenon/${encodeURIComponent(id)}`, { credentials: 'include' })
       .then(async (res) => {
         const body = (await res.json()) as DetailResponse;
@@ -205,7 +210,13 @@ function DetailBody({ phenomenon: p }: { phenomenon: PhenomenonDetail }) {
         <section className="lg:col-span-2 space-y-6">
           <NarrativeSections parsed={localized.parsed} state={p.state} />
           <CampaignIdeaSection phenomenon={p} mallId={user?.mallId ?? null} />
-          <FeedbackSection phenomenonId={p.id} mallId={user?.mallId ?? null} />
+          <FeedbackSection
+            phenomenonId={p.id}
+            mallId={user?.mallId ?? null}
+            label={localized.label}
+            promptContext={localized.description}
+            generatedAnswer={localized.parsed.retailerImpact ?? localized.parsed.summary}
+          />
           <TrajectoryChart scores={p.scores} />
           <LinksPanel linksFrom={p.linksFrom} linksTo={p.linksTo} selfId={p.id} />
         </section>
@@ -219,11 +230,31 @@ function DetailBody({ phenomenon: p }: { phenomenon: PhenomenonDetail }) {
   );
 }
 
-function FeedbackSection({ phenomenonId, mallId }: { phenomenonId: string; mallId: string | null }) {
+function FeedbackSection({
+  phenomenonId,
+  mallId,
+  label,
+  promptContext,
+  generatedAnswer,
+}: {
+  phenomenonId: string;
+  mallId: string | null;
+  label: string;
+  promptContext: string;
+  generatedAnswer: string | null;
+}) {
   const { t } = useTranslation('mall');
+  const categoryIds = inferRetailCategoryImpacts(`${phenomenonId} | ${label} | ${promptContext} | ${generatedAnswer ?? ''}`).map((i) => i.id);
   return (
     <SectionCard icon={MessageSquare} title={t('shoppermind.sections.feedback')} accent="neutral">
-      <TrendFeedback phenomenonId={phenomenonId} mallId={mallId} />
+      <TrendFeedback
+        phenomenonId={phenomenonId}
+        mallId={mallId}
+        entityLabel={label}
+        categoryIds={categoryIds}
+        promptContext={promptContext}
+        generatedAnswer={generatedAnswer ?? label}
+      />
     </SectionCard>
   );
 }
@@ -366,7 +397,7 @@ function LinksPanel({
 
   useEffect(() => {
     if (relatedIds.length === 0) {
-      setRelated({});
+      queueMicrotask(() => setRelated({}));
       return;
     }
     let cancelled = false;

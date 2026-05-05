@@ -12,7 +12,24 @@
     "counterData": "Laskuridata",
     "customers": "Asiakkaat",
     "shopperMindFeedback": "ShopperMind-palaute",
+    "shopperMindActivity": "ShopperMind-aktiivisuus",
     "plans": "Palvelupaketit"
+  },
+  "shopperMindActivity": {
+    "title": "ShopperMind-aktiivisuus",
+    "loading": "Ladataan aktiivisuutta...",
+    "notConfigured": "Aktiivisuuden tallennus ei ole vielä käytössä.",
+    "empty": "Ei ShopperMind-aktiivisuutta tällä jaksolla.",
+    "events": "Vuorovaikutukset",
+    "tabs": "Välilehdet",
+    "entities": "Sisältötyypit",
+    "categories": "Fokuskategoriat",
+    "malls": "Kohteet",
+    "lastEvents": "Viimeisimmät tapahtumat",
+    "event": "Tapahtuma",
+    "entity": "Kohde",
+    "mall": "Kohde",
+    "time": "Aika"
   },
   "customers": {
     "title": "Asiakastilit",

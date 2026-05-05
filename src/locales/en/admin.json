@@ -12,7 +12,24 @@
     "counterData": "Counter Data",
     "customers": "Customers",
     "shopperMindFeedback": "ShopperMind Feedback",
+    "shopperMindActivity": "ShopperMind Activity",
     "plans": "Plans"
+  },
+  "shopperMindActivity": {
+    "title": "ShopperMind Activity",
+    "loading": "Loading activity...",
+    "notConfigured": "Activity storage is not configured yet.",
+    "empty": "No ShopperMind activity in this period.",
+    "events": "Interactions",
+    "tabs": "Tabs",
+    "entities": "Content types",
+    "categories": "Focus categories",
+    "malls": "Properties",
+    "lastEvents": "Latest events",
+    "event": "Event",
+    "entity": "Entity",
+    "mall": "Property",
+    "time": "Time"
   },
   "customers": {
     "title": "Customer Accounts",

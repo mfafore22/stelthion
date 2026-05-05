@@ -5,9 +5,11 @@ import { CuratedTrendCard } from './CuratedTrendCard';
 interface Props {
   trends: CuratedTrendResolved[];
   mallName?: string;
+  mallId?: string | null;
+  marketId?: string | null;
 }
 
-export function CuratedTrendStrip({ trends, mallName }: Props) {
+export function CuratedTrendStrip({ trends, mallName, mallId, marketId }: Props) {
   const { t } = useTranslation('mall');
   if (!trends || trends.length === 0) return null;
   return (
@@ -22,7 +24,7 @@ export function CuratedTrendStrip({ trends, mallName }: Props) {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
         {trends.map((trend) => (
-          <CuratedTrendCard key={trend.id} trend={trend} mallName={mallName} />
+          <CuratedTrendCard key={trend.id} trend={trend} mallName={mallName} mallId={mallId} marketId={marketId} />
         ))}
       </div>
     </section>

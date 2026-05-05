@@ -12,7 +12,24 @@
     "counterData": "Räknardata",
     "customers": "Kunder",
     "shopperMindFeedback": "ShopperMind-feedback",
+    "shopperMindActivity": "ShopperMind-aktivitet",
     "plans": "Abonnemang"
+  },
+  "shopperMindActivity": {
+    "title": "ShopperMind-aktivitet",
+    "loading": "Laddar aktivitet...",
+    "notConfigured": "Aktivitetslagring är inte konfigurerad ännu.",
+    "empty": "Ingen ShopperMind-aktivitet under perioden.",
+    "events": "Interaktioner",
+    "tabs": "Flikar",
+    "entities": "Innehållstyper",
+    "categories": "Fokuskategorier",
+    "malls": "Fastigheter",
+    "lastEvents": "Senaste händelser",
+    "event": "Händelse",
+    "entity": "Objekt",
+    "mall": "Fastighet",
+    "time": "Tid"
   },
   "dashboard": {
     "title": "Administratörspanel",

@@ -5,6 +5,8 @@ import { CollapsibleSection } from './CollapsibleSection';
 import { VisualBanner } from '@/components/mall/visuals/VisualBanner';
 import { localizeSotdNarrative, localizeSotdSections } from '@/lib/shoppermind/localize';
 import { signalBannerSrc } from '@/lib/shoppermind/visualTheme';
+import { inferRetailCategoryImpacts } from '@/lib/shoppermind/retailCategories';
+import { CategoryImpactChips } from './CategoryImpactChips';
 
 export function SignalOfTheDayCard({
   sotd,
@@ -44,6 +46,15 @@ export function SignalOfTheDayCard({
     }
   })();
   const headline = sections?.headline ?? '';
+  const categoryImpacts = inferRetailCategoryImpacts([
+    ...(sotd.phenomenonIds ?? []),
+    headline,
+    narrative,
+    ...(sections?.keyFindings ?? []),
+    ...(sections?.alsoVisible ?? []),
+    ...(sections?.watching ?? []),
+    ...(sections?.byCity?.map((b) => b.body) ?? []),
+  ].join(' | '));
   return (
     <CollapsibleSection
       title={t('shoppermind.signalSections.monthly')}
@@ -52,6 +63,9 @@ export function SignalOfTheDayCard({
       toneClassName="ring-1 ring-bo-neutral-200/60"
       topMedia={<VisualBanner src={signalBannerSrc(headline, narrative)} alt={headline || t('shoppermind.signalSections.monthly')} />}
     >
+      <div className="mb-4">
+        <CategoryImpactChips impacts={categoryImpacts} />
+      </div>
       {sections ? <SignalSections sections={sections} /> : (
         <p className="text-sm text-bo-neutral-800 leading-relaxed whitespace-pre-wrap">{narrative}</p>
       )}

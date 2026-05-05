@@ -4,12 +4,20 @@ import { useState } from 'react';
 import { ChevronDown, ExternalLink, ShieldCheck } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { PhenomenonEvidenceResponse } from '@stelthion/shoppermind-client-types';
+import { useShopperMindActivity } from './useShopperMindActivity';
 
 const STRONG_SOURCE_THRESHOLD = 2;
 const MAX_LINKS = 5;
 
-export function PhenomenonSourceStrip({ phenomenonId }: { phenomenonId: string }) {
+export function PhenomenonSourceStrip({
+  phenomenonId,
+  mallId,
+}: {
+  phenomenonId: string;
+  mallId?: string | null;
+}) {
   const { t } = useTranslation('mall');
+  const track = useShopperMindActivity({ mallId });
   const [open, setOpen] = useState(false);
   const [data, setData] = useState<PhenomenonEvidenceResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -20,6 +28,14 @@ export function PhenomenonSourceStrip({ phenomenonId }: { phenomenonId: string }
     e.stopPropagation();
     const next = !open;
     setOpen(next);
+    if (next) {
+      track({
+        eventName: 'evidence_open',
+        tab: 'trends',
+        entityType: 'trend',
+        entityId: phenomenonId,
+      });
+    }
     if (next && !data && !loading) {
       setLoading(true);
       try {
@@ -73,7 +89,17 @@ export function PhenomenonSourceStrip({ phenomenonId }: { phenomenonId: string }
                     href={s.url ?? '#'}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      track({
+                        eventName: 'source_click',
+                        tab: 'trends',
+                        entityType: 'source',
+                        entityId: s.sourceId,
+                        entityLabel: s.name,
+                        metadata: { phenomenonId, sourceType: s.type },
+                      });
+                    }}
                     className="inline-flex items-baseline gap-1 text-bo-primary-700 hover:text-bo-primary-900 underline decoration-bo-primary-200 hover:decoration-bo-primary-700 underline-offset-2"
                   >
                     <span className="truncate max-w-[200px]">{s.name}</span>

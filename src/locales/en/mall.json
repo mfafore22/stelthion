@@ -810,7 +810,23 @@
       "edit": "Edit",
       "submitting": "Submitting…",
       "submitted": "Thanks for your feedback",
-      "error": "Couldn't save your feedback"
+      "error": "Couldn't save your feedback",
+      "reasons": {
+        "notPropertyRelevant": "Not relevant to this property",
+        "wrongCategory": "Wrong category",
+        "outdated": "Data seems outdated",
+        "notPractical": "Action is not practical",
+        "missingEvidence": "Missing evidence",
+        "alreadyHandled": "Already handled"
+      }
+    },
+    "categoryImpact": {
+      "present": "This category exists in the current tenant mix.",
+      "absent_relevant": "This category may be relevant even if it is not present in the mall.",
+      "badges": {
+        "present": "in mix",
+        "absent_relevant": "gap"
+      }
     },
     "campaignIdea": {
       "generate": "Generate campaign idea",

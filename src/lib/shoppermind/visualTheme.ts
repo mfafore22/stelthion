@@ -2,10 +2,46 @@ import { getMallLogo } from '@/lib/mall/mallLogos';
 import type { BannerVisual } from '@/components/mall/visuals/VisualBanner';
 import { ASSISTANT_VISUALS, SECTION_VISUALS, TREND_VISUALS, type TaggedVisual } from './visualCatalog';
 
+const DIRECT_TREND_RULES: Array<{ title: string; patterns: string[] }> = [
+  { title: 'New weight management', patterns: ['glp-1', 'glp1', 'ozempic', 'weight management', 'painonhallinta'] },
+  { title: 'Digital grocery', patterns: ['digital-grocery', 'web grocery', 'e-commerce grocery', 'online grocery', 'verkkoruoka'] },
+  { title: 'Physical return', patterns: ['physical-return', 'gen z', 'z generation', 'z-generation', 'nuoret aikuiset'] },
+  { title: 'Challenger brands', patterns: ['challenger-brand', 'challenger brands', 'indie brand', 'direct-to-consumer'] },
+  { title: 'AI shopping', patterns: ['ai-shopping', 'ai shopping', 'generative ai', 'tekoälyostos'] },
+  { title: 'Experience-led retail', patterns: ['curated-discretionary', 'experiential', 'experience-led', 'elämys'] },
+  { title: 'Proximity stores', patterns: ['proximity', 'neighbourhood', 'neighborhood', 'lähikauppa'] },
+  { title: 'Omnichannel', patterns: ['frictionless-omnichannel', 'omnichannel', 'retail media', 'kaupan media', 'retail media-plattform', 'fulfilment platform'] },
+  { title: 'Grocery frequency', patterns: ['grocery-frequency', 'daily essentials', 'päivittäistavara', 'dagligvar'] },
+  { title: 'Health and wellness', patterns: ['health-beauty-wellness-frequency', 'service-led-ageing', 'beauty and wellness', 'kauneus ja terveys', 'terveys', 'kauneus', 'hyvinvointi', 'hälsa', 'skönhet', 'välmående', 'wellness'] },
+  { title: 'Convenience food', patterns: ['convenience food', 'take-away', 'takeaway', 'fast food', 'quick food', 'noutoruoka'] },
+  { title: 'Outdoor leisure', patterns: ['nordic outdoor', 'outdoor culture', 'outdoor leisure', 'friluftsliv', 'ulkoilu'] },
+  { title: 'Circular commerce', patterns: ['circular-commerce', 'circular commerce', 'product-life', 'kiertokauppa', 'kiertotalous', 'kierrätys', 'sustainability', 'hållbarhet', 'cirkulär handel'] },
+  { title: 'Food and dining', patterns: ['food and dining', 'food-led', 'fine dining', 'ravintola', 'ruoka ja juoma', 'ruoka ja ravintolat', 'mat och dryck'] },
+  { title: 'Premium destination', patterns: ['premium destination', 'safe-hub-tourism', 'safe hub', 'luxury'] },
+  { title: 'Smart value', patterns: ['smart-value-low-risk', 'smart value', 'private label', 'value polarization', 'low-risk spending'] },
+];
+
+function visualByTitle(title: string) {
+  return TREND_VISUALS.find((visual) => typeof visual.src !== 'string' && visual.src.title === title)?.src;
+}
+
 function taggedVisualSrc(parts: Array<string | null | undefined>, visuals: TaggedVisual[], fallback: BannerVisual) {
-  const text = parts.filter(Boolean).join(' ').toLowerCase();
+  const normalizedParts = parts.filter(Boolean).map((part) => String(part).toLowerCase());
+  const identityText = normalizedParts.slice(0, 3).join(' ');
+  for (const rule of DIRECT_TREND_RULES) {
+    if (rule.patterns.some((pattern) => identityText.includes(pattern) || normalizedParts[0]?.includes(pattern))) {
+      return visualByTitle(rule.title) ?? fallback;
+    }
+  }
   const match = visuals
-    .map((visual) => ({ visual, score: visual.tags.filter((tag) => text.includes(tag)).length }))
+    .map((visual) => ({
+      visual,
+      score: visual.tags.reduce((sum, tag) => {
+        const index = normalizedParts.findIndex((part) => part.includes(tag));
+        if (index < 0) return sum;
+        return sum + Math.max(1, 6 - index);
+      }, 0),
+    }))
     .sort((a, b) => b.score - a.score)[0];
   return match && match.score > 0 ? match.visual.src : fallback;
 }

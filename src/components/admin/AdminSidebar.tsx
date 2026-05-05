@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { useTranslation } from '@/lib/i18n/hooks';
 import '@/lib/i18n';
-import { LayoutDashboard, Map, ClipboardList, Route, Cpu, BarChart3, Tag, MessageSquare } from 'lucide-react';
+import { LayoutDashboard, Map, ClipboardList, Route, Cpu, BarChart3, Tag, MessageSquare, MousePointerClick } from 'lucide-react';
 import useSWR from 'swr';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { useAdminMall } from '@/lib/hooks/useAdminMall';
@@ -45,6 +45,7 @@ export function AdminSidebar() {
     { href: '/admin/results', labelKey: 'sidebar.resultsJourneys', icon: Route },
     { href: '/admin/edge', labelKey: 'sidebar.edgeDevices', icon: Cpu },
     { href: '/admin/shoppermind/feedback', labelKey: 'sidebar.shopperMindFeedback', icon: MessageSquare },
+    { href: '/admin/shoppermind/activity', labelKey: 'sidebar.shopperMindActivity', icon: MousePointerClick },
     ...(isStelthionAdmin
       ? [{ href: '/admin/plans', labelKey: 'sidebar.plans', icon: Tag }]
       : []),

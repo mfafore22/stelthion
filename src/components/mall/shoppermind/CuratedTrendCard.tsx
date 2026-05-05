@@ -12,19 +12,35 @@ import { MallImplicationsPanel } from './MallImplicationsPanel';
 import { CuratedCampaignList } from './CuratedCampaignList';
 import { VisualBanner } from '@/components/mall/visuals/VisualBanner';
 import { trendBannerSrc } from '@/lib/shoppermind/visualTheme';
+import { inferRetailCategoryImpacts } from '@/lib/shoppermind/retailCategories';
+import { sentencePreview } from '@/lib/text/sentencePreview';
+import { CategoryImpactChips } from './CategoryImpactChips';
+import { useShopperMindActivity } from './useShopperMindActivity';
 
 interface Props {
   trend: CuratedTrendResolved;
   mallName?: string;
+  mallId?: string | null;
+  marketId?: string | null;
 }
 
-export function CuratedTrendCard({ trend, mallName }: Props) {
+export function CuratedTrendCard({ trend, mallName, mallId, marketId }: Props) {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation('mall');
+  const track = useShopperMindActivity({ mallId, marketId });
+  const categoryImpacts = inferRetailCategoryImpacts([
+    trend.id,
+    trend.label,
+    trend.category,
+    trend.body,
+    trend.marketsNote,
+    ...trend.mallImplications,
+    ...trend.opportunities,
+  ].join(' | '));
   return (
     <MallCard variant="glass" padding="md">
       <VisualBanner
-        src={trendBannerSrc(trend.label, trend.body, trend.category, trend.marketsNote)}
+        src={trendBannerSrc(trend.id, trend.label, trend.category, trend.marketsNote, trend.body)}
         alt={trend.label}
         className="mb-3"
       />
@@ -46,12 +62,28 @@ export function CuratedTrendCard({ trend, mallName }: Props) {
           {t('shoppermind.curatedTrends.marketsNote', { defaultValue: trend.marketsNote })}
         </span>
       </div>
-      <p className="text-sm text-bo-neutral-800 leading-relaxed mb-2 line-clamp-3">
-        {trend.body}
+      <p className="text-sm text-bo-neutral-800 leading-relaxed mb-2">
+        {sentencePreview(trend.body, 240)}
       </p>
+      <div className="mb-3">
+        <CategoryImpactChips impacts={categoryImpacts} compact />
+      </div>
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => {
+          const next = !open;
+          setOpen(next);
+          if (next) {
+            track({
+              eventName: 'trend_expand',
+              tab: 'trends',
+              entityType: 'curated_trend',
+              entityId: trend.id,
+              entityLabel: trend.label,
+              categoryIds: categoryImpacts.map((i) => i.id),
+            });
+          }
+        }}
         aria-expanded={open}
         className="text-[11px] text-bo-primary-700 hover:text-bo-primary-900 inline-flex items-center gap-1"
       >
@@ -65,6 +97,7 @@ export function CuratedTrendCard({ trend, mallName }: Props) {
             opportunitiesFallback={trend.opportunities}
             mallName={mallName}
           />
+          <CategoryImpactChips impacts={categoryImpacts} />
           {trend.campaigns.length > 0 && <CuratedCampaignList campaigns={trend.campaigns} />}
           {trend.sources.length > 0 && (
             <section>
@@ -75,6 +108,14 @@ export function CuratedTrendCard({ trend, mallName }: Props) {
                 {trend.sources.slice(0, 4).map((s) => (
                   <li key={s.id} className="text-[11px] leading-snug">
                     <a href={s.url} target="_blank" rel="noopener noreferrer"
+                       onClick={() => track({
+                         eventName: 'source_click',
+                         tab: 'trends',
+                         entityType: 'source',
+                         entityId: s.id,
+                         entityLabel: s.title,
+                         metadata: { trendId: trend.id, publisher: s.publisher },
+                       })}
                        className="inline-flex items-baseline gap-1 text-bo-primary-700 hover:text-bo-primary-900 underline decoration-bo-primary-200 hover:decoration-bo-primary-700 underline-offset-2">
                       <span className="truncate max-w-[260px]">{s.title}</span>
                       <ExternalLink size={9} />
