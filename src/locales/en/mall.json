@@ -568,6 +568,29 @@
     "snapshot": {
       "section": "Trend snapshot"
     },
+    "trust": {
+      "title": "Trust and coverage",
+      "sources": {
+        "label": "Sources",
+        "value": "{{count}} sources",
+        "body": "Claims are tied to sources, and sources open directly from the cards."
+      },
+      "scope": {
+        "label": "Account",
+        "fallback": "Scoped customer view",
+        "body": "The view only uses properties allowed for the selected customer account."
+      },
+      "feedback": {
+        "label": "Feedback",
+        "value": "Learns from feedback",
+        "body": "Thumbs and comments are stored as training material for future development."
+      },
+      "categories": {
+        "label": "Categories",
+        "value": "{{count}} categories",
+        "body": "Trends are tagged to tenant categories, including future opportunities."
+      }
+    },
     "tabs": {
       "overview": "Overview",
       "actions": "Actions",

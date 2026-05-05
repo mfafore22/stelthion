@@ -568,6 +568,29 @@
     "snapshot": {
       "section": "Trendikatsaus"
     },
+    "trust": {
+      "title": "Luottamus ja kattavuus",
+      "sources": {
+        "label": "Lähteet",
+        "value": "{{count}} lähdettä",
+        "body": "Väitteet sidotaan lähteisiin, ja lähteet avautuvat suoraan korteista."
+      },
+      "scope": {
+        "label": "Asiakkuus",
+        "fallback": "Rajattu asiakasnäkymä",
+        "body": "Näkymä käyttää vain valitun asiakkuuden sallittuja kohteita."
+      },
+      "feedback": {
+        "label": "Palaute",
+        "value": "Oppii palautteesta",
+        "body": "Peukut ja kommentit tallentuvat jatkokehityksen koulutusaineistoksi."
+      },
+      "categories": {
+        "label": "Kategoriat",
+        "value": "{{count}} kategoriaa",
+        "body": "Trendit tagitetaan vuokralaiskategorioihin, myös tuleviin mahdollisuuksiin."
+      }
+    },
     "tabs": {
       "overview": "Päänäkymä",
       "actions": "Toimenpiteet",

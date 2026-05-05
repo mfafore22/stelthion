@@ -15,6 +15,7 @@ import type {
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ShopperMindHeader } from '@/components/mall/shoppermind/ShopperMindHeader';
 import { MacroDashboard } from '@/components/mall/shoppermind/MacroDashboard';
+import { ShopperMindTrustStrip } from '@/components/mall/shoppermind/ShopperMindTrustStrip';
 import { useShopperMindActivity } from '@/components/mall/shoppermind/useShopperMindActivity';
 import {
   ShopperMindTabPanels,
@@ -231,6 +232,18 @@ export default function ShopperMindPage() {
   const activeSignalOfTheDay = overviewMatchesCountry
     ? withFallbackSources(data?.signalOfTheDay ?? null, fallbackSignalOfTheDay)
     : fallbackSignalOfTheDay;
+  const trustStats = useMemo(() => {
+    const sources = new Set<string>();
+    const allCurated = [...curated.short, ...curated.medium, ...curated.long];
+    megaScenario?.sources.forEach((s) => sources.add(s.id));
+    allCurated.forEach((trend) => trend.sources.forEach((s) => sources.add(s.id)));
+    activeSignalOfTheDay?.contributingSources?.forEach((s) => sources.add(`${s.type}:${s.authority}`));
+    return {
+      sourceCount: sources.size,
+      trendCount: allCurated.length,
+      categoryCount: new Set(allCurated.map((trend) => trend.category).filter(Boolean)).size,
+    };
+  }, [activeSignalOfTheDay, curated.long, curated.medium, curated.short, megaScenario]);
 
   useEffect(() => {
     if (!visibleTabs.some((tab) => tab.value === activeTab)) {
@@ -297,6 +310,12 @@ export default function ShopperMindPage() {
                     {t('shoppermind.macro.notSupported', { defaultValue: 'Makroindikaattorit eivät ole vielä saatavilla tälle markkinalle.' })}
                   </div>
                 )}
+                <ShopperMindTrustStrip
+                  sourceCount={trustStats.sourceCount}
+                  trendCount={trustStats.trendCount}
+                  categoryCount={trustStats.categoryCount}
+                  customerName={user.companyName}
+                />
                 <Tabs value={activeTab} onValueChange={(value) => handleTabChange(value as ShopperMindTab)} className="space-y-4">
                   <div className="overflow-x-auto pb-1">
                     <TabsList className="min-w-max">

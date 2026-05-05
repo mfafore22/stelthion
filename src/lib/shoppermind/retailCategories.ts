@@ -84,7 +84,7 @@ export function inferRetailCategoryImpacts(text: string, present: RetailCategory
       intensity: 'high',
     }));
   }
-  const scored = Object.entries(KEYWORDS).flatMap(([id, words]) => {
+  const scored: Array<RetailCategoryImpact & { hits: number }> = Object.entries(KEYWORDS).flatMap(([id, words]) => {
     const hits = words.filter((w) => hay.includes(w)).length;
     if (!hits) return [];
     const direction = /risk|pressure|heikko|riski|paine|svag|risk/.test(hay) ? 'mixed' : 'positive';
@@ -92,5 +92,5 @@ export function inferRetailCategoryImpacts(text: string, present: RetailCategory
     return [{ id: id as RetailCategoryId, state: presentSet.has(id as RetailCategoryId) ? 'present' : 'absent_relevant', direction, intensity, hits }];
   });
   return scored.sort((a, b) => b.hits - a.hits).slice(0, 6)
-    .map((item) => ({ id: item.id, state: item.state, direction: item.direction, intensity: item.intensity }));
+    .map((item): RetailCategoryImpact => ({ id: item.id, state: item.state, direction: item.direction, intensity: item.intensity }));
 }

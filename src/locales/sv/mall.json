@@ -577,6 +577,29 @@
     "snapshot": {
       "section": "Trendöversikt"
     },
+    "trust": {
+      "title": "Förtroende och täckning",
+      "sources": {
+        "label": "Källor",
+        "value": "{{count}} källor",
+        "body": "Påståenden kopplas till källor, och källor öppnas direkt från korten."
+      },
+      "scope": {
+        "label": "Konto",
+        "fallback": "Avgränsad kundvy",
+        "body": "Vyn använder endast fastigheter som är tillåtna för det valda kundkontot."
+      },
+      "feedback": {
+        "label": "Feedback",
+        "value": "Lär av feedback",
+        "body": "Tummar och kommentarer sparas som träningsmaterial för framtida utveckling."
+      },
+      "categories": {
+        "label": "Kategorier",
+        "value": "{{count}} kategorier",
+        "body": "Trender taggas till hyresgästkategorier, inklusive framtida möjligheter."
+      }
+    },
     "tabs": {
       "overview": "Huvudvy",
       "actions": "Åtgärder",
