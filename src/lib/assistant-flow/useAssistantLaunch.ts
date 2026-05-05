@@ -19,6 +19,7 @@ export function useAssistantLaunch() {
 
   return useCallback((launch: AssistantLaunch) => {
     viewContext.setValue(launch.viewContext);
+    if (launch.targetMallId) concierge.setMallFocus(launch.targetMallId);
     concierge.createConversation(launch.agentRole);
     concierge.setActiveAgent(launch.agentRole);
     concierge.openPanel();

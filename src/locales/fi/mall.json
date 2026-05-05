@@ -1135,7 +1135,7 @@
     "subtitle": "Muuta ShopperMindin trendit kampanjabriiffeiksi, joita voidaan testata kävijä-, POS- ja vuokralaisdatalla.",
     "builder": "Kampanjabriiffin luonnos",
     "createBrief": "Luo testibriiffi",
-    "assistantPrompt": "Luo testibriiffi kohteelle {{mall}}. Alue: {{zone}}. Kohderyhmä: {{audience}}. Kategoria: {{category}}. Ehdotetut vuokralaiset: {{stores}}. Budjetti: {{budget}}. Kesto: {{duration}}. Käytä ShopperMindin vuokralaisvaikutusta {{impact}} taustana, jos se on annettu.",
+    "assistantPrompt": "Laadi kampanjabriiffi. Käytä vain näitä valintoja: kohde {{mall}}, alue {{zone}}, kohderyhmä {{audience}}, kategoria {{category}}, ehdotetut vuokralaiset {{stores}}, budjetti {{budget}}, kesto {{duration}}. Rakenna vastaus otsikoilla: tavoite, asiakastarve, kampanjaidea, vuokralaisten roolit, kanavat, KPI:t, hyväksyntäaskeleet ja live-dataan liitettävät tiedot. Pidä vastaus konkreettisena äläkä vastaa muista aiheista.",
     "flowTitle": "Työnkulku live-dataan liitettynä",
     "aiTitle": "Demo nyt, asiakasdata myöhemmin",
     "aiBody": "Räätälöity tekoälymalli käyttää vain asiakkaan omaan ympäristöön rajattua dataa. Demo näyttää työnkulun siemen- ja trendidatalla, mutta sama näkymä voidaan liittää POS-, kävijä-, vuokralais- ja kampanjatuloksiin.",
@@ -1151,7 +1151,9 @@
           "everyday": "Päivittäisasiointi",
           "station": "Asema",
           "restaurants": "Ravintolat",
-          "services": "Palvelut"
+          "services": "Palvelut",
+          "fashion": "Muoti",
+          "home": "Koti ja elektroniikka"
         }
       },
       "audience": {
@@ -1195,17 +1197,20 @@
       "visits": {
         "label": "Kävijäennuste",
         "value": "+3,8 %",
-        "hint": "Demoarvio valitulle alueelle"
+        "hint": "Demoarvio valitulle alueelle",
+        "dynamicHint": "{{duration}} päivän demoarvio, {{tenants}} vuokralaista mukana"
       },
       "sales": {
         "label": "Myyntisignaali",
         "value": "+2,4 %",
-        "hint": "POS-liitos myöhemmässä toteutuksessa"
+        "hint": "POS-liitos myöhemmässä toteutuksessa",
+        "dynamicHint": "Budjettitaso muuttaa oletettua näkyvyyttä: {{budget}}"
       },
       "tenants": {
         "label": "Vuokralaiset",
         "value": "12",
-        "hint": "Sopivat osallistujat siemendatasta"
+        "hint": "Sopivat osallistujat siemendatasta",
+        "dynamicHint": "{{selected}} valittu, {{available}} sopivaa ehdokasta"
       }
     },
     "steps": {
@@ -1525,7 +1530,8 @@
       "trends": "Trendit",
       "signalOfDay": "Päivän signaali",
       "zoneFlow": "Kävijävirrat",
-      "mallStats": "Tunnusluvut"
+      "mallStats": "Tunnusluvut",
+      "activationPlan": "Aktivointisuunnitelma"
     },
     "specialist": {
       "weather": "Säätilaasiantuntija",

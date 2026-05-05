@@ -9,10 +9,11 @@
 'use client';
 
 import React from 'react';
-import { Sun, Users, Calendar, Car, Train, ClipboardList, TrendingUp, BarChart3 } from 'lucide-react';
+import { Sun, Users, Calendar, Car, Train, ClipboardList, TrendingUp, BarChart3, CheckSquare } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useConcierge } from './ConciergeContext';
 import { canonicalizeMallId } from '@/lib/mall/ids';
+import { useViewContext } from '@/lib/shoppermind/view-context';
 
 interface QuickActionChipsProps {
   onSend: (message: string) => void;
@@ -99,6 +100,17 @@ const GENERAL_CHIPS: Chip[] = [
     },
   },
 ];
+
+const CAMPAIGN_BRIEF_CHIP: Chip = {
+  icon: CheckSquare,
+  labelKey: 'concierge.quickAction.activationPlan',
+  labelFallback: 'Aktivointisuunnitelma',
+  query: {
+    fi: 'Jatka aktivointisuunnitelmaan tämän kampanjabriiffin perusteella.',
+    en: 'Continue to the activation plan based on this campaign brief.',
+    sv: 'Fortsätt till aktiveringsplanen utifrån denna kampanjbrief.',
+  },
+};
 
 const AGENT_CHIPS: Record<string, Chip[]> = {
   'trend-analyst': [
@@ -271,6 +283,7 @@ const AGENT_CHIPS: Record<string, Chip[]> = {
 export function QuickActionChips({ onSend, disabled = false }: QuickActionChipsProps) {
   const { t, i18n } = useTranslation('mall');
   const { activeConversation, mallId } = useConcierge();
+  const { value: viewContext } = useViewContext();
   const lang = (i18n.language || 'en') as 'en' | 'fi' | 'sv';
 
   const agentRole = activeConversation?.agentRole;
@@ -279,9 +292,12 @@ export function QuickActionChips({ onSend, disabled = false }: QuickActionChipsP
   const hasLocationData = canonicalMallId
     ? ['ideapark-lempaala', 'realidea-sello', 'realidea-tripla'].includes(canonicalMallId)
     : false;
+  const scopedChips = viewContext?.kind === 'campaign_brief'
+    ? [CAMPAIGN_BRIEF_CHIP, ...baseChips]
+    : baseChips;
   const chips = hasLocationData
-    ? baseChips
-    : baseChips
+    ? scopedChips
+    : scopedChips
       .filter((chip) => chip.labelKey !== 'concierge.quickAction.parking' && chip.labelKey !== 'concierge.quickAction.transport')
       .map((chip) => chip === BRIEFING_CHIP ? BRIEFING_WITHOUT_TRANSPORT_CHIP : chip);
 
