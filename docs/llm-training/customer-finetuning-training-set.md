@@ -12,8 +12,21 @@ Scope rules:
 
 Live collection:
 - `LlmTrainingPair` stores customer-scoped prompt-answer pairs from Concierge chat.
+- ShopperMind feedback records training candidates with `source = shoppermind.feedback`.
 - `/api/admin/llm-training/pairs` exports active-customer JSONL in chat fine-tuning format.
 - The export includes source metadata, tool calls, attachments, and view context.
+
+ShopperMind feedback training loop:
+- Thumbs-up feedback becomes a weak positive training candidate.
+- Thumbs-up with a comment becomes a stronger positive candidate.
+- Thumbs-down with reason codes or a comment becomes a correction candidate.
+- ShopperMind activity events are admin analytics signals, not direct training examples.
+- High activity plus low feedback can still guide admin review of future training candidates.
+- Feedback candidates must stay scoped by `customerId`, `mallId`, market, language, entity type, category IDs, and user verdict.
+- Admin review should decide whether a candidate is accepted, ignored, needs source review, needs category correction, or needs action rewrite.
+- Category feedback must preserve whether the category is present in the mall or absent but relevant.
+- Absent but relevant categories are valid learning signals because a trend may reveal a leasing gap, campaign opportunity, or missing service category.
+- Do not use one customer's feedback to tune another customer's LLM.
 
 Seed prompt-answer pairs from recent product work:
 

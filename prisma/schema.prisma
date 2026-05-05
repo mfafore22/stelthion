@@ -599,6 +599,27 @@ model LlmTrainingPair {
   @@index([customerId, mallId])
 }
 
+model ShopperMindActivityEvent {
+  id          String   @id @default(cuid())
+  customerId  String
+  mallId      String
+  userId      String
+  marketId    String?
+  eventName   String
+  tab         String?
+  entityType  String?
+  entityId    String?
+  entityLabel String?
+  categoryIds Json?
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  @@index([customerId, createdAt])
+  @@index([customerId, mallId])
+  @@index([customerId, eventName])
+  @@index([customerId, entityType])
+}
+
 // ─── ShopperMind macro indicators ──────────────────────────────────────────
 // Public macroeconomic series fetched from open APIs (e.g. Tilastokeskus PxWeb).
 // One row per (indicator, period). Sync script upserts on conflict.
