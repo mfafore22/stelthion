@@ -93,12 +93,12 @@ export default function AdminResultsIndexPage() {
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
                       <span className="text-bo-neutral-400">{MODE_ICONS[job.mode]}</span>
-                      {job.camera?.label ?? '—'}
+                      {job.camera?.label ?? '–'}
                     </div>
                   </td>
                   <td className="px-4 py-3">{new Date(job.footageDate).toLocaleDateString()}</td>
                   <td className="px-4 py-3">{job.startTime}–{job.endTime}</td>
-                  <td className="px-4 py-3">{job.journeyCount > 0 ? `${job.journeyCount} ${t('jobs.tagged')}` : '—'}</td>
+                  <td className="px-4 py-3">{job.journeyCount > 0 ? `${job.journeyCount} ${t('jobs.tagged')}` : '–'}</td>
                   <td className="px-4 py-3">
                     <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[job.status] ?? ''}`}>
                       {job.status}
@@ -117,7 +117,7 @@ export default function AdminResultsIndexPage() {
                         {t('results.verify', 'Verify')}
                       </Link>
                     ) : (
-                      <span className="text-[10px] text-bo-neutral-400">—</span>
+                      <span className="text-[10px] text-bo-neutral-400">–</span>
                     )}
                   </td>
                   <td className="px-4 py-3 text-right">

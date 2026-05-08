@@ -14,7 +14,7 @@ interface WeatherKPIProps {
   representativeMallId?: string; // Mall to use for portfolio-wide weather
 }
 
-export function WeatherKPI({ representativeMallId = 'ideapark' }: WeatherKPIProps) {
+export function WeatherKPI({ representativeMallId = 'ideapark-lempaala' }: WeatherKPIProps) {
   const { weather, isLoading } = useWeather(representativeMallId);
 
   if (isLoading) {

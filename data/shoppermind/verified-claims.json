@@ -1,0 +1,230 @@
+{
+  "version": 1,
+  "updatedAt": "2026-05-01",
+  "claims": [
+    {
+      "id": "trend-smart-value-confidence-fi",
+      "trendId": "smart-value-low-risk",
+      "sourceId": "stat-fi-confidence-apr-2026",
+      "text": "Finnish consumer confidence remained weak in April 2026, supporting a defensive value-led retail stance.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-smart-value-capgemini",
+      "trendId": "smart-value-low-risk",
+      "sourceId": "capgemini-consumer-2026",
+      "text": "Capgemini frames value as a mix of transparent pricing, quality, trust, emotional connection, and AI-assisted shopping rather than discounting alone.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-omnichannel-niq",
+      "trendId": "frictionless-omnichannel",
+      "sourceId": "niq-consumer-outlook-2026",
+      "text": "NIQ identifies seamless commerce, social commerce, quick commerce, and retail media as converging into a single shopper ecosystem.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-omnichannel-nshift",
+      "trendId": "frictionless-omnichannel",
+      "sourceId": "nshift-nordic-commerce-2026",
+      "text": "Nordic commerce sources support the need for connected delivery, pickup, return, and digital journey design.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-curated-discretionary-yougov",
+      "trendId": "curated-discretionary",
+      "sourceId": "yougov-fashion-se-2026",
+      "text": "Fashion consideration is shifting, requiring clearer differentiation and more intentional category curation.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-curated-discretionary-capgemini",
+      "trendId": "curated-discretionary",
+      "sourceId": "capgemini-consumer-2026",
+      "text": "Consumers still allow intentional indulgence when reliability, quality, and emotional value are clear.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-circular-vtt",
+      "trendId": "circular-commerce",
+      "sourceId": "vtt-nordic-circular",
+      "text": "Finnish and Nordic circularity sources support repair, reuse, and traceability as credible retail themes.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-circular-eu",
+      "trendId": "circular-commerce",
+      "sourceId": "ec-2030-consumer-agenda",
+      "text": "The European consumer agenda supports stronger consumer protection, sustainability, and informed choices.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-ageing-bof",
+      "trendId": "service-led-ageing",
+      "sourceId": "bof-longterm-aging",
+      "text": "Bank of Finland analysis supports ageing and a shrinking working-age population as structural long-term forces in Finland.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-ageing-mintel",
+      "trendId": "service-led-ageing",
+      "sourceId": "mintel-2026-beyond",
+      "text": "Mintel's 2026 predictions support blurred life stages and reinvention across older age groups.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-retail-media-niq",
+      "trendId": "retail-media-and-mall-attention",
+      "sourceId": "niq-consumer-outlook-2026",
+      "text": "NIQ identifies retail media networks as reshaping commerce and retailer monetisation.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-retail-media-nepa",
+      "trendId": "retail-media-and-mall-attention",
+      "sourceId": "nepa-nordic-fmcg-2026",
+      "text": "Nepa links retail media, AI-mediated discovery, and evidence-based category growth for Nordic FMCG planning in 2026.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-wellness-niq",
+      "trendId": "health-beauty-wellness-frequency",
+      "sourceId": "niq-consumer-outlook-2026",
+      "text": "NIQ identifies Health & Beauty as a stronger engagement category with more frequent shopping occasions in leading markets.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-wellness-nepa",
+      "trendId": "health-beauty-wellness-frequency",
+      "sourceId": "nepa-nordic-fmcg-2026",
+      "text": "Nepa frames health behaviour and functional choices as linked 2026 Nordic FMCG growth priorities.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-smart-value-us-nrf",
+      "trendId": "smart-value-low-risk",
+      "sourceId": "nrf-us-retail-2026",
+      "text": "NRF forecasts US retail sales growth of 4.4% in 2026, supporting a resilient but selective spending baseline.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-smart-value-us-deloitte",
+      "trendId": "smart-value-low-risk",
+      "sourceId": "deloitte-cp-2026",
+      "text": "Deloitte reports value-seeking as a structural consumer-products issue, with shoppers expecting more value for the price.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-omnichannel-us-census",
+      "trendId": "frictionless-omnichannel",
+      "sourceId": "census-us-ecommerce-2025",
+      "text": "U.S. Census e-commerce data supports e-commerce as a material part of US retail, requiring physical centres to integrate pickup, returns, and fulfilment.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-curated-us-moa",
+      "trendId": "curated-discretionary",
+      "sourceId": "mall-of-america-flagship-2025",
+      "text": "Mall of America provides an official destination benchmark for combining scale, attractions, events, and flagship retail.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-circular-us-deloitte",
+      "trendId": "circular-commerce",
+      "sourceId": "deloitte-cp-2026",
+      "text": "Deloitte's value-seeking analysis supports repair, trade-in, and product-life-extension services as practical value propositions.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-ageing-us-mckinsey",
+      "trendId": "service-led-ageing",
+      "sourceId": "mckinsey-wellness-2025",
+      "text": "McKinsey's wellness research supports health, appearance, fitness, nutrition, and mindfulness as cross-age consumer priorities.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-retail-media-us-emarketer",
+      "trendId": "retail-media-and-mall-attention",
+      "sourceId": "emarketer-retail-media-2026",
+      "text": "EMARKETER forecasts US retail media ad spending growth in 2026, supporting retail media as a monetisation layer.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-retail-media-us-coresight",
+      "trendId": "retail-media-and-mall-attention",
+      "sourceId": "coresight-instore-retail-media-2026",
+      "text": "Coresight identifies in-store retail media as a growing retail monetisation and shopper-engagement opportunity.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-wellness-us-circana",
+      "trendId": "health-beauty-wellness-frequency",
+      "sourceId": "circana-us-beauty-2025",
+      "text": "Circana reports growth in US prestige and mass beauty retail in 2025, supporting beauty as a proven frequency category.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-wellness-us-mckinsey",
+      "trendId": "health-beauty-wellness-frequency",
+      "sourceId": "mckinsey-wellness-2025",
+      "text": "McKinsey finds wellness demand spanning health, sleep, nutrition, fitness, appearance, and mindfulness, supporting wellness-service clustering.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-omnichannel-us-deloitte",
+      "trendId": "frictionless-omnichannel",
+      "sourceId": "deloitte-cp-2026",
+      "text": "Deloitte identifies AI-enabled demand and a changing value chain as forces that make connected retail planning more important.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-curated-us-nrf",
+      "trendId": "curated-discretionary",
+      "sourceId": "nrf-us-retail-2026",
+      "text": "NRF forecasts 2026 US retail sales growth, supporting a selective growth rather than no-growth mall planning baseline.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-uae-hormuz-reuters-shipping",
+      "trendId": "uae-hormuz-risk-premium",
+      "sourceId": "reuters-hormuz-shipping-2026",
+      "text": "Reuters reports Hormuz shipping disruption, stranded tankers and cancelled war-risk cover, supporting logistics and insurance risk for UAE malls.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-uae-hormuz-cbuae-growth",
+      "trendId": "uae-hormuz-risk-premium",
+      "sourceId": "cbuae-qer-mar-2026",
+      "text": "CBUAE forecasts strong UAE growth but identifies regional conflicts, commodity prices and risk premia as downside risks.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-uae-opec-reuters-exit",
+      "trendId": "uae-opec-autonomy-retail",
+      "sourceId": "reuters-uae-opec-exit-2026",
+      "text": "Reuters reports the UAE said it would leave OPEC and OPEC+ from May 1, 2026, supporting the energy-autonomy scenario.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-uae-opec-reuters-autonomy",
+      "trendId": "uae-opec-autonomy-retail",
+      "sourceId": "reuters-uae-autonomy-2026",
+      "text": "Reuters reports UAE officials framing strategic autonomy and a review of multilateral ties after the OPEC exit.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-uae-safe-hub-det-visitors",
+      "trendId": "uae-safe-hub-tourism",
+      "sourceId": "dubai-det-visitors-2025",
+      "text": "Dubai DET reports 19.59 million international visitors in 2025, supporting tourism as a UAE mall demand base.",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "trend-uae-safe-hub-reuters-deadlock",
+      "trendId": "uae-safe-hub-tourism",
+      "sourceId": "reuters-iran-war-deadlock-2026",
+      "text": "Reuters reports continued Iran-war negotiation deadlock and Hormuz risk, supporting the need to make safe-hub operations explicit.",
+      "verificationStatus": "verified"
+    }
+  ]
+}

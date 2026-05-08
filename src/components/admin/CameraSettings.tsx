@@ -84,7 +84,7 @@ export function CameraSettings({ camera, zones, onClose, onSaved }: CameraSettin
       onSaved(dirty as Partial<CameraData>);
       onClose();
     } catch {
-      setError('Network error — please try again');
+      setError('Network error. Please try again.');
       setSaving(false);
     }
   }
@@ -130,7 +130,7 @@ export function CameraSettings({ camera, zones, onClose, onSaved }: CameraSettin
                   <div>
                     <label className={LABEL_CLS}>Role</label>
                     <select className={INPUT_CLS} value={form.cameraRole} onChange={(e) => set('cameraRole', e.target.value)}>
-                      <option value="">— None —</option>
+                      <option value="">(none)</option>
                       {['entrance', 'zone', 'panoramic'].map((r) => (
                         <option key={r} value={r}>{r}</option>
                       ))}
@@ -198,7 +198,7 @@ export function CameraSettings({ camera, zones, onClose, onSaved }: CameraSettin
             <div>
               <label className={LABEL_CLS}>Assigned Zone</label>
               <select className={INPUT_CLS} value={form.zoneDbId} onChange={(e) => set('zoneDbId', e.target.value)}>
-                <option value="">— None —</option>
+                <option value="">(none)</option>
                 {zones.filter((z) => z.id).map((z) => (
                   <option key={z.id} value={z.id!}>{z.name} ({z.zoneId})</option>
                 ))}

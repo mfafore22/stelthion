@@ -38,11 +38,12 @@ export function AlertsStream({ alerts }: AlertsStreamProps) {
   };
 
   return (
-    <Card className="p-6 bg-bo-glass border-bo-neutral-200/30 shadow-bo-glass">
+    <Card className="bo-surface rounded-xl border-2 border-bo-primary-200/50 p-6 shadow-bo-glass">
+      <div className="mb-4 h-1.5 rounded-full bg-gradient-to-r from-bo-success-dark via-bo-warning-dark to-bo-error-dark" />
       <h3 className="mb-4 text-lg font-semibold text-bo-neutral-950 tracking-tight">{t('alertsStream.title')}</h3>
       <div className="space-y-3">
         {alerts.length === 0 && (
-          <div className="flex items-center gap-3 rounded-lg bg-bo-success-light/70 p-3 border border-bo-success/15">
+          <div className="bo-surface-subtle flex items-center gap-3 rounded-lg border border-bo-success/20 p-3">
             <CheckCircle className="h-5 w-5 text-bo-success-dark" />
             <div>
               <div className="font-medium text-bo-success-dark">{t('alertsStream.allNormal')}</div>
@@ -55,9 +56,9 @@ export function AlertsStream({ alerts }: AlertsStreamProps) {
             key={i}
             className={cn(
               'flex items-start gap-3 rounded-lg p-3 border',
-              alert.level === 'warning' && 'bg-bo-warning-light/70 border-bo-warning/15',
-              alert.level === 'critical' && 'bg-bo-error-light/70 border-bo-error/15',
-              alert.level === 'info' && 'bg-bo-success-light/70 border-bo-success/15'
+              alert.level === 'warning' && 'bo-surface-subtle border-bo-warning/30',
+              alert.level === 'critical' && 'bo-surface-subtle border-bo-error/30',
+              alert.level === 'info' && 'bo-surface-subtle border-bo-success/30'
             )}
           >
             {getAlertIcon(alert.level)}

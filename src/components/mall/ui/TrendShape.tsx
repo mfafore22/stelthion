@@ -12,7 +12,9 @@
 
 'use client';
 
-import React from 'react';
+import { useId } from 'react';
+
+export type TrendShapeIntensity = 'foreground' | 'background';
 
 interface TrendShapeProps {
   /**
@@ -24,33 +26,58 @@ interface TrendShapeProps {
    * Threshold for considering a trend as "flat" (default: 0.5%)
    */
   flatThreshold?: number;
+  /**
+   * Visual intensity. `foreground` is the bold KPI-tile look (default).
+   * `background` is the muted variant for cards that already have rich
+   * content (sparklines, badges, body text).
+   */
+  intensity?: TrendShapeIntensity;
+  /**
+   * Optional color override for semantic risk visuals where direction and
+   * color are separate concepts, e.g. high debt pressure should slope upward
+   * while still being red.
+   */
+  color?: string;
 }
 
-export function TrendShape({ percentageChange, flatThreshold = 0.5 }: TrendShapeProps) {
+export function TrendShape({
+  percentageChange,
+  flatThreshold = 0.5,
+  intensity = 'foreground',
+  color,
+}: TrendShapeProps) {
   const absChange = Math.abs(percentageChange);
   const isFlat = absChange < flatThreshold;
   const isPositive = percentageChange > 0;
 
   // Determine colors
   const getColors = () => {
+    const isBg = intensity === 'background';
     if (isFlat) {
       return {
-        base: '#9ca3af', // gray-400
-        startOpacity: 0.3,
-        endOpacity: 0.3,
+        base: color ?? '#9ca3af',
+        startOpacity: isBg ? 0.08 : 0.3,
+        endOpacity: isBg ? 0.08 : 0.3,
+      };
+    }
+    if (color) {
+      return {
+        base: color,
+        startOpacity: isBg ? 0.05 : 0.2,
+        endOpacity: isBg ? 0.22 : 0.6,
       };
     }
     if (isPositive) {
       return {
-        base: '#10b981', // emerald-500
-        startOpacity: 0.2, // faded under text
-        endOpacity: 0.6,   // bright at edge
+        base: '#10b981',
+        startOpacity: isBg ? 0.05 : 0.2,
+        endOpacity: isBg ? 0.22 : 0.6,
       };
     }
     return {
-      base: '#ef4444', // red-500
-      startOpacity: 0.2, // faded under text
-      endOpacity: 0.6,   // bright at edge
+      base: '#ef4444',
+      startOpacity: isBg ? 0.05 : 0.2,
+      endOpacity: isBg ? 0.22 : 0.6,
     };
   };
 
@@ -92,8 +119,8 @@ export function TrendShape({ percentageChange, flatThreshold = 0.5 }: TrendShape
     100,100
   `;
 
-  // Create gradient ID unique to this instance
-  const gradientId = `trend-gradient-${Math.random().toString(36).substr(2, 9)}`;
+  // Stable gradient ID per instance (replaces Math.random() to avoid re-render churn).
+  const gradientId = `trend-gradient-${useId()}`;
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">

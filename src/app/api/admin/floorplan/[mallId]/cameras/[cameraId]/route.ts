@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
-import { requireAdmin } from '@/lib/admin-auth';
+import { requireMallAccess } from '@/lib/admin-customer';
 
 const PATCHABLE = [
   'label', 'angleDeg', 'fovDeg', 'rangeM', 'streamUrl',
@@ -16,10 +16,9 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ mallId: string; cameraId: string }> },
 ) {
-  const { error } = await requireAdmin();
-  if (error) return error;
-
   const { mallId, cameraId } = await params;
+  const guard = await requireMallAccess(mallId);
+  if ('error' in guard) return guard.error;
 
   const existing = await prisma.camera.findUnique({ where: { id: cameraId } });
   if (!existing || existing.mallId !== mallId) {

@@ -2,7 +2,7 @@
  * Footfall Chart Component
  * Shows real hourly counter data when available.
  * Fills missing hours (no upload for today) from historical profile averages.
- * YoY comparison always uses real uploaded prevYear data — never hardcoded.
+ * YoY comparison always uses real uploaded prevYear data, never hardcoded.
  */
 
 'use client';
@@ -45,15 +45,15 @@ export function FootfallChart({ mallId }: FootfallChartProps) {
   const { data, anyEstimated } = useMemo(() => {
     const todayDate = findDateForWeekday();
     const hourly = todayDate ? hourlyTotalsForDate(todayDate) : [];
-    let usedEstimate = false;
 
-    const chartData = OPERATING_HOURS.map((hr) => {
+    const rows = OPERATING_HOURS.map((hr) => {
       const entry = hourly.find((h) => h.hour === hr);
       const realVisitors = entry?.visitors ?? 0;
       const realPrevYear = entry?.prevYear ?? null;
 
       let actual = realVisitors;
       let prevYear = realPrevYear ?? 0;
+      let estimated = false;
 
       // Fill gaps from profile when real data is missing for this hour
       if (actual === 0 && (hasProfile || !hasRealData)) {
@@ -61,19 +61,27 @@ export function FootfallChart({ mallId }: FootfallChartProps) {
         if (est.visitors > 0) {
           actual = est.visitors;
           if (prevYear === 0 && est.prevYear != null) prevYear = est.prevYear;
-          usedEstimate = true;
+          estimated = true;
         }
       } else if (prevYear === 0 && hasProfile) {
-        // Real visitors exist but prevYear missing — fill prevYear from profile
+        // Real visitors exist but prevYear is missing, fill prevYear from profile.
         const est = estimateForHour(todayWeekday, hr);
         if (est.prevYear != null) prevYear = est.prevYear;
       }
 
       const weatherBoost = Math.round(actual * (weatherImpactPercent / 100));
-      return { time: HOUR_LABELS[hr], actual, prevYear, weatherBoost };
+      return { time: HOUR_LABELS[hr], actual, prevYear, weatherBoost, estimated };
     });
 
-    return { data: chartData, anyEstimated: usedEstimate };
+    return {
+      data: rows.map((row) => ({
+        time: row.time,
+        actual: row.actual,
+        prevYear: row.prevYear,
+        weatherBoost: row.weatherBoost,
+      })),
+      anyEstimated: rows.some((row) => row.estimated),
+    };
   }, [hasRealData, hasProfile, hourlyTotalsForDate, findDateForWeekday, estimateForHour, todayWeekday, weatherImpactPercent]);
 
   const hasAnyData = hasRealData || hasProfile;
@@ -85,7 +93,8 @@ export function FootfallChart({ mallId }: FootfallChartProps) {
     : null;
 
   return (
-    <Card className="p-6 bg-bo-glass border-2 border-bo-neutral-300/60 shadow-bo-glass-strong backdrop-blur-xl">
+    <Card className="bo-surface rounded-xl border-2 border-bo-primary-200/50 p-6 shadow-bo-glass">
+      <div className="mb-4 h-1.5 rounded-full bg-gradient-to-r from-bo-success-dark via-bo-primary-700 to-bo-info-dark" />
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-bo-neutral-950 tracking-tight">{t('footfall.chartTitle')}</h3>
         {badgeLabel && (

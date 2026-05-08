@@ -1,0 +1,71 @@
+version: "3.9"
+
+# Local dev stack for the ShopperMind service.
+# Brings up Postgres (service-owned) + Redis + the service in dev mode.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: shoppermind
+      POSTGRES_PASSWORD: shoppermind
+      POSTGRES_DB: shoppermind_db
+    ports:
+      - "55432:5432"
+    volumes:
+      - shoppermind_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shoppermind -d shoppermind_db"]
+      interval: 2s
+      timeout: 2s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "56379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 2s
+      retries: 20
+
+  http:
+    build:
+      context: ../..
+      dockerfile: services/shoppermind/Dockerfile
+    command: ["node", "dist/http/server.js"]
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgres://shoppermind:shoppermind@postgres:5432/shoppermind_db
+      REDIS_URL: redis://redis:6379
+      SHOPPERMIND_SERVICE_TOKEN: dev-local-token-0000
+      SHOPPERMIND_INTERNAL_TOKEN: dev-internal-token-0000
+      PORT: "4000"
+    ports:
+      - "4000:4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: ../..
+      dockerfile: services/shoppermind/Dockerfile
+    command: ["node", "dist/worker/index.js"]
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgres://shoppermind:shoppermind@postgres:5432/shoppermind_db
+      REDIS_URL: redis://redis:6379
+      SHOPPERMIND_SERVICE_TOKEN: dev-local-token-0000
+      SHOPPERMIND_INTERNAL_TOKEN: dev-internal-token-0000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  shoppermind_pgdata:

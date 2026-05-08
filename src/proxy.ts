@@ -14,6 +14,7 @@ export default auth((req) => {
   const isPublicRoute =
     pathname === '/' ||
     pathname === '/login' ||
+    pathname === '/mall/login' ||
     pathname.startsWith('/api/auth')
 
   const is2FARoute =
@@ -28,9 +29,7 @@ export default auth((req) => {
   const isStaticRoute =
     pathname.startsWith('/_next') ||
     pathname.startsWith('/assets') ||
-    pathname.endsWith('.png') ||
-    pathname.endsWith('.ico') ||
-    pathname.endsWith('.svg')
+    /\.(png|jpe?g|webp|avif|gif|ico|svg)$/i.test(pathname)
 
   if (isStaticRoute) return NextResponse.next()
 
@@ -67,5 +66,5 @@ export default auth((req) => {
 })
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|.*\\.png$|.*\\.ico$).*)'],
+  matcher: ['/((?!_next/static|_next/image|.*\\.(?:png|jpe?g|webp|avif|gif|ico|svg)$).*)'],
 }

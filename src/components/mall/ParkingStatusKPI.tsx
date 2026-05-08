@@ -18,6 +18,7 @@ interface ParkingStatusKPIProps {
 
 export function ParkingStatusKPI({ parkingData }: ParkingStatusKPIProps) {
   const { t } = useTranslation('mall');
+  const isFreeParking = parkingData.pricing.hourlyRate === 0 && parkingData.pricing.dailyMax === 0;
   // Calculate total occupied and available
   const totalOccupied = parkingData.levels.reduce((sum, level) => sum + level.currentOccupancy, 0);
   const totalAvailable = parkingData.totalCapacity - totalOccupied;
@@ -34,12 +35,6 @@ export function ParkingStatusKPI({ parkingData }: ParkingStatusKPIProps) {
     if (percent >= 90) return 'bg-bo-error-light/70 border-bo-error/15';
     if (percent >= 70) return 'bg-bo-warning-light/70 border-bo-warning/15';
     return 'bg-bo-success-light/70 border-bo-success/15';
-  };
-
-  const getUtilizationBarColor = (percent: number) => {
-    if (percent >= 90) return 'bg-bo-error-dark';
-    if (percent >= 70) return 'bg-bo-warning-dark';
-    return 'bg-bo-success-dark';
   };
 
   // Level-specific utilization
@@ -60,7 +55,7 @@ export function ParkingStatusKPI({ parkingData }: ParkingStatusKPIProps) {
               {t('parking.status')}
             </h3>
             <p className="text-sm text-bo-neutral-600">
-              {t('parking.outdoorSurfaceLotFree', { count: parkingData.totalCapacity })}
+              {t(isFreeParking ? 'parking.capacityFree' : 'parking.capacityPaid', { count: parkingData.totalCapacity })}
             </p>
           </div>
           <div className={`rounded-lg p-3 border ${getUtilizationBg(utilizationPercent)}`}>
@@ -183,7 +178,7 @@ export function ParkingStatusKPI({ parkingData }: ParkingStatusKPIProps) {
             </div>
           </div>
           <div className="mt-2 text-xs text-bo-neutral-600">
-            {t('parking.paymentInfo')}
+            {t(isFreeParking ? 'parking.paymentInfoFree' : 'parking.paymentInfoPaid')}
           </div>
         </div>
 

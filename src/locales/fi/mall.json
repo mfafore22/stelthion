@@ -146,7 +146,7 @@
     "venuesAndUpcoming": "Tapahtumapaikkoja & Tulevia tapahtumia",
     "nearbyImpact": "Lähistön tapahtumien vaikutus",
     "refresh": "Päivitä",
-    "fetchError": "Tapahtumatietojen haku epäonnistui — näytetään välimuistissa olevia tietoja",
+    "fetchError": "Tapahtumatietojen haku epäonnistui. Näytetään välimuistissa olevia tietoja.",
     "nearbyVenues": "Lähistön tapahtumapaikkoja",
     "allUpcoming": "Kaikki tulevat tapahtumat",
     "nextHours": "Tapahtumat (seuraavat 2–6 tuntia)",
@@ -412,81 +412,709 @@
     "description": "AI Assistentit kiinteistönhallintaan",
     "comingSoon": "AI Assistentit integraatio",
     "integrationDescription": "AI Assistentit käyttävät kiinteistösi eristettyä dataa tuottaakseen kiinteistökohtaisia simulaatioita ja ennusteita. Niiden avulla voit testata valitsemiesi toimenpiteiden vaikutusta tai varautua tilanteisiin. Stelthion AI-mallit tuovat simulaatioihin ja ennusteisiin laajempaa näkemystä ja vaihtoehtoja.",
-    "tryScenarios": "Kokeile Skenaariolaskuria"
+    "tryScenarios": "Kokeile Skenaariolaskuria",
+    "actions": {
+      "startChat": "Aloita keskustelu",
+      "askInChat": "Kysy chatissa"
+    },
+    "demo": {
+      "owner-copilot": {
+        "title": "Omistajan assistentti",
+        "body": "Kokoaa strategian, riskit ja viikon päätökset tiiviiksi näkymäksi.",
+        "tools": {
+          "0": "Tunnusluvut",
+          "1": "Päiväkatsaus",
+          "2": "Hyväksynnät"
+        },
+        "prompts": {
+          "0": "Anna omistajan päätöslista tälle viikolle.",
+          "1": "Mikä vaatii hyväksynnän ennen perjantaita?"
+        }
+      },
+      "trend-analyst": {
+        "title": "ShopperMind-trendianalyytikko",
+        "body": "Selittää polut, toimenpiteet, kilpailijat ja markkinasignaalit.",
+        "tools": {
+          "0": "ShopperMind",
+          "1": "Lähteet",
+          "2": "Kampanjaidea"
+        },
+        "prompts": {
+          "0": "Mikä polku kannattaa priorisoida ja miksi?",
+          "1": "Muuta vahvin trendi kahdeksi toimenpiteeksi."
+        }
+      },
+      "campaign-designer": {
+        "title": "Kampanjasuunnittelija",
+        "body": "Luonnostelee briiffit, kohderyhmät, vuokralaiset, kanavat, KPI:t ja hyväksynnät.",
+        "tools": {
+          "0": "Kampanjat",
+          "1": "Tapahtumat",
+          "2": "Kävijämäärät"
+        },
+        "prompts": {
+          "0": "Luonnostele kampanjabriiffi nykyisestä trendistä.",
+          "1": "Mitkä vuokralaiset kannattaa ottaa mukaan?"
+        }
+      },
+      "space-optimizer": {
+        "title": "Tila- ja vuokrausoptimoija",
+        "body": "Yhdistää trendit, vuokrasopimusten ajoituksen, aluevirrat ja vuokravaikutuksen.",
+        "tools": {
+          "0": "Tilaoptimointi",
+          "1": "Vuokralaismix",
+          "2": "Myynti"
+        },
+        "prompts": {
+          "0": "Missä tilamuutoksessa on paras riskikorjattu hyöty?",
+          "1": "Selitä tämä tilasuositus vuokraukselle."
+        }
+      }
+    },
+    "panels": {
+      "security": {
+        "title": "Turva ja hyväksynnät",
+        "prompt": "Selitä assistenttien turvarajat, hyväksynnät ja asiakaseristys.",
+        "rows": {
+          "0": "Asiakasraja: customerId + mallId",
+          "1": "Ei hakua toisen asiakkaan aineistosta",
+          "2": "Kirjoittavat toiminnot vaativat hyväksynnän",
+          "3": "Työkalukutsuille jää audit trail",
+          "4": "Hienosäätödata viedään asiakaskohtaisesti"
+        }
+      },
+      "data": {
+        "title": "Datan valmius",
+        "prompt": "Näytä, mitkä datalähteet ovat live-, demo- tai integraatiovalmiita.",
+        "rows": {
+          "0": "ShopperMind: live/demo",
+          "1": "Kävijädata: rajattu kauppakeskukseen",
+          "2": "POS: aggregoitu demo",
+          "3": "Vuokrasopimukset: skeema valmis",
+          "4": "RAG: nimiavaruudet valmiina"
+        }
+      }
+    },
+    "controlTitle": "Suljetun ympäristön assistentit",
+    "closedEnvironment": "Rajattu asiakasympäristö",
+    "controlBody": "Assistentit suunnitellaan käyttämään vain valitun asiakkaan, operaattorin ja kiinteistön dataa. Demo näyttää hallintamallin: mitä assistentteja on käytössä, mitä työkaluja ne saavat käyttää ja milloin ihmisen hyväksyntä vaaditaan.",
+    "mallFocus": "Kohdefokus",
+    "agentCatalog": "Assistentit",
+    "securityTitle": "Turvarajat",
+    "dataTitle": "Datalähteet",
+    "ragTitle": "RAG-valmius",
+    "ragBody": "RAG toteutetaan asiakas- ja kiinteistökohtaisilla nimiavaruuksilla. Lähteet, dokumentit ja vastaukset pysyvät jäljitettävinä, eikä toisen asiakkaan aineistoa haeta samaan kontekstiin.",
+    "workflowTitle": "Työnkulut",
+    "workflowBody": "Kirjoittavat toiminnot, kuten kampanjabriiffin luonti tai vuokralaisviestin valmistelu, kulkevat hyväksyntäportin kautta. Keskustelu voi ehdottaa, mutta ei julkaise tai muuta dataa ilman lupaa.",
+    "agents": {
+      "trend": {
+        "title": "Trendiasiantuntija",
+        "body": "Selittää ShopperMindin trendit ja käyttää vain lähteistettyjä väitteitä."
+      },
+      "campaign": {
+        "title": "Kampanja-assistentti",
+        "body": "Muuttaa trendin kampanjabriiffiksi ja ehdottaa mittareita."
+      },
+      "operations": {
+        "title": "Operatiivinen assistentti",
+        "body": "Tukee alue-, kävijä- ja palvelutason päätöksiä."
+      }
+    },
+    "guards": {
+      "scope": {
+        "title": "Asiakas- ja kohderajaus",
+        "body": "Jokainen pyyntö sidotaan customerId- ja mallId-tietoihin."
+      },
+      "sources": {
+        "title": "Lähdepakko",
+        "body": "Faktaväitteet tarvitsevat lähteen tai ne merkitään oletuksiksi."
+      },
+      "approval": {
+        "title": "Hyväksyntäportit",
+        "body": "Julkaisu-, viesti- ja budjettitoimet vaativat ihmisen hyväksynnän."
+      },
+      "audit": {
+        "title": "Audit trail",
+        "body": "Työkalukutsut, lähteet ja päätökset tallennetaan tarkastettaviksi."
+      }
+    },
+    "data": {
+      "rag": {
+        "title": "Dokumentit",
+        "body": "Vuokrasopimukset, brändiohjeet ja raportit rajataan asiakkaalle."
+      },
+      "pos": {
+        "title": "POS",
+        "body": "Myyntidata peitetään ja aggregoidaan käyttöoikeuksien mukaan."
+      },
+      "footfall": {
+        "title": "Kävijädata",
+        "body": "Kävijävirrat sidotaan aikaan, alueeseen ja kampanjajaksoon."
+      },
+      "tenant": {
+        "title": "Vuokralaiset",
+        "body": "Vuokralais- ja kategoriatieto ohjaa suosituksia."
+      }
+    }
   },
   "shoppermind": {
     "title": "ShopperMind",
-    "tagline": "Trendejä, ennusteita ja ilmiöitä kauppakeskusten toimintaan",
-    "country": {
-      "fi": "Suomi",
-      "ae": "UAE",
-      "global": "Globaali"
+    "tagline": "Ennakointi jokaiseen kauppakeskukseen toimivilla ennusteilla",
+    "loading": "Ladataan…",
+    "loadingTrends": "Ladataan trendejä…",
+    "loadingTrend": "Ladataan trendiä…",
+    "noMarket": "Trendimoottori",
+    "marketPrefix": "Markkina",
+    "snapshot": {
+      "section": "Trendikatsaus"
     },
-    "state": {
-      "emerging": "Nouseva",
-      "accelerating": "Kiihtyvä",
-      "stable": "Vakaa",
-      "fading": "Hiipuva",
-      "dormant": "Lepäävä"
+    "trust": {
+      "title": "Luottamus ja kattavuus",
+      "sources": {
+        "label": "Lähteet",
+        "value": "{{count}} lähdettä",
+        "body": "Väitteet sidotaan lähteisiin, ja lähteet avautuvat suoraan korteista."
+      },
+      "scope": {
+        "label": "Asiakkuus",
+        "fallback": "Rajattu asiakasnäkymä",
+        "body": "Näkymä käyttää vain valitun asiakkuuden sallittuja kohteita."
+      },
+      "feedback": {
+        "label": "Palaute",
+        "value": "Oppii palautteesta",
+        "body": "Peukut ja kommentit tallentuvat jatkokehityksen koulutusaineistoksi."
+      },
+      "categories": {
+        "label": "Kategoriat",
+        "value": "{{count}} kategoriaa",
+        "body": "Trendit tagitetaan vuokralaiskategorioihin, myös tuleviin mahdollisuuksiin."
+      }
     },
-    "filters": {
-      "minScore": "Min. pistemäärä",
-      "category": "Kategoria",
-      "search": "Hae ilmiöitä",
-      "allStates": "Kaikki tilat"
+    "tabs": {
+      "overview": "Päänäkymä",
+      "actions": "Toimenpiteet",
+      "trends": "Trendit",
+      "competitors": "Kilpailijat",
+      "decisionSupport": "Päätöksen tuki",
+      "emptyActionsTitle": "Toimenpiteitä valmistellaan",
+      "emptyActionsBody": "Tälle valitulle markkinalle tai kiinteistölle ei ole vielä julkaistu lähteistettyjä toimenpidesuosituksia."
+    },
+    "competitors": {
+      "emptyTitle": "Kilpailijavertailua valmistellaan",
+      "emptyBody": "Tälle markkinalle ei ole vielä julkaistu validoituja kilpailijaesimerkkejä.",
+      "title": "Markkinakohtaiset vertailukohteet",
+      "body": "Vertailut pysyvät samassa markkinassa kuin valittu näkymä. Lähteet näkyvät siellä, missä esimerkkiä käytetään."
+    },
+    "decisionSupport": {
+      "title": "Miksi nämä suositukset ovat perusteltuja",
+      "body": "Tämä näkymä näyttää, miten trendit, markkinasignaalit, valittu kiinteistö ja kilpailijaesimerkit muuttuvat toimenpiteiksi.",
+      "logicTitle": "Miten suositukset muodostuvat",
+      "logicTrend": "{{count}} markkinakohtaista trendiä",
+      "logicScenario": "Kolme vaihtoehtoista skenaariopolkua",
+      "logicProperty": "Valitun kiinteistön profiili ja vertailukohteet",
+      "usedTitle": "Mitä tietoa käytettiin",
+      "usedSources": "{{count}} lähteistettyä markkina- tai kiinteistölähdettä",
+      "usedClaims": "{{count}} toimenpiteisiin sidottua väitettä",
+      "usedEvidence": "Todisteet näkyvät suoraan toimenpide-, trendi- ja kilpailijakorteissa",
+      "missingTitle": "Mitä asiakasdata parantaa",
+      "missingSales": "Myynti, vuokralaismix ja vuokrasopimusten rakenne",
+      "missingFootfall": "Kävijävirrat, alueet ja kampanjatulokset",
+      "missingBudget": "Budjetti-, aikataulu- ja toteutusrajoitteet",
+      "aiTitle": "Räätälöity tekoälymalli seuraavana kerroksena",
+      "aiBody": "Räätälöity tekoälymalli voidaan liittää asiakkaan omiin vuokralais-, kävijä-, myynti- ja kampanjatietoihin. Malli ei korvaa lähteistettyä analyysiä, vaan selittää suosituksia, tuottaa vaihtoehtoisia toimenpiteitä ja auttaa priorisoimaan ne kiinteistö-, markkina- ja budjettikohtaisesti."
+    },
+    "actionBoard": {
+      "weeklyHeader": "Viikon toimenpide-ehdotukset",
+      "title": "Toimenpidesuunnitelma: {{propertyName}}",
+      "subtitle": "Todennetut trendisignaalit muunnettuna konkreettisiksi kauppakeskustoimiksi, vertailuesimerkeiksi ja päätöksen tueksi.",
+      "verifiedEvidence": "Todennetut lähteet",
+      "evidenceSummary": "{{claims}} väitettä · {{sources}} lähdettä · päätöksen tuki valmis",
+      "impactVsEffort": "Vaikutus vs. vaivannäkö",
+      "highImpact": "Suuri vaikutus",
+      "highEffort": "Suuri vaivannäkö",
+      "actionCoverage": "Toimenpiteiden kattavuus",
+      "prioritySummary": "Prioriteettijakauma",
+      "decisionContext": "Päätöksen tuki",
+      "decisionContextBody": "Suosituksiin on liitetty {{count}} todennettua viitettä, joita voidaan käyttää myöhemmin räätälöidyn tekoälymallin perustana.",
+      "effort": "Vaivannäkö",
+      "impact": "Vaikutus",
+      "whyNow": "Miksi nyt",
+      "expectedKpi": "Odotettu KPI",
+      "competitorExample": "Kilpailijaesimerkki",
+      "noCompetitorExample": "Ei liitettyä kilpailijaesimerkkiä.",
+      "showEvidence": "Näytä todennetut lähteet ({{count}})",
+      "benchmark": "Vertailukohta",
+      "openCampaign": "Avaa kampanjaideaksi",
+      "discussAssistant": "Keskustele assistentin kanssa",
+      "priority": "Prioriteetti",
+      "property": "Kohde",
+      "priorities": {
+        "critical": "Kriittinen",
+        "high": "Korkea",
+        "medium": "Keskitaso"
+      },
+      "efforts": {
+        "low": "Pieni",
+        "medium": "Keskitaso",
+        "high": "Suuri"
+      },
+      "impacts": {
+        "low": "Pieni",
+        "medium": "Keskitaso",
+        "high": "Suuri"
+      },
+      "timeHorizons": {
+        "thisWeek": "Tällä viikolla",
+        "thirtyDays": "30 päivää",
+        "ninetyDays": "90 päivää"
+      },
+      "zones": {
+        "food": "Ruoka ja ravintolat",
+        "health": "Terveys ja hyvinvointi",
+        "campaign": "Kampanjat ja media",
+        "services": "Palvelut",
+        "leisure": "Vapaa-aika",
+        "mallWide": "Koko keskus"
+      },
+      "actionTypes": {
+        "operations": "Aktivoi arjen asiointi",
+        "campaign": "Käynnistä kohdennettu kampanja",
+        "tenantMix": "Tarkenna vuokralaismixiä",
+        "benchmark": "Vertaa seuraava liike",
+        "retailMedia": "Myy huomio kampanjaksi"
+      }
+    },
+    "countries": {
+      "FI": "Suomi",
+      "JP": "Japani",
+      "US": "Yhdysvallat",
+      "SE": "Ruotsi",
+      "DE": "Saksa"
+    },
+    "back": "Takaisin trendeihin",
+    "breadcrumbRoot": "ShopperMind",
+    "notFound": "Trendiä {{id}} ei löytynyt.",
+    "notConfigured": {
+      "title": "Palvelua ei ole määritetty tähän ympäristöön",
+      "body": "Aseta {{envVar1}} ja {{envVar2}} yhdistääksesi. Tämä kauppakeskus vastaisi tunnusta {{marketId}}.",
+      "detail": "ShopperMind-palvelua ei ole määritetty tähän ympäristöön."
+    },
+    "upgrade": {
+      "title": "ShopperMind ei sisälly sopimukseesi",
+      "body": "Päivitä sopimus ottaaksesi trendiälyn käyttöön markkinoillasi. Ota yhteytä asiakkuusvastaavaasi tai järjestelmänvalvojaan vaihtaaksesi sopimuksen."
+    },
+    "errorBanner": "Trendipalvelu ei ole tavoitettavissa: {{message}}",
+    "grid": {
+      "empty": "Tälle markkinalle ei ole vielä seurattuja trendejä.",
+      "topTrends": "Päätrendit",
+      "tracked_one": "{{count}} trendi seurannassa",
+      "tracked_other": "{{count}} trendiä seurannassa",
+      "score": "Pisteet"
+    },
+    "signalOfTheDay": {
+      "title": "Päivän signaali",
+      "empty": "Tälle markkinalle ei ole vielä julkaistu signaalia tänään.",
+      "comingSoon": "Kuukauden signaalia valmistellaan tälle markkinalle. Näytämme sen, kun lähteet on validoitu."
+    },
+    "signalSections": {
+      "monthly": "Kuukauden signaali",
+      "headline": "Pääotsikko",
+      "keyFindings": "Tärkeimmät löydökset",
+      "byCity": "Kauppiaat, {{city}}",
+      "alsoVisible": "Myös näkyvillä",
+      "watching": "Seurannassa"
+    },
+    "states": {
+      "EMERGING": "Nouseva",
+      "ACCELERATING": "Kiihtyvä",
+      "STABLE": "Vakaa",
+      "FADING": "Hiipuva",
+      "DORMANT": "Lepotilassa"
+    },
+    "markets": {
+      "gridTitle": "Tilanne markkinoittain",
+      "market": "Markkina",
+      "country": "Maa",
+      "state": "Tila",
+      "compositeScore": "Kokonaispisteet",
+      "divergentCallout": "Huomattava ero: trendi etenee eri tahtiin eri markkinoilla.",
+      "empty": "Markkinakohtaisia tietoja kerätään yhä.",
+      "FI": "Suomi",
+      "SE": "Ruotsi",
+      "US": "Yhdysvallat",
+      "UAE": "Arabiemiirikunnat",
+      "KR": "Etelä-Korea",
+      "EU": "EU (yleiskuva)",
+      "comingSoon": "Tulossa pian",
+      "comingSoonBody": "Markkinaa kerätään parhaillaan. Päivitämme näkymän, kun lähteet on validoitu.",
+      "noScenario": "Tämän markkinan päänäkymää kerätään parhaillaan.",
+      "horizonsComingSoon": "Aikajaksokohtaiset trendit saatavilla pian."
+    },
+    "evidence": {
+      "title": "Näytöt",
+      "confidence": "Luottamusaste",
+      "componentsLabel": "Luottamusasteen osatekijät",
+      "sourceList": "Lähteet",
+      "strongSources": "Vahvoja lähteitä",
+      "corroboratedIn": "Vahvistavat markkinat",
+      "whyConfident": "Miksi luotamme tähän",
+      "whyCautious": "Miksi olemme varovaisia",
+      "empty": "Näyttöä vahvistetaan vielä eri lähteistä.",
+      "strip": {
+        "show": "Lähteet",
+        "label_one": "{{count}} vahva lähde",
+        "label_other": "{{count}} vahvaa lähdettä",
+        "loading": "Ladataan lähteitä…",
+        "empty": "Lähteitä ei vielä saatavilla.",
+        "collecting": "Kerätään näyttöä useammasta lähteestä…",
+        "noUrls": "Tähän trendiin ei ole vielä artikkelilinkkejä.",
+        "error": "Lähteitä ei voitu ladata."
+      }
+    },
+    "lifecycle": {
+      "label": "Elämänkaari",
+      "relevance": "Relevanssi",
+      "rising": "nouseva",
+      "cooling": "viilenevä",
+      "holding": "vakaa",
+      "youAreHere": "Tässä ollaan"
+    },
+    "trajectory": {
+      "title": "Trendin kehitys",
+      "subtitle": "Yhdistelmäpisteet ajan mittaan - valitse aikaikkuna",
+      "empty": "Pisteytyshistoriaa ei ole vielä kertynyt.",
+      "windows": {
+        "7d": "7 pv",
+        "14d": "14 pv",
+        "30d": "30 pv",
+        "4w": "4 vk",
+        "12w": "12 vk",
+        "12m": "12 kk"
+      },
+      "series": {
+        "composite": "Yhdistelmä",
+        "footTraffic": "Jalankulkuliikenne",
+        "cultural": "Kulttuurinen"
+      },
+      "stats": {
+        "relevance": "Relevanssi",
+        "velocity": "Nopeus",
+        "acceleration": "Kiihtyvyys",
+        "volume": "Volyymi"
+      }
+    },
+    "tooltips": {
+      "relevance": "Yhdistelmäpisteet (0–1): kertoo kuinka merkittävä tämä trendi on juuri tälle markkinalle. Yhdistää volyymin, nopeuden, lähteiden monipuolisuuden ja kulttuurisen / jalankulun läheisyyden.",
+      "velocity": "Trendin kasvuvauhti: kuinka nopeasti signaalimäärä muuttuu. Positiivinen = nousussa, negatiivinen = laskussa.",
+      "acceleration": "Kasvuvauhdin muutos: kiihtyykö vai hidastuuko trendi. Positiivinen kiihtyvyys = nousu voimistuu.",
+      "volume": "Havaittujen signaalien määrä tällä jaksolla - kuinka monta kertaa trendistä on saatu mainintoja eri lähteistä.",
+      "cultural": "Kulttuurinen ulottuvuus: kuinka lähellä trendi on tämän markkinan kulttuurista keskustelua - esim. somessa, mediassa ja ihmisten arjen valinnoissa.",
+      "footTraffic": "Jalankulkuliikenne: kuinka lähellä trendi on todellista kävijävirtaa kauppakeskuksen ympärillä - paikallisia tapahtumia, liikennettä ja saavutettavuutta.",
+      "composite": "Yhdistelmä: kulttuurisen ja jalankulun signaalien painotettu yhdistelmä - kokonaiskuva trendin merkittävyydestä."
+    },
+    "sections": {
+      "summary": "Tiivistelmä",
+      "signal": "Signaali tällä markkinalla",
+      "impact": "Mitä tämä tarkoittaa sinulle",
+      "opportunity": "Mahdollisuus",
+      "watchOut": "Varoitus",
+      "opportunityBody": "Trendin kiihtyessä varhain liikkeellä oleville jälleenmyyjille on tarjolla nousupotentiaalia edellä kuvattujen kulmien kautta.",
+      "watchOutBody": "Tämä trendi viilenee. Varaudu hitaampaan kysyntään ja valmistaudu siirtämään painopistettä pois syvästä altistumisesta.",
+      "campaignIdea": "Kampanjaidea",
+      "feedback": "Oliko tästä hyötyä?"
     },
     "feedback": {
-      "title": "Arvosi",
-      "relevant": "Relevantti",
-      "notRelevant": "Ei relevantti",
-      "noise": "Kohina",
-      "star": "Tärkeä"
+      "relevant": "Hyödyllinen",
+      "notRelevant": "Ei hyödyllinen",
+      "commentPlaceholder": "Lisää lyhyt kommentti (valinnainen)",
+      "submit": "Lähetä",
+      "cancel": "Peruuta",
+      "edit": "Muokkaa",
+      "submitting": "Lähetetään…",
+      "submitted": "Kiitos palautteestasi",
+      "error": "Palautteen tallennus epäonnistui",
+      "reasons": {
+        "notPropertyRelevant": "Ei relevantti tälle kohteelle",
+        "wrongCategory": "Väärä kategoria",
+        "outdated": "Data vaikuttaa vanhentuneelta",
+        "notPractical": "Toimenpide ei ole käytännöllinen",
+        "missingEvidence": "Näyttö puuttuu",
+        "alreadyHandled": "Jo hoidettu"
+      }
     },
-    "signalOfDay": {
-      "title": "Päivän signaali",
-      "share": "Jaa",
-      "copyLink": "Kopioi",
-      "copied": "Kopioitu"
+    "categoryImpact": {
+      "present": "Kategoria on nykyisessä vuokralaiskokonaisuudessa.",
+      "absent_relevant": "Kategoria voi olla relevantti, vaikka sitä ei vielä ole kohteessa.",
+      "badges": {
+        "present": "mukana",
+        "absent_relevant": "aukko"
+      }
     },
-    "empty": "Suodattimet eivät tuota osumia vielä.",
-    "loading": "Analysoidaan signaaleja...",
-    "trajectory": "28 päivän kehitys",
-    "representativeSignals": "Esimerkkisignaalit",
-    "impact": {
-      "title": "Mitä tämä voi tarkoittaa kauppakeskukselle {{mallName}}",
-      "accelerating": "Ilmiön kiihtyminen näkyy todennäköisesti kävijämäärissä ja kysynnässä 2–6 viikon viiveellä. Kannattaa tarkistaa kyseisten kategorioiden vuokralaiset ja kampanjakalenteri.",
-      "emerging": "Varhainen signaali — ei vielä vaikuta operatiivisesti, mutta seurannassa. Hyvä hetki keskustella kategorian vuokralaisten kanssa.",
-      "stable": "Taustavoima, joka ei heilauta lukuja lähiaikoina. Pidä mielessä pitkän aikavälin suunnittelussa.",
-      "fading": "Hiipuva ilmiö — kategorian vuokralaisten myynti voi laskea. Varaudu ja etsi korvaavia konsepteja.",
-      "dormant": "Ei aktiivinen tällä hetkellä. Ei välittömiä toimenpiteitä."
+    "tenantImpact": {
+      "eyebrow": "Vuokralaisvaikutus",
+      "title": "Miten trendit muuttuvat kategoriapäätöksiksi",
+      "body": "Tämä näkymä ei ole liiketilahakemisto. Se näyttää, mitkä kategoriat ja esimerkkivuokralaiset vastaavat trendin tarpeeseen, missä kannattaa kasvattaa, mitä kannattaa tarkentaa ja mistä kampanja voidaan aloittaa.",
+      "liveReady": "Demo nyt, live-data myöhemmin",
+      "recommendation": "Suositus",
+      "focus": "Kasvata",
+      "reduce": "Vähennä",
+      "storeExamples": "Esimerkkivuokralaiset",
+      "openCampaign": "Vie kampanjabriiffiin",
+      "moves": {
+        "increase": "kasvata",
+        "reposition": "asemoi uudelleen",
+        "reduce": "vähennä",
+        "test": "testaa",
+        "recruit": "rekrytoi"
+      },
+      "horizons": {
+        "short": "lyhyt",
+        "medium": "keskipitkä",
+        "long": "pitkä"
+      }
     },
-    "totalPhenomena": "{{count}} ilmiötä yhteensä",
-    "signalsCount": "{{count}} signaalia",
-    "sourcePrefix": "Lähde",
-    "phenomenonFallback": "Koostuu {{count}} signaalista kategoriassa {{category}}.",
-    "phenomenonFallbackNoCategory": "Koostuu {{count}} signaalista.",
-    "category": {
-      "fashion": "Muoti",
-      "grocery": "Päivittäistavara",
-      "f&b": "Ravintolat & kahvilat",
-      "health-beauty": "Terveys & kauneus",
-      "home": "Koti & sisustus",
-      "services": "Palvelut",
-      "leisure": "Vapaa-aika",
-      "retail-tenancy": "Liiketilat & vuokraus",
-      "footfall-driver": "Kävijämääräajuri",
-      "consumer-behaviour": "Kuluttajakäyttäytyminen",
-      "residential-sale": "Asuntokauppa",
-      "residential-rental": "Vuokra-asunnot",
-      "commercial-office": "Toimistotilat",
-      "commercial-retail": "Liiketilat (kaupallinen)",
-      "hospitality": "Hotellit & matkailu",
-      "tourism": "Matkailu",
-      "construction-pipeline": "Rakennushankkeet",
-      "short-term-rental": "Lyhytaikaisvuokraus",
-      "mixed-use": "Monikäyttöalueet",
-      "infrastructure": "Infrastruktuuri",
-      "investment-flows": "Sijoitusvirrat"
+    "campaignIdea": {
+      "generate": "Luo kampanjaidea",
+      "generating": "Luonnostellaan ideaa…",
+      "regenerate": "Luo uusi versio",
+      "refineInChat": "Hio chatissa",
+      "openInDetail": "Avaa lisätiedot",
+      "errorTitle": "Idean luominen ei onnistunut",
+      "errorBody": "Generaattori ei vastannut. Yritä hetken kuluttua uudelleen.",
+      "fields": {
+        "hook": "Iskulause",
+        "audience": "Kohderyhmä",
+        "channels": "Kanavat",
+        "successMetric": "Onnistumismittari",
+        "angle": "Kulma",
+        "cta": "Toimintakehotus",
+        "whyNow": "Miksi nyt",
+        "rationale": "Perustelut",
+        "duration": "Kesto",
+        "budget": "Budjetti"
+      },
+      "budget": {
+        "light": "Kevyt",
+        "standard": "Perus",
+        "premium": "Premium"
+      },
+      "durationDays": "{{count}} päivää"
+    },
+    "detail": {
+      "description": "Kuvaus",
+      "relatedTrends": "Liittyvät trendit",
+      "relatedTrendsEmpty": "Tälle trendille ei ole liitettyjä trendejä.",
+      "linkGraph": "Linkkikartta",
+      "linkGraphEmpty": "Pääteltyä linkkiä ei vielä ole.",
+      "upstream": "Ylävirta - trendit, jotka syöttävät tätä",
+      "downstream": "Alavirta - trendit, joihin tämä syöttää",
+      "recentScoring": "Viimeisin pisteytys",
+      "details": "Tiedot",
+      "tags": "Tunnisteet",
+      "categories": "Kategoriat",
+      "keywords": "Avainsanat",
+      "meta": {
+        "eventStart": "Tapahtuman alku",
+        "eventEnd": "Tapahtuman loppu",
+        "firstSeen": "Ensin havaittu",
+        "lastSignal": "Viimeisin signaali",
+        "cultural": "Kulttuurinen",
+        "footTraffic": "Jalankulkuliikenne"
+      },
+      "metrics": {
+        "composite": "Yhdistelmä",
+        "footTraffic": "Jalankulku",
+        "cultural": "Kulttuurinen",
+        "velocity": "Nopeus",
+        "acceleration": "Kiihtyvyys",
+        "volume": "Volyymi",
+        "empty": "Pisteytyksiä ei ole vielä kirjattu."
+      },
+      "table": {
+        "date": "Päiväys",
+        "composite": "Yhdistelmä",
+        "footTraffic": "Jalankulku",
+        "cultural": "Kulttuurinen",
+        "velocity": "Nopeus",
+        "volume": "Volyymi",
+        "boost": "Vahvistus"
+      }
+    },
+    "linkTypes": {
+      "CONTRIBUTES_TO": "Edistää",
+      "MANIFESTATION_OF": "Ilmentymä",
+      "ACCELERATES": "Kiihdyttää",
+      "PRECEDES": "Edeltää",
+      "CONTRADICTS": "Ristiriita"
+    },
+    "phenomenonTypes": {
+      "TREND": "Trendi",
+      "EVENT": "Tapahtuma",
+      "CAMPAIGN": "Kampanja",
+      "INCIDENT": "Poikkeama"
+    },
+    "lifecycleStates": {
+      "UPCOMING": "Tuleva",
+      "ACTIVE": "Käynnissä",
+      "CONCLUDED": "Päättynyt"
+    },
+    "scopes": {
+      "CITY": "Kaupunki",
+      "REGION": "Alue",
+      "COUNTRY": "Maa",
+      "GLOBAL": "Globaali"
+    },
+    "errors": {
+      "network": "Verkkovirhe",
+      "serviceUnavailable": "Palvelu ei ole käytettävissä"
+    },
+    "linkAuthor": {
+      "openButton": "Lisää linkki (admin)",
+      "heading": "Uusi linkki",
+      "cancel": "Peruuta",
+      "save": "Tallenna linkki",
+      "saving": "Tallennetaan…",
+      "targetLabel": "Kohdetrendin tunnus",
+      "targetPlaceholder": "trendi-id",
+      "typeLabel": "Linkin tyyppi",
+      "weightLabel": "Paino (0–1)",
+      "rationaleLabel": "Perustelu (valinnainen)",
+      "rationalePlaceholder": "Miksi tämä linkki on oikein?",
+      "errors": {
+        "targetRequired": "Kohdetrendin tunnus vaaditaan",
+        "cannotLinkSelf": "Trendiä ei voi linkittää itseensä",
+        "weightRange": "Painon on oltava välillä 0 ja 1",
+        "forbidden": "Linkkien kirjoittamiseen vaaditaan ADMIN-rooli",
+        "requestFailed": "Pyyntö epäonnistui ({{status}})"
+      }
+    },
+    "demo": {
+      "badge": "Demo",
+      "getAccess": "Hanki täysi käyttöoikeus",
+      "notSeededTitle": "Demo-dataa ei ole vielä syötetty",
+      "notSeededBody": "Suorita {{command}} syöttääksesi demo-markkinat.",
+      "defaultFocus": "Kaupan trendiäly",
+      "loading": "Ladataan trendidataa…",
+      "ctaTitle": "Näe ShopperMind kauppakeskuksesi omilla tiedoilla",
+      "ctaBody": "Kun yhdistetään Stelthioniin, ShopperMind korreloi nämä trendit kauppakeskuksesi todellisen kävijäliikenteen kanssa - näyttäen mitkä trendit jo vetävät liikennettä.",
+      "bookDemo": "Varaa demo"
+    },
+    "section": {
+      "expand": "Laajenna",
+      "collapse": "Tiivistä",
+      "sources": "Lähteet"
+    },
+    "horizons": {
+      "short": {
+        "label": "Lyhyt aikaväli",
+        "timespan": "2026",
+        "subtitle": "Välittömät mahdollisuudet",
+        "verb": "Hyödynnä"
+      },
+      "medium": {
+        "label": "Keskipitkä aikaväli",
+        "timespan": "2027–2029",
+        "subtitle": "Trendit, joihin valmistautua",
+        "verb": "Valmistaudu"
+      },
+      "long": {
+        "label": "Pitkä aikaväli",
+        "timespan": "2030+",
+        "subtitle": "Toimialaa muokkaavat ilmiöt",
+        "verb": "Uudelleenjärjestele"
+      },
+      "tracked_one": "{{count}} ilmiö seurannassa",
+      "tracked_other": "{{count}} ilmiötä seurannassa",
+      "emptyShort": "Lyhyen aikavälin signaaleja kerätään parhaillaan.",
+      "emptyMedium": "Keskipitkän aikavälin trendejä päivitetään.",
+      "emptyLong": "Pitkän aikavälin ilmiöitä rakennetaan parhaillaan."
+    },
+    "megaScenario": {
+      "label": "Päänäkymä",
+      "finlandStructuralTitle": "Päänäkymä: Suomen rakenteellinen murros",
+      "pathBlocks": {
+        "macro": "Makrotalous",
+        "consumer": "Kuluttaja",
+        "retail": "Kauppa",
+        "property": "Kiinteistömarkkina",
+        "mallImpact": "Vaikutus kauppakeskukseen"
+      },
+      "pathToneNeutral": "Neutraali",
+      "pathToneDark": "Synkkä",
+      "pathToneBright": "Valoisa",
+      "evidenceLabel": "Näyttö",
+      "keyNumbersLabel": "Tunnusluvut"
+    },
+    "macro": {
+      "title": "Talouden tunnusluvut",
+      "loading": "Ladataan tunnuslukuja…",
+      "updated": "päivitetty {{date}}",
+      "noData": "ei dataa",
+      "onlyFinland": "Live-makroindikaattorit saatavilla vain Suomesta toistaiseksi.",
+      "notSupported": "Makroindikaattorit eivät ole vielä saatavilla tälle markkinalle."
+    },
+    "header": {
+      "marketLabel": "Markkina",
+      "titleBrand": "ShopperMind",
+      "titleSuffix": "Trendikatsaus"
+    },
+    "actions": {
+      "general": "Toimenpide-ehdotukset kiinteistöille",
+      "perMall": "Kiinteistökohtaiset ehdotukset",
+      "selectProperty": "Valitse kiinteistö",
+      "kpisLabel": "Ydinmittarit",
+      "kpiTarget": "Tavoite",
+      "noMallSelected": "Valitse kiinteistö nähdäksesi ehdotukset.",
+      "ownProperties": "Omat kohteet",
+      "competitorProperties": "Kilpailijat (vertailu)",
+      "competitorTag": "Kilpailija"
+    },
+    "curatedTrends": {
+      "label": "Analyytikon trendit",
+      "tracked_one": "{{count}} kuratoitu trendi",
+      "tracked_other": "{{count}} kuratoitua trendiä",
+      "confidence": "Luotettavuus {{score}}/100",
+      "confidenceTooltip": "Lähteiden ja yhdenmukaisuuden luotettavuusarvio",
+      "mallImplications": "Mitä tämä tarkoittaa kiinteistölle",
+      "mallImplicationsFor": "Mitä tämä tarkoittaa kohteelle: {{mallName}}",
+      "opportunities": "Mahdollisuudet",
+      "campaigns": "Kampanjaideat",
+      "playAtMall": "Käytä tätä trendiä",
+      "draftCampaign": "Luonnostele Kampanjoissa",
+      "discussCampaign": "Hio assistentin kanssa",
+      "marketsNote": "{{- defaultValue}}",
+      "audience": "Yleisö",
+      "whyNow": "Miksi nyt",
+      "successMetric": "Mittari",
+      "channels": "Kanavat"
+    },
+    "mallFormat": {
+      "transit": "Kauttakulkukeskus",
+      "mixedUse": "Palvelukeskus",
+      "destination": "Kohdekeskus",
+      "all": "Kaikki muodot"
+    },
+    "channels": {
+      "app": "Sovellus",
+      "screens": "Diginäytöt",
+      "station": "Asema-alue",
+      "social": "Sosiaalinen media",
+      "signage": "Opasteet",
+      "in-store": "Myymälöissä",
+      "event": "Tapahtuma",
+      "email": "Sähköposti"
+    },
+    "stress": {
+      "title": "Skenaario-herkkyys: {{mallName}}",
+      "operationalChanges": "Toimenpidemuutokset",
+      "keyRisks": "Keskeiset riskit",
+      "sensitivities": "Herkkyysmittarit",
+      "impact": {
+        "low": "Pieni vaikutus",
+        "medium": "Keskisuuri vaikutus",
+        "high": "Suuri vaikutus"
+      }
     }
   },
   "campaigns": {
@@ -501,6 +1129,107 @@
     "runSimilarScenario": "Suorita vastaava skenaario",
     "campaignHistory": "Kampanjahistoria",
     "visitors": "kävijää"
+  },
+  "campaignWorkspace": {
+    "title": "Kampanjat",
+    "subtitle": "Muuta ShopperMindin trendit kampanjabriiffeiksi, joita voidaan testata kävijä-, POS- ja vuokralaisdatalla.",
+    "builder": "Kampanjabriiffin luonnos",
+    "createBrief": "Luo testibriiffi",
+    "assistantPrompt": "Luo testibriiffi kohteelle {{mall}}. Alue: {{zone}}. Kohderyhmä: {{audience}}. Kategoria: {{category}}. Ehdotetut vuokralaiset: {{stores}}. Budjetti: {{budget}}. Kesto: {{duration}}. Käytä ShopperMindin vuokralaisvaikutusta {{impact}} taustana, jos se on annettu.",
+    "flowTitle": "Työnkulku live-dataan liitettynä",
+    "aiTitle": "Demo nyt, asiakasdata myöhemmin",
+    "aiBody": "Räätälöity tekoälymalli käyttää vain asiakkaan omaan ympäristöön rajattua dataa. Demo näyttää työnkulun siemen- ja trendidatalla, mutta sama näkymä voidaan liittää POS-, kävijä-, vuokralais- ja kampanjatuloksiin.",
+    "fields": {
+      "mall": {
+        "label": "Kohde",
+        "value": "Sello tai Mall of Tripla"
+      },
+      "zone": {
+        "label": "Alue",
+        "value": "Päivittäisasiointi, asema, ravintolat tai palvelut",
+        "options": {
+          "everyday": "Päivittäisasiointi",
+          "station": "Asema",
+          "restaurants": "Ravintolat",
+          "services": "Palvelut"
+        }
+      },
+      "audience": {
+        "label": "Kohderyhmä",
+        "value": "Arjen asioijat, perheet tai hyvinvointiasiakkaat",
+        "options": {
+          "daily": "Arjen asioijat",
+          "families": "Perheet",
+          "wellness": "Hyvinvointiasiakkaat",
+          "commuters": "Työmatkalaiset"
+        }
+      },
+      "category": {
+        "label": "Kategoria",
+        "value": "ShopperMindin ehdottama kategoria"
+      },
+      "stores": {
+        "label": "Ehdotetut vuokralaiset",
+        "empty": "Ei valittuja vuokralaisia"
+      },
+      "budget": {
+        "label": "Budjetti",
+        "value": "Kevyt / perus / laaja",
+        "options": {
+          "light": "Kevyt",
+          "standard": "Perus",
+          "broad": "Laaja"
+        }
+      },
+      "duration": {
+        "label": "Kesto",
+        "value": "7, 14 tai 30 päivää",
+        "options": {
+          "7": "7 päivää",
+          "14": "14 päivää",
+          "30": "30 päivää"
+        }
+      }
+    },
+    "kpis": {
+      "visits": {
+        "label": "Kävijäennuste",
+        "value": "+3,8 %",
+        "hint": "Demoarvio valitulle alueelle"
+      },
+      "sales": {
+        "label": "Myyntisignaali",
+        "value": "+2,4 %",
+        "hint": "POS-liitos myöhemmässä toteutuksessa"
+      },
+      "tenants": {
+        "label": "Vuokralaiset",
+        "value": "12",
+        "hint": "Sopivat osallistujat siemendatasta"
+      }
+    },
+    "steps": {
+      "brief": {
+        "title": "Briiffi",
+        "body": "Valitse trendi, kohde, alue ja yleisö."
+      },
+      "model": {
+        "title": "Mallinnus",
+        "body": "Laske odotettu kävijä- ja myyntivaikutus."
+      },
+      "approval": {
+        "title": "Hyväksyntä",
+        "body": "Varmista budjetti, kanavat ja vuokralaiset."
+      },
+      "live": {
+        "title": "Seuranta",
+        "body": "Seuraa kävijöitä, lunastuksia ja poikkeamia."
+      },
+      "learning": {
+        "title": "Opit",
+        "body": "Tallenna vaikutus seuraavia kampanjoita varten."
+      }
+    }
   },
   "properties": {
     "myProperties": "Omat kiinteistöt",
@@ -536,7 +1265,14 @@
     "notFound": "Kiinteistöä ei löydy",
     "locationLoading": "Ladataan sijaintitietoja...",
     "locationNotAvailable": "Sijainti- ja saavutettavuustietoja ei vielä ole saatavilla tälle kiinteistölle.",
-    "eventsNotAvailable": "Tapahtumakalenteri ei vielä ole saatavilla tälle kiinteistölle."
+    "eventsNotAvailable": "Tapahtumakalenteri ei vielä ole saatavilla tälle kiinteistölle.",
+    "propertyBody": "Tarkastele operatiivista suorituskykyä, vuokralaisjakaumaa, sijaintikontekstia ja kiinteistötason tukisignaaleja samassa visuaalisessa järjestelmässä kuin ShopperMindissä.",
+    "selloTenantLocations": {
+      "title": "Sellon liiketilojen sijainnit",
+      "body": "Virallinen liiketilalista ryhmiteltynä P1-tasolle ja liikekerroksiin 1-4.",
+      "floor": "Kerros {{floor}}",
+      "source": "Lähde:"
+    }
   },
   "kpi": {
     "currentVisitors": "Nykyiset kävijät",
@@ -600,13 +1336,13 @@
       "excellent": "Erinomainen ostossää",
       "great": "Loistava kauppakeskuspäivä",
       "good": "Hyvä ostossää",
-      "outdoors": "Kaunis ulkoilusää — vähemmän kävijöitä"
+      "outdoors": "Kaunis ulkoilusää, vähemmän kävijöitä"
     },
     "impact": {
       "indoor": "🌧️ Sää ohjaa kävijöitä sisätiloihin",
       "mild": "☀️ Lievä säävaikutus kävijämääriin",
       "outdoor": "🌤️ Optimaaliset ulko-olosuhteet",
-      "quiet": "❄️ Hiljainen kausi — vähemmän kävijöitä odotettavissa",
+      "quiet": "❄️ Hiljainen kausi, vähemmän kävijöitä odotettavissa",
       "normal": "Normaali kävijävirta odotettavissa"
     },
     "forecastMsg": {
@@ -656,7 +1392,17 @@
       "foodCourt": "Ravintolamaailma"
     },
     "estimated": "Arvioitu",
-    "noData": "Laskuridataa ei vielä ladattu"
+    "noData": "Laskuridataa ei vielä ladattu",
+    "floorplanAlt": {
+      "ground": "Yleinen suuren kauppakeskuksen pohjakerroksen pohjapiirros",
+      "upper": "Yleinen suuren kauppakeskuksen yläkerroksen pohjapiirros"
+    },
+    "entrances": {
+      "west": "Läntinen sisäänkäynti",
+      "central": "Joukkoliikenteen sisäänkäynti",
+      "east": "Itäinen sisäänkäynti",
+      "transit": "Pysäköinnin sisäänkäynti"
+    }
   },
   "topbar": {
     "concierge": "Stelthion Concierge",
@@ -694,22 +1440,32 @@
     }
   },
   "concierge": {
+    "viewContext": {
+      "shoppermindTrendChip": "Trendi: {{label}}",
+      "clear": "Poista konteksti"
+    },
+    "greetings": {
+      "shoppermindTrend": "Näen, että tutkit *{{label}}* -trendiä ({{state}}). Haluatko, että luonnostelen sille kampanjaidean? Voin myös ehdottaa pari erilaista linjaa."
+    },
     "newConversation": "Uusi keskustelu",
     "recent": "Viimeisimmät",
     "loading": "Ladataan...",
     "noConversations": "Ei keskusteluja. Aloita uusi!",
     "viewAll": "Näytä kaikki keskustelut",
-    "selectAgent": "Valitse agentti",
-    "chooseAgent": "Valitse paras agentti tehtävällesi:",
+    "selectAgent": "Valitse assistentti",
+    "chooseAgent": "Valitse paras assistentti tehtävällesi:",
     "notSure": "Etkö ole varma?",
-    "generalAssistantSuggestion": "Aloita yleisavustajalla — se voi auttaa missä tahansa kysymyksessä ja ohjata automaattisesti erikoistuneille agenteille tarvittaessa.",
+    "generalAssistantSuggestion": "Aloita yleisassistentilla. Se voi auttaa missä tahansa kysymyksessä ja ohjata automaattisesti erikoistuneille assistenteille tarvittaessa.",
     "startWithGeneral": "Aloita yleisavustajalla",
     "startConversation": "Aloita keskustelu",
     "startConversationDesc": "Kysy myynneistä, kävijämääristä, tapahtumista, pysäköinnistä tai trendeistä. Olen täällä auttamassa sinua tekemään parempia päätöksiä.",
     "askAnything": "Kysy mitä tahansa...",
     "typeMessage": "Kirjoita viestisi...",
-    "agentLabel": "Agentti",
-    "noBackendStub": "Tämä on käyttöliittymäesikatselu — AI-taustapalvelu ei ole vielä yhteydessä. Kun Concierge-palvelu on konfiguroitu, vastaan reaaliajassa.",
+    "agentLabel": "Assistentti",
+    "assistantSelected": "Assistentti valittu",
+    "confidence": "{{percent}} % varmuus",
+    "alternativeAssistants": "Vaihtoehtoiset assistentit",
+    "noBackendStub": "Tämä on käyttöliittymäesikatselu. AI-taustapalvelu ei ole vielä yhteydessä. Kun Concierge-palvelu on konfiguroitu, vastaan reaaliajassa.",
     "select": "Valitse",
     "bestFor": "Parhaiten soveltuu:",
     "agents": {
@@ -757,7 +1513,7 @@
       "morning": "Huomenta!",
       "afternoon": "Hyvää päivää!",
       "evening": "Hyvää iltaa!",
-      "intro": "Olen {{propertyName}} — kysy mitä vain minusta!"
+      "intro": "Olen {{propertyName}}. Kysy mitä vain minusta!"
     },
     "quickAction": {
       "briefing": "Päiväkatsaus",
@@ -867,6 +1623,10 @@
       "label": "ShopperMind",
       "description": "Trendit ja ennusteet"
     },
+    "space-optimizer": {
+      "label": "Tilaoptimointi",
+      "description": "Trendipohjaiset vuokratilan suositukset"
+    },
     "managementCompany": "Kiinteistönhallintayhtiö",
     "comingSoon": "Tulossa pian"
   },
@@ -942,7 +1702,7 @@
     },
     "gdpr": {
       "title": "Tietosuoja ja GDPR-vaatimustenmukaisuus",
-      "description": "Kaikki seuranta on täysin anonyymiä. Järjestelmä tunnistaa henkilöt ainoastaan ulkoisen olemuksen perusteella — kasvojentunnistusta, biometrisiä tietoja, ikää, sukupuolta tai muita henkilötietoja ei käsitellä tai tallenneta. EU:n GDPR-asetuksen mukainen."
+      "description": "Kaikki seuranta on täysin anonyymiä. Järjestelmä tunnistaa henkilöt ainoastaan ulkoisen olemuksen perusteella. Kasvojentunnistusta, biometrisiä tietoja, ikää, sukupuolta tai muita henkilötietoja ei käsitellä tai tallenneta. EU:n GDPR-asetuksen mukainen."
     },
     "future": {
       "llmAnalysis": "Tekoälynäkemykset",
@@ -1000,5 +1760,84 @@
     "coverSubtitle": "Kerros: {{floor}} · Klo: {{hour}}:00",
     "executiveSummary": "Yhteenveto",
     "keyHighlights": "Keskeiset havainnot"
+  },
+  "spaceOptimizer": {
+    "title": "Tilaoptimoija",
+    "subtitle": "Konkreettisia vuokratilojen muutoksia ShopperMind-trendien ja operatiivisten signaalien pohjalta",
+    "futureConnection": {
+      "title": "ShopperMind-yhteys suunnitteilla",
+      "body": "Seuraavassa vaiheessa trendisignaali muuttuu alue- ja kategoriakohtaiseksi tilahypoteesiksi, jonka vaikutus arvioidaan kävijä-, myynti-, vuokra- ja sopimusdatalla."
+    },
+    "header": {
+      "summary": "{{count}} suositus, {{zones}} aluetta",
+      "summary_other": "{{count}} suositusta, {{zones}} aluetta",
+      "drivenBy": "Ajurina {{count}} trendi",
+      "drivenBy_other": "Ajurina {{count}} trendiä",
+      "lastRun": "Luotu {{date}}"
+    },
+    "actions": {
+      "EXPAND": "Laajenna",
+      "CONVERT": "Muunna",
+      "MAINTAIN": "Säilytä",
+      "SUNSET": "Lopeta",
+      "expandLong": "Laajenna tilaa",
+      "convertLong": "Muunna uuteen kategoriaan",
+      "maintainLong": "Säilytä: ei muutosta",
+      "sunsetLong": "Lopeta ja vuokraa uudelleen"
+    },
+    "filters": {
+      "all": "Kaikki",
+      "byAction": "Toimenpide",
+      "byTrend": "Trendi",
+      "sortByConfidence": "Korkein luottamus",
+      "sortByUplift": "Suurin nousu",
+      "sortByLeaseEnd": "Sopimus päättyy ensin"
+    },
+    "card": {
+      "currentCategory": "Nykyinen",
+      "proposedCategory": "Ehdotettu",
+      "drivingTrends": "Ajurit",
+      "confidence": "Luottamus",
+      "projectedUplift": "Ennustettu nousu",
+      "projectedAnnual": "~{{value}}/v",
+      "leaseEnds": "Sopimus päättyy {{date}}",
+      "noLease": "Ei sopimustietoa",
+      "tenant": "Vuokralainen",
+      "viewPhenomenon": "Näytä trendi",
+      "dismiss": "Hylkää",
+      "accept": "Merkitse seurantaan",
+      "projection": "ennuste, suuntaa-antava"
+    },
+    "floorplan": {
+      "title": "Pohjakuva",
+      "legend": "Selitykset",
+      "floor": "Kerros {{floor}}",
+      "noZones": "Ei näytettäviä alueita"
+    },
+    "empty": {
+      "title": "Ei suosituksia",
+      "body": "ShopperMind ei ole nostanut tällä syklillä selkeää tilaehdotusta kohteelle {{mall}}. Seuraava päivitys ajetaan päivittäin. Tarkista huomenna."
+    },
+    "errors": {
+      "load": "Tilaoptimoijan latauksessa virhe: {{message}}",
+      "gated": {
+        "title": "Tilaoptimoija vaatii päivityksen",
+        "body": "Toiminto kuuluu Realidea Suite -tilaukseen. Aktivoi se tilihoitajasi kautta."
+      }
+    },
+    "demo": {
+      "badge": "Live-demo",
+      "header": "Realidea: Sello",
+      "subtitle": "Mitä ShopperMind näkee tänään, sovitettuna Sellon todelliseen aluekokoonpanoon",
+      "getAccess": "Hanki käyttöoikeus",
+      "ctaTitle": "Haluatko tämän omaan portfolioosi?",
+      "ctaBody": "Reaaliaikaisia suosituksia oman POS-, kävijämäärä- ja kamera-aineistosi pohjalta.",
+      "bookDemo": "Varaa demo",
+      "loading": "Ladataan ehdotuksia..."
+    },
+    "nav": {
+      "label": "Tilaoptimoija",
+      "description": "Trendipohjaiset vuokratilojen suositukset"
+    }
   }
 }

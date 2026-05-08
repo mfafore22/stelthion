@@ -1,7 +1,7 @@
 /**
  * FootfallAnalysis Component
  * Floor plan heatmap with clickable zones, time slider, and per-zone visitor data.
- * Designed for Ideapark Lempäälä (mallId: 'ideapark').
+ * Uses a neutral large-mall base plan so property views do not imply one customer.
  */
 
 'use client';
@@ -21,9 +21,11 @@ import {
 import { ZoneStoreList } from './ZoneStoreList';
 import { CounterDataPanel } from './CounterDataPanel';
 import {
-  GROUND_FLOOR_ENTRANCES,
-} from '@/lib/data/ideaparkStorePositions';
-import { usePublishedFloorplan, type PublishedCamera } from '@/hooks/usePublishedFloorplan';
+  GENERIC_LARGE_MALL_GROUND_ENTRANCES,
+  getMallFloorplan,
+  type FloorplanFloor,
+} from '@/lib/mall/floorplanAssets';
+import { usePublishedFloorplan } from '@/hooks/usePublishedFloorplan';
 import { decollidLabels, getPolygonBbox, type LabelInput } from '@/lib/utils/labelDecollision';
 
 /** Counter data types from /api/counters/[mallId] */
@@ -54,10 +56,10 @@ interface CounterApiResponse {
 
 /** Data snapshot exposed via ref for report export */
 export interface FootfallReportData {
-  floor: 'ground' | 'upper';
+  floor: FloorplanFloor;
   hour: number;
   dayOfWeek: number;
-  zones: { zone: import('@/lib/data/ideaparkZones').IdeaparkZone; visitors: import('@/lib/data/ideaparkZones').ZoneVisitorData }[];
+  zones: { zone: IdeaparkZone; visitors: ZoneVisitorData }[];
   floorplanElement: HTMLElement | null;
 }
 
@@ -70,16 +72,14 @@ interface FootfallAnalysisProps {
   onToggleCamera?: (id: string) => void;
   onToggleZone?: (id: string) => void;
   /** Called when the user switches floor */
-  onFloorChange?: (floor: 'ground' | 'upper') => void;
+  onFloorChange?: (floor: FloorplanFloor) => void;
   /** Render prop for injecting an SVG overlay (e.g. flow arrows) on top of the floorplan */
-  overlayContent?: (floor: 'ground' | 'upper') => React.ReactNode;
+  overlayContent?: (floor: FloorplanFloor) => React.ReactNode;
   /** Ref that receives current state snapshot for report export */
   reportDataRef?: React.RefObject<FootfallReportData | null>;
   /** Hide the density colour legend at the bottom (e.g. when used inside analysis modes) */
   hideDensityLegend?: boolean;
 }
-
-type Floor = 'ground' | 'upper';
 
 const HOUR_LABELS: Record<number, string> = {
   10: '10:00', 11: '11:00', 12: '12:00', 13: '13:00', 14: '14:00',
@@ -105,8 +105,11 @@ export function FootfallAnalysis({
   hideDensityLegend = false,
 }: FootfallAnalysisProps) {
   const { t } = useTranslation('mall');
-  const now = new Date();
-  const [floor, setFloor] = useState<Floor>('ground');
+  const [now] = useState(() => new Date());
+  const floorOptions = useMemo<FloorplanFloor[]>(() => mallId === 'realidea-sello'
+    ? ['p1', 'floor1', 'floor2', 'floor3', 'floor4']
+    : ['ground', 'upper'], [mallId]);
+  const [floor, setFloor] = useState<FloorplanFloor>(floorOptions[0] ?? 'ground');
   const [hour, setHour] = useState<number>(now.getHours() >= 10 && now.getHours() <= 21 ? now.getHours() : 14);
   const [playing, setPlaying] = useState(false);
   const [selectedZone, setSelectedZone] = useState<IdeaparkZone | null>(null);
@@ -130,9 +133,13 @@ export function FootfallAnalysis({
 
   // Auto-select the first available week once data arrives
   useEffect(() => {
-    if (!selectedWeek && counterData?.availableWeeks?.length) {
-      setSelectedWeek(counterData.availableWeeks[0]);
-    }
+    let cancelled = false;
+    Promise.resolve().then(() => {
+      if (!cancelled && !selectedWeek && counterData?.availableWeeks?.length) {
+        setSelectedWeek(counterData.availableWeeks[0]);
+      }
+    });
+    return () => { cancelled = true; };
   }, [counterData, selectedWeek]);
 
   // Map counter label → counter info for quick lookup
@@ -147,6 +154,7 @@ export function FootfallAnalysis({
   const ZOOM_STEP = 0.25;
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [panning, setPanning] = useState(false);
   const isPanning = useRef(false);
   const panStart = useRef({ x: 0, y: 0 });
   const panOrigin = useRef({ x: 0, y: 0 });
@@ -166,10 +174,32 @@ export function FootfallAnalysis({
     const z = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, newZoom));
     setZoom(z);
     setPan((p) => clampPan(p.x, p.y, z));
-  }, [clampPan]);
+  }, [clampPan, setPan, setZoom]);
 
   // Reset zoom when floor changes
-  useEffect(() => { setZoom(1); setPan({ x: 0, y: 0 }); }, [floor]);
+  useEffect(() => {
+    let cancelled = false;
+    Promise.resolve().then(() => {
+      if (cancelled) return;
+      setZoom(1);
+      setPan({ x: 0, y: 0 });
+    });
+    return () => { cancelled = true; };
+  }, [floor]);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!floorOptions.includes(floor)) {
+      const nextFloor = floorOptions[0] ?? 'ground';
+      Promise.resolve().then(() => {
+        if (cancelled) return;
+        setFloor(nextFloor);
+        setSelectedZone(null);
+        onFloorChange?.(nextFloor);
+      });
+    }
+    return () => { cancelled = true; };
+  }, [floor, floorOptions, onFloorChange]);
 
   // Wheel / trackpad zoom — non-passive listeners so preventDefault stops page scroll
   useEffect(() => {
@@ -218,6 +248,7 @@ export function FootfallAnalysis({
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
     if (zoom <= 1) return;
     isPanning.current = true;
+    setPanning(true);
     panStart.current = { x: e.clientX, y: e.clientY };
     panOrigin.current = { ...pan };
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
@@ -229,10 +260,11 @@ export function FootfallAnalysis({
     const dx = ((e.clientX - panStart.current.x) / rect.width) * 100;
     const dy = ((e.clientY - panStart.current.y) / rect.height) * 100;
     setPan(clampPan(panOrigin.current.x + dx, panOrigin.current.y + dy, zoom));
-  }, [zoom, clampPan]);
+  }, [zoom, clampPan, setPan]);
 
   const handlePointerUp = useCallback(() => {
     isPanning.current = false;
+    setPanning(false);
   }, []);
 
   // Auto-advance hour when playing
@@ -252,25 +284,20 @@ export function FootfallAnalysis({
 
   // Prefer published floorplan data from DB; fall back to static imports
   const published = usePublishedFloorplan(mallId);
-  const activeCameras = floor === 'upper' ? published.upperCameras : published.groundCameras;
-
-  const getVisitorData = useCallback(
-    (zone: IdeaparkZone): ZoneVisitorData => getZoneVisitors(zone, hour, dayOfWeek),
-    [hour, dayOfWeek]
-  );
+  const activeCameras = published.byFloor[floor]?.cameras ?? [];
+  const floorplanViewBox = mallId === 'realidea-sello' ? { w: 2072, h: 1216 } : floor === 'upper' ? { w: 1518, h: 688 } : { w: 1504, h: 704 };
+  const floorplanAspect = mallId === 'realidea-sello' ? '58.7%' : floor === 'upper' ? '45.3%' : '46.8%';
 
   // Use only published DB data — no static fallback.
   // Show empty floorplan while loading; avoids stale static zones conflicting with live data.
   const hasPublishedGround = published.groundZones !== null;
-  const allZones = floor === 'upper'
-    ? (published.upperZones ?? [])
-    : (published.groundZones ?? []);
+  const allZones = published.byFloor[floor]?.zones ?? [];
 
   // Filter out store zones — they have capacity 0 and make the heat map look messy
   const activeZones = allZones;
 
   // De-collide zone/store name labels so they don't overlap
-  const viewBox = floor === 'upper' ? { w: 1518, h: 688 } : { w: 1504, h: 704 };
+  const viewBox = floorplanViewBox;
   const decollidedLabels = useMemo(() => {
     if (activeZones.length === 0) return [];
     const allInputs: LabelInput[] = activeZones.map((z) => {
@@ -305,7 +332,7 @@ export function FootfallAnalysis({
     });
 
     return decollidLabels(visibleInputs, { viewBoxWidth: viewBox.w, viewBoxHeight: viewBox.h });
-  }, [activeZones, floor, viewBox.w, viewBox.h, zoom, pan.x, pan.y]);
+  }, [activeZones, viewBox.w, viewBox.h, zoom, pan.x, pan.y]);
 
   // Sum real counter data for the selected hour when available
   const counterTotalForHour = useMemo(() => {
@@ -334,7 +361,7 @@ export function FootfallAnalysis({
   }, [counterData, hour, dayOfWeek]);
 
   const totalVisitors = counterTotalForHour ?? activeZones.reduce(
-    (sum, z) => sum + getVisitorData(z).visitors,
+    (sum, z) => sum + getZoneVisitors(z, hour, dayOfWeek).visitors,
     0
   );
 
@@ -349,10 +376,10 @@ export function FootfallAnalysis({
       floor,
       hour,
       dayOfWeek,
-      zones: activeZones.map((z) => ({ zone: z, visitors: getVisitorData(z) })),
+      zones: activeZones.map((z) => ({ zone: z, visitors: getZoneVisitors(z, hour, dayOfWeek) })),
       floorplanElement: mapContainerRef.current,
     };
-  }, [reportDataRef, floor, hour, dayOfWeek, activeZones, getVisitorData]);
+  }, [reportDataRef, floor, hour, dayOfWeek, activeZones]);
 
   return (
     <Card className="p-0 overflow-hidden bg-bo-glass rounded-xl shadow-bo-glass-strong border-2 border-bo-neutral-300/60 backdrop-blur-xl">
@@ -360,7 +387,7 @@ export function FootfallAnalysis({
       <div className="flex items-center justify-between px-4 py-3 border-b border-bo-primary-100/60 bg-bo-glass-primary">
         {/* Floor selector */}
         <div className="flex items-center gap-1 bg-bo-primary-50/60 rounded-lg p-1">
-          {(['ground', 'upper'] as Floor[]).map((f) => (
+          {floorOptions.map((f) => (
             <button
               key={f}
               onClick={() => { setFloor(f); setSelectedZone(null); onFloorChange?.(f); }}
@@ -371,7 +398,7 @@ export function FootfallAnalysis({
                   : 'text-bo-neutral-500 hover:text-bo-neutral-700'
               )}
             >
-              {f === 'ground' ? t('heatmap.groundFloor') : t('heatmap.upperFloor')}
+              {floorLabel(f, t('heatmap.groundFloor'), t('heatmap.upperFloor'))}
             </button>
           ))}
         </div>
@@ -503,7 +530,7 @@ export function FootfallAnalysis({
       <div
         ref={mapContainerRef}
         className="relative w-full overflow-hidden"
-        style={{ paddingBottom: floor === 'upper' ? '45.3%' : '46.8%', cursor: zoom > 1 ? 'grab' : 'default', touchAction: 'none' }}
+        style={{ paddingBottom: floorplanAspect, cursor: zoom > 1 ? 'grab' : 'default', touchAction: 'none' }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -536,17 +563,15 @@ export function FootfallAnalysis({
           className="absolute inset-0 origin-center"
           style={{
             transform: `scale(${zoom}) translate(${pan.x}%, ${pan.y}%)`,
-            transition: isPanning.current ? 'none' : 'transform 0.25s ease-out',
+            transition: panning ? 'none' : 'transform 0.25s ease-out',
           }}
         >
           {/* Floor plan image */}
           <Image
-            src={floor === 'upper'
-              ? '/assets/malls/ideapark/floorplan-upper.png'
-              : '/assets/malls/ideapark/floorplan-ground.png'}
+            src={getMallFloorplan(mallId, floor)}
             alt={floor === 'upper'
-              ? 'Ideapark Lempäälä yläkerran pohjakartta'
-              : 'Ideapark Lempäälä pohjakerroksen pohjakartta'}
+              ? t('footfall.floorplanAlt.upper')
+              : t('footfall.floorplanAlt.ground')}
             fill
             className="object-contain"
             priority
@@ -557,7 +582,7 @@ export function FootfallAnalysis({
           <svg
             ref={svgRef}
             className="absolute inset-0 w-full h-full"
-            viewBox={floor === 'upper' ? '0 0 1518 688' : '0 0 1504 704'}
+            viewBox={`0 0 ${floorplanViewBox.w} ${floorplanViewBox.h}`}
             preserveAspectRatio="xMidYMid meet"
             style={{ pointerEvents: 'none' }}
           >
@@ -565,7 +590,7 @@ export function FootfallAnalysis({
             <rect width="100%" height="100%" fill="var(--color-bo-primary-50)" fillOpacity={0.35} />
 
             {activeZones.map((zone) => {
-              const data = getVisitorData(zone);
+              const data = getZoneVisitors(zone, hour, dayOfWeek);
               const color = getHeatColor(data.visitors, zone.capacity);
               const isHovered = hoveredZone === zone.id;
               const isZoneSelected = selectionMode && selectedZoneIds.includes(zone.id);
@@ -669,7 +694,7 @@ export function FootfallAnalysis({
               return zoneBtns.map(({ zoneId, cx, cy, label }) => {
                 const zone = activeZones.find((z) => z.id === zoneId);
                 const isHov = hoveredZone === `btn-${zoneId}`;
-                const color = zone ? getHeatColor(getVisitorData(zone).visitors, zone.capacity) : '#64748b';
+                const color = zone ? getHeatColor(getZoneVisitors(zone, hour, dayOfWeek).visitors, zone.capacity) : '#64748b';
                 return (
                   <g key={`btn-${zoneId}`}
                     style={{ pointerEvents: 'all', cursor: 'pointer' }}
@@ -694,8 +719,8 @@ export function FootfallAnalysis({
               });
             })()}
 
-            {/* ── Entrance pins (ground floor only, hidden when published data exists) */}
-            {floor === 'ground' && !hasPublishedGround && GROUND_FLOOR_ENTRANCES.map((e) => (
+            {/* Entrance pins for the neutral base plan, hidden when published data exists. */}
+            {floor === 'ground' && !hasPublishedGround && GENERIC_LARGE_MALL_GROUND_ENTRANCES.map((e) => (
               <g key={e.id} style={{ pointerEvents: 'none' }}>
                 <circle cx={e.x} cy={e.y} r={6}
                   fill="var(--color-bo-accent-600)" fillOpacity={0.9} stroke="white" strokeWidth={1.5} />
@@ -706,7 +731,7 @@ export function FootfallAnalysis({
                 <text x={e.x} y={e.y + 17} textAnchor="middle"
                   fontSize="7.5" fontWeight="600" fill="var(--color-bo-accent-600)" fillOpacity={0.95}
                   style={{ userSelect: 'none' }}>
-                  {e.labelFi}
+                  {t(`footfall.entrances.${e.labelKey}`)}
                 </text>
               </g>
             ))}
@@ -835,7 +860,7 @@ export function FootfallAnalysis({
             {hoveredZone && !hoveredZone.startsWith('btn-') && (() => {
               const zone = activeZones.find((z) => z.id === hoveredZone);
               if (!zone) return null;
-              const data = getVisitorData(zone);
+              const data = getZoneVisitors(zone, hour, dayOfWeek);
               const label = `${zone.nameFi} · ${data.visitors.toLocaleString()}`;
               const s = 1 / zoom; // inverse scale so tooltip stays readable at any zoom
               const fs = 22;
@@ -864,7 +889,7 @@ export function FootfallAnalysis({
 
           {/* Zone popup (hidden in selection mode) */}
           {!selectionMode && selectedZone && (() => {
-            const data = getVisitorData(selectedZone);
+            const data = getZoneVisitors(selectedZone, hour, dayOfWeek);
             return (
               <div
                 className="absolute z-20 bg-bo-glass rounded-xl shadow-bo-glass-strong border-2 border-bo-neutral-300/60 backdrop-blur-xl p-4 w-52"
@@ -956,4 +981,11 @@ export function FootfallAnalysis({
       )}
     </Card>
   );
+}
+
+function floorLabel(floor: FloorplanFloor, groundLabel: string, upperLabel: string) {
+  if (floor === 'ground') return groundLabel;
+  if (floor === 'upper') return upperLabel;
+  if (floor === 'p1') return 'P1';
+  return floor.replace('floor', '');
 }

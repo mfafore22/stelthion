@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "ideapark": {
+    "ideapark-lempaala": {
       "name": "Ideapark Lempäälä",
       "logo": "/ideapark-logo.png",
       "colors": {
@@ -19,22 +19,84 @@
         "fontFamily": "Inter, sans-serif",
         "headingWeight": 700
       }
+    },
+    "realidea-sello": {
+      "name": "Sello",
+      "logo": "/assets/mall-operators/Sello_logo.svg",
+      "colors": {
+        "primary": "#67a93b",
+        "secondary": "#2f6f34",
+        "accent": "#19311d",
+        "warning": "#f7966b",
+        "error": "#f04e54",
+        "background": "#f3f8f1"
+      },
+      "gradient": {
+        "from": "#67a93b",
+        "to": "#2f6f34"
+      },
+      "typography": {
+        "fontFamily": "Inter, sans-serif",
+        "headingWeight": 700
+      }
+    },
+    "realidea-tripla": {
+      "name": "Mall of Tripla",
+      "logo": "/assets/mall-operators/MallofTripla_logo.png",
+      "colors": {
+        "primary": "#db4c64",
+        "secondary": "#f0c24c",
+        "accent": "#2fa866",
+        "warning": "#f7966b",
+        "error": "#f04e54",
+        "background": "#fbf4f5"
+      },
+      "gradient": {
+        "from": "#db4c64",
+        "to": "#f0c24c"
+      },
+      "typography": {
+        "fontFamily": "Inter, sans-serif",
+        "headingWeight": 700
+      }
+    }
+  },
+  "customerFallback": {
+    "realidea-oy": {
+      "name": "Realidea Oy",
+      "logo": "",
+      "colors": {
+        "primary": "#1f3866",
+        "secondary": "#4d6694",
+        "accent": "#c4a675",
+        "warning": "#f7966b",
+        "error": "#f04e54",
+        "background": "#F5F6F8"
+      },
+      "gradient": {
+        "from": "#1f3866",
+        "to": "#0f1d3a"
+      },
+      "typography": {
+        "fontFamily": "Inter, sans-serif",
+        "headingWeight": 700
+      }
     }
   },
   "fallback": {
-    "name": "Ideapark Lempäälä",
-    "logo": "/ideapark-logo.png",
+    "name": "Stelthion",
+    "logo": "",
     "colors": {
-      "primary": "#328d2e",
-      "secondary": "#7cb928",
-      "accent": "#214990",
+      "primary": "#1f2937",
+      "secondary": "#374151",
+      "accent": "#6b7280",
       "warning": "#f7966b",
       "error": "#f04e54",
-      "background": "#F8F6F3"
+      "background": "#F4F4F5"
     },
     "gradient": {
-      "from": "#264d21",
-      "to": "#1a3a15"
+      "from": "#1f2937",
+      "to": "#111827"
     },
     "typography": {
       "fontFamily": "Inter, sans-serif",

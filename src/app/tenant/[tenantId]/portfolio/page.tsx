@@ -1,353 +1,120 @@
 'use client';
 
-import React, { useMemo, useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
 import Image from 'next/image';
+import { useEffect, useMemo } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import useSWR from 'swr';
+import { Building2 } from 'lucide-react';
 import { useSession } from '@/contexts/SessionContext';
 import { useTranslation } from '@/lib/i18n/hooks';
+import { getCurrentFootfall } from '@/lib/data/footfall';
+import { getOperatorLogoOrFallback } from '@/lib/mall/operatorLogos';
 import { MallLeftNav } from '@/components/mall/shell/MallLeftNav';
 import { MallTopBar } from '@/components/mall/shell/MallTopBar';
+import { PortfolioPropertyCard } from '@/components/mall/portfolio/PortfolioPropertyCard';
 import { MallKPICard } from '@/components/mall/ui/MallKPICard';
-import { MallCard } from '@/components/mall/ui/MallCard';
-import { Button } from '@/components/ui/button';
-import { getMallIdentity } from '@/lib/mall/mallIdentity';
-import { getMallBrandColors } from '@/lib/mall/mallDatabase';
-import { getOperatorLogoOrFallback } from '@/lib/mall/operatorLogos';
-import { getCurrentFootfall } from '@/lib/data/footfall';
+import { PageHero } from '@/components/mall/visuals/PageHero';
 
-const TENANT_MAP: Record<string, string> = {
-  'koy-ideapark-ab': 'Koy Ideapark Ab',
-};
+const TENANT_MAP: Record<string, string> = { ideapark: 'Koy Ideapark Ab', 'realidea-oy': 'Realidea Oy' };
+const fetcher = async (url: string) => { const r = await fetch(url); if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); };
+const compact = (num: number, currency = false) => num >= 1_000_000 ? `${currency ? '€' : ''}${(num / 1_000_000).toFixed(currency ? 0 : 1)}M` : num >= 1000 ? `${(num / 1000).toFixed(1)}k` : `${currency ? '€' : ''}${num.toLocaleString()}`;
 
-const ALL_PROPERTIES = [
-  {
-    id: 'ideapark',
-    name: 'Ideapark Lempäälä',
-    city: 'Lempäälä',
-    status: 'live' as const,
-    currentVisitors: 0,
-    annualVisitors: 7500000,
-    annualSales: 450000000,
-    coordinates: [23.7987, 61.3615] as [number, number],
-  },
-];
-
-function formatNumber(num: number): string {
-  if (num >= 1000000000) {
-    return `€${(num / 1000000000).toFixed(1)}B`;
-  }
-  if (num >= 1000000) {
-    return `${(num / 1000000).toFixed(1)}M`;
-  }
-  if (num >= 1000) {
-    return `${(num / 1000).toFixed(1)}k`;
-  }
-  return num.toLocaleString();
-}
-
-function formatVisitors(num: number): string {
-  if (num >= 1000000) {
-    return `${(num / 1000000).toFixed(1)}M`;
-  }
-  if (num >= 1000) {
-    return `${(num / 1000).toFixed(1)}k`;
-  }
-  return num.toLocaleString();
-}
-
-function formatCurrency(num: number): string {
-  if (num >= 1000000) {
-    return `€${(num / 1000000).toFixed(0)}M`;
-  }
-  return `€${num.toLocaleString()}`;
-}
-
-const STATUS_ACCENTS: Record<string, { badgeBg: string; badgeText: string }> = {
-  live: { badgeBg: 'bg-[#d1fae5]', badgeText: 'text-[#047857]' },
-  beta: { badgeBg: 'bg-[#fff4e6]', badgeText: 'text-[#b55600]' },
-  alpha: { badgeBg: 'bg-[#e7f1ff]', badgeText: 'text-[#1c64f2]' },
-  planned: { badgeBg: 'bg-[#eef2f7]', badgeText: 'text-[#475569]' },
-};
-
-const getPortfolioKPIs = (t: (key: string) => string) => {
-  const footfall = getCurrentFootfall();
-  return [
-    {
-      label: t('mall:portfolio.currentVisitors'),
-      value: formatVisitors(footfall.currentVisitors),
-      delta: `+${footfall.vsPlanned.toFixed(1)}% ${t('mall:portfolio.vsPlan')}`,
-      deltaType: 'positive' as const,
-      accent: 'green' as const,
-      trendPercentage: footfall.vsPlanned,
-    },
-    {
-      label: t('mall:portfolio.dwellTime'),
-      value: `${footfall.dwellTimeMinutes} min`,
-      delta: `+3.5% ${t('mall:portfolio.vsBaseline')}`,
-      deltaType: 'positive' as const,
-      accent: 'blue' as const,
-      trendPercentage: 3.5,
-    },
-    {
-      label: t('mall:portfolio.conversionRate'),
-      value: `${footfall.conversionRate.toFixed(1)}%`,
-      delta: `+1.8% ${t('mall:portfolio.vsLastWeek')}`,
-      deltaType: 'positive' as const,
-      accent: 'orange' as const,
-      trendPercentage: 1.8,
-    },
-  ];
-};
+interface CustomerMall { mallId: string; name: string; city: string; status: 'LIVE' | 'BETA' | 'ALPHA' | 'PLANNED'; totalShops: number | null; stats: { currentVisitors: number; annualVisitors: number; annualSales: number } | null; }
+interface CustomerResponse { id: string; name: string; malls: CustomerMall[]; }
 
 export default function TenantPortfolioPage() {
   const router = useRouter();
   const params = useParams();
-  const { user, loading: sessionLoading } = useSession();
+  const { user, loading } = useSession();
   const { t } = useTranslation(['mall', 'kpi']);
-
   const tenantId = params?.tenantId as string | undefined;
-  const tenantName = tenantId ? TENANT_MAP[tenantId] : undefined;
+  const tenantName = tenantId ? TENANT_MAP[tenantId] : '';
+  const { data } = useSWR<CustomerResponse>(user && tenantId ? `/api/customers/${tenantId}` : null, fetcher);
+  const operatorLogo = getOperatorLogoOrFallback(tenantName);
+  const footfall = useMemo(() => getCurrentFootfall(), []);
 
-  // Redirect to login if not authenticated
   useEffect(() => {
-    if (!sessionLoading && !user) {
-      router.push('/mall/login');
+    if (!loading && !user) router.push('/mall/login');
+    if (!loading && user && tenantId) {
+      const ownTenant = Object.entries(TENANT_MAP).find(([, name]) => name === user.companyName)?.[0];
+      if (ownTenant && ownTenant !== tenantId) router.push(`/tenant/${ownTenant}/portfolio`);
     }
-  }, [sessionLoading, user, router]);
+  }, [loading, router, tenantId, user]);
 
-  // Route guard: validate tenant slug matches user's company
-  useEffect(() => {
-    if (!sessionLoading && user && tenantId) {
-      const userTenantId = Object.entries(TENANT_MAP).find(
-        ([, name]) => name === user.companyName
-      )?.[0];
+  const malls = useMemo(() => (data?.malls ?? []).map((mall) => ({
+    id: mall.mallId,
+    name: mall.name,
+    city: mall.city,
+    status: mall.status,
+    currentVisitors: mall.stats?.currentVisitors ?? 0,
+    annualVisitors: mall.stats?.annualVisitors ?? 0,
+    annualSales: mall.stats?.annualSales ?? 0,
+    totalShops: mall.totalShops ?? 0,
+  })), [data]);
+  const totals = useMemo(() => ({
+    count: malls.length,
+    visitors: malls.reduce((sum, mall) => sum + mall.annualVisitors, 0),
+    sales: malls.reduce((sum, mall) => sum + mall.annualSales, 0),
+  }), [malls]);
 
-      if (userTenantId && tenantId !== userTenantId) {
-        router.push(`/tenant/${userTenantId}/portfolio`);
-      }
-    }
-  }, [sessionLoading, user, tenantId, router]);
-
-  const authorizedProperties = useMemo(() => {
-    if (!user || !tenantName) return [];
-
-    if (tenantName === 'Koy Ideapark Ab') {
-      return ALL_PROPERTIES.filter(property => property.id === 'ideapark');
-    }
-
-    return [];
-  }, [user, tenantName]);
-
-  const tenantStats = useMemo(() => {
-    const totalProperties = authorizedProperties.length;
-    const totalAnnualVisitors = authorizedProperties.reduce((sum, p) => sum + p.annualVisitors, 0);
-    const totalAnnualSales = authorizedProperties.reduce((sum, p) => sum + p.annualSales, 0);
-    const companyName = tenantName || '';
-
-    return {
-      propertyCount: totalProperties,
-      annualVisitors: totalAnnualVisitors,
-      annualSales: totalAnnualSales,
-      companyName,
-    };
-  }, [authorizedProperties, tenantName]);
-
-  const operatorLogo = getOperatorLogoOrFallback(tenantStats.companyName);
-
-  const handleMallClick = (mallId: string) => {
-    router.push(`/mall/${mallId}`);
-  };
-
-  if (sessionLoading || !user) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-bo-neutral-400 text-sm">Loading...</div>
-      </div>
-    );
-  }
+  if (loading || !user) return <div className="flex h-64 items-center justify-center"><div className="text-sm text-bo-neutral-400">Loading...</div></div>;
 
   return (
-    <div className="min-h-screen bg-bo-beige-100">
-      <MallLeftNav
-        managementCompanyId={tenantId || ''}
-        onNavigate={(itemId) => console.log(`Navigate to: ${itemId}`)}
-      />
-
+    <div className="min-h-screen bg-bo-neutral-50">
+      <MallLeftNav managementCompanyId={tenantId || ''} onNavigate={() => undefined} />
       <MallTopBar />
-
       <main className="ml-[80px] mt-[80px] p-8">
-        <div className="max-w-[1600px] mx-auto space-y-8">
-          {/* Management Company Header */}
-          <div className="bg-bo-glass rounded-xl border border-bo-neutral-200/30 shadow-bo-glass p-8 flex flex-col gap-6 bg-bo-gradient-muted">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-              <div className="flex items-center gap-5">
-                <div className="w-14 h-14 relative bg-bo-neutral-50 rounded-lg border border-bo-neutral-200 shadow-bo-sm flex items-center justify-center overflow-hidden">
-                  {operatorLogo.type === 'image' ? (
-                    <Image
-                      src={operatorLogo.value}
-                      alt={`${tenantStats.companyName} logo`}
-                      fill
-                      sizes="56px"
-                      className="object-contain p-1.5"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-bo-primary-600 font-bold text-2xl">
-                      {operatorLogo.value}
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <h1 className="text-2xl font-semibold text-bo-neutral-950 tracking-tight">
-                    {tenantStats.companyName}
-                  </h1>
-                  <p className="text-sm text-bo-neutral-600 leading-relaxed">
-                    {t('mall:portfolio.propertyOperator')} • {t('mall:portfolio.shoppingCenters', { count: tenantStats.propertyCount })}
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-8 text-right">
-                <div className="text-right">
-                  <div className="text-2xl font-bold text-bo-neutral-950 tracking-tight">
-                    {tenantStats.propertyCount}
-                  </div>
-                  <div className="text-xs text-bo-neutral-600 uppercase tracking-wider">
-                    {t('mall:portfolio.property', { count: tenantStats.propertyCount })}
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="text-2xl font-bold text-bo-neutral-950 tracking-tight">
-                    {formatVisitors(tenantStats.annualVisitors)}
-                  </div>
-                  <div className="text-xs text-bo-neutral-600 uppercase tracking-wider">
-                    {t('mall:portfolio.annualVisitors')}
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="text-2xl font-bold text-bo-neutral-950 tracking-tight">
-                    {formatNumber(tenantStats.annualSales)}
-                  </div>
-                  <div className="text-xs text-bo-neutral-600 uppercase tracking-wider">
-                    {t('mall:portfolio.annualSales')}
-                  </div>
-                </div>
-              </div>
+        <div className="mx-auto max-w-[1600px] space-y-6">
+          <PageHero
+            icon={<Building2 className="h-6 w-6 text-bo-primary-700" />}
+            title={tenantName}
+            body={t('mall:portfolio.operatorHeroBody', { defaultValue: 'Track the portfolio at operator level, compare mall operating signals, and open each property in a branded workspace card.' })}
+            bannerSrc={{ title: tenantName, primary: '#214990', secondary: '#328d2e', accent: '#f3c978' }}
+            bannerAlt={tenantName}
+            rightSlot={<LogoBox logo={operatorLogo} name={tenantName} />}
+          />
+          <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <MallKPICard label={t('mall:portfolio.currentVisitors')} value={compact(footfall.currentVisitors)} delta={`+${footfall.vsPlanned.toFixed(1)}% ${t('mall:portfolio.vsPlan')}`} deltaType="positive" accent="green" trendPercentage={footfall.vsPlanned} surfaceAccent={{ primary: '#328d2e', secondary: '#214990' }} />
+            <MallKPICard label={t('mall:portfolio.annualVisitors')} value={compact(totals.visitors)} delta={`${totals.count} ${t('mall:portfolio.shoppingCenters', { count: totals.count })}`} accent="blue" trendPercentage={3.2} surfaceAccent={{ primary: '#214990', secondary: '#328d2e' }} />
+            <MallKPICard label={t('mall:portfolio.annualSales')} value={compact(totals.sales, true)} delta={t('mall:portfolio.propertyOperator')} accent="orange" trendPercentage={2.1} surfaceAccent={{ primary: '#b45309', secondary: '#214990' }} />
+          </section>
+          <section className="bo-surface rounded-2xl border-2 border-bo-primary-200/60 p-5">
+            <div className="mb-4">
+              <h2 className="text-lg font-semibold tracking-tight text-bo-neutral-950">{t('mall:portfolio.portfolioProperties', { count: malls.length })}</h2>
             </div>
-          </div>
-
-          {/* KPI Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-            {getPortfolioKPIs(t).map((kpi, index) => (
-              <MallKPICard
-                key={index}
-                label={kpi.label}
-                value={kpi.value}
-                delta={kpi.delta}
-                deltaType={kpi.deltaType}
-                accent={kpi.accent}
-                trendPercentage={kpi.trendPercentage}
-              />
-            ))}
-          </div>
-
-          {/* Mall Properties */}
-          <section className="bg-bo-glass rounded-xl border border-bo-neutral-200/30 shadow-bo-glass p-8 bg-bo-gradient-muted">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h2 className="text-2xl font-semibold text-bo-neutral-950 tracking-tight">
-                  {t('mall:portfolio.portfolioProperties', { count: authorizedProperties.length })}
-                </h2>
-              </div>
-            </div>
-
-            <div className="space-y-5">
-              {authorizedProperties.map((mall) => {
-                const identity = getMallIdentity(mall.id);
-                return (
-                  <MallCard
-                    key={mall.id}
-                    hover
-                    onClick={() => handleMallClick(mall.id)}
-                    variant="elevated"
-                    padding="md"
-                    className="cursor-pointer relative overflow-hidden"
-                    style={{
-                      borderLeft: `4px solid ${identity.colors.primary}`,
-                    }}
-                  >
-                    {/* Brand gradient accent */}
-                    <div
-                      className="absolute top-0 left-0 right-0 h-1 opacity-60"
-                      style={{
-                        background: `linear-gradient(90deg, ${identity.gradient.from} 0%, ${identity.gradient.to} 100%)`,
-                      }}
-                    />
-
-                    <div className="flex items-start gap-5 mb-4">
-                      <div
-                        className="flex-shrink-0 w-16 h-16 relative bg-bo-neutral-50 rounded-lg border-2 shadow-bo-sm flex items-center justify-center overflow-hidden"
-                        style={{ borderColor: identity.colors.primary }}
-                      >
-                        <div
-                          className="w-full h-full flex items-center justify-center text-white font-bold text-xl"
-                          style={{
-                            background: `linear-gradient(135deg, ${identity.gradient.from} 0%, ${identity.gradient.to} 100%)`,
-                          }}
-                        >
-                          {mall.name[0]}
-                        </div>
-                      </div>
-
-                      <div className="flex-1 flex justify-between items-start">
-                        <div>
-                          <h3
-                            className="text-lg font-semibold tracking-tight"
-                            style={{ color: identity.colors.primary }}
-                          >
-                            {mall.name}
-                          </h3>
-                          <p className="text-sm text-bo-neutral-600 leading-relaxed">{mall.city}</p>
-                        </div>
-                        <span
-                          className="text-xs font-semibold px-3 py-1.5 rounded-md uppercase tracking-wider"
-                          style={{
-                            backgroundColor: `${identity.colors.primary}15`,
-                            color: identity.colors.primary,
-                            border: `1px solid ${identity.colors.primary}40`,
-                          }}
-                        >
-                          {mall.status}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-5 text-sm">
-                      <div>
-                        <p className="text-bo-neutral-600 text-xs uppercase tracking-wider mb-1">{t('mall:portfolio.currentVisitors')}</p>
-                        <p className="text-lg font-semibold text-bo-neutral-950 tracking-tight">
-                          {formatVisitors(mall.currentVisitors)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-bo-neutral-600 text-xs uppercase tracking-wider mb-1">{t('mall:portfolio.annualVisitors')}</p>
-                        <p className="text-lg font-semibold text-bo-neutral-950 tracking-tight">
-                          {formatVisitors(mall.annualVisitors)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-bo-neutral-600 text-xs uppercase tracking-wider mb-1">{t('mall:portfolio.annualSales')}</p>
-                        <p className="text-lg font-semibold text-bo-neutral-950 tracking-tight">
-                          {formatCurrency(mall.annualSales)}
-                        </p>
-                      </div>
-                    </div>
-                  </MallCard>
-                );
-              })}
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {malls.map((mall) => (
+                <PortfolioPropertyCard
+                  key={mall.id}
+                  mallId={mall.id}
+                  name={mall.name}
+                  city={mall.city}
+                  status={mall.status}
+                  actionLabel={t('mall:portfolio.viewProperty', { defaultValue: 'Open property' })}
+                  metrics={[
+                    { label: t('mall:portfolio.currentVisitors'), value: compact(mall.currentVisitors), trendPercentage: 3.2 },
+                    { label: t('mall:portfolio.annualVisitors'), value: compact(mall.annualVisitors), trendPercentage: 2.6 },
+                    { label: t('mall:portfolio.annualSales'), value: compact(mall.annualSales, true), trendPercentage: 2.1 },
+                  ]}
+                  onClick={() => router.push(`/mall/${mall.id}`)}
+                />
+              ))}
             </div>
           </section>
         </div>
       </main>
+    </div>
+  );
+}
+
+function LogoBox({ logo, name }: { logo: { type: 'image' | 'letter'; value: string }; name: string }) {
+  return (
+    <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl border border-bo-neutral-200 bg-white shadow-bo-sm">
+      {logo.type === 'image' ? (
+        <Image src={logo.value} alt={`${name} logo`} fill={false} width={56} height={56} className="h-12 w-12 object-contain" />
+      ) : (
+        <span className="text-xl font-semibold text-bo-primary-700">{logo.value}</span>
+      )}
     </div>
   );
 }

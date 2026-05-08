@@ -46,7 +46,7 @@ export function JobHistory({ jobs, selectedJobId, onSelectJob }: JobHistoryProps
           {jobs.map((job) => {
             const isSelected = job.id === selectedJobId;
             const modeMeta = MODE_META[job.mode as AnalysisMode];
-            const cameraLabel = job.camera?.label ?? '—';
+            const cameraLabel = job.camera?.label ?? '–';
             const dateStr = new Date(job.footageDate).toLocaleDateString();
 
             return (

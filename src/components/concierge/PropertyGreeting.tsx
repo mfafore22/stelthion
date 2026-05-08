@@ -19,8 +19,8 @@ interface PropertyGreetingProps {
 }
 
 export function PropertyGreeting({
-  propertyName = 'Ideapark Lempäälä',
-  logoUrl = '/ideapark-logo.png',
+  propertyName = 'your property',
+  logoUrl,
 }: PropertyGreetingProps) {
   const { i18n } = useTranslation();
   const hour = new Date().getHours();
@@ -37,13 +37,19 @@ export function PropertyGreeting({
     >
       {/* Property logo */}
       <div className="w-16 h-16 rounded-full bg-bo-primary-50 border border-bo-primary-200/50 flex items-center justify-center overflow-hidden mb-4 shadow-bo-sm">
-        <Image
-          src={logoUrl}
-          alt={propertyName}
-          width={48}
-          height={48}
-          className="object-contain"
-        />
+        {logoUrl ? (
+          <Image
+            src={logoUrl}
+            alt={propertyName}
+            width={48}
+            height={48}
+            className="object-contain"
+          />
+        ) : (
+          <span className="text-lg font-semibold text-bo-primary-700">
+            {propertyName.slice(0, 1).toUpperCase()}
+          </span>
+        )}
       </div>
 
       {/* Time-aware greeting */}
@@ -70,7 +76,7 @@ function getGreeting(hour: number, language: string): string {
 }
 
 function getIntro(propertyName: string, language: string): string {
-  if (language === 'fi') return `Olen ${propertyName} — kysy mitä vain minusta!`;
-  if (language === 'sv') return `Jag är ${propertyName} — fråga mig vad som helst!`;
-  return `I'm ${propertyName} — ask me anything about your property!`;
+  if (language === 'fi') return `Olen ${propertyName}. Kysy mitä vain minusta!`;
+  if (language === 'sv') return `Jag är ${propertyName}. Fråga mig vad som helst!`;
+  return `I'm ${propertyName}. Ask me anything about your property!`;
 }

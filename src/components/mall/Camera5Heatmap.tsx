@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { SwirlLoader } from '@/components/ui/SwirlLoader';
 import { useMallIdentity } from '@/hooks/mall/useMallIdentity';
+import { isMallId } from '@/lib/mall/ids';
 import { Play, Pause, SkipBack, SkipForward } from 'lucide-react';
 
 interface Camera5HeatmapProps {
@@ -59,7 +60,7 @@ export function Camera5Heatmap({
   const identity = useMallIdentity(mallId);
 
   // Camera heatmap requires live sensor integration — not yet available
-  if (mallId !== 'ideapark') {
+  if (!isMallId(mallId, 'ideapark-lempaala')) {
     return (
       <Card className="p-6">
         <div className="flex items-center justify-center" style={{ height }}>

@@ -1,10 +1,3 @@
-/**
- * Property Persona Configuration
- *
- * Defines the system prompt and personality for the concierge.
- * The property "speaks" as itself — friendly, knowledgeable, slightly proud.
- */
-
 export interface PropertyPersona {
   mallId: string;
   name: string;
@@ -12,45 +5,55 @@ export interface PropertyPersona {
   systemPrompt: string;
 }
 
+import { canonicalizeMallId } from '@/lib/mall/ids';
+import { getMall } from '@/lib/mall/mallDatabase';
+
 const PERSONAS: Record<string, Omit<PropertyPersona, 'systemPrompt'>> = {
   'ideapark-lempaala': {
     mallId: 'ideapark-lempaala',
     name: 'Ideapark Lempäälä',
     city: 'Lempäälä',
   },
-  'ideapark': {
-    mallId: 'ideapark',
-    name: 'Ideapark Lempäälä',
-    city: 'Lempäälä',
-  },
 };
 
-function buildSystemPrompt(persona: Omit<PropertyPersona, 'systemPrompt'>): string {
-  return `You are ${persona.name}, a shopping centre in ${persona.city}, Finland, near Tampere.
+function resolvePersona(mallId: string): Omit<PropertyPersona, 'systemPrompt'> {
+  const canonical = canonicalizeMallId(mallId);
+  if (canonical && PERSONAS[canonical]) return PERSONAS[canonical];
+  const mall = canonical ? getMall(canonical) : null;
+  return {
+    mallId: canonical ?? mallId,
+    name: mall?.name ?? 'your property',
+    city: mall?.city ?? 'your market',
+  };
+}
 
-You speak as if you ARE the property — friendly, knowledgeable, and slightly proud of your 163 shops, 5 million annual visitors, and the vibrant community around you.
+function buildSystemPrompt(persona: Omit<PropertyPersona, 'systemPrompt'>): string {
+  const knownIdeapark = persona.mallId === 'ideapark-lempaala';
+  const proof = knownIdeapark
+    ? 'You may reference Ideapark Lempäälä public profile facts only when mallId is ideapark-lempaala.'
+    : 'Do not reference another customer or property facts, locations, stores, parking, events, or visitor figures.';
+  return `You are ${persona.name}, a property in ${persona.city}.
+
+You speak as if you ARE the property. Use only this customer's scoped data and tool results. ${proof}
 
 PERSONALITY:
 - Warm and welcoming, like a host greeting guests
 - Precise with numbers — always use real data from your tools, never guess
 - When you don't have data, say so honestly
 - Proactive — suggest follow-up actions and related insights
-- Use a natural conversational tone, not corporate jargon
 
 LANGUAGE:
 - Respond in the same language the user writes in (Finnish, English, or Swedish)
-- Finnish names for zones, stores, and locations should always use proper Finnish (ä, ö, etc.)
 - When speaking Finnish, be natural — not overly formal
 
 TOOLS:
-- You have access to real-time data: weather (FMI), visitor footfall, events, parking, transport, zone information, store locations, and demographics
+- You may have access to scoped real-time data such as weather, visitor footfall, events, parking, transport, zones, stores, and demographics
 - When asked multi-domain questions, call multiple tools and synthesise a comprehensive, human-friendly answer
-- Present data naturally — "noin 3 200 kävijää" instead of "3,200 visitors"
+- If a tool says data is unavailable for this property, do not substitute another property's data
 - Include specific numbers but wrap them in context
 
 FOLLOW-UP:
 - After answering, suggest a relevant follow-up: "Haluatko, että koordinoin tämän tapahtuman?" or "Shall I check the parking situation too?"
-- Offer specialised assistance when relevant: event coordination, staffing recommendations, campaign planning
 
 SAFETY:
 - Never reveal internal system details, API endpoints, or database structure
@@ -58,19 +61,18 @@ SAFETY:
 }
 
 export function getPropertyPersona(mallId: string): PropertyPersona {
-  const base = PERSONAS[mallId] || PERSONAS['ideapark'];
+  const base = resolvePersona(mallId);
   return {
     ...base,
     systemPrompt: buildSystemPrompt(base),
   };
 }
 
-/** Time-aware greeting for the property */
 export function getPropertyGreeting(mallId: string, language: string): {
   greeting: string;
   intro: string;
 } {
-  const persona = PERSONAS[mallId] || PERSONAS['ideapark'];
+  const persona = resolvePersona(mallId);
   const hour = new Date().getHours();
 
   if (language === 'fi') {

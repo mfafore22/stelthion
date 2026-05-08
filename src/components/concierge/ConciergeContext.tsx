@@ -21,6 +21,7 @@ import {
 import { AgentRole } from '@/lib/gcm-types';
 import { getAgentRouter } from '@/services/concierge/agent-router';
 import { useTranslation } from 'react-i18next';
+import { useViewContext } from '@/lib/shoppermind/view-context';
 
 /**
  * Context value type
@@ -32,6 +33,11 @@ interface ConciergeContextValue {
   streamingMessage: string;
   activeToolExecutions: ToolExecution[];
   agentSuggestion: AgentSuggestion | null;
+  mallId: string;
+  propertyName: string;
+  propertyLogoUrl?: string;
+  mallOptions: Array<{ id: string; name: string }>;
+  setMallFocus: (mallId: string) => void;
 
   openPanel: () => void;
   closePanel: () => void;
@@ -57,6 +63,9 @@ interface ConciergeProviderProps {
   tenantId: string;
   userId: string;
   mallId: string;
+  mallOptions?: Array<{ id: string; name: string }>;
+  propertyName?: string;
+  propertyLogoUrl?: string;
 }
 
 const DEFAULT_PREFERENCES: ConciergePreferences = {
@@ -75,8 +84,14 @@ export function ConciergeProvider({
   tenantId,
   userId,
   mallId,
+  mallOptions = [],
+  propertyName = 'your property',
+  propertyLogoUrl,
 }: ConciergeProviderProps) {
   const { t, i18n } = useTranslation('mall');
+  const viewContextStore = useViewContext();
+  const [focusedMallId, setFocusedMallId] = useState(mallId);
+  useEffect(() => { setFocusedMallId(mallId); }, [mallId]);
   const [state, setState] = useState<ConciergeUIState>({
     panelOpen: false,
     panelMinimized: false,
@@ -113,7 +128,7 @@ export function ConciergeProvider({
     setState((prev) => ({ ...prev, isLoading: true }));
 
     try {
-      const response = await fetch(`/api/concierge/conversations?mallId=${mallId}`);
+      const response = await fetch(`/api/concierge/conversations?mallId=${focusedMallId}`);
       if (!response.ok) {
         setState((prev) => ({ ...prev, isLoading: false, conversations: [] }));
         return;
@@ -127,7 +142,7 @@ export function ConciergeProvider({
     } catch {
       setState((prev) => ({ ...prev, isLoading: false, conversations: [] }));
     }
-  }, [tenantId, mallId]);
+  }, [tenantId, focusedMallId]);
 
   useEffect(() => { refreshConversations(); }, [refreshConversations]);
 
@@ -167,7 +182,7 @@ export function ConciergeProvider({
       setActiveConversation(newConversation);
       setState((prev) => ({ ...prev, activeConversationId: conversationId, panelOpen: true }));
     },
-    [tenantId, userId, preferences.defaultAgent]
+    [tenantId, userId, preferences.defaultAgent, t]
   );
 
   // Load conversation
@@ -252,9 +267,10 @@ export function ConciergeProvider({
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             conversationId: activeConversation?.id?.startsWith('conv-') ? undefined : activeConversation?.id,
-            mallId,
+            mallId: focusedMallId,
             message: content,
             language: i18n.language || preferences.language || 'en',
+            viewContext: viewContextStore.value,
           }),
           signal: controller.signal,
         });
@@ -394,8 +410,25 @@ export function ConciergeProvider({
         abortRef.current = null;
       }
     },
-    [activeConversation, mallId, i18n.language, preferences.language, createConversation]
+    [activeConversation, focusedMallId, i18n.language, preferences.language, createConversation, viewContextStore.value]
   );
+
+  const setMallFocus = useCallback((nextMallId: string) => {
+    if (!nextMallId || nextMallId === focusedMallId) return;
+    abortRef.current?.abort();
+    setFocusedMallId(nextMallId);
+    setActiveConversation(null);
+    setStreamingMessage('');
+    setActiveToolExecutions([]);
+    setAgentSuggestion(null);
+    setState((prev) => ({
+      ...prev,
+      activeConversationId: null,
+      conversations: [],
+      isStreaming: false,
+      error: null,
+    }));
+  }, [focusedMallId]);
 
   const stopStreaming = useCallback(() => {
     abortRef.current?.abort();
@@ -444,6 +477,11 @@ export function ConciergeProvider({
     streamingMessage,
     activeToolExecutions,
     agentSuggestion,
+    mallId: focusedMallId,
+    propertyName: mallOptions.find((option) => option.id === focusedMallId)?.name ?? propertyName,
+    propertyLogoUrl,
+    mallOptions,
+    setMallFocus,
     openPanel,
     closePanel,
     togglePanel,

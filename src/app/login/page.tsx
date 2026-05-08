@@ -18,13 +18,16 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
+      // NextAuth v5 returns { url } not { ok, error } when redirect: false.
+      // A failed login url contains '/api/auth/error'; success url is the callbackUrl.
       const result = await signIn('credentials', {
         email,
         password,
         redirect: false,
       });
 
-      if (result?.error || !result?.ok) {
+      const failed = !result?.url || result.url.includes('/api/auth/error');
+      if (failed) {
         setError('Invalid email or password');
         setLoading(false);
         return;
@@ -44,19 +47,37 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[#fafafa]">
-      <div className="w-full max-w-md px-4">
-        <div className="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] border border-gray-100 px-10 py-10">
+    <div className="relative flex flex-col items-center min-h-screen w-full overflow-hidden pt-[20vh]">
+      <Image
+        src="/Stelthion_landing-bg.jpg"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-center -z-10"
+      />
+      <div className="relative z-10 w-full max-w-lg px-4">
+        <div className={`rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] border border-gray-100 px-10 pt-8 pb-8 ${
+          mode === 'choose'
+            ? 'bg-gradient-to-t from-white/10 via-white/90 to-white'
+            : 'bg-white'
+        }`}>
 
-          <div className="flex justify-center mb-8">
+          <div className="flex flex-col items-center mb-4">
             <Image
-              src="/stelthion-brandmark.png"
+              src="/logo.png"
               alt="Stelthion"
-              width={440}
-              height={120}
-              className="object-contain"
+              width={360}
+              height={98}
               priority
+              className="h-auto w-[200px] sm:w-[260px] md:w-[320px] lg:w-[360px]"
             />
+            <p className="-mt-1 w-[200px] translate-x-[5px] text-center text-sm font-medium uppercase tracking-[0.30em] text-bo-neutral-800 sm:w-[260px] sm:translate-x-[6px] sm:text-base sm:tracking-[0.34em] md:w-[320px] md:translate-x-[7px] md:text-lg md:tracking-[0.38em] lg:w-[360px] lg:translate-x-[8px] lg:text-xl lg:tracking-[0.42em]">
+              PropertyOS
+              <sup className="ml-0.5 align-super text-[0.45em] tracking-normal">
+                TM
+              </sup>
+            </p>
           </div>
 
           {mode === 'choose' && (
@@ -69,7 +90,7 @@ export default function LoginPage() {
                   onClick={() => setMode('mall')}
                   className="w-full py-2.5 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-all"
                 >
-                  Mall Login
+                  Property Login
                 </button>
                 <button
                   onClick={() => setMode('admin')}

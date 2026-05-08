@@ -127,7 +127,7 @@ export function ScenarioPlanner({ mallId }: ScenarioPlannerProps) {
                   setSelectedMalls(Array.from(e.target.selectedOptions, (option) => option.value))
                 }
               >
-                <option value="ideapark">Ideapark Lempäälä</option>
+                <option value="ideapark-lempaala">Ideapark Lempäälä</option>
               </select>
             </div>
 

@@ -1,0 +1,34 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@/auth';
+import { getShopperMindClient } from '@/lib/shoppermind-client';
+
+export async function GET(
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const session = await auth();
+  if (!session?.user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const { id } = await params;
+  const client = getShopperMindClient();
+  if (!client) {
+    return NextResponse.json({ configured: false, rows: [], divergence: null });
+  }
+
+  try {
+    const data = await client.getPhenomenonMarkets(id);
+    return NextResponse.json({ configured: true, ...data });
+  } catch (err) {
+    return NextResponse.json(
+      {
+        configured: true,
+        rows: [],
+        divergence: null,
+        error: err instanceof Error ? err.message : 'service error',
+      },
+      { status: 502 },
+    );
+  }
+}

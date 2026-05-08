@@ -8,13 +8,19 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { useConcierge } from './ConciergeContext';
 import { MessageBubble } from './MessageBubble';
 import { MessageInput } from './MessageInput';
 import { PropertyGreeting } from './PropertyGreeting';
 import { QuickActionChips } from './QuickActionChips';
 import { SpecialistIndicator } from './SpecialistIndicator';
-import { MoreVertical, Minimize2, X } from 'lucide-react';
+import { ViewContextChip } from './ViewContextChip';
+import { TrendGreeting } from './TrendGreeting';
+import { ConciergeBanner } from './ConciergeBanner';
+import { useViewContext } from '@/lib/shoppermind/view-context';
+import { PropertySegmentedSelector } from '@/components/mall/shoppermind/PropertySegmentedSelector';
+import { Bot, MoreVertical, Minimize2, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export function ConversationPanel() {
@@ -30,8 +36,14 @@ export function ConversationPanel() {
     closePanel,
     minimizePanel,
     deleteActiveConversation,
+    propertyName,
+    propertyLogoUrl,
+    mallId,
+    mallOptions,
+    setMallFocus,
   } = useConcierge();
   const { t } = useTranslation('mall');
+  const { value: viewContext } = useViewContext();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [showScrollButton, setShowScrollButton] = useState(false);
@@ -68,14 +80,25 @@ export function ConversationPanel() {
           onClose={closePanel}
           onDelete={deleteActiveConversation}
         />
+        <ConciergeBanner title={t('topbar.concierge', 'Concierge')} />
+        <MallFocusSelector
+          options={mallOptions}
+          value={mallId}
+          onChange={setMallFocus}
+        />
 
-        {/* Property greeting */}
+        {/* Greeting — trend-aware if viewing a ShopperMind trend, else generic */}
         <div className="flex-1 flex flex-col items-center justify-center">
-          <PropertyGreeting />
+          {viewContext?.kind === 'shoppermind_trend' ? (
+            <TrendGreeting />
+          ) : (
+            <PropertyGreeting propertyName={propertyName} logoUrl={propertyLogoUrl} />
+          )}
         </div>
 
         {/* Quick action chips + input */}
-        <div className="border-t border-bo-neutral-200/60">
+        <div className="border-t border-bo-neutral-200/60 flex flex-col">
+          <ViewContextChip />
           <QuickActionChips onSend={sendMessage} disabled={state.isStreaming} />
           <div className="px-4 pb-4">
             <MessageInput
@@ -97,6 +120,12 @@ export function ConversationPanel() {
         onMinimize={minimizePanel}
         onClose={closePanel}
         onDelete={deleteActiveConversation}
+      />
+      <ConciergeBanner title={t('topbar.concierge', 'Concierge')} />
+      <MallFocusSelector
+        options={mallOptions}
+        value={mallId}
+        onChange={setMallFocus}
       />
 
       {/* Messages */}
@@ -163,6 +192,29 @@ export function ConversationPanel() {
   );
 }
 
+function MallFocusSelector({
+  options,
+  value,
+  onChange,
+}: {
+  options: Array<{ id: string; name: string }>;
+  value: string;
+  onChange: (mallId: string) => void;
+}) {
+  const { t } = useTranslation('mall');
+  if (options.length <= 1) return null;
+  return (
+    <div className="border-b border-bo-neutral-200/60 px-4 py-3">
+      <PropertySegmentedSelector
+        label={t('assistants.mallFocus')}
+        options={options}
+        value={value}
+        onChange={onChange}
+      />
+    </div>
+  );
+}
+
 /**
  * Conversation Header
  */
@@ -190,6 +242,13 @@ function ConversationHeader({ title, subtitle, agentRole, onMinimize, onClose, o
       </div>
 
       <div className="flex items-center gap-1">
+        <Link
+          href="/mall/assistants"
+          className="p-1.5 hover:bg-bo-neutral-100 rounded-md transition-colors"
+          title={t('assistants.title', 'Assistants')}
+        >
+          <Bot className="w-4 h-4 text-bo-neutral-400" />
+        </Link>
         <button
           onClick={() => setShowMenu(!showMenu)}
           className="p-1.5 hover:bg-bo-neutral-100 rounded-md transition-colors"

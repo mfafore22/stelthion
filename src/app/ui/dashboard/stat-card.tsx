@@ -25,7 +25,7 @@ export function StatCard({ label, value, subtitle, trend, color = 'default' }: S
         <p className="text-sm text-gray-500 mt-1">{subtitle}</p>
       )}
       {trend && (
-        <p className="text-sm text-gray-400 mt-1">— {trend}</p>
+        <p className="text-sm text-gray-400 mt-1">{trend}</p>
       )}
     </div>
   )

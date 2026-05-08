@@ -30,7 +30,7 @@ export function ZoneCountResult({ job }: ZoneCountResultProps) {
       .sort((a, b) => a.hour.localeCompare(b.hour));
   }, [job.results]);
 
-  const cameraLabel = job.camera?.label ?? '—';
+  const cameraLabel = job.camera?.label ?? '–';
   const dateStr = new Date(job.footageDate).toLocaleDateString();
 
   return (

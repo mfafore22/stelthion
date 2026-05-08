@@ -1,6 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
 import { auth } from '@/auth';
+import { currentUserMallIds } from '@/lib/admin-customer';
+
+async function assertJobInScope(jobId: string): Promise<NextResponse | { mallId: string }> {
+  const job = await prisma.analysisJob.findUnique({
+    where: { id: jobId },
+    select: { mallId: true },
+  });
+  if (!job) return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+  const allowed = await currentUserMallIds();
+  if (!allowed || !allowed.includes(job.mallId)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+  return { mallId: job.mallId };
+}
 
 /**
  * GET /api/analysis/insights/[jobId] — Fetch insights for a job.
@@ -16,6 +30,8 @@ export async function GET(
   }
 
   const { jobId } = await params;
+  const scope = await assertJobInScope(jobId);
+  if (scope instanceof NextResponse) return scope;
 
   try {
     const insights = await prisma.analysisInsight.findMany({
@@ -48,12 +64,15 @@ export async function POST(
   }
 
   const { jobId } = await params;
+  const scope = await assertJobInScope(jobId);
+  if (scope instanceof NextResponse) return scope;
 
   try {
     // Fetch job with all results
     const job = await prisma.analysisJob.findUnique({
       where: { id: jobId },
       include: {
+        mall: { select: { name: true, city: true } },
         results: { orderBy: { hour: 'asc' } },
         journeys: { include: { paths: true } },
         behaviors: { orderBy: { hour: 'asc' } },
@@ -136,8 +155,11 @@ export async function POST(
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildInsightPrompt(job: any): string {
+  const mallLabel = job.mall?.name
+    ? `${job.mall.name}${job.mall.city ? ` (${job.mall.city})` : ''}`
+    : 'this shopping center';
   const lines: string[] = [
-    `You are a mall analytics expert for Ideapark Lempäälä shopping center.`,
+    `You are a mall analytics expert for ${mallLabel}.`,
     `Analyze the following data and provide:`,
     `1. A brief summary of key findings (2-3 sentences)`,
     `2. Actionable recommendations for the mall administrator`,

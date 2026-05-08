@@ -29,7 +29,7 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
 
   if (isLoading && !eventsData) {
     return (
-      <Card className="p-6 bg-bo-glass border-bo-neutral-200/30 shadow-bo-glass">
+      <Card className="bo-surface rounded-xl border-2 border-bo-primary-200/50 p-6 shadow-bo-glass">
         <div className="flex items-center justify-center py-8">
           <SwirlLoader size="md" />
           <span className="ml-2 text-sm text-bo-neutral-600">{t('events.loadingData')}</span>
@@ -39,7 +39,7 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
   }
 
   // Filter events for next 2-6 hours (or show all if expanded)
-  const now = Date.now();
+  const now = eventsData?.timestamp ? new Date(eventsData.timestamp).getTime() : 0;
   const twoHoursFromNow = now + 2 * 60 * 60 * 1000;
   const sixHoursFromNow = now + 6 * 60 * 60 * 1000;
 
@@ -80,7 +80,8 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
   };
 
   return (
-    <Card className="p-6 bg-bo-glass border-bo-neutral-200/30 shadow-bo-glass">
+    <Card className="bo-surface rounded-xl border-2 border-bo-primary-200/50 p-6 shadow-bo-glass">
+      <div className="mb-4 h-1.5 rounded-full bg-gradient-to-r from-bo-warning-dark via-bo-primary-700 to-bo-success-dark" />
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Calendar className="h-5 w-5 text-bo-info-dark" />
@@ -101,8 +102,8 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
       </div>
 
       {isError && (
-        <div className="mb-4 rounded-md bg-yellow-50 p-3 text-sm text-yellow-800 dark:bg-yellow-950 dark:text-yellow-200">
-          ⚠️ {t('events.fetchError')}
+        <div className="bo-surface-subtle mb-4 rounded-lg border border-bo-warning/30 p-3 text-sm text-bo-warning-dark">
+          {t('events.fetchError')}
         </div>
       )}
 
@@ -113,7 +114,7 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
           {venues.slice(0, expanded ? 10 : 3).map((venue) => (
             <div
               key={venue.id}
-              className="flex items-start justify-between rounded-lg border border-bo-neutral-200/50 bg-white/80 p-3 dark:bg-slate-800/50"
+              className="bo-surface-subtle bo-surface-hover flex items-start justify-between rounded-lg border border-bo-neutral-200/60 p-3"
             >
               <div className="flex items-start gap-2">
                 <MapPin className="mt-0.5 h-4 w-4 text-bo-info-dark" />
@@ -142,7 +143,7 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
             {displayEvents.map((event) => (
               <div
                 key={event.id}
-                className="overflow-hidden rounded-lg border border-bo-neutral-200/50 bg-gradient-to-r from-blue-50 to-white dark:from-slate-800 dark:to-slate-900"
+                className="bo-surface-subtle bo-surface-hover overflow-hidden rounded-xl border border-bo-neutral-200/60"
               >
                 {event.imageUrl && (
                   <div className="relative h-28 w-full">
@@ -161,7 +162,7 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
                   </div>
                 )}
                 <div className="p-4">
-                  {/* Header — hidden when image already shows title in overlay */}
+                  {/* Header hidden when image already shows title in overlay */}
                   {!event.imageUrl && (
                     <div className="mb-2 flex items-start justify-between">
                       <div className="flex items-start gap-2">
@@ -172,7 +173,7 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
                         </div>
                       </div>
                       {event.ticketsAvailable && (
-                        <span className="flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700 dark:bg-green-900 dark:text-green-200">
+                        <span className="flex items-center gap-1 rounded-full border border-bo-success/30 bg-bo-success-light/70 px-2 py-1 text-xs font-medium text-bo-success-dark">
                           <Ticket className="h-3 w-3" />
                           {t('events.ticketsAvailable')}
                         </span>
@@ -183,7 +184,7 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
                   {/* Tickets badge for image cards (header is in overlay) */}
                   {event.imageUrl && event.ticketsAvailable && (
                     <div className="mb-2 flex justify-end">
-                      <span className="flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700 dark:bg-green-900 dark:text-green-200">
+                      <span className="flex items-center gap-1 rounded-full border border-bo-success/30 bg-bo-success-light/70 px-2 py-1 text-xs font-medium text-bo-success-dark">
                         <Ticket className="h-3 w-3" />
                         {t('events.ticketsAvailable')}
                       </span>
@@ -224,9 +225,9 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
                     )}
 
                     <div className="flex items-center gap-2 text-bo-neutral-700">
-                      <TrendingUp className="h-4 w-4 text-green-600" />
+                      <TrendingUp className="h-4 w-4 text-bo-success-dark" />
                       <div>
-                        <div className="font-medium text-green-600">+{event.footfallImpact} {t('events.visitorsUnit')}</div>
+                        <div className="font-medium text-bo-success-dark">+{event.footfallImpact} {t('events.visitorsUnit')}</div>
                         <div className="text-xs text-bo-neutral-500">{t('events.footfallImpactLabel')}</div>
                       </div>
                     </div>
@@ -239,7 +240,7 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
           </div>
         </div>
       ) : (
-        <div className="rounded-lg border border-bo-neutral-200/50 bg-white/80 p-6 text-center dark:bg-slate-800/50">
+        <div className="bo-surface-subtle rounded-xl border border-bo-neutral-200/60 p-6 text-center">
           <Calendar className="mx-auto mb-2 h-8 w-8 text-bo-neutral-400" />
           <div className="text-sm text-bo-neutral-600">
             {expanded ? t('events.noUpcoming') : t('events.noEventsNextHours')}
@@ -268,7 +269,7 @@ export function EventsPanel({ mallId, expanded = false }: EventsPanelProps) {
             {t('events.impactDescription')}
           </div>
 
-          <div className="rounded-md bg-muted/50 p-3">
+          <div className="bo-surface-subtle rounded-lg border border-bo-neutral-200/60 p-3">
             <div className="text-sm font-medium text-bo-neutral-950">{t('events.impactModel')}</div>
             <div className="mt-2 space-y-1 text-xs text-bo-neutral-600">
               <div>• {t('events.impactFactor1')}</div>

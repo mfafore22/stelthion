@@ -8,7 +8,7 @@
 'use client';
 
 import React from 'react';
-import { ConversationMessage, ToolExecution } from '@/services/concierge/types';
+import { ConversationMessage } from '@/services/concierge/types';
 import { ToolExecutionPanel } from './ToolExecutionPanel';
 import { Bot, User } from 'lucide-react';
 import { WeatherCard } from './attachments/WeatherCard';
@@ -63,18 +63,21 @@ export function MessageBubble({ message, isStreaming, streamingContent }: Messag
         <div className="flex flex-col gap-0.5">
           {/* Header */}
           <div className={`flex items-center gap-2 text-[10px] text-bo-neutral-400 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
-            <span>{isUser ? 'You' : message.agentRole?.replace(/-/g, ' ') || 'Ideapark'}</span>
+            <span>{isUser ? 'You' : message.agentRole?.replace(/-/g, ' ') || 'Concierge'}</span>
             <span>{timeStr}</span>
           </div>
 
           {/* Bubble */}
           <div
-            className={`px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed ${
+            className={`relative overflow-hidden px-3.5 py-2.5 text-sm leading-relaxed ${
               isUser
-                ? 'bg-bo-primary-500 text-white rounded-tr-sm'
-                : 'bg-bo-neutral-100 text-bo-neutral-900 rounded-tl-sm'
+                ? 'rounded-2xl rounded-tr-sm bg-bo-primary-500 text-white'
+                : 'bo-surface bo-surface-hover rounded-xl rounded-tl-sm border-2 border-bo-primary-200/60 text-bo-neutral-900 shadow-bo-glass'
             }`}
           >
+            {isAgent && (
+              <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#214990] via-[#328d2e] to-[#f3c978]" />
+            )}
             {/* Tool executions (agents only) */}
             {isAgent && message.toolExecutions && message.toolExecutions.length > 0 && (
               <div className="mb-2">

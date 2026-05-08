@@ -51,9 +51,9 @@ export interface MallIdentityContext extends MallIdentity {
  * }
  * ```
  */
-export function useMallIdentity(mallId: string): MallIdentityContext {
+export function useMallIdentity(mallId: string, customerId?: string): MallIdentityContext {
   return useMemo(() => {
-    const identity = getMallIdentity(mallId);
+    const identity = getMallIdentity(mallId, customerId);
 
     return {
       ...identity,
@@ -62,5 +62,5 @@ export function useMallIdentity(mallId: string): MallIdentityContext {
       cssVars: getMallCSSVars(identity),
       gradientCSS: `linear-gradient(135deg, ${identity.gradient.from} 0%, ${identity.gradient.to} 100%)`,
     };
-  }, [mallId]);
+  }, [mallId, customerId]);
 }

@@ -14,6 +14,7 @@ import { Plus, X, Minimize2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { useSession } from '@/contexts/SessionContext';
 import { useTranslation } from 'react-i18next';
+import { ConciergeBanner } from './ConciergeBanner';
 
 export function ConversationList() {
   const { state, conversations, loadConversation, closePanel, minimizePanel } = useConcierge();
@@ -55,6 +56,8 @@ export function ConversationList() {
           </button>
         </div>
       </div>
+
+      <ConciergeBanner title={t('topbar.concierge')} />
 
       {/* New Conversation Button */}
       <div className="p-4">
@@ -166,7 +169,7 @@ function ConversationCard({ conversation, onClick }: ConversationCardProps) {
         {agentRole.replace(/-/g, ' ')}
       </div>
 
-      <p className="text-sm text-bo-neutral-600 line-clamp-2 mb-2">"{conversation.preview ?? ''}"</p>
+      <p className="text-sm text-bo-neutral-600 line-clamp-2 mb-2">{conversation.preview ?? ''}</p>
 
       <div className="flex items-center gap-3 text-xs text-bo-neutral-400">
         <span>{conversation.messageCount} messages</span>

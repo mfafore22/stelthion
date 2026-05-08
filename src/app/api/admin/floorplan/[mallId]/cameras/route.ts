@@ -1,17 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
-import { auth } from '@/auth';
+import { requireMallAccess } from '@/lib/admin-customer';
 
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ mallId: string }> },
 ) {
-  const session = await auth();
-  if (!session?.user || session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
   const { mallId } = await params;
+  const guard = await requireMallAccess(mallId);
+  if ('error' in guard) return guard.error;
   const floor = new URL(_req.url).searchParams.get('floor') ?? 'ground';
 
   const cameras = await prisma.camera.findMany({

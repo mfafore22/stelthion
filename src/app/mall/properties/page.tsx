@@ -18,8 +18,8 @@ export default function PropertiesPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#F8F6F3]">
-        <div className="animate-pulse text-gray-400 text-sm">Loading…</div>
+      <div className="flex min-h-screen items-center justify-center bg-bo-neutral-50">
+        <div className="animate-pulse text-sm text-bo-neutral-400">Loading…</div>
       </div>
     );
   }
@@ -35,7 +35,7 @@ export default function PropertiesPage() {
       <MallLeftNav />
       <MallTopBar />
 
-      <main className="ml-[80px] h-screen overflow-auto pt-[80px] bg-[#F8F6F3]">
+      <main className="ml-[80px] h-screen overflow-auto bg-bo-neutral-50 pt-[80px]">
         <div className="p-8 max-w-[1600px] mx-auto">
           <PropertyDetail mallId={mallId} />
         </div>

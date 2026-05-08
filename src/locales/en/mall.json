@@ -146,7 +146,7 @@
     "venuesAndUpcoming": "Event Venues & Upcoming Events",
     "nearbyImpact": "Nearby Events Impact",
     "refresh": "Refresh",
-    "fetchError": "Unable to fetch events data — showing cached information",
+    "fetchError": "Unable to fetch events data. Showing cached information.",
     "nearbyVenues": "Nearby Event Venues",
     "allUpcoming": "All Upcoming Events",
     "nextHours": "Events (Next 2–6 hours)",
@@ -412,81 +412,709 @@
     "description": "AI Assistants for property operations",
     "comingSoon": "AI Assistants Integration",
     "integrationDescription": "AI Assistants use your property's isolated data to produce property-specific simulations and forecasts. With them, you can test the impact of your chosen actions or prepare for situations. Stelthion AI models bring broader insights and alternatives to simulations and forecasts.",
-    "tryScenarios": "Try Scenarios Calculator Now"
+    "tryScenarios": "Try Scenarios Calculator Now",
+    "actions": {
+      "startChat": "Start chat",
+      "askInChat": "Ask in chat"
+    },
+    "demo": {
+      "owner-copilot": {
+        "title": "Property Owner Copilot",
+        "body": "Turns strategy, risk, and weekly decisions into a concise owner view.",
+        "tools": {
+          "0": "KPIs",
+          "1": "Briefing",
+          "2": "Approvals"
+        },
+        "prompts": {
+          "0": "Give me the owner decision queue for this week.",
+          "1": "What needs approval before Friday?"
+        }
+      },
+      "trend-analyst": {
+        "title": "ShopperMind Trend Analyst",
+        "body": "Explains paths, actions, competitors, and sourced market signals.",
+        "tools": {
+          "0": "ShopperMind",
+          "1": "Sources",
+          "2": "Campaign idea"
+        },
+        "prompts": {
+          "0": "Which path should we prioritize and why?",
+          "1": "Turn the strongest trend into two actions."
+        }
+      },
+      "campaign-designer": {
+        "title": "Campaign Designer",
+        "body": "Drafts briefs, audiences, tenants, channels, KPIs, and approval steps.",
+        "tools": {
+          "0": "Campaigns",
+          "1": "Events",
+          "2": "Footfall"
+        },
+        "prompts": {
+          "0": "Draft a campaign brief from the current trend.",
+          "1": "Which tenants should participate?"
+        }
+      },
+      "space-optimizer": {
+        "title": "Space and Leasing Optimizer",
+        "body": "Connects trends, lease timing, zone flow, and projected rent impact.",
+        "tools": {
+          "0": "Space optimizer",
+          "1": "Tenant mix",
+          "2": "Sales"
+        },
+        "prompts": {
+          "0": "Which zone conversion has the best risk-adjusted upside?",
+          "1": "Explain this space suggestion for leasing."
+        }
+      }
+    },
+    "panels": {
+      "security": {
+        "title": "Security and approvals",
+        "prompt": "Explain our assistant security boundaries, approvals, and customer isolation.",
+        "rows": {
+          "0": "Customer boundary: customerId + mallId",
+          "1": "No cross-customer retrieval",
+          "2": "Write actions require approval",
+          "3": "Audit trail for tools",
+          "4": "Fine-tune data exported per customer"
+        }
+      },
+      "data": {
+        "title": "Data readiness",
+        "prompt": "Show which data sources are live, demo, or ready for integration.",
+        "rows": {
+          "0": "ShopperMind: live/demo",
+          "1": "Footfall: scoped by mall",
+          "2": "POS: aggregate demo",
+          "3": "Leases: schema-ready",
+          "4": "RAG: namespace-ready"
+        }
+      }
+    },
+    "controlTitle": "Assistants for closed environments",
+    "closedEnvironment": "Customer-scoped environment",
+    "controlBody": "Assistants are designed to use only the selected customer, operator, and property data. The demo shows the control model: which assistants are available, which tools they may use, and when human approval is required.",
+    "mallFocus": "Mall focus",
+    "agentCatalog": "Assistants",
+    "securityTitle": "Security boundaries",
+    "dataTitle": "Data sources",
+    "ragTitle": "RAG readiness",
+    "ragBody": "RAG will use customer- and property-specific namespaces. Sources, documents, and answers remain traceable, and another customer’s material is never retrieved into the same context.",
+    "workflowTitle": "Workflows",
+    "workflowBody": "Write actions such as creating a campaign brief or preparing tenant messages pass through approval gates. Chat may propose actions, but it does not publish or alter data without permission.",
+    "agents": {
+      "trend": {
+        "title": "Trend specialist",
+        "body": "Explains ShopperMind trends using only sourced claims."
+      },
+      "campaign": {
+        "title": "Campaign assistant",
+        "body": "Turns a trend into a campaign brief and suggested KPIs."
+      },
+      "operations": {
+        "title": "Operations assistant",
+        "body": "Supports zone, visitor, and service-level decisions."
+      }
+    },
+    "guards": {
+      "scope": {
+        "title": "Customer and property scope",
+        "body": "Every request is bound to customerId and mallId."
+      },
+      "sources": {
+        "title": "Citation requirement",
+        "body": "Factual claims need a source or are marked as assumptions."
+      },
+      "approval": {
+        "title": "Approval gates",
+        "body": "Publishing, messaging, and budget actions require human approval."
+      },
+      "audit": {
+        "title": "Audit trail",
+        "body": "Tool calls, sources, and decisions are stored for review."
+      }
+    },
+    "data": {
+      "rag": {
+        "title": "Documents",
+        "body": "Leases, brand rules, and reports are scoped to the customer."
+      },
+      "pos": {
+        "title": "POS",
+        "body": "Sales data is masked and aggregated by permission level."
+      },
+      "footfall": {
+        "title": "Footfall",
+        "body": "Visitor flows are linked to time, zone, and campaign period."
+      },
+      "tenant": {
+        "title": "Tenants",
+        "body": "Tenant and category data shapes recommendations."
+      }
+    }
   },
   "shoppermind": {
     "title": "ShopperMind",
-    "tagline": "Trends, forecasts and phenomena for shopping centre operations",
-    "country": {
-      "fi": "Finland",
-      "ae": "UAE",
-      "global": "Global"
+    "tagline": "Foresight for every mall with actionable forecasts",
+    "loading": "Loading…",
+    "loadingTrends": "Loading trends…",
+    "loadingTrend": "Loading trend…",
+    "noMarket": "Trend engine",
+    "marketPrefix": "Market",
+    "snapshot": {
+      "section": "Trend snapshot"
     },
-    "state": {
-      "emerging": "Emerging",
-      "accelerating": "Accelerating",
-      "stable": "Stable",
-      "fading": "Fading",
-      "dormant": "Dormant"
+    "trust": {
+      "title": "Trust and coverage",
+      "sources": {
+        "label": "Sources",
+        "value": "{{count}} sources",
+        "body": "Claims are tied to sources, and sources open directly from the cards."
+      },
+      "scope": {
+        "label": "Account",
+        "fallback": "Scoped customer view",
+        "body": "The view only uses properties allowed for the selected customer account."
+      },
+      "feedback": {
+        "label": "Feedback",
+        "value": "Learns from feedback",
+        "body": "Thumbs and comments are stored as training material for future development."
+      },
+      "categories": {
+        "label": "Categories",
+        "value": "{{count}} categories",
+        "body": "Trends are tagged to tenant categories, including future opportunities."
+      }
     },
-    "filters": {
-      "minScore": "Min score",
-      "category": "Category",
-      "search": "Search phenomena",
-      "allStates": "All states"
+    "tabs": {
+      "overview": "Overview",
+      "actions": "Actions",
+      "trends": "Trends",
+      "competitors": "Competitors",
+      "decisionSupport": "Decision support",
+      "emptyActionsTitle": "Actions in preparation",
+      "emptyActionsBody": "No sourced action recommendations have been published yet for this selected market or property."
+    },
+    "competitors": {
+      "emptyTitle": "Competitor benchmarks in preparation",
+      "emptyBody": "No validated competitor examples have been published for this market yet.",
+      "title": "Market-specific benchmarks",
+      "body": "Benchmarks stay in the same market as the selected view. Sources are shown where each example is used."
+    },
+    "decisionSupport": {
+      "title": "Why these recommendations are justified",
+      "body": "This view shows how trends, market signals, the selected property, and competitor examples become concrete actions.",
+      "logicTitle": "How recommendations are formed",
+      "logicTrend": "{{count}} market-specific trends",
+      "logicScenario": "Three alternative scenario paths",
+      "logicProperty": "Selected property profile and benchmarks",
+      "usedTitle": "What information was used",
+      "usedSources": "{{count}} sourced market or property sources",
+      "usedClaims": "{{count}} action-linked claims",
+      "usedEvidence": "Evidence is shown directly in action, trend, and competitor cards",
+      "missingTitle": "What customer data improves",
+      "missingSales": "Sales, tenant mix, and lease structure",
+      "missingFootfall": "Footfall, zones, and campaign results",
+      "missingBudget": "Budget, timing, and delivery constraints",
+      "aiTitle": "Tailored AI model as the next layer",
+      "aiBody": "A tailored AI model can connect to the customer’s tenant, footfall, sales, and campaign data. The model does not replace sourced analysis; it explains recommendations, generates alternative actions, and helps prioritize them by property, market, and budget."
+    },
+    "actionBoard": {
+      "weeklyHeader": "Weekly action recommendations",
+      "title": "Action plan: {{propertyName}}",
+      "subtitle": "Verified trend signals translated into concrete mall actions, benchmark examples, and decision support.",
+      "verifiedEvidence": "Verified evidence",
+      "evidenceSummary": "{{claims}} claims · {{sources}} sources · decision support ready",
+      "impactVsEffort": "Impact vs. effort",
+      "highImpact": "High impact",
+      "highEffort": "High effort",
+      "actionCoverage": "Action coverage",
+      "prioritySummary": "Priority mix",
+      "decisionContext": "Decision support",
+      "decisionContextBody": "The recommendations include {{count}} verified citations that can later ground a tailored AI model.",
+      "effort": "Effort",
+      "impact": "Impact",
+      "whyNow": "Why now",
+      "expectedKpi": "Expected KPI",
+      "competitorExample": "Competitor example",
+      "noCompetitorExample": "No competitor example linked.",
+      "showEvidence": "Show verified evidence ({{count}})",
+      "benchmark": "Benchmark",
+      "openCampaign": "Draft in Campaigns",
+      "discussAssistant": "Discuss with Assistant",
+      "priority": "Priority",
+      "property": "Property",
+      "priorities": {
+        "critical": "Critical",
+        "high": "High",
+        "medium": "Medium"
+      },
+      "efforts": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "impacts": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "timeHorizons": {
+        "thisWeek": "This week",
+        "thirtyDays": "30 days",
+        "ninetyDays": "90 days"
+      },
+      "zones": {
+        "food": "Food and restaurants",
+        "health": "Health and wellness",
+        "campaign": "Campaigns and media",
+        "services": "Services",
+        "leisure": "Leisure",
+        "mallWide": "Mall-wide"
+      },
+      "actionTypes": {
+        "operations": "Activate daily visits",
+        "campaign": "Launch targeted campaign",
+        "tenantMix": "Tune tenant mix",
+        "benchmark": "Benchmark next move",
+        "retailMedia": "Package mall attention"
+      }
+    },
+    "countries": {
+      "FI": "Finland",
+      "JP": "Japan",
+      "US": "United States",
+      "SE": "Sweden",
+      "DE": "Germany"
+    },
+    "back": "Back to trends",
+    "breadcrumbRoot": "ShopperMind",
+    "notFound": "Trend {{id}} was not found.",
+    "notConfigured": {
+      "title": "Service not configured for this environment",
+      "body": "Set {{envVar1}} and {{envVar2}} to connect. This mall would resolve to {{marketId}}.",
+      "detail": "ShopperMind service is not configured in this environment."
+    },
+    "upgrade": {
+      "title": "ShopperMind is not included in your plan",
+      "body": "Upgrade to unlock trend intelligence for your markets. Contact your account manager or an administrator to change your plan."
+    },
+    "errorBanner": "Trend service unreachable: {{message}}",
+    "grid": {
+      "empty": "No trends tracked for this market yet.",
+      "topTrends": "Top trends",
+      "tracked_one": "{{count}} trend tracked",
+      "tracked_other": "{{count}} trends tracked",
+      "score": "Score"
+    },
+    "signalSections": {
+      "monthly": "Signal of the month",
+      "headline": "Headline",
+      "keyFindings": "Key findings",
+      "byCity": "Merchants in {{city}}",
+      "alsoVisible": "Also visible",
+      "watching": "Watching"
+    },
+    "signalOfTheDay": {
+      "title": "Signal of the Day",
+      "empty": "No signal published yet for this market today.",
+      "comingSoon": "The monthly signal is being prepared for this market and will appear once sources are validated."
+    },
+    "states": {
+      "EMERGING": "Emerging",
+      "ACCELERATING": "Accelerating",
+      "STABLE": "Stable",
+      "FADING": "Fading",
+      "DORMANT": "Dormant"
+    },
+    "markets": {
+      "gridTitle": "Status across markets",
+      "market": "Market",
+      "country": "Country",
+      "state": "State",
+      "compositeScore": "Composite",
+      "divergentCallout": "Notable contrast: this trend plays out differently across markets.",
+      "empty": "Cross-market readings are still being gathered for this trend.",
+      "FI": "Finland",
+      "SE": "Sweden",
+      "US": "United States",
+      "UAE": "United Arab Emirates",
+      "KR": "South Korea",
+      "EU": "EU (overview)",
+      "comingSoon": "Coming soon",
+      "comingSoonBody": "Market analysis is in preparation. The view updates once sources are validated.",
+      "noScenario": "A headline view for this market is in preparation.",
+      "horizonsComingSoon": "Time-horizon trends available shortly."
+    },
+    "evidence": {
+      "title": "Evidence",
+      "confidence": "Confidence",
+      "componentsLabel": "Confidence components",
+      "sourceList": "Cited sources",
+      "strongSources": "Strong sources",
+      "corroboratedIn": "Markets corroborating",
+      "whyConfident": "Why we're confident",
+      "whyCautious": "Why we're cautious",
+      "empty": "Evidence is still being corroborated across sources.",
+      "strip": {
+        "show": "Sources",
+        "label_one": "{{count}} strong source",
+        "label_other": "{{count}} strong sources",
+        "loading": "Loading sources…",
+        "empty": "No sources available yet.",
+        "collecting": "Gathering evidence from more sources…",
+        "noUrls": "No article links yet for this trend.",
+        "error": "Could not load sources."
+      }
+    },
+    "lifecycle": {
+      "label": "Lifecycle",
+      "relevance": "Relevance",
+      "rising": "rising",
+      "cooling": "cooling",
+      "holding": "holding",
+      "youAreHere": "You are here"
+    },
+    "trajectory": {
+      "title": "Trend trajectory",
+      "subtitle": "Composite score over time - pick a window",
+      "empty": "No scoring history recorded yet.",
+      "windows": {
+        "7d": "7d",
+        "14d": "14d",
+        "30d": "30d",
+        "4w": "4w",
+        "12w": "12w",
+        "12m": "12m"
+      },
+      "series": {
+        "composite": "Composite",
+        "footTraffic": "Foot traffic",
+        "cultural": "Cultural"
+      },
+      "stats": {
+        "relevance": "Relevance",
+        "velocity": "Velocity",
+        "acceleration": "Acceleration",
+        "volume": "Volume"
+      }
+    },
+    "tooltips": {
+      "relevance": "Composite score (0–1): how relevant this trend is to this specific market. Combines volume, velocity, source diversity, and cultural / foot-traffic proximity.",
+      "velocity": "Growth rate of the trend: how fast signal volume is changing. Positive = rising, negative = falling.",
+      "acceleration": "Change in growth rate: whether the trend is speeding up or slowing down. Positive = momentum building.",
+      "volume": "Number of signals observed in the period - how many times this trend has been mentioned across sources.",
+      "cultural": "Cultural dimension: how close this trend is to this market's cultural conversation - social media, news and everyday choices.",
+      "footTraffic": "Foot-traffic dimension: how close this trend is to actual visitor flow around the mall - local events, transit, and accessibility.",
+      "composite": "Composite: weighted blend of the cultural and foot-traffic signals - the overall picture of the trend's relevance."
+    },
+    "sections": {
+      "summary": "Summary",
+      "signal": "Signal in this market",
+      "impact": "What this means for you",
+      "opportunity": "Opportunity",
+      "watchOut": "Watch-out",
+      "opportunityBody": "With the trend accelerating, there is upside for retailers who move early on the angles above.",
+      "watchOutBody": "This trend is cooling. Plan for slower uptake and prepare to rotate out of deep exposure.",
+      "campaignIdea": "Campaign idea",
+      "feedback": "Was this useful?"
     },
     "feedback": {
-      "title": "Your verdict",
       "relevant": "Relevant",
       "notRelevant": "Not relevant",
-      "noise": "Noise",
-      "star": "Star"
+      "commentPlaceholder": "Add a short comment (optional)",
+      "submit": "Submit",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "submitting": "Submitting…",
+      "submitted": "Thanks for your feedback",
+      "error": "Couldn't save your feedback",
+      "reasons": {
+        "notPropertyRelevant": "Not relevant to this property",
+        "wrongCategory": "Wrong category",
+        "outdated": "Data seems outdated",
+        "notPractical": "Action is not practical",
+        "missingEvidence": "Missing evidence",
+        "alreadyHandled": "Already handled"
+      }
     },
-    "signalOfDay": {
-      "title": "Signal of the Day",
-      "share": "Share",
-      "copyLink": "Copy",
-      "copied": "Copied"
+    "categoryImpact": {
+      "present": "This category exists in the current tenant mix.",
+      "absent_relevant": "This category may be relevant even if it is not present in the mall.",
+      "badges": {
+        "present": "in mix",
+        "absent_relevant": "gap"
+      }
     },
-    "empty": "No phenomena match your filters yet.",
-    "loading": "Analysing signals...",
-    "trajectory": "28-day trajectory",
-    "representativeSignals": "Representative signals",
-    "impact": {
-      "title": "What this could mean for {{mallName}}",
-      "accelerating": "An accelerating phenomenon typically shows up in footfall and category demand within 2–6 weeks. Review tenants in the flagged categories and upcoming campaigns.",
-      "emerging": "Early signal — no operational impact yet, but worth tracking. A good moment to discuss with tenants in the affected categories.",
-      "stable": "A background force that won't move near-term numbers. Keep in mind for long-range planning.",
-      "fading": "Fading phenomenon — tenant sales in the category may decline. Prepare and look for replacement concepts.",
-      "dormant": "Currently inactive. No immediate action required."
+    "tenantImpact": {
+      "eyebrow": "Tenant impact",
+      "title": "How trends become category decisions",
+      "body": "This is not a store directory. It shows which categories and example tenants meet a trend need, where to grow, what to sharpen, and where a campaign can start.",
+      "liveReady": "Demo now, live data later",
+      "recommendation": "Recommendation",
+      "focus": "Increase",
+      "reduce": "Reduce",
+      "storeExamples": "Example tenants",
+      "openCampaign": "Send to campaign brief",
+      "moves": {
+        "increase": "increase",
+        "reposition": "reposition",
+        "reduce": "reduce",
+        "test": "test",
+        "recruit": "recruit"
+      },
+      "horizons": {
+        "short": "short",
+        "medium": "medium",
+        "long": "long"
+      }
     },
-    "totalPhenomena": "{{count}} phenomena total",
-    "signalsCount": "{{count}} signals",
-    "sourcePrefix": "Source",
-    "phenomenonFallback": "Based on {{count}} signals in {{category}}.",
-    "phenomenonFallbackNoCategory": "Based on {{count}} signals.",
-    "category": {
-      "fashion": "Fashion",
-      "grocery": "Grocery",
-      "f&b": "Food & beverage",
-      "health-beauty": "Health & beauty",
-      "home": "Home & interiors",
-      "services": "Services",
-      "leisure": "Leisure",
-      "retail-tenancy": "Retail tenancy",
-      "footfall-driver": "Footfall driver",
-      "consumer-behaviour": "Consumer behaviour",
-      "residential-sale": "Residential sale",
-      "residential-rental": "Residential rental",
-      "commercial-office": "Commercial office",
-      "commercial-retail": "Commercial retail",
-      "hospitality": "Hospitality",
-      "tourism": "Tourism",
-      "construction-pipeline": "Construction pipeline",
-      "short-term-rental": "Short-term rental",
-      "mixed-use": "Mixed-use",
-      "infrastructure": "Infrastructure",
-      "investment-flows": "Investment flows"
+    "campaignIdea": {
+      "generate": "Generate campaign idea",
+      "generating": "Drafting an idea…",
+      "regenerate": "Regenerate",
+      "refineInChat": "Refine in chat",
+      "openInDetail": "Open in detail",
+      "errorTitle": "Couldn't draft an idea right now",
+      "errorBody": "The generator didn't respond. Try again in a moment.",
+      "fields": {
+        "hook": "Hook",
+        "audience": "Audience",
+        "channels": "Channels",
+        "successMetric": "Success metric",
+        "angle": "Angle",
+        "cta": "Call to action",
+        "whyNow": "Why now",
+        "rationale": "Rationale",
+        "duration": "Duration",
+        "budget": "Budget"
+      },
+      "budget": {
+        "light": "Light",
+        "standard": "Standard",
+        "premium": "Premium"
+      },
+      "durationDays": "{{count}} days"
+    },
+    "detail": {
+      "description": "Description",
+      "relatedTrends": "Related trends",
+      "relatedTrendsEmpty": "No related trends connected to this one yet.",
+      "linkGraph": "Link graph",
+      "linkGraphEmpty": "No inferred links yet.",
+      "upstream": "Upstream - trends that feed into this one",
+      "downstream": "Downstream - trends this one feeds into",
+      "recentScoring": "Recent scoring",
+      "details": "Details",
+      "tags": "Tags",
+      "categories": "Categories",
+      "keywords": "Keywords",
+      "meta": {
+        "eventStart": "Event start",
+        "eventEnd": "Event end",
+        "firstSeen": "First seen",
+        "lastSignal": "Last signal",
+        "cultural": "Cultural",
+        "footTraffic": "Foot traffic"
+      },
+      "metrics": {
+        "composite": "Composite",
+        "footTraffic": "Foot-traffic",
+        "cultural": "Cultural",
+        "velocity": "Velocity",
+        "acceleration": "Acceleration",
+        "volume": "Volume",
+        "empty": "No scores recorded yet."
+      },
+      "table": {
+        "date": "Date",
+        "composite": "Composite",
+        "footTraffic": "Foot-traffic",
+        "cultural": "Cultural",
+        "velocity": "Velocity",
+        "volume": "Volume",
+        "boost": "Boost"
+      }
+    },
+    "linkTypes": {
+      "CONTRIBUTES_TO": "Contributes to",
+      "MANIFESTATION_OF": "Manifestation of",
+      "ACCELERATES": "Accelerates",
+      "PRECEDES": "Precedes",
+      "CONTRADICTS": "Contradicts"
+    },
+    "phenomenonTypes": {
+      "TREND": "Trend",
+      "EVENT": "Event",
+      "CAMPAIGN": "Campaign",
+      "INCIDENT": "Incident"
+    },
+    "lifecycleStates": {
+      "UPCOMING": "Upcoming",
+      "ACTIVE": "Active",
+      "CONCLUDED": "Concluded"
+    },
+    "scopes": {
+      "CITY": "City",
+      "REGION": "Region",
+      "COUNTRY": "Country",
+      "GLOBAL": "Global"
+    },
+    "errors": {
+      "network": "Network error",
+      "serviceUnavailable": "Service unavailable"
+    },
+    "linkAuthor": {
+      "openButton": "Author link (admin)",
+      "heading": "New link",
+      "cancel": "Cancel",
+      "save": "Save link",
+      "saving": "Saving…",
+      "targetLabel": "Target trend ID",
+      "targetPlaceholder": "trend-id",
+      "typeLabel": "Link type",
+      "weightLabel": "Weight (0–1)",
+      "rationaleLabel": "Rationale (optional)",
+      "rationalePlaceholder": "Why is this link correct?",
+      "errors": {
+        "targetRequired": "Target trend ID required",
+        "cannotLinkSelf": "Cannot link a trend to itself",
+        "weightRange": "Weight must be between 0 and 1",
+        "forbidden": "ADMIN role required to author links",
+        "requestFailed": "Request failed ({{status}})"
+      }
+    },
+    "demo": {
+      "badge": "Demo",
+      "getAccess": "Get full access",
+      "notSeededTitle": "Demo data not yet seeded",
+      "notSeededBody": "Run {{command}} to populate demo markets.",
+      "defaultFocus": "Retail trend intelligence",
+      "loading": "Loading trend data…",
+      "ctaTitle": "See ShopperMind with your mall’s data",
+      "ctaBody": "When connected to Stelthion, ShopperMind correlates these trends with real footfall data from your mall - showing you which trends are already driving traffic.",
+      "bookDemo": "Book a demo"
+    },
+    "section": {
+      "expand": "Expand",
+      "collapse": "Collapse",
+      "sources": "Sources"
+    },
+    "horizons": {
+      "short": {
+        "label": "Short term",
+        "timespan": "2026",
+        "subtitle": "Immediate opportunities",
+        "verb": "Capture"
+      },
+      "medium": {
+        "label": "Medium term",
+        "timespan": "2027–2029",
+        "subtitle": "Trends to prepare for",
+        "verb": "Prepare"
+      },
+      "long": {
+        "label": "Long term",
+        "timespan": "2030+",
+        "subtitle": "Industry-shaping shifts",
+        "verb": "Restructure"
+      },
+      "tracked_one": "{{count}} phenomenon tracked",
+      "tracked_other": "{{count}} phenomena tracked",
+      "emptyShort": "No short-term signals tracked yet.",
+      "emptyMedium": "Medium-term trends are still being built.",
+      "emptyLong": "Long-term phenomena are still being built."
+    },
+    "megaScenario": {
+      "label": "Headline view",
+      "finlandStructuralTitle": "Overview: Finland’s structural shift",
+      "pathBlocks": {
+        "macro": "Macroeconomy",
+        "consumer": "Consumer",
+        "retail": "Retail",
+        "property": "Property market",
+        "mallImpact": "Mall impact"
+      },
+      "pathToneNeutral": "Neutral",
+      "pathToneDark": "Dark",
+      "pathToneBright": "Bright",
+      "evidenceLabel": "Evidence",
+      "keyNumbersLabel": "Key numbers"
+    },
+    "macro": {
+      "title": "Economic indicators",
+      "loading": "Loading indicators…",
+      "updated": "updated {{date}}",
+      "noData": "no data",
+      "onlyFinland": "Live macro indicators available for Finland only at this time.",
+      "notSupported": "Macro indicators are not yet available for this market."
+    },
+    "header": {
+      "marketLabel": "Market",
+      "titleBrand": "ShopperMind",
+      "titleSuffix": "Trend Outlook"
+    },
+    "actions": {
+      "general": "Property action recommendations",
+      "perMall": "Property-specific recommendations",
+      "selectProperty": "Select property",
+      "kpisLabel": "Key metrics",
+      "kpiTarget": "Target",
+      "noMallSelected": "Select a property to see its recommendations.",
+      "ownProperties": "Own properties",
+      "competitorProperties": "Competitors (benchmark)",
+      "competitorTag": "Competitor"
+    },
+    "curatedTrends": {
+      "label": "Analyst trends",
+      "tracked_one": "{{count}} curated trend",
+      "tracked_other": "{{count}} curated trends",
+      "confidence": "Confidence {{score}}/100",
+      "confidenceTooltip": "Confidence score from source agreement and recency",
+      "mallImplications": "What this means for the property",
+      "mallImplicationsFor": "What this means for {{mallName}}",
+      "opportunities": "Opportunities",
+      "campaigns": "Campaign ideas",
+      "playAtMall": "Use this trend",
+      "draftCampaign": "Draft in Campaigns",
+      "discussCampaign": "Refine with Assistant",
+      "marketsNote": "{{- defaultValue}}",
+      "audience": "Audience",
+      "whyNow": "Why now",
+      "successMetric": "Success metric",
+      "channels": "Channels"
+    },
+    "mallFormat": {
+      "transit": "Transit hub",
+      "mixedUse": "Service hub",
+      "destination": "Destination",
+      "all": "All formats"
+    },
+    "channels": {
+      "app": "App",
+      "screens": "Digital screens",
+      "station": "Station hall",
+      "social": "Social media",
+      "signage": "Signage",
+      "in-store": "In-store",
+      "event": "Event",
+      "email": "Email"
+    },
+    "stress": {
+      "title": "Scenario sensitivity: {{mallName}}",
+      "operationalChanges": "Operational changes",
+      "keyRisks": "Key risks",
+      "sensitivities": "Sensitivities",
+      "impact": {
+        "low": "Low impact",
+        "medium": "Medium impact",
+        "high": "High impact"
+      }
     }
   },
   "campaigns": {
@@ -501,6 +1129,107 @@
     "runSimilarScenario": "Run Similar Scenario",
     "campaignHistory": "Campaign History",
     "visitors": "visitors"
+  },
+  "campaignWorkspace": {
+    "title": "Campaigns",
+    "subtitle": "Turn ShopperMind trends into campaign briefs that can be tested against visitor, POS, and tenant data.",
+    "builder": "Campaign brief draft",
+    "createBrief": "Create test brief",
+    "assistantPrompt": "Create a test campaign brief for {{mall}}. Zone: {{zone}}. Audience: {{audience}}. Category: {{category}}. Suggested tenants: {{stores}}. Budget: {{budget}}. Duration: {{duration}}. Use ShopperMind tenant impact {{impact}} as background if provided.",
+    "flowTitle": "Workflow once connected to live data",
+    "aiTitle": "Demo now, customer data later",
+    "aiBody": "A tailored AI model uses only data scoped to the customer environment. The demo shows the workflow with seeded and trend data, while the same view can later connect to POS, visitor, tenant, and campaign-result data.",
+    "fields": {
+      "mall": {
+        "label": "Property",
+        "value": "Sello or Mall of Tripla"
+      },
+      "zone": {
+        "label": "Zone",
+        "value": "Everyday retail, station, restaurants, or services",
+        "options": {
+          "everyday": "Everyday retail",
+          "station": "Station",
+          "restaurants": "Restaurants",
+          "services": "Services"
+        }
+      },
+      "audience": {
+        "label": "Audience",
+        "value": "Daily visitors, families, or wellness customers",
+        "options": {
+          "daily": "Daily visitors",
+          "families": "Families",
+          "wellness": "Wellness customers",
+          "commuters": "Commuters"
+        }
+      },
+      "category": {
+        "label": "Category",
+        "value": "ShopperMind suggested category"
+      },
+      "stores": {
+        "label": "Suggested tenants",
+        "empty": "No tenants selected"
+      },
+      "budget": {
+        "label": "Budget",
+        "value": "Light / standard / broad",
+        "options": {
+          "light": "Light",
+          "standard": "Standard",
+          "broad": "Broad"
+        }
+      },
+      "duration": {
+        "label": "Duration",
+        "value": "7, 14, or 30 days",
+        "options": {
+          "7": "7 days",
+          "14": "14 days",
+          "30": "30 days"
+        }
+      }
+    },
+    "kpis": {
+      "visits": {
+        "label": "Visitor forecast",
+        "value": "+3.8%",
+        "hint": "Demo estimate for the selected zone"
+      },
+      "sales": {
+        "label": "Sales signal",
+        "value": "+2.4%",
+        "hint": "POS connection in full implementation"
+      },
+      "tenants": {
+        "label": "Tenants",
+        "value": "12",
+        "hint": "Matched participants from seed data"
+      }
+    },
+    "steps": {
+      "brief": {
+        "title": "Brief",
+        "body": "Select trend, property, zone, and audience."
+      },
+      "model": {
+        "title": "Model",
+        "body": "Estimate expected visitor and sales impact."
+      },
+      "approval": {
+        "title": "Approval",
+        "body": "Confirm budget, channels, and tenant participation."
+      },
+      "live": {
+        "title": "Live tracking",
+        "body": "Track visits, redemptions, and anomalies."
+      },
+      "learning": {
+        "title": "Learning",
+        "body": "Save measured impact for future campaigns."
+      }
+    }
   },
   "properties": {
     "myProperties": "My Properties",
@@ -536,7 +1265,14 @@
     "notFound": "Property not found",
     "locationLoading": "Loading location data...",
     "locationNotAvailable": "Location and accessibility data is not yet available for this property.",
-    "eventsNotAvailable": "Events calendar is not yet available for this property."
+    "eventsNotAvailable": "Events calendar is not yet available for this property.",
+    "propertyBody": "Inspect operating performance, tenant mix, location context, and property-level supporting signals in the same visual system as ShopperMind.",
+    "selloTenantLocations": {
+      "title": "Sello tenant locations",
+      "body": "Official tenant list grouped by P1 and retail floors 1 to 4.",
+      "floor": "Floor {{floor}}",
+      "source": "Source:"
+    }
   },
   "kpi": {
     "currentVisitors": "Current Visitors",
@@ -600,13 +1336,13 @@
       "excellent": "Excellent for shopping",
       "great": "Great for mall visits",
       "good": "Good for shopping",
-      "outdoors": "Nice outdoors — fewer visitors expected"
+      "outdoors": "Nice outdoors; fewer visitors expected"
     },
     "impact": {
       "indoor": "🌧️ Weather drives visitors indoors",
       "mild": "☀️ Mild weather impact on visitor numbers",
       "outdoor": "🌤️ Optimal outdoor conditions",
-      "quiet": "❄️ Quiet period — fewer visitors expected",
+      "quiet": "❄️ Quiet period; fewer visitors expected",
       "normal": "Normal visitor flow expected"
     },
     "forecastMsg": {
@@ -656,7 +1392,17 @@
       "foodCourt": "Food Court"
     },
     "estimated": "Estimated",
-    "noData": "No counter data uploaded yet"
+    "noData": "No counter data uploaded yet",
+    "floorplanAlt": {
+      "ground": "Generic large shopping mall ground floor plan",
+      "upper": "Generic large shopping mall upper floor plan"
+    },
+    "entrances": {
+      "west": "West entrance",
+      "central": "Transit entrance",
+      "east": "East entrance",
+      "transit": "Parking entrance"
+    }
   },
   "topbar": {
     "concierge": "Stelthion Concierge",
@@ -694,22 +1440,32 @@
     }
   },
   "concierge": {
+    "viewContext": {
+      "shoppermindTrendChip": "Trend: {{label}}",
+      "clear": "Clear context"
+    },
+    "greetings": {
+      "shoppermindTrend": "I see you're looking at the *{{label}}* trend ({{state}}). Want me to draft a campaign idea for it? I can also suggest a couple of different angles."
+    },
     "newConversation": "New Conversation",
     "recent": "Recent",
     "loading": "Loading...",
     "noConversations": "No conversations yet. Start a new one!",
     "viewAll": "View all conversations",
-    "selectAgent": "Select Agent",
-    "chooseAgent": "Choose the best agent for your task:",
+    "selectAgent": "Select assistant",
+    "chooseAgent": "Choose the best assistant for your task:",
     "notSure": "Not sure?",
-    "generalAssistantSuggestion": "Start with General Assistant — it can help with any question and automatically route to specialised agents when needed.",
+    "generalAssistantSuggestion": "Start with General Assistant. It can help with any question and automatically route to specialised assistants when needed.",
     "startWithGeneral": "Start with General Assistant",
     "startConversation": "Start a Conversation",
     "startConversationDesc": "Ask me about sales, footfall, events, parking, or trends. I'm here to help you make better decisions for your mall.",
     "askAnything": "Ask me anything...",
     "typeMessage": "Type your message...",
-    "agentLabel": "Agent",
-    "noBackendStub": "This is a UI preview — the AI backend is not yet connected. Once the Concierge service is configured, I will respond in real time.",
+    "agentLabel": "Assistant",
+    "assistantSelected": "Assistant selected",
+    "confidence": "{{percent}}% confident",
+    "alternativeAssistants": "Alternative assistants",
+    "noBackendStub": "This is a UI preview. The AI backend is not yet connected. Once the Concierge service is configured, I will respond in real time.",
     "select": "Select",
     "bestFor": "Best for:",
     "agents": {
@@ -757,7 +1513,7 @@
       "morning": "Good morning!",
       "afternoon": "Good afternoon!",
       "evening": "Good evening!",
-      "intro": "I'm {{propertyName}} — ask me anything about your property!"
+      "intro": "I'm {{propertyName}}. Ask me anything about your property!"
     },
     "quickAction": {
       "briefing": "Today's briefing",
@@ -824,7 +1580,7 @@
         "title": "Parking Status"
       },
       "trends": {
-        "title": "ShopperMind — Trends"
+        "title": "ShopperMind: Trends"
       },
       "weekdays": {
         "0": "Sunday",
@@ -861,11 +1617,15 @@
     },
     "assistants": {
       "label": "Assistants",
-      "description": "AI agents for mall operations"
+      "description": "AI assistants for mall operations"
     },
     "shoppermind": {
       "label": "ShopperMind",
       "description": "Trends and Predictions"
+    },
+    "space-optimizer": {
+      "label": "Space Optimizer",
+      "description": "Trend-driven rental-space recommendations"
     },
     "managementCompany": "Management Company",
     "comingSoon": "Coming Soon"
@@ -942,7 +1702,7 @@
     },
     "gdpr": {
       "title": "Privacy & GDPR Compliance",
-      "description": "All tracking is fully anonymous. The system identifies individuals by visual appearance only — no facial recognition, biometric data, age, gender, or personally identifiable information is processed or stored. Compliant with EU GDPR regulation."
+      "description": "All tracking is fully anonymous. The system identifies individuals by visual appearance only; no facial recognition, biometric data, age, gender, or personally identifiable information is processed or stored. Compliant with EU GDPR regulation."
     },
     "future": {
       "llmAnalysis": "AI-Powered Insights",
@@ -1000,5 +1760,84 @@
     "coverSubtitle": "Floor: {{floor}} · Hour: {{hour}}:00",
     "executiveSummary": "Executive Summary",
     "keyHighlights": "Key Highlights"
+  },
+  "spaceOptimizer": {
+    "title": "Space Optimizer",
+    "subtitle": "Tangible rental-space moves driven by ShopperMind trends and operational signals",
+    "futureConnection": {
+      "title": "ShopperMind connection planned",
+      "body": "In the next phase, a trend signal becomes a zone and category hypothesis whose impact is estimated with visitor, sales, rent, and lease data."
+    },
+    "header": {
+      "summary": "{{count}} suggestion across {{zones}} zones",
+      "summary_other": "{{count}} suggestions across {{zones}} zones",
+      "drivenBy": "Driven by {{count}} trend",
+      "drivenBy_other": "Driven by {{count}} trends",
+      "lastRun": "Generated {{date}}"
+    },
+    "actions": {
+      "EXPAND": "Expand",
+      "CONVERT": "Convert",
+      "MAINTAIN": "Maintain",
+      "SUNSET": "Sunset",
+      "expandLong": "Expand footprint",
+      "convertLong": "Convert to a new category",
+      "maintainLong": "Maintain: no change recommended",
+      "sunsetLong": "Sunset and re-let"
+    },
+    "filters": {
+      "all": "All",
+      "byAction": "Action",
+      "byTrend": "Trend",
+      "sortByConfidence": "Highest confidence",
+      "sortByUplift": "Largest uplift",
+      "sortByLeaseEnd": "Lease ending soonest"
+    },
+    "card": {
+      "currentCategory": "Currently",
+      "proposedCategory": "Proposed",
+      "drivingTrends": "Driving trends",
+      "confidence": "Confidence",
+      "projectedUplift": "Projected uplift",
+      "projectedAnnual": "~{{value}}/yr",
+      "leaseEnds": "Lease ends {{date}}",
+      "noLease": "No lease info",
+      "tenant": "Tenant",
+      "viewPhenomenon": "View trend",
+      "dismiss": "Dismiss",
+      "accept": "Mark for follow-up",
+      "projection": "projection: directional, not guaranteed"
+    },
+    "floorplan": {
+      "title": "Floorplan",
+      "legend": "Legend",
+      "floor": "Floor {{floor}}",
+      "noZones": "No zones to display"
+    },
+    "empty": {
+      "title": "No suggestions yet",
+      "body": "ShopperMind hasn't surfaced a clear space move for {{mall}} this cycle. The next refresh runs daily. Check back tomorrow."
+    },
+    "errors": {
+      "load": "Couldn't load space-optimizer suggestions: {{message}}",
+      "gated": {
+        "title": "Space Optimizer requires an upgrade",
+        "body": "This feature is part of the Realidea Suite plan. Contact your account manager to enable it for your mall."
+      }
+    },
+    "demo": {
+      "badge": "Live Demo",
+      "header": "Realidea: Sello",
+      "subtitle": "What ShopperMind sees today, applied to Sello's actual zone mix",
+      "getAccess": "Get Access",
+      "ctaTitle": "Want this for your portfolio?",
+      "ctaBody": "Live recommendations against your own POS, footfall, and camera signals.",
+      "bookDemo": "Book a demo",
+      "loading": "Loading suggestions..."
+    },
+    "nav": {
+      "label": "Space Optimizer",
+      "description": "Trend-driven rental-space recommendations"
+    }
   }
 }

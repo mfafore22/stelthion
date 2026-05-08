@@ -11,6 +11,8 @@ import { getLLMClient, type LLMMessage, type LLMToolCall } from './llm-client';
 import { getPropertyPersona } from './property-persona';
 import { getToolSchemas } from './tools';
 import { routeToAgent } from './agent-router';
+import { campaignBriefResponse } from './campaign-brief-response';
+import type { AssistantViewContext } from '@/lib/assistant-flow/types';
 
 // ── Types ─────────────────────────────────────────────────
 
@@ -18,6 +20,7 @@ export interface ChatRequest {
   mallId: string;
   messages: LLMMessage[];
   language?: string;
+  viewContext?: AssistantViewContext | null;
 }
 
 export interface ToolExecutionResult {
@@ -91,7 +94,7 @@ export async function executeToolCalls(
 export async function* orchestrateChat(
   request: ChatRequest
 ): AsyncGenerator<SSEEvent> {
-  const { mallId, messages, language } = request;
+  const { mallId, messages, language, viewContext } = request;
   const persona = getPropertyPersona(mallId);
   const toolSchemas = getToolSchemas();
   const client = getLLMClient();
@@ -103,10 +106,17 @@ export async function* orchestrateChat(
     const routing = routeToAgent(lastUserMsg.content);
     agentRole = routing.agentRole;
   }
+  const directCampaignResponse = campaignBriefResponse(messages, viewContext, language);
+  if (directCampaignResponse) agentRole = 'event-coordinator';
+
+  const viewContextBlock = renderViewContextBlock(viewContext);
+  const systemPrompt = viewContextBlock
+    ? `${persona.systemPrompt}\n\n${viewContextBlock}`
+    : persona.systemPrompt;
 
   // Build full message list with system prompt
   const fullMessages: LLMMessage[] = [
-    { role: 'system', content: persona.systemPrompt },
+    { role: 'system', content: systemPrompt },
     ...trimConversationHistory(messages, 20),
   ];
 
@@ -114,6 +124,17 @@ export async function* orchestrateChat(
     type: 'message_start',
     data: { agentRole, mallId },
   };
+
+  if (directCampaignResponse) {
+    for (const chunk of chunkText(directCampaignResponse)) {
+      yield { type: 'message_chunk', data: { text: chunk } };
+    }
+    yield {
+      type: 'message_complete',
+      data: { content: directCampaignResponse, agentRole },
+    };
+    return;
+  }
 
   // Track tool calls across rounds to avoid duplicate execution / attachment spam
   const executedToolKeys = new Set<string>();
@@ -220,6 +241,76 @@ export async function* orchestrateChat(
   };
 }
 
+// ── View context ──────────────────────────────────────────
+
+function renderViewContextBlock(
+  viewContext: AssistantViewContext | null | undefined,
+): string | null {
+  if (!viewContext) return null;
+  if (viewContext.kind === 'shoppermind_trend') {
+    return [
+      'CURRENT VIEWING CONTEXT',
+      'The user is currently looking at a ShopperMind trend:',
+      `- Label: ${viewContext.label}`,
+      `- State: ${viewContext.state}`,
+      `- Primary country: ${viewContext.primaryCountry}`,
+      `- Phenomenon ID: ${viewContext.phenomenonId}`,
+      '',
+      'When the user asks open-ended questions ("ideas?", "what should I do?",',
+      '"miten hyödyntäisin tätä?"), assume they mean this trend unless they say',
+      'otherwise. Prefer the generate_campaign_idea tool for concrete proposals;',
+      'pass this phenomenonId. Keep responses in the user\'s language.',
+    ].join('\n');
+  }
+  if (viewContext.kind === 'campaign_brief') {
+    const labels = viewContext.payload?.labels as Record<string, string> | undefined;
+    const metrics = viewContext.payload?.metrics as Record<string, { value?: string; hint?: string }> | undefined;
+    const draft = viewContext.payload?.draft as {
+      tenantRoles?: Array<{ name?: string; location?: string; role?: string }>;
+      liveConnectors?: string[];
+      learningCapture?: string[];
+    } | null | undefined;
+    const workflow = viewContext.payload?.workflow as { steps?: Array<{ title?: string; body?: string; demoContent?: string }> } | undefined;
+    const steps = workflow?.steps?.map((step) => `${step.title}: ${step.body}${step.demoContent ? ` ${step.demoContent}` : ''}`);
+    return [
+      'CURRENT WORK CONTEXT',
+      'The user is creating a campaign brief from the Campaigns workspace.',
+      labels?.mall ? `- Property: ${labels.mall}` : null,
+      labels?.zone ? `- Zone: ${labels.zone}` : null,
+      labels?.audience ? `- Audience: ${labels.audience}` : null,
+      labels?.category ? `- Tenant category: ${labels.category}` : null,
+      labels?.stores ? `- Suggested tenant participants: ${labels.stores}` : null,
+      labels?.budget ? `- Budget: ${labels.budget}` : null,
+      labels?.duration ? `- Duration: ${labels.duration}` : null,
+      labels?.impact ? `- ShopperMind tenant-impact source: ${labels.impact}` : null,
+      metrics?.visits?.value ? `- Visitor estimate: ${metrics.visits.value} (${metrics.visits.hint ?? 'demo model'})` : null,
+      metrics?.sales?.value ? `- Sales signal: ${metrics.sales.value} (${metrics.sales.hint ?? 'demo model'})` : null,
+      metrics?.tenants?.value ? `- Tenant count: ${metrics.tenants.value} (${metrics.tenants.hint ?? 'demo model'})` : null,
+      draft?.tenantRoles?.length ? `- Tenant roles: ${draft.tenantRoles.map((tenant) => `${tenant.name} (${tenant.location}): ${tenant.role}`).join(' | ')}` : null,
+      steps?.length ? `- Workflow: ${steps.join(' | ')}` : null,
+      draft?.liveConnectors?.length ? `- Live data connectors: ${draft.liveConnectors.join(', ')}` : null,
+      draft?.learningCapture?.length ? `- Learning capture fields: ${draft.learningCapture.join(', ')}` : null,
+      '',
+      'Use these selected settings to draft a practical campaign brief. Do not ask the user to re-select them.',
+      'Answer as a campaign designer: include objective, customer need, tenant role, channel mix, activation concept, KPI plan, approval steps, and what data should be connected later.',
+      'Do not answer with unrelated demographics, events, or generic property information unless it directly supports this campaign brief.',
+    ].filter(Boolean).join('\n');
+  }
+  const payload = 'payload' in viewContext && viewContext.payload
+    ? `- Payload: ${JSON.stringify(viewContext.payload).slice(0, 1200)}`
+    : null;
+  return [
+    'CURRENT WORK CONTEXT',
+    `- Kind: ${viewContext.kind}`,
+    `- Label: ${viewContext.label}`,
+    'source' in viewContext ? `- Source module: ${viewContext.source}` : null,
+    viewContext.returnTarget ? `- Return target: ${viewContext.returnTarget.label} (${viewContext.returnTarget.href})` : null,
+    payload,
+    '',
+    'Use this context when the user asks follow-up questions. Keep customer data isolated and never infer data from another customer.',
+  ].filter(Boolean).join('\n');
+}
+
 // ── Tool/agent helpers ────────────────────────────────────
 
 function stableArgsKey(args: unknown): string {
@@ -228,6 +319,12 @@ function stableArgsKey(args: unknown): string {
   } catch {
     return String(args);
   }
+}
+
+function chunkText(text: string) {
+  const chunks: string[] = [];
+  for (let i = 0; i < text.length; i += 180) chunks.push(text.slice(i, i + 180));
+  return chunks;
 }
 
 /** Map the dominant tool name to a display agent role. */

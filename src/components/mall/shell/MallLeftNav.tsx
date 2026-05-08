@@ -24,10 +24,14 @@ import {
   BarChart3,
   TrendingUpDown,
   HandPlatter,
-  Brain,
+  LayoutPanelTop,
+  Lock,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSession } from '@/contexts/SessionContext';
+import { ShopperMindIcon } from '@/components/mall/shoppermind/ShopperMindIcon';
+import useSWR from 'swr';
+import type { PlanFeatures } from '@/lib/plan-gate';
 import {
   Tooltip,
   TooltipContent,
@@ -46,13 +50,14 @@ export interface MallNavItem {
 }
 
 const NAV_ITEMS: MallNavItem[] = [
-  { id: 'portfolio',    label: 'Portfolio',    icon: LayoutGrid,    route: '/mall/portfolio' },
-  { id: 'properties',  label: 'Properties',   icon: Building2,     route: '/mall/properties' },
-  { id: 'campaigns',   label: 'Campaigns',    icon: Megaphone,     route: '/mall/campaigns' },
-  { id: 'analytics',   label: 'Analytics',    icon: BarChart3,     route: '/mall/analytics' },
-  { id: 'scenarios',   label: 'Scenarios',    icon: TrendingUpDown, route: '/mall/scenarios' },
-  { id: 'assistants',  label: 'Assistants',   icon: HandPlatter,   route: '/mall/assistants' },
-  { id: 'shoppermind', label: 'ShopperMind',  icon: Brain,         route: '/mall/shoppermind' },
+  { id: 'portfolio',       label: 'Portfolio',       icon: LayoutGrid,     route: '/mall/portfolio' },
+  { id: 'properties',      label: 'Properties',      icon: Building2,      route: '/mall/properties' },
+  { id: 'campaigns',       label: 'Campaigns',       icon: Megaphone,      route: '/mall/campaigns' },
+  { id: 'analytics',       label: 'Analytics',       icon: BarChart3,      route: '/mall/analytics' },
+  { id: 'scenarios',       label: 'Scenarios',       icon: TrendingUpDown, route: '/mall/scenarios' },
+  { id: 'assistants',      label: 'Assistants',      icon: HandPlatter,    route: '/mall/assistants' },
+  { id: 'shoppermind',     label: 'ShopperMind',     icon: ShopperMindIcon, route: '/mall/shoppermind' },
+  { id: 'space-optimizer', label: 'Space Optimizer', icon: LayoutPanelTop, route: '/mall/space-optimizer' },
 ];
 
 export interface MallLeftNavProps {
@@ -71,6 +76,9 @@ export interface MallLeftNavProps {
   className?: string;
 }
 
+const ALWAYS_ACTIVE = new Set(['portfolio', 'properties', 'campaigns']);
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
+
 export function MallLeftNav({
   managementCompanyId,
   onNavigate,
@@ -80,22 +88,30 @@ export function MallLeftNav({
   const pathname = usePathname();
   const { user } = useSession();
   const { t } = useTranslation();
+  const { data: features } = useSWR<PlanFeatures>('/api/mall/my-features', fetcher);
 
-  // Active nav items — only Portfolio and Properties are functional at this stage
-  const ACTIVE_NAV_IDS = new Set(['portfolio', 'properties', 'shoppermind']);
+  // Plan-gated items
+  const planActive = React.useMemo(
+    () => new Set<string>([
+      ...(features?.shoppermind ? ['shoppermind'] : []),
+      ...(features?.concierge ? ['assistants'] : []),
+      ...(features?.spaceAllocation ? ['space-optimizer'] : []),
+    ]),
+    [features?.concierge, features?.shoppermind, features?.spaceAllocation],
+  );
 
   // Generate tenant-specific navigation items
   const navItems = React.useMemo(() => {
     if (!user) return NAV_ITEMS.map(item => ({
       ...item,
-      disabled: !ACTIVE_NAV_IDS.has(item.id),
+      disabled: !ALWAYS_ACTIVE.has(item.id),
     }));
 
     const tenantSlug = user.companyName.toLowerCase().replace(/\s+/g, '-');
 
     return NAV_ITEMS
       .map(item => {
-        const disabled = !ACTIVE_NAV_IDS.has(item.id);
+        const disabled = !ALWAYS_ACTIVE.has(item.id) && !planActive.has(item.id);
 
         if (item.id === 'portfolio') {
           if (user.isMultiProperty) {
@@ -120,7 +136,7 @@ export function MallLeftNav({
 
         return { ...item, disabled };
       });
-  }, [user]);
+  }, [planActive, user]);
 
   // Determine active item from pathname
   const activeItemId = navItems.find(item =>
@@ -146,13 +162,13 @@ export function MallLeftNav({
         )}
         aria-label="Mall portfolio navigation"
       >
-        {/* Swirl logo — vertically centered in the 80px top bar row */}
+        {/* Stelthion icon - vertically centered in the 80px top bar row */}
         <div className="h-[80px] w-full flex items-center justify-center shrink-0">
           <Image
-            src="/stelthion-swirl-v2.png"
+            src="/stelthion-brand-s.png"
             alt="Stelthion"
-            width={26}
-            height={26}
+            width={42}
+            height={44}
             className="object-contain"
             priority
           />
@@ -170,7 +186,7 @@ export function MallLeftNav({
                 <button
                   onClick={() => handleNavClick(item)}
                   className={cn(
-                    'w-14 h-14 rounded-xl flex items-center justify-center',
+                    'group w-14 h-14 rounded-xl flex items-center justify-center',
                     'transition-all duration-300 ease-bo-out-expo',
                     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bo-primary-600 focus-visible:ring-opacity-20',
                     item.disabled && 'text-bo-neutral-400 cursor-not-allowed opacity-60',
@@ -181,7 +197,14 @@ export function MallLeftNav({
                   aria-current={isActive ? 'page' : undefined}
                   aria-disabled={item.disabled || undefined}
                 >
-                  <Icon className="h-6 w-6" />
+                  {item.disabled && !ALWAYS_ACTIVE.has(item.id) ? (
+                    <span className="relative">
+                      <Icon className="h-8 w-8" />
+                      <Lock className="h-3 w-3 absolute -bottom-1 -right-1 text-bo-neutral-400" />
+                    </span>
+                  ) : (
+                    <Icon className="h-8 w-8" />
+                  )}
                 </button>
               </TooltipTrigger>
               <TooltipContent
@@ -192,9 +215,11 @@ export function MallLeftNav({
                   {item.labelOverride ?? t(`mall:navigation.${item.id}.label`)}
                 </div>
                 <div className="text-xs text-gray-300 mt-1 leading-relaxed">
-                  {item.disabled
-                    ? t('navigation.comingSoon', 'Coming Soon')
-                    : (item.descriptionOverride ?? t(`mall:navigation.${item.id}.description`))}
+                  {item.disabled && !ALWAYS_ACTIVE.has(item.id)
+                    ? t('navigation.upgradePlan', 'Upgrade your plan to unlock')
+                    : item.disabled
+                      ? t('navigation.comingSoon', 'Coming Soon')
+                      : (item.descriptionOverride ?? t(`mall:navigation.${item.id}.description`))}
                 </div>
               </TooltipContent>
             </Tooltip>

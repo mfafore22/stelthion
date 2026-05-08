@@ -1,12 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
-import { requireAdmin } from '@/lib/admin-auth';
+import { requireMallAccess } from '@/lib/admin-customer';
 import * as XLSX from 'xlsx';
 
 export async function POST(req: NextRequest) {
-  const guard = await requireAdmin();
-  if ('error' in guard) return guard.error;
-
   try {
     const formData = await req.formData();
     const file = formData.get('file') as File | null;
@@ -15,6 +12,9 @@ export async function POST(req: NextRequest) {
     if (!file || !mallId) {
       return NextResponse.json({ error: 'Missing file or mallId' }, { status: 400 });
     }
+
+    const guard = await requireMallAccess(mallId);
+    if ('error' in guard) return guard.error;
 
     const buffer = await file.arrayBuffer();
     const workbook = XLSX.read(buffer, { type: 'array' });

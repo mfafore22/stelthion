@@ -1,0 +1,1151 @@
+{
+  "mallId": "realidea-sello",
+  "sourceUrls": [
+    "https://www.sello.fi/liikkeet",
+    "https://www.sello.fi/ravintolat-espoo"
+  ],
+  "updatedAt": "2026-05-05",
+  "tenants": [
+    {
+      "name": "4Chiefs Saloon",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "Ratsusola, katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/4chiefs-saloon"
+    },
+    {
+      "name": "Adam & Eve",
+      "category": "Beauty & Health",
+      "floor": "floor3",
+      "location": "3. krs. ylätaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/adam-eve"
+    },
+    {
+      "name": "Alepa",
+      "category": "Daily Goods & Grocery",
+      "floor": "p1",
+      "location": "P1 - Pysäköintitaso",
+      "url": "https://www.sello.fi/liikkeet/tavaratalot-ja-paivittaistavarat/alepa"
+    },
+    {
+      "name": "Alko",
+      "category": "Daily Goods & Grocery",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/tavaratalot-ja-paivittaistavarat/alko"
+    },
+    {
+      "name": "Arnolds",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/arnolds"
+    },
+    {
+      "name": "Backyard",
+      "category": "Food & Beverage",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/backyard"
+    },
+    {
+      "name": "Barber Shop Sello",
+      "category": "Beauty & Health",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/barber-shop-sello"
+    },
+    {
+      "name": "Beauty Hair Sirpa Mansner",
+      "category": "Beauty & Health",
+      "floor": "floor3",
+      "location": "3. krs. ylätaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/beauty-hair-sirpa-mansner"
+    },
+    {
+      "name": "BowlCircus",
+      "category": "Leisure",
+      "floor": "floor1",
+      "location": "Vapaa-ajankeskus, 1. krs.",
+      "url": "https://www.sello.fi/liikkeet/vapaa-aika/bowlcircus"
+    },
+    {
+      "name": "BURGER KING",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/burger-king"
+    },
+    {
+      "name": "CAP-Autokoulu",
+      "category": "Services",
+      "floor": "floor1",
+      "location": "Ratsusola, katutaso",
+      "url": "https://www.sello.fi/liikkeet/palvelut/cap-autokoulu"
+    },
+    {
+      "name": "Carlings",
+      "category": "Fashion",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/carlings"
+    },
+    {
+      "name": "CarStation",
+      "category": "Services",
+      "floor": "p1",
+      "location": "P1 - Pysäköintitaso",
+      "url": "https://www.sello.fi/liikkeet/palvelut/carstation"
+    },
+    {
+      "name": "Change",
+      "category": "Fashion",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/change"
+    },
+    {
+      "name": "Clas Ohlson",
+      "category": "Home & Living",
+      "floor": "floor3",
+      "location": "3. krs. ylätaso",
+      "url": "https://www.sello.fi/liikkeet/sisustaminen-ja-kodintarvikkeet/clas-ohlson"
+    },
+    {
+      "name": "Classic Pizza",
+      "category": "Food & Beverage",
+      "floor": "floor3",
+      "location": "3. krs. ylätaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/classic-pizza"
+    },
+    {
+      "name": "Click Shoes",
+      "category": "Fashion",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/click-shoes"
+    },
+    {
+      "name": "Comfort Hotel Sello",
+      "category": "Services",
+      "floor": "floor1",
+      "location": "Leppävaarankatu, katutaso",
+      "url": "https://www.sello.fi/liikkeet/palvelut/comfort-hotel-sello"
+    },
+    {
+      "name": "Comfort Hotel Sello Ravintola",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "Ratsutori, katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/comfort-hotel-sello-ravintola"
+    },
+    {
+      "name": "Cubus",
+      "category": "Fashion",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/cubus"
+    },
+    {
+      "name": "Cutters",
+      "category": "Beauty & Health",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/cutters"
+    },
+    {
+      "name": "DNA Kauppa",
+      "category": "Home & Living",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/sisustaminen-ja-kodintarvikkeet/dna-kauppa"
+    },
+    {
+      "name": "Dressmann",
+      "category": "Fashion",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/dressmann"
+    },
+    {
+      "name": "Elias Döner Kebab",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "Ratsutori, katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/elias-doner-kebab"
+    },
+    {
+      "name": "Elisa",
+      "category": "Home & Living",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/sisustaminen-ja-kodintarvikkeet/elisa"
+    },
+    {
+      "name": "Elixia",
+      "category": "Leisure",
+      "floor": "floor3",
+      "location": "3. krs. ylätaso",
+      "url": "https://www.sello.fi/liikkeet/vapaa-aika/elixia"
+    },
+    {
+      "name": "Emmyn vaatekeräyspiste",
+      "category": "Services",
+      "floor": "p1",
+      "location": "P1 - Pysäköintitaso",
+      "url": "https://www.sello.fi/liikkeet/palvelut/emmyn-vaatekerayspiste"
+    },
+    {
+      "name": "Emotion",
+      "category": "Beauty & Health",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/emotion"
+    },
+    {
+      "name": "eOmistaja - Löytötavarapalvelu",
+      "category": "Services",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/palvelut/eomistaja-loytotavarapalvelu"
+    },
+    {
+      "name": "Espoo-infon asiointipiste Leppävaara",
+      "category": "Services",
+      "floor": "floor2",
+      "location": "Kirjasto, Viaporintori",
+      "url": "https://www.sello.fi/liikkeet/palvelut/espoo-infon-asiointipiste-leppavaara"
+    },
+    {
+      "name": "Espoon työllisyyspalvelut",
+      "category": "Services",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/palvelut/espoon-tyollisyyspalvelut"
+    },
+    {
+      "name": "Espresso House Sellonaukio",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/espresso-house-sellonaukio"
+    },
+    {
+      "name": "Eurokangas",
+      "category": "Home & Living",
+      "floor": "floor3",
+      "location": "3. krs. ylätaso",
+      "url": "https://www.sello.fi/liikkeet/sisustaminen-ja-kodintarvikkeet/eurokangas"
+    },
+    {
+      "name": "Fazer Café",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/fazer-cafe"
+    },
+    {
+      "name": "Finlayson",
+      "category": "Home & Living",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/sisustaminen-ja-kodintarvikkeet/finlayson"
+    },
+    {
+      "name": "Finnkino",
+      "category": "Leisure",
+      "floor": "floor2",
+      "location": "Vapaa-ajankeskus, 2. krs.",
+      "url": "https://www.sello.fi/liikkeet/vapaa-aika/finnkino"
+    },
+    {
+      "name": "Fonum",
+      "category": "Leisure",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/vapaa-aika/fonum"
+    },
+    {
+      "name": "Fotoyks",
+      "category": "Services",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/palvelut/fotoyks"
+    },
+    {
+      "name": "fresKo",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "1.krs. hyperaula",
+      "url": "https://www.sello.fi/ravintolat-espoo/fresko"
+    },
+    {
+      "name": "Friends & Brgrs",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/friends-brgrs"
+    },
+    {
+      "name": "Fries Factory",
+      "category": "Food & Beverage",
+      "floor": "floor2",
+      "location": "Viaporintori",
+      "url": "https://www.sello.fi/ravintolat-espoo/fries-factory"
+    },
+    {
+      "name": "Fuku Supreme",
+      "category": "Food & Beverage",
+      "floor": "floor2",
+      "location": "Viaporintori",
+      "url": "https://www.sello.fi/ravintolat-espoo/fuku-supreme"
+    },
+    {
+      "name": "Fysios Mehiläinen",
+      "category": "Beauty & Health",
+      "floor": "floor4",
+      "location": "4. krs. Sellon kirjaston yläkerta",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/fysios-mehilainen"
+    },
+    {
+      "name": "Galleria Aarni ja Espoon taidelainaamo",
+      "category": "Leisure",
+      "floor": "floor2",
+      "location": "Viaporintori",
+      "url": "https://www.sello.fi/liikkeet/vapaa-aika/galleria-aarni-ja-espoon-taidelainaamo"
+    },
+    {
+      "name": "Glitter",
+      "category": "Fashion",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/glitter"
+    },
+    {
+      "name": "Glowstation",
+      "category": "Beauty & Health",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/glowstation"
+    },
+    {
+      "name": "H&M",
+      "category": "Fashion",
+      "floor": "floor2",
+      "location": "1.krs. & 2.krs.",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/hm"
+    },
+    {
+      "name": "H&M Home",
+      "category": "Home & Living",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/sisustaminen-ja-kodintarvikkeet/hm-home"
+    },
+    {
+      "name": "HairStore",
+      "category": "Beauty & Health",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/hairstore"
+    },
+    {
+      "name": "Halonen",
+      "category": "Fashion",
+      "floor": "floor2",
+      "location": "1.krs. & 2.krs.",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/halonen"
+    },
+    {
+      "name": "Hanko Aasia",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/hanko-aasia"
+    },
+    {
+      "name": "Helsingin Jäätelötehdas",
+      "category": "Food & Beverage",
+      "floor": "floor2",
+      "location": "Viaporintori",
+      "url": "https://www.sello.fi/ravintolat-espoo/helsingin-jaatelotehdas"
+    },
+    {
+      "name": "Hemtex",
+      "category": "Home & Living",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/sisustaminen-ja-kodintarvikkeet/hemtex"
+    },
+    {
+      "name": "HOK-Elannon Hautaus- ja Lakipalvelu",
+      "category": "Services",
+      "floor": "floor1",
+      "location": "Ratsusola, katutaso",
+      "url": "https://www.sello.fi/liikkeet/palvelut/hok-elannon-hautaus-ja-lakipalvelu"
+    },
+    {
+      "name": "iNoodles",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "Ratsutori, katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/inoodles"
+    },
+    {
+      "name": "Instrumentarium",
+      "category": "Beauty & Health",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/instrumentarium"
+    },
+    {
+      "name": "Intersport",
+      "category": "Leisure",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/vapaa-aika/intersport"
+    },
+    {
+      "name": "iPoke",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "Ratsutori, katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/ipoke"
+    },
+    {
+      "name": "Jack & Jones",
+      "category": "Fashion",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/jack-jones"
+    },
+    {
+      "name": "JD Sports",
+      "category": "Leisure",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/vapaa-aika/jd-sports"
+    },
+    {
+      "name": "JesperJunior",
+      "category": "Fashion",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/jesperjunior"
+    },
+    {
+      "name": "JK Shop",
+      "category": "Daily Goods & Grocery",
+      "floor": "floor1",
+      "location": "Ratsusola, katutaso",
+      "url": "https://www.sello.fi/liikkeet/tavaratalot-ja-paivittaistavarat/jk-shop"
+    },
+    {
+      "name": "Juhlamaailma",
+      "category": "Home & Living",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/sisustaminen-ja-kodintarvikkeet/juhlamaailma"
+    },
+    {
+      "name": "Jungle Juice Bar",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/jungle-juice-bar"
+    },
+    {
+      "name": "Jysk",
+      "category": "Home & Living",
+      "floor": "floor3",
+      "location": "3. krs. ylätaso",
+      "url": "https://www.sello.fi/liikkeet/sisustaminen-ja-kodintarvikkeet/jysk"
+    },
+    {
+      "name": "K-Citymarket",
+      "category": "Daily Goods & Grocery",
+      "floor": "floor1",
+      "location": "1.krs. hyperaula",
+      "url": "https://www.sello.fi/liikkeet/tavaratalot-ja-paivittaistavarat/k-citymarket"
+    },
+    {
+      "name": "K-market",
+      "category": "Daily Goods & Grocery",
+      "floor": "p1",
+      "location": "P1 - Pysäköintitaso",
+      "url": "https://www.sello.fi/liikkeet/tavaratalot-ja-paivittaistavarat/k-market"
+    },
+    {
+      "name": "Kaivokukka",
+      "category": "Home & Living",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/sisustaminen-ja-kodintarvikkeet/kaivokukka"
+    },
+    {
+      "name": "Kanniston Leipomo",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/kanniston-leipomo"
+    },
+    {
+      "name": "KappAhl",
+      "category": "Fashion",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/kappahl"
+    },
+    {
+      "name": "Karkkitori",
+      "category": "Daily Goods & Grocery",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/tavaratalot-ja-paivittaistavarat/karkkitori"
+    },
+    {
+      "name": "Kauppakeskus Sellon Info",
+      "category": "Services",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/palvelut/kauppakeskus-sellon-info"
+    },
+    {
+      "name": "Kekäle",
+      "category": "Fashion",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/kekale"
+    },
+    {
+      "name": "KFC",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/kfc"
+    },
+    {
+      "name": "KICKS",
+      "category": "Beauty & Health",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/kicks"
+    },
+    {
+      "name": "Kopparberg",
+      "category": "Food & Beverage",
+      "floor": "floor2",
+      "location": "Viaporintori",
+      "url": "https://www.sello.fi/ravintolat-espoo/kopparberg-0"
+    },
+    {
+      "name": "Korean Bear Chicken",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "Leppävaarankatu, katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/korean-bear-chicken"
+    },
+    {
+      "name": "Kotipizza",
+      "category": "Food & Beverage",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/kotipizza"
+    },
+    {
+      "name": "Kultajousi",
+      "category": "Beauty & Health",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/kultajousi"
+    },
+    {
+      "name": "Kung Food Panda",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/kung-food-panda"
+    },
+    {
+      "name": "La Torrefazione",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/la-torrefazione"
+    },
+    {
+      "name": "Laatukoru",
+      "category": "Beauty & Health",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/laatukoru"
+    },
+    {
+      "name": "Lapsiparkki",
+      "category": "Services",
+      "floor": "floor3",
+      "location": "3. krs. ylätaso",
+      "url": "https://www.sello.fi/liikkeet/palvelut/lapsiparkki"
+    },
+    {
+      "name": "Lidl",
+      "category": "Daily Goods & Grocery",
+      "floor": "floor1",
+      "location": "Vapaa-ajankeskus, 1. krs.",
+      "url": "https://www.sello.fi/liikkeet/tavaratalot-ja-paivittaistavarat/lidl"
+    },
+    {
+      "name": "Lime Leaf",
+      "category": "Food & Beverage",
+      "floor": "floor2",
+      "location": "Vapaa-ajankeskus, 2. krs.",
+      "url": "https://www.sello.fi/ravintolat-espoo/lime-leaf"
+    },
+    {
+      "name": "Lindex",
+      "category": "Fashion",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/lindex"
+    },
+    {
+      "name": "Luhta Brand Store",
+      "category": "Fashion",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/luhta-brand-store"
+    },
+    {
+      "name": "Lyko",
+      "category": "Beauty & Health",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/lyko"
+    },
+    {
+      "name": "Lähilääkärit",
+      "category": "Beauty & Health",
+      "floor": "floor2",
+      "location": "Ratsutori, 2. krs.",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/lahilaakarit"
+    },
+    {
+      "name": "Mall & Mall",
+      "category": "Home & Living",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/sisustaminen-ja-kodintarvikkeet/mall-mall"
+    },
+    {
+      "name": "Mandarin Palace",
+      "category": "Food & Beverage",
+      "floor": "floor3",
+      "location": "3. krs. ylätaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/mandarin-palace"
+    },
+    {
+      "name": "Marian Konditoria",
+      "category": "Food & Beverage",
+      "floor": "floor2",
+      "location": "Viaporintori",
+      "url": "https://www.sello.fi/ravintolat-espoo/marian-konditoria"
+    },
+    {
+      "name": "Marimekko",
+      "category": "Fashion",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/marimekko"
+    },
+    {
+      "name": "McDonald's Sello",
+      "category": "Food & Beverage",
+      "floor": "floor2",
+      "location": "Viaporintori",
+      "url": "https://www.sello.fi/ravintolat-espoo/mcdonalds-sello"
+    },
+    {
+      "name": "Momochi",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/momochi"
+    },
+    {
+      "name": "Musiikkiopisto Juvenalia",
+      "category": "Services",
+      "floor": "floor2",
+      "location": "Viaporintori",
+      "url": "https://www.sello.fi/liikkeet/palvelut/musiikkiopisto-juvenalia"
+    },
+    {
+      "name": "Musti ja Mirri",
+      "category": "Leisure",
+      "floor": "floor3",
+      "location": "3. krs. ylätaso",
+      "url": "https://www.sello.fi/liikkeet/vapaa-aika/musti-ja-mirri"
+    },
+    {
+      "name": "New Yorker",
+      "category": "Fashion",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/new-yorker"
+    },
+    {
+      "name": "Newbie",
+      "category": "Fashion",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/newbie"
+    },
+    {
+      "name": "Nissen",
+      "category": "Beauty & Health",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/nissen"
+    },
+    {
+      "name": "Nordea",
+      "category": "Services",
+      "floor": "floor1",
+      "location": "Leppävaarankatu, katutaso",
+      "url": "https://www.sello.fi/liikkeet/palvelut/nordea"
+    },
+    {
+      "name": "Normal",
+      "category": "Beauty & Health",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/normal"
+    },
+    {
+      "name": "NP Housukauppa",
+      "category": "Fashion",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/np-housukauppa"
+    },
+    {
+      "name": "Oikko",
+      "category": "Daily Goods & Grocery",
+      "floor": "floor1",
+      "location": "Ratsusola, katutaso",
+      "url": "https://www.sello.fi/liikkeet/tavaratalot-ja-paivittaistavarat/oikko"
+    },
+    {
+      "name": "OP Uusimaa",
+      "category": "Services",
+      "floor": "floor1",
+      "location": "Ratsusola, katutaso",
+      "url": "https://www.sello.fi/liikkeet/palvelut/op-uusimaa"
+    },
+    {
+      "name": "Pancho Villa",
+      "category": "Food & Beverage",
+      "floor": "floor2",
+      "location": "Vapaa-ajankeskus, 2. krs.",
+      "url": "https://www.sello.fi/ravintolat-espoo/pancho-villa"
+    },
+    {
+      "name": "Partioaitta",
+      "category": "Leisure",
+      "floor": "floor3",
+      "location": "3. krs. ylätaso",
+      "url": "https://www.sello.fi/liikkeet/vapaa-aika/partioaitta"
+    },
+    {
+      "name": "Pesuabox",
+      "category": "Services",
+      "floor": "p1",
+      "location": "P1 - Pysäköintitaso",
+      "url": "https://www.sello.fi/liikkeet/palvelut/pesuabox"
+    },
+    {
+      "name": "Pho Station",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/pho-station"
+    },
+    {
+      "name": "Picnic",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/picnic"
+    },
+    {
+      "name": "Pihlajalinna",
+      "category": "Services",
+      "floor": "floor2",
+      "location": "Ratsutori, 2. krs.",
+      "url": "https://www.sello.fi/liikkeet/palvelut/pihlajalinna"
+    },
+    {
+      "name": "Pingviini Jäätelökahvila",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/pingviini-jaatelokahvila"
+    },
+    {
+      "name": "Power",
+      "category": "Home & Living",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/sisustaminen-ja-kodintarvikkeet/power"
+    },
+    {
+      "name": "Prisma",
+      "category": "Daily Goods & Grocery",
+      "floor": "floor1",
+      "location": "1.krs. hyperaula",
+      "url": "https://www.sello.fi/liikkeet/tavaratalot-ja-paivittaistavarat/prisma"
+    },
+    {
+      "name": "R-kioski Ratikkakäytävä",
+      "category": "Daily Goods & Grocery",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/tavaratalot-ja-paivittaistavarat/r-kioski-ratikkakaytava"
+    },
+    {
+      "name": "R-kioski, ulkona",
+      "category": "Daily Goods & Grocery",
+      "floor": "floor1",
+      "location": "Leppävaarankatu, katutaso",
+      "url": "https://www.sello.fi/liikkeet/tavaratalot-ja-paivittaistavarat/r-kioski-ulkona"
+    },
+    {
+      "name": "Ravintola Base",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/ravintola-base"
+    },
+    {
+      "name": "RAX Pizzabuffet",
+      "category": "Food & Beverage",
+      "floor": "floor3",
+      "location": "3. krs. ylätaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/rax-pizzabuffet"
+    },
+    {
+      "name": "Ristorante Momento",
+      "category": "Food & Beverage",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/ristorante-momento"
+    },
+    {
+      "name": "Rituals",
+      "category": "Beauty & Health",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/rituals"
+    },
+    {
+      "name": "Robert's Coffee",
+      "category": "Food & Beverage",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/roberts-coffee"
+    },
+    {
+      "name": "Ruohonjuuri",
+      "category": "Beauty & Health",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/ruohonjuuri"
+    },
+    {
+      "name": "S-kaupat ruoan verkkokaupan noutopiste, Prisma Sello",
+      "category": "Daily Goods & Grocery",
+      "floor": "p1",
+      "location": "P1 - Pysäköintitaso",
+      "url": "https://www.sello.fi/liikkeet/tavaratalot-ja-paivittaistavarat/s-kaupat-ruoan-verkkokaupan-noutopiste-prisma-sello"
+    },
+    {
+      "name": "S-Pankki",
+      "category": "Services",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/palvelut/s-pankki"
+    },
+    {
+      "name": "Salon Klipsi",
+      "category": "Beauty & Health",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/salon-klipsi"
+    },
+    {
+      "name": "Samsonite",
+      "category": "Leisure",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/vapaa-aika/samsonite"
+    },
+    {
+      "name": "Sanitum Apteekki Sello",
+      "category": "Beauty & Health",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/sanitum-apteekki-sello"
+    },
+    {
+      "name": "Seastea",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/seastea"
+    },
+    {
+      "name": "Sellon Apteekki",
+      "category": "Beauty & Health",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/sellon-apteekki"
+    },
+    {
+      "name": "Sellon Katse Optikko",
+      "category": "Beauty & Health",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/sellon-katse-optikko"
+    },
+    {
+      "name": "Sellon kirjasto",
+      "category": "Services",
+      "floor": "floor2",
+      "location": "Viaporintori",
+      "url": "https://www.sello.fi/liikkeet/palvelut/sellon-kirjasto"
+    },
+    {
+      "name": "Sellonpuisto",
+      "category": "Services",
+      "floor": "floor3",
+      "location": "3. krs. ylätaso",
+      "url": "https://www.sello.fi/liikkeet/palvelut/sellonpuisto"
+    },
+    {
+      "name": "Sellosali",
+      "category": "Services",
+      "floor": "floor2",
+      "location": "Viaporintori",
+      "url": "https://www.sello.fi/liikkeet/palvelut/sellosali"
+    },
+    {
+      "name": "Seoul Good",
+      "category": "Food & Beverage",
+      "floor": "floor2",
+      "location": "Vapaa-ajankeskus, 2. krs.",
+      "url": "https://www.sello.fi/ravintolat-espoo/seoul-good"
+    },
+    {
+      "name": "Silmäasema",
+      "category": "Beauty & Health",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/silmaasema"
+    },
+    {
+      "name": "Silmäsairaala Espoo Sello",
+      "category": "Services",
+      "floor": "floor2",
+      "location": "Viaporintori",
+      "url": "https://www.sello.fi/liikkeet/palvelut/silmasairaala-espoo-sello"
+    },
+    {
+      "name": "Sizzle Station",
+      "category": "Food & Beverage",
+      "floor": "floor2",
+      "location": "Vapaa-ajankeskus, 2. krs.",
+      "url": "https://www.sello.fi/ravintolat-espoo/sizzle-station"
+    },
+    {
+      "name": "Skechers",
+      "category": "Fashion",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/skechers"
+    },
+    {
+      "name": "Specsavers Optikko",
+      "category": "Beauty & Health",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/specsavers-optikko"
+    },
+    {
+      "name": "Stadium",
+      "category": "Leisure",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/vapaa-aika/stadium"
+    },
+    {
+      "name": "Star Image",
+      "category": "Leisure",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/vapaa-aika/star-image"
+    },
+    {
+      "name": "Subway",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/subway"
+    },
+    {
+      "name": "Suomalainen Kirjakauppa",
+      "category": "Leisure",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/vapaa-aika/suomalainen-kirjakauppa"
+    },
+    {
+      "name": "Suomen Rokotepalvelu",
+      "category": "Beauty & Health",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/suomen-rokotepalvelu"
+    },
+    {
+      "name": "Suutari Juha Piiroinen",
+      "category": "Services",
+      "floor": "p1",
+      "location": "P1 - Pysäköintitaso",
+      "url": "https://www.sello.fi/liikkeet/palvelut/suutari-juha-piiroinen"
+    },
+    {
+      "name": "Synsam",
+      "category": "Beauty & Health",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/synsam"
+    },
+    {
+      "name": "Søstrene Grene",
+      "category": "Home & Living",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/sisustaminen-ja-kodintarvikkeet/sostrene-grene"
+    },
+    {
+      "name": "Taco Bell",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/taco-bell"
+    },
+    {
+      "name": "Tector",
+      "category": "Home & Living",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/sisustaminen-ja-kodintarvikkeet/tector"
+    },
+    {
+      "name": "Telia",
+      "category": "Home & Living",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/sisustaminen-ja-kodintarvikkeet/telia"
+    },
+    {
+      "name": "Tempur",
+      "category": "Home & Living",
+      "floor": "floor2",
+      "location": "Viaporintori",
+      "url": "https://www.sello.fi/liikkeet/sisustaminen-ja-kodintarvikkeet/tempur"
+    },
+    {
+      "name": "Thai Papaya",
+      "category": "Food & Beverage",
+      "floor": "floor2",
+      "location": "Viaporintori",
+      "url": "https://www.sello.fi/ravintolat-espoo/thai-papaya"
+    },
+    {
+      "name": "The Body Shop",
+      "category": "Beauty & Health",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/the-body-shop"
+    },
+    {
+      "name": "Timanttiset",
+      "category": "Beauty & Health",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/liikkeet/kauneus-ja-terveys/timanttiset"
+    },
+    {
+      "name": "Tokmanni",
+      "category": "Daily Goods & Grocery",
+      "floor": "floor3",
+      "location": "3. krs. ylätaso",
+      "url": "https://www.sello.fi/liikkeet/tavaratalot-ja-paivittaistavarat/tokmanni"
+    },
+    {
+      "name": "Tokumaru",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "1. krs. katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/tokumaru"
+    },
+    {
+      "name": "Trenday",
+      "category": "Fashion",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/trenday"
+    },
+    {
+      "name": "UFF",
+      "category": "Fashion",
+      "floor": "floor3",
+      "location": "3. krs. ylätaso",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/uff"
+    },
+    {
+      "name": "Vero Moda",
+      "category": "Fashion",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/vero-moda"
+    },
+    {
+      "name": "William K.",
+      "category": "Food & Beverage",
+      "floor": "floor2",
+      "location": "Viaporintori",
+      "url": "https://www.sello.fi/ravintolat-espoo/william-k"
+    },
+    {
+      "name": "XS Lelut",
+      "category": "Leisure",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/vapaa-aika/xs-lelut"
+    },
+    {
+      "name": "Your Face",
+      "category": "Fashion",
+      "floor": "floor2",
+      "location": "2. krs. toritaso",
+      "url": "https://www.sello.fi/liikkeet/pukeutuminen/your-face"
+    },
+    {
+      "name": "Yummy Teppanyaki",
+      "category": "Food & Beverage",
+      "floor": "floor1",
+      "location": "Ratsusola, katutaso",
+      "url": "https://www.sello.fi/ravintolat-espoo/yummy-teppanyaki"
+    }
+  ]
+}

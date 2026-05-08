@@ -146,7 +146,7 @@
     "venuesAndUpcoming": "Arenor och kommande evenemang",
     "nearbyImpact": "Påverkan från närliggande evenemang",
     "refresh": "Uppdatera",
-    "fetchError": "Kunde inte hämta evenemangsdata — visar cachad information",
+    "fetchError": "Kunde inte hämta evenemangsdata. Visar cachad information.",
     "nearbyVenues": "Närliggande arenor",
     "allUpcoming": "Alla kommande evenemang",
     "nextHours": "Evenemang (Nästa 2–6 timmar)",
@@ -421,81 +421,709 @@
     "description": "AI-assistenter för fastighetsförvaltning",
     "comingSoon": "AI-assistentintegration",
     "integrationDescription": "AI-assistenter använder din fastighets isolerade data för att producera fastighetsspecifika simuleringar och prognoser. Med dem kan du testa effekten av dina valda åtgärder eller förbereda dig för situationer. Stelthion AI-modeller ger bredare insikter och alternativ till simuleringar och prognoser.",
-    "tryScenarios": "Prova scenariokalkylator nu"
+    "tryScenarios": "Prova scenariokalkylator nu",
+    "actions": {
+      "startChat": "Starta chatt",
+      "askInChat": "Fråga i chatten"
+    },
+    "demo": {
+      "owner-copilot": {
+        "title": "Ägarens Copilot",
+        "body": "Samlar strategi, risker och veckans beslut till en tydlig ägarvy.",
+        "tools": {
+          "0": "Nyckeltal",
+          "1": "Daglig briefing",
+          "2": "Godkännanden"
+        },
+        "prompts": {
+          "0": "Ge mig ägarens beslutslista för den här veckan.",
+          "1": "Vad behöver godkännas före fredag?"
+        }
+      },
+      "trend-analyst": {
+        "title": "ShopperMind-trendanalytiker",
+        "body": "Förklarar vägar, åtgärder, konkurrenter och källbelagda marknadssignaler.",
+        "tools": {
+          "0": "ShopperMind",
+          "1": "Källor",
+          "2": "Kampanjidé"
+        },
+        "prompts": {
+          "0": "Vilken väg ska prioriteras och varför?",
+          "1": "Gör den starkaste trenden till två åtgärder."
+        }
+      },
+      "campaign-designer": {
+        "title": "Kampanjdesigner",
+        "body": "Skissar briefar, målgrupper, hyresgäster, kanaler, KPI:er och godkännanden.",
+        "tools": {
+          "0": "Kampanjer",
+          "1": "Evenemang",
+          "2": "Besöksflöden"
+        },
+        "prompts": {
+          "0": "Skissa en kampanjbrief från den aktuella trenden.",
+          "1": "Vilka hyresgäster bör ingå?"
+        }
+      },
+      "space-optimizer": {
+        "title": "Yt- och uthyrningsoptimerare",
+        "body": "Kopplar trender, hyresavtalstiming, zonflöden och hyrespåverkan.",
+        "tools": {
+          "0": "Ytoptimering",
+          "1": "Hyresgästmix",
+          "2": "Försäljning"
+        },
+        "prompts": {
+          "0": "Vilken ytförändring har bäst riskjusterad effekt?",
+          "1": "Förklara den här ytrekommendationen för uthyrningsteamet."
+        }
+      }
+    },
+    "panels": {
+      "security": {
+        "title": "Säkerhet och godkännanden",
+        "prompt": "Förklara assistenternas säkerhetsgränser, godkännanden och kundisolering.",
+        "rows": {
+          "0": "Varje begäran binds till kund, fastighet och användarroll.",
+          "1": "Skrivande åtgärder kräver ett separat godkännande.",
+          "2": "Kunddata blandas inte mellan Ideapark, Realidea eller andra konton.",
+          "3": "Verktygsanrop och källor loggas för granskning.",
+          "4": "Auth, 2FA och OTP ändras inte av assistentflödet."
+        }
+      },
+      "data": {
+        "title": "Datakort och anslutningar",
+        "prompt": "Visa vilka datakällor som kan anslutas till assistenterna och vad demon använder tills live-data finns.",
+        "rows": {
+          "0": "ShopperMind-trender, vägar och åtgärder används som beslutsunderlag.",
+          "1": "Kampanjbriefar kan senare kopplas till POS-, besöks- och hyresgästdata.",
+          "2": "Ytoptimeraren väntar på avtal, hyror och zonflöden.",
+          "3": "Briefingar och chattsvar sparar prompt-svar-par för kundspecifik modellträning.",
+          "4": "Demo-innehåll är märkt så att det kan ersättas med livekopplingar."
+        }
+      }
+    },
+    "controlTitle": "Assistenter för slutna miljöer",
+    "closedEnvironment": "Kundavgränsad miljö",
+    "controlBody": "Assistenterna utformas för att endast använda vald kunds, operatörs och fastighets data. Demon visar styrmodellen: vilka assistenter som finns, vilka verktyg de får använda och när mänskligt godkännande krävs.",
+    "mallFocus": "Fastighetsfokus",
+    "agentCatalog": "Assistenter",
+    "securityTitle": "Säkerhetsgränser",
+    "dataTitle": "Datakällor",
+    "ragTitle": "RAG-beredskap",
+    "ragBody": "RAG byggs med kund- och fastighetsspecifika namnrymder. Källor, dokument och svar förblir spårbara, och en annan kunds material hämtas aldrig in i samma kontext.",
+    "workflowTitle": "Arbetsflöden",
+    "workflowBody": "Skrivande åtgärder som kampanjbriefar eller hyresgästmeddelanden går via godkännandeportar. Chatten kan föreslå åtgärder, men publicerar eller ändrar inte data utan tillstånd.",
+    "agents": {
+      "trend": {
+        "title": "Trendspecialist",
+        "body": "Förklarar ShopperMind-trender med endast källbelagda påståenden."
+      },
+      "campaign": {
+        "title": "Kampanjassistent",
+        "body": "Gör en trend till en kampanjbrief och föreslagna KPI:er."
+      },
+      "operations": {
+        "title": "Operativ assistent",
+        "body": "Stödjer beslut om zoner, besökare och servicenivå."
+      }
+    },
+    "guards": {
+      "scope": {
+        "title": "Kund- och fastighetsgräns",
+        "body": "Varje begäran binds till customerId och mallId."
+      },
+      "sources": {
+        "title": "Källkrav",
+        "body": "Faktapåståenden behöver källa eller markeras som antaganden."
+      },
+      "approval": {
+        "title": "Godkännandeportar",
+        "body": "Publicering, meddelanden och budgetåtgärder kräver mänskligt godkännande."
+      },
+      "audit": {
+        "title": "Audit trail",
+        "body": "Verktygsanrop, källor och beslut sparas för granskning."
+      }
+    },
+    "data": {
+      "rag": {
+        "title": "Dokument",
+        "body": "Hyresavtal, varumärkesregler och rapporter avgränsas till kunden."
+      },
+      "pos": {
+        "title": "POS",
+        "body": "Försäljningsdata maskeras och aggregeras efter behörighet."
+      },
+      "footfall": {
+        "title": "Besöksdata",
+        "body": "Besöksflöden kopplas till tid, zon och kampanjperiod."
+      },
+      "tenant": {
+        "title": "Hyresgäster",
+        "body": "Hyresgäst- och kategoridata styr rekommendationerna."
+      }
+    }
   },
   "shoppermind": {
     "title": "ShopperMind",
-    "tagline": "Trender, prognoser och fenomen för köpcentrums verksamhet",
-    "country": {
-      "fi": "Finland",
-      "ae": "UAE",
-      "global": "Globalt"
+    "tagline": "Framförhållning för varje köpcentrum med handlingsbara prognoser",
+    "loading": "Laddar…",
+    "loadingTrends": "Laddar trender…",
+    "loadingTrend": "Laddar trend…",
+    "noMarket": "Trendmotor",
+    "marketPrefix": "Marknad",
+    "snapshot": {
+      "section": "Trendöversikt"
     },
-    "state": {
-      "emerging": "Framväxande",
-      "accelerating": "Accelererande",
-      "stable": "Stabil",
-      "fading": "Avtagande",
-      "dormant": "Vilande"
+    "trust": {
+      "title": "Förtroende och täckning",
+      "sources": {
+        "label": "Källor",
+        "value": "{{count}} källor",
+        "body": "Påståenden kopplas till källor, och källor öppnas direkt från korten."
+      },
+      "scope": {
+        "label": "Konto",
+        "fallback": "Avgränsad kundvy",
+        "body": "Vyn använder endast fastigheter som är tillåtna för det valda kundkontot."
+      },
+      "feedback": {
+        "label": "Feedback",
+        "value": "Lär av feedback",
+        "body": "Tummar och kommentarer sparas som träningsmaterial för framtida utveckling."
+      },
+      "categories": {
+        "label": "Kategorier",
+        "value": "{{count}} kategorier",
+        "body": "Trender taggas till hyresgästkategorier, inklusive framtida möjligheter."
+      }
     },
-    "filters": {
-      "minScore": "Min poäng",
-      "category": "Kategori",
-      "search": "Sök fenomen",
-      "allStates": "Alla tillstånd"
+    "tabs": {
+      "overview": "Huvudvy",
+      "actions": "Åtgärder",
+      "trends": "Trender",
+      "competitors": "Konkurrenter",
+      "decisionSupport": "Beslutsstöd",
+      "emptyActionsTitle": "Åtgärder förbereds",
+      "emptyActionsBody": "Inga källbelagda åtgärdsrekommendationer har ännu publicerats för den valda marknaden eller fastigheten."
+    },
+    "competitors": {
+      "emptyTitle": "Konkurrentjämförelser förbereds",
+      "emptyBody": "Inga validerade konkurrentexempel har ännu publicerats för denna marknad.",
+      "title": "Marknadsspecifika jämförelseobjekt",
+      "body": "Jämförelserna hålls i samma marknad som den valda vyn. Källor visas där respektive exempel används."
+    },
+    "decisionSupport": {
+      "title": "Varför rekommendationerna är motiverade",
+      "body": "Denna vy visar hur trender, marknadssignaler, den valda fastigheten och konkurrentexempel blir konkreta åtgärder.",
+      "logicTitle": "Hur rekommendationer bildas",
+      "logicTrend": "{{count}} marknadsspecifika trender",
+      "logicScenario": "Tre alternativa scenariovägar",
+      "logicProperty": "Vald fastighetsprofil och jämförelseobjekt",
+      "usedTitle": "Vilken information som användes",
+      "usedSources": "{{count}} källbelagda marknads- eller fastighetskällor",
+      "usedClaims": "{{count}} åtgärdskopplade påståenden",
+      "usedEvidence": "Belägg visas direkt i åtgärds-, trend- och konkurrentkort",
+      "missingTitle": "Vad kunddata förbättrar",
+      "missingSales": "Försäljning, hyresgästmix och hyresavtalens struktur",
+      "missingFootfall": "Besöksflöden, zoner och kampanjresultat",
+      "missingBudget": "Budget-, tids- och genomförandebegränsningar",
+      "aiTitle": "Skräddarsydd AI-modell som nästa lager",
+      "aiBody": "En skräddarsydd AI-modell kan kopplas till kundens egna hyresgäst-, besöks-, försäljnings- och kampanjdata. Modellen ersätter inte källbelagd analys, utan förklarar rekommendationer, tar fram alternativa åtgärder och hjälper till att prioritera dem per fastighet, marknad och budget."
+    },
+    "actionBoard": {
+      "weeklyHeader": "Veckans åtgärdsförslag",
+      "title": "Åtgärdsplan: {{propertyName}}",
+      "subtitle": "Verifierade trendsignaler översatta till konkreta köpcentrumåtgärder, jämförelseexempel och beslutsstöd.",
+      "verifiedEvidence": "Verifierade belägg",
+      "evidenceSummary": "{{claims}} påståenden · {{sources}} källor · beslutsstöd klart",
+      "impactVsEffort": "Effekt jämfört med arbetsinsats",
+      "highImpact": "Hög effekt",
+      "highEffort": "Stor arbetsinsats",
+      "actionCoverage": "Åtgärdernas täckning",
+      "prioritySummary": "Prioritetsfördelning",
+      "decisionContext": "Beslutsstöd",
+      "decisionContextBody": "Rekommendationerna innehåller {{count}} verifierade hänvisningar som senare kan ligga till grund för en skräddarsydd AI-modell.",
+      "effort": "Arbetsinsats",
+      "impact": "Effekt",
+      "whyNow": "Varför nu",
+      "expectedKpi": "Förväntat nyckeltal",
+      "competitorExample": "Konkurrentexempel",
+      "noCompetitorExample": "Inget konkurrentexempel kopplat.",
+      "showEvidence": "Visa verifierade belägg ({{count}})",
+      "benchmark": "Jämförelse",
+      "openCampaign": "Öppna som kampanjidé",
+      "discussAssistant": "Diskutera med assistenten",
+      "priority": "Prioritet",
+      "property": "Fastighet",
+      "priorities": {
+        "critical": "Kritisk",
+        "high": "Hög",
+        "medium": "Medel"
+      },
+      "efforts": {
+        "low": "Låg",
+        "medium": "Medel",
+        "high": "Hög"
+      },
+      "impacts": {
+        "low": "Låg",
+        "medium": "Medel",
+        "high": "Hög"
+      },
+      "timeHorizons": {
+        "thisWeek": "Denna vecka",
+        "thirtyDays": "30 dagar",
+        "ninetyDays": "90 dagar"
+      },
+      "zones": {
+        "food": "Mat och restauranger",
+        "health": "Hälsa och wellness",
+        "campaign": "Kampanjer och media",
+        "services": "Tjänster",
+        "leisure": "Fritid",
+        "mallWide": "Hela köpcentrumet"
+      },
+      "actionTypes": {
+        "operations": "Aktivera vardagsbesök",
+        "campaign": "Starta riktad kampanj",
+        "tenantMix": "Justera hyresgästmixen",
+        "benchmark": "Jämför nästa steg",
+        "retailMedia": "Paketera uppmärksamhet"
+      }
+    },
+    "countries": {
+      "FI": "Finland",
+      "JP": "Japan",
+      "US": "USA",
+      "SE": "Sverige",
+      "DE": "Tyskland"
+    },
+    "back": "Tillbaka till trender",
+    "breadcrumbRoot": "ShopperMind",
+    "notFound": "Trenden {{id}} hittades inte.",
+    "notConfigured": {
+      "title": "Tjänsten är inte konfigurerad i den här miljön",
+      "body": "Ange {{envVar1}} och {{envVar2}} för att ansluta. Det här köpcentrumet skulle motsvara {{marketId}}.",
+      "detail": "ShopperMind-tjänsten är inte konfigurerad i den här miljön."
+    },
+    "upgrade": {
+      "title": "ShopperMind ingår inte i din plan",
+      "body": "Uppgradera för att låsa upp trendintelligens för dina marknader. Kontakta din kundansvarig eller en administratör för att byta plan."
+    },
+    "errorBanner": "Trendtjänsten är inte tillgänglig: {{message}}",
+    "grid": {
+      "empty": "Inga trender spåras för den här marknaden ännu.",
+      "topTrends": "Topptrender",
+      "tracked_one": "{{count}} trend spåras",
+      "tracked_other": "{{count}} trender spåras",
+      "score": "Poäng"
+    },
+    "signalOfTheDay": {
+      "title": "Dagens signal",
+      "empty": "Ingen signal har publicerats för den här marknaden idag.",
+      "comingSoon": "Månadens signal förbereds för denna marknad och visas när källorna har validerats."
+    },
+    "signalSections": {
+      "monthly": "Månadens signal",
+      "headline": "Rubrik",
+      "keyFindings": "Huvudsakliga insikter",
+      "byCity": "Handlare i {{city}}",
+      "alsoVisible": "Även synligt",
+      "watching": "Bevakning"
+    },
+    "states": {
+      "EMERGING": "Framväxande",
+      "ACCELERATING": "Accelererande",
+      "STABLE": "Stabil",
+      "FADING": "Avtagande",
+      "DORMANT": "Vilande"
+    },
+    "markets": {
+      "gridTitle": "Läget per marknad",
+      "market": "Marknad",
+      "country": "Land",
+      "state": "Status",
+      "compositeScore": "Poäng",
+      "divergentCallout": "Markant skillnad: trenden utvecklas olika på olika marknader.",
+      "empty": "Marknadsdata samlas fortfarande in.",
+      "FI": "Finland",
+      "SE": "Sverige",
+      "US": "USA",
+      "UAE": "Förenade Arabemiraten",
+      "KR": "Sydkorea",
+      "EU": "EU (översikt)",
+      "comingSoon": "Kommer snart",
+      "comingSoonBody": "Marknadsanalys förbereds. Vyn uppdateras när källorna validerats.",
+      "noScenario": "En huvudvy för denna marknad förbereds.",
+      "horizonsComingSoon": "Tidshorisontstrender tillgängliga snart."
+    },
+    "evidence": {
+      "title": "Belysning",
+      "confidence": "Tillförlitlighet",
+      "componentsLabel": "Komponenter för tillförlitlighet",
+      "sourceList": "Källor",
+      "strongSources": "Starka källor",
+      "corroboratedIn": "Marknader som bekräftar",
+      "whyConfident": "Varför vi är säkra",
+      "whyCautious": "Varför vi är försiktiga",
+      "empty": "Beläggen bekräftas fortfarande.",
+      "strip": {
+        "show": "Källor",
+        "label_one": "{{count}} stark källa",
+        "label_other": "{{count}} starka källor",
+        "loading": "Laddar källor…",
+        "empty": "Inga källor tillgängliga ännu.",
+        "collecting": "Samlar bevis från fler källor…",
+        "noUrls": "Inga artikellänkar ännu för denna trend.",
+        "error": "Kunde inte ladda källor."
+      }
+    },
+    "lifecycle": {
+      "label": "Livscykel",
+      "relevance": "Relevans",
+      "rising": "stigande",
+      "cooling": "svalnande",
+      "holding": "stabil",
+      "youAreHere": "Du är här"
+    },
+    "trajectory": {
+      "title": "Trendens utveckling",
+      "subtitle": "Sammansatt poäng över tid - välj ett fönster",
+      "empty": "Ingen poängshistorik ännu.",
+      "windows": {
+        "7d": "7 d",
+        "14d": "14 d",
+        "30d": "30 d",
+        "4w": "4 v",
+        "12w": "12 v",
+        "12m": "12 m"
+      },
+      "series": {
+        "composite": "Sammansatt",
+        "footTraffic": "Besökstrafik",
+        "cultural": "Kulturell"
+      },
+      "stats": {
+        "relevance": "Relevans",
+        "velocity": "Hastighet",
+        "acceleration": "Acceleration",
+        "volume": "Volym"
+      }
+    },
+    "tooltips": {
+      "relevance": "Kombinerat poäng (0–1): hur relevant trenden är för just denna marknad. Kombinerar volym, hastighet, källmangfald och kulturell / fotgängarnärhet.",
+      "velocity": "Trendens tillväxttakt: hur snabbt signalvolymen förändras. Positivt = stigande, negativt = fallande.",
+      "acceleration": "Förändring av tillväxttakten: om trenden accelererar eller avtar. Positivt = momentum byggs upp.",
+      "volume": "Antal observerade signaler under perioden - hur många gånger trenden har nämnts i olika källor.",
+      "cultural": "Kulturell dimension: hur nära trenden ligger marknadens kulturella samtal - sociala medier, nyheter och vardagliga val.",
+      "footTraffic": "Fotgängardimension: hur nära trenden ligger den faktiska besökströmmen runt köpcentrumet - lokala evenemang, transit och tillgänglighet.",
+      "composite": "Kombinerat: viktad blandning av de kulturella och fotgängarsignalerna - den övergripande bilden av trendens relevans."
+    },
+    "sections": {
+      "summary": "Sammanfattning",
+      "signal": "Signal på den här marknaden",
+      "impact": "Vad det betyder för dig",
+      "opportunity": "Möjlighet",
+      "watchOut": "Varning",
+      "opportunityBody": "När trenden accelererar finns det uppsida för handlare som rör sig tidigt på vinklarna ovan.",
+      "watchOutBody": "Trenden svalnar. Planera för långsammare upptag och förbered dig på att rotera bort från djup exponering.",
+      "campaignIdea": "Kampanjidé",
+      "feedback": "Var detta användbart?"
     },
     "feedback": {
-      "title": "Ditt omdöme",
       "relevant": "Relevant",
       "notRelevant": "Inte relevant",
-      "noise": "Brus",
-      "star": "Viktig"
+      "commentPlaceholder": "Lägg till en kort kommentar (valfritt)",
+      "submit": "Skicka",
+      "cancel": "Avbryt",
+      "edit": "Redigera",
+      "submitting": "Skickar…",
+      "submitted": "Tack för din feedback",
+      "error": "Kunde inte spara din feedback",
+      "reasons": {
+        "notPropertyRelevant": "Inte relevant för den här fastigheten",
+        "wrongCategory": "Fel kategori",
+        "outdated": "Data verkar föråldrad",
+        "notPractical": "Åtgärden är inte praktisk",
+        "missingEvidence": "Saknar evidens",
+        "alreadyHandled": "Redan hanterat"
+      }
     },
-    "signalOfDay": {
-      "title": "Dagens signal",
-      "share": "Dela",
-      "copyLink": "Kopiera",
-      "copied": "Kopierat"
+    "categoryImpact": {
+      "present": "Kategorin finns i den nuvarande hyresgästmixen.",
+      "absent_relevant": "Kategorin kan vara relevant även om den inte finns i köpcentrumet.",
+      "badges": {
+        "present": "i mix",
+        "absent_relevant": "lucka"
+      }
     },
-    "empty": "Inga fenomen matchar dina filter ännu.",
-    "loading": "Analyserar signaler...",
-    "trajectory": "28-dagars utveckling",
-    "representativeSignals": "Representativa signaler",
-    "impact": {
-      "title": "Vad detta kan betyda för {{mallName}}",
-      "accelerating": "Ett accelererande fenomen syns vanligtvis i besöksantal och kategorispecifik efterfrågan inom 2–6 veckor. Se över hyresgäster i berörda kategorier och kommande kampanjer.",
-      "emerging": "Tidig signal — ingen operativ påverkan ännu, men värd att följa. Bra läge att diskutera med hyresgäster i den berörda kategorin.",
-      "stable": "En bakgrundskraft som inte rör närtidens siffror. Håll i åtanke vid långtidsplanering.",
-      "fading": "Avtagande fenomen — hyresgästernas försäljning i kategorin kan minska. Förbered och sök ersättningskoncept.",
-      "dormant": "Inaktivt just nu. Ingen omedelbar åtgärd behövs."
+    "tenantImpact": {
+      "eyebrow": "Hyresgästeffekt",
+      "title": "Hur trender blir kategoribeslut",
+      "body": "Detta är inte en butikslista. Vyn visar vilka kategorier och exempelhyresgäster som möter trendens behov, var man bör växa, vad som bör skärpas och var en kampanj kan börja.",
+      "liveReady": "Demo nu, live-data senare",
+      "recommendation": "Rekommendation",
+      "focus": "Öka",
+      "reduce": "Minska",
+      "storeExamples": "Exempelhyresgäster",
+      "openCampaign": "Skicka till kampanjbrief",
+      "moves": {
+        "increase": "öka",
+        "reposition": "positionera om",
+        "reduce": "minska",
+        "test": "testa",
+        "recruit": "rekrytera"
+      },
+      "horizons": {
+        "short": "kort",
+        "medium": "medel",
+        "long": "lång"
+      }
     },
-    "totalPhenomena": "{{count}} fenomen totalt",
-    "signalsCount": "{{count}} signaler",
-    "sourcePrefix": "Källa",
-    "phenomenonFallback": "Baserat på {{count}} signaler i {{category}}.",
-    "phenomenonFallbackNoCategory": "Baserat på {{count}} signaler.",
-    "category": {
-      "fashion": "Mode",
-      "grocery": "Dagligvaror",
-      "f&b": "Restaurang & café",
-      "health-beauty": "Hälsa & skönhet",
-      "home": "Hem & inredning",
-      "services": "Tjänster",
-      "leisure": "Fritid",
-      "retail-tenancy": "Butikshyra",
-      "footfall-driver": "Besöksdrivare",
-      "consumer-behaviour": "Konsumentbeteende",
-      "residential-sale": "Bostadsförsäljning",
-      "residential-rental": "Hyresbostäder",
-      "commercial-office": "Kontorslokaler",
-      "commercial-retail": "Kommersiella butikslokaler",
-      "hospitality": "Hotell & besöksnäring",
-      "tourism": "Turism",
-      "construction-pipeline": "Byggprojekt",
-      "short-term-rental": "Korttidsuthyrning",
-      "mixed-use": "Blandad användning",
-      "infrastructure": "Infrastruktur",
-      "investment-flows": "Investeringsflöden"
+    "campaignIdea": {
+      "generate": "Skapa kampanjidé",
+      "generating": "Skissar på en idé…",
+      "regenerate": "Skapa ny version",
+      "refineInChat": "Finslipa i chatten",
+      "openInDetail": "Öppna detaljer",
+      "errorTitle": "Kunde inte skapa en idé just nu",
+      "errorBody": "Generatorn svarade inte. Försök igen om en stund.",
+      "fields": {
+        "hook": "Slogan",
+        "audience": "Målgrupp",
+        "channels": "Kanaler",
+        "successMetric": "Framgångsmått",
+        "angle": "Vinkel",
+        "cta": "Uppmaning",
+        "whyNow": "Varför nu",
+        "rationale": "Motivering",
+        "duration": "Varaktighet",
+        "budget": "Budget"
+      },
+      "budget": {
+        "light": "Lätt",
+        "standard": "Standard",
+        "premium": "Premium"
+      },
+      "durationDays": "{{count}} dagar"
+    },
+    "detail": {
+      "description": "Beskrivning",
+      "relatedTrends": "Relaterade trender",
+      "relatedTrendsEmpty": "Inga relaterade trender kopplade till den här ännu.",
+      "linkGraph": "Länkkarta",
+      "linkGraphEmpty": "Inga härledda länkar ännu.",
+      "upstream": "Uppströms - trender som matar in i den här",
+      "downstream": "Nedströms - trender som den här matar in i",
+      "recentScoring": "Senaste poängsättning",
+      "details": "Detaljer",
+      "tags": "Taggar",
+      "categories": "Kategorier",
+      "keywords": "Nyckelord",
+      "meta": {
+        "eventStart": "Händelsens start",
+        "eventEnd": "Händelsens slut",
+        "firstSeen": "Första observation",
+        "lastSignal": "Senaste signal",
+        "cultural": "Kulturell",
+        "footTraffic": "Besökstrafik"
+      },
+      "metrics": {
+        "composite": "Sammansatt",
+        "footTraffic": "Besökstrafik",
+        "cultural": "Kulturell",
+        "velocity": "Hastighet",
+        "acceleration": "Acceleration",
+        "volume": "Volym",
+        "empty": "Inga poäng registrerade ännu."
+      },
+      "table": {
+        "date": "Datum",
+        "composite": "Sammansatt",
+        "footTraffic": "Besökstrafik",
+        "cultural": "Kulturell",
+        "velocity": "Hastighet",
+        "volume": "Volym",
+        "boost": "Booster"
+      }
+    },
+    "linkTypes": {
+      "CONTRIBUTES_TO": "Bidrar till",
+      "MANIFESTATION_OF": "Manifestation av",
+      "ACCELERATES": "Accelererar",
+      "PRECEDES": "Föregår",
+      "CONTRADICTS": "Motsäger"
+    },
+    "phenomenonTypes": {
+      "TREND": "Trend",
+      "EVENT": "Händelse",
+      "CAMPAIGN": "Kampanj",
+      "INCIDENT": "Incident"
+    },
+    "lifecycleStates": {
+      "UPCOMING": "Kommande",
+      "ACTIVE": "Aktiv",
+      "CONCLUDED": "Avslutad"
+    },
+    "scopes": {
+      "CITY": "Stad",
+      "REGION": "Region",
+      "COUNTRY": "Land",
+      "GLOBAL": "Global"
+    },
+    "errors": {
+      "network": "Nätverksfel",
+      "serviceUnavailable": "Tjänsten är inte tillgänglig"
+    },
+    "linkAuthor": {
+      "openButton": "Skapa länk (admin)",
+      "heading": "Ny länk",
+      "cancel": "Avbryt",
+      "save": "Spara länk",
+      "saving": "Sparar…",
+      "targetLabel": "Måltrendens ID",
+      "targetPlaceholder": "trend-id",
+      "typeLabel": "Länktyp",
+      "weightLabel": "Vikt (0–1)",
+      "rationaleLabel": "Motivering (valfritt)",
+      "rationalePlaceholder": "Varför är den här länken korrekt?",
+      "errors": {
+        "targetRequired": "Måltrendens ID krävs",
+        "cannotLinkSelf": "En trend kan inte länkas till sig själv",
+        "weightRange": "Vikten måste vara mellan 0 och 1",
+        "forbidden": "ADMIN-roll krävs för att skapa länkar",
+        "requestFailed": "Begäran misslyckades ({{status}})"
+      }
+    },
+    "demo": {
+      "badge": "Demo",
+      "getAccess": "Få full tillgång",
+      "notSeededTitle": "Demodata ännu inte inläst",
+      "notSeededBody": "Kör {{command}} för att fylla demomarknader.",
+      "defaultFocus": "Detaljhandelns trendintelligens",
+      "loading": "Laddar trenddata…",
+      "ctaTitle": "Se ShopperMind med ditt köpcentrums data",
+      "ctaBody": "När det är anslutet till Stelthion korrelerar ShopperMind de här trenderna med verklig besökstrafik från ditt köpcentrum - och visar vilka trender som redan drar trafik.",
+      "bookDemo": "Boka en demo"
+    },
+    "section": {
+      "expand": "Expandera",
+      "collapse": "Förminska",
+      "sources": "Källor"
+    },
+    "horizons": {
+      "short": {
+        "label": "Kort sikt",
+        "timespan": "2026",
+        "subtitle": "Omedelbara möjligheter",
+        "verb": "Fånga"
+      },
+      "medium": {
+        "label": "Medellång sikt",
+        "timespan": "2027–2029",
+        "subtitle": "Trender att förbereda sig för",
+        "verb": "Förbered"
+      },
+      "long": {
+        "label": "Lång sikt",
+        "timespan": "2030+",
+        "subtitle": "Branschformande skiften",
+        "verb": "Omstrukturera"
+      },
+      "tracked_one": "{{count}} fenomen följs",
+      "tracked_other": "{{count}} fenomen följs",
+      "emptyShort": "Inga kortsiktiga signaler spåras ännu.",
+      "emptyMedium": "Medellånga trender byggs fortfarande.",
+      "emptyLong": "Långsiktiga fenomen byggs fortfarande."
+    },
+    "megaScenario": {
+      "label": "Huvudvy",
+      "finlandStructuralTitle": "Huvudvy: Finlands strukturella omställning",
+      "pathBlocks": {
+        "macro": "Makroekonomi",
+        "consumer": "Konsument",
+        "retail": "Handel",
+        "property": "Fastighetsmarknad",
+        "mallImpact": "Påverkan på köpcentrum"
+      },
+      "pathToneNeutral": "Neutral",
+      "pathToneDark": "Mörk",
+      "pathToneBright": "Ljus",
+      "evidenceLabel": "Bevis",
+      "keyNumbersLabel": "Nyckeltal"
+    },
+    "macro": {
+      "title": "Ekonomiska indikatorer",
+      "loading": "Laddar indikatorer…",
+      "updated": "uppdaterad {{date}}",
+      "noData": "ingen data",
+      "onlyFinland": "Live-makroindikatorer endast tillgängliga för Finland för närvarande.",
+      "notSupported": "Makroindikatorer är inte ännu tillgängliga för denna marknad."
+    },
+    "header": {
+      "marketLabel": "Marknad",
+      "titleBrand": "ShopperMind",
+      "titleSuffix": "Trendöversikt"
+    },
+    "actions": {
+      "general": "Åtgärdsförslag för fastigheter",
+      "perMall": "Fastighetsspecifika rekommendationer",
+      "selectProperty": "Välj fastighet",
+      "kpisLabel": "Nyckelmått",
+      "kpiTarget": "Mål",
+      "noMallSelected": "Välj en fastighet för att se rekommendationerna.",
+      "ownProperties": "Egna fastigheter",
+      "competitorProperties": "Konkurrenter (benchmark)",
+      "competitorTag": "Konkurrent"
+    },
+    "curatedTrends": {
+      "label": "Analytiker-trender",
+      "tracked_one": "{{count}} kuraterad trend",
+      "tracked_other": "{{count}} kuraterade trender",
+      "confidence": "Tillförlitlighet {{score}}/100",
+      "confidenceTooltip": "Tillförlitlighet baserad på källöverenskommelse och aktualitet",
+      "mallImplications": "Vad det betyder för fastigheten",
+      "mallImplicationsFor": "Vad det betyder för {{mallName}}",
+      "opportunities": "Möjligheter",
+      "campaigns": "Kampanjidéer",
+      "playAtMall": "Använd denna trend",
+      "draftCampaign": "Skissa i Kampanjer",
+      "discussCampaign": "Finslipa med assistenten",
+      "marketsNote": "{{- defaultValue}}",
+      "audience": "Målgrupp",
+      "whyNow": "Varför nu",
+      "successMetric": "Mätetal",
+      "channels": "Kanaler"
+    },
+    "mallFormat": {
+      "transit": "Transitnav",
+      "mixedUse": "Servicenav",
+      "destination": "Destination",
+      "all": "Alla format"
+    },
+    "channels": {
+      "app": "App",
+      "screens": "Digitala skärmar",
+      "station": "Stationsområde",
+      "social": "Sociala medier",
+      "signage": "Skyltar",
+      "in-store": "I butik",
+      "event": "Evenemang",
+      "email": "E-post"
+    },
+    "stress": {
+      "title": "Scenariokänslighet: {{mallName}}",
+      "operationalChanges": "Operativa ändringar",
+      "keyRisks": "Nyckelrisker",
+      "sensitivities": "Känslighetsmått",
+      "impact": {
+        "low": "Låg påverkan",
+        "medium": "Medel påverkan",
+        "high": "Hög påverkan"
+      }
     }
   },
   "campaigns": {
@@ -510,6 +1138,107 @@
     "runSimilarScenario": "Kör liknande scenario",
     "campaignHistory": "Kampanjhistorik",
     "visitors": "besökare"
+  },
+  "campaignWorkspace": {
+    "title": "Kampanjer",
+    "subtitle": "Gör ShopperMind-trender till kampanjbriefar som kan testas mot besöks-, POS- och hyresgästdata.",
+    "builder": "Utkast till kampanjbrief",
+    "createBrief": "Skapa testbrief",
+    "assistantPrompt": "Skapa en testkampanjbrief för {{mall}}. Zon: {{zone}}. Målgrupp: {{audience}}. Kategori: {{category}}. Föreslagna hyresgäster: {{stores}}. Budget: {{budget}}. Längd: {{duration}}. Använd ShopperMinds hyresgästeffekt {{impact}} som bakgrund om den finns.",
+    "flowTitle": "Arbetsflöde när live-data är ansluten",
+    "aiTitle": "Demo nu, kunddata senare",
+    "aiBody": "En skräddarsydd AI-modell använder endast data som är avgränsad till kundens egen miljö. Demon visar arbetsflödet med seedad data och trenddata, medan samma vy senare kan kopplas till POS-, besöks-, hyresgäst- och kampanjresultat.",
+    "fields": {
+      "mall": {
+        "label": "Fastighet",
+        "value": "Sello eller Mall of Tripla"
+      },
+      "zone": {
+        "label": "Zon",
+        "value": "Vardagsärenden, station, restauranger eller tjänster",
+        "options": {
+          "everyday": "Vardagsärenden",
+          "station": "Station",
+          "restaurants": "Restauranger",
+          "services": "Tjänster"
+        }
+      },
+      "audience": {
+        "label": "Målgrupp",
+        "value": "Vardagsbesökare, familjer eller wellnesskunder",
+        "options": {
+          "daily": "Vardagsbesökare",
+          "families": "Familjer",
+          "wellness": "Wellnesskunder",
+          "commuters": "Pendlare"
+        }
+      },
+      "category": {
+        "label": "Kategori",
+        "value": "ShopperMind-föreslagen kategori"
+      },
+      "stores": {
+        "label": "Föreslagna hyresgäster",
+        "empty": "Inga hyresgäster valda"
+      },
+      "budget": {
+        "label": "Budget",
+        "value": "Lätt / standard / bred",
+        "options": {
+          "light": "Lätt",
+          "standard": "Standard",
+          "broad": "Bred"
+        }
+      },
+      "duration": {
+        "label": "Längd",
+        "value": "7, 14 eller 30 dagar",
+        "options": {
+          "7": "7 dagar",
+          "14": "14 dagar",
+          "30": "30 dagar"
+        }
+      }
+    },
+    "kpis": {
+      "visits": {
+        "label": "Besöksprognos",
+        "value": "+3,8 %",
+        "hint": "Demoestimat för vald zon"
+      },
+      "sales": {
+        "label": "Försäljningssignal",
+        "value": "+2,4 %",
+        "hint": "POS-koppling i full implementation"
+      },
+      "tenants": {
+        "label": "Hyresgäster",
+        "value": "12",
+        "hint": "Matchade deltagare från seedad data"
+      }
+    },
+    "steps": {
+      "brief": {
+        "title": "Brief",
+        "body": "Välj trend, fastighet, zon och målgrupp."
+      },
+      "model": {
+        "title": "Modell",
+        "body": "Beräkna förväntad besöks- och försäljningseffekt."
+      },
+      "approval": {
+        "title": "Godkännande",
+        "body": "Bekräfta budget, kanaler och hyresgäster."
+      },
+      "live": {
+        "title": "Uppföljning",
+        "body": "Följ besök, inlösen och avvikelser."
+      },
+      "learning": {
+        "title": "Lärdomar",
+        "body": "Spara uppmätt effekt för framtida kampanjer."
+      }
+    }
   },
   "properties": {
     "myProperties": "Mina fastigheter",
@@ -545,7 +1274,14 @@
     "notFound": "Fastighet hittades ej",
     "locationLoading": "Laddar platsinformation...",
     "locationNotAvailable": "Plats- och tillgänglighetsdata är ännu ej tillgänglig för denna fastighet.",
-    "eventsNotAvailable": "Evenemangskalendern är ännu ej tillgänglig för denna fastighet."
+    "eventsNotAvailable": "Evenemangskalendern är ännu ej tillgänglig för denna fastighet.",
+    "propertyBody": "Granska operativ prestanda, hyresgästmix, lägeskontext och stödjande signaler på fastighetsnivå i samma visuella system som ShopperMind.",
+    "selloTenantLocations": {
+      "title": "Sellos hyresgästlägen",
+      "body": "Officiell hyresgästlista grupperad efter P1 och butiksvåningarna 1-4.",
+      "floor": "Våning {{floor}}",
+      "source": "Källa:"
+    }
   },
   "kpi": {
     "currentVisitors": "Aktuella besökare",
@@ -586,7 +1322,7 @@
   "weather": {
     "title": "Analys av väderpåverkan",
     "loading": "Laddar väderdata...",
-    "serviceUnavailable": "Vädertjänsten otillgänglig — visar uppskattade data",
+    "serviceUnavailable": "Vädertjänsten otillgänglig. Visar uppskattade data.",
     "temperature": "Temperatur",
     "precipitation": "Nederbörd",
     "comfortIndex": "Komfortindex",
@@ -610,21 +1346,21 @@
       "excellent": "Utmärkt för shopping",
       "great": "Bra dag för köpcentret",
       "good": "Bra shoppingväder",
-      "outdoors": "Fint utomhusväder — färre besökare förväntas"
+      "outdoors": "Fint utomhusväder, färre besökare förväntas"
     },
     "impact": {
       "indoor": "🌧️ Vädret driver besökare inomhus",
       "mild": "☀️ Måttlig väderpåverkan på besökarantalet",
       "outdoor": "🌤️ Optimala utomhusförhållanden",
-      "quiet": "🌙 Lugn period — lägre besökarantal förväntas",
-      "normal": "🌥️ Typiska förhållanden — normalt besöksmönster"
+      "quiet": "🌙 Lugn period, lägre besökarantal förväntas",
+      "normal": "🌥️ Typiska förhållanden, normalt besöksmönster"
     },
     "forecastMsg": {
       "significant": "{{condition}} – betydande inomhustrafik på grund av vädret",
       "moderate": "{{description}} – besökarantalet förväntas öka",
       "outdoor": "Utmärkt utomhusväder kan minska köpcentrumbesöken",
       "stable": "{{description}} – stabilt besökarantal förväntas",
-      "coldQuiet": "Kallt eller mörkt väder — lugnare period för köpcentret"
+      "coldQuiet": "Kallt eller mörkt väder, lugnare period för köpcentret"
     },
     "condition": {
       "Cloudy": "Mestadels molnigt",
@@ -663,7 +1399,17 @@
       "foodCourt": "Restaurangavdelningen"
     },
     "estimated": "Uppskattat",
-    "noData": "Ingen räknardata uppladdad ännu"
+    "noData": "Ingen räknardata uppladdad ännu",
+    "floorplanAlt": {
+      "ground": "Generisk bottenplanritning för stort köpcentrum",
+      "upper": "Generisk övre planritning för stort köpcentrum"
+    },
+    "entrances": {
+      "west": "Västra ingången",
+      "central": "Kollektivtrafikingång",
+      "east": "Östra ingången",
+      "transit": "Parkeringsingång"
+    }
   },
   "topbar": {
     "concierge": "Stelthion Concierge",
@@ -701,22 +1447,32 @@
     }
   },
   "concierge": {
+    "viewContext": {
+      "shoppermindTrendChip": "Trend: {{label}}",
+      "clear": "Rensa kontext"
+    },
+    "greetings": {
+      "shoppermindTrend": "Jag ser att du tittar på trenden *{{label}}* ({{state}}). Vill du att jag skissar en kampanjidé för den? Jag kan också föreslå ett par olika vinklar."
+    },
     "newConversation": "Ny konversation",
     "recent": "Senaste",
     "loading": "Laddar...",
     "noConversations": "Inga konversationer ännu. Starta en ny!",
     "viewAll": "Visa alla konversationer",
-    "selectAgent": "Välj agent",
-    "chooseAgent": "Välj den bästa agenten för din uppgift:",
+    "selectAgent": "Välj assistent",
+    "chooseAgent": "Välj den bästa assistenten för din uppgift:",
     "notSure": "Osäker?",
-    "generalAssistantSuggestion": "Börja med Generell assistent — den kan hjälpa till med alla frågor och dirigerar automatiskt till specialiserade agenter vid behov.",
+    "generalAssistantSuggestion": "Börja med Generell assistent. Den kan hjälpa till med alla frågor och dirigerar automatiskt till specialiserade assistenter vid behov.",
     "startWithGeneral": "Börja med Generell assistent",
     "startConversation": "Starta en konversation",
     "startConversationDesc": "Fråga mig om försäljning, besöksflöde, evenemang, parkering eller trender. Jag finns här för att hjälpa dig fatta bättre beslut för ditt köpcentrum.",
     "askAnything": "Fråga mig vad som helst...",
     "typeMessage": "Skriv ditt meddelande...",
-    "agentLabel": "Agent",
-    "noBackendStub": "Detta är en UI-förhandsvisning — AI-backend är ännu ej ansluten. När Concierge-tjänsten är konfigurerad svarar jag i realtid.",
+    "agentLabel": "Assistent",
+    "assistantSelected": "Assistent vald",
+    "confidence": "{{percent}} % säker",
+    "alternativeAssistants": "Alternativa assistenter",
+    "noBackendStub": "Detta är en UI-förhandsvisning. AI-backend är ännu ej ansluten. När Concierge-tjänsten är konfigurerad svarar jag i realtid.",
     "select": "Välj",
     "bestFor": "Bäst för:",
     "agents": {
@@ -764,7 +1520,7 @@
       "morning": "God morgon!",
       "afternoon": "God dag!",
       "evening": "God kväll!",
-      "intro": "Jag är {{propertyName}} — fråga mig vad som helst!"
+      "intro": "Jag är {{propertyName}}. Fråga mig vad som helst!"
     },
     "quickAction": {
       "briefing": "Dagens briefing",
@@ -868,11 +1624,15 @@
     },
     "assistants": {
       "label": "Assistenter",
-      "description": "AI-agenter för köpcentrumdrift"
+      "description": "AI-assistenter för köpcentrumdrift"
     },
     "shoppermind": {
       "label": "ShopperMind",
       "description": "Trender och prognoser"
+    },
+    "space-optimizer": {
+      "label": "Ytoptimering",
+      "description": "Trenddrivna rekommendationer för uthyrningsyta"
     },
     "managementCompany": "Förvaltningsbolag",
     "comingSoon": "Kommer snart"
@@ -950,7 +1710,7 @@
     },
     "gdpr": {
       "title": "Integritet & GDPR-efterlevnad",
-      "description": "All spårning är helt anonym. Systemet identifierar individer enbart genom visuellt utseende — ingen ansiktsigenkänning, biometrisk data, ålder, kön eller annan personligt identifierbar information bearbetas eller lagras. I enlighet med EU:s GDPR-förordning."
+      "description": "All spårning är helt anonym. Systemet identifierar individer enbart genom visuellt utseende. Ingen ansiktsigenkänning, biometrisk data, ålder, kön eller annan personligt identifierbar information bearbetas eller lagras. I enlighet med EU:s GDPR-förordning."
     },
     "future": {
       "llmAnalysis": "AI-drivna insikter",
@@ -1029,5 +1789,84 @@
     "coverSubtitle": "Våning: {{floor}} · Klockan: {{hour}}:00",
     "executiveSummary": "Sammanfattning",
     "keyHighlights": "Viktiga observationer"
+  },
+  "spaceOptimizer": {
+    "title": "Yt-Optimerare",
+    "subtitle": "Konkreta hyresytsförändringar drivna av ShopperMind-trender och operativa signaler",
+    "futureConnection": {
+      "title": "ShopperMind-koppling planerad",
+      "body": "I nästa fas blir en trendsignal en zon- och kategorihypotes vars effekt uppskattas med besöks-, försäljnings-, hyres- och avtalsdata."
+    },
+    "header": {
+      "summary": "{{count}} förslag över {{zones}} zoner",
+      "summary_other": "{{count}} förslag över {{zones}} zoner",
+      "drivenBy": "Drivs av {{count}} trend",
+      "drivenBy_other": "Drivs av {{count}} trender",
+      "lastRun": "Genererad {{date}}"
+    },
+    "actions": {
+      "EXPAND": "Expandera",
+      "CONVERT": "Konvertera",
+      "MAINTAIN": "Behåll",
+      "SUNSET": "Avveckla",
+      "expandLong": "Utöka ytan",
+      "convertLong": "Konvertera till ny kategori",
+      "maintainLong": "Behåll: ingen åtgärd",
+      "sunsetLong": "Avveckla och hyr ut igen"
+    },
+    "filters": {
+      "all": "Alla",
+      "byAction": "Åtgärd",
+      "byTrend": "Trend",
+      "sortByConfidence": "Högsta konfidens",
+      "sortByUplift": "Störst lyft",
+      "sortByLeaseEnd": "Avtal löper ut först"
+    },
+    "card": {
+      "currentCategory": "Nuvarande",
+      "proposedCategory": "Föreslagen",
+      "drivingTrends": "Drivkrafter",
+      "confidence": "Konfidens",
+      "projectedUplift": "Prognosticerat lyft",
+      "projectedAnnual": "~{{value}}/år",
+      "leaseEnds": "Avtal slutar {{date}}",
+      "noLease": "Ingen avtalsinfo",
+      "tenant": "Hyresgäst",
+      "viewPhenomenon": "Visa trend",
+      "dismiss": "Avvisa",
+      "accept": "Markera för uppföljning",
+      "projection": "prognos: riktning, ej garanti"
+    },
+    "floorplan": {
+      "title": "Planritning",
+      "legend": "Förklaring",
+      "floor": "Våning {{floor}}",
+      "noZones": "Inga zoner att visa"
+    },
+    "empty": {
+      "title": "Inga förslag ännu",
+      "body": "ShopperMind har inte lyft fram något tydligt yt-förslag för {{mall}} denna cykel. Nästa uppdatering körs dagligen. Återkom imorgon."
+    },
+    "errors": {
+      "load": "Kunde inte ladda Yt-Optimerare: {{message}}",
+      "gated": {
+        "title": "Yt-Optimerare kräver uppgradering",
+        "body": "Funktionen ingår i Realidea Suite-planen. Kontakta din kontoansvarige för att aktivera."
+      }
+    },
+    "demo": {
+      "badge": "Live-demo",
+      "header": "Realidea: Sello",
+      "subtitle": "Vad ShopperMind ser idag, applicerat på Sellos faktiska zonmix",
+      "getAccess": "Få åtkomst",
+      "ctaTitle": "Vill du ha detta för din portfölj?",
+      "ctaBody": "Direktrekommendationer mot dina egna POS-, besökar- och kamerasignaler.",
+      "bookDemo": "Boka demo",
+      "loading": "Laddar förslag..."
+    },
+    "nav": {
+      "label": "Yt-Optimerare",
+      "description": "Trenddrivna hyresytsrekommendationer"
+    }
   }
 }

@@ -8,7 +8,7 @@
 import React from 'react';
 import { MallKPICard } from './ui/MallKPICard';
 import { Card } from '@/components/ui/card';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 
@@ -20,21 +20,24 @@ interface PropertyKPIsProps {
   dwellDelta: number;
   conversionRate: number | null;
   conversionDelta: number;
-  alerts: any[];
+  alerts: PropertyKPIAlert[];
   hasRealData?: boolean;
   isEstimated?: boolean;
+}
+
+interface PropertyKPIAlert {
+  level: 'warning' | 'info';
+  message: string;
 }
 
 export function PropertyKPIs({
   currentVisitors,
   deltaVsPlan,
-  weatherImpact,
   dwellTime,
   dwellDelta,
   conversionRate,
   conversionDelta,
   alerts,
-  hasRealData,
   isEstimated,
 }: PropertyKPIsProps) {
   const { t } = useTranslation('mall');
@@ -96,22 +99,26 @@ export function PropertyKPIs({
         />
       </div>
 
-      {/* Active Alerts - keeping old Card design as it has special alert list UI */}
-      <Card className="p-4 bg-bo-glass border-2 border-bo-neutral-300/60 shadow-bo-glass-strong backdrop-blur-xl">
-        <div className="flex items-center gap-2 text-sm font-medium text-bo-neutral-600 tracking-wide">
+      <Card className="bo-surface-subtle bo-surface-hover relative overflow-hidden rounded-xl border-2 border-bo-neutral-200/60 p-6 shadow-bo-glass-strong backdrop-blur-xl">
+        <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-bo-warning via-bo-primary-400 to-bo-success" />
+        <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-bo-neutral-600">
           <AlertCircle className="h-4 w-4" />
           <span>{t('kpi.activeAlerts')}</span>
         </div>
-        <div className="mt-2 space-y-2">
+        <div className="mt-4 space-y-3">
           {alerts.length === 0 && (
             <div className="flex items-center gap-2 text-sm">
-              <span>🟢</span>
+              <CheckCircle2 className="h-4 w-4 text-bo-success" />
               <span className="text-bo-success-dark font-medium">{t('kpi.allSystemsNormal')}</span>
             </div>
           )}
           {alerts.map((alert, i) => (
             <div key={i} className="flex items-center gap-2 text-sm">
-              <span>{alert.level === 'warning' ? '🟡' : '🟢'}</span>
+              {alert.level === 'warning' ? (
+                <AlertCircle className="h-4 w-4 text-bo-warning" />
+              ) : (
+                <CheckCircle2 className="h-4 w-4 text-bo-success" />
+              )}
               <span
                 className={cn(
                   'font-medium',

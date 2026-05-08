@@ -1,10 +1,10 @@
 /**
  * Weather 5-day forecast API
- * Returns simulated forecast for Ideapark Lempäälä.
+ * Returns simulated forecast for the requested mall location.
  */
 
 import { NextResponse } from 'next/server';
-import { getSeason } from '@/lib/weather/utils';
+import { getMallCoordinates, getSeason } from '@/lib/weather/utils';
 
 const SEASON_TEMP: Record<string, number> = {
   spring: 8,
@@ -22,7 +22,8 @@ const CONDITIONS = [
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const mallId = searchParams.get('mallId') || 'ideapark';
+  const mallId = searchParams.get('mallId') || 'ideapark-lempaala';
+  const coords = getMallCoordinates(mallId);
 
   const now = new Date();
   const season = getSeason(now);
@@ -56,7 +57,7 @@ export async function GET(request: Request) {
   });
 
   return NextResponse.json(
-    { mallId, forecast, source: 'Stelthion — Ideapark Lempäälä (61.316°N, 23.757°E)' },
+    { mallId, forecast, source: `Stelthion — ${coords.label || mallId} (${coords.lat}°N, ${coords.lon}°E)` },
     { headers: { 'Cache-Control': 'public, max-age=3600' } }
   );
 }

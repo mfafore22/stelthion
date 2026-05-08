@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
+import { isMallId } from '@/lib/mall/ids';
+import { getSelloTenantSummary, SELLO_TENANT_UPDATED_AT } from '@/lib/data/selloTenantMix';
 
 const IDEAPARK_DATA = {
-  id: 'ideapark',
+  id: 'ideapark-lempaala',
   summary: {
     mall_name: 'Ideapark Lempäälä',
     city: 'Lempäälä',
@@ -65,7 +67,7 @@ export async function GET(
   const { mallId } = await params;
 
   // Try static data first (ideapark)
-  if (mallId === 'ideapark') {
+  if (isMallId(mallId, 'ideapark-lempaala')) {
     const data = {
       ...IDEAPARK_DATA,
       summary: {
@@ -74,6 +76,29 @@ export async function GET(
       },
     };
     return NextResponse.json({ success: true, data });
+  }
+
+  if (isMallId(mallId, 'realidea-sello')) {
+    const tenant = getSelloTenantSummary();
+    return NextResponse.json({
+      success: true,
+      data: {
+        id: 'realidea-sello',
+        summary: {
+          mall_name: 'Sello',
+          city: 'Espoo',
+          total_shops: tenant.totalShops,
+          collection_date: SELLO_TENANT_UPDATED_AT,
+          data_source: 'Sello official tenant listings',
+          shops_by_retailer_type: tenant.categoryCounts,
+          shops_by_category: tenant.categoryCounts,
+          retailer_type_percentages: tenant.retailerPercentages,
+          top_categories: tenant.topCategories.slice(0, 7),
+          shops_by_floor: tenant.floorCounts,
+        },
+        shops: null,
+      },
+    });
   }
 
   // Try database for other malls

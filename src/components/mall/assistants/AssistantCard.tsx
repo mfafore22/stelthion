@@ -63,14 +63,12 @@ const colorClasses = {
 };
 
 export function AssistantCard({
-  id,
   name,
   nameFi,
   description,
   descriptionFi,
   icon: Icon,
   color,
-  mallId,
 }: AssistantCardProps) {
   const { i18n } = useTranslation();
   const colors = colorClasses[color];
@@ -78,9 +76,8 @@ export function AssistantCard({
 
   return (
     <Card className={cn(
-      'p-6 bg-bo-glass border-2 shadow-bo-glass-strong backdrop-blur-xl transition-all duration-300',
+      'bo-surface-hover p-6 bg-bo-glass border-2 shadow-bo-glass-strong backdrop-blur-xl',
       colors.border,
-      'hover:shadow-bo-glass-stronger hover:-translate-y-1',
       'opacity-75' // Reduced opacity to indicate not yet active
     )}>
       {/* Icon and Title */}

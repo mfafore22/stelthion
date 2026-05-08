@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { getIdeaparkUpcomingEvents } from '@/lib/data/ideaparkEvents';
+import { getRealideaUpcomingEvents } from '@/lib/data/realideaEvents';
+import { canonicalizeMallId, isMallId } from '@/lib/mall/ids';
 
 export async function GET(
   _request: Request,
@@ -12,15 +14,22 @@ export async function GET(
   }
 
   const { mallId } = await params;
+  const canonicalMallId = canonicalizeMallId(mallId);
 
-  if (mallId.startsWith('ideapark')) {
+  if (isMallId(mallId, 'ideapark-lempaala')) {
     const data = getIdeaparkUpcomingEvents();
     return NextResponse.json(data, {
       headers: { 'Cache-Control': 'public, max-age=3600' },
     });
   }
 
-  // Return empty events for malls without data yet
+  const realideaEvents = canonicalMallId ? getRealideaUpcomingEvents(canonicalMallId) : null;
+  if (realideaEvents) {
+    return NextResponse.json(realideaEvents, {
+      headers: { 'Cache-Control': 'public, max-age=3600' },
+    });
+  }
+
   return NextResponse.json({
     mallId,
     venues: [],

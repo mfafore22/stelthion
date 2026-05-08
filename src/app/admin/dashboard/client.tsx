@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import '@/lib/i18n';
 import { Map, ClipboardList, UserPlus } from 'lucide-react';
+import { useAdminMall } from '@/lib/hooks/useAdminMall';
 
 interface Props {
   zoneCount: number;
@@ -15,6 +16,7 @@ interface Props {
 
 export function AdminDashboardClient({ zoneCount, cameraCount, pending, processing, complete }: Props) {
   const { t } = useTranslation('admin');
+  const { activeMallId } = useAdminMall();
 
   return (
     <div className="p-6 max-w-4xl">
@@ -32,7 +34,9 @@ export function AdminDashboardClient({ zoneCount, cameraCount, pending, processi
       </div>
 
       <div className="space-y-3">
-        <QuickLink href="/admin/floorplan/ideapark" icon={Map} label={t('dashboard.editFloorPlan')} />
+        {activeMallId && (
+          <QuickLink href={`/admin/floorplan/${activeMallId}`} icon={Map} label={t('dashboard.editFloorPlan')} />
+        )}
         <QuickLink href="/admin/jobs" icon={ClipboardList} label={t('dashboard.manageJobs')} />
         <QuickLink href="/admin/users" icon={UserPlus} label="User Management" />
       </div>

@@ -1,0 +1,2085 @@
+{
+  "id": "finland-suuri-murros",
+  "country": "FI",
+  "timespan": "2030+",
+  "updatedAt": "2026-05-03",
+  "i18n": {
+    "fi": {
+      "title": "Suomen suuri murros",
+      "intro": "Suomeen kohdistuu yhtä aikaa hidas talouskasvu, heikko kuluttajaluottamus, väestön ikääntyminen, matala syntyvyys ja maahanmuuton kasvava merkitys. Tämä ei ole yksittäinen sokki vaan pitkä rakennemuutos, joka muuttaa kysynnän, työvoiman, alueellisen markkinan ja kaupan logiikan pysyvästi vuoteen 2035 mennessä.",
+      "redString": "Punainen lanka kymmenistä lähteistä: kuluttajan varovaisuudesta tulee pysyvä ilmiö, ja kaupan voittajia ovat ne kiinteistöt, jotka yhdistävät hintatietoisuuden, luotettavuuden, datakyvykkyyden ja uudet palvelumallit samaan kokonaisuuteen. Murros ei ratkea yhdellä polulla, vaan kiinteistön on kestettävä kaikki kolme.",
+      "pathsLabel": "Kolme polkua vuoteen 2035",
+      "paths": [
+        {
+          "id": "a",
+          "title": "Polku A: Hidas normalisoituminen",
+          "tone": "neutraali",
+          "summary": "Talous kasvaa hitaasti mutta välttää uuden syvän iskun. Kuluttajan varovaisuus juurtuu pysyvästi.",
+          "macro": "Bruttokansantuote kasvaa 0,5–1,5 prosenttia vuodessa 2026–2030. Inflaatio painuu 1,5–2 prosenttiin, korot laskevat asteittain, reaalipalkat alkavat kasvaa hitaasti. Velkasuhde tasaantuu 96–98 prosenttiin bruttokansantuotteesta, mutta ei korjaudu, mikä jättää julkisen talouden haavoittuvaksi seuraavalle ulkoiselle sokille.",
+          "consumer": "Luottamus paranee asteittain huhtikuun 2026 lukemasta -12,5 lähemmäs pitkän ajan keskiarvoa -2,8. Vuosien 2024–2026 varovaisuus juurtuu kuitenkin syvään: hintavertailu pysyy aggressiivisena, suuret hankinnat suunnitellaan kuukausia etukäteen, kanta-asiakasohjelmiin osallistuminen kasvaa ja kotitaloudet ylläpitävät korkeampaa säästöastetta kuin ennen.",
+          "retail": "Volyymit palautuvat 2027–2028, mutta vain hitaasti. Marginaalit pysyvät tiukkoina hintavertailun takia. Voittajia ovat vahvat hintamielikuvat, helppo monikanavainen asiointi, vahva asiakasdata ja personointi. Häviäjiä on keskihintainen erikoiskauppa ilman selkeää erottautumista, koska sen yläpuolelta puristaa premium ja alapuolelta edullisuus.",
+          "property": "Liikekiinteistömarkkina on vakaa mutta vaisu. Vuokrat seuraavat indeksiä, korotuspainetta ei ole. Tuottovaateet pysyvät ennallaan, ykkössijaintien arvostus säilyy, mutta toissijaiset sijainnit kärsivät hitaasti, koska kävijävolyymit eivät palaa vuosien 2018–2019 tasolle. Peruskorjausinvestoinnit ovat järkeviä, uusi rakentaminen pysyy vaisuna.",
+          "mallImpact": "Kauppakeskukset säilyttävät asemansa, mutta vuokralaisrakenteen on muututtava: lisää palveluita, terveyttä, ravintoloita ja kahviloita. Tyypillisesti 5–10 prosenttia vuokrattavasta pinta-alasta siirtyy ei-perinteisiin käyttötarkoituksiin kuten kuntosaleihin, klinikoihin, yhteistyötiloihin ja kirjastoihin. Tapahtumat ja yhteisöllisyys vahvistuvat, koska niillä on korkea kytkös ostotodennäköisyyteen.",
+          "keyNumbers": [
+            {
+              "label": "BKT-kasvu",
+              "value": "0,5–1,5 %",
+              "hint": "vuodessa 2026–2030"
+            },
+            {
+              "label": "Kuluttajaluottamus",
+              "value": "−12 → −3",
+              "hint": "asteittainen palautuminen"
+            },
+            {
+              "label": "Velkasuhde",
+              "value": "96–98 %",
+              "hint": "BKT:sta, tasaantuminen"
+            },
+            {
+              "label": "Vuokrausaste",
+              "value": "vakaa",
+              "hint": "ei painetta alas"
+            },
+            {
+              "label": "Erikoiskaupan kato",
+              "value": "−5 %",
+              "hint": "myymälöitä 2030 mennessä"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "BKT, volyymi-indeksi",
+              "unit": "index",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 99
+                },
+                {
+                  "p": "2025",
+                  "v": 100
+                },
+                {
+                  "p": "2026",
+                  "v": 101
+                },
+                {
+                  "p": "2027",
+                  "v": 102.5
+                },
+                {
+                  "p": "2028",
+                  "v": 104
+                },
+                {
+                  "p": "2029",
+                  "v": 105.5
+                },
+                {
+                  "p": "2030",
+                  "v": 107
+                }
+              ]
+            },
+            {
+              "label": "Kuluttajaluottamus",
+              "unit": "saldo",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": -10
+                },
+                {
+                  "p": "2025",
+                  "v": -11
+                },
+                {
+                  "p": "2026",
+                  "v": -12
+                },
+                {
+                  "p": "2027",
+                  "v": -8
+                },
+                {
+                  "p": "2028",
+                  "v": -5
+                },
+                {
+                  "p": "2029",
+                  "v": -3
+                },
+                {
+                  "p": "2030",
+                  "v": -3
+                }
+              ]
+            },
+            {
+              "label": "Velkasuhde, % BKT:sta",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 80
+                },
+                {
+                  "p": "2025",
+                  "v": 84
+                },
+                {
+                  "p": "2026",
+                  "v": 88
+                },
+                {
+                  "p": "2027",
+                  "v": 93
+                },
+                {
+                  "p": "2028",
+                  "v": 96
+                },
+                {
+                  "p": "2029",
+                  "v": 97
+                },
+                {
+                  "p": "2030",
+                  "v": 97
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "title": "Polku B: Julkisen talouden sokki",
+          "tone": "synkkä",
+          "summary": "Markkinat pakottavat Suomen rajuun sopeutukseen. Sosiaaliturvan ja kuntatalouden leikkaukset osuvat suoraan kulutukseen.",
+          "macro": "Velkasuhde lähestyy 100 prosenttia bruttokansantuotteesta ja korkomenot syövät julkisia menoja. Joko markkinapaine, luottoluokituksen lasku tai EU:n vakaussopimuksen tiukennus pakottaa uuden hallituksen 8–10 miljardin euron kumulatiiviseen sopeutuspakettiin vuosille 2027–2030. Sopeutus tehdään suurimmaksi osaksi menoleikkauksin, koska kuluttajaverojen korotuksilla on suora osuma jo heikkoon kysyntään.",
+          "consumer": "Sosiaaliturvan leikkaukset osuvat ensin: työttömyysturva 15–20 prosenttia alas, asumistuki 10–15 prosenttia alas, toimeentulotuen myöntämiskriteerit tiukkenevat, lapsilisien ja eläkeindeksien tarkistukset jäädytetään. Pienituloisen kolmanneksen käytettävissä olevat tulot supistuvat reaalisesti 10–20 prosenttia. Kuntien hoiva- ja terveysmaksut nousevat samanaikaisesti, jolloin etenkin yksinasuvien seniorien arjen kuluerä kasvaa.",
+          "retail": "Harkinnanvaraiset menot, eli vaatteet, viihde ja ulkona syöminen, supistuvat 15–25 prosenttia. Päivittäistavara siirtyy halpaketjuihin ja omiin merkkeihin. Käytettyjen tuotteiden myynti kasvaa 30–40 prosenttia, korjauspalveluiden kysyntä lisääntyy, vuokra- ja jakamismallit yleistyvät. Maksujen myöhästymiset ja velkakierre kasvavat, mikä heikentää kuluttajaluottoja myöntäviä toimijoita.",
+          "property": "Liikekiinteistöjen tuottovaateet nousevat 50–100 korkopistettä, mikä tarkoittaa noin 0,5–1,0 prosenttiyksikköä korkeampaa tuottovaadetta. Toissijaisten sijaintien arvostus laskee 15–25 prosenttia. Pääkaupunkiseudun ykkössijainnit kestävät, mutta maakuntien aluekeskukset kärsivät rajusti, koska julkisen sektorin työpaikkojen 15 000–25 000 vähennys osuu juuri sinne. Rahoituksen saatavuus heikkenee ja jälleenrahoitus kallistuu.",
+          "mallImpact": "Vuokrausaste laskee 5–10 prosenttiyksikköä, tyhjät tilat näkyvät käytävillä. Vuokrasopimusten kesto lyhenee 5–7 vuodesta 2–3 vuoteen, liikevaihtosidonnaiset vuokrat yleistyvät kiinteiden sijaan. Erikoiskauppa ja muoti karsiutuvat aggressiivisesti, kun taas päivittäistavara, terveyspalvelut, kierrätys ja edullisuuspainotteiset konseptit nousevat ankkureiksi. Väliaikaiskonseptit täyttävät tyhjiä liiketiloja. Kauppakeskuksesta tulee yhteisötila ja palvelukeskus, ei pelkkä ostospaikka.",
+          "keyNumbers": [
+            {
+              "label": "BKT-kehitys",
+              "value": "−1 → +0,5 %",
+              "hint": "katkonainen 2027–2030"
+            },
+            {
+              "label": "Kuluttajaluottamus",
+              "value": "−18",
+              "hint": "uusi pohja 2028"
+            },
+            {
+              "label": "Velkasuhde",
+              "value": "100 % → 90 %",
+              "hint": "pakkosopeutus"
+            },
+            {
+              "label": "Vuokrausaste",
+              "value": "−5…−10 %-yks",
+              "hint": "tyhjät tilat näkyvät"
+            },
+            {
+              "label": "Sopeutuspaketti",
+              "value": "8–10 mrd €",
+              "hint": "kumulatiivinen 2027–2030"
+            },
+            {
+              "label": "Pienituloisten tulonalennus",
+              "value": "10–20 %",
+              "hint": "reaalisesti"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "BKT, volyymi-indeksi",
+              "unit": "index",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 99
+                },
+                {
+                  "p": "2025",
+                  "v": 100
+                },
+                {
+                  "p": "2026",
+                  "v": 101
+                },
+                {
+                  "p": "2027",
+                  "v": 100
+                },
+                {
+                  "p": "2028",
+                  "v": 99
+                },
+                {
+                  "p": "2029",
+                  "v": 99.5
+                },
+                {
+                  "p": "2030",
+                  "v": 100.5
+                }
+              ]
+            },
+            {
+              "label": "Kuluttajaluottamus",
+              "unit": "saldo",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": -10
+                },
+                {
+                  "p": "2025",
+                  "v": -11
+                },
+                {
+                  "p": "2026",
+                  "v": -12
+                },
+                {
+                  "p": "2027",
+                  "v": -16
+                },
+                {
+                  "p": "2028",
+                  "v": -18
+                },
+                {
+                  "p": "2029",
+                  "v": -15
+                },
+                {
+                  "p": "2030",
+                  "v": -12
+                }
+              ]
+            },
+            {
+              "label": "Velkasuhde, % BKT:sta",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 80
+                },
+                {
+                  "p": "2025",
+                  "v": 84
+                },
+                {
+                  "p": "2026",
+                  "v": 88
+                },
+                {
+                  "p": "2027",
+                  "v": 95
+                },
+                {
+                  "p": "2028",
+                  "v": 100
+                },
+                {
+                  "p": "2029",
+                  "v": 96
+                },
+                {
+                  "p": "2030",
+                  "v": 90
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "title": "Polku C: Uusi kasvuarkkitehtuuri",
+          "tone": "valoisa",
+          "summary": "Tuottavuus, työperäinen maahanmuutto ja vihreä siirtymä yhdistyvät. Suomi nousee 2,5–3,5 prosentin kasvu-uralle 2030-luvulla.",
+          "macro": "Kolme tekijää yhdistyy: tuottavuusinvestoinnit dataan, ohjelmistoihin ja automaatioon tuottavat tulosta, työperäinen maahanmuutto kasvaa 30 000–40 000 hengellä vuosittain, ja vihreä siirtymä synnyttää uutta teollisuutta vetytaloudessa, akkukemikaaleissa ja biotaloudessa. Bruttokansantuote kasvaa 2,5–3,5 prosenttia vuodessa 2030-luvulla, mikä on selvästi Suomen Pankin perusskenaarion 1,8 prosentin yläpuolella.",
+          "consumer": "Maahanmuuton ansiosta työikäinen väestö pysähtyy supistumasta ja kääntyy lievään kasvuun. Nuorten aikuisten 25–39 ikäluokka monimuotoistuu, kosmopolisoituu ja kuluttaa palveluja aiempaa enemmän. Aktiivisten seniorien 65–79 ikäluokka on hyvin koulutettu ja maksaa palveluista. Polarisaatio jatkuu, mutta yläpää kasvaa nopeammin. Vastuullisuus ja kotimaisuus arvotetaan korkeammalle, hintavetoisuus kevenee.",
+          "retail": "Palvelut kasvavat tavarakulutusta nopeammin. Terveys, hyvinvointi, koulutus ja kokemukset ottavat kuluttajan euroista entistä isomman osuuden. Digitaaliset palvelut sulautuvat fyysiseen asiointiin saumattomasti, ja monikanavaisuus on enää lähtötaso, ei kilpailuetu. Vihreät sertifikaatit kuten LEED Platinum (rakennuksen ympäristöluokitus, korkein taso) ja BREEAM (eurooppalainen vastine) muuttuvat institutionaalisen sijoittajan vähimmäisvaatimukseksi.",
+          "property": "Tuottovaateet laskevat 25–50 korkopistettä, sijoittajakysyntä palaa. Uusi rakentaminen elpyy, erityisesti monikäyttöinen ja palvelukeskeinen. Pääkaupunkiseutu ja kasvavat aluekeskukset Tampere, Turku ja Oulu hyötyvät eniten. Toissijaisten sijaintien arvostuserot pysyvät, mutta vahvat aluekeskukset elpyvät.",
+          "mallImpact": "Kauppakeskuksesta tulee monikäyttöinen kaupunkitila, jossa vähittäiskauppa, palvelut, työtilat ja asuminen ovat lähellä toisiaan. 30–40 prosenttia vuokralaismixistä on ei-perinteistä vähittäiskauppaa: terveyspalveluja, yhteistyötiloja, kuntoilua, kulttuuria. Tapahtumat ja kokemukset muodostavat 15–20 prosenttia kävijäarvosta. Kierrätys ja korjauspalvelut ovat osa normaalia tarjontaa. Kauppakeskuksen oma medianäyttöverkosto ja kanta-asiakasdata muuttuvat merkittäväksi tulonlähteeksi.",
+          "keyNumbers": [
+            {
+              "label": "BKT-kasvu",
+              "value": "2,5–3,5 %",
+              "hint": "vuodessa 2030-luvulla"
+            },
+            {
+              "label": "Kuluttajaluottamus",
+              "value": "+5",
+              "hint": "yli pitkän ajan keskiarvon"
+            },
+            {
+              "label": "Velkasuhde",
+              "value": "82 %",
+              "hint": "laskeva trendi"
+            },
+            {
+              "label": "Työperäinen maahanmuutto",
+              "value": "30–40 000",
+              "hint": "vuodessa"
+            },
+            {
+              "label": "Palvelut vuokralaismixistä",
+              "value": "30–40 %",
+              "hint": "ei-perinteistä retailia"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "BKT, volyymi-indeksi",
+              "unit": "index",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 99
+                },
+                {
+                  "p": "2025",
+                  "v": 100
+                },
+                {
+                  "p": "2026",
+                  "v": 101
+                },
+                {
+                  "p": "2027",
+                  "v": 103
+                },
+                {
+                  "p": "2028",
+                  "v": 106
+                },
+                {
+                  "p": "2029",
+                  "v": 110
+                },
+                {
+                  "p": "2030",
+                  "v": 115
+                }
+              ]
+            },
+            {
+              "label": "Kuluttajaluottamus",
+              "unit": "saldo",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": -10
+                },
+                {
+                  "p": "2025",
+                  "v": -11
+                },
+                {
+                  "p": "2026",
+                  "v": -12
+                },
+                {
+                  "p": "2027",
+                  "v": -5
+                },
+                {
+                  "p": "2028",
+                  "v": 0
+                },
+                {
+                  "p": "2029",
+                  "v": 3
+                },
+                {
+                  "p": "2030",
+                  "v": 5
+                }
+              ]
+            },
+            {
+              "label": "Velkasuhde, % BKT:sta",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 80
+                },
+                {
+                  "p": "2025",
+                  "v": 84
+                },
+                {
+                  "p": "2026",
+                  "v": 88
+                },
+                {
+                  "p": "2027",
+                  "v": 90
+                },
+                {
+                  "p": "2028",
+                  "v": 88
+                },
+                {
+                  "p": "2029",
+                  "v": 85
+                },
+                {
+                  "p": "2030",
+                  "v": 82
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "actionsLabel": "Toimenpide-ehdotukset kiinteistöille",
+      "actionsGeneralLabel": "Kaikkia kiinteistöjä koskevat",
+      "actionsGeneral": [
+        "Rakenna halpa, hyvä ja parempi -valikoimalogiikka, jossa hintamielikuva on jatkuvassa hallinnassa kaikissa kolmessa polussa.",
+        "Lisää toukokuun 2026 energiariski toimintamalliin: seuraa vuokralaisten energia- ja logistiikkalisää, ajoita kampanjat palkka- ja etuusviikoille ja viesti kalliit ostokset matalan riskin päätöksinä.",
+        "Investoi dataan, ohjelmistoihin ja personointiin: Suomen kaupan tuottavuusvaje on juuri täällä, ja tämä investointi tuottaa kaikissa skenaarioissa.",
+        "Lisää terveys-, hyvinvointi- ja arjen palveluita, joiden kysyntä kasvaa väestön ikääntyessä riippumatta kasvupolusta.",
+        "Vahvista monikanavaista asiointia: noutopisteet, verkkotilaus ja nouto, sovellus ja fyysinen tila yhdessä.",
+        "Kasvata kiertotaloutta: käytettyjen tuotteiden myynti, korjauspalvelut, vuokraus ja palvelullistaminen.",
+        "Lyhennä vuokrasopimusten keskimääräistä kestoa ja kasvata liikevaihtosidonnaisten vuokrien osuutta sokin varalta.",
+        "Varaa 5–10 prosenttia pinta-alasta joustavasti väliaikaiskonsepteille ja yhteisötilalle."
+      ],
+      "actionsPerMallLabel": "Kiinteistökohtaiset ehdotukset",
+      "actionsPerMall": {
+        "realidea-sello": {
+          "name": "Sello, Espoo",
+          "context": "Yli 24 miljoonaa kävijää vuodessa, esteettömyysindeksi 93/100, hiilineutraali ja LEED Platinum -sertifioitu. 65 vuotta täyttäneiden määrä Espoossa kasvaa 14 400 hengellä vuoteen 2033 mennessä.",
+          "items": [
+            "Tee Sellosta seniorien arjen olohuone: levähdyspaikat, selkeät opasteet, valaistus ja äänielementit. Tämä kestää kaikissa kolmessa polussa.",
+            "Sijoita terveys- ja hyvinvointipalvelut näkyville reiteille, ei kuolleisiin nurkkiin. Polussa B kuntien hoivamenojen leikkaukset siirtävät kysyntää yksityisiin palveluihin.",
+            "Toukokuun energiasokki: rakenna perheille ja senioreille \"kuluta varmemmin\" -asiointipolku, jossa apteekki, ruoka, korjauspalvelut ja maltilliset kestohankinnat näkyvät samalla reitillä.",
+            "Tasapainota Polun B varalta: vahvista päivittäistavaraa ja arjen palveluita erikoiskaupan kustannuksella, lyhennä erikoiskauppojen vuokrasopimuksia.",
+            "Hyödynnä LEED Platinum -sertifiointi (rakennuksen ympäristöluokitus, korkein taso) ja hiilineutraalius vastuullisuusviestinnässä erityisesti Polkua C silmällä pitäen.",
+            "Mittaa erikseen seniori-NPS-arvo (Net Promoter Score, asiakkaan suositteluhalukkuus) ja esteettömän asioinnin onnistuminen, ei vain yleistä NPS-lukua.",
+            "Suunnittele Leppävaaran-aukion laajennus skenaarioiden mukaan: Polussa A peruskorjaus, Polussa B aikataulun viivästys, Polussa C palvelukeskeinen laajennus."
+          ],
+          "kpis": [
+            {
+              "label": "Seniori-NPS",
+              "target": "≥ 65",
+              "hint": "65+ ikäryhmälle erikseen"
+            },
+            {
+              "label": "Esteetön reitti -onnistuminen",
+              "target": "≥ 95 %",
+              "hint": "asioinnin loppuunsaattaminen"
+            },
+            {
+              "label": "Päivittäistavaran osuus",
+              "target": "20–25 %",
+              "hint": "vuokrattavasta pinta-alasta"
+            },
+            {
+              "label": "Terveyspalveluiden osuus",
+              "target": "10–15 %",
+              "hint": "väestön ikääntyessä"
+            },
+            {
+              "label": "Energia kävijää kohti",
+              "target": "≤ 0,8 kWh",
+              "hint": "LEED Platinum -taso"
+            },
+            {
+              "label": "Liikevaihtosidonnaisten vuokrien osuus",
+              "target": "≥ 30 %",
+              "hint": "shokin varalta"
+            },
+            {
+              "label": "Kanta-asiakasohjelmaan kuuluvat",
+              "target": "≥ 25 %",
+              "hint": "tunnetut kävijät"
+            },
+            {
+              "label": "Esteettömyysindeksi",
+              "target": "≥ 95/100",
+              "hint": "pidetään johtoasema"
+            }
+          ],
+          "operator": "Realidea",
+          "isCompetitor": false
+        },
+        "realidea-tripla": {
+          "name": "Mall of Tripla, Helsinki",
+          "context": "Pasilan liikenne- ja työpaikkasolmu, monikulttuurinen ja nuori kuluttajakunta. Junayhteys ja metroliityntä ylläpitävät kävijävirtaa myös sokin aikana.",
+          "items": [
+            "Painota asemakeskeistä mukavuutta: nopea ruoka, ota mukaan -annokset ja palvelut työmatkalaisille. Pasilan kävijävirta kestää, vaikka diskretionaarinen kulutus heikkenisi.",
+            "Kasvata faniyhteisö- ja popkulttuuritapahtumia nuoren kaupunkilaisen sosiaaliseksi tilaksi. Ne ovat halpa tapa täyttää kävijäaikaa ja kasvattavat ostoa myöhemmin.",
+            "Toukokuun energiasokki: hyödynnä Pasilan välttämätön asiointivirta nopeilla ruoka-, nouto-, huolto- ja arvolupauksilla. Älä nojaa pelkkään harkinnanvaraiseen vapaa-aikaan.",
+            "Polun B varalta reagoi nopeasti: lyhytaikaiset väliaikaiskonseptit ja edullisuuspainotteiset konseptit pitkien jäykkien vuokrasopimusten sijaan. Älä lukitse pinta-alaa pitkillä kiinteillä vuokrilla.",
+            "Hyödynnä monikulttuurinen alue: kansainvälisen ruoan, kauneuden ja pienpalveluiden kerros toimii kaikissa kolmessa polussa.",
+            "Rakenna Triplasta vähittäiskaupan media-alusta: Pasilan kävijävirrat ovat itsessään myytävää media-arvoa. Tämä on pieni mutta vakaa lisätulo Polussa A ja räjähtävä mahdollisuus Polussa C."
+          ],
+          "kpis": [
+            {
+              "label": "Asema- ja työmatkakävijöiden osuus",
+              "target": "≥ 50 %",
+              "hint": "asemakeskeinen virta"
+            },
+            {
+              "label": "Faniyhteisötapahtumat",
+              "target": "≥ 24/v",
+              "hint": "kahdesti kuukaudessa"
+            },
+            {
+              "label": "Ota mukaan -ruokaosuus",
+              "target": "≥ 20 %",
+              "hint": "ravintolatarjonnasta"
+            },
+            {
+              "label": "Vuokrasopimusten keskikesto",
+              "target": "≤ 3 v",
+              "hint": "joustavuus shokin varalta"
+            },
+            {
+              "label": "Väliaikaiskonseptien osuus",
+              "target": "≥ 15 %",
+              "hint": "vapaata pinta-alaa"
+            },
+            {
+              "label": "Kansainvälisten brändien osuus",
+              "target": "≥ 20 %",
+              "hint": "monikulttuurinen alue"
+            },
+            {
+              "label": "Vähittäiskaupan media-tulot",
+              "target": "≥ 200 000 €/v",
+              "hint": "Pasilan kävijävirta"
+            },
+            {
+              "label": "Kanta-asiakasohjelmaan kuuluvat",
+              "target": "≥ 30 %",
+              "hint": "data-arvo"
+            }
+          ],
+          "operator": "Realidea",
+          "isCompetitor": false
+        },
+        "citycon-itis": {
+          "operator": "Citycon",
+          "isCompetitor": true,
+          "name": "Itis, Helsinki",
+          "context": "Citycon-omisteinen kilpailijakauppakeskus. Yli 120 myymälää, vahva julkisen liikenteen yhteys, laaja katealue. Käytä vertailupohjana arjen palveluiden ja edullisen vähittäiskaupan strategioissa.",
+          "items": [
+            "Vertaa arjen välttämättömyyksien painotusta: kuinka paljon Itis painottaa päivittäistavaraa ja terveyspalveluita oman portfolion vastaaviin nähden.",
+            "Seuraa metro- ja bussiliityntää toistuvan asioinnin moottorina, peilaa Sellon ja Triplan oman asemavirran konversioon.",
+            "Tarkista keskitettyjen palautus- ja noutopisteiden määrä ja sijoittelu vs. omat keskukset.",
+            "Mittaa kierrätys- ja korjauspisteiden näkyvyys reittien varrella, vertaa omiin kiertotaloustoimenpiteisiin.",
+            "Arvioi saavutettavan muodin ja viihteen yhdistelmäpaketit kilpailijan kalenterissa.",
+            "Vertaa julkiset palvelut + terveys + arki -mission yhdistelmää oman tarjonnan vastaaviin."
+          ],
+          "kpis": [
+            {
+              "label": "Julkisen liikenteen kävijöiden osuus",
+              "target": "vertailu",
+              "hint": "metro- ja bussipysäkkien hyödyntäminen vs. oma"
+            },
+            {
+              "label": "Arjen välttämättömyyksien osuus pinta-alasta",
+              "target": "vertailu",
+              "hint": "päivittäistavara, apteekki, terveys"
+            },
+            {
+              "label": "Keskitetyt palautus- ja noutopisteet",
+              "target": "vertailu",
+              "hint": "sijoittelu ja määrä"
+            },
+            {
+              "label": "Kierrätys- ja korjauspisteet",
+              "target": "vertailu",
+              "hint": "näkyvillä reiteillä"
+            },
+            {
+              "label": "Tapahtumakalenterin tiheys",
+              "target": "vertailu",
+              "hint": "kuukauden tapahtumat"
+            },
+            {
+              "label": "Vuokrasopimusten kesto",
+              "target": "vertailu",
+              "hint": "liikevaihtosidonnaisten osuus"
+            }
+          ]
+        },
+        "citycon-jumbo": {
+          "operator": "Citycon",
+          "isCompetitor": true,
+          "name": "Jumbo-Flamingo, Vantaa",
+          "context": "Citycon-omisteinen kohdekauppakeskus yhdessä Flamingo-vapaa-ajan kanssa. Vertaile suuren kohdekäynnin strategioita: pitkä viipymäaika, perheen ostokorit ja vapaa-ajan ankkurien kytkös vähittäismyyntiin.",
+          "items": [
+            "Vertaa keskimääräistä viipymäaikaa: Jumbon kohdekäynti vs. omien kohteiden vastaava.",
+            "Mittaa vapaa-ajan ankkurien (kylpylä, elokuvat) konversio vähittäismyyntiin saman käynnin aikana.",
+            "Seuraa perheryhmäkävijöiden osuutta ja peilaa Sellon ja Triplan vastaaviin lukuihin.",
+            "Vertaa kiertotaloustapahtumia (lasten vaatevaihto, urheilun second hand) oman kalenterin vastaaviin.",
+            "Tarkista pysäköintialueiden saatavuus ruuhka-aikana, käytä benchmarkina.",
+            "Arvioi viikonlopun ostokorin keskikoko ja vertaa oman kohdekeskuksen vastaavaan."
+          ],
+          "kpis": [
+            {
+              "label": "Keskimääräinen viipymäaika",
+              "target": "vertailu",
+              "hint": "kohdekäynnin pituus"
+            },
+            {
+              "label": "Perheryhmäkävijöiden osuus",
+              "target": "vertailu",
+              "hint": "2+ kävijää, joista 1+ alle 18 v"
+            },
+            {
+              "label": "Vapaa-aika -> vähittäismyyntikonversio",
+              "target": "vertailu",
+              "hint": "samasta käynnistä"
+            },
+            {
+              "label": "Pysäköinnin saatavuus ruuhka-aikana",
+              "target": "vertailu",
+              "hint": "lauantai 12-16"
+            },
+            {
+              "label": "Kohde-ostosten keskikoko",
+              "target": "vertailu",
+              "hint": "kävijää kohti"
+            },
+            {
+              "label": "Vapaa-ajan tapahtumat / kuukausi",
+              "target": "vertailu",
+              "hint": "Flamingo + Jumbo yhteensä"
+            }
+          ]
+        }
+      }
+    },
+    "en": {
+      "title": "Finland's structural transition",
+      "intro": "Finland is hit at the same time by slow growth, weak consumer confidence, an ageing population, low birth rates and the rising importance of immigration. This is a long structural shift, not a one-off shock, that permanently changes demand, labour, regional markets and retail logic by 2035.",
+      "redString": "The red string across dozens of sources: consumer caution becomes permanent, and the winning properties combine price clarity, reliability, data capability and new service models in one offering. The transition does not resolve along one path; the property must withstand all three.",
+      "pathsLabel": "Three paths to 2035",
+      "paths": [
+        {
+          "id": "a",
+          "title": "Path A: Slow normalisation",
+          "tone": "neutral",
+          "summary": "Slow growth, no deep new shock. Consumer caution becomes permanent.",
+          "macro": "GDP grows 0.5 to 1.5% per year 2026 to 2030. Inflation settles at 1.5 to 2%, rates ease, real wages slowly rise. Debt ratio plateaus at 96 to 98% of GDP without correcting, leaving public finances vulnerable to the next external shock.",
+          "consumer": "Confidence climbs slowly from -12.5 toward the long-run average of -2.8, but the 2024 to 2026 caution embeds: aggressive price comparison, big purchases planned months ahead, loyalty-program participation rises, households keep a higher savings rate than before.",
+          "retail": "Volumes recover 2027 to 2028 but slowly. Margins stay tight under price pressure. Winners combine strong price image, easy omnichannel service and strong customer data. Losers are mid-priced specialty retail without clear differentiation.",
+          "property": "Stable but quiet retail-property market. Rents track index, no upward pressure. Yields unchanged, prime locations hold value; secondary locations slowly suffer because volumes never return to 2018 to 2019 levels. Refurbishment makes sense; new builds stay quiet.",
+          "mallImpact": "Malls hold position but tenant mix must shift: more services, health, food and beverage. Typically 5 to 10% of leasable area moves to non-traditional uses such as gyms, clinics, co-working and libraries. Events and community programming strengthen because of their high link to purchase probability.",
+          "keyNumbers": [
+            {
+              "label": "GDP growth",
+              "value": "0.5–1.5 %",
+              "hint": "per year 2026–2030"
+            },
+            {
+              "label": "Consumer confidence",
+              "value": "−12 → −3",
+              "hint": "gradual recovery"
+            },
+            {
+              "label": "Debt ratio",
+              "value": "96–98 %",
+              "hint": "of GDP, plateau"
+            },
+            {
+              "label": "Occupancy",
+              "value": "stable",
+              "hint": "no downward pressure"
+            },
+            {
+              "label": "Specialty retail loss",
+              "value": "−5 %",
+              "hint": "stores by 2030"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "GDP volume index",
+              "unit": "index",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 99
+                },
+                {
+                  "p": "2025",
+                  "v": 100
+                },
+                {
+                  "p": "2026",
+                  "v": 101
+                },
+                {
+                  "p": "2027",
+                  "v": 102.5
+                },
+                {
+                  "p": "2028",
+                  "v": 104
+                },
+                {
+                  "p": "2029",
+                  "v": 105.5
+                },
+                {
+                  "p": "2030",
+                  "v": 107
+                }
+              ]
+            },
+            {
+              "label": "Consumer confidence",
+              "unit": "saldo",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": -10
+                },
+                {
+                  "p": "2025",
+                  "v": -11
+                },
+                {
+                  "p": "2026",
+                  "v": -12
+                },
+                {
+                  "p": "2027",
+                  "v": -8
+                },
+                {
+                  "p": "2028",
+                  "v": -5
+                },
+                {
+                  "p": "2029",
+                  "v": -3
+                },
+                {
+                  "p": "2030",
+                  "v": -3
+                }
+              ]
+            },
+            {
+              "label": "Debt ratio, % of GDP",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 80
+                },
+                {
+                  "p": "2025",
+                  "v": 84
+                },
+                {
+                  "p": "2026",
+                  "v": 88
+                },
+                {
+                  "p": "2027",
+                  "v": 93
+                },
+                {
+                  "p": "2028",
+                  "v": 96
+                },
+                {
+                  "p": "2029",
+                  "v": 97
+                },
+                {
+                  "p": "2030",
+                  "v": 97
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "title": "Path B: Public-finance shock",
+          "tone": "dark",
+          "summary": "Markets force Finland into severe austerity. Cuts to social transfers and municipal finance hit consumption directly.",
+          "macro": "Debt ratio approaches 100% of GDP and interest costs eat into public spending. Either market pressure, a credit-rating downgrade or tightened EU stability rules force a new government into a cumulative 8 to 10 billion euro austerity package across 2027 to 2030, mostly through spending cuts because tax hikes would hit already-weak demand.",
+          "consumer": "Social-transfer cuts come first: unemployment benefits down 15 to 20%, housing benefits down 10 to 15%, tightened means-tested support, frozen child-benefit and pension index adjustments. Real disposable income for the bottom third drops 10 to 20%. Municipal care and health fees rise simultaneously, hitting single-living seniors.",
+          "retail": "Discretionary spending (clothing, entertainment, eating out) falls 15 to 25%. Grocery shifts into discount chains and own-label. Second-hand sales rise 30 to 40%, repair-service demand grows, rental and sharing models gain ground. Payment delinquencies and debt spirals rise.",
+          "property": "Retail-property yields rise 50 to 100 basis points (0.5 to 1.0 percentage points). Secondary-location values fall 15 to 25%. Helsinki-region prime holds, but regional centres suffer because public-sector job cuts of 15,000 to 25,000 land precisely there. Financing tightens, refinancing gets more expensive.",
+          "mallImpact": "Occupancy drops 5 to 10 percentage points; vacancies become visible. Lease terms shorten from 5 to 7 years to 2 to 3 years; turnover-linked rents replace fixed rents. Specialty and fashion get culled aggressively. Grocery, health services, circular and value-priced concepts become the new anchors. Temporary concepts fill empty units. The mall becomes a community space and service centre, not a pure shopping place.",
+          "keyNumbers": [
+            {
+              "label": "GDP path",
+              "value": "−1 to +0.5 %",
+              "hint": "patchy 2027–2030"
+            },
+            {
+              "label": "Consumer confidence",
+              "value": "−18",
+              "hint": "new floor 2028"
+            },
+            {
+              "label": "Debt ratio",
+              "value": "100 % → 90 %",
+              "hint": "forced consolidation"
+            },
+            {
+              "label": "Occupancy drop",
+              "value": "−5 to −10 pp",
+              "hint": "vacancies become visible"
+            },
+            {
+              "label": "Austerity package",
+              "value": "€8–10 bn",
+              "hint": "cumulative 2027–2030"
+            },
+            {
+              "label": "Bottom-third income loss",
+              "value": "10–20 %",
+              "hint": "real terms"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "GDP volume index",
+              "unit": "index",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 99
+                },
+                {
+                  "p": "2025",
+                  "v": 100
+                },
+                {
+                  "p": "2026",
+                  "v": 101
+                },
+                {
+                  "p": "2027",
+                  "v": 100
+                },
+                {
+                  "p": "2028",
+                  "v": 99
+                },
+                {
+                  "p": "2029",
+                  "v": 99.5
+                },
+                {
+                  "p": "2030",
+                  "v": 100.5
+                }
+              ]
+            },
+            {
+              "label": "Consumer confidence",
+              "unit": "saldo",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": -10
+                },
+                {
+                  "p": "2025",
+                  "v": -11
+                },
+                {
+                  "p": "2026",
+                  "v": -12
+                },
+                {
+                  "p": "2027",
+                  "v": -16
+                },
+                {
+                  "p": "2028",
+                  "v": -18
+                },
+                {
+                  "p": "2029",
+                  "v": -15
+                },
+                {
+                  "p": "2030",
+                  "v": -12
+                }
+              ]
+            },
+            {
+              "label": "Debt ratio, % of GDP",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 80
+                },
+                {
+                  "p": "2025",
+                  "v": 84
+                },
+                {
+                  "p": "2026",
+                  "v": 88
+                },
+                {
+                  "p": "2027",
+                  "v": 95
+                },
+                {
+                  "p": "2028",
+                  "v": 100
+                },
+                {
+                  "p": "2029",
+                  "v": 96
+                },
+                {
+                  "p": "2030",
+                  "v": 90
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "title": "Path C: New growth architecture",
+          "tone": "bright",
+          "summary": "Productivity, work-based immigration and the green transition combine. Finland reaches 2.5 to 3.5% growth in the 2030s.",
+          "macro": "Three forces combine: productivity investment in data, software and automation pays off; work-based immigration grows by 30,000 to 40,000 per year; green-transition industries (hydrogen, battery chemicals, bioeconomy) take off. GDP grows 2.5 to 3.5% per year in the 2030s, well above Bank of Finland's 1.8% baseline.",
+          "consumer": "Working-age population stops shrinking and edges back to growth. The 25 to 39 cohort diversifies and buys more services. The active 65 to 79 senior cohort is well-educated and pays for services. Polarisation continues but the upper end grows faster. Sustainability and Finnish provenance gain weight; price-driven behaviour eases.",
+          "retail": "Services grow faster than goods. Health, wellness, education and experiences take a larger share of the consumer euro. Digital and physical merge seamlessly; omnichannel becomes baseline, not advantage. Green certifications such as LEED Platinum (highest building environmental rating) and BREEAM (its European counterpart) become a minimum institutional requirement.",
+          "property": "Yields fall 25 to 50 basis points; investor demand returns. New construction recovers, especially mixed-use and service-led. Helsinki region and growing regional centres (Tampere, Turku, Oulu) benefit most. Secondary-location gaps persist but strong regional centres recover.",
+          "mallImpact": "Mall becomes a mixed-use urban space combining retail, services, work and adjacent housing. 30 to 40% of tenant mix is non-traditional: health services, co-working, fitness, culture. Events and experiences make up 15 to 20% of visit value. Circular and repair services are part of the standard offer. The mall's own digital media network and loyalty data become a meaningful revenue stream.",
+          "keyNumbers": [
+            {
+              "label": "GDP growth",
+              "value": "2.5–3.5 %",
+              "hint": "per year in the 2030s"
+            },
+            {
+              "label": "Consumer confidence",
+              "value": "+5",
+              "hint": "above long-run average"
+            },
+            {
+              "label": "Debt ratio",
+              "value": "82 %",
+              "hint": "declining"
+            },
+            {
+              "label": "Work-based immigration",
+              "value": "30k–40k",
+              "hint": "per year"
+            },
+            {
+              "label": "Services in tenant mix",
+              "value": "30–40 %",
+              "hint": "non-traditional retail"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "GDP volume index",
+              "unit": "index",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 99
+                },
+                {
+                  "p": "2025",
+                  "v": 100
+                },
+                {
+                  "p": "2026",
+                  "v": 101
+                },
+                {
+                  "p": "2027",
+                  "v": 103
+                },
+                {
+                  "p": "2028",
+                  "v": 106
+                },
+                {
+                  "p": "2029",
+                  "v": 110
+                },
+                {
+                  "p": "2030",
+                  "v": 115
+                }
+              ]
+            },
+            {
+              "label": "Consumer confidence",
+              "unit": "saldo",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": -10
+                },
+                {
+                  "p": "2025",
+                  "v": -11
+                },
+                {
+                  "p": "2026",
+                  "v": -12
+                },
+                {
+                  "p": "2027",
+                  "v": -5
+                },
+                {
+                  "p": "2028",
+                  "v": 0
+                },
+                {
+                  "p": "2029",
+                  "v": 3
+                },
+                {
+                  "p": "2030",
+                  "v": 5
+                }
+              ]
+            },
+            {
+              "label": "Debt ratio, % of GDP",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 80
+                },
+                {
+                  "p": "2025",
+                  "v": 84
+                },
+                {
+                  "p": "2026",
+                  "v": 88
+                },
+                {
+                  "p": "2027",
+                  "v": 90
+                },
+                {
+                  "p": "2028",
+                  "v": 88
+                },
+                {
+                  "p": "2029",
+                  "v": 85
+                },
+                {
+                  "p": "2030",
+                  "v": 82
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "actionsLabel": "Property action recommendations",
+      "actionsGeneralLabel": "Across all properties",
+      "actionsGeneral": [
+        "Build a cheap-good-better assortment logic with continuous price-image management. Works in all three paths.",
+        "Add the May 2026 energy-risk layer to operations: track tenant energy and logistics surcharges, time campaigns to salary and benefit weeks, and frame big purchases as lower-risk decisions.",
+        "Invest in data, software and personalisation: the Finnish retail productivity gap is exactly here, and the investment pays off in every scenario.",
+        "Add health, wellness and everyday-life services as the population ages, regardless of the growth path.",
+        "Strengthen omnichannel: pickup points, click-and-collect, app and physical space together.",
+        "Grow circularity: second-hand sales, repair, rental and servicification.",
+        "Shorten average lease terms and grow the share of turnover-linked rents to hedge for shocks.",
+        "Reserve 5 to 10% of floor area as flexible space for temporary concepts and community use."
+      ],
+      "actionsPerMallLabel": "Property-specific recommendations",
+      "actionsPerMall": {
+        "realidea-sello": {
+          "name": "Sello, Espoo",
+          "context": "24M+ visits/year, accessibility index 93/100, carbon-neutral and LEED Platinum certified. 65+ population in Espoo grows by 14,400 by 2033.",
+          "items": [
+            "Make Sello the seniors' everyday living room: rest stops, clear wayfinding, lighting and audio cues. This holds in all three paths.",
+            "Place health and wellness services on visible routes, not in dead corners. Path B shifts demand from cut municipal care into private services.",
+            "May energy shock: build a \"spend with more certainty\" path for families and seniors, linking pharmacy, grocery, repair services and moderate durable purchases on one visible route.",
+            "Hedge for Path B: strengthen grocery and everyday services at the expense of specialty retail; shorten specialty leases.",
+            "Leverage LEED Platinum (highest building environmental rating) and carbon neutrality in sustainability messaging. Strongest upside in Path C.",
+            "Measure senior NPS (Net Promoter Score, customer recommendation likelihood) and accessible-journey success separately, not just overall NPS.",
+            "Plan the Leppävaaranaukio extension by scenario: Path A refurbishment, Path B schedule slip, Path C service-led extension."
+          ],
+          "kpis": [
+            {
+              "label": "Senior NPS",
+              "target": "≥ 65",
+              "hint": "65+ cohort, measured separately"
+            },
+            {
+              "label": "Accessible-journey completion",
+              "target": "≥ 95 %",
+              "hint": "visit completed without friction"
+            },
+            {
+              "label": "Grocery share of leasable area",
+              "target": "20–25 %"
+            },
+            {
+              "label": "Health-services share",
+              "target": "10–15 %",
+              "hint": "as population ages"
+            },
+            {
+              "label": "Energy per visit",
+              "target": "≤ 0.8 kWh",
+              "hint": "LEED Platinum level"
+            },
+            {
+              "label": "Turnover-linked rents share",
+              "target": "≥ 30 %",
+              "hint": "shock hedge"
+            },
+            {
+              "label": "Loyalty-program members share",
+              "target": "≥ 25 %",
+              "hint": "identified visitors"
+            },
+            {
+              "label": "Accessibility index",
+              "target": "≥ 95/100",
+              "hint": "maintain leadership"
+            }
+          ],
+          "operator": "Realidea",
+          "isCompetitor": false
+        },
+        "realidea-tripla": {
+          "name": "Mall of Tripla, Helsinki",
+          "context": "Pasila transit and workplace hub, multicultural and young consumer base. Train and metro connections sustain footfall even during a shock.",
+          "items": [
+            "Lean into transit-driven convenience: fast food, take-away portions and services for commuters. Pasila flows hold even when discretionary spending weakens.",
+            "Grow fan-community and pop-culture events as a young urban social space. Cheap way to fill dwell time and lifts later spending.",
+            "May energy shock: use Pasila’s necessary-trip flow with fast food, pickup, repair and value-proof offers. Do not rely only on discretionary leisure demand.",
+            "Hedge for Path B: short temporary concepts and value-priced formats instead of rigid long leases. Don't lock floor area into long fixed rents.",
+            "Use the multicultural catchment: international food, beauty and small-services layer works in all three paths.",
+            "Build Tripla as a retail media platform: Pasila's flows are sellable media value in themselves. A small steady upside in Path A, an explosive opportunity in Path C."
+          ],
+          "kpis": [
+            {
+              "label": "Transit/commuter visitor share",
+              "target": "≥ 50 %",
+              "hint": "station-driven flow"
+            },
+            {
+              "label": "Fan-community events / year",
+              "target": "≥ 24",
+              "hint": "twice a month"
+            },
+            {
+              "label": "Take-away food share",
+              "target": "≥ 20 %",
+              "hint": "of restaurant offer"
+            },
+            {
+              "label": "Average lease term",
+              "target": "≤ 3 yr",
+              "hint": "shock-flex"
+            },
+            {
+              "label": "Temporary-concept area share",
+              "target": "≥ 15 %",
+              "hint": "flexible space"
+            },
+            {
+              "label": "International brands share",
+              "target": "≥ 20 %",
+              "hint": "multicultural catchment"
+            },
+            {
+              "label": "Retail media revenue",
+              "target": "≥ €200k/yr",
+              "hint": "Pasila flows"
+            },
+            {
+              "label": "Loyalty-program members share",
+              "target": "≥ 30 %",
+              "hint": "data value"
+            }
+          ],
+          "operator": "Realidea",
+          "isCompetitor": false
+        },
+        "citycon-itis": {
+          "operator": "Citycon",
+          "isCompetitor": true,
+          "name": "Itis, Helsinki",
+          "context": "Citycon-owned competitor mall. 120+ stores, strong public-transport links, broad catchment. Use as a benchmark for everyday-service and value-retail strategy.",
+          "items": [
+            "Benchmark essentials weighting: how much Itis leans on grocery and health vs. your own portfolio.",
+            "Track metro/bus interchange as a repeat-visit driver vs. Sello and Tripla flow.",
+            "Compare centralised return and pickup point density and placement.",
+            "Check visibility of recycling and repair stations along routes vs. your circular actions.",
+            "Audit accessible-fashion + entertainment bundles in the competitor calendar.",
+            "Compare public-services + health + everyday mission bundling vs. your own offer."
+          ],
+          "kpis": [
+            {
+              "label": "Public-transport visitor share",
+              "target": "benchmark",
+              "hint": "interchange flow vs. your own"
+            },
+            {
+              "label": "Essentials share of leasable area",
+              "target": "benchmark",
+              "hint": "grocery, pharmacy, health"
+            },
+            {
+              "label": "Centralised return and pickup points",
+              "target": "benchmark",
+              "hint": "placement and count"
+            },
+            {
+              "label": "Recycling and repair points",
+              "target": "benchmark",
+              "hint": "on visible routes"
+            },
+            {
+              "label": "Event calendar density",
+              "target": "benchmark",
+              "hint": "monthly events"
+            },
+            {
+              "label": "Lease term and turnover-linked share",
+              "target": "benchmark",
+              "hint": "vs. your own portfolio"
+            }
+          ]
+        },
+        "citycon-jumbo": {
+          "operator": "Citycon",
+          "isCompetitor": true,
+          "name": "Jumbo-Flamingo, Vantaa",
+          "context": "Citycon-owned destination mall paired with Flamingo leisure complex. Use as a benchmark for destination-visit strategy: long dwell time, family baskets, and leisure-anchor conversion to retail.",
+          "items": [
+            "Benchmark average dwell time: Jumbo destination visit vs. your own destination assets.",
+            "Measure leisure-anchor (spa, cinema) conversion to retail in the same visit.",
+            "Track family-group visitor share vs. Sello and Tripla.",
+            "Compare circular-economy events (kids clothing swap, sports second hand) vs. your calendar.",
+            "Check parking availability at peak as a benchmark.",
+            "Evaluate weekend basket size vs. your destination assets."
+          ],
+          "kpis": [
+            {
+              "label": "Average dwell time",
+              "target": "benchmark",
+              "hint": "destination visit length"
+            },
+            {
+              "label": "Family-group visitor share",
+              "target": "benchmark",
+              "hint": "2+ visitors, 1+ under 18"
+            },
+            {
+              "label": "Leisure-to-retail conversion",
+              "target": "benchmark",
+              "hint": "same visit"
+            },
+            {
+              "label": "Parking availability at peak",
+              "target": "benchmark",
+              "hint": "Saturday 12-16"
+            },
+            {
+              "label": "Destination basket size",
+              "target": "benchmark",
+              "hint": "per visitor"
+            },
+            {
+              "label": "Leisure events per month",
+              "target": "benchmark",
+              "hint": "Flamingo + Jumbo combined"
+            }
+          ]
+        }
+      }
+    },
+    "sv": {
+      "title": "Finlands stora omställning",
+      "intro": "Finland möter samtidigt långsam tillväxt, svag konsumentförtroende, åldrande befolkning, låg nativitet och ökad betydelse av invandring. Det är en lång strukturomställning, inte en engångschock, som permanent ändrar efterfrågan, arbetskraft, regionala marknader och handelslogik fram till 2035.",
+      "redString": "Den röda tråden i dussintals källor: konsumentens försiktighet blir permanent, och de vinnande fastigheterna kombinerar prisklarhet, tillförlitlighet, datakapacitet och nya servicemodeller i samma helhet. Omställningen löses inte längs en väg; fastigheten måste klara alla tre.",
+      "pathsLabel": "Tre vägar till 2035",
+      "paths": [
+        {
+          "id": "a",
+          "title": "Väg A: Långsam normalisering",
+          "tone": "neutral",
+          "summary": "Långsam tillväxt, ingen ny djup chock. Konsumentens försiktighet blir permanent.",
+          "macro": "Bruttonationalprodukten växer 0,5 till 1,5 procent per år 2026 till 2030. Inflationen sjunker till 1,5 till 2 procent, räntorna lättar, reallönerna stiger långsamt. Skuldkvoten planar ut på 96 till 98 procent av bruttonationalprodukten utan att korrigeras.",
+          "consumer": "Förtroendet stiger långsamt från april 2026:s -12,5 mot långtidsgenomsnittet -2,8. Försiktigheten från 2024 till 2026 sätter sig: aggressiv prisjämförelse, stora köp planeras månader i förväg, kundklubbsdeltagande växer.",
+          "retail": "Volymerna återhämtar sig 2027 till 2028 men långsamt. Marginalerna är fortsatt pressade. Vinnarna har stark prisbild, smidig omnikanalservice och stark kunddata.",
+          "property": "Stabil men dämpad fastighetsmarknad. Hyror följer index, inget uppåttryck. Avkastningskrav oförändrade, A-lägen behåller värdet, sekundära lägen sjunker långsamt.",
+          "mallImpact": "Köpcentrumen behåller sin ställning men hyresgästmixen måste skifta: mer service, hälsa, mat och dryck. 5 till 10 procent av uthyrbar yta flyttar till icke-traditionella ändamål.",
+          "keyNumbers": [
+            {
+              "label": "BNP-tillväxt",
+              "value": "0,5–1,5 %",
+              "hint": "per år 2026–2030"
+            },
+            {
+              "label": "Konsumentförtroende",
+              "value": "−12 → −3",
+              "hint": "gradvis återhämtning"
+            },
+            {
+              "label": "Skuldkvot",
+              "value": "96–98 %",
+              "hint": "av BNP, platå"
+            },
+            {
+              "label": "Uthyrningsgrad",
+              "value": "stabil",
+              "hint": "inget tryck nedåt"
+            },
+            {
+              "label": "Specialhandel-bortfall",
+              "value": "−5 %",
+              "hint": "butiker till 2030"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "BNP, volymindex",
+              "unit": "index",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 99
+                },
+                {
+                  "p": "2025",
+                  "v": 100
+                },
+                {
+                  "p": "2026",
+                  "v": 101
+                },
+                {
+                  "p": "2027",
+                  "v": 102.5
+                },
+                {
+                  "p": "2028",
+                  "v": 104
+                },
+                {
+                  "p": "2029",
+                  "v": 105.5
+                },
+                {
+                  "p": "2030",
+                  "v": 107
+                }
+              ]
+            },
+            {
+              "label": "Konsumentförtroende",
+              "unit": "saldo",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": -10
+                },
+                {
+                  "p": "2025",
+                  "v": -11
+                },
+                {
+                  "p": "2026",
+                  "v": -12
+                },
+                {
+                  "p": "2027",
+                  "v": -8
+                },
+                {
+                  "p": "2028",
+                  "v": -5
+                },
+                {
+                  "p": "2029",
+                  "v": -3
+                },
+                {
+                  "p": "2030",
+                  "v": -3
+                }
+              ]
+            },
+            {
+              "label": "Skuldkvot, % av BNP",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 80
+                },
+                {
+                  "p": "2025",
+                  "v": 84
+                },
+                {
+                  "p": "2026",
+                  "v": 88
+                },
+                {
+                  "p": "2027",
+                  "v": 93
+                },
+                {
+                  "p": "2028",
+                  "v": 96
+                },
+                {
+                  "p": "2029",
+                  "v": 97
+                },
+                {
+                  "p": "2030",
+                  "v": 97
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "title": "Väg B: Chock i offentlig ekonomi",
+          "tone": "mörk",
+          "summary": "Marknaderna tvingar Finland till hård sanering. Nedskärningar i socialförsäkring och kommunalekonomi slår direkt mot konsumtionen.",
+          "macro": "Skuldkvoten närmar sig 100 procent av bruttonationalprodukten och räntekostnaderna äter offentliga utgifter. Marknadstryck, kreditbetygsänkning eller skärpta EU-regler tvingar fram ett kumulativt åtstramningspaket på 8 till 10 miljarder euro 2027 till 2030.",
+          "consumer": "Nedskärningar i socialförsäkringen kommer först: arbetslöshetsförmåner ned 15 till 20 procent, bostadsbidrag ned 10 till 15 procent, strängare grundtrygghetskriterier. Den lägre tredjedelens disponibla inkomster minskar reellt 10 till 20 procent.",
+          "retail": "Diskretionära utgifter (kläder, nöje, restaurangbesök) minskar 15 till 25 procent. Dagligvaror flyttar till lågpriskedjor och egna märken. Försäljning av begagnade varor växer 30 till 40 procent.",
+          "property": "Avkastningskraven stiger 50 till 100 räntepunkter (0,5 till 1,0 procentenheter). Sekundära lägens värden faller 15 till 25 procent. Huvudstadsregionens A-lägen håller.",
+          "mallImpact": "Uthyrningsgrad faller 5 till 10 procentenheter; vakanser syns. Hyreskontrakt kortas från 5 till 7 år till 2 till 3 år. Specialhandel och mode rensas hårt.",
+          "keyNumbers": [
+            {
+              "label": "BNP-bana",
+              "value": "−1 till +0,5 %",
+              "hint": "ojämn 2027–2030"
+            },
+            {
+              "label": "Konsumentförtroende",
+              "value": "−18",
+              "hint": "nytt golv 2028"
+            },
+            {
+              "label": "Skuldkvot",
+              "value": "100 % → 90 %",
+              "hint": "tvångskonsolidering"
+            },
+            {
+              "label": "Uthyrningsgrad",
+              "value": "−5 till −10 pe",
+              "hint": "vakanser syns"
+            },
+            {
+              "label": "Åtstramningspaket",
+              "value": "8–10 mdr €",
+              "hint": "kumulativt 2027–2030"
+            },
+            {
+              "label": "Nedre tredjedelens inkomstbortfall",
+              "value": "10–20 %",
+              "hint": "reellt"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "BNP, volymindex",
+              "unit": "index",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 99
+                },
+                {
+                  "p": "2025",
+                  "v": 100
+                },
+                {
+                  "p": "2026",
+                  "v": 101
+                },
+                {
+                  "p": "2027",
+                  "v": 100
+                },
+                {
+                  "p": "2028",
+                  "v": 99
+                },
+                {
+                  "p": "2029",
+                  "v": 99.5
+                },
+                {
+                  "p": "2030",
+                  "v": 100.5
+                }
+              ]
+            },
+            {
+              "label": "Konsumentförtroende",
+              "unit": "saldo",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": -10
+                },
+                {
+                  "p": "2025",
+                  "v": -11
+                },
+                {
+                  "p": "2026",
+                  "v": -12
+                },
+                {
+                  "p": "2027",
+                  "v": -16
+                },
+                {
+                  "p": "2028",
+                  "v": -18
+                },
+                {
+                  "p": "2029",
+                  "v": -15
+                },
+                {
+                  "p": "2030",
+                  "v": -12
+                }
+              ]
+            },
+            {
+              "label": "Skuldkvot, % av BNP",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 80
+                },
+                {
+                  "p": "2025",
+                  "v": 84
+                },
+                {
+                  "p": "2026",
+                  "v": 88
+                },
+                {
+                  "p": "2027",
+                  "v": 95
+                },
+                {
+                  "p": "2028",
+                  "v": 100
+                },
+                {
+                  "p": "2029",
+                  "v": 96
+                },
+                {
+                  "p": "2030",
+                  "v": 90
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "title": "Väg C: Ny tillväxtarkitektur",
+          "tone": "ljus",
+          "summary": "Produktivitet, arbetsbaserad invandring och grön omställning kombineras. Finland når 2,5 till 3,5 procents tillväxt på 2030-talet.",
+          "macro": "Tre krafter kombineras: produktivitetsinvesteringar i data, mjukvara och automation ger utdelning; arbetsbaserad invandring ökar med 30 000 till 40 000 per år; gröna omställningsindustrier växer fram.",
+          "consumer": "Den arbetsföra befolkningen slutar krympa och vänder uppåt. 25 till 39-kohorten diversifieras och köper mer tjänster.",
+          "retail": "Tjänster växer snabbare än varor. Hälsa, välmående, utbildning och upplevelser tar större del av konsumenteuron.",
+          "property": "Avkastningskraven faller 25 till 50 räntepunkter; investerarnas efterfrågan återvänder. Nybyggnation återhämtar sig.",
+          "mallImpact": "Köpcentrum blir blandad urban yta som kombinerar handel, service, arbete och närliggande boende. 30 till 40 procent av hyresmixen är icke-traditionell handel.",
+          "keyNumbers": [
+            {
+              "label": "BNP-tillväxt",
+              "value": "2,5–3,5 %",
+              "hint": "per år på 2030-talet"
+            },
+            {
+              "label": "Konsumentförtroende",
+              "value": "+5",
+              "hint": "över långtidsgenomsnittet"
+            },
+            {
+              "label": "Skuldkvot",
+              "value": "82 %",
+              "hint": "fallande"
+            },
+            {
+              "label": "Arbetsbaserad invandring",
+              "value": "30k–40k",
+              "hint": "per år"
+            },
+            {
+              "label": "Tjänster i hyresmix",
+              "value": "30–40 %",
+              "hint": "icke-traditionell handel"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "BNP, volymindex",
+              "unit": "index",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 99
+                },
+                {
+                  "p": "2025",
+                  "v": 100
+                },
+                {
+                  "p": "2026",
+                  "v": 101
+                },
+                {
+                  "p": "2027",
+                  "v": 103
+                },
+                {
+                  "p": "2028",
+                  "v": 106
+                },
+                {
+                  "p": "2029",
+                  "v": 110
+                },
+                {
+                  "p": "2030",
+                  "v": 115
+                }
+              ]
+            },
+            {
+              "label": "Konsumentförtroende",
+              "unit": "saldo",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": -10
+                },
+                {
+                  "p": "2025",
+                  "v": -11
+                },
+                {
+                  "p": "2026",
+                  "v": -12
+                },
+                {
+                  "p": "2027",
+                  "v": -5
+                },
+                {
+                  "p": "2028",
+                  "v": 0
+                },
+                {
+                  "p": "2029",
+                  "v": 3
+                },
+                {
+                  "p": "2030",
+                  "v": 5
+                }
+              ]
+            },
+            {
+              "label": "Skuldkvot, % av BNP",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2024",
+                  "v": 80
+                },
+                {
+                  "p": "2025",
+                  "v": 84
+                },
+                {
+                  "p": "2026",
+                  "v": 88
+                },
+                {
+                  "p": "2027",
+                  "v": 90
+                },
+                {
+                  "p": "2028",
+                  "v": 88
+                },
+                {
+                  "p": "2029",
+                  "v": 85
+                },
+                {
+                  "p": "2030",
+                  "v": 82
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "actionsLabel": "Åtgärdsförslag för fastigheter",
+      "actionsGeneralLabel": "Gäller alla fastigheter",
+      "actionsGeneral": [
+        "Bygg en billig-bra-bättre-sortimentlogik med kontinuerlig prisbildshantering.",
+        "Lägg in maj 2026 års energirisk i driften: följ hyresgästers energi- och logistiktillägg, tajma kampanjer till löne- och bidragsveckor och rama in större köp som lägre risk.",
+        "Investera i data, mjukvara och personalisering.",
+        "Lägg till hälsa, välmående och vardagsservice när befolkningen åldras.",
+        "Stärk omnikanal: hämtpunkter, beställning online och hämtning, app och fysisk plats tillsammans.",
+        "Väx cirkulär ekonomi: försäljning av begagnade varor, reparationstjänster, hyra och servifiering.",
+        "Korta genomsnittliga hyresavtal och öka andelen omsättningsbaserade hyror.",
+        "Reservera 5 till 10 procent av ytan som flexibel yta för tillfälliga koncept."
+      ],
+      "actionsPerMallLabel": "Fastighetsspecifika rekommendationer",
+      "actionsPerMall": {
+        "realidea-sello": {
+          "name": "Sello, Esbo",
+          "context": "Över 24 miljoner besök/år, tillgänglighetsindex 93/100, koldioxidneutral och LEED Platinum-certifierad. 65+ i Esbo växer med 14 400 till 2033.",
+          "items": [
+            "Gör Sello till seniorernas vardagsvardagsrum: vilopunkter, tydliga skyltar, belysning och ljudvägledning.",
+            "Placera hälso- och välmåendetjänster vid synliga stråk, inte i döda hörn.",
+            "Majs energichock: bygg en \"handla med större trygghet\"-väg för familjer och seniorer där apotek, mat, reparation och måttliga sällanköp syns på samma stråk.",
+            "Häcka för Väg B: stärk dagligvaror och vardagstjänster på bekostnad av specialhandel.",
+            "Använd LEED Platinum-certifiering (högsta miljöbetyg för byggnader) och koldioxidneutralitet i hållbarhetsmarknadsföringen.",
+            "Mät senior-NPS (Net Promoter Score, kundens rekommendationsbenägenhet) och tillgänglig kundresa separat, inte bara övergripande NPS.",
+            "Planera Leppävaaratorgets utbyggnad efter scenario: Väg A renovering, Väg B fördröjd tidsplan, Väg C servicedriven utbyggnad."
+          ],
+          "kpis": [
+            {
+              "label": "Senior-NPS",
+              "target": "≥ 65",
+              "hint": "65+ kohort, mäts separat"
+            },
+            {
+              "label": "Tillgänglig kundresa, slutförande",
+              "target": "≥ 95 %",
+              "hint": "besök utan friktion"
+            },
+            {
+              "label": "Dagligvarors andel av yta",
+              "target": "20–25 %"
+            },
+            {
+              "label": "Hälsotjänsters andel",
+              "target": "10–15 %",
+              "hint": "när befolkningen åldras"
+            },
+            {
+              "label": "Energi per besök",
+              "target": "≤ 0,8 kWh",
+              "hint": "LEED Platinum-nivå"
+            },
+            {
+              "label": "Omsättningsbaserade hyror, andel",
+              "target": "≥ 30 %",
+              "hint": "chockskydd"
+            },
+            {
+              "label": "Kundklubbsmedlemmars andel",
+              "target": "≥ 25 %",
+              "hint": "identifierade besökare"
+            },
+            {
+              "label": "Tillgänglighetsindex",
+              "target": "≥ 95/100",
+              "hint": "behåll ledarskapet"
+            }
+          ],
+          "operator": "Realidea",
+          "isCompetitor": false
+        },
+        "realidea-tripla": {
+          "name": "Mall of Tripla, Helsingfors",
+          "context": "Pasila transit- och arbetsplatsnav, mångkulturell och ung kundbas. Tåg- och metroförbindelser bär flödet även under en chock.",
+          "items": [
+            "Satsa på stationsnära bekvämlighet: snabbmat, take-away och tjänster för pendlare.",
+            "Väx fanbaserade och popkulturella evenemang som ung urban social plats.",
+            "Majs energichock: använd Pasilas nödvändiga besöksflöde med snabbmat, hämtning, reparation och värdebevis. Luta dig inte enbart mot sällanbesök och nöje.",
+            "Häcka för Väg B: korta tillfälliga koncept och prisvärda format istället för stela långa hyresavtal.",
+            "Använd det mångkulturella upptagningsområdet: internationell mat, skönhet och småservicelager.",
+            "Bygg Tripla som en handelsmediaplattform: Pasilas flöden är säljbart mediavärde i sig själva."
+          ],
+          "kpis": [
+            {
+              "label": "Transit/pendlares andel av besök",
+              "target": "≥ 50 %",
+              "hint": "stationsdriven flöde"
+            },
+            {
+              "label": "Fanevenemang / år",
+              "target": "≥ 24",
+              "hint": "två gånger i månaden"
+            },
+            {
+              "label": "Take-away-mat, andel",
+              "target": "≥ 20 %",
+              "hint": "av restaurangutbudet"
+            },
+            {
+              "label": "Genomsnittlig hyrestid",
+              "target": "≤ 3 år",
+              "hint": "flexibilitet"
+            },
+            {
+              "label": "Tillfälliga konceptens yta",
+              "target": "≥ 15 %",
+              "hint": "flexyta"
+            },
+            {
+              "label": "Internationella varumärken, andel",
+              "target": "≥ 20 %",
+              "hint": "mångkulturellt"
+            },
+            {
+              "label": "Retail media-intäkter",
+              "target": "≥ 200 000 €/år",
+              "hint": "Pasila-flöden"
+            },
+            {
+              "label": "Kundklubbsmedlemmars andel",
+              "target": "≥ 30 %",
+              "hint": "datavärde"
+            }
+          ],
+          "operator": "Realidea",
+          "isCompetitor": false
+        },
+        "citycon-itis": {
+          "operator": "Citycon",
+          "isCompetitor": true,
+          "name": "Itis, Helsingfors",
+          "context": "Citycon-ägd konkurrent. 120+ butiker, starka kollektivtrafikförbindelser, brett upptagningsområde. Använd som benchmark för vardagstjänster och värdehandel.",
+          "items": [
+            "Jämför basvarors vikt: hur mycket Itis lutar mot dagligvaror och hälsa vs. egen portfölj.",
+            "Följ metro/buss-byte som återbesöksdrivkraft vs. Sello och Tripla.",
+            "Jämför centraliserad retur/hämtning, antal och placering.",
+            "Kontrollera synlighet av återvinning och reparation längs stråk vs. egna cirkulära åtgärder.",
+            "Granska åtkomliga mode- och underhållningspaket i konkurrentens kalender.",
+            "Jämför offentliga tjänster + hälsa + vardag som mission vs. eget erbjudande."
+          ],
+          "kpis": [
+            {
+              "label": "Andel kollektivtrafikbesökare",
+              "target": "benchmark",
+              "hint": "byte vs. egen"
+            },
+            {
+              "label": "Basvarors andel av yta",
+              "target": "benchmark",
+              "hint": "dagligvaror, apotek, hälsa"
+            },
+            {
+              "label": "Centraliserad retur/hämtning",
+              "target": "benchmark",
+              "hint": "placering och antal"
+            },
+            {
+              "label": "Återvinning och reparation",
+              "target": "benchmark",
+              "hint": "synliga stråk"
+            },
+            {
+              "label": "Eventkalenderns densitet",
+              "target": "benchmark",
+              "hint": "månadsvis"
+            },
+            {
+              "label": "Hyrestid och omsättningsbaserade",
+              "target": "benchmark",
+              "hint": "vs. egen portfölj"
+            }
+          ]
+        },
+        "citycon-jumbo": {
+          "operator": "Citycon",
+          "isCompetitor": true,
+          "name": "Jumbo-Flamingo, Vanda",
+          "context": "Citycon-ägd destination tillsammans med Flamingo-fritidskomplexet. Använd som benchmark för destinationsbesök: lång vistelsetid, familjekorg och fritidsankar-konvertering till handel.",
+          "items": [
+            "Jämför genomsnittlig vistelsetid: Jumbo destination vs. egna destinationer.",
+            "Mät fritidsankar (spa, bio) konvertering till handel i samma besök.",
+            "Följ familjebesöksandel vs. Sello och Tripla.",
+            "Jämför cirkulärekonomi-event (barnkläder-byte, sport second hand) vs. egen kalender.",
+            "Kontrollera parkeringstillgång vid topp som benchmark.",
+            "Utvärdera helgkorg vs. egna destinationer."
+          ],
+          "kpis": [
+            {
+              "label": "Genomsnittlig vistelsetid",
+              "target": "benchmark",
+              "hint": "destinationsbesökets längd"
+            },
+            {
+              "label": "Familjebesöksandel",
+              "target": "benchmark",
+              "hint": "2+ besökare, 1+ under 18"
+            },
+            {
+              "label": "Fritid till handel-konvertering",
+              "target": "benchmark",
+              "hint": "samma besök"
+            },
+            {
+              "label": "Parkeringstillgång vid topp",
+              "target": "benchmark",
+              "hint": "lördag 12-16"
+            },
+            {
+              "label": "Destinationskorg per besökare",
+              "target": "benchmark",
+              "hint": "familjemission"
+            },
+            {
+              "label": "Fritidsevenemang per månad",
+              "target": "benchmark",
+              "hint": "Flamingo + Jumbo tillsammans"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "glossary": {
+    "fi": {
+      "NPS": "Net Promoter Score, asiakkaan suositteluhalukkuutta mittaava luku.",
+      "LEED Platinum": "Maailmanlaajuinen rakennusten ympäristösertifiointi, korkein taso.",
+      "BREEAM": "Eurooppalainen rakennusten ympäristösertifiointi, vastaa LEED-järjestelmää.",
+      "korkopiste": "0,01 prosenttiyksikköä, käytetään korkojen ja tuottojen muutoksen ilmaisuun."
+    },
+    "en": {
+      "NPS": "Net Promoter Score, a customer recommendation-likelihood metric.",
+      "LEED Platinum": "Highest level of the global LEED building environmental certification.",
+      "BREEAM": "European building environmental certification equivalent to LEED.",
+      "basis points": "0.01 percentage points, used to express changes in interest rates and yields."
+    },
+    "sv": {
+      "NPS": "Net Promoter Score, ett mått på kundens rekommendationsbenägenhet.",
+      "LEED Platinum": "Den högsta nivån av den globala LEED-miljöcertifieringen för byggnader.",
+      "BREEAM": "Europeisk miljöcertifiering för byggnader motsvarande LEED.",
+      "räntepunkter": "0,01 procentenheter, används för att uttrycka förändringar i räntor och avkastning."
+    }
+  },
+  "sources": [
+    {
+      "id": "bof-longterm",
+      "url": "https://www.suomenpankki.fi/fi/ajankohtaista/lehdistotiedotteet-ja-uutiset/tiedotteet/2025/vaestokehitys-ja-heikko-tuottavuus-painavat-suomen-pitkan-ajan-kasvua/",
+      "publisher": "Suomen Pankki",
+      "title": {
+        "fi": "Suomen Pankki: Pitkän aikavälin ennuste",
+        "en": "Bank of Finland: Long-term forecast",
+        "sv": "Finlands Bank: Långsiktig prognos"
+      }
+    },
+    {
+      "id": "eurojatalous-energy",
+      "url": "https://www.eurojatalous.fi/fi/2026/artikkelit/nousevat-energiahinnat-varjostavat-talouskehitysta/",
+      "publisher": "Euro & talous",
+      "title": {
+        "fi": "Euro & talous: Nousevat energiahinnat varjostavat kehitystä",
+        "en": "Euro & talous: Rising energy prices weigh on growth",
+        "sv": "Euro & talous: Stigande energipriser tynger tillväxten"
+      }
+    },
+    {
+      "id": "stat-confidence",
+      "url": "https://stat.fi/fi/tilasto/kbar",
+      "publisher": "Tilastokeskus",
+      "title": {
+        "fi": "Tilastokeskus: Kuluttajien luottamusindikaattori",
+        "en": "Statistics Finland: Consumer confidence indicator",
+        "sv": "Statistikcentralen: Konsumenternas förtroendeindikator"
+      }
+    },
+    {
+      "id": "vm-recovery",
+      "url": "https://valtioneuvosto.fi/-/10623/suomen-talouden-toipuminen-on-viivastynyt",
+      "publisher": "Valtioneuvosto",
+      "title": {
+        "fi": "Valtiovarainministeriö: Toipumisen viivästyminen",
+        "en": "Ministry of Finance: Delayed recovery",
+        "sv": "Finansministeriet: Försenad återhämtning"
+      }
+    },
+    {
+      "id": "etla-productivity",
+      "url": "https://www.etla.fi/ajankohtaista/kaupan-alalla-tuottavuus-kehittynyt-kilpailijamaiden-tahdissa-ja-jopa-paremmin-mutta-investoinnit-jaavat-jalkeen-verrokkimaista/",
+      "publisher": "ETLA",
+      "title": {
+        "fi": "ETLA: Kaupan tuottavuus ja investointivaje",
+        "en": "ETLA: Retail productivity and investment gap",
+        "sv": "ETLA: Handelns produktivitet och investeringsgap"
+      }
+    },
+    {
+      "id": "hvk-2030",
+      "url": "https://www.huoltovarmuuskeskus.fi/files/a303a41c7de310569433eea50c35dfb01d0d455e/skenaariot-2030_2p.pdf",
+      "publisher": "Huoltovarmuuskeskus",
+      "title": {
+        "fi": "Huoltovarmuuskeskus: Skenaariot 2030",
+        "en": "NESA: 2030 scenarios",
+        "sv": "Försörjningsberedskapscentralen: Scenarier 2030"
+      }
+    },
+    {
+      "id": "kauppa-circular",
+      "url": "https://kauppa.fi/kaupan-ala/kiertotalous-kuluttajakaupassa/",
+      "publisher": "Kaupan liitto",
+      "title": {
+        "fi": "Kaupan liitto: Kiertotalous kuluttajakaupassa",
+        "en": "Finnish Commerce Federation: Circular economy in consumer trade",
+        "sv": "Handelsförbundet: Cirkulär ekonomi i konsumenthandeln"
+      }
+    },
+    {
+      "id": "etu-2030",
+      "url": "https://www.etu.fi/uutiset/erikoiskauppa-2030-globaali-toimintaymparisto-vaatii-joustavuutta-ja-innovaatioita.html",
+      "publisher": "ETU",
+      "title": {
+        "fi": "ETU: Erikoiskauppa 2030",
+        "en": "ETU: Specialty retail 2030",
+        "sv": "ETU: Specialhandel 2030"
+      }
+    }
+  ]
+}

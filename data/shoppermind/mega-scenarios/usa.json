@@ -1,0 +1,826 @@
+{
+  "id": "usa-structural-shift",
+  "country": "US",
+  "timespan": "2030+",
+  "updatedAt": "2026-05-01",
+  "placeholder": false,
+  "i18n": {
+    "fi": {
+      "title": "Yhdysvaltojen rakenteellinen siirtymä",
+      "intro": "OECD arvioi USA:n BKT-kasvuksi 2,0 prosenttia vuonna 2026 ja 1,7 prosenttia vuonna 2027: tekoälyvetoinen investointi tukee taloutta, mutta reaalitulojen ja kuluttajamenojen hidastuminen painaa. NRF ennustaa silti USA:n vähittäiskaupan kasvavan 4,4 prosenttia vuonna 2026. Kauppakeskukselle kysymys ei ole kulutuksen katoamisesta vaan siitä, mihin se keskittyy: arvoon, helppouteen, terveyteen, kauneuteen, ruokaan ja kohde-elämyksiin.",
+      "redString": "Punainen lanka: USA:ssa voittavat ne kohteet, jotka osaavat olla joko todella edullisia tai todella elämyksellisiä. Yleisluonteinen keskiluokan vaatekauppa puristuu rajusti.",
+      "pathsLabel": "Kolme polkua vuoteen 2035",
+      "paths": [
+        {
+          "id": "a",
+          "title": "Polku A: Sitkeä mutta valikoiva kulutus",
+          "tone": "neutraali",
+          "summary": "USA välttää laajan vähittäiskaupan laskun. Kasvu on maltillista, mutta asiointi keskittyy arvoon, helppouteen ja uskottaviin kokemuksiin.",
+          "macro": "Peruspolkuna käytetään OECD:n 2,0 prosentin BKT-kasvua 2026 ja 1,7 prosenttia 2027 sekä NRF:n 4,4 prosentin vähittäiskaupan kasvuennustetta.",
+          "consumer": "Keskituloiset pysyvät arvotietoisina; hyvätuloiset maksavat yhä vahvoista kokemuksista. Kauppakeskuksen pitää tehdä arvo näkyväksi ilman puhdasta alennusleimaa.",
+          "retail": "Edulliset merkkituotteet, kauneus, terveys, ruoka ja palvelut muodostavat puolustavan kasvukerroksen. Keskihintainen muoti tarvitsee terävämpää kuratointia ja omnikanavapalvelua.",
+          "property": "A-luokan kohteet hyötyvät kokemuksista ja lippulaivalogiikasta; heikommat keskukset tarvitsevat arjen ankkureita ja lyhyempää vuokrasopimusriskiä.",
+          "mallImpact": "Priorisoi mitattavat arvoalueet, terveys- ja kauneuspalvelujen käyntitiheys, ruoka ja perheviihde ennen geneerisen muotipinta-alan lisäystä.",
+          "keyNumbers": [
+            {
+              "label": "USA:n BKT-kasvu",
+              "hint": "OECD 2026",
+              "value": "2,0 %"
+            },
+            {
+              "label": "USA:n BKT-kasvu",
+              "hint": "OECD 2027",
+              "value": "1,7 %"
+            },
+            {
+              "label": "Vähittäiskauppa",
+              "hint": "NRF 2026",
+              "value": "+4,4 %"
+            },
+            {
+              "label": "MOA-kävijät",
+              "hint": "virallinen vertailu",
+              "value": "32M+"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "USA:n BKT-kasvu, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2025",
+                  "v": 2
+                },
+                {
+                  "p": "2026",
+                  "v": 2
+                },
+                {
+                  "p": "2027",
+                  "v": 1.7
+                }
+              ]
+            },
+            {
+              "label": "USA:n vähittäiskaupan kasvu, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2025",
+                  "v": 3.2
+                },
+                {
+                  "p": "2026",
+                  "v": 4.4
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "title": "Polku B: Arvosokki",
+          "tone": "synkkä",
+          "summary": "Energia, inflaatio tai uusi kauppajännite tekee kuluttajasta defensiivisemmän. Voittaja on kohde, joka tekee arjen arvon ja korvaavat käytöt näkyviksi.",
+          "macro": "OECD nostaa energiahinnan, inflaation ja kauppajännitteet keskeisiksi alariskeiksi. Tämä on stressipolku, ei perusennuste.",
+          "consumer": "Harkinnanvaraisia ostoksia lykätään tai vaihdetaan edullisempiin. Ostajat vertaavat hintoja kovemmin ja palkitsevat selkeän arvon, palautukset, korjauksen ja käytännön palvelut.",
+          "retail": "Tavaratalojen ja geneerisen vaatepinta-alan riski kasvaa. Edulliset merkkituotteet, outletit, päivittäistavaraa lähellä olevat palvelut, terveys, kauneus ja korjaus/kierrätys korostuvat.",
+          "property": "Sekundääristen keskusten pitää varautua nopeaan uudelleenvuokraukseen; A-luokan kohteet suojaavat viihde- ja ruokavirtaa.",
+          "mallImpact": "Suunnittele isoille vapautuville pinnoille etukäteen viihde-, terveys-, koulutus-, nouto- ja toimituspalvelu- tai yhteisöpalvelukäyttöjä.",
+          "keyNumbers": [
+            {
+              "label": "Riskisignaali",
+              "hint": "OECD alariski",
+              "value": "inflaatio"
+            },
+            {
+              "label": "Riskisignaali",
+              "hint": "OECD alariski",
+              "value": "energia"
+            },
+            {
+              "label": "Vähittäiskauppa",
+              "hint": "NRF-perusura stressattavaksi",
+              "value": "+4,4 %"
+            },
+            {
+              "label": "MOA-skaala",
+              "hint": "kohdekeskuksen vertailutieto",
+              "value": "5,6M sq ft"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "Stressipolun BKT-oletus, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2026",
+                  "v": 1.2
+                },
+                {
+                  "p": "2027",
+                  "v": 0.5
+                },
+                {
+                  "p": "2028",
+                  "v": 1.2
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "title": "Polku C: Tekno- ja palveluvetoinen kasvu",
+          "tone": "valoisa",
+          "summary": "tekoälyinvestoinnit ja palvelut leviävät vahvemmaksi kuluttajakysynnäksi. Korkeamman hintaluokan kohteet, ruoka, viihde, kauneus ja lippulaivakonseptit hyötyvät.",
+          "macro": "OECD tunnistaa tekoälyvetoisen investoinnin USA:n kasvua tukevaksi voimaksi. Jos tuottavuushyödyt laajenevat, kasvu suosii laadukkaita kohdekeskuksia.",
+          "consumer": "Reaalitulot vahvistuvat ja harkinnanvaraiset ostoskäynnit palautuvat, mutta kokemus, palvelu ja arvon todiste pysyvät vaatimuksina.",
+          "retail": "Lippulaivamyymälät ja elämykselliset myymälät ovat hyödyllisiä kohdekeskuksissa. Mall of America on hyödyllinen vertailukohta, koska se yhdistää skaalan, vetonaulat ja lippulaivaposition.",
+          "property": "A-luokan kohteet ja monikäyttöiset keskukset ottavat kasvun ensin. Esikaupunkikeskukset kääntävät saman logiikan terveyteen, kauneuteen, ruokaan ja perheen asiointisyihin.",
+          "mallImpact": "Käytä kasvutilanne kaupan median mainospaikkojen, lippulaivatestauksen ja sponsoroitavien kokemusalueiden myyntiin, älä pelkkään perinteisen muodin laajentamiseen.",
+          "keyNumbers": [
+            {
+              "label": "tekoälyinvestointi",
+              "hint": "OECD:n kasvun mahdollisuus",
+              "value": "myötätuuli"
+            },
+            {
+              "label": "Vähittäiskauppa",
+              "hint": "NRF 2026",
+              "value": "+4,4 %"
+            },
+            {
+              "label": "MOA-myymälät",
+              "hint": "virallinen vertailu",
+              "value": "jopa 520"
+            },
+            {
+              "label": "MOA-pinta-ala",
+              "hint": "virallinen vertailu",
+              "value": "5,6M sq ft"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "Kasvupolun BKT-oletus, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2026",
+                  "v": 2
+                },
+                {
+                  "p": "2027",
+                  "v": 2.2
+                },
+                {
+                  "p": "2028",
+                  "v": 2.5
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "actionsLabel": "Toimenpide-ehdotukset kiinteistöille",
+      "actionsGeneralLabel": "Kaikkia kiinteistöjä koskevat",
+      "actionsGeneral": [
+        "Vältä geneeristä keskiluokan vaatealan vuokrasopimusta. Painota edullisia merkkituotteita tai kohde-elämyksiä.",
+        "Investoi verkosta lähteneiden brändien lippulaivamyymälöihin ja elämykselliseen viihteeseen.",
+        "Lisää terveys- ja hyvinvointitarjontaa, etenkin esikaupungeissa.",
+        "Käytä kaupunkikeskuksissa toimistovirtaa vaivattoman asioinnin ankkurina.",
+        "Mall of America -tyyppisissä kohteissa: kokeilumyymälät, ei vain perinteinen kauppa."
+      ],
+      "actionsPerMallLabel": "Kiinteistökohtaiset ehdotukset",
+      "actionsPerMall": {
+        "us-dc-urban": {
+          "operator": "esimerkki",
+          "isCompetitor": true,
+          "name": "Washington D.C., urbaani keskus (kilpailijaesimerkki)",
+          "context": "Toimistotyöntekijöiden ja julkisen liikenteen vetovoima. Painottuu nopeaan mukaan otettavaan arkeen ja vaivattomaan asiointiin.",
+          "items": [
+            "Painota vaivaton asiointi: kahvilat, lounas, terveys, palvelut.",
+            "Pidä edulliset merkkituotteet ja edulliset asiointimuodot edustettuna.",
+            "Yhdistä toimistovirta ja iltakävijät ravintolatarjonnassa.",
+            "Käytä julkisen liikenteen virtaa kaupan median kanavana.",
+            "Vältä luksuspositioita: keskiluokka on puristuksissa."
+          ],
+          "kpis": [
+            {
+              "label": "Vaivattoman asioinnin osuus pinta-alasta",
+              "target": "20–25 %",
+              "hint": "ravintolat + nopea mukaan otettava tarjonta"
+            },
+            {
+              "label": "Edulliset merkkituotteet-osuus",
+              "target": "≥ 15 %",
+              "hint": "tariffi-inflaation puskurina"
+            },
+            {
+              "label": "Toimistovirran konversio",
+              "target": "≥ 25 %",
+              "hint": "lounas + iltakahvi"
+            },
+            {
+              "label": "Vuokrasopimusten kesto",
+              "target": "≤ 4 v",
+              "hint": "tariffisokin varalta"
+            }
+          ]
+        },
+        "us-mall-of-america": {
+          "operator": "Triple Five Group",
+          "isCompetitor": true,
+          "name": "Mall of America, Minnesota (kilpailija, kohdekeskusvertailu)",
+          "context": "Yli 32 miljoonaa vuosikävijää, 5,6 milj. neliöjalkaa, jopa 520 liikettä ja ravintolaa. Käytä kohdekeskuksen vertailukohtana turistivirralle, viihteelle, vetonauloille ja lippulaivamyymälöille.",
+          "items": [
+            "Vertaa lippulaivamyymälöiden osuutta vuokralaisrakenteesta.",
+            "Mittaa viihdeankkurien (vesipuisto, teemapuisto) konversiota kauppaan.",
+            "Seuraa verkosta lähteneiden brändien laajentumista kohdekeskukseen ennen omaa portfoliotasi.",
+            "Vertaa tapahtumakalenterin tiheys ja perheviihdekonseptien skaala.",
+            "Tarkkaile viipymäaika ja kohdekäynnin keskiostos."
+          ],
+          "kpis": [
+            {
+              "label": "Lippulaivamyymälöiden osuus",
+              "target": "vertailu",
+              "hint": "vs. oma kohdekeskus"
+            },
+            {
+              "label": "Viihteen kaupan konversio",
+              "target": "vertailu",
+              "hint": "samasta käynnistä"
+            },
+            {
+              "label": "Kävijämäärä per neliöjalka",
+              "target": "vertailu",
+              "hint": "kohdekeskuksen tiheys"
+            },
+            {
+              "label": "Verkosta lähteneiden brändien lisäysnopeus",
+              "target": "vertailu",
+              "hint": "vuosittainen netto"
+            },
+            {
+              "label": "Tapahtumakalenterin tiheys",
+              "target": "vertailu",
+              "hint": "kuukauden tapahtumat"
+            }
+          ]
+        }
+      }
+    },
+    "en": {
+      "title": "United States structural shift",
+      "intro": "OECD projects US GDP growth at 2.0% in 2026 and 1.7% in 2027 as strong AI-related investment is offset by slower real-income and consumer-spending growth. NRF still forecasts 4.4% US retail sales growth in 2026, so the mall question is not whether spending disappears, but where it concentrates: value, convenience, health, beauty, food, and destination experiences.",
+      "redString": "Red string: in the US, the winners are properties that excel at being either truly affordable or truly experiential. Generic mid-market apparel squeezes hardest.",
+      "pathsLabel": "Three paths to 2035",
+      "paths": [
+        {
+          "id": "a",
+          "title": "Path A: Resilient but selective spending",
+          "tone": "neutral",
+          "summary": "The US avoids a broad retail downturn. Growth is moderate, but shoppers concentrate trips around value, convenience, and credible experiences.",
+          "macro": "Use OECD's 2.0% 2026 and 1.7% 2027 GDP path as the base case, with NRF's 4.4% retail-sales growth showing continued consumer resilience.",
+          "consumer": "Middle-income shoppers stay value-aware; higher-income shoppers remain willing to pay for strong experiences. The mall has to make value visible without looking purely discount-led.",
+          "retail": "off-price, beauty, health, food, and services are the defensive growth layer. Mid-market apparel needs sharper editing, events, and omnichannel service to justify space.",
+          "property": "A-tier destinations benefit from experience and flagship logic; weaker centres need tighter everyday-use anchors and shorter lease risk.",
+          "mallImpact": "Prioritise measurable value zones, health/beauty frequency, food, and family entertainment before adding generic apparel space.",
+          "keyNumbers": [
+            {
+              "label": "US GDP growth",
+              "hint": "OECD 2026 projection",
+              "value": "2.0%"
+            },
+            {
+              "label": "US GDP growth",
+              "hint": "OECD 2027 projection",
+              "value": "1.7%"
+            },
+            {
+              "label": "Retail sales",
+              "hint": "NRF 2026 forecast",
+              "value": "+4.4%"
+            },
+            {
+              "label": "MOA visitors",
+              "hint": "annual official benchmark",
+              "value": "32M+"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "US GDP growth, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2025",
+                  "v": 2
+                },
+                {
+                  "p": "2026",
+                  "v": 2
+                },
+                {
+                  "p": "2027",
+                  "v": 1.7
+                }
+              ]
+            },
+            {
+              "label": "US retail sales growth, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2025",
+                  "v": 3.2
+                },
+                {
+                  "p": "2026",
+                  "v": 4.4
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "title": "Path B: value shock",
+          "tone": "dark",
+          "summary": "Energy, inflation, or renewed trade friction makes shoppers more defensive. The winner is the property that makes everyday value and replacement uses obvious.",
+          "macro": "OECD flags higher energy prices, inflation pressure, and trade tension as downside risks. Treat this path as a stress case, not a baseline forecast.",
+          "consumer": "discretionary purchases are delayed or traded down. Shoppers compare prices harder and reward clear value, returns, repair, and practical services.",
+          "retail": "Department-store and generic apparel risk rises. off-price, outlets, grocery-adjacent, health, beauty services, and repair/reuse concepts become more important.",
+          "property": "Secondary centres should plan for faster backfill and more flexible tenanting; A-tier destinations should protect entertainment and food traffic.",
+          "mallImpact": "Pre-plan department-store or big-box vacancy reuse into entertainment, health, education, fulfilment, or community service formats.",
+          "keyNumbers": [
+            {
+              "label": "Risk signal",
+              "hint": "OECD downside risk",
+              "value": "inflation"
+            },
+            {
+              "label": "Risk signal",
+              "hint": "OECD downside risk",
+              "value": "energy"
+            },
+            {
+              "label": "Retail resilience",
+              "hint": "NRF base forecast to stress-test against",
+              "value": "+4.4%"
+            },
+            {
+              "label": "MOA scale",
+              "hint": "destination benchmark",
+              "value": "5.6M sq ft"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "Stress-case GDP assumption, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2026",
+                  "v": 1.2
+                },
+                {
+                  "p": "2027",
+                  "v": 0.5
+                },
+                {
+                  "p": "2028",
+                  "v": 1.2
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "title": "Path C: Tech and experience-led upside",
+          "tone": "bright",
+          "summary": "AI-related investment and services broaden into stronger consumer demand. premium destinations, food, entertainment, beauty, and flagship concepts gain share.",
+          "macro": "OECD identifies AI-related investment as a current US growth support. If productivity gains broaden, the upside path favours high-quality destination assets.",
+          "consumer": "Real-income momentum improves and shoppers resume more discretionary trips, but they still expect strong experience, service, and proof of value.",
+          "retail": "Flagship and immersive stores become more useful in destination centres. Mall of America is a relevant benchmark because it already combines scale, attractions, and flagship-store positioning.",
+          "property": "A-tier destinations and mixed-use centres capture the upside first. Suburban centres should translate the same logic into frequent health, beauty, food, and family missions.",
+          "mallImpact": "Use the upside to sell retail-media inventory, flagship testing space, and sponsorable experience zones rather than simply expanding traditional apparel.",
+          "keyNumbers": [
+            {
+              "label": "AI investment",
+              "hint": "OECD risk/upside framing",
+              "value": "tailwind"
+            },
+            {
+              "label": "Retail sales",
+              "hint": "NRF 2026 forecast",
+              "value": "+4.4%"
+            },
+            {
+              "label": "MOA stores",
+              "hint": "official benchmark",
+              "value": "up to 520"
+            },
+            {
+              "label": "MOA area",
+              "hint": "official benchmark",
+              "value": "5.6M sq ft"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "upside GDP assumption, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2026",
+                  "v": 2
+                },
+                {
+                  "p": "2027",
+                  "v": 2.2
+                },
+                {
+                  "p": "2028",
+                  "v": 2.5
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "actionsLabel": "Property action recommendations",
+      "actionsGeneralLabel": "Across all properties",
+      "actionsGeneral": [
+        "Avoid generic mid-market apparel leases. Lean into off-price or destination experiences.",
+        "Invest in DTC flagships and immersive entertainment.",
+        "Add health and wellness, especially in suburbs.",
+        "In urban centres, use office flow as a convenience anchor.",
+        "In Mall of America-type destinations: showroom concepts, not pure retail."
+      ],
+      "actionsPerMallLabel": "Property-specific recommendations",
+      "actionsPerMall": {
+        "us-dc-urban": {
+          "operator": "example",
+          "isCompetitor": true,
+          "name": "Washington D.C. urban centre (competitor example)",
+          "context": "Office worker and transit pull. Tilts toward grab-and-go everyday and convenience.",
+          "items": [
+            "Lead with convenience: cafés, lunch, health, services.",
+            "Keep off-price and value formats represented.",
+            "Combine office flow and evening visitors in F&B.",
+            "Use transit flow as a retail-media channel.",
+            "Avoid luxury positioning: middle class is squeezed."
+          ],
+          "kpis": [
+            {
+              "label": "convenience share of area",
+              "target": "20-25%",
+              "hint": "F&B + grab-and-go"
+            },
+            {
+              "label": "off-price share",
+              "target": "≥ 15%",
+              "hint": "tariff-inflation hedge"
+            },
+            {
+              "label": "Office-flow conversion",
+              "target": "≥ 25%",
+              "hint": "lunch + evening coffee"
+            },
+            {
+              "label": "Lease term",
+              "target": "≤ 4 yr",
+              "hint": "tariff shock hedge"
+            }
+          ]
+        },
+        "us-mall-of-america": {
+          "operator": "Triple Five Group",
+          "isCompetitor": true,
+          "name": "Mall of America, Minnesota (competitor, destination benchmark)",
+          "context": "32M+ annual visits, 5.6M sq ft, up to 520 stores and restaurants. Use as a destination benchmark for tourist flow, entertainment, attractions, and flagship stores.",
+          "items": [
+            "Compare flagship-store share of tenant mix.",
+            "Measure entertainment-anchor (water park, theme park) conversion to retail.",
+            "Watch DTC arrivals to destination centres before your portfolio.",
+            "Compare event-calendar density and family-entertainment scale.",
+            "Track dwell time and average destination basket size."
+          ],
+          "kpis": [
+            {
+              "label": "Flagship-store share",
+              "target": "benchmark",
+              "hint": "vs. own destination"
+            },
+            {
+              "label": "Entertainment-to-retail conversion",
+              "target": "benchmark",
+              "hint": "same visit"
+            },
+            {
+              "label": "Visitors per sq ft",
+              "target": "benchmark",
+              "hint": "destination density"
+            },
+            {
+              "label": "DTC addition rate",
+              "target": "benchmark",
+              "hint": "annual net"
+            },
+            {
+              "label": "Event-calendar density",
+              "target": "benchmark",
+              "hint": "monthly events"
+            }
+          ]
+        }
+      }
+    },
+    "sv": {
+      "title": "USA:s strukturella omställning",
+      "intro": "OECD räknar med 2,0 % BNP-tillväxt i USA 2026 och 1,7 % 2027: AI-relaterade investeringar stödjer ekonomin, men långsammare realinkomst- och konsumtionstillväxt bromsar. NRF prognostiserar ändå 4,4 % detaljhandelstillväxt i USA 2026. För köpcentrum handlar frågan därför om var konsumtionen koncentreras: värde, bekvämlighet, hälsa, skönhet, mat och destinationsupplevelser.",
+      "redString": "Röd tråd: i USA vinner de fastigheter som verkligen är antingen prisvärda eller upplevelsedrivna. Generisk mellanmarknadsmode pressas hårdast.",
+      "pathsLabel": "Tre vägar till 2035",
+      "paths": [
+        {
+          "id": "a",
+          "title": "Väg A: Motståndskraftig men selektiv konsumtion",
+          "tone": "neutral",
+          "summary": "USA undviker en bred detaljhandelsnedgång. Tillväxten är måttlig, men besök koncentreras till värde, bekvämlighet och trovärdiga upplevelser.",
+          "macro": "Basen är OECD:s 2,0 % BNP-tillväxt 2026 och 1,7 % 2027 samt NRF:s 4,4 % detaljhandelstillväxt för 2026.",
+          "consumer": "Medelinkomsttagare förblir värdemedvetna; höginkomsttagare betalar fortfarande för starka upplevelser. Köpcentrumet måste göra värde synligt utan att bli enbart rabattdrivet.",
+          "retail": "off-price, skönhet, hälsa, mat och tjänster är det defensiva tillväxtlagret. Mellanmarknadsmode behöver skarpare kuratering och omnikanaltjänster.",
+          "property": "A-läge destinationer gynnas av upplevelser och flaggskeppslogik; svagare centrum behöver vardagsankare och kortare hyresrisk.",
+          "mallImpact": "Prioritera mätbara värdezoner, hälsa/skönhet-frekvens, mat och familjeunderhållning före mer generisk modeyta.",
+          "keyNumbers": [
+            {
+              "label": "USA BNP",
+              "hint": "OECD 2026",
+              "value": "2,0 %"
+            },
+            {
+              "label": "USA BNP",
+              "hint": "OECD 2027",
+              "value": "1,7 %"
+            },
+            {
+              "label": "Detaljhandel",
+              "hint": "NRF 2026",
+              "value": "+4,4 %"
+            },
+            {
+              "label": "MOA-besök",
+              "hint": "officiell benchmark",
+              "value": "32M+"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "USA BNP-tillväxt, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2025",
+                  "v": 2
+                },
+                {
+                  "p": "2026",
+                  "v": 2
+                },
+                {
+                  "p": "2027",
+                  "v": 1.7
+                }
+              ]
+            },
+            {
+              "label": "USA detaljhandelstillväxt, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2025",
+                  "v": 3.2
+                },
+                {
+                  "p": "2026",
+                  "v": 4.4
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "title": "Väg B: Värdeschock",
+          "tone": "dark",
+          "summary": "Energi, inflation eller ny handelsspänning gör konsumenten mer defensiv. Vinnaren är fastigheten som gör vardagsvärde och ersättningsanvändning tydlig.",
+          "macro": "OECD lyfter energipriser, inflationstryck och handelsspänningar som nedsiderisker. Detta är ett stresstest, inte basprognosen.",
+          "consumer": "Sällanköp skjuts upp eller byts ned. Shoppare jämför priser hårdare och belönar tydligt värde, returer, reparation och praktiska tjänster.",
+          "retail": "Department stores och generiskt mode får högre risk. off-price, outlet, dagligvarunära service, hälsa, skönhet och reparation/återbruk blir viktigare.",
+          "property": "Sekundära centrum bör planera snabb återuthyrning; A-läge destinationer skyddar underhållnings- och matflöden.",
+          "mallImpact": "Förplanera stora vakanta ytor för underhållning, hälsa, utbildning, fulfilment eller samhällsservice.",
+          "keyNumbers": [
+            {
+              "label": "Risksignal",
+              "hint": "OECD nedsiderisk",
+              "value": "inflation"
+            },
+            {
+              "label": "Risksignal",
+              "hint": "OECD nedsiderisk",
+              "value": "energi"
+            },
+            {
+              "label": "Detaljhandel",
+              "hint": "NRF basprognos",
+              "value": "+4,4 %"
+            },
+            {
+              "label": "MOA-skala",
+              "hint": "destinationsbenchmark",
+              "value": "5,6M sq ft"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "Stressantagande BNP, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2026",
+                  "v": 1.2
+                },
+                {
+                  "p": "2027",
+                  "v": 0.5
+                },
+                {
+                  "p": "2028",
+                  "v": 1.2
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "title": "Väg C: Teknik- och upplevelseledd uppsida",
+          "tone": "bright",
+          "summary": "AI-investeringar och tjänster breddas till starkare konsumentefterfrågan. premiumdestinationer, mat, underhållning, skönhet och flaggskepp gynnas.",
+          "macro": "OECD identifierar AI-relaterade investeringar som ett stöd för USA:s tillväxt. Om produktivitetsvinsterna breddas gynnas högkvalitativa destinationer.",
+          "consumer": "Realinkomsten förbättras och fler sällanbesök återkommer, men upplevelse, service och bevisat värde krävs fortfarande.",
+          "retail": "Flaggskepps- och immersiva butiker blir mer användbara i destinationer. Mall of America är relevant benchmark genom skala, attraktioner och flaggskeppsposition.",
+          "property": "A-läge destinationer och mixed-use-centrum fångar uppsidan först. Förortscentrum bör översätta logiken till hälsa, skönhet, mat och familjemissioner.",
+          "mallImpact": "Sälj handelsmedia-inventarier, flaggskeppstestytor och sponsringsbara upplevelsezoner snarare än att bara expandera traditionellt mode.",
+          "keyNumbers": [
+            {
+              "label": "AI-investering",
+              "hint": "OECD uppsida",
+              "value": "medvind"
+            },
+            {
+              "label": "Detaljhandel",
+              "hint": "NRF 2026",
+              "value": "+4,4 %"
+            },
+            {
+              "label": "MOA-butiker",
+              "hint": "officiell benchmark",
+              "value": "upp till 520"
+            },
+            {
+              "label": "MOA-yta",
+              "hint": "officiell benchmark",
+              "value": "5,6M sq ft"
+            }
+          ],
+          "evidenceCharts": [
+            {
+              "label": "Uppsidesantagande BNP, %",
+              "unit": "%",
+              "series": [
+                {
+                  "p": "2026",
+                  "v": 2
+                },
+                {
+                  "p": "2027",
+                  "v": 2.2
+                },
+                {
+                  "p": "2028",
+                  "v": 2.5
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "actionsLabel": "Åtgärdsförslag för fastigheter",
+      "actionsGeneralLabel": "Gäller alla fastigheter",
+      "actionsGeneral": [
+        "Undvik generiska mellanmarknadsmode-avtal. Satsa på off-price eller destinationsupplevelser.",
+        "Investera i DTC-flaggskepp och immersiv underhållning.",
+        "Lägg till hälsa och välmående, särskilt i förorter.",
+        "I urbana centrum: använd kontorsflöde som bekvämlighetsankare.",
+        "I Mall of America-typ destinationer: showroom-koncept, inte ren handel."
+      ],
+      "actionsPerMallLabel": "Fastighetsspecifika rekommendationer",
+      "actionsPerMall": {
+        "us-dc-urban": {
+          "operator": "exempel",
+          "isCompetitor": true,
+          "name": "Washington D.C. urbant centrum (konkurrent-exempel)",
+          "context": "Kontorsanställdas och kollektivtrafikens dragkraft. Lutar mot grab-and-go vardag.",
+          "items": [
+            "Led med bekvämlighet: caféer, lunch, hälsa, tjänster.",
+            "Behåll off-price och värdeformat representerade.",
+            "Kombinera kontorsflöde och kvällsbesökare i F&B."
+          ],
+          "kpis": [
+            {
+              "label": "Bekvämlighetens andel av yta",
+              "target": "20-25 %",
+              "hint": "ravintolat + grab-and-go"
+            },
+            {
+              "label": "off-price-andel",
+              "target": "≥ 15 %",
+              "hint": "tullinflations-skydd"
+            }
+          ]
+        },
+        "us-mall-of-america": {
+          "operator": "Triple Five Group",
+          "isCompetitor": true,
+          "name": "Mall of America, Minnesota (konkurrent, destinationsbenchmark)",
+          "context": "32M+ årliga besök, 5,6M kvft, upp till 520 butiker och restauranger. Använd som benchmark för turistflöde, underhållning, attraktioner och flaggskeppsbutiker.",
+          "items": [
+            "Jämför flaggskeppsbutikers andel av hyresmix.",
+            "Mät underhållningsankarens (vattenpark, temapark) konvertering till handel.",
+            "Bevaka DTC-tillkomst till destinationscentrum före din portfölj."
+          ],
+          "kpis": [
+            {
+              "label": "Flaggskeppsbutikers andel",
+              "target": "benchmark",
+              "hint": "vs. egen destination"
+            },
+            {
+              "label": "Underhållning-till-handel-konvertering",
+              "target": "benchmark",
+              "hint": "samma besök"
+            },
+            {
+              "label": "Besökare per kvft",
+              "target": "benchmark",
+              "hint": "destinationsdensitet"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "glossary": {
+    "fi": {},
+    "en": {},
+    "sv": {}
+  },
+  "sources": [
+    {
+      "id": "oecd-us-2026",
+      "url": "https://www.oecd.org/en/publications/oecd-economic-outlook-interim-report-march-2026_d4623013-en/full-report.html",
+      "publisher": "OECD",
+      "title": {
+        "fi": "OECD: Yhdysvaltojen talousnäkymä 2026",
+        "en": "OECD: US economic outlook 2026",
+        "sv": "OECD: USA:s ekonomiska utsikter 2026"
+      }
+    },
+    {
+      "id": "nrf-us-retail-2026",
+      "url": "https://nrf.com/media-center/press-releases/nrf-forecasts-4.4-annual-retail-sales-growth-new-economic-model",
+      "publisher": "NRF",
+      "title": {
+        "fi": "NRF: USA:n vähittäiskaupan kasvuennuste 2026",
+        "en": "NRF: US retail sales growth forecast 2026",
+        "sv": "NRF: USA:s detaljhandelstillväxt 2026"
+      }
+    },
+    {
+      "id": "mall-of-america",
+      "url": "https://www.mallofamerica.com/press-release/28485",
+      "publisher": "Mall of America",
+      "title": {
+        "fi": "Mall of America, Minnesota",
+        "en": "Mall of America, Minnesota",
+        "sv": "Mall of America, Minnesota"
+      }
+    }
+  ]
+}

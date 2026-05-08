@@ -9,7 +9,6 @@ import {
   FileSpreadsheet,
   LogOut,
   Building2,
-  Sparkles,
   Calendar,
   Clock,
   KeyRound,
@@ -19,6 +18,7 @@ import { useSession } from '@/contexts/SessionContext';
 import { signOut } from 'next-auth/react';
 import { CompactLanguageSelector } from '@/components/ui/language-selector';
 import { useConciergeOptional } from '@/components/concierge/ConciergeContext';
+import { PropertySpeechBubble } from '@/components/concierge/PropertySpeechBubble';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,6 +28,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useTranslation } from 'react-i18next';
+import { canonicalizeMallId } from '@/lib/mall/ids';
+import { getMallIdentity } from '@/lib/mall/mallIdentity';
 
 export interface MallTopBarProps {
   onExport?: (format: 'pdf' | 'csv' | 'excel') => void;
@@ -41,6 +43,10 @@ export function MallTopBar({
   const { user } = useSession();
   const concierge = useConciergeOptional();
   const { t, i18n } = useTranslation('mall');
+  const activeMallId = canonicalizeMallId(user?.mallId);
+  const activePropertyName = activeMallId
+    ? getMallIdentity(activeMallId).name
+    : (user?.mallDisplayName ?? user?.companyName ?? 'your property');
 
   const [now, setNow] = useState(new Date());
   useEffect(() => {
@@ -98,26 +104,14 @@ export function MallTopBar({
 
       {/* Right: Actions */}
       <div className="flex items-center gap-3">
-        {/* Concierge AI Assistant Toggle */}
+        {/* Concierge Speech Bubble */}
         {concierge && (
-          <button
+          <PropertySpeechBubble
+            isOpen={concierge.state?.panelOpen ?? false}
+            unreadCount={concierge.state?.conversations?.length ?? 0}
             onClick={() => concierge.togglePanel()}
-            className={cn(
-              'flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all duration-200',
-              concierge.state?.panelOpen
-                ? 'bg-bo-primary-500 text-white border-bo-primary-600 shadow-lg shadow-bo-primary-500/30'
-                : 'bg-bo-neutral-100 text-bo-neutral-900 border-bo-neutral-200 hover:bg-bo-primary-50 hover:border-bo-primary-300 hover:text-bo-primary-700'
-            )}
-            aria-label={t('topbar.concierge')}
-          >
-            <Sparkles className="h-4 w-4" />
-            <span className="text-sm font-medium">{t('topbar.concierge')}</span>
-            {concierge.state?.conversations?.length > 0 && !concierge.state?.panelOpen && (
-              <span className="ml-1 bg-bo-primary-500 text-white text-xs rounded-full px-2 py-0.5">
-                {concierge.state.conversations.length}
-              </span>
-            )}
-          </button>
+            propertyName={activePropertyName}
+          />
         )}
 
         {/* Language Selector */}

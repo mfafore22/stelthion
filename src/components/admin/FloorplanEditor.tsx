@@ -462,7 +462,7 @@ export function FloorplanEditor({
       setSavedSincePublish(true);
     } catch (err) {
       console.error('Save failed:', err);
-      alert('Save failed — check console for details.');
+      alert('Save failed. Check console for details.');
     } finally {
       setSaving(false);
     }

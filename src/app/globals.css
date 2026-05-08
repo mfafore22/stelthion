@@ -165,6 +165,17 @@
     color: var(--foreground);
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
+  select {
+    background-color: #FFFFFF !important;
+    color: #1A1A1A;
+  }
+  select option {
+    background-color: #FFFFFF !important;
+    color: #1A1A1A !important;
+  }
+  select option:disabled {
+    color: #9C9896;
+  }
 }
 
 @layer utilities {
@@ -201,6 +212,34 @@
     background: rgba(50, 141, 46, 0.07);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
+  }
+  .bo-surface {
+    background: rgba(248, 246, 243, 0.65);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    box-shadow: 0 8px 24px rgba(26, 26, 26, 0.08);
+  }
+  .bo-surface-subtle {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+  }
+  .bo-surface-hover {
+    transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 300ms cubic-bezier(0.16, 1, 0.3, 1),
+                background 300ms cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 300ms cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+  .bo-surface-hover:hover {
+    background: rgba(255, 255, 255, 0.62);
+    border-color: rgba(50, 141, 46, 0.25);
+    box-shadow: 0 12px 32px rgba(26, 26, 26, 0.10);
+    transform: translateY(-2px);
+  }
+  .bo-surface-hover:active {
+    transform: translateY(0);
+    transition-duration: 120ms;
   }
   .bg-bo-gradient-muted {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(33, 73, 144, 0.12) 100%);
@@ -245,6 +284,7 @@
   }
   .hover-lift:hover {
     transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(26, 26, 26, 0.10);
   }
   .active-press:active {
     transform: translateY(0);
@@ -322,6 +362,42 @@
   .bo-interactive-box:active {
     transform: translateY(0);
     transition-duration: 100ms;
+  }
+  .bo-select {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(224, 221, 217, 0.95);
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(26, 26, 26, 0.06);
+    color: #1A1A1A;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.5rem 0.75rem;
+    -webkit-font-smoothing: antialiased;
+    transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1),
+                background 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  select.bo-select,
+  select:not([multiple]) {
+    background: #FFFFFF !important;
+    border-color: rgba(224, 221, 217, 0.95);
+    color: #1A1A1A;
+  }
+  select:not([multiple]):hover,
+  .bo-select:hover {
+    background: rgba(255, 255, 255, 0.96) !important;
+    border-color: rgba(50, 141, 46, 0.25);
+    box-shadow: 0 4px 12px rgba(26, 26, 26, 0.07);
+  }
+  .bo-select:focus {
+    border-color: rgba(50, 141, 46, 0.65);
+    box-shadow: 0 0 0 3px rgba(50, 141, 46, 0.16);
+    outline: none;
+  }
+  select:not([multiple]):focus {
+    border-color: rgba(50, 141, 46, 0.65);
+    box-shadow: 0 0 0 3px rgba(50, 141, 46, 0.16);
+    outline: none;
   }
 
   /* Transport badges */

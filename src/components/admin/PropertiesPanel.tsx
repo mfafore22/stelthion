@@ -171,7 +171,7 @@ function SelectField({ label, value, options, onChange, allowEmpty }: { label: s
         value={value}
         onChange={(e) => onChange(e.target.value)}
       >
-        {allowEmpty && <option value="">—</option>}
+        {allowEmpty && <option value="">–</option>}
         {options.map((o) => (
           <option key={o} value={o}>{o}</option>
         ))}

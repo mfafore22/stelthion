@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import '@/lib/i18n';
 import { Upload, Download, FileSpreadsheet, AlertTriangle, Check, Trash2 } from 'lucide-react';
+import { useAdminMall } from '@/lib/hooks/useAdminMall';
 
 interface UploadEntry {
   id: string | null;
@@ -39,7 +40,8 @@ export function CounterDataClient() {
   const [deleting, setDeleting] = useState<string | null>(null);
   const [deleteInProgress, setDeleteInProgress] = useState(false);
 
-  const mallId = 'ideapark';
+  const { activeMallId } = useAdminMall();
+  const mallId = activeMallId;
 
   const fetchEntries = useCallback(async () => {
     try {
@@ -268,10 +270,10 @@ export function CounterDataClient() {
                     </td>
                     <td className="px-4 py-2 text-right text-bo-neutral-600">{entry.counterCount}</td>
                     <td className="px-4 py-2 text-right text-bo-neutral-600">
-                      {entry.readingCount ?? (entry.totalVisitors?.toLocaleString() ?? '—')}
+                      {entry.readingCount ?? (entry.totalVisitors?.toLocaleString() ?? '–')}
                     </td>
                     <td className="px-4 py-2 text-right text-bo-neutral-400 text-xs">
-                      {entry.uploadedAt ? new Date(entry.uploadedAt).toLocaleString() : '—'}
+                      {entry.uploadedAt ? new Date(entry.uploadedAt).toLocaleString() : '–'}
                     </td>
                     <td className="px-4 py-2 text-right">
                       <div className="flex items-center justify-end gap-1">

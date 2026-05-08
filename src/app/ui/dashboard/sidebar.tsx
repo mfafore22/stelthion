@@ -10,9 +10,15 @@ import {
   BarChart3,
   TrendingUpDown,
   HandPlatter,
-  Brain,
   Settings,
 } from 'lucide-react'
+import { ShopperMindIcon } from '@/components/mall/shoppermind/ShopperMindIcon'
+
+function DashboardShopperMindIcon({ size = 20 }: { size?: number }) {
+  return (
+    <ShopperMindIcon className={size > 20 ? 'h-7 w-7' : 'h-6 w-6'} />
+  )
+}
 
 const navItems = [
   { href: '/dashboard', icon: LayoutGrid, label: 'Portfolio' },
@@ -21,7 +27,7 @@ const navItems = [
   { href: '/dashboard/analytics', icon: BarChart3, label: 'Analytics' },
   { href: '/dashboard/insights', icon: TrendingUpDown, label: 'Scenarios' },
   { href: '/dashboard/messages', icon: HandPlatter, label: 'Assistants' },
-  { href: '/dashboard/shoppermind', icon: Brain, label: 'ShopperMind' },
+  { href: '/dashboard/shoppermind', icon: DashboardShopperMindIcon, label: 'ShopperMind' },
   { href: '/dashboard/settings', icon: Settings, label: 'Settings' },
 ]
 
@@ -30,13 +36,13 @@ export function Sidebar() {
 
   return (
     <aside className="w-[80px] bg-white border-r border-gray-200 flex flex-col items-center">
-      {/* Swirl logo — same position as mall side */}
+      {/* Stelthion icon — same position as mall side */}
       <div className="h-[80px] w-full flex items-center justify-center shrink-0">
         <Image
-          src="/stelthion-swirl-v2.png"
+          src="/stelthion-brand-s.png"
           alt="Stelthion"
           width={26}
-          height={26}
+          height={28}
           className="object-contain"
           priority
         />

@@ -91,6 +91,9 @@ export class StubLLMClient implements LLMClient {
   /** Simple keyword-based tool detection for the stub */
   private detectToolCalls(query: string, tools: LLMToolSchema[]): LLMToolCall[] {
     const lower = query.toLowerCase();
+    const primaryTool = this.detectPrimaryTool(lower, tools);
+    if (primaryTool) return [this.toolCall(primaryTool)];
+
     const calls: LLMToolCall[] = [];
 
     const keywords: Record<string, string[]> = {
@@ -99,28 +102,42 @@ export class StubLLMClient implements LLMClient {
       get_current_visitors: ['current visitors', 'how many visitors', 'visitors now', 'nyt kävijä', 'kävijämäärä nyt', 'montako kävijää', 'live visitors', 'right now', 'besökare nu'],
       get_footfall_profile: ['footfall', 'visitors', 'kävijä', 'traffic', 'liikenne', 'profile', 'profiili'],
       get_footfall_for_date: ['footfall on', 'visitors on', 'how many people'],
-      get_events: ['event', 'tapahtuma', 'concert', 'konsertti', 'match', 'ottelu'],
+      get_events: ['event', 'tapahtum', 'concert', 'konsertti', 'match', 'ottelu', 'evenemang'],
       get_parking_status: ['parking', 'pysäköinti', 'car', 'auto'],
       get_transport: ['bus', 'train', 'juna', 'bussi', 'departure', 'lähtö', 'transport', 'liikenne', 'kollektivtrafik'],
       get_mall_stats: ['stats', 'kpi', 'sales', 'myynti', 'visitors annual', 'tunnusluku', 'tunnusluvut', 'nyckeltal', 'key metrics'],
-      get_zone_info: ['zone', 'alue', 'vyöhyke', 'floor'],
+      get_zone_info: ['zone', 'vyöhyke', 'kerros', 'floor'],
       get_store_info: ['store', 'shop', 'kauppa', 'myymälä', 'where is'],
       get_zone_flow: ['flow', 'movement', 'passage', 'corridor', 'käytävä', 'kävijävirr', 'besöksflöde', 'visitor flow'],
-      get_demographics: ['demographic', 'population', 'väestö', 'income', 'tulo', 'catchment'],
+      get_demographics: ['demographic', 'population', 'väestö', 'income', 'tulot', 'tulotaso', 'catchment'],
       get_shoppermind_trends: ['trend', 'trendi', 'emerging', 'nouseva', 'phenomenon', 'ilmiö', 'signal', 'signaali', 'shoppermind', 'market trend', 'industry', 'fading', 'accelerating', 'what is rising', 'what is hot', 'property trend', 'retail trend'],
     };
 
     for (const [toolName, kws] of Object.entries(keywords)) {
       if (kws.some(kw => lower.includes(kw)) && tools.some(t => t.name === toolName)) {
-        calls.push({
-          id: `stub_${toolName}_${Date.now()}`,
-          name: toolName,
-          arguments: {},
-        });
+        calls.push(this.toolCall(toolName));
       }
     }
 
     return calls;
+  }
+
+  private detectPrimaryTool(lower: string, tools: LLMToolSchema[]): string | null {
+    if (
+      /\b(events?|concerts?|matches?)\b/.test(lower) ||
+      /tapahtum|konsertt|ottelu|evenemang/.test(lower)
+    ) {
+      return tools.some(t => t.name === 'get_events') ? 'get_events' : null;
+    }
+    return null;
+  }
+
+  private toolCall(toolName: string): LLMToolCall {
+    return {
+      id: `stub_${toolName}_${Date.now()}`,
+      name: toolName,
+      arguments: {},
+    };
   }
 }
 
@@ -156,6 +173,60 @@ export class StubLLMClient implements LLMClient {
  *   }
  * }
  */
+
+// ── Embedding Client ─────────────────────────────────────
+
+export interface EmbeddingClient {
+  embed(texts: string[]): Promise<number[][]>;
+}
+
+class OllamaEmbeddingClient implements EmbeddingClient {
+  constructor(
+    private baseUrl: string,
+    private model = 'nomic-embed-text',
+  ) {}
+
+  async embed(texts: string[]): Promise<number[][]> {
+    const results: number[][] = [];
+    for (const text of texts) {
+      const res = await fetch(`${this.baseUrl}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: this.model, input: text }),
+      });
+      if (!res.ok) throw new Error(`Embedding request failed: ${res.status}`);
+      const data = (await res.json()) as { embeddings?: number[][]; embedding?: number[] };
+      const vec = data.embeddings?.[0] ?? data.embedding;
+      if (!vec) throw new Error('No embedding in response');
+      results.push(vec);
+    }
+    return results;
+  }
+}
+
+class StubEmbeddingClient implements EmbeddingClient {
+  async embed(texts: string[]): Promise<number[][]> {
+    return texts.map(() => {
+      const vec = new Array(384).fill(0).map(() => Math.random() - 0.5);
+      const mag = Math.sqrt(vec.reduce((a, b) => a + b * b, 0));
+      return vec.map((v) => v / (mag || 1));
+    });
+  }
+}
+
+let embeddingInstance: EmbeddingClient | null = null;
+
+export function getEmbeddingClient(): EmbeddingClient {
+  if (!embeddingInstance) {
+    const url = process.env.LOCAL_EMBEDDING_URL;
+    if (url) {
+      embeddingInstance = new OllamaEmbeddingClient(url);
+    } else {
+      embeddingInstance = new StubEmbeddingClient();
+    }
+  }
+  return embeddingInstance;
+}
 
 // ── Factory ───────────────────────────────────────────────
 

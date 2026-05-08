@@ -22,8 +22,13 @@ import type {
   JobWithResults, JourneyResponse,
 } from './types';
 import type { FlowQueryResponse } from '@/lib/types/flowQuery';
+import type { FloorplanFloor } from '@/lib/mall/floorplanAssets';
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+const fetcher = async (url: string) => {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
+};
 
 interface VideoAnalysisProps {
   mallId: string;
@@ -45,7 +50,6 @@ export function VideoAnalysis({ mallId }: VideoAnalysisProps) {
   const [flowOrigin, setFlowOrigin] = useState<string | null>(null);
   const [flowDestination, setFlowDestination] = useState<string | null>(null);
   const [flowResult, setFlowResult] = useState<FlowQueryResponse | null>(null);
-  const [flowFloor, setFlowFloor] = useState<'ground' | 'upper'>('ground');
 
   // ── Data fetching ──────────────────────────────────────────────────────
   const { data: cameras = [] } = useSWR<Camera[]>(
@@ -53,14 +57,15 @@ export function VideoAnalysis({ mallId }: VideoAnalysisProps) {
     fetcher,
   );
 
-  const { data: zonesData } = useSWR<{ groundZones: Zone[]; upperZones: Zone[] }>(
+  const { data: zonesData } = useSWR<{ groundZones: Zone[]; upperZones: Zone[]; floors?: Record<string, Zone[]> }>(
     `/api/floorplan/${mallId}/zones`,
     fetcher,
   );
-  const zones = useMemo(() => [
-    ...(zonesData?.groundZones ?? []),
-    ...(zonesData?.upperZones ?? []),
-  ], [zonesData]);
+  const zones = useMemo(() => (
+    zonesData?.floors
+      ? Object.values(zonesData.floors).flat()
+      : [...(zonesData?.groundZones ?? []), ...(zonesData?.upperZones ?? [])]
+  ), [zonesData]);
 
   const jobsKey = `/api/analysis/jobs?mallId=${mallId}`;
   const { data: jobs = [] } = useSWR<AnalysisJob[]>(jobsKey, fetcher, { refreshInterval: 15000 });
@@ -151,8 +156,9 @@ export function VideoAnalysis({ mallId }: VideoAnalysisProps) {
   }, [flowOrigin, flowDestination]);
 
   // Render prop for Sankey overlay on floorplan
-  const renderFlowOverlay = useCallback((floor: 'ground' | 'upper') => {
+  const renderFlowOverlay = useCallback((floor: FloorplanFloor) => {
     if (!flowResult) return null;
+    if (floor !== 'ground' && floor !== 'upper') return null;
     return <FlowSankeyOverlay data={flowResult} floor={floor} />;
   }, [flowResult]);
 
@@ -226,24 +232,24 @@ export function VideoAnalysis({ mallId }: VideoAnalysisProps) {
   }, [flowOrigin, flowDestination]);
 
   return (
-    <div className="space-y-6">
+    <div className="bo-surface bo-surface-hover space-y-5 rounded-2xl border-2 border-bo-primary-200/60 p-5 sm:p-6">
       {/* Header */}
-      <div className="flex items-center gap-2.5">
-        <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-gradient-to-br from-bo-primary-50 to-bo-primary-100 border border-bo-primary-200/40">
+      <div className="flex items-center gap-3">
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-bo-primary-200/50 bg-bo-primary-100/70 shadow-bo-sm">
           <Scan className="w-4.5 h-4.5 text-bo-primary-600" />
         </div>
         <div>
-          <h3 className="text-base font-semibold text-bo-neutral-900">
+          <h3 className="text-lg font-semibold tracking-tight text-bo-neutral-950">
             {t('videoAnalysis.unified.title')}
           </h3>
-          <p className="text-[11px] text-bo-neutral-500">
+          <p className="mt-1 text-sm text-bo-neutral-600">
             {t('videoAnalysis.unified.subtitle')}
           </p>
         </div>
       </div>
 
       {/* Mode bar */}
-      <div className="flex items-center gap-1 p-1 bg-bo-neutral-100 rounded-lg w-fit">
+      <div className="flex w-fit items-center gap-1 rounded-xl border-2 border-bo-neutral-200/70 bg-white/75 p-1 shadow-bo-glass backdrop-blur-xl">
         {MODE_BAR.map(({ mode, labelKey }) => {
           const meta = MODE_META[mode];
           const Icon = meta.icon;
@@ -253,10 +259,10 @@ export function VideoAnalysis({ mallId }: VideoAnalysisProps) {
               key={mode}
               onClick={() => handleModeSwitch(isActive ? null : mode)}
               className={cn(
-                'flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all',
+                'flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-semibold transition-all duration-200 ease-bo-out-expo',
                 isActive
-                  ? 'bg-white shadow text-bo-neutral-900'
-                  : 'text-bo-neutral-500 hover:text-bo-neutral-700'
+                  ? 'bg-bo-neutral-950 text-white shadow-lg shadow-bo-neutral-900/15 -translate-y-0.5'
+                  : 'text-bo-neutral-600 hover:bg-white/70 hover:text-bo-neutral-950'
               )}
             >
               <Icon className="w-3.5 h-3.5" />
@@ -268,7 +274,7 @@ export function VideoAnalysis({ mallId }: VideoAnalysisProps) {
 
       {/* Active mode description */}
       {activeMode && (
-        <div className="flex items-start gap-2 px-3 py-2 rounded-lg bg-bo-neutral-50 border border-bo-neutral-200/60">
+        <div className="flex items-start gap-2 rounded-xl border border-bo-neutral-200/60 bg-white/70 px-4 py-3 shadow-bo-glass backdrop-blur-xl">
           <p className="text-xs text-bo-neutral-600 leading-relaxed">
             {t(`videoAnalysis.modesDescription.${activeMode === 'ZONE_COUNT' ? 'zoneCount' : activeMode === 'JOURNEY_MAP' ? 'journeyMap' : 'flowQuery'}`)}
           </p>
@@ -277,10 +283,10 @@ export function VideoAnalysis({ mallId }: VideoAnalysisProps) {
 
       {/* Flow Query mode: sidebar + floorplan grid */}
       {isFlowQueryMode ? (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid gap-4 xl:grid-cols-3">
           {/* Left sidebar */}
-          <div className="col-span-1">
-            <div className="bg-white rounded-xl border border-bo-neutral-200 shadow-bo-sm p-4">
+          <div>
+            <div className="bo-surface-subtle bo-surface-hover rounded-xl border-2 border-bo-neutral-200/60 p-4 shadow-bo-glass">
               <FlowQuerySidebar
                 mallId={mallId}
                 origin={flowOrigin}
@@ -293,7 +299,7 @@ export function VideoAnalysis({ mallId }: VideoAnalysisProps) {
           </div>
 
           {/* Right: floorplan with Sankey overlay */}
-          <div className="col-span-2">
+          <div className="xl:col-span-2">
             <FootfallAnalysis
               mallId={mallId}
               selectionMode
@@ -301,7 +307,6 @@ export function VideoAnalysis({ mallId }: VideoAnalysisProps) {
               selectedZoneIds={flowSelectedZoneIds}
               onToggleCamera={() => {}}
               onToggleZone={handleFlowZoneToggle}
-              onFloorChange={setFlowFloor}
               overlayContent={renderFlowOverlay}
               hideDensityLegend
             />
@@ -364,7 +369,7 @@ export function VideoAnalysis({ mallId }: VideoAnalysisProps) {
                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 className="overflow-hidden"
               >
-                <div className="bg-white rounded-xl border border-bo-neutral-200 shadow-bo-sm p-6">
+                <div className="bo-surface-subtle bo-surface-hover rounded-xl border-2 border-bo-neutral-200/60 p-6 shadow-bo-glass">
                   {selectedJob?.mode === 'ZONE_COUNT' && jobResults && (
                     <ZoneCountResult job={jobResults} />
                   )}
@@ -394,7 +399,7 @@ export function VideoAnalysis({ mallId }: VideoAnalysisProps) {
           </AnimatePresence>
 
           {/* Job History */}
-          <div className="bg-white rounded-xl border border-bo-neutral-200 shadow-bo-sm p-6">
+          <div className="bo-surface-subtle bo-surface-hover rounded-xl border-2 border-bo-neutral-200/60 p-6 shadow-bo-glass">
             <JobHistory
               jobs={jobs}
               selectedJobId={selectedJobId}

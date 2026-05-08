@@ -128,23 +128,22 @@ export function AgentSelectionModal({ onClose }: AgentSelectionModalProps) {
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-          className="relative bg-white border border-bo-neutral-200 rounded-xl shadow-bo-xl max-w-3xl w-full max-h-[80vh] overflow-hidden"
+          className="bo-surface relative max-h-[80vh] w-full max-w-3xl overflow-hidden rounded-2xl border-2 border-bo-primary-200/60 shadow-bo-xl"
         >
-          {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-bo-neutral-200">
+          <div className="h-2 bg-gradient-to-r from-bo-primary-700 via-bo-success-dark to-bo-warning-dark" />
+          <div className="flex items-center justify-between px-6 py-4 border-b border-bo-neutral-200/60">
             <h2 className="text-lg font-semibold text-bo-neutral-950 tracking-tight">
               {t('concierge.selectAgent')}
             </h2>
             <button
               onClick={onClose}
-              className="p-1.5 hover:bg-bo-neutral-100 rounded-md transition-colors"
+              className="p-1.5 hover:bg-white/55 rounded-md transition-colors"
               aria-label="Close"
             >
               <X className="w-5 h-5 text-bo-neutral-500" />
             </button>
           </div>
 
-          {/* Content */}
           <div className="p-6 overflow-y-auto max-h-[calc(80vh-120px)]">
             <p className="text-sm text-bo-neutral-600 mb-5">{t('concierge.chooseAgent')}</p>
 
@@ -160,8 +159,7 @@ export function AgentSelectionModal({ onClose }: AgentSelectionModalProps) {
               ))}
             </div>
 
-            {/* General Assistant suggestion */}
-            <div className="mt-5 p-4 bg-bo-neutral-50 border border-bo-neutral-200 rounded-lg">
+            <div className="bo-surface-subtle mt-5 rounded-xl border border-bo-primary-200/50 p-4">
               <div className="flex items-start gap-3">
                 <Lightbulb className="w-5 h-5 text-bo-neutral-500 flex-shrink-0 mt-0.5" />
                 <div>
@@ -171,7 +169,7 @@ export function AgentSelectionModal({ onClose }: AgentSelectionModalProps) {
                   </p>
                   <button
                     onClick={() => handleSelect(AgentRole.GENERAL_ASSISTANT)}
-                    className="px-4 py-2 bg-bo-neutral-950 hover:bg-bo-neutral-900 text-bo-neutral-50 rounded-lg transition-colors text-sm font-medium"
+                    className="rounded-full bg-bo-neutral-950 px-4 py-2 text-sm font-medium text-bo-neutral-50 transition-colors hover:bg-bo-neutral-900"
                   >
                     {t('concierge.startWithGeneral')}
                   </button>
@@ -207,20 +205,22 @@ function AgentCard({ agent, isSelected, onSelect, t }: AgentCardProps) {
   return (
     <button
       onClick={onSelect}
-      className={`w-full text-left p-4 border rounded-lg transition-all ${
+      className={`bo-surface-subtle bo-surface-hover w-full overflow-hidden rounded-xl border text-left transition-all ${
         isSelected
-          ? 'bg-bo-neutral-100 border-bo-neutral-950'
-          : 'bg-white border-bo-neutral-200 hover:border-bo-neutral-400 hover:bg-bo-neutral-50'
+          ? 'border-bo-neutral-950 ring-2 ring-bo-primary-200'
+          : 'border-bo-neutral-200 hover:border-bo-primary-300'
       }`}
     >
+      <div className="h-1.5 bg-gradient-to-r from-bo-primary-700 via-bo-success-dark to-bo-warning-dark" />
+      <div className="p-4">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-bo-neutral-100 flex items-center justify-center flex-shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-bo-primary-100 flex items-center justify-center flex-shrink-0">
             <Icon className="w-4 h-4 text-bo-neutral-700" />
           </div>
           <h3 className="text-sm font-semibold text-bo-neutral-950">{t(agent.nameKey)}</h3>
         </div>
-        <span className="px-3 py-1 bg-bo-neutral-950 text-bo-neutral-50 text-xs rounded-lg font-medium">
+        <span className="px-3 py-1 bg-bo-neutral-950 text-bo-neutral-50 text-xs rounded-full font-medium">
           {t('concierge.select')}
         </span>
       </div>
@@ -236,6 +236,7 @@ function AgentCard({ agent, isSelected, onSelect, t }: AgentCardProps) {
           </li>
         ))}
       </ul>
+      </div>
     </button>
   );
 }

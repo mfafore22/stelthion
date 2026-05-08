@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
 import { auth } from '@/auth';
+import { currentUserMallIds } from '@/lib/admin-customer';
 
 const VALID_JOURNEY_COUNTS = [1, 5, 10, 15, 20];
 const VALID_MODES = ['ZONE_COUNT', 'AB_TRACKING', 'JOURNEY_MAP', 'STORE_BEHAVIOR'] as const;
@@ -9,14 +10,24 @@ export async function GET(req: NextRequest) {
   const session = await auth();
   if (!session?.user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
+  const allowedMallIds = await currentUserMallIds();
+  if (!allowedMallIds) {
+    return NextResponse.json({ error: 'No accessible customer' }, { status: 409 });
+  }
+
   const { searchParams } = new URL(req.url);
   const mallId = searchParams.get('mallId');
   const status = searchParams.get('status');
   const mode = searchParams.get('mode');
   const type = searchParams.get('type');
 
-  const where: Record<string, unknown> = {};
-  if (mallId) where.mallId = mallId;
+  if (mallId && !allowedMallIds.includes(mallId)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+
+  const where: Record<string, unknown> = {
+    mallId: mallId ? mallId : { in: allowedMallIds },
+  };
   if (status) where.status = status;
   if (mode && VALID_MODES.includes(mode as typeof VALID_MODES[number])) where.mode = mode;
   if (type === 'journey-planner') where.originZoneId = { not: null };
@@ -47,6 +58,11 @@ export async function POST(req: NextRequest) {
 
   if (!mallId || !footageDate || !startTime || !endTime || !requestedBy) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+  }
+
+  const allowedMallIds = await currentUserMallIds();
+  if (!allowedMallIds || !allowedMallIds.includes(mallId)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
   if (!VALID_MODES.includes(mode)) {
@@ -83,10 +99,16 @@ export async function POST(req: NextRequest) {
   if (cameraId) {
     const camera = await prisma.camera.findUnique({ where: { id: cameraId } });
     if (!camera) return NextResponse.json({ error: 'Camera not found' }, { status: 404 });
+    if (!allowedMallIds.includes(camera.mallId)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
   }
   if (secondaryCameraId) {
     const cam2 = await prisma.camera.findUnique({ where: { id: secondaryCameraId } });
     if (!cam2) return NextResponse.json({ error: 'Secondary camera not found' }, { status: 404 });
+    if (!allowedMallIds.includes(cam2.mallId)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
   }
 
   const job = await prisma.analysisJob.create({

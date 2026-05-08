@@ -26,7 +26,7 @@ export function WeatherNextPanel({ mallId, expanded = false }: WeatherNextPanelP
   // Show loading state
   if (isLoading) {
     return (
-      <Card className="p-6 bg-bo-glass border-bo-neutral-200/30 shadow-bo-glass">
+      <Card className="bo-surface rounded-xl border-2 border-bo-primary-200/50 p-6 shadow-bo-glass">
         <div className="flex items-center justify-center h-48">
           <SwirlLoader size="md" />
           <span className="ml-2 text-sm text-bo-neutral-600">{t('weather.loading')}</span>
@@ -87,20 +87,21 @@ export function WeatherNextPanel({ mallId, expanded = false }: WeatherNextPanelP
   };
 
   return (
-    <Card className="p-6 bg-bo-glass border-bo-neutral-200/30 shadow-bo-glass">
+    <Card className="bo-surface rounded-xl border-2 border-bo-primary-200/50 p-6 shadow-bo-glass">
+      <div className="mb-4 h-1.5 rounded-full bg-gradient-to-r from-bo-info-dark via-bo-primary-700 to-bo-success-dark" />
       <div className="mb-4 flex items-center gap-2">
         <Cloud className="h-5 w-5 text-bo-info-dark" />
         <h3 className="text-lg font-semibold text-bo-neutral-950 tracking-tight">{t('weather.title')}</h3>
       </div>
 
       {isError && (
-        <div className="mb-4 rounded-md bg-yellow-50 p-3 text-sm text-yellow-800 dark:bg-yellow-950 dark:text-yellow-200">
-          ⚠️ {t('weather.serviceUnavailable')}
+        <div className="bo-surface-subtle mb-4 rounded-lg border border-bo-warning/30 p-3 text-sm text-bo-warning-dark">
+          {t('weather.serviceUnavailable')}
         </div>
       )}
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="flex items-center gap-3">
+        <div className="bo-surface-subtle flex items-center gap-3 rounded-lg border border-bo-neutral-200/60 p-3">
           <ThermometerSun className="h-5 w-5 text-bo-warning-dark" />
           <div>
             <div className="text-sm text-bo-neutral-600">{t('weather.temperature')}</div>
@@ -108,7 +109,7 @@ export function WeatherNextPanel({ mallId, expanded = false }: WeatherNextPanelP
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="bo-surface-subtle flex items-center gap-3 rounded-lg border border-bo-neutral-200/60 p-3">
           <Droplets className="h-5 w-5 text-bo-info-dark" />
           <div>
             <div className="text-sm text-bo-neutral-600">{t('weather.precipitation')}</div>
@@ -116,7 +117,7 @@ export function WeatherNextPanel({ mallId, expanded = false }: WeatherNextPanelP
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="bo-surface-subtle flex items-center gap-3 rounded-lg border border-bo-neutral-200/60 p-3">
           <Cloud className="h-5 w-5 text-bo-success-dark" />
           <div>
             <div className="text-sm text-bo-neutral-600">{t('weather.shoppingWeather')}</div>
@@ -124,7 +125,7 @@ export function WeatherNextPanel({ mallId, expanded = false }: WeatherNextPanelP
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="bo-surface-subtle flex items-center gap-3 rounded-lg border border-bo-neutral-200/60 p-3">
           <Wind className="h-5 w-5 text-bo-neutral-500" />
           <div>
             <div className="text-sm text-bo-neutral-600">{t('weather.wind')}</div>
@@ -145,7 +146,7 @@ export function WeatherNextPanel({ mallId, expanded = false }: WeatherNextPanelP
         </div>
       </div>
 
-      <div className="mt-4 rounded-lg bg-bo-info-light/50 p-3 text-sm border border-bo-info/15">
+      <div className="bo-surface-subtle mt-4 rounded-lg border border-bo-info/20 p-3 text-sm">
         <div className="font-medium text-bo-neutral-950">{t('weather.forecast')}</div>
         <div className="text-bo-neutral-700">{getForecast()}</div>
         <div className="mt-2 text-xs text-bo-neutral-600">

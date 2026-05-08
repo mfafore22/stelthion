@@ -1,0 +1,47 @@
+{
+  "name": "@stelthion/shoppermind",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/http/server.js",
+  "scripts": {
+    "dev:http": "tsx watch src/http/server.ts",
+    "dev:worker": "tsx watch src/worker/index.ts",
+    "start:http": "node dist/http/server.js",
+    "start:worker": "node dist/worker/index.js",
+    "build": "tsc -p tsconfig.build.json",
+    "prisma:generate": "prisma generate",
+    "prisma:push": "prisma db push",
+    "import:legacy": "tsx scripts/import-legacy-data.ts",
+    "seed:trend-bootstrap": "tsx scripts/seed-bootstrap-trends.ts",
+    "regression": "tsx scripts/regression-harness.ts",
+    "smoke": "tsx scripts/smoke-test.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@bull-board/api": "^7.0.0",
+    "@bull-board/fastify": "^7.0.0",
+    "@fastify/sensible": "^6.0.3",
+    "@fastify/swagger": "^9.4.2",
+    "@fastify/swagger-ui": "^5.2.1",
+    "@prisma/adapter-pg": "^7.3.0",
+    "@prisma/client": "^7.3.0",
+    "bullmq": "^5.28.1",
+    "dotenv": "^17.2.4",
+    "fastify": "^5.2.1",
+    "fastify-type-provider-zod": "^4.0.2",
+    "ioredis": "^5.4.2",
+    "pino": "^9.5.0",
+    "pino-pretty": "^11.3.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "prisma": "^7.3.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5",
+    "vitest": "^2.1.8"
+  }
+}

@@ -1,14 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
 import { requireAdmin } from '@/lib/admin-auth';
-import { createUserAndSendWelcome } from '@/lib/email/sendOtp';
+import { getActiveCustomer, requireOwnedCustomer } from '@/lib/admin-customer';
+import { createUserAndSendWelcome } from '@/lib/email/sendOTP';
 
 export async function GET() {
   try {
     const guard = await requireAdmin();
     if ('error' in guard) return guard.error;
 
+    const active = await getActiveCustomer();
+    if (!active) {
+      return NextResponse.json({ error: 'No active customer' }, { status: 409 });
+    }
+
     const users = await prisma.user.findMany({
+      where: { customerId: active.id },
       orderBy: { createdAt: 'desc' },
       select: {
         id: true,
@@ -32,9 +39,6 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const guard = await requireAdmin();
-    if ('error' in guard) return guard.error;
-
     const { email, name, customerId, role } = await req.json();
 
     if (!email || !name || !customerId) {
@@ -43,6 +47,9 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+
+    const guard = await requireOwnedCustomer(customerId);
+    if ('error' in guard) return guard.error;
 
     const result = await createUserAndSendWelcome({
       email,

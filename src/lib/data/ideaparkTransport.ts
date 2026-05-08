@@ -23,7 +23,7 @@ import type {
  * Lempäälä asema (VR) is ~2 km from Ideapark.
  */
 export const ideaparkNysseAccessibility: NysseAccessibility = {
-  mallId: 'ideapark',
+  mallId: 'ideapark-lempaala',
 
   buses: {
     routes: [
@@ -72,7 +72,7 @@ export const ideaparkNysseAccessibility: NysseAccessibility = {
  * IC and regional trains stop here (2 km from Ideapark).
  */
 export const ideaparkVRConnections: VRConnections = {
-  mallId: 'ideapark',
+  mallId: 'ideapark-lempaala',
   nearestStation: 'Lempäälä asema',
 
   connections: [
@@ -124,7 +124,7 @@ export const ideaparkVRConnections: VRConnections = {
  * Statistics Finland data for Lempäälä and surrounding municipalities.
  */
 export const ideaparkCatchmentDemographics: CatchmentDemographics = {
-  mallId: 'ideapark',
+  mallId: 'ideapark-lempaala',
 
   zones: [
     // 5-minute drive (Lempäälä centre + Marjamäki)
@@ -258,7 +258,7 @@ export const ideaparkCatchmentDemographics: CatchmentDemographics = {
  * EV charging: 57 spots total (40× 22 kW basic + 17× 150 kW fast charge)
  */
 export const ideaparkParkingData: ParkingData = {
-  mallId: 'ideapark',
+  mallId: 'ideapark-lempaala',
 
   levels: [
     {
@@ -397,7 +397,7 @@ export function getIdeaparkLiveDepartures(date: Date = new Date()): LiveDepartur
   buses.sort((a, b) => a.scheduledTime.localeCompare(b.scheduledTime));
 
   return {
-    mallId: 'ideapark',
+    mallId: 'ideapark-lempaala',
     station: 'Lempäälä asema',
     lastUpdated: date.toISOString(),
     trains: [],

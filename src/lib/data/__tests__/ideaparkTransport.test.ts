@@ -68,8 +68,8 @@ describe('getIdeaparkParkingSnapshot', () => {
 describe('getIdeaparkLiveDepartures', () => {
   const dep = getIdeaparkLiveDepartures(new Date('2026-03-11T14:00:00'));
 
-  it('mallId is ideapark', () => {
-    expect(dep.mallId).toBe('ideapark');
+  it('mallId is canonical ideapark-lempaala', () => {
+    expect(dep.mallId).toBe('ideapark-lempaala');
   });
 
   it('trains array is empty (trains field reserved for HSL)', () => {

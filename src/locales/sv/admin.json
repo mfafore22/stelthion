@@ -8,7 +8,28 @@
     "floorPlan": "Planlösning",
     "analysisJobs": "Analysjobb",
     "resultsJourneys": "Resultat & resor",
-    "edgeDevices": "Edge-enheter"
+    "edgeDevices": "Edge-enheter",
+    "counterData": "Räknardata",
+    "customers": "Kunder",
+    "shopperMindFeedback": "ShopperMind-feedback",
+    "shopperMindActivity": "ShopperMind-aktivitet",
+    "plans": "Abonnemang"
+  },
+  "shopperMindActivity": {
+    "title": "ShopperMind-aktivitet",
+    "loading": "Laddar aktivitet...",
+    "notConfigured": "Aktivitetslagring är inte konfigurerad ännu.",
+    "empty": "Ingen ShopperMind-aktivitet under perioden.",
+    "events": "Interaktioner",
+    "tabs": "Flikar",
+    "entities": "Innehållstyper",
+    "categories": "Fokuskategorier",
+    "malls": "Fastigheter",
+    "lastEvents": "Senaste händelser",
+    "event": "Händelse",
+    "entity": "Objekt",
+    "mall": "Fastighet",
+    "time": "Tid"
   },
   "dashboard": {
     "title": "Administratörspanel",
@@ -18,7 +39,7 @@
     "jobsPending": "Väntande jobb",
     "jobsProcessing": "Bearbetas",
     "jobsComplete": "Slutförda jobb",
-    "editFloorPlan": "Redigera Ideaparks planlösning",
+    "editFloorPlan": "Redigera planlösning",
     "manageJobs": "Hantera analysjobb"
   },
   "floorplan": {
@@ -130,7 +151,7 @@
     "zone": "Zon",
     "visitors": "Besökare",
     "densityPm2": "Densitet (p/m²)",
-    "totalVisitorsAt": "Totalt besökare kl {{hour}}:00 — {{count}}",
+    "totalVisitorsAt": "Totalt besökare kl {{hour}}:00 ({{count}})",
     "visitorJourneyTracking": "Besökarresespårning",
     "taggedVisitors": "{{count}} taggade besökare",
     "journeyPending": "Resedata visas när jobbet är klart.",
@@ -157,7 +178,7 @@
     "selectJob": "Välj slutfört jobb",
     "chooseJob": "Välj ett jobb...",
     "noZoneResults": "Inga zonresultat tillgängliga för detta jobb.",
-    "totalVisitorsAt": "Totalt besökare kl {{hour}}:00 — {{count}}",
+    "totalVisitorsAt": "Totalt besökare kl {{hour}}:00 ({{count}})",
     "journeysTitle": "Besökarresor",
     "noJourneyJobs": "Inga slutförda jobb med resespårning ännu. Schemalägg en analys med minst 1 taggad besökare.",
     "selectJourneyJob": "Välj jobb med resespårning",

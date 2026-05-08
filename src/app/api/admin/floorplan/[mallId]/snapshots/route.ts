@@ -1,18 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
-import { auth } from '@/auth';
+import { requireMallAccess } from '@/lib/admin-customer';
 import { createFloorplanSnapshot } from '@/lib/services/floorplanBackup';
 
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ mallId: string }> },
 ) {
-  const session = await auth();
-  if (!session?.user || session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
   const { mallId } = await params;
+  const guard = await requireMallAccess(mallId);
+  if ('error' in guard) return guard.error;
   const floor = new URL(req.url).searchParams.get('floor') ?? 'ground';
 
   const snapshots = await prisma.floorplanSnapshot.findMany({
@@ -66,12 +63,9 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ mallId: string }> },
 ) {
-  const session = await auth();
-  if (!session?.user || session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
   const { mallId } = await params;
+  const guard = await requireMallAccess(mallId);
+  if ('error' in guard) return guard.error;
   const { snapshotId } = await req.json();
 
   const snapshot = await prisma.floorplanSnapshot.findUnique({
@@ -88,6 +82,21 @@ export async function POST(
     zones = [...zones, ...convertLegacyStores(parsed.stores)];
   }
   const cameras = parsed.cameras ?? [];
+
+  if (zones.length === 0) {
+    return NextResponse.json(
+      { ok: false, error: 'Refused: snapshot contains 0 zones. Restore aborted to protect live data.' },
+      { status: 400 },
+    );
+  }
+
+  const liveZoneCount = await prisma.floorplanZone.count({ where: { mallId, floor: snapshot.floor } });
+  if (liveZoneCount > 4 && zones.length < liveZoneCount * 0.5) {
+    return NextResponse.json(
+      { ok: false, error: `Refused: snapshot has ${zones.length} zones but live has ${liveZoneCount}. Restore would delete more than half. Use a more recent snapshot.` },
+      { status: 400 },
+    );
+  }
 
   await createFloorplanSnapshot(prisma, mallId, snapshot.floor, 'pre-restore');
 

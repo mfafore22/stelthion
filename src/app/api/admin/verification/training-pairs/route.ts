@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
 import { requireAdmin } from '@/lib/admin-auth';
+import { activeCustomerMallIds } from '@/lib/admin-customer';
 
 /**
  * GET /api/admin/verification/training-pairs
@@ -14,9 +15,18 @@ export async function GET() {
   const guard = await requireAdmin();
   if ('error' in guard) return guard.error;
 
-  // Fetch all reviews with a definitive verdict (exclude "unsure")
+  const mallIds = await activeCustomerMallIds();
+  if (!mallIds) {
+    return NextResponse.json({ error: 'No active customer' }, { status: 409 });
+  }
+
+  // Fetch all reviews with a definitive verdict (exclude "unsure"), scoped to
+  // jobs owned by malls in the active customer.
   const reviews = await prisma.verificationReview.findMany({
-    where: { verdict: { in: ['match', 'mismatch'] } },
+    where: {
+      verdict: { in: ['match', 'mismatch'] },
+      job: { mallId: { in: mallIds } },
+    },
     select: {
       jobId: true,
       anonymousTagId: true,

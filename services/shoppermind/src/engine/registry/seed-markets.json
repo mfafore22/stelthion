@@ -1,0 +1,262 @@
+[
+  {
+    "id": "helsinki-fi",
+    "country": "FI",
+    "region": "uusimaa-fi",
+    "displayName": "Helsinki",
+    "industryFocus": "retail-tenancy",
+    "geoAnchorLat": 60.1699,
+    "geoAnchorLon": 24.9384,
+    "footTrafficSubs": ["COUNTRY:FI"],
+    "culturalSubs": ["COUNTRY:FI"],
+    "footTrafficAxisWeight": 0.5,
+    "culturalAxisWeight": 0.5,
+    "active": true,
+    "profile": {
+      "displayName": "Helsinki",
+      "industryFocus": "retail-tenancy",
+      "language": "fi",
+      "persona": "Finnish retail trend analyst; concise, data-forward, references local chains and shopping districts.",
+      "categoryKeywords": {},
+      "relevanceKeywords": [],
+      "weightPriors": {},
+      "seedSources": []
+    },
+    "policy": {
+      "version": 1,
+      "thresholds": {
+        "TREND:composite:COUNTRY": { "publish": 0.6, "review": 0.4, "reject": 0.2 }
+      },
+      "lifecycleModifiers": { "UPCOMING": -0.1, "ACTIVE": 0, "CONCLUDED": 0.2 }
+    }
+  },
+  {
+    "id": "dubai-ae",
+    "country": "AE",
+    "region": null,
+    "displayName": "Dubai",
+    "industryFocus": "retail-tenancy",
+    "geoAnchorLat": 25.2048,
+    "geoAnchorLon": 55.2708,
+    "footTrafficSubs": ["COUNTRY:AE"],
+    "culturalSubs": ["COUNTRY:AE"],
+    "footTrafficAxisWeight": 0.5,
+    "culturalAxisWeight": 0.5,
+    "active": true,
+    "profile": {
+      "displayName": "Dubai",
+      "industryFocus": "retail-tenancy",
+      "language": "en",
+      "persona": "Dubai retail trend analyst; covers mall anchor tenants, expat and tourist footfall, branded luxury flows.",
+      "categoryKeywords": {},
+      "relevanceKeywords": [],
+      "weightPriors": {},
+      "seedSources": []
+    },
+    "policy": {
+      "version": 1,
+      "thresholds": {
+        "TREND:composite:COUNTRY": { "publish": 0.6, "review": 0.4, "reject": 0.2 }
+      },
+      "lifecycleModifiers": { "UPCOMING": -0.1, "ACTIVE": 0, "CONCLUDED": 0.2 }
+    }
+  },
+  {
+    "id": "tampere-fi",
+    "country": "FI",
+    "region": "pirkanmaa-fi",
+    "displayName": "Tampere",
+    "industryFocus": "property-industry",
+    "geoAnchorLat": 61.4978,
+    "geoAnchorLon": 23.7609,
+    "footTrafficSubs": ["CITY:tampere-fi", "REGION:pirkanmaa-fi", "COUNTRY:FI"],
+    "culturalSubs": ["COUNTRY:FI", "GLOBAL"],
+    "footTrafficAxisWeight": 0.4,
+    "culturalAxisWeight": 0.6,
+    "active": true,
+    "profile": {
+      "displayName": "Tampere",
+      "industryFocus": "property-industry",
+      "language": "fi",
+      "persona": "Generic human-behaviour trend analyst for the Tampere / Pirkanmaa catchment. Primary audience today is property managers, but the brief covers all forces that shape how people live, spend, move, and decide: shopper behaviour, household economics, FI economy, relocations, travel, lifestyle and life-choice shifts, local events and incidents, plus housing-design and urban-planning currents. Tampere-region signals that move national discourse get special attention.",
+      "categoryKeywords": {},
+      "relevanceKeywords": [],
+      "weightPriors": {},
+      "seedSources": []
+    },
+    "policy": {
+      "version": 1,
+      "thresholds": {
+        "TREND:composite:CITY": { "publish": 0.5, "review": 0.3, "reject": 0.1 },
+        "TREND:composite:REGION": { "publish": 0.55, "review": 0.35, "reject": 0.15 },
+        "TREND:composite:COUNTRY": { "publish": 0.6, "review": 0.4, "reject": 0.2 },
+        "TREND:composite:GLOBAL": { "publish": 0.65, "review": 0.45, "reject": 0.25 },
+        "EVENT:composite:CITY": { "publish": 0.45, "review": 0.25, "reject": 0.1 },
+        "EVENT:composite:REGION": { "publish": 0.5, "review": 0.3, "reject": 0.15 },
+        "EVENT:composite:COUNTRY": { "publish": 0.55, "review": 0.35, "reject": 0.2 },
+        "CAMPAIGN:composite:COUNTRY": { "publish": 0.5, "review": 0.3, "reject": 0.15 },
+        "INCIDENT:composite:CITY": { "publish": 0.35, "review": 0.2, "reject": 0.1 },
+        "INCIDENT:composite:REGION": { "publish": 0.4, "review": 0.25, "reject": 0.12 },
+        "INCIDENT:composite:COUNTRY": { "publish": 0.45, "review": 0.3, "reject": 0.15 }
+      },
+      "lifecycleModifiers": { "UPCOMING": -0.15, "ACTIVE": 0, "CONCLUDED": 0.25 }
+    }
+  },
+  {
+    "id": "lempaala-fi",
+    "country": "FI",
+    "region": "pirkanmaa-fi",
+    "displayName": "Lempäälä",
+    "industryFocus": "property-industry",
+    "geoAnchorLat": 61.3126,
+    "geoAnchorLon": 23.7525,
+    "footTrafficSubs": ["CITY:lempaala-fi", "REGION:pirkanmaa-fi"],
+    "culturalSubs": ["COUNTRY:FI", "GLOBAL"],
+    "footTrafficAxisWeight": 0.3,
+    "culturalAxisWeight": 0.7,
+    "active": true,
+    "profile": {
+      "displayName": "Lempäälä",
+      "industryFocus": "property-industry",
+      "language": "fi",
+      "persona": "Generic human-behaviour trend analyst for Lempäälä: narrow foot-traffic catchment, broad cultural reach. Primary audience today is property managers, but the brief spans shopper behaviour, regional and national economics, relocations within FI, lifestyle and life-choice shifts, weather and transit incidents, and housing and urban-living trends. Asuntomessut-scale events here shape country-wide conversation on how people live.",
+      "categoryKeywords": {},
+      "relevanceKeywords": [],
+      "weightPriors": {},
+      "seedSources": []
+    },
+    "policy": {
+      "version": 1,
+      "thresholds": {
+        "TREND:composite:CITY": { "publish": 0.45, "review": 0.25, "reject": 0.1 },
+        "TREND:composite:REGION": { "publish": 0.5, "review": 0.3, "reject": 0.12 },
+        "TREND:composite:COUNTRY": { "publish": 0.55, "review": 0.35, "reject": 0.18 },
+        "TREND:composite:GLOBAL": { "publish": 0.6, "review": 0.4, "reject": 0.22 },
+        "EVENT:composite:CITY": { "publish": 0.4, "review": 0.2, "reject": 0.08 },
+        "EVENT:composite:REGION": { "publish": 0.45, "review": 0.25, "reject": 0.1 },
+        "EVENT:composite:COUNTRY": { "publish": 0.5, "review": 0.3, "reject": 0.15 },
+        "CAMPAIGN:composite:COUNTRY": { "publish": 0.5, "review": 0.3, "reject": 0.15 },
+        "INCIDENT:composite:CITY": { "publish": 0.3, "review": 0.15, "reject": 0.08 },
+        "INCIDENT:composite:COUNTRY": { "publish": 0.4, "review": 0.25, "reject": 0.12 }
+      },
+      "lifecycleModifiers": { "UPCOMING": -0.2, "ACTIVE": 0, "CONCLUDED": 0.3 }
+    }
+  },
+  {
+    "id": "berlin-de",
+    "country": "DE",
+    "region": "berlin-de",
+    "displayName": "Berlin",
+    "industryFocus": "retail-tenancy",
+    "geoAnchorLat": 52.52,
+    "geoAnchorLon": 13.405,
+    "footTrafficSubs": ["CITY:berlin-de", "REGION:berlin-de", "COUNTRY:DE"],
+    "culturalSubs": ["COUNTRY:DE", "GLOBAL"],
+    "footTrafficAxisWeight": 0.5,
+    "culturalAxisWeight": 0.5,
+    "active": true,
+    "profile": {
+      "displayName": "Berlin",
+      "industryFocus": "retail-tenancy",
+      "language": "de",
+      "persona": "Generic human-behaviour trend analyst for Berlin. Primary audience today is property managers, but the brief covers Mitte/Kreuzberg/Charlottenburg footfall, DE consumer sentiment and purchasing power, domestic and cross-border migration, travel and tourism, life-choice and lifestyle shifts, EU cultural currents, transit and weather incidents, and the tension between discount and luxury verticals.",
+      "categoryKeywords": {},
+      "relevanceKeywords": [],
+      "weightPriors": {},
+      "seedSources": []
+    },
+    "policy": {
+      "version": 1,
+      "thresholds": {
+        "TREND:composite:CITY": { "publish": 0.5, "review": 0.3, "reject": 0.1 },
+        "TREND:composite:REGION": { "publish": 0.55, "review": 0.35, "reject": 0.15 },
+        "TREND:composite:COUNTRY": { "publish": 0.6, "review": 0.4, "reject": 0.2 },
+        "TREND:composite:GLOBAL": { "publish": 0.65, "review": 0.45, "reject": 0.25 },
+        "EVENT:composite:CITY": { "publish": 0.45, "review": 0.25, "reject": 0.1 },
+        "EVENT:composite:COUNTRY": { "publish": 0.55, "review": 0.35, "reject": 0.2 },
+        "CAMPAIGN:composite:COUNTRY": { "publish": 0.5, "review": 0.3, "reject": 0.15 },
+        "INCIDENT:composite:CITY": { "publish": 0.35, "review": 0.2, "reject": 0.1 },
+        "INCIDENT:composite:COUNTRY": { "publish": 0.45, "review": 0.3, "reject": 0.15 }
+      },
+      "lifecycleModifiers": { "UPCOMING": -0.1, "ACTIVE": 0, "CONCLUDED": 0.2 }
+    }
+  },
+  {
+    "id": "tokyo-jp",
+    "country": "JP",
+    "region": "tokyo-jp",
+    "displayName": "Tokyo",
+    "industryFocus": "retail-tenancy",
+    "geoAnchorLat": 35.6762,
+    "geoAnchorLon": 139.6503,
+    "footTrafficSubs": ["CITY:tokyo-jp", "REGION:kanto-jp", "COUNTRY:JP"],
+    "culturalSubs": ["COUNTRY:JP", "GLOBAL"],
+    "footTrafficAxisWeight": 0.5,
+    "culturalAxisWeight": 0.5,
+    "active": true,
+    "profile": {
+      "displayName": "Tokyo",
+      "industryFocus": "retail-tenancy",
+      "language": "ja",
+      "persona": "Generic human-behaviour trend analyst for Tokyo. Primary audience today is property managers, but the brief covers Shibuya/Shinjuku/Ginza footfall, inbound and domestic tourism, JP economic and wage indicators, demographic and relocation shifts, life-choice trends, weather and transit incidents, and Kanto-wide consumer discourse that shapes national behaviour.",
+      "categoryKeywords": {},
+      "relevanceKeywords": [],
+      "weightPriors": {},
+      "seedSources": []
+    },
+    "policy": {
+      "version": 1,
+      "thresholds": {
+        "TREND:composite:CITY": { "publish": 0.5, "review": 0.3, "reject": 0.1 },
+        "TREND:composite:REGION": { "publish": 0.55, "review": 0.35, "reject": 0.15 },
+        "TREND:composite:COUNTRY": { "publish": 0.6, "review": 0.4, "reject": 0.2 },
+        "TREND:composite:GLOBAL": { "publish": 0.65, "review": 0.45, "reject": 0.25 },
+        "EVENT:composite:CITY": { "publish": 0.45, "review": 0.25, "reject": 0.1 },
+        "EVENT:composite:COUNTRY": { "publish": 0.55, "review": 0.35, "reject": 0.2 },
+        "CAMPAIGN:composite:COUNTRY": { "publish": 0.5, "review": 0.3, "reject": 0.15 },
+        "INCIDENT:composite:CITY": { "publish": 0.35, "review": 0.2, "reject": 0.1 },
+        "INCIDENT:composite:COUNTRY": { "publish": 0.45, "review": 0.3, "reject": 0.15 }
+      },
+      "lifecycleModifiers": { "UPCOMING": -0.1, "ACTIVE": 0, "CONCLUDED": 0.2 }
+    }
+  },
+  {
+    "id": "newyork-us",
+    "country": "US",
+    "region": "newyork-us",
+    "displayName": "New York",
+    "industryFocus": "retail-tenancy",
+    "geoAnchorLat": 40.7128,
+    "geoAnchorLon": -74.006,
+    "footTrafficSubs": ["CITY:newyork-us", "REGION:newyork-us", "COUNTRY:US"],
+    "culturalSubs": ["COUNTRY:US", "GLOBAL"],
+    "footTrafficAxisWeight": 0.5,
+    "culturalAxisWeight": 0.5,
+    "active": true,
+    "profile": {
+      "displayName": "New York",
+      "industryFocus": "retail-tenancy",
+      "language": "en",
+      "persona": "Generic human-behaviour trend analyst for New York. Primary audience today is property managers, but the brief covers SoHo/Fifth Ave/Hudson Yards footfall, US consumer spending and wages, domestic relocations and migration, travel and tourism, life-choice and lifestyle shifts, weather and transit incidents, DTC brand openings, and the cultural pull NYC exerts on national and global behaviour.",
+      "categoryKeywords": {},
+      "relevanceKeywords": [],
+      "weightPriors": {},
+      "seedSources": []
+    },
+    "policy": {
+      "version": 1,
+      "thresholds": {
+        "TREND:composite:CITY": { "publish": 0.5, "review": 0.3, "reject": 0.1 },
+        "TREND:composite:REGION": { "publish": 0.55, "review": 0.35, "reject": 0.15 },
+        "TREND:composite:COUNTRY": { "publish": 0.6, "review": 0.4, "reject": 0.2 },
+        "TREND:composite:GLOBAL": { "publish": 0.65, "review": 0.45, "reject": 0.25 },
+        "EVENT:composite:CITY": { "publish": 0.45, "review": 0.25, "reject": 0.1 },
+        "EVENT:composite:COUNTRY": { "publish": 0.55, "review": 0.35, "reject": 0.2 },
+        "CAMPAIGN:composite:COUNTRY": { "publish": 0.5, "review": 0.3, "reject": 0.15 },
+        "INCIDENT:composite:CITY": { "publish": 0.35, "review": 0.2, "reject": 0.1 },
+        "INCIDENT:composite:COUNTRY": { "publish": 0.45, "review": 0.3, "reject": 0.15 }
+      },
+      "lifecycleModifiers": { "UPCOMING": -0.1, "ACTIVE": 0, "CONCLUDED": 0.2 }
+    }
+  }
+]

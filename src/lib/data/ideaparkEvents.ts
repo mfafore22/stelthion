@@ -185,7 +185,7 @@ export function getIdeaparkUpcomingEvents(): EventsData {
   events.sort((a, b) => a.startDate.localeCompare(b.startDate));
 
   return {
-    mallId: 'ideapark',
+    mallId: 'ideapark-lempaala',
     venues: ideaparkVenues,
     upcomingEvents: events,
     dataSource: 'Nokia Arena (nokiaarena.fi), Tampere-talo (tampere-talo.fi), Tampereen Messu ja Urheilu — static schedule',
