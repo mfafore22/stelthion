@@ -30,5 +30,13 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
 , "src/app/lib"  ],
-  "exclude": ["node_modules", "prisma", "scripts"]
+  "exclude": [
+    "node_modules",
+    "prisma",
+    "scripts",
+    "packages/**/dist",
+    "services/**/dist",
+    "services/shoppermind/src",
+    "src/services/shoppermind"
+  ]
 }

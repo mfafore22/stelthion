@@ -13,12 +13,12 @@
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "test": "jest",
-    "test:watch": "jest --watch",
-    "shoppermind:seed-demo": "tsx scripts/shoppermind/seed-demo.ts"
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
+    "@stelthion/intelligence-runtime": "*",
     "@stelthion/shoppermind-client": "*",
     "@stelthion/shoppermind-client-types": "*",
     "@radix-ui/react-accordion": "^1.2.12",

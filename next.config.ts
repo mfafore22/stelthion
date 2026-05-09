@@ -3,7 +3,11 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: false,
   output: 'standalone',
-  transpilePackages: ['@stelthion/shoppermind-client', '@stelthion/shoppermind-client-types'],
+  transpilePackages: [
+    '@stelthion/intelligence-runtime',
+    '@stelthion/shoppermind-client',
+    '@stelthion/shoppermind-client-types',
+  ],
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com' },
