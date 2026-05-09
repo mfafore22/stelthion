@@ -13,8 +13,9 @@ interface Plan {
 }
 
 type Step = 1 | 2 | 3 | 4;
+type ServiceType = 'MALL' | 'VENUE';
 
-const STEPS = ['Company', 'Plan', 'First Mall', 'Invite User'];
+const STEPS = ['Company', 'Plan', 'First Location', 'Invite User'];
 
 export default function NewCustomerPage() {
   const router = useRouter();
@@ -25,6 +26,7 @@ export default function NewCustomerPage() {
 
   // Step 1
   const [companyName, setCompanyName] = useState('');
+  const [serviceType, setServiceType] = useState<ServiceType>('MALL');
   // Step 2
   const [planId, setPlanId] = useState('');
   // Step 3
@@ -58,21 +60,27 @@ export default function NewCustomerPage() {
       const custRes = await fetch('/api/admin/customers', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: companyName, planId: planId || null }),
+        body: JSON.stringify({ name: companyName, planId: planId || null, serviceType }),
       });
       if (!custRes.ok) throw new Error((await custRes.json()).error ?? 'Failed to create customer');
       const cust = await custRes.json();
       const cId = cust.id;
       setCustomerId(cId);
 
-      // Create mall if not skipped
+      // Create first location if not skipped
       if (!skipMall && mallSlug && mallName && mallCity) {
-        const mallRes = await fetch(`/api/admin/customers/${cId}/malls`, {
+        const endpoint = serviceType === 'VENUE'
+          ? `/api/admin/customers/${cId}/venues`
+          : `/api/admin/customers/${cId}/malls`;
+        const payload = serviceType === 'VENUE'
+          ? { venueId: mallSlug, name: mallName, city: mallCity, country: marketId || 'FI', capacity: 15000 }
+          : { mallId: mallSlug, name: mallName, city: mallCity, marketId: marketId || null };
+        const mallRes = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ mallId: mallSlug, name: mallName, city: mallCity, marketId: marketId || null }),
+          body: JSON.stringify(payload),
         });
-        if (!mallRes.ok) throw new Error((await mallRes.json()).error ?? 'Failed to create mall');
+        if (!mallRes.ok) throw new Error((await mallRes.json()).error ?? 'Failed to create location');
       }
 
       // Invite user if not skipped
@@ -138,6 +146,13 @@ export default function NewCustomerPage() {
                 className="w-full px-3 py-2 text-sm border border-bo-neutral-200 rounded-lg bg-bo-neutral-50 focus:outline-none focus:ring-2 focus:ring-bo-primary-500/20 focus:border-bo-primary-500"
               />
             </div>
+            <div>
+              <label className="block text-sm font-medium text-bo-neutral-700 mb-1">Service type</label>
+              <select value={serviceType} onChange={(e) => setServiceType(e.target.value as ServiceType)} className={inputCls}>
+                <option value="MALL">Mall intelligence</option>
+                <option value="VENUE">Venue and arena intelligence</option>
+              </select>
+            </div>
           </div>
         )}
 
@@ -174,7 +189,9 @@ export default function NewCustomerPage() {
                         {f.shoppermind && <span className="text-[10px] font-medium text-blue-600">ShopperMind</span>}
                         {f.edgeVision && <span className="text-[10px] font-medium text-green-600">Edge Vision</span>}
                         {f.concierge && <span className="text-[10px] font-medium text-purple-600">Concierge</span>}
+                        {f.venueMind && <span className="text-[10px] font-medium text-amber-700">VenueMind</span>}
                         <span className="text-[10px] text-bo-neutral-400">Up to {f.maxMalls} mall{f.maxMalls !== 1 ? 's' : ''}</span>
+                        {f.venueMind && <span className="text-[10px] text-bo-neutral-400">Up to {f.maxVenues} venue{f.maxVenues !== 1 ? 's' : ''}</span>}
                       </div>
                     </div>
                   </label>
@@ -194,12 +211,14 @@ export default function NewCustomerPage() {
         {/* Step 3 */}
         {step === 3 && (
           <div className="space-y-4">
-            <h2 className="text-base font-semibold text-bo-neutral-900">First mall</h2>
+            <h2 className="text-base font-semibold text-bo-neutral-900">
+              {serviceType === 'VENUE' ? 'First venue or arena' : 'First mall'}
+            </h2>
             {!skipMall ? (
               <>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-sm font-medium text-bo-neutral-700 mb-1">Mall name</label>
+                    <label className="block text-sm font-medium text-bo-neutral-700 mb-1">{serviceType === 'VENUE' ? 'Venue name' : 'Mall name'}</label>
                     <input type="text" value={mallName} onChange={(e) => setMallName(e.target.value)}
                       placeholder="City Centre" className={inputCls} />
                   </div>
@@ -210,16 +229,18 @@ export default function NewCustomerPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-bo-neutral-700 mb-1">Mall ID (slug)</label>
+                  <label className="block text-sm font-medium text-bo-neutral-700 mb-1">{serviceType === 'VENUE' ? 'Venue ID (slug)' : 'Mall ID (slug)'}</label>
                   <input type="text" value={mallSlug} onChange={(e) => setMallSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-'))}
                     placeholder="city-centre-fi" className={inputCls} />
                   <p className="text-xs text-bo-neutral-400 mt-1">Lowercase, hyphens only. Cannot be changed later.</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-bo-neutral-700 mb-1">ShopperMind Market ID</label>
+                  <label className="block text-sm font-medium text-bo-neutral-700 mb-1">{serviceType === 'VENUE' ? 'Country code' : 'ShopperMind Market ID'}</label>
                   <input type="text" value={marketId} onChange={(e) => setMarketId(e.target.value)}
-                    placeholder="helsinki-fi" className={inputCls} />
-                  <p className="text-xs text-bo-neutral-400 mt-1">Leave blank if ShopperMind is not used for this mall.</p>
+                    placeholder={serviceType === 'VENUE' ? 'FI' : 'helsinki-fi'} className={inputCls} />
+                  <p className="text-xs text-bo-neutral-400 mt-1">
+                    {serviceType === 'VENUE' ? 'Use FI, AE or SG for the first VenueMind demo.' : 'Leave blank if ShopperMind is not used for this mall.'}
+                  </p>
                 </div>
               </>
             ) : null}

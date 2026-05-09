@@ -21,7 +21,16 @@ export async function GET() {
     },
   });
 
-  return NextResponse.json(customers);
+  const venueCounts = await prisma.$queryRaw<Array<{ customerId: string; count: bigint }>>`
+    SELECT "customerId", COUNT(*)::bigint AS count
+    FROM "Venue"
+    GROUP BY "customerId"
+  `;
+  const counts = new Map(venueCounts.map((row) => [row.customerId, Number(row.count)]));
+  return NextResponse.json(customers.map((customer) => ({
+    ...customer,
+    _count: { ...customer._count, venues: counts.get(customer.id) ?? 0 },
+  })));
 }
 
 export async function POST(req: NextRequest) {
@@ -36,13 +45,13 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { name, planId } = await req.json();
+  const { name, planId, serviceType } = await req.json();
   if (!name) {
     return NextResponse.json({ error: 'name is required' }, { status: 400 });
   }
 
   const customer = await prisma.customer.create({
-    data: { name, planId: planId || null },
+    data: { name, planId: planId || null, serviceType: serviceType || 'MALL' },
     include: { plan: { select: { id: true, name: true } } },
   });
 

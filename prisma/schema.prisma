@@ -20,12 +20,20 @@ model Plan {
 model Customer {
   id        String    @id @default(cuid())
   name      String
+  serviceType CustomerServiceType @default(MALL)
   planId    String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   plan      Plan?     @relation(fields: [planId], references: [id])
   users     User[]
   malls     Mall[]
+  venues    Venue[]
+}
+
+enum CustomerServiceType {
+  MALL
+  VENUE
+  MIXED
 }
 
 model User {
@@ -618,6 +626,81 @@ model ShopperMindActivityEvent {
   @@index([customerId, mallId])
   @@index([customerId, eventName])
   @@index([customerId, entityType])
+}
+
+// ─── Venue / Arena ─────────────────────────────────────────────────────────
+
+model Venue {
+  id             String      @id @default(cuid())
+  venueId        String      @unique
+  name           String
+  city           String
+  country        String
+  address        String?
+  capacity       Int
+  annualVisitors Int?
+  annualEvents   Int?
+  status         VenueStatus @default(LIVE)
+  customerId     String
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  customer Customer     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  zones    VenueZone[]
+  events   VenueEvent[]
+  kpis     VenueKpi[]
+}
+
+enum VenueStatus {
+  LIVE
+  BETA
+  ALPHA
+  PLANNED
+}
+
+model VenueZone {
+  id          String   @id @default(cuid())
+  venueId     String
+  zoneId      String
+  name        String
+  category    String
+  capacity    Int?
+  sensorReady Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  venue Venue @relation(fields: [venueId], references: [venueId], onDelete: Cascade)
+
+  @@unique([venueId, zoneId])
+}
+
+model VenueEvent {
+  id              String   @id @default(cuid())
+  venueId          String
+  title           String
+  category        String
+  startDate       DateTime
+  expectedGuests  Int?
+  eventSourceUrl  String?
+  operationalNote String?
+  createdAt       DateTime @default(now())
+
+  venue Venue @relation(fields: [venueId], references: [venueId], onDelete: Cascade)
+
+  @@index([venueId, startDate])
+}
+
+model VenueKpi {
+  id        String   @id @default(cuid())
+  venueId   String
+  code      String
+  label     String
+  value     String
+  trend     String?
+  createdAt DateTime @default(now())
+
+  venue Venue @relation(fields: [venueId], references: [venueId], onDelete: Cascade)
+
+  @@unique([venueId, code])
 }
 
 // ─── ShopperMind macro indicators ──────────────────────────────────────────

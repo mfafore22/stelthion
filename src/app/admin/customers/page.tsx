@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Building2, Plus, Users, Store } from 'lucide-react';
+import { Building2, Plus, Users, Store, Landmark } from 'lucide-react';
 import { parsePlanFeatures } from '@/lib/plan-gate';
 
 interface Plan {
@@ -14,9 +14,10 @@ interface Plan {
 interface CustomerRow {
   id: string;
   name: string;
+  serviceType?: 'MALL' | 'VENUE' | 'MIXED';
   createdAt: string;
   plan: Plan | null;
-  _count: { malls: number; users: number };
+  _count: { malls: number; venues?: number; users: number };
 }
 
 const PLAN_COLORS: Record<string, string> = {
@@ -30,6 +31,7 @@ export default function AdminCustomersPage() {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [creatingVenueDemo, setCreatingVenueDemo] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -64,6 +66,21 @@ export default function AdminCustomersPage() {
     }
   }
 
+  async function createVenueDemo() {
+    setCreatingVenueDemo(true);
+    try {
+      const res = await fetch('/api/admin/customers/demo-venue-operator', { method: 'POST' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const refreshed = await fetch('/api/admin/customers').then((r) => r.json());
+      if (Array.isArray(refreshed)) setCustomers(refreshed);
+    } catch (err) {
+      console.error('Failed to create venue demo', err);
+      alert('Failed to create venue demo. Check console.');
+    } finally {
+      setCreatingVenueDemo(false);
+    }
+  }
+
   return (
     <div className="p-6 max-w-5xl">
       <div className="flex items-center justify-between mb-6">
@@ -78,6 +95,15 @@ export default function AdminCustomersPage() {
           <Plus className="w-4 h-4" />
           New Customer
         </Link>
+        <button
+          type="button"
+          onClick={createVenueDemo}
+          disabled={creatingVenueDemo}
+          className="flex items-center gap-2 px-4 py-2 border border-bo-neutral-200 bg-white text-bo-neutral-800 text-sm font-medium rounded-lg hover:bg-bo-neutral-50 disabled:opacity-50"
+        >
+          <Landmark className="w-4 h-4" />
+          {creatingVenueDemo ? 'Creating...' : 'Create venue demo'}
+        </button>
       </div>
 
       <div className="bg-white rounded-xl border border-bo-neutral-200 overflow-hidden">
@@ -92,9 +118,10 @@ export default function AdminCustomersPage() {
             <thead className="bg-bo-neutral-50 border-b border-bo-neutral-200">
               <tr>
                 <th className="text-left px-5 py-3 font-medium text-bo-neutral-600">Company</th>
+                <th className="text-left px-5 py-3 font-medium text-bo-neutral-600">Service</th>
                 <th className="text-left px-5 py-3 font-medium text-bo-neutral-600">Plan</th>
                 <th className="text-left px-5 py-3 font-medium text-bo-neutral-600">Features</th>
-                <th className="text-center px-5 py-3 font-medium text-bo-neutral-600">Malls</th>
+                <th className="text-center px-5 py-3 font-medium text-bo-neutral-600">Locations</th>
                 <th className="text-center px-5 py-3 font-medium text-bo-neutral-600">Users</th>
                 <th className="text-right px-5 py-3 font-medium text-bo-neutral-600">Created</th>
               </tr>
@@ -106,6 +133,11 @@ export default function AdminCustomersPage() {
                 return (
                   <tr key={c.id} className="border-t border-bo-neutral-100 hover:bg-bo-neutral-50">
                     <td className="px-5 py-3 font-medium text-bo-neutral-900">{c.name}</td>
+                    <td className="px-5 py-3">
+                      <span className="rounded-full border border-bo-neutral-200 bg-bo-neutral-50 px-2.5 py-1 text-[10px] font-semibold text-bo-neutral-700">
+                        {c.serviceType ?? 'MALL'}
+                      </span>
+                    </td>
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-2">
                         {c.plan && (
@@ -132,6 +164,7 @@ export default function AdminCustomersPage() {
                         {features.shoppermind && <FeatureBadge label="ShopperMind" color="blue" />}
                         {features.edgeVision && <FeatureBadge label="Edge Vision" color="green" />}
                         {features.concierge && <FeatureBadge label="Concierge" color="purple" />}
+                        {features.venueMind && <FeatureBadge label="VenueMind" color="amber" />}
                         {Boolean(
                           (c.plan?.features as { spaceAllocation?: boolean } | null | undefined)
                             ?.spaceAllocation,
@@ -144,11 +177,21 @@ export default function AdminCustomersPage() {
                           <Store className="w-3.5 h-3.5" />
                           {c._count.malls}
                         </span>
+                        <span className="flex items-center gap-1 text-bo-neutral-600">
+                          <Landmark className="w-3.5 h-3.5" />
+                          {c._count.venues ?? 0}
+                        </span>
                         <Link
                           href={`/admin/customers/${c.id}/malls/new`}
                           className="text-xs text-bo-primary-600 hover:underline"
                         >
-                          + Add
+                          + Mall
+                        </Link>
+                        <Link
+                          href={`/admin/customers/${c.id}/venues/new`}
+                          className="text-xs text-bo-primary-600 hover:underline"
+                        >
+                          + Venue
                         </Link>
                       </div>
                     </td>

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/app/lib/prisma'
 import { auth } from '@/auth'
+import { sortCustomerMalls } from '@/lib/mall/primaryMall'
 
 export async function GET(
   request: NextRequest,
@@ -35,7 +36,18 @@ export async function GET(
       return NextResponse.json({ error: 'Customer not found' }, { status: 404 })
     }
 
-    return NextResponse.json(customer)
+    const venues = await prisma.$queryRaw`
+      SELECT "venueId", "name", "city", "country", "capacity", "annualVisitors", "annualEvents", "status"
+      FROM "Venue"
+      WHERE "customerId" = ${id}
+      ORDER BY "name" ASC
+    `
+
+    return NextResponse.json({
+      ...customer,
+      malls: sortCustomerMalls(customer.malls, customer.id),
+      venues,
+    })
   } catch {
     return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }

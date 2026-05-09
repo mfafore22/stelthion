@@ -1,0 +1,24 @@
+{
+  "name": "@stelthion/venuemind",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx watch src/index.ts",
+    "lint": "eslint src",
+    "test": "npm run build && node --test dist/__tests__/*.test.js",
+    "release:gate": "tsx scripts/release-gate.ts",
+    "smoke": "tsx scripts/smoke-test.ts"
+  },
+  "dependencies": {
+    "@stelthion/intelligence-runtime": "*",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "tsx": "^4.21.0",
+    "typescript": "^5"
+  }
+}
