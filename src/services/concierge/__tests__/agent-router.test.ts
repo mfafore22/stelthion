@@ -59,7 +59,7 @@ describe('AgentRouter', () => {
       });
     });
 
-    it('should classify forecast intent', () => {
+    it('should classify predict intent', () => {
       const queries = [
         'Predict next week sales',
         'What will footfall be tomorrow?',
@@ -68,7 +68,7 @@ describe('AgentRouter', () => {
 
       queries.forEach((query) => {
         const intent = (router as any).classifyIntent(query);
-        expect(intent.intent).toBe('forecast');
+        expect(intent.intent).toBe('predict');
         expect(intent.confidence).toBeGreaterThan(0.5);
       });
     });

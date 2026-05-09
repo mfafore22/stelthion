@@ -6,7 +6,7 @@
 
 import { ConciergeWebSocketClient, WSConnectionState, createWebSocketClient } from '../websocket-client';
 import { WSMessageType, ConversationMessage, ToolExecution } from '../types';
-import { AgentRole } from '../../gcm/orchestrator/types';
+import { AgentRole } from '@/lib/gcm-types';
 
 // Mock WebSocket
 class MockWebSocket {

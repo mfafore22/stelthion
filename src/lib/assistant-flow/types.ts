@@ -27,4 +27,5 @@ export interface AssistantLaunch {
   agentRole: AgentRole;
   starterPrompt: string;
   viewContext: AssistantViewContext;
+  targetMallId?: string;
 }

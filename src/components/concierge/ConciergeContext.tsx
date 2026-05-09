@@ -66,6 +66,7 @@ interface ConciergeProviderProps {
   mallOptions?: Array<{ id: string; name: string }>;
   propertyName?: string;
   propertyLogoUrl?: string;
+  mode?: 'mall' | 'venue';
 }
 
 const DEFAULT_PREFERENCES: ConciergePreferences = {
@@ -87,6 +88,7 @@ export function ConciergeProvider({
   mallOptions = [],
   propertyName = 'your property',
   propertyLogoUrl,
+  mode = 'mall',
 }: ConciergeProviderProps) {
   const { t, i18n } = useTranslation('mall');
   const viewContextStore = useViewContext();
@@ -128,7 +130,10 @@ export function ConciergeProvider({
     setState((prev) => ({ ...prev, isLoading: true }));
 
     try {
-      const response = await fetch(`/api/concierge/conversations?mallId=${focusedMallId}`);
+      const endpoint = mode === 'venue'
+        ? `/api/venue/concierge/conversations?venueId=${focusedMallId}`
+        : `/api/concierge/conversations?mallId=${focusedMallId}`;
+      const response = await fetch(endpoint);
       if (!response.ok) {
         setState((prev) => ({ ...prev, isLoading: false, conversations: [] }));
         return;
@@ -142,7 +147,7 @@ export function ConciergeProvider({
     } catch {
       setState((prev) => ({ ...prev, isLoading: false, conversations: [] }));
     }
-  }, [tenantId, focusedMallId]);
+  }, [tenantId, focusedMallId, mode]);
 
   useEffect(() => { refreshConversations(); }, [refreshConversations]);
 
@@ -262,12 +267,13 @@ export function ConciergeProvider({
       abortRef.current = controller;
 
       try {
-        const response = await fetch('/api/concierge/chat', {
+        const response = await fetch(mode === 'venue' ? '/api/venue/concierge/chat' : '/api/concierge/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             conversationId: activeConversation?.id?.startsWith('conv-') ? undefined : activeConversation?.id,
             mallId: focusedMallId,
+            venueId: mode === 'venue' ? focusedMallId : undefined,
             message: content,
             language: i18n.language || preferences.language || 'en',
             viewContext: viewContextStore.value,
@@ -410,7 +416,7 @@ export function ConciergeProvider({
         abortRef.current = null;
       }
     },
-    [activeConversation, focusedMallId, i18n.language, preferences.language, createConversation, viewContextStore.value]
+    [activeConversation, focusedMallId, i18n.language, preferences.language, createConversation, viewContextStore.value, mode]
   );
 
   const setMallFocus = useCallback((nextMallId: string) => {

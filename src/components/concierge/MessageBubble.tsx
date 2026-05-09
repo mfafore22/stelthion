@@ -16,6 +16,7 @@ import { FootfallSparkline } from './attachments/FootfallSparkline';
 import { EventCard } from './attachments/EventCard';
 import { ParkingStatusCard } from './attachments/ParkingStatusCard';
 import { TransportCard } from './attachments/TransportCard';
+import { ShopperMindTrendsCard } from './attachments/ShopperMindTrendsCard';
 
 interface MessageBubbleProps {
   message: ConversationMessage;
@@ -142,6 +143,8 @@ function AttachmentRenderer({ attachment }: { attachment: { id: string; type: st
       return <ParkingStatusCard data={attachment.data} title={attachment.title} />;
     case 'transport_card':
       return <TransportCard data={attachment.data} title={attachment.title} />;
+    case 'shoppermind_trends':
+      return <ShopperMindTrendsCard data={attachment.data} title={attachment.title} />;
     default:
       return (
         <div className="bg-bo-neutral-50 rounded-lg p-2 text-xs text-bo-neutral-500">
