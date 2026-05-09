@@ -1,3 +1,5 @@
+import { localizePropertyActions } from './property-action-localization.js';
+
 export type VerificationStatus = 'verified' | 'needs_rewrite' | 'unsupported' | 'retired';
 export type EvidenceSourceType = 'official' | 'statistical' | 'operator' | 'research' | 'trade';
 export type EvidenceAuthorityTier = 'primary' | 'trusted_research' | 'trade_reference';
@@ -420,9 +422,15 @@ export function getPropertyProfile(propertyId: string): PropertyProfile | null {
   return PROPERTIES.find((p) => p.id === propertyId) ?? null;
 }
 
+function resolveActionLanguage(property: PropertyProfile, language?: string): string | undefined {
+  if (property.id === 'realidea-sello' && property.marketId === 'helsinki-fi') return 'fi';
+  return language;
+}
+
 export function getPropertyActions(
   propertyId: string,
   marketId?: string,
+  language?: string,
 ): PropertyActionsResponse | null {
   const property = getPropertyProfile(propertyId);
   if (!property) return null;
@@ -449,13 +457,13 @@ export function getPropertyActions(
   });
   const sources = listVerifiedSources().filter((source) => sourceIds.has(source.id));
 
-  return {
+  return localizePropertyActions({
     property,
     recommendations,
     evidenceClaims,
     sources,
     llmReadyContext: buildPropertyActionLLMContext(recommendations, evidenceClaims),
-  };
+  }, resolveActionLanguage(property, language));
 }
 
 export function buildPropertyActionLLMContext(

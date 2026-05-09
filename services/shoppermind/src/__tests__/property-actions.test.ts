@@ -27,6 +27,27 @@ describe('property action recommendations', () => {
     expect(getPropertyActions('realidea-tripla', 'dubai-ae')).toBeNull();
   });
 
+  it('localizes Sello action content for Finnish sessions', () => {
+    const result = getPropertyActions('realidea-sello', 'helsinki-fi');
+    const recommendation = result?.recommendations.find((item) => item.id === 'sello-service-frequency');
+
+    expect(result?.property.summary).toContain('Alueellinen arjen asiointikeskus');
+    expect(recommendation?.title).toBe('Muuta palvelutarjonta viikoittaiseksi asiointirutiiniksi');
+    expect(recommendation?.action).toContain('Rakenna viikoittaiset asiointitehtävät');
+    expect(recommendation?.action).not.toContain('Create weekly service missions');
+    expect(recommendation?.competitorExamples[0]?.observedMove).toContain('käyntijärjestelmänä');
+    expect(result?.evidenceClaims.find((claim) => claim.id === 'claim-sello-160-stores')?.text)
+      .toContain('Sello kertoo');
+  });
+
+  it('keeps Sello Finnish even if the caller sends English language state', () => {
+    const result = getPropertyActions('realidea-sello', 'helsinki-fi', 'en');
+    const recommendation = result?.recommendations.find((item) => item.id === 'sello-service-frequency');
+
+    expect(recommendation?.title).toBe('Muuta palvelutarjonta viikoittaiseksi asiointirutiiniksi');
+    expect(recommendation?.action).not.toContain('Create weekly service missions');
+  });
+
   it('builds LLM context only from verified claims', () => {
     const claims = listVerifiedClaims();
     const result = getPropertyActions('realidea-tripla', 'helsinki-fi');

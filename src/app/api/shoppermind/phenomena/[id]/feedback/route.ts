@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';
 import { requireAdmin } from '@/lib/admin-auth';
-import { recalculateWeights } from '@/services/shoppermind/weights';
+import { getShopperMindClient } from '@/lib/shoppermind-client';
+import { shopperMindErrorJson } from '@/lib/shoppermind-route-adapter';
 
 export async function POST(
   req: NextRequest,
@@ -11,27 +11,32 @@ export async function POST(
   if ('error' in guard) return guard.error;
 
   const { id } = await params;
-  const body = (await req.json()) as { verdict: string; note?: string; userId: string };
+  const body = (await req.json()) as {
+    verdict: string;
+    note?: string;
+    userId: string;
+    marketId?: string;
+  };
 
   if (!body.verdict || !body.userId) {
     return NextResponse.json({ error: 'verdict and userId required' }, { status: 400 });
   }
 
-  const phenomenon = await prisma.phenomenon.findUnique({ where: { id } });
-  if (!phenomenon) {
-    return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  const client = getShopperMindClient();
+  if (!client) {
+    return NextResponse.json({ error: 'shoppermind_not_configured' }, { status: 503 });
   }
 
-  const feedback = await prisma.phenomenonFeedback.create({
-    data: {
-      phenomenonId: id,
+  try {
+    const feedback = await client.recordFeedback(id, {
       userId: body.userId,
+      marketId: body.marketId,
+      interactionKind: 'thumbs',
       verdict: body.verdict,
       note: body.note,
-    },
-  });
-
-  recalculateWeights(phenomenon.primaryCountry).catch(() => {});
-
-  return NextResponse.json(feedback);
+    });
+    return NextResponse.json(feedback, { status: 201 });
+  } catch (err) {
+    return shopperMindErrorJson(err, {});
+  }
 }

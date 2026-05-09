@@ -6,7 +6,8 @@ vi.mock('../db/prisma.js', () => ({
   prisma: () => ({ reviewItem: { findMany } }),
 }));
 
-const { streamTrainingRecords } = await import('../engine/insights/training-export.js');
+const { streamPolicyTrainingEvents, streamTrainingRecords } =
+  await import('../engine/insights/training-export.js');
 
 function row(overrides: Partial<Record<string, unknown>> = {}) {
   return {
@@ -92,5 +93,23 @@ describe('streamTrainingRecords', () => {
 
     const records = await collect(streamTrainingRecords({ status: ['PENDING'] }));
     expect(records[0]!.reviewerAction).toBeNull();
+  });
+
+  it('streams review outcomes as platform policy training events', async () => {
+    findMany.mockResolvedValueOnce([row({
+      id: 'review-1',
+      metricsSnapshot: {
+        compositeScore: 0.55,
+        quality: { decision: 'review', handling: 'review_first' },
+      },
+    })]);
+    findMany.mockResolvedValueOnce([]);
+
+    const events = await collect(streamPolicyTrainingEvents({ marketId: 'helsinki-fi' }));
+
+    expect(events[0]!.id).toBe('shoppermind:review:review-1');
+    expect(events[0]!.source).toBe('review_outcome');
+    expect(events[0]!.outcome).toBe('accepted');
+    expect(events[0]!.quality).toEqual({ decision: 'review', handling: 'review_first' });
   });
 });

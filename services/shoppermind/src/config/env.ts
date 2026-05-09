@@ -27,6 +27,11 @@ const Env = z.object({
     .string()
     .default('true')
     .transform((v) => v !== 'false'),
+  RATE_LIMIT_PUBLIC_PER_MINUTE: z.coerce.number().int().positive().default(120),
+  RATE_LIMIT_INTERNAL_PER_MINUTE: z.coerce.number().int().positive().default(600),
+  RATE_LIMIT_AGENT_PER_MINUTE: z.coerce.number().int().positive().default(60),
+  RATE_LIMIT_EXPORT_PER_MINUTE: z.coerce.number().int().positive().default(20),
+  RATE_LIMIT_STORE: z.enum(['redis', 'memory']).optional(),
 });
 
 export type AppEnv = z.infer<typeof Env>;

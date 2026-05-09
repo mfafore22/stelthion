@@ -4,6 +4,7 @@ import { runIngestion } from '../ingest-runner.js';
 import { runClustering } from '../clustering.js';
 import { runScoring } from '../scoring.js';
 import { runPublisher } from '../publisher.js';
+import { refreshMarketMemoryCaches } from '../memory/retrieval-memory.js';
 
 export type Stage = 'ingest' | 'cluster' | 'score' | 'publish';
 const DEFAULT_STAGES: Stage[] = ['ingest', 'cluster', 'score', 'publish'];
@@ -130,5 +131,15 @@ export async function runPipeline(args: RunArgs = {}): Promise<RunSummary> {
     },
   });
 
+  await refreshSuccessfulMarketCaches(perMarket);
+
   return { runId: run.id, status, marketIds, stages, markets: perMarket };
+}
+
+async function refreshSuccessfulMarketCaches(markets: MarketRunSummary[]): Promise<void> {
+  await Promise.all(
+    markets
+      .filter((market) => market.ok)
+      .map((market) => refreshMarketMemoryCaches(market.marketId).catch(() => undefined)),
+  );
 }

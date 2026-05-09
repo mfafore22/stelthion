@@ -1,4 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify';
+import { runShopperMindAgentGovernance } from '../../../engine/agents/governance.js';
+import { buildObservabilitySnapshot } from '../../../engine/observability/snapshot.js';
 import { prisma } from '../../../db/prisma.js';
 import { redis } from '../../../db/redis.js';
 import { requireBearer } from '../../auth/bearer.js';
@@ -30,6 +32,14 @@ export const healthRoutes: FastifyPluginAsync = async (app) => {
     return out;
   });
 
-  // Open, unauthenticated liveness probe — for container orchestrator health probes.
+  app.get('/internal/governance', { preHandler: requireBearer('internal') }, async () => {
+    const report = runShopperMindAgentGovernance();
+    return { status: report.blockerCount === 0 ? 'ok' : 'blocked', ...report };
+  });
+
+  app.get('/internal/metrics', { preHandler: requireBearer('internal') }, async () =>
+    buildObservabilitySnapshot());
+
+  // Open, unauthenticated liveness probe - for container orchestrator health probes.
   app.get('/internal/live', async () => ({ status: 'ok' }));
 };

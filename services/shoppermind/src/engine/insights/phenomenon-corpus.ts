@@ -1,4 +1,5 @@
 import { prisma } from '../../db/prisma.js';
+import { loadPhenomenonSourceEvidence } from '../quality/source-evidence.js';
 
 export interface CorpusDocument {
   id: string;
@@ -16,6 +17,9 @@ export interface CorpusDocument {
     state: string;
     latestCompositeScore: number | null;
     latestScoreDate: string | null;
+    sourceCount: number;
+    strongSourceCount: number;
+    sourceIds: string[];
     firstSeenAt: string;
     lastSignalAt: string;
     eventStart: string | null;
@@ -30,7 +34,7 @@ export interface CorpusDocument {
  * link graph into sectioned prose so a downstream embedding store + RAG
  * retriever can return a single coherent chunk per phenomenon. Market-scoped
  * because the score rows we surface are the ones produced for this market's
- * proximity weights — a Helsinki-relevant document for Asuntomessut Lempäälä
+ * proximity weights - a Helsinki-relevant document for Asuntomessut Lempäälä
  * looks different from Tampere's.
  */
 export async function buildCorpusDocument(
@@ -39,7 +43,7 @@ export async function buildCorpusDocument(
 ): Promise<CorpusDocument | null> {
   const db = prisma();
 
-  const [phenomenon, scores, linksFrom, linksTo] = await Promise.all([
+  const [phenomenon, scores, linksFrom, linksTo, sourceEvidence] = await Promise.all([
     db.phenomenon.findUnique({ where: { id: phenomenonId } }),
     db.phenomenonScore.findMany({
       where: { phenomenonId, marketId },
@@ -52,6 +56,7 @@ export async function buildCorpusDocument(
     db.phenomenonLink.findMany({
       where: { toPhenomenonId: phenomenonId, supersededAt: null },
     }),
+    loadPhenomenonSourceEvidence(phenomenonId, marketId),
   ]);
 
   if (!phenomenon) return null;
@@ -141,6 +146,9 @@ export async function buildCorpusDocument(
       state: phenomenon.state,
       latestCompositeScore: latest?.compositeScore ?? null,
       latestScoreDate: latest?.date.toISOString() ?? null,
+      sourceCount: sourceEvidence.sourceCount,
+      strongSourceCount: sourceEvidence.strongSourceCount,
+      sourceIds: sourceEvidence.sourceIds,
       firstSeenAt: phenomenon.firstSeenAt.toISOString(),
       lastSignalAt: phenomenon.lastSignalAt.toISOString(),
       eventStart: phenomenon.eventStart?.toISOString() ?? null,

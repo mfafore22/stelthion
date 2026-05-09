@@ -10,6 +10,8 @@ import {
   MarketPolicySchema,
   MarketProfileSchema,
 } from '../../../engine/registry/market-schema.js';
+import { getMarketOverview } from '../../../engine/memory/market-overview-memory.js';
+import { getPhenomenonDetailSnapshot } from '../../../engine/memory/phenomenon-detail-memory.js';
 import { requireAnyBearer, requireBearer } from '../../auth/bearer.js';
 
 const ConfigBody = z.object({
@@ -65,6 +67,28 @@ export const marketsRoutes: FastifyPluginAsync = async (app) => {
         profile: market.profile,
         active: market.active,
       };
+    },
+  );
+
+  app.get<{ Params: { marketId: string } }>(
+    '/v1/markets/:marketId/overview',
+    { preHandler: requireAnyBearer() },
+    async (req) => getMarketOverview(req.params.marketId),
+  );
+
+  app.get<{ Params: { marketId: string; id: string } }>(
+    '/v1/markets/:marketId/phenomena/:id',
+    { preHandler: requireAnyBearer() },
+    async (req, reply) => {
+      const snapshot = await getPhenomenonDetailSnapshot(
+        req.params.marketId,
+        req.params.id,
+      );
+      if (!snapshot) {
+        reply.code(404).send({ error: 'phenomenon_not_found' });
+        return;
+      }
+      return snapshot;
     },
   );
 

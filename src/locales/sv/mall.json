@@ -31,6 +31,7 @@
     "annualVisitors": "Årliga besökare",
     "annualSales": "Årlig omsättning",
     "currentVisitors": "Aktuella besökare",
+    "liveDataPending": "Live-räknare väntar på anslutning",
     "retailUnits": "Butiker",
     "topCategory": "Största kategori",
     "stelthionSignals": "Stelthion Signaler",
@@ -709,6 +710,10 @@
       "body": "Ange {{envVar1}} och {{envVar2}} för att ansluta. Det här köpcentrumet skulle motsvara {{marketId}}.",
       "detail": "ShopperMind-tjänsten är inte konfigurerad i den här miljön."
     },
+    "offlineFallback": {
+      "title": "Visar Realideas grundläggande marknadsintelligens",
+      "body": "Den livebaserade ShopperMind-tjänsten är inte ansluten i den här miljön, så vyn använder lokal marknadsintelligens för {{marketId}}."
+    },
     "upgrade": {
       "title": "ShopperMind ingår inte i din plan",
       "body": "Uppgradera för att låsa upp trendintelligens för dina marknader. Kontakta din kundansvarig eller en administratör för att byta plan."
@@ -1144,7 +1149,7 @@
     "subtitle": "Gör ShopperMind-trender till kampanjbriefar som kan testas mot besöks-, POS- och hyresgästdata.",
     "builder": "Utkast till kampanjbrief",
     "createBrief": "Skapa testbrief",
-    "assistantPrompt": "Skapa en testkampanjbrief för {{mall}}. Zon: {{zone}}. Målgrupp: {{audience}}. Kategori: {{category}}. Föreslagna hyresgäster: {{stores}}. Budget: {{budget}}. Längd: {{duration}}. Använd ShopperMinds hyresgästeffekt {{impact}} som bakgrund om den finns.",
+    "assistantPrompt": "Skriv en kampanjbrief. Använd endast dessa val: fastighet {{mall}}, zon {{zone}}, målgrupp {{audience}}, kategori {{category}}, föreslagna hyresgäster {{stores}}, budget {{budget}}, längd {{duration}}. Strukturera svaret med: mål, kundbehov, kampanjidé, hyresgästernas roller, kanaler, KPI:er, godkännandesteg och data att koppla när live. Håll det konkret och svara inte på andra ämnen.",
     "flowTitle": "Arbetsflöde när live-data är ansluten",
     "aiTitle": "Demo nu, kunddata senare",
     "aiBody": "En skräddarsydd AI-modell använder endast data som är avgränsad till kundens egen miljö. Demon visar arbetsflödet med seedad data och trenddata, medan samma vy senare kan kopplas till POS-, besöks-, hyresgäst- och kampanjresultat.",
@@ -1160,7 +1165,9 @@
           "everyday": "Vardagsärenden",
           "station": "Station",
           "restaurants": "Restauranger",
-          "services": "Tjänster"
+          "services": "Tjänster",
+          "fashion": "Mode",
+          "home": "Hem och elektronik"
         }
       },
       "audience": {
@@ -1204,17 +1211,20 @@
       "visits": {
         "label": "Besöksprognos",
         "value": "+3,8 %",
-        "hint": "Demoestimat för vald zon"
+        "hint": "Demoestimat för vald zon",
+        "dynamicHint": "{{duration}} dagars demoestimat med {{tenants}} hyresgäster"
       },
       "sales": {
         "label": "Försäljningssignal",
         "value": "+2,4 %",
-        "hint": "POS-koppling i full implementation"
+        "hint": "POS-koppling i full implementation",
+        "dynamicHint": "Budgetnivån ändrar förväntad räckvidd: {{budget}}"
       },
       "tenants": {
         "label": "Hyresgäster",
         "value": "12",
-        "hint": "Matchade deltagare från seedad data"
+        "hint": "Matchade deltagare från seedad data",
+        "dynamicHint": "{{selected}} valda, {{available}} matchande kandidater"
       }
     },
     "steps": {
@@ -1532,7 +1542,8 @@
       "trends": "Trender",
       "signalOfDay": "Dagens signal",
       "zoneFlow": "Besöksflöden",
-      "mallStats": "Nyckeltal"
+      "mallStats": "Nyckeltal",
+      "activationPlan": "Aktiveringsplan"
     },
     "specialist": {
       "weather": "Väderspecialist",

@@ -10,11 +10,14 @@ COPY package.json package-lock.json .npmrc ./
 COPY services/shoppermind/package.json ./services/shoppermind/
 COPY packages/shoppermind-client-types/package.json ./packages/shoppermind-client-types/
 COPY packages/shoppermind-client/package.json ./packages/shoppermind-client/
-RUN npm ci --workspace=@stelthion/shoppermind --include-workspace-root=false --legacy-peer-deps
+COPY packages/intelligence-runtime/package.json ./packages/intelligence-runtime/
+RUN npm ci --workspace=@stelthion/shoppermind --workspace=@stelthion/intelligence-runtime --include-workspace-root=false --legacy-peer-deps
 
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/services/shoppermind/node_modules ./services/shoppermind/node_modules
+COPY packages/intelligence-runtime ./packages/intelligence-runtime
+RUN cd packages/intelligence-runtime && npm run build
 COPY services/shoppermind ./services/shoppermind
 WORKDIR /app/services/shoppermind
 # DATABASE_URL is required by prisma.config.ts at load time; a dummy value is
@@ -28,6 +31,7 @@ FROM base AS runtime
 ENV NODE_ENV=production
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/services/shoppermind/node_modules ./services/shoppermind/node_modules
+COPY --from=builder /app/packages/intelligence-runtime ./packages/intelligence-runtime
 COPY --from=builder /app/services/shoppermind/dist ./services/shoppermind/dist
 COPY --from=builder /app/services/shoppermind/prisma ./services/shoppermind/prisma
 COPY --from=builder /app/services/shoppermind/package.json ./services/shoppermind/package.json

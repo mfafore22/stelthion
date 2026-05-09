@@ -13,7 +13,7 @@ import {
 function input(overrides: Partial<CampaignIdeaInput> = {}): CampaignIdeaInput {
   return {
     phenomenonId: 'p-1',
-    label: 'Finnish craft beer → spices',
+    label: 'Finnish craft beer with spices',
     state: 'ACCELERATING',
     phenomenonType: 'TREND',
     primaryCountry: 'FI',
@@ -47,7 +47,7 @@ const goodJson = JSON.stringify({
   angle: 'Tie spiced-beer trend to a 7-day partner-restaurant night across two zones.',
   audience: '25–45 foodies and craft-beer enthusiasts inside Tampere catchment.',
   channels: ['Instagram Reels', 'Mall newsletter', 'Partner-restaurant CRM'],
-  hook: 'Your favourite beer — in a flavour you have not tried.',
+  hook: 'Your favourite beer in a flavour you have not tried.',
   cta: 'Book a tasting flight at the partner restaurant.',
   successMetric: 'Tasting bookings ≥ 200 over the 7-day window.',
   whyNow: 'Velocity is +0.18 in two weeks; signal strongest in Tampere.',
@@ -99,8 +99,7 @@ describe('generateCampaignIdea', () => {
     setLLMClient(stubReturning('this is not JSON'));
     const idea = await generateCampaignIdea(input(), { language: 'fi' });
     expect(idea.language).toBe('fi');
-    // Finnish fallback uses the label inline
-    expect(idea.hook).toContain('Finnish craft beer → spices');
+    expect(idea.hook).not.toMatch(/now at|nyt/i);
     expect(idea.channels.length).toBeGreaterThan(0);
   });
 
@@ -118,5 +117,15 @@ describe('generateCampaignIdea', () => {
     setLLMClient(stubReturning(tooManyChannels));
     const idea = await generateCampaignIdea(input());
     expect(idea.channels).toHaveLength(4);
+  });
+
+  it('replaces repetitive now-in-place hooks with a varied fallback', async () => {
+    setLLMClient(stubReturning(JSON.stringify({
+      ...JSON.parse(goodJson),
+      hook: 'Finnish craft beer with spices: now at Ideapark Lempäälä.',
+    })));
+    const idea = await generateCampaignIdea(input());
+    expect(idea.hook).not.toContain('now at Ideapark');
+    expect(idea.hook.length).toBeGreaterThan(10);
   });
 });

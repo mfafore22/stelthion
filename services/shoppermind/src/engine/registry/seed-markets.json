@@ -258,5 +258,83 @@
       },
       "lifecycleModifiers": { "UPCOMING": -0.1, "ACTIVE": 0, "CONCLUDED": 0.2 }
     }
+  },
+  {
+    "id": "stockholm-se",
+    "country": "SE",
+    "region": "stockholm-se",
+    "displayName": "Stockholm",
+    "industryFocus": "retail-tenancy",
+    "geoAnchorLat": 59.3293,
+    "geoAnchorLon": 18.0686,
+    "footTrafficSubs": ["CITY:stockholm-se", "REGION:stockholm-se", "COUNTRY:SE"],
+    "culturalSubs": ["COUNTRY:SE", "GLOBAL"],
+    "footTrafficAxisWeight": 0.5,
+    "culturalAxisWeight": 0.5,
+    "active": true,
+    "profile": {
+      "displayName": "Stockholm",
+      "industryFocus": "retail-tenancy",
+      "language": "sv",
+      "persona": "Generic human-behaviour trend analyst for Stockholm. Primary audience today is property managers, but the brief covers Norrmalm/Östermalm/Södermalm footfall, SE consumer sentiment and household spending, Nordic cross-border shopping and tourism, life-choice and lifestyle shifts, weather and transit incidents, and the way Stockholm sets the cultural tone for retail across the Nordics.",
+      "categoryKeywords": {},
+      "relevanceKeywords": [],
+      "weightPriors": {},
+      "seedSources": []
+    },
+    "policy": {
+      "version": 1,
+      "thresholds": {
+        "TREND:composite:CITY": { "publish": 0.5, "review": 0.3, "reject": 0.1 },
+        "TREND:composite:REGION": { "publish": 0.55, "review": 0.35, "reject": 0.15 },
+        "TREND:composite:COUNTRY": { "publish": 0.6, "review": 0.4, "reject": 0.2 },
+        "TREND:composite:GLOBAL": { "publish": 0.65, "review": 0.45, "reject": 0.25 },
+        "EVENT:composite:CITY": { "publish": 0.45, "review": 0.25, "reject": 0.1 },
+        "EVENT:composite:COUNTRY": { "publish": 0.55, "review": 0.35, "reject": 0.2 },
+        "CAMPAIGN:composite:COUNTRY": { "publish": 0.5, "review": 0.3, "reject": 0.15 },
+        "INCIDENT:composite:CITY": { "publish": 0.35, "review": 0.2, "reject": 0.1 },
+        "INCIDENT:composite:COUNTRY": { "publish": 0.45, "review": 0.3, "reject": 0.15 }
+      },
+      "lifecycleModifiers": { "UPCOMING": -0.1, "ACTIVE": 0, "CONCLUDED": 0.2 }
+    }
+  },
+  {
+    "id": "london-uk",
+    "country": "UK",
+    "region": "london-uk",
+    "displayName": "London",
+    "industryFocus": "retail-tenancy",
+    "geoAnchorLat": 51.5074,
+    "geoAnchorLon": -0.1278,
+    "footTrafficSubs": ["CITY:london-uk", "REGION:london-uk", "COUNTRY:UK"],
+    "culturalSubs": ["COUNTRY:UK", "GLOBAL"],
+    "footTrafficAxisWeight": 0.5,
+    "culturalAxisWeight": 0.5,
+    "active": true,
+    "profile": {
+      "displayName": "London",
+      "industryFocus": "retail-tenancy",
+      "language": "en",
+      "persona": "Generic human-behaviour trend analyst for London. Primary audience today is property managers, but the brief covers Oxford Street/Westfield/Canary Wharf footfall, UK consumer spending under post-Brexit and cost-of-living pressures, inbound tourism, domestic relocations, life-choice and lifestyle shifts, transit and weather incidents, and the cultural pull London exerts across the UK and into mainland Europe.",
+      "categoryKeywords": {},
+      "relevanceKeywords": [],
+      "weightPriors": {},
+      "seedSources": []
+    },
+    "policy": {
+      "version": 1,
+      "thresholds": {
+        "TREND:composite:CITY": { "publish": 0.5, "review": 0.3, "reject": 0.1 },
+        "TREND:composite:REGION": { "publish": 0.55, "review": 0.35, "reject": 0.15 },
+        "TREND:composite:COUNTRY": { "publish": 0.6, "review": 0.4, "reject": 0.2 },
+        "TREND:composite:GLOBAL": { "publish": 0.65, "review": 0.45, "reject": 0.25 },
+        "EVENT:composite:CITY": { "publish": 0.45, "review": 0.25, "reject": 0.1 },
+        "EVENT:composite:COUNTRY": { "publish": 0.55, "review": 0.35, "reject": 0.2 },
+        "CAMPAIGN:composite:COUNTRY": { "publish": 0.5, "review": 0.3, "reject": 0.15 },
+        "INCIDENT:composite:CITY": { "publish": 0.35, "review": 0.2, "reject": 0.1 },
+        "INCIDENT:composite:COUNTRY": { "publish": 0.45, "review": 0.3, "reject": 0.15 }
+      },
+      "lifecycleModifiers": { "UPCOMING": -0.1, "ACTIVE": 0, "CONCLUDED": 0.2 }
+    }
   }
 ]

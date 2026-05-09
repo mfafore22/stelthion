@@ -26,22 +26,33 @@ export function CategoryImpactChips({
 
   return (
     <div className="flex flex-wrap gap-1.5">
-      {impacts.map((impact) => (
-        <span
-          key={`${impact.id}-${impact.state}`}
-          className={cn(
-            'inline-flex items-center gap-1 rounded-full border font-medium',
-            compact ? 'px-2 py-0.5 text-[10px]' : 'px-2.5 py-1 text-[11px]',
-            directionClass[impact.direction],
-          )}
-          title={t(`shoppermind.categoryImpact.${impact.state}`)}
-        >
-          {categoryLabel(impact.id, i18n.language)}
-          <span className="text-current/60">
-            {t(`shoppermind.categoryImpact.badges.${impact.state}`)}
+      {impacts.map((impact) => {
+        const badge = t(`shoppermind.categoryImpact.badges.${impact.state}`);
+        const category = categoryLabel(impact.id, i18n.language);
+        return (
+          <span
+            key={`${impact.id}-${impact.state}`}
+            className={cn(
+              'inline-flex items-center gap-1 rounded-full border font-medium',
+              compact ? 'px-2 py-0.5 text-[10px]' : 'px-2.5 py-1 text-[11px]',
+              directionClass[impact.direction],
+            )}
+            title={t(`shoppermind.categoryImpact.${impact.state}`)}
+          >
+            {impact.state === 'absent_relevant' ? (
+              <>
+                <span className="text-current/60">{badge}:</span>
+                {category}
+              </>
+            ) : (
+              <>
+                {category}
+                <span className="text-current/60">{badge}</span>
+              </>
+            )}
           </span>
-        </span>
-      ))}
+        );
+      })}
     </div>
   );
 }

@@ -16,8 +16,10 @@ import type {
   MarketConfigUpdate,
   MarketDetail,
   MarketListResponse,
+  MarketOverviewResponse,
   PhenomenaListResponse,
   PhenomenonDetail,
+  PhenomenonDetailSnapshotResponse,
   PhenomenonEvidenceResponse,
   PhenomenonLinkCreate,
   PhenomenonLinkRow,
@@ -68,6 +70,25 @@ export class ShopperMindClient {
 
   getMarket(marketId: string): Promise<MarketDetail> {
     return request<MarketDetail>(this.opts, 'GET', `v1/markets/${encodeURIComponent(marketId)}`);
+  }
+
+  getMarketOverview(marketId: string): Promise<MarketOverviewResponse> {
+    return request<MarketOverviewResponse>(
+      this.opts,
+      'GET',
+      `v1/markets/${encodeURIComponent(marketId)}/overview`,
+    );
+  }
+
+  getMarketPhenomenonDetail(
+    marketId: string,
+    phenomenonId: string,
+  ): Promise<PhenomenonDetailSnapshotResponse> {
+    return request<PhenomenonDetailSnapshotResponse>(
+      this.opts,
+      'GET',
+      `v1/markets/${encodeURIComponent(marketId)}/phenomena/${encodeURIComponent(phenomenonId)}`,
+    );
   }
 
   listPhenomena(args: {
@@ -158,7 +179,7 @@ export class ShopperMindClient {
     });
   }
 
-  // Admin — requires internal token in `ShopperMindClientOptions.token`.
+  // Admin - requires internal token in `ShopperMindClientOptions.token`.
   getMarketConfig(marketId: string): Promise<MarketConfig> {
     return request<MarketConfig>(
       this.opts,
@@ -248,13 +269,13 @@ export class ShopperMindClient {
 
   getPropertyActions(
     propertyId: string,
-    args: { marketId?: string } = {},
+    args: { marketId?: string; language?: string } = {},
   ): Promise<PropertyActionsResponse> {
     return request<PropertyActionsResponse>(
       this.opts,
       'GET',
       `v1/properties/${encodeURIComponent(propertyId)}/actions`,
-      { query: { marketId: args.marketId } },
+      { query: { marketId: args.marketId, language: args.language } },
     );
   }
 }
@@ -287,7 +308,7 @@ export class ShopperMindInternalClient {
       until: q.until,
       limit: q.limit,
     };
-    // Multiple status values are sent as repeated query params — we can't
+    // Multiple status values are sent as repeated query params - we can't
     // express that in a flat Record, so serialise the first status here and
     // let callers issue multiple calls if they truly need OR-status filtering.
     if (q.status && q.status.length > 0) query.status = q.status[0];

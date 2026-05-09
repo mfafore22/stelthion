@@ -1,4 +1,28 @@
 import { SELLO_TENANTS, type SelloTenant } from '@/lib/data/selloTenantMix';
+import { TRIPLA_TENANTS, type TriplaTenant } from '@/lib/data/triplaTenantMix';
+
+type Tenant = SelloTenant | TriplaTenant;
+
+// Maps the abstract categoryIds used in TEMPLATES to the concrete `category`
+// strings stored on each tenant record. Lets the same template select
+// tenants from any mall's pool by category rather than by hardcoded name.
+const CATEGORY_ID_TO_TENANT_CATEGORY: Record<string, string[]> = {
+  'food-beverage': ['Food & Beverage'],
+  'grocery-daily': ['Daily Goods & Grocery'],
+  'beauty-health': ['Beauty & Health'],
+  'fitness-wellness-medical': ['Beauty & Health'],
+  'fashion-apparel': ['Fashion'],
+  'home-furniture': ['Home & Living'],
+  'electronics': ['Home & Living'],
+  'services': ['Services'],
+  'entertainment-experiences': ['Leisure'],
+  'books-toys-hobby': ['Leisure', 'Home & Living'],
+};
+
+function pickByCategory(pool: Tenant[], categoryIds: string[], limit = 6): Tenant[] {
+  const categories = new Set(categoryIds.flatMap((id) => CATEGORY_ID_TO_TENANT_CATEGORY[id] ?? []));
+  return pool.filter((tenant) => categories.has(tenant.category)).slice(0, limit);
+}
 
 type Lang = 'fi' | 'en' | 'sv';
 type Move = 'increase' | 'reposition' | 'reduce' | 'test' | 'recruit';
@@ -46,12 +70,12 @@ const TEMPLATES: Template[] = [
     stores: ['iPoke', 'Jungle Juice Bar', 'Fazer Café', 'Classic Pizza', 'Prisma', 'Elixia'],
     text: {
       fi: {
-        title: 'Ruoka ei kaipaa lisää määrää vaan tarkempia ostotilanteita',
-        need: 'Arvohaku, painonhallinta ja työpäivän rytmi jakavat ruokakysynnän pienempiin käyttötarkoituksiin.',
-        recommendation: 'Käsittele runsasta ravintolatarjontaa päiväosa- ja missiovalikoimana: nopea proteiinilounas, kevyt välipala, perheen ilta ja viikonlopun elämys.',
-        focus: 'Nosta valikoima- ja annoskulmat, jotka pienentävät ostoriskiä ja tekevät terveellisemmästä valinnasta helpon.',
-        reduce: 'Vältä lisäämästä yleistä pikaruokakapasiteettia ilman selkeää käyttötarkoitusta tai erottuvaa vierailusyyytä.',
-        campaignAngle: 'Rakenna lounas- ja iltareittejä, joissa sama trendi palvelee eri vuorokaudenaikoja.',
+        title: 'Ruokatarjonta tarvitsee tarkempia asiointitilanteita',
+        need: 'Hintatietoisuus, hyvinvointi ja työpäivän rytmi jakavat ruokakysyntää selkeisiin käyttötarpeisiin.',
+        recommendation: 'Jäsennä ravintolatarjonta tilanteittain: nopea proteiinilounas, kevyt välipala, perheen ilta ja viikonlopun elämys.',
+        focus: 'Korosta annos- ja valikoimaratkaisuja, jotka tekevät terveellisemmästä tai edullisemmasta valinnasta helpon.',
+        reduce: 'Älä lisää yleistä pikaruokakapasiteettia ilman selkeää roolia tai erottuvaa käyntisyytä.',
+        campaignAngle: 'Rakenna lounas- ja iltareittejä, joissa sama trendi palvelee eri kellonaikoja.',
       },
       en: {
         title: 'Food needs sharper missions, not simply more volume',
@@ -79,12 +103,12 @@ const TEMPLATES: Template[] = [
     stores: ['KICKS', 'Lyko', 'Rituals', 'Sanitum Apteekki Sello', 'Pihlajalinna', 'Elixia'],
     text: {
       fi: {
-        title: 'Hyvinvointi toimii parhaiten asiointisilmukkana',
-        need: 'Kuluttaja hakee hallittua itsestä huolehtimista, mutta ei halua erillistä raskasta ostosreissua.',
-        recommendation: 'Yhdistä apteekki, terveyspalvelut, kauneus ja liikunta ajanvaraukseen ja arjen asiointiin.',
-        focus: 'Kasvata toistuvia hoito-, täydennys- ja jäsenyyskäyntejä, joissa lyhyt vierailu on hyväksyttävä lopputulos.',
-        reduce: 'Vähennä irrallisia kauneuskampanjoita, jotka eivät linkity palveluun, terveyteen tai arjen rytmiin.',
-        campaignAngle: 'Tee viikon hyvinvointireitti: varaus, täydennysostos ja nopea palauttava palvelu.',
+        title: 'Hyvinvointi toimii arjen asiointireittinä',
+        need: 'Asiakas haluaa hoitaa hyvinvointia hallitusti, ilman erillistä ja raskasta ostoskäyntiä.',
+        recommendation: 'Kytke apteekki, terveyspalvelut, kauneus ja liikunta ajanvarauksiin sekä arjen asiointiin.',
+        focus: 'Kasvata toistuvia hoito-, täydennys- ja jäsenyyskäyntejä, joissa lyhyt käynti riittää.',
+        reduce: 'Vähennä irrallisia kauneuskampanjoita, jos ne eivät liity palveluun, terveyteen tai arjen rytmiin.',
+        campaignAngle: 'Tee viikon hyvinvointireitti: varaus, täydennysostos ja lyhyt palauttava palvelu.',
       },
       en: {
         title: 'Wellness works best as an errand loop',
@@ -112,12 +136,12 @@ const TEMPLATES: Template[] = [
     stores: ['Emmyn vaatekeräyspiste', 'Fonum', 'Clas Ohlson', 'Eurokangas', 'Suomalainen Kirjakauppa', 'Power'],
     text: {
       fi: {
-        title: 'Kiertotalous kannattaa ankkuroida korjaukseen ja noutoon',
+        title: 'Kiertotalous tarvitsee korjauksen, huollon ja noudon',
         need: 'Arvo- ja vastuullisuustrendi ei muutu myynniksi, jos se jää pelkäksi vastuullisuusviestiksi.',
-        recommendation: 'Tee palautuksesta, korjauksesta, huollosta ja uudelleenostosta sama fyysinen ketju.',
+        recommendation: 'Tee palautuksesta, korjauksesta, huollosta ja uudelleenostosta yksi fyysinen asiointiketju.',
         focus: 'Lisää palveluja, jotka pidentävät tuotteen käyttöikää ja tuovat asiakkaan takaisin keskukseen.',
         reduce: 'Vähennä pelkkää alennusviestintää, jos sama asiakas voitaisiin ohjata korjaamaan, täydentämään tai vaihtamaan.',
-        campaignAngle: 'Kampanjoi huolto-, keräys- ja vaihtoviikko, jossa vastuullisuus päättyy uuteen asiointiin.',
+        campaignAngle: 'Kampanjoi huolto-, keräys- ja vaihtoviikko, joka muuttaa vastuullisuuden uudeksi käynniksi.',
       },
       en: {
         title: 'Circularity should be anchored in repair and pickup',
@@ -145,12 +169,12 @@ const TEMPLATES: Template[] = [
     stores: ['Sellon kirjasto', 'Finnkino', 'BowlCircus', 'XS Lelut', 'Prisma', 'K-Citymarket'],
     text: {
       fi: {
-        title: 'Perhekäynti syntyy säänkestävästä ketjusta, ei yksittäisestä tapahtumasta',
+        title: 'Perhekäynti syntyy säänkestävästä reitistä',
         need: 'Epävarma sää ja varovainen kulutus suosivat reittejä, joissa arkiostos ja viihde tukevat toisiaan.',
-        recommendation: 'Yhdistä kirjasto, elokuva, leikki, ruoka ja hypermarket yhdeksi matalan riskin perhekäynniksi.',
+        recommendation: 'Yhdistä kirjasto, elokuva, leikki, ruoka ja hypermarket matalan riskin perhekäynniksi.',
         focus: 'Kasvata viipymää niin, että ostos ei ole käynnin ainoa perustelu.',
         reduce: 'Vältä tapahtumia, jotka eivät ohjaa seuraavaan tilaan tai mitattavaan vuokralaiskäyntiin.',
-        campaignAngle: 'Tee viikonlopun sisäreitti, jossa perhe voi vaihtaa suunnitelmaa ilman lisäkitkaa.',
+        campaignAngle: 'Tee viikonlopun sisäreitti, jossa perhe voi vaihtaa suunnitelmaa ilman kitkaa.',
       },
       en: {
         title: 'Family visits come from a weatherproof chain, not a single event',
@@ -177,25 +201,35 @@ function pickLang(lang?: string | null): Lang {
   return l === 'fi' || l === 'sv' ? l : 'en';
 }
 
-function tenantRecord(tenant: SelloTenant): TenantImpactStore {
+function tenantRecord(tenant: Tenant): TenantImpactStore {
   return { name: tenant.name, category: tenant.category, floor: tenant.floor, location: tenant.location };
 }
 
+const TENANT_POOLS: Record<string, Tenant[]> = {
+  'realidea-sello': SELLO_TENANTS,
+  'realidea-tripla': TRIPLA_TENANTS,
+};
+
 export function getTenantImpactInsights(mallId: string, lang?: string | null): TenantImpactInsight[] {
-  if (mallId !== 'realidea-sello') return [];
+  const pool = TENANT_POOLS[mallId];
+  if (!pool) return [];
   const L = pickLang(lang);
-  return TEMPLATES.map((template) => ({
-    id: template.id,
-    ...template.text[L],
-    horizon: template.horizon,
-    move: template.move,
-    categoryIds: template.categoryIds,
-    stores: template.stores
-      .map((name) => SELLO_TENANTS.find((tenant) => tenant.name === name))
-      .filter((tenant): tenant is SelloTenant => Boolean(tenant))
-      .map(tenantRecord),
-    liveInputs: ['tenant_mix', 'floorplan', 'footfall', 'pos', 'lease_dates', 'campaign_results'],
-  }));
+  return TEMPLATES.map((template) => {
+    const stores = mallId === 'realidea-sello'
+      ? template.stores
+          .map((name) => pool.find((tenant) => tenant.name === name))
+          .filter((tenant): tenant is Tenant => Boolean(tenant))
+      : pickByCategory(pool, template.categoryIds);
+    return {
+      id: template.id,
+      ...template.text[L],
+      horizon: template.horizon,
+      move: template.move,
+      categoryIds: template.categoryIds,
+      stores: stores.map(tenantRecord),
+      liveInputs: ['tenant_mix', 'floorplan', 'footfall', 'pos', 'lease_dates', 'campaign_results'],
+    };
+  });
 }
 
 export function getTenantCampaignSeed(mallId: string, lang?: string | null) {

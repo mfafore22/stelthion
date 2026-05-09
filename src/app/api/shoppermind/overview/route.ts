@@ -19,6 +19,7 @@ export async function GET(req: NextRequest) {
 
   const { searchParams } = new URL(req.url);
   const mallId = searchParams.get('mallId');
+  const language = searchParams.get('language') ?? searchParams.get('lang') ?? undefined;
   if (!mallId) {
     return NextResponse.json({ error: 'mallId required' }, { status: 400 });
   }
@@ -26,30 +27,26 @@ export async function GET(req: NextRequest) {
   const marketId = await resolveMarketIdFromMall(mallId);
   const client = getShopperMindClient();
   if (!client) {
-    return NextResponse.json({
-      configured: false,
-      marketId,
-      market: null,
-      phenomena: [],
-      signalOfTheDay: null,
-    });
+    return shopperMindUnavailable(marketId);
   }
   try {
-    const [market, phenomenaRes, sotdRes] = await Promise.all([
-      client.getMarket(marketId),
-      client.listPhenomena({ marketId, limit: 25 }),
-      client.getSignalOfTheDay({ marketId }),
-    ]);
-    const actions = await client.getPropertyActions(mallId, { marketId }).catch(() => null);
+    const overview = await client.getMarketOverview(marketId);
+    const actions = await client.getPropertyActions(mallId, { marketId, language }).catch(() => null);
     return NextResponse.json({
       configured: true,
       marketId,
-      market,
-      phenomena: phenomenaRes.phenomena,
-      signalOfTheDay: sotdRes.signalOfTheDay,
+      market: overview.market,
+      phenomena: overview.phenomena,
+      signalOfTheDay: overview.signalOfTheDay,
+      materializedAt: overview.materializedAt,
+      expiresAt: overview.expiresAt,
+      freshness: overview.freshness,
       propertyActions: actions,
     });
   } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      return shopperMindUnavailable(marketId);
+    }
     return NextResponse.json(
       {
         configured: true,
@@ -62,4 +59,22 @@ export async function GET(req: NextRequest) {
       { status: 502 },
     );
   }
+}
+
+function shopperMindUnavailable(marketId: string) {
+  const localFallback =
+    process.env.NODE_ENV !== 'production' &&
+    process.env.SHOPPERMIND_ALLOW_LOCAL_FALLBACK !== 'false';
+  return NextResponse.json(
+    {
+      configured: false,
+      localFallback,
+      marketId,
+      market: null,
+      phenomena: [],
+      signalOfTheDay: null,
+      error: localFallback ? undefined : 'shoppermind_service_not_configured',
+    },
+    { status: localFallback ? 200 : 503 },
+  );
 }

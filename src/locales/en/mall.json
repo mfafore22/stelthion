@@ -31,6 +31,7 @@
     "annualVisitors": "Annual Visitors",
     "annualSales": "Annual Sales",
     "currentVisitors": "Current visitors",
+    "liveDataPending": "Live counters pending",
     "retailUnits": "Retail Units",
     "topCategory": "Top Category",
     "stelthionSignals": "Stelthion Signals",
@@ -700,6 +701,10 @@
       "body": "Set {{envVar1}} and {{envVar2}} to connect. This mall would resolve to {{marketId}}.",
       "detail": "ShopperMind service is not configured in this environment."
     },
+    "offlineFallback": {
+      "title": "Showing Realidea baseline intelligence",
+      "body": "The live ShopperMind service is not connected in this environment, so this view is using local market intelligence for {{marketId}}."
+    },
     "upgrade": {
       "title": "ShopperMind is not included in your plan",
       "body": "Upgrade to unlock trend intelligence for your markets. Contact your account manager or an administrator to change your plan."
@@ -1135,7 +1140,7 @@
     "subtitle": "Turn ShopperMind trends into campaign briefs that can be tested against visitor, POS, and tenant data.",
     "builder": "Campaign brief draft",
     "createBrief": "Create test brief",
-    "assistantPrompt": "Create a test campaign brief for {{mall}}. Zone: {{zone}}. Audience: {{audience}}. Category: {{category}}. Suggested tenants: {{stores}}. Budget: {{budget}}. Duration: {{duration}}. Use ShopperMind tenant impact {{impact}} as background if provided.",
+    "assistantPrompt": "Draft a campaign brief. Use only these selections: property {{mall}}, zone {{zone}}, audience {{audience}}, category {{category}}, suggested tenants {{stores}}, budget {{budget}}, duration {{duration}}. Structure the answer with: objective, customer need, campaign concept, tenant roles, channels, KPIs, approval steps, and data to connect when live. Keep it concrete and do not answer other topics.",
     "flowTitle": "Workflow once connected to live data",
     "aiTitle": "Demo now, customer data later",
     "aiBody": "A tailored AI model uses only data scoped to the customer environment. The demo shows the workflow with seeded and trend data, while the same view can later connect to POS, visitor, tenant, and campaign-result data.",
@@ -1151,7 +1156,9 @@
           "everyday": "Everyday retail",
           "station": "Station",
           "restaurants": "Restaurants",
-          "services": "Services"
+          "services": "Services",
+          "fashion": "Fashion",
+          "home": "Home and electronics"
         }
       },
       "audience": {
@@ -1195,17 +1202,20 @@
       "visits": {
         "label": "Visitor forecast",
         "value": "+3.8%",
-        "hint": "Demo estimate for the selected zone"
+        "hint": "Demo estimate for the selected zone",
+        "dynamicHint": "{{duration}} day demo estimate with {{tenants}} tenants included"
       },
       "sales": {
         "label": "Sales signal",
         "value": "+2.4%",
-        "hint": "POS connection in full implementation"
+        "hint": "POS connection in full implementation",
+        "dynamicHint": "Budget level changes expected reach: {{budget}}"
       },
       "tenants": {
         "label": "Tenants",
         "value": "12",
-        "hint": "Matched participants from seed data"
+        "hint": "Matched participants from seed data",
+        "dynamicHint": "{{selected}} selected, {{available}} matching candidates"
       }
     },
     "steps": {
@@ -1525,7 +1535,8 @@
       "trends": "Trends",
       "signalOfDay": "Signal of the day",
       "zoneFlow": "Visitor flows",
-      "mallStats": "Key metrics"
+      "mallStats": "Key metrics",
+      "activationPlan": "Activation plan"
     },
     "specialist": {
       "weather": "Weather specialist",

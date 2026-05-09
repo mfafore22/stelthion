@@ -1,10 +1,12 @@
 /**
- * Engine-local LLM client — chat + embedding interfaces plus deterministic
+ * Engine-local LLM client with chat and embedding interfaces plus deterministic
  * stub implementations. The service must not import the mall app's concierge
  * llm-client (service boundary); this module mirrors that interface so the
  * engine is self-contained. Phase 2+ will add a real provider adapter
  * selected via env (LOCAL_LLM_URL, OPENAI_API_KEY, ANTHROPIC_API_KEY).
  */
+
+import { observeEmbeddingClient, observeLLMClient } from '../observability/llm-metrics.js';
 
 export interface LLMMessage {
   role: 'system' | 'user' | 'assistant' | 'tool';
@@ -40,12 +42,12 @@ class StubLLMClient implements LLMClient {
 let llmInstance: LLMClient | null = null;
 
 export function getLLMClient(): LLMClient {
-  if (!llmInstance) llmInstance = new StubLLMClient();
+  if (!llmInstance) llmInstance = observeLLMClient(new StubLLMClient());
   return llmInstance;
 }
 
 export function setLLMClient(client: LLMClient): void {
-  llmInstance = client;
+  llmInstance = observeLLMClient(client);
 }
 
 export interface EmbeddingClient {
@@ -88,11 +90,12 @@ let embeddingInstance: EmbeddingClient | null = null;
 export function getEmbeddingClient(): EmbeddingClient {
   if (!embeddingInstance) {
     const url = process.env.LOCAL_EMBEDDING_URL;
-    embeddingInstance = url ? new OllamaEmbeddingClient(url) : new StubEmbeddingClient();
+    const client = url ? new OllamaEmbeddingClient(url) : new StubEmbeddingClient();
+    embeddingInstance = observeEmbeddingClient(client);
   }
   return embeddingInstance;
 }
 
 export function setEmbeddingClient(client: EmbeddingClient): void {
-  embeddingInstance = client;
+  embeddingInstance = observeEmbeddingClient(client);
 }

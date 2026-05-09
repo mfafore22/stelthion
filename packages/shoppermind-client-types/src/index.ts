@@ -26,9 +26,41 @@ export type SourceType =
   | 'TIKTOK'
   | 'TRADE_PUB'
   | 'STATFIN'
-  | 'FRED';
+  | 'FRED'
+  | 'FOOTFALL_COUNTER'
+  | 'IMF';
 
 export type SourceAuthority = 'authoritative' | 'opinion';
+export type InsightHandlingMode = 'show' | 'show_with_context' | 'review_first' | 'hold';
+export type InsightFreshness = 'fresh' | 'recent' | 'stale' | 'expired';
+export type InsightDecision = 'publish' | 'review' | 'reject' | 'hold';
+export type InsightChatCaution = 'none' | 'cite_context' | 'cautious' | 'blocked';
+
+export interface InsightQuality {
+  confidence: number;
+  freshness: InsightFreshness;
+  recency: number;
+  sourceStrength: number;
+  sourceCount: number;
+  contradictionRisk: number;
+  divergenceRisk: number;
+  feedbackScore: number;
+  lifecycleRisk: number;
+  sensitivity: 'low' | 'medium' | 'high';
+  decision: InsightDecision;
+  handling: InsightHandlingMode;
+  uiVisibility: 'visible' | 'contextual' | 'hidden';
+  chatCaution: InsightChatCaution;
+  reasons: string[];
+}
+
+export interface InsightQualityView {
+  freshness: InsightFreshness;
+  quality: InsightQuality;
+  evidence: { sourceCount: number; strongSourceCount: number; sourceIds: string[] };
+  decisionReasons: string[];
+  handlingMode: InsightHandlingMode;
+}
 
 export interface ContributingSource {
   type: SourceType;
@@ -91,10 +123,30 @@ export interface PhenomenonSummary {
   latestVelocity?: number;
   i18n?: PhenomenonI18n | null;
   contributingSources?: ContributingSource[];
+  qualityView?: InsightQualityView;
 }
 
 export interface PhenomenaListResponse {
   phenomena: PhenomenonSummary[];
+}
+
+export interface MarketOverviewResponse {
+  marketId: string;
+  materializedAt: string;
+  expiresAt: string;
+  freshness: 'fresh' | 'stale';
+  market: MarketDetail | null;
+  phenomena: PhenomenonSummary[];
+  signalOfTheDay: SignalOfTheDay | null;
+}
+
+export interface PhenomenonDetailSnapshotResponse {
+  marketId: string;
+  phenomenonId: string;
+  materializedAt: string;
+  expiresAt: string;
+  freshness: 'fresh' | 'stale';
+  phenomenon: PhenomenonDetail;
 }
 
 export interface PhenomenonScoreRow {
@@ -151,6 +203,7 @@ export interface PhenomenonDetail {
   linksTo: PhenomenonLinkRow[];
   i18n?: PhenomenonI18n | null;
   contributingSources?: ContributingSource[];
+  qualityView?: InsightQualityView | null;
 }
 
 export interface PhenomenonLinksResponse {
@@ -514,6 +567,7 @@ export interface InsightsChatCitation {
   title: string;
   excerpt: string;
   score: number;
+  qualityView?: InsightQualityView;
 }
 
 export interface InsightsChatResponse {
@@ -521,6 +575,7 @@ export interface InsightsChatResponse {
   question: string;
   answer: string;
   citations: InsightsChatCitation[];
+  qualityView?: InsightQualityView;
 }
 
 export type VerificationStatus = 'verified' | 'needs_rewrite' | 'unsupported' | 'retired';

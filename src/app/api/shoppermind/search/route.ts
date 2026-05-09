@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';
 import { requireAdmin } from '@/lib/admin-auth';
-import { getEmbeddingClient } from '@/services/shoppermind/embedding';
-import { cosineSimilarity } from '@/lib/stats';
+import {
+  getShopperMindClient,
+  resolveMarketIdFromCountry,
+} from '@/lib/shoppermind-client';
+import { toDashboardPhenomenon } from '@/lib/shoppermind-route-adapter';
 
 export async function GET(req: NextRequest) {
   const guard = await requireAdmin();
@@ -12,24 +14,32 @@ export async function GET(req: NextRequest) {
   const query = url.searchParams.get('q');
   const country = url.searchParams.get('country');
   const limit = Math.min(20, Math.max(1, Number(url.searchParams.get('limit')) || 10));
+  const marketId = url.searchParams.get('marketId') ?? resolveMarketIdFromCountry(country);
 
   if (!query) return NextResponse.json({ error: 'q parameter required' }, { status: 400 });
 
-  const embedder = getEmbeddingClient();
-  const [queryVec] = await embedder.embed([query]);
+  const client = getShopperMindClient();
+  if (!client) {
+    return NextResponse.json([]);
+  }
 
-  const phenomena = await prisma.phenomenon.findMany({
-    where: {
-      mergedInto: null,
-      ...(country ? { primaryCountry: country } : {}),
-    },
-    select: { id: true, label: true, description: true, primaryCountry: true, state: true, centroid: true, categories: true },
-  });
+  const needle = query.toLowerCase();
+  const response = await client.listPhenomena({ marketId, limit: 100 });
 
-  const scored = phenomena
-    .filter((p) => p.centroid.length > 0)
-    .map((p) => ({ ...p, similarity: cosineSimilarity(queryVec, p.centroid) }))
-    .sort((a, b) => b.similarity - a.similarity)
+  const scored = response.phenomena
+    .map((p) => {
+      const haystack = [
+        p.label,
+        p.description,
+        ...(p.categories ?? []),
+        ...(p.keywords ?? []),
+      ].join(' ').toLowerCase();
+      return {
+        ...toDashboardPhenomenon(p, marketId),
+        similarity: haystack.includes(needle) ? 1 : 0,
+      };
+    })
+    .filter((p) => p.similarity > 0)
     .slice(0, limit);
 
   return NextResponse.json(scored);

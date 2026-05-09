@@ -40,10 +40,14 @@ import { buildScenarioActionFallback } from '@/lib/shoppermind/scenarioActionFal
 
 interface OverviewResponse {
   configured: boolean;
+  localFallback?: boolean;
   marketId: string;
   market: MarketDetail | null;
   phenomena: PhenomenonSummary[];
   signalOfTheDay: SignalOfTheDay | null;
+  materializedAt?: string;
+  expiresAt?: string;
+  freshness?: 'fresh' | 'stale';
   propertyActions?: PropertyActionsResponse | null;
   error?: string;
 }
@@ -95,12 +99,13 @@ export default function ShopperMindPage() {
         setGated(false);
       }
     });
-    fetch(`/api/shoppermind/overview?mallId=${encodeURIComponent(user.mallId)}`, { credentials: 'include' })
+    const params = new URLSearchParams({ mallId: user.mallId, language: i18n.language });
+    fetch(`/api/shoppermind/overview?${params.toString()}`, { credentials: 'include' })
       .then(async (res) => {
         const body = (await res.json()) as OverviewResponse & { error?: string };
         if (cancelled) return;
         if (res.status === 403 && body.error === 'feature_not_on_plan') { setGated(true); return; }
-        if (!res.ok && !body.configured) setError(body.error ?? t('shoppermind.errors.serviceUnavailable'));
+        if (!res.ok) setError(t('shoppermind.errors.serviceUnavailable'));
         else if (body.error) setError(body.error);
         setData(body);
         if (body.market?.country) setCountry(body.market.country);
@@ -108,7 +113,7 @@ export default function ShopperMindPage() {
       .catch((err) => { if (!cancelled) setError(err instanceof Error ? err.message : t('shoppermind.errors.network')); })
       .finally(() => { if (!cancelled) setFetching(false); });
     return () => { cancelled = true; };
-  }, [user?.mallId, t]);
+  }, [user?.mallId, t, i18n.language]);
 
   useEffect(() => {
     if (!user?.mallId) return;
@@ -299,9 +304,10 @@ export default function ShopperMindPage() {
               <div className="text-sm text-bo-neutral-400 animate-pulse">{t('shoppermind.loadingTrends')}</div>
             )}
             {!fetching && gated && <UpgradeBanner />}
-            {!fetching && !gated && data && !data.configured && <NotConfigured marketId={data.marketId} />}
+            {!fetching && !gated && data && !data.configured && data.localFallback && <OfflineFallback marketId={data.marketId} />}
+            {!fetching && !gated && data && !data.configured && !data.localFallback && error && <ErrorBanner message={error} />}
             {!fetching && !gated && data?.configured && error && <ErrorBanner message={error} />}
-            {!fetching && !gated && data?.configured && !error && (
+            {!fetching && !gated && data && (data.configured ? !error : data.localFallback) && (
               <>
                 {isSupported ? (
                   <MacroDashboard country={country} />
@@ -371,15 +377,13 @@ function UpgradeBanner() {
   );
 }
 
-function NotConfigured({ marketId }: { marketId: string }) {
+function OfflineFallback({ marketId }: { marketId: string }) {
   const { t } = useTranslation('mall');
   return (
-    <div className="rounded-xl border-2 border-bo-warning/30 bg-bo-warning-light/40 p-6 text-sm text-bo-warning-dark backdrop-blur-xl">
-      <div className="font-medium mb-1">{t('shoppermind.notConfigured.title')}</div>
-      <div className="text-bo-warning-dark/80">
-        {t('shoppermind.notConfigured.body', {
-          envVar1: 'SHOPPERMIND_SERVICE_URL', envVar2: 'SHOPPERMIND_SERVICE_TOKEN', marketId,
-        })}
+    <div className="rounded-xl border border-bo-info/20 bg-bo-info-light/35 p-4 text-sm text-bo-info-dark backdrop-blur-xl">
+      <div className="font-medium mb-1">{t('shoppermind.offlineFallback.title')}</div>
+      <div className="text-bo-info-dark/80">
+        {t('shoppermind.offlineFallback.body', { marketId })}
       </div>
     </div>
   );

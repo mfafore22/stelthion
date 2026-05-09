@@ -5,6 +5,7 @@ import { requireAnyBearer } from '../../auth/bearer.js';
 
 const Query = z.object({
   marketId: z.string().min(1).optional(),
+  language: z.string().min(2).optional(),
 });
 
 export const propertiesRoutes: FastifyPluginAsync = async (app) => {
@@ -18,7 +19,11 @@ export const propertiesRoutes: FastifyPluginAsync = async (app) => {
         return;
       }
 
-      const result = getPropertyActions(req.params.propertyId, parsed.data.marketId);
+      const result = getPropertyActions(
+        req.params.propertyId,
+        parsed.data.marketId,
+        parsed.data.language,
+      );
       if (!result) {
         reply.code(404).send({ error: 'property_actions_not_found' });
         return;

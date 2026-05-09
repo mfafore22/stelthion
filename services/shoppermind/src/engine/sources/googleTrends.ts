@@ -20,7 +20,6 @@ export const fetchGoogleTrends: SourceFetcher = async (ctx): Promise<FetchResult
   type TrendsApiLike = { interestOverTime: (opts: Record<string, unknown>) => Promise<string> };
   let trendsApi: TrendsApiLike | null = null;
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const mod = await (Function('return import("google-trends-api")')() as Promise<Record<string, unknown>>).catch(() => null);
     if (mod) {
       trendsApi = (mod.default ?? mod) as TrendsApiLike;

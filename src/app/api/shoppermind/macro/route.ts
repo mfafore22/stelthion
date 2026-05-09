@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import prisma from '@/app/lib/prisma';
 import { getIndicatorsForCountry } from '@/lib/shoppermind/macro-indicators';
+import { syncOneIndicator } from '@/lib/shoppermind/sync-macro';
 
 export const revalidate = 3600; // 1 hour
 
@@ -19,6 +20,10 @@ export async function GET(req: NextRequest) {
   }
 
   const codes = meta.map((m) => m.code);
+  if (process.env.NODE_ENV !== 'production') {
+    await refreshStaleLocalIndicators(codes, meta);
+  }
+
   const rows = await prisma.macroIndicatorPoint.findMany({
     where: { indicatorCode: { in: codes } },
     orderBy: { periodDate: 'desc' },
@@ -63,4 +68,23 @@ export async function GET(req: NextRequest) {
   });
 
   return NextResponse.json({ country, indicators });
+}
+
+async function refreshStaleLocalIndicators(
+  codes: string[],
+  meta: ReturnType<typeof getIndicatorsForCountry>,
+) {
+  const existing = await prisma.macroIndicatorPoint.groupBy({
+    by: ['indicatorCode'],
+    where: { indicatorCode: { in: codes } },
+    _max: { fetchedAt: true },
+  });
+  const latestByCode = new Map(existing.map((row) => [row.indicatorCode, row._max.fetchedAt]));
+  const staleBefore = Date.now() - 6 * 60 * 60 * 1000;
+  const stale = meta.filter((indicator) => {
+    const latest = latestByCode.get(indicator.code);
+    return !latest || latest.getTime() < staleBefore;
+  });
+  if (stale.length === 0) return;
+  await Promise.all(stale.map((indicator) => syncOneIndicator(prisma, indicator)));
 }

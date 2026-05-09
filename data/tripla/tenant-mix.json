@@ -1,0 +1,1178 @@
+{
+  "mallId": "realidea-tripla",
+  "sourceUrls": [
+    "https://malloftripla.fi/liikkeet-palvelut/",
+    "https://malloftripla.fi/kahvilat-ravintolat/",
+    "https://malloftripla.fi/muoti-ja-asusteet/",
+    "https://malloftripla.fi/kauneus-terveys-ja-hyvinvointi/",
+    "https://malloftripla.fi/kodintarvikkeet-ja-vapaa-aika/",
+    "https://malloftripla.fi/palvelut/",
+    "https://malloftripla.fi/ruokakaupat/",
+    "https://malloftripla.fi/elamykset-ja-viihde/"
+  ],
+  "updatedAt": "2026-05-08",
+  "tenants": [
+    {
+      "name": "24 Pesula",
+      "category": "Services",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/palvelut/24-pesula/-/cb"
+    },
+    {
+      "name": "Alepa",
+      "category": "Daily Goods & Grocery",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/ruokakaupat/alepa/-/10c"
+    },
+    {
+      "name": "Alko",
+      "category": "Daily Goods & Grocery",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/ruokakaupat/alko/-/4f"
+    },
+    {
+      "name": "Apteekki 51",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/apteekki-51/-/63"
+    },
+    {
+      "name": "Arnolds",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/arnolds/-/6b"
+    },
+    {
+      "name": "Ba Bu",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/ba-bu/-/d2"
+    },
+    {
+      "name": "Bakery Manteli",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/bakery-manteli/-/135"
+    },
+    {
+      "name": "Bangkok 9",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/bangkok-9/-/c4"
+    },
+    {
+      "name": "Bar Pikajuna",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/bar-pikajuna/-/169"
+    },
+    {
+      "name": "Beard Park",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/beard-park/-/136"
+    },
+    {
+      "name": "Best Berry",
+      "category": "Daily Goods & Grocery",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/ruokakaupat/best-berry/-/1b1"
+    },
+    {
+      "name": "Bierhaus Berlin",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/bierhaus-berlin/-/11e"
+    },
+    {
+      "name": "Biitsi.fi",
+      "category": "Leisure",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/elamykset-ja-viihde/biitsifi/-/93"
+    },
+    {
+      "name": "BikBok",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/bikbok/-/55"
+    },
+    {
+      "name": "BioRex",
+      "category": "Leisure",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/elamykset-ja-viihde/biorex/-/179"
+    },
+    {
+      "name": "Black Box 360",
+      "category": "Leisure",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/elamykset-ja-viihde/black-box-360/-/f4"
+    },
+    {
+      "name": "BongArt",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/bongart/-/1ef"
+    },
+    {
+      "name": "Brokadi Tripla",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/brokadi-tripla/-/d8"
+    },
+    {
+      "name": "Burger King",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/burger-king/-/1da"
+    },
+    {
+      "name": "Burgers & Wine",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/burgers-wine/-/17c"
+    },
+    {
+      "name": "Bär Bar",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/bar-bar/-/19d"
+    },
+    {
+      "name": "Candytown",
+      "category": "Daily Goods & Grocery",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/ruokakaupat/candytown/-/bd"
+    },
+    {
+      "name": "Capperi",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/capperi/-/b7"
+    },
+    {
+      "name": "Carlings",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/carlings/-/57"
+    },
+    {
+      "name": "CHANGE Lingerie",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/change-lingerie/-/c0"
+    },
+    {
+      "name": "ChangeGroup",
+      "category": "Services",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/palvelut/changegroup/-/18f"
+    },
+    {
+      "name": "Clas Ohlson",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/clas-ohlson/-/95"
+    },
+    {
+      "name": "CLIPS - Kampaamo-Myymälä",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/clips-kampaamo-myymala/-/119"
+    },
+    {
+      "name": "Cocopanda",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/cocopanda/-/1e9"
+    },
+    {
+      "name": "Crazy Bing",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/crazy-bing/-/170"
+    },
+    {
+      "name": "Cropp",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/cropp/-/116"
+    },
+    {
+      "name": "Cubus",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/cubus/-/58"
+    },
+    {
+      "name": "Cutters",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/cutters/-/ef"
+    },
+    {
+      "name": "Delhi Rasoi",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/delhi-rasoi/-/da"
+    },
+    {
+      "name": "DNA Kauppa",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/dna-kauppa/-/5a"
+    },
+    {
+      "name": "Draft Sports Bar",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/draft-sports-bar/-/79"
+    },
+    {
+      "name": "Dressmann",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/dressmann/-/5b"
+    },
+    {
+      "name": "Eat Poke",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/eat-poke/-/1d3"
+    },
+    {
+      "name": "Elisa",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/elisa/-/5c"
+    },
+    {
+      "name": "Emotion",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/emotion/-/10a"
+    },
+    {
+      "name": "Epic Autokoulu",
+      "category": "Services",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/palvelut/epic-autokoulu/-/e8"
+    },
+    {
+      "name": "Espresso House 1. krs",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/espresso-house-1-krs/-/e1"
+    },
+    {
+      "name": "Espresso House 4. krs",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/espresso-house-4-krs/-/133"
+    },
+    {
+      "name": "Falafel Box",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/falafel-box/-/d9"
+    },
+    {
+      "name": "Familon",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/familon/-/1b3"
+    },
+    {
+      "name": "Fazer Café 1. krs",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/fazer-cafe-1-krs/-/1e1"
+    },
+    {
+      "name": "Fazer Café 3. krs",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/fazer-cafe-3-krs/-/5f"
+    },
+    {
+      "name": "Figulus",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/figulus/-/19a"
+    },
+    {
+      "name": "Finlayson",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/finlayson/-/61"
+    },
+    {
+      "name": "Fitness24Seven",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/fitness24seven/-/98"
+    },
+    {
+      "name": "Fokus",
+      "category": "Services",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/palvelut/fokus/-/aa"
+    },
+    {
+      "name": "Fonum",
+      "category": "Services",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/palvelut/fonum/-/64"
+    },
+    {
+      "name": "Fredde's",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/freddes/-/12b"
+    },
+    {
+      "name": "Friends & Brgrs",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/friends-brgrs/-/65"
+    },
+    {
+      "name": "Gateau",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/gateau/-/60"
+    },
+    {
+      "name": "Gina Tricot",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/gina-tricot/-/66"
+    },
+    {
+      "name": "Glitter",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/glitter/-/67"
+    },
+    {
+      "name": "Glory For You Spa Salonki",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/glory-for-you-spa-salonki/-/bc"
+    },
+    {
+      "name": "GRANIT",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/granit/-/97"
+    },
+    {
+      "name": "H&M",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/hm/-/68"
+    },
+    {
+      "name": "Hanko Aasia",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/hanko-aasia/-/8d"
+    },
+    {
+      "name": "Hard Day's Night",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/hard-days-night/-/206"
+    },
+    {
+      "name": "Hemtex",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/hemtex/-/1eb"
+    },
+    {
+      "name": "Hesburger",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/hesburger/-/92"
+    },
+    {
+      "name": "House",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/house/-/117"
+    },
+    {
+      "name": "HSL Palvelupiste",
+      "category": "Services",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/palvelut/hsl-palvelupiste/-/1e8"
+    },
+    {
+      "name": "Humu'z & Döners",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/humuz-doners/-/1d0"
+    },
+    {
+      "name": "Iittala",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/iittala/-/bb"
+    },
+    {
+      "name": "InCar Autopesula ja Rengaspalvelut",
+      "category": "Services",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/palvelut/incar-autopesula-ja-rengaspalvelut/-/1d6"
+    },
+    {
+      "name": "InCar Vauriokorjaamo ja autolasipalvelut",
+      "category": "Services",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/palvelut/incar-vauriokorjaamo-ja-autolasipalvelut/-/1d2"
+    },
+    {
+      "name": "Instrumentarium",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/instrumentarium/-/121"
+    },
+    {
+      "name": "Intersport",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/intersport/-/f9"
+    },
+    {
+      "name": "JD Sports",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/jd-sports/-/af"
+    },
+    {
+      "name": "Jennifer shoes",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/jennifer-shoes/-/13c"
+    },
+    {
+      "name": "Jesper Junior",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/jesper-junior/-/122"
+    },
+    {
+      "name": "Jonathan",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/jonathan/-/12f"
+    },
+    {
+      "name": "Jungle Juice Bar 2. krs",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/jungle-juice-bar-2-krs/-/134"
+    },
+    {
+      "name": "Jungle Juice Bar 4. krs",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/jungle-juice-bar-4-krs/-/88"
+    },
+    {
+      "name": "K-Market Pasilan asema",
+      "category": "Daily Goods & Grocery",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/ruokakaupat/k-market-pasilan-asema/-/10e"
+    },
+    {
+      "name": "K-Supermarket noutopiste",
+      "category": "Daily Goods & Grocery",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/ruokakaupat/k-supermarket-noutopiste/-/14b"
+    },
+    {
+      "name": "K-Supermarket Tripla",
+      "category": "Daily Goods & Grocery",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/ruokakaupat/k-supermarket-tripla/-/10f"
+    },
+    {
+      "name": "Kaivokukka Tripla",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/kaivokukka-tripla/-/70"
+    },
+    {
+      "name": "Kalaliike & Bistro S. Wallin",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/kalaliike-bistro-s-wallin/-/d5"
+    },
+    {
+      "name": "Kekäle",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/kekale/-/f5"
+    },
+    {
+      "name": "KFC",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/kfc/-/1ee"
+    },
+    {
+      "name": "KICKS",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/kicks/-/b8"
+    },
+    {
+      "name": "Kukkakauppa Bloom",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/kukkakauppa-bloom/-/1ed"
+    },
+    {
+      "name": "Kultajousi",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/kultajousi/-/b3"
+    },
+    {
+      "name": "Kuvatehdas",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/kuvatehdas/-/f7"
+    },
+    {
+      "name": "Laatukoru",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/laatukoru/-/73"
+    },
+    {
+      "name": "Leo's",
+      "category": "Leisure",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/elamykset-ja-viihde/leos/-/6e"
+    },
+    {
+      "name": "Lidl",
+      "category": "Daily Goods & Grocery",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/ruokakaupat/lidl/-/75"
+    },
+    {
+      "name": "Limone Ravintola",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/limone-ravintola/-/152"
+    },
+    {
+      "name": "Lindex",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/lindex/-/77"
+    },
+    {
+      "name": "Lindt",
+      "category": "Daily Goods & Grocery",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/ruokakaupat/lindt/-/12e"
+    },
+    {
+      "name": "Luckiefun's Sushibuffet",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/luckiefuns-sushibuffet/-/8f"
+    },
+    {
+      "name": "Luhta Brand Store",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/luhta-brand-store/-/1f5"
+    },
+    {
+      "name": "Luxury Nails & Spa",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/luxury-nails-spa/-/ad"
+    },
+    {
+      "name": "Löfbergs",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/lofbergs/-/b1"
+    },
+    {
+      "name": "Magnolia Coffee & Bakery",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/magnolia-coffee-bakery/-/1d4"
+    },
+    {
+      "name": "Mari's Treehouse",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/maris-treehouse/-/ba"
+    },
+    {
+      "name": "Marimekko",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/marimekko/-/d0"
+    },
+    {
+      "name": "Mini-Tripla",
+      "category": "Services",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/palvelut/mini-tripla/-/1a9"
+    },
+    {
+      "name": "Minibuffet",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/minibuffet/-/200"
+    },
+    {
+      "name": "Mohito",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/mohito/-/118"
+    },
+    {
+      "name": "Moody Monday",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/moody-monday/-/1b4"
+    },
+    {
+      "name": "Musti ja Mirri",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/musti-ja-mirri/-/125"
+    },
+    {
+      "name": "Nails Fashion",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/nails-fashion/-/1cc"
+    },
+    {
+      "name": "Naked Taco",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/naked-taco/-/1e6"
+    },
+    {
+      "name": "Nanso",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/nanso/-/1bd"
+    },
+    {
+      "name": "Nespresso",
+      "category": "Daily Goods & Grocery",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/ruokakaupat/nespresso/-/1cf"
+    },
+    {
+      "name": "Normal",
+      "category": "Daily Goods & Grocery",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/ruokakaupat/normal/-/172"
+    },
+    {
+      "name": "Nosto Pankkiautomaatit",
+      "category": "Services",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/palvelut/nosto-pankkiautomaatit/-/e6"
+    },
+    {
+      "name": "NP Housukauppa",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/np-housukauppa/-/fc"
+    },
+    {
+      "name": "Onam",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/onam/-/7a"
+    },
+    {
+      "name": "Onnipyörä",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/onnipyora/-/1e5"
+    },
+    {
+      "name": "Pakettipiste",
+      "category": "Services",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/palvelut/pakettipiste/-/106"
+    },
+    {
+      "name": "Pancho Villa",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/pancho-villa/-/12d"
+    },
+    {
+      "name": "Partioaitta",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/partioaitta/-/1ea"
+    },
+    {
+      "name": "Partyland",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/partyland/-/165"
+    },
+    {
+      "name": "Pasilan Apteekki",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/pasilan-apteekki/-/7d"
+    },
+    {
+      "name": "Picnic",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/picnic/-/81"
+    },
+    {
+      "name": "Piece of Hair Tripla",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/piece-of-hair-tripla/-/a9"
+    },
+    {
+      "name": "Pilates & Barre Glow",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/pilates-barre-glow/-/1d9"
+    },
+    {
+      "name": "Pizza Hut",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/pizza-hut/-/9b"
+    },
+    {
+      "name": "Postin automaatti 1. kerros",
+      "category": "Services",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/palvelut/postin-automaatti-1-kerros/-/205"
+    },
+    {
+      "name": "Postin automaatti, Pasilan asema",
+      "category": "Services",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/palvelut/postin-automaatti-pasilan-asema/-/202"
+    },
+    {
+      "name": "Pretty Boy",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/pretty-boy/-/193"
+    },
+    {
+      "name": "Prisma",
+      "category": "Daily Goods & Grocery",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/ruokakaupat/prisma/-/10b"
+    },
+    {
+      "name": "Prisma Verkkokauppa noutopiste",
+      "category": "Daily Goods & Grocery",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/ruokakaupat/prisma-verkkokauppa-noutopiste/-/14c"
+    },
+    {
+      "name": "Puhti",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/puhti/-/18d"
+    },
+    {
+      "name": "Puolenkuun Pelit Tripla",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/puolenkuun-pelit-tripla/-/190"
+    },
+    {
+      "name": "Pupu",
+      "category": "Food & Beverage",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kahvilat-ja-ravintolat/pupu/-/be"
+    },
+    {
+      "name": "Pysäköinnin asiakaspalvelu",
+      "category": "Services",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/palvelut/pysakoinnin-asiakaspalvelu/-/1b7"
+    },
+    {
+      "name": "R-kioski Tripla Asema Itä",
+      "category": "Daily Goods & Grocery",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/ruokakaupat/r-kioski-tripla-asema-ita/-/141"
+    },
+    {
+      "name": "R-kioski Tripla Asema Länsi",
+      "category": "Daily Goods & Grocery",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/ruokakaupat/r-kioski-tripla-asema-lansi/-/83"
+    },
+    {
+      "name": "Reserved",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/reserved/-/115"
+    },
+    {
+      "name": "RIIPISEN Riistaherkut, Riista- ja matkamuistomyymälä",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/riipisen-riistaherkut-riista-ja-matkamuistomyymala/-/102"
+    },
+    {
+      "name": "Rituals",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/rituals/-/1b8"
+    },
+    {
+      "name": "Ruohonjuuri Tripla",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/ruohonjuuri-tripla/-/d1"
+    },
+    {
+      "name": "S-Pankki",
+      "category": "Services",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/palvelut/s-pankki/-/148"
+    },
+    {
+      "name": "Silmäasema",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/silmaasema/-/87"
+    },
+    {
+      "name": "Sinsay",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/sinsay/-/114"
+    },
+    {
+      "name": "Skechers",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/skechers/-/d4"
+    },
+    {
+      "name": "Specsavers",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/specsavers/-/89"
+    },
+    {
+      "name": "Suomalainen Kirjakauppa",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/suomalainen-kirjakauppa/-/8c"
+    },
+    {
+      "name": "Surf House Helsinki",
+      "category": "Leisure",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/elamykset-ja-viihde/surf-house-helsinki/-/94"
+    },
+    {
+      "name": "Suutari Shoemakermen",
+      "category": "Services",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/palvelut/suutari-shoemakermen/-/86"
+    },
+    {
+      "name": "Synsam",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/synsam/-/17a"
+    },
+    {
+      "name": "Søstrene Grene",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/sstrene-grene/-/164"
+    },
+    {
+      "name": "Talletusautomaatti",
+      "category": "Services",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/palvelut/talletusautomaatti/-/1e7"
+    },
+    {
+      "name": "Tanssiseura Comets",
+      "category": "Leisure",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/elamykset-ja-viihde/tanssiseura-comets/-/1d5"
+    },
+    {
+      "name": "Telia",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/telia/-/c3"
+    },
+    {
+      "name": "Tempur Brand Store",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/tempur-brand-store/-/f3"
+    },
+    {
+      "name": "Terveystalo",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/terveystalo/-/96"
+    },
+    {
+      "name": "The Body Shop",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/the-body-shop/-/56"
+    },
+    {
+      "name": "Timanttiset",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/timanttiset/-/1f3"
+    },
+    {
+      "name": "Tunnin Kuva",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/tunnin-kuva/-/a0"
+    },
+    {
+      "name": "Turo",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/turo/-/104"
+    },
+    {
+      "name": "VERO MODA",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/vero-moda/-/113"
+    },
+    {
+      "name": "VILA",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/vila/-/1e2"
+    },
+    {
+      "name": "Volt",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/volt/-/90"
+    },
+    {
+      "name": "XS Lelut",
+      "category": "Home & Living",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kodintarvikkeet-ja-vapaa-aika/xs-lelut/-/105"
+    },
+    {
+      "name": "Yeppo&Soonsoo",
+      "category": "Beauty & Health",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/kauneus-terveys-ja-hyvinvointi/yepposoonsoo/-/16e"
+    },
+    {
+      "name": "YIT Asuntomyynti",
+      "category": "Services",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/palvelut/yit-asuntomyynti/-/1cb"
+    },
+    {
+      "name": "Your&More",
+      "category": "Fashion",
+      "floor": "unknown",
+      "location": "Mall of Tripla",
+      "url": "https://malloftripla.fi/liikkeet-palvelut/muoti-ja-asusteet/yourmore/-/1f2"
+    }
+  ]
+}

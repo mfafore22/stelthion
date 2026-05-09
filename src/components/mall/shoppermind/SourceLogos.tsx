@@ -11,6 +11,8 @@ import { cn } from '@/lib/utils';
 const ALL_SOURCES: SourceType[] = [
   'STATFIN',
   'FRED',
+  'IMF',
+  'FOOTFALL_COUNTER',
   'TRADE_PUB',
   'RSS',
   'GOOGLE_TRENDS',
@@ -22,6 +24,8 @@ const ALL_SOURCES: SourceType[] = [
 const AUTHORITATIVE: ReadonlySet<SourceType> = new Set([
   'STATFIN',
   'FRED',
+  'IMF',
+  'FOOTFALL_COUNTER',
   'TRADE_PUB',
 ]);
 
@@ -33,6 +37,8 @@ interface BadgeMeta {
 const META: Record<SourceType, BadgeMeta> = {
   STATFIN: { short: 'SF', active: 'bg-emerald-600 text-white' },
   FRED: { short: 'FR', active: 'bg-emerald-700 text-white' },
+  IMF: { short: 'IM', active: 'bg-sky-700 text-white' },
+  FOOTFALL_COUNTER: { short: 'FC', active: 'bg-cyan-700 text-white' },
   TRADE_PUB: { short: 'TP', active: 'bg-emerald-500 text-white' },
   RSS: { short: 'RS', active: 'bg-orange-500 text-white' },
   GOOGLE_TRENDS: { short: 'GT', active: 'bg-blue-500 text-white' },

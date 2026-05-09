@@ -1,7 +1,7 @@
 'use client';
 
 import useSWR from 'swr';
-import type { PhenomenonState } from '@prisma/client';
+import type { PhenomenonStateValue } from '@stelthion/shoppermind-client-types';
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
@@ -11,7 +11,7 @@ export interface PhenomenonSummary {
   description: string;
   primaryCountry: string;
   categories: string[];
-  state: PhenomenonState;
+  state: PhenomenonStateValue;
   lastSignalAt: string;
   scores: {
     date: string;

@@ -5,6 +5,7 @@ import { fetchGoogleTrends } from './googleTrends.js';
 import { fetchStatFin } from './statfin.js';
 import { fetchFred } from './fred.js';
 import { fetchFootfallCounter } from './footfall-counter.js';
+import { fetchImf } from './imf.js';
 
 const NOT_IMPLEMENTED: SourceFetcher = async () => ({
   signals: [],
@@ -16,6 +17,7 @@ export const FETCHERS: Record<SourceType, SourceFetcher> = {
   GOOGLE_TRENDS: fetchGoogleTrends,
   STATFIN: fetchStatFin,
   FRED: fetchFred,
+  IMF: fetchImf,
   REDDIT: NOT_IMPLEMENTED,
   X: NOT_IMPLEMENTED,
   TIKTOK: NOT_IMPLEMENTED,

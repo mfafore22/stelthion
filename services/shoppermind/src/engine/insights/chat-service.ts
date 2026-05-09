@@ -1,5 +1,7 @@
-import { buildCorpusForMarket, type CorpusDocument } from './phenomenon-corpus.js';
+import type { CorpusDocument } from './phenomenon-corpus.js';
+import { readMarketRetrievalCorpus } from '../memory/retrieval-memory.js';
 import { getLLMClient, type LLMMessage } from '../llm/client.js';
+import { qualityViewFromCorpus, type InsightQualityView } from '../quality/envelope.js';
 import { loadMarket } from '../registry/market-registry.js';
 
 export interface ChatRequest {
@@ -14,6 +16,7 @@ export interface ChatCitation {
   title: string;
   excerpt: string;
   score: number;
+  qualityView?: InsightQualityView;
 }
 
 export interface ChatResponse {
@@ -21,6 +24,7 @@ export interface ChatResponse {
   question: string;
   answer: string;
   citations: ChatCitation[];
+  qualityView?: InsightQualityView;
 }
 
 const STOPWORDS = new Set([
@@ -57,11 +61,9 @@ function excerpt(body: string, queryTokens: string[], maxLen = 280): string {
 }
 
 /**
- * RAG-style answer over the market's phenomenon corpus. First cut: lexical
- * retrieval (token overlap) over freshly-built documents; Phase 4 follow-up
- * swaps in the embedding store. The chat client sees only citations for
- * phenomena this market is subscribed to, so a Helsinki user cannot pull
- * context from a Dubai-only trend.
+ * RAG-style answer over the market's materialized phenomenon corpus. The
+ * chat path reads prebuilt market-scoped retrieval memory instead of building
+ * documents on demand, so freshness and scope are controlled by the pipeline.
  */
 export async function answerInsightsQuestion(req: ChatRequest): Promise<ChatResponse> {
   const topK = req.topK ?? 4;
@@ -77,7 +79,8 @@ export async function answerInsightsQuestion(req: ChatRequest): Promise<ChatResp
     };
   }
 
-  const corpus = await buildCorpusForMarket(req.marketId, windowDays);
+  const snapshot = await readMarketRetrievalCorpus(req.marketId, windowDays);
+  const corpus = snapshot?.documents ?? [];
   const queryTokens = tokenize(req.question);
   const ranked = rank(corpus, queryTokens, topK);
 
@@ -86,7 +89,9 @@ export async function answerInsightsQuestion(req: ChatRequest): Promise<ChatResp
       marketId: req.marketId,
       question: req.question,
       answer:
-        'No phenomena currently tracked in this market match that question. Try broadening the window or rephrasing.',
+        snapshot
+          ? 'No materialized phenomena in this market match that question. Try broadening the window or rephrasing.'
+          : 'Retrieval memory for this market is not materialized yet. Run the ShopperMind pipeline before using insights chat.',
       citations: [],
     };
   }
@@ -126,6 +131,7 @@ export async function answerInsightsQuestion(req: ChatRequest): Promise<ChatResp
     title: doc.title,
     excerpt: excerpt(doc.body, queryTokens),
     score,
+    qualityView: qualityViewFromCorpus(doc, score),
   }));
 
   return {
@@ -133,6 +139,7 @@ export async function answerInsightsQuestion(req: ChatRequest): Promise<ChatResp
     question: req.question,
     answer: answer.trim(),
     citations,
+    qualityView: citations[0]?.qualityView,
   };
 }
 

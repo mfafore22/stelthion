@@ -24,7 +24,10 @@ const prisma = prismaFactory();
 
 const STRONG_WEIGHT = 0.7;
 const PROVENANCE_KEYWORD = `bootstrap:${BOOTSTRAP_EPOCH}`;
-const EU_COUNTRIES = new Set(['FI', 'DE', 'FR', 'SE', 'NL', 'IT', 'ES', 'PL', 'BE', 'AT', 'DK', 'IE', 'PT', 'CZ', 'GR', 'HU', 'RO']);
+// Post-Brexit UK is no longer EU politically, but UK retail consumer behaviour
+// still tracks the broader European pattern; using the EU fallback keeps UK
+// markets populated until trend rows carry an explicit UK column.
+const EU_COUNTRIES = new Set(['FI', 'DE', 'FR', 'SE', 'NL', 'IT', 'ES', 'PL', 'BE', 'AT', 'DK', 'IE', 'PT', 'CZ', 'GR', 'HU', 'RO', 'UK']);
 
 function slugify(s: string): string {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');

@@ -1,58 +1,46 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import type { CorpusDocument } from '../engine/insights/phenomenon-corpus.js';
 
-const phenomenonFindUnique = vi.fn();
-const scoreFindMany = vi.fn();
-const linkFindMany = vi.fn();
 const loadMarketMock = vi.fn();
-
-vi.mock('../db/prisma.js', () => ({
-  prisma: () => ({
-    phenomenon: { findUnique: phenomenonFindUnique },
-    phenomenonScore: { findMany: scoreFindMany },
-    phenomenonLink: { findMany: linkFindMany },
-  }),
-}));
+const readMarketRetrievalCorpusMock = vi.fn();
 
 vi.mock('../engine/registry/market-registry.js', () => ({
   loadMarket: loadMarketMock,
 }));
 
+vi.mock('../engine/memory/retrieval-memory.js', () => ({
+  readMarketRetrievalCorpus: readMarketRetrievalCorpusMock,
+}));
+
 const { answerInsightsQuestion } = await import('../engine/insights/chat-service.js');
 const { setLLMClient } = await import('../engine/llm/client.js');
 
-function phen(id: string, label: string, description: string) {
+function doc(id: string, title: string, body: string): CorpusDocument {
   return {
     id,
-    label,
-    description,
-    phenomenonType: 'TREND',
-    lifecycleState: null,
-    state: 'EMERGING',
-    culturalScope: 'COUNTRY',
-    culturalLocality: 'FI',
-    footTrafficScope: 'COUNTRY',
-    footTrafficLocality: 'FI',
-    firstSeenAt: new Date('2026-03-01T00:00:00Z'),
-    lastSignalAt: new Date('2026-04-18T00:00:00Z'),
-    eventStart: null,
-    eventEnd: null,
-    keywords: [],
+    phenomenonId: id,
+    marketId: 'helsinki-fi',
+    title,
+    body,
+    metadata: {
+      latestCompositeScore: 0.82,
+      lastSignalAt: '2026-05-07T12:00:00Z',
+      sourceCount: 3,
+      strongSourceCount: 2,
+      sourceIds: ['source-a', 'source-b', 'source-c'],
+    } as CorpusDocument['metadata'],
   };
 }
 
 describe('answerInsightsQuestion', () => {
   beforeEach(() => {
-    phenomenonFindUnique.mockReset();
-    scoreFindMany.mockReset();
-    linkFindMany.mockReset();
     loadMarketMock.mockReset();
+    readMarketRetrievalCorpusMock.mockReset();
     loadMarketMock.mockResolvedValue({
       id: 'helsinki-fi',
       profile: { displayName: 'Helsinki', language: 'en' },
       policy: {},
     });
-    // Default empty links
-    linkFindMany.mockResolvedValue([]);
   });
 
   it('returns empty-citation response when market is unknown', async () => {
@@ -63,27 +51,35 @@ describe('answerInsightsQuestion', () => {
   });
 
   it('returns no-match response when no phenomena in the corpus overlap the question', async () => {
-    // buildCorpusForMarket uses a distinct findMany first
-    scoreFindMany.mockResolvedValueOnce([{ phenomenonId: 'p1' }]); // distinct call
-    phenomenonFindUnique.mockResolvedValue(phen('p1', 'Dubai luxury retail', 'about dubai'));
-    scoreFindMany.mockResolvedValueOnce([]); // score fetch inside buildCorpusDocument
+    readMarketRetrievalCorpusMock.mockResolvedValue({
+      documents: [doc('p1', 'Dubai luxury retail', 'about dubai')],
+    });
 
     const res = await answerInsightsQuestion({
       marketId: 'helsinki-fi',
       question: 'passive house adoption Finland',
     });
     expect(res.citations).toEqual([]);
-    expect(res.answer.toLowerCase()).toContain('no phenomena');
+    expect(res.answer.toLowerCase()).toContain('no materialized phenomena');
+  });
+
+  it('does not build retrieval corpus on chat requests', async () => {
+    readMarketRetrievalCorpusMock.mockResolvedValue(null);
+    const res = await answerInsightsQuestion({
+      marketId: 'helsinki-fi',
+      question: 'What passive housing trends matter?',
+    });
+    expect(res.citations).toEqual([]);
+    expect(res.answer.toLowerCase()).toContain('not materialized');
   });
 
   it('ranks corpus documents by token overlap and calls the LLM with cited context', async () => {
-    scoreFindMany.mockResolvedValueOnce([{ phenomenonId: 'p1' }, { phenomenonId: 'p2' }]);
-    phenomenonFindUnique
-      .mockResolvedValueOnce(phen('p1', 'Passive house adoption', 'Low-energy housing discourse'))
-      .mockResolvedValueOnce(phen('p2', 'Luxury retail openings', 'High-end flagships'));
-    scoreFindMany
-      .mockResolvedValueOnce([]) // p1 scores
-      .mockResolvedValueOnce([]); // p2 scores
+    readMarketRetrievalCorpusMock.mockResolvedValue({
+      documents: [
+        doc('p1', 'Passive house adoption', 'Low-energy housing discourse'),
+        doc('p2', 'Luxury retail openings', 'High-end flagships'),
+      ],
+    });
 
     let chatInput: unknown[] = [];
     setLLMClient({
@@ -101,6 +97,9 @@ describe('answerInsightsQuestion', () => {
 
     expect(res.citations).toHaveLength(1);
     expect(res.citations[0]!.phenomenonId).toBe('p1');
+    expect(res.citations[0]!.qualityView?.evidence.sourceIds).toContain('source-a');
+    expect(res.citations[0]!.qualityView?.handlingMode).toBeTruthy();
+    expect(res.qualityView?.quality.chatCaution).toBeTruthy();
     expect(res.answer).toContain('Passive house uptake');
     expect(chatInput.length).toBe(2);
   });

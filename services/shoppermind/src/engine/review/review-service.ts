@@ -1,5 +1,6 @@
 import type { Prisma } from '../../../node_modules/.prisma/shoppermind-client/index.js';
 import { prisma } from '../../db/prisma.js';
+import { persistReviewPolicyEvent } from '../learning/review-events.js';
 
 type ListArgs = {
   marketId: string;
@@ -57,7 +58,7 @@ export async function approveReview(id: string, userId: string, note?: string): 
     },
   });
 
-  await prisma().reviewItem.update({
+  const updated = await prisma().reviewItem.update({
     where: { id },
     data: {
       status: 'APPROVED',
@@ -66,7 +67,9 @@ export async function approveReview(id: string, userId: string, note?: string): 
       resolutionNote: note ?? null,
       appliedAction: 'PUBLISHED',
     },
+    include: { phenomenon: true },
   });
+  await persistReviewPolicyEvent(updated);
 
   return { ok: true, value: { reviewItemId: id, signalOfTheDayId: sot.id } };
 }
@@ -78,7 +81,7 @@ export interface ExpireSummary {
 
 /**
  * Mark every PENDING ReviewItem whose ttlExpiresAt has elapsed as EXPIRED.
- * Idempotent by design — safe to run on a cron cadence. Passing `now` lets
+ * Idempotent by design - safe to run on a cron cadence. Passing `now` lets
  * tests freeze the clock; production callers omit it.
  */
 export async function expireReviewItems(now: Date = new Date()): Promise<ExpireSummary> {
@@ -101,7 +104,7 @@ export async function rejectReview(id: string, userId: string, note?: string): P
   const item = await prisma().reviewItem.findUnique({ where: { id } });
   if (!item) return { ok: false, status: 404, error: 'review_item_not_found' };
   if (item.status !== 'PENDING') return { ok: false, status: 409, error: 'already_resolved' };
-  await prisma().reviewItem.update({
+  const updated = await prisma().reviewItem.update({
     where: { id },
     data: {
       status: 'REJECTED',
@@ -110,6 +113,8 @@ export async function rejectReview(id: string, userId: string, note?: string): P
       resolutionNote: note ?? null,
       appliedAction: 'REJECTED',
     },
+    include: { phenomenon: true },
   });
+  await persistReviewPolicyEvent(updated);
   return { ok: true, value: { reviewItemId: id } };
 }

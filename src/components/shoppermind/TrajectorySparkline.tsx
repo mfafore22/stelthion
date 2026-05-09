@@ -1,9 +1,9 @@
 'use client';
 
 import { AreaChart, Area, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
-import type { PhenomenonState } from '@prisma/client';
+import type { PhenomenonStateValue } from '@stelthion/shoppermind-client-types';
 
-const STATE_COLOR: Record<PhenomenonState, string> = {
+const STATE_COLOR: Record<PhenomenonStateValue, string> = {
   EMERGING: '#3b82f6',
   ACCELERATING: '#10b981',
   STABLE: '#9ca3af',
@@ -18,7 +18,7 @@ interface Point {
 
 interface TrajectorySparklineProps {
   data: Point[];
-  state: PhenomenonState;
+  state: PhenomenonStateValue;
   height?: number;
 }
 

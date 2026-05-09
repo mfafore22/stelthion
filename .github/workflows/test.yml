@@ -29,3 +29,67 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DIRECT_URL: ${{ secrets.DIRECT_URL }}
           AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+
+  shoppermind-release-gate:
+    runs-on: ubuntu-latest
+
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgres://test:test@localhost:5432/test
+      REDIS_URL: redis://localhost:6379
+      SHOPPERMIND_SERVICE_TOKEN: service-token-1234567890
+      SHOPPERMIND_INTERNAL_TOKEN: internal-token-1234567890
+      REVIEW_TTL_ENABLED: 'false'
+      RETENTION_ENABLED: 'false'
+      BULL_BOARD_ENABLED: 'false'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run ShopperMind release gate
+        run: npm run release:gate --workspace=@stelthion/shoppermind
+
+  secret-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Scan tracked files for forbidden literals
+        env:
+          FORBIDDEN_LITERALS: ${{ secrets.FORBIDDEN_LITERALS }}
+        run: bash scripts/ci/check-forbidden-literals.sh
+
+  venuemind-release-gate:
+    runs-on: ubuntu-latest
+
+    env:
+      NODE_ENV: test
+      VENUEMIND_INTERNAL_TOKEN: internal-token-1234567890
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run VenueMind release gate
+        run: npm run release:gate --workspace=@stelthion/venuemind

@@ -1,5 +1,5 @@
 // ShopperMind service schema. Owns its own database (shoppermind_db).
-// Never joined to the mall app's tables — coupling lives at the HTTP API only.
+// Never joined to the mall app's tables - coupling lives at the HTTP API only.
 
 generator client {
   provider = "prisma-client-js"
@@ -20,6 +20,7 @@ enum SourceType {
   STATFIN
   FRED
   FOOTFALL_COUNTER
+  IMF
 }
 
 enum PhenomenonState {
@@ -267,4 +268,64 @@ model PhenomenonLink {
   @@unique([fromPhenomenonId, toPhenomenonId, linkType])
   @@index([toPhenomenonId])
   @@index([fromPhenomenonId])
+}
+
+model PolicyTrainingEvent {
+  id                 String    @id
+  domain             String
+  scope              Json
+  source             String
+  resultId           String
+  outcome            String
+  observedAt         DateTime
+  actorIdHash        String?
+  policyPackId       String?
+  quality            Json?
+  features           Json?
+  labels             Json?
+  notes              String?
+  metadata           Json?
+  piiExpiresAt       DateTime
+  retentionExpiresAt DateTime
+  anonymizedAt       DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@index([domain, source, observedAt])
+  @@index([resultId, observedAt])
+  @@index([piiExpiresAt])
+  @@index([retentionExpiresAt])
+}
+
+model PolicyPackRecord {
+  id                  String    @id
+  domain              String
+  version             String
+  maturityStage       String
+  status              String
+  marketId            String?
+  qualityPolicy       Json?
+  validationProfileId String?
+  metadata            Json?
+  createdAt           DateTime
+  activatedAt         DateTime?
+
+  @@index([domain, status])
+  @@index([marketId, status])
+}
+
+model PolicyEvaluationResultRecord {
+  id                    String   @id @default(cuid())
+  datasetId             String
+  currentPolicyPackId   String
+  candidatePolicyPackId String
+  status                String
+  metrics               Json
+  gates                 Json
+  regressionCaseIds     String[]
+  evaluatedAt           DateTime
+  createdAt             DateTime @default(now())
+
+  @@index([candidatePolicyPackId, status])
+  @@index([datasetId, evaluatedAt])
 }

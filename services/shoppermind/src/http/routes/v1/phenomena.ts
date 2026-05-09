@@ -13,8 +13,12 @@ import {
   recordInteraction,
   summariseInteractions,
 } from '../../../engine/insights/feedback-collector.js';
+import { getLearningPort } from '../../../engine/learning/learning-port.js';
+import { interactionToPolicyTrainingEvent } from '../../../engine/learning/policy-events.js';
 import { classifyMarketState } from '../../../engine/insights/per-market-state.js';
 import { countStrongSources } from '../../../engine/insights/source-strength.js';
+import { qualityViewFromScore } from '../../../engine/quality/envelope.js';
+import { loadPhenomenonSourceEvidence } from '../../../engine/quality/source-evidence.js';
 import { predictForTrend } from '../../../engine/predictive/event-predictor.js';
 import { requireAnyBearer, requireBearer } from '../../auth/bearer.js';
 
@@ -189,7 +193,15 @@ export const phenomenaRoutes: FastifyPluginAsync = async (app) => {
         reply.code(404).send({ error: 'phenomenon_not_found' });
         return;
       }
-      return phenomenon;
+      const latest = phenomenon.scores[0] ?? null;
+      const marketId = latest?.marketId ?? null;
+      const evidence = marketId
+        ? await loadPhenomenonSourceEvidence(req.params.id, marketId)
+        : undefined;
+      return {
+        ...phenomenon,
+        qualityView: latest ? qualityViewFromScore({ ...latest, phenomenon }, evidence) : null,
+      };
     },
   );
 
@@ -441,6 +453,9 @@ export const phenomenaRoutes: FastifyPluginAsync = async (app) => {
         verdict: parsed.data.verdict,
         note: parsed.data.note,
       });
+      if (saved.marketId) {
+        await getLearningPort().appendTrainingEvent(interactionToPolicyTrainingEvent(saved));
+      }
       reply.code(201);
       return saved;
     },

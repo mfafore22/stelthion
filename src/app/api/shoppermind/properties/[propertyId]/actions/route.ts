@@ -13,13 +13,14 @@ export async function GET(
 
   const { propertyId } = await params;
   const marketId = req.nextUrl.searchParams.get('marketId') ?? undefined;
+  const language = req.nextUrl.searchParams.get('language') ?? req.nextUrl.searchParams.get('lang') ?? undefined;
   const client = getShopperMindClient();
   if (!client) {
     return NextResponse.json({ configured: false, actions: null });
   }
 
   try {
-    const actions = await client.getPropertyActions(propertyId, { marketId });
+    const actions = await client.getPropertyActions(propertyId, { marketId, language });
     return NextResponse.json({ configured: true, actions });
   } catch (err) {
     return NextResponse.json(

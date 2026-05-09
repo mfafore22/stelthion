@@ -8,7 +8,7 @@ import { TrajectorySparkline } from './TrajectorySparkline';
 import { FeedbackChips } from './FeedbackChips';
 import { friendlyDescription, categoryLabel } from './helpers';
 import { usePhenomenonDetail } from '@/hooks/useShopperMind';
-import type { PhenomenonState } from '@prisma/client';
+import type { PhenomenonStateValue } from '@stelthion/shoppermind-client-types';
 
 interface PhenomenonDetailProps {
   phenomenonId: string;
@@ -36,7 +36,7 @@ export function PhenomenonDetail({ phenomenonId, userId, onClose }: PhenomenonDe
         <div className="flex-1 min-w-0 mr-3">
           <h2 className="text-lg font-bold text-bo-neutral-900 truncate">{data.label}</h2>
           <div className="flex items-center gap-2 mt-1">
-            <StateBadge state={data.state as PhenomenonState} />
+            <StateBadge state={data.state as PhenomenonStateValue} />
             <span className="text-xs text-bo-neutral-400">{data.primaryCountry}</span>
           </div>
         </div>
@@ -60,7 +60,7 @@ export function PhenomenonDetail({ phenomenonId, userId, onClose }: PhenomenonDe
                 date: s.date,
                 compositeScore: s.compositeScore,
               }))}
-              state={data.state as PhenomenonState}
+              state={data.state as PhenomenonStateValue}
               height={120}
             />
           </div>

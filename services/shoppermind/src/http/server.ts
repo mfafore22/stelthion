@@ -13,6 +13,10 @@ import { reviewRoutes } from './routes/v1/review.js';
 import { resonanceRoutes } from './routes/v1/resonance.js';
 import { insightsRoutes } from './routes/v1/insights.js';
 import { propertiesRoutes } from './routes/v1/properties.js';
+import { recordApiRequest } from '../engine/observability/api-metrics.js';
+import { classifyRoute, rateLimitByRequest } from './security/rate-limit.js';
+
+type TimedRequest = { startTime?: number };
 
 export async function buildServer() {
   const app = Fastify({
@@ -25,6 +29,18 @@ export async function buildServer() {
   });
 
   await app.register(sensible);
+  app.addHook('onRequest', rateLimitByRequest);
+  app.addHook('onRequest', async (req) => {
+    (req as TimedRequest).startTime = Date.now();
+  });
+  app.addHook('onResponse', async (req, reply) => {
+    const startTime = (req as TimedRequest).startTime ?? Date.now();
+    recordApiRequest({
+      routeClass: classifyRoute(req.url),
+      statusCode: reply.statusCode,
+      durationMs: Date.now() - startTime,
+    });
+  });
 
   await app.register(healthRoutes);
   await app.register(cronRoutes);

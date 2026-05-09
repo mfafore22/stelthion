@@ -10,13 +10,13 @@ import { SignalOfTheDayFeed } from './SignalOfTheDayFeed';
 import { looksEnglishOnly } from './helpers';
 import { usePhenomena } from '@/hooks/useShopperMind';
 import { getMarketProfile } from '@/services/shoppermind/markets';
-import type { PhenomenonState } from '@prisma/client';
+import type { PhenomenonStateValue } from '@stelthion/shoppermind-client-types';
 
 interface ShopperMindDashboardProps {
   userId: string;
 }
 
-const STATES: PhenomenonState[] = ['EMERGING', 'ACCELERATING', 'STABLE', 'FADING', 'DORMANT'];
+const STATES: PhenomenonStateValue[] = ['EMERGING', 'ACCELERATING', 'STABLE', 'FADING', 'DORMANT'];
 
 export function ShopperMindDashboard({ userId }: ShopperMindDashboardProps) {
   const { t, i18n } = useTranslation('mall');

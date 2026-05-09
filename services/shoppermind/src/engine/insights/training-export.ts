@@ -1,4 +1,6 @@
 import { prisma } from '../../db/prisma.js';
+import { reviewRecordToPolicyTrainingEvent } from '../learning/policy-events.js';
+import type { PolicyTrainingEvent } from '@stelthion/intelligence-runtime';
 
 export interface TrainingExportQuery {
   marketId?: string;
@@ -108,5 +110,13 @@ export async function* streamTrainingRecords(
 
     cursor = batch[batch.length - 1]!.id;
     if (batch.length < pageSize) break;
+  }
+}
+
+export async function* streamPolicyTrainingEvents(
+  q: TrainingExportQuery,
+): AsyncGenerator<PolicyTrainingEvent> {
+  for await (const record of streamTrainingRecords(q)) {
+    yield reviewRecordToPolicyTrainingEvent(record);
   }
 }

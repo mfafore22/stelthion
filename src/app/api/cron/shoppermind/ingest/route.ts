@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { runIngestion } from '@/services/shoppermind/ingest-runner';
+import { getShopperMindInternalClient } from '@/lib/shoppermind-client';
 
 export async function POST(req: NextRequest) {
   const secret = req.headers.get('x-cron-secret');
@@ -9,11 +9,14 @@ export async function POST(req: NextRequest) {
   }
 
   const body = (await req.json().catch(() => ({}))) as {
-    limit?: number;
-    sourceIds?: string[];
-    force?: boolean;
+    markets?: string[];
   };
 
-  const summary = await runIngestion(body);
+  const client = getShopperMindInternalClient();
+  if (!client) {
+    return NextResponse.json({ error: 'shoppermind_not_configured' }, { status: 503 });
+  }
+
+  const summary = await client.runCron({ stages: ['ingest'], markets: body.markets });
   return NextResponse.json(summary);
 }
