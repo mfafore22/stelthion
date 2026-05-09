@@ -7,7 +7,13 @@ out
 # OS & build artefacts
 .DS_Store
 tsconfig.tsbuildinfo
+docs/generated/
 services/shoppermind/dist/
+services/*/dist/
+packages/*/dist/
+packages/*/src/*.d.ts
+packages/*/src/*.js
+packages/*/src/*.js.map
 
 # Claude Code workspace
 .claude/

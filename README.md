@@ -133,7 +133,7 @@ npm test           # Run Jest test suite
 ```
 URL:      http://localhost:3000/mall/login
 userId:   KoyIdeaparkOy
-password: ideapark2024
+password: <set via SEED_ADMIN_PASSWORD in .env.local>
 mallId:   ideapark
 ```
 

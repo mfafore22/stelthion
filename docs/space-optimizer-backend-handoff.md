@@ -369,6 +369,6 @@ The frontend renders whatever the engine returns; it does no scoring of its own.
 3. Login as `realidea-demo@stelthion.com` lands on the multi-property portfolio. Left nav shows Space Optimizer enabled.
 4. `/api/space-optimizer/suggestions?mallId=sello` returns a `SpaceSuggestionsResponse` with at least one suggestion of each action type.
 5. `/api/demo/space-optimizer?mallId=sello` returns the same shape unauthenticated.
-6. Login as `kimmoisbjornssund@pm.me` (Ideapark, no spaceAllocation) → API returns 403 with `feature_not_on_plan`; left-nav shows the lock badge.
+6. Login as a seeded Ideapark admin (no spaceAllocation) → API returns 403 with `feature_not_on_plan`; left-nav shows the lock badge.
 7. Auth regression: log out, log back in for both customers; OTP / 2FA flows behave identically to baseline.
 8. The frontend's mock fixture and live API responses validate against the same `SpaceSuggestionsResponse` TypeScript type without changes.
