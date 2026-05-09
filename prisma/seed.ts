@@ -2,6 +2,7 @@ import "dotenv/config"
 import { PrismaPg } from '@prisma/adapter-pg'
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcrypt'
+import { seedRealidea } from './seed-realidea-data'
 
 const adapter = new PrismaPg({
   connectionString: process.env.DIRECT_URL || process.env.DATABASE_URL!,
@@ -11,14 +12,28 @@ const prisma = new PrismaClient({ adapter })
 async function main() {
   console.log('Seeding database (non-destructive)...')
 
-  // Check if already seeded
-  const existingIdeapark = await prisma.customer.findUnique({ where: { id: 'ideapark' } })
-  if (existingIdeapark) {
-    console.log('✅ Data already seeded — skipping. Use Supabase dashboard to edit data.')
-    return
+  const primaryCustomer = await seedRealidea(prisma)
+  console.log(`Realidea Oy seeded as primary production tenant (${primaryCustomer.id}).`)
+
+  const seedPassword = process.env.SEED_ADMIN_PASSWORD
+  const seedAdmins = (process.env.SEED_ADMIN_EMAILS ?? '')
+    .split(',')
+    .map((entry) => entry.trim())
+    .filter(Boolean)
+    .map((entry) => {
+      const [email, name] = entry.split('|').map((part) => part?.trim())
+      if (!email) throw new Error(`Invalid SEED_ADMIN_EMAILS entry: "${entry}"`)
+      return { email, name: name || email.split('@')[0], role: 'ADMIN' as const }
+    })
+
+  if (!seedPassword || seedAdmins.length === 0) {
+    throw new Error(
+      'SEED_ADMIN_PASSWORD and SEED_ADMIN_EMAILS must be set (gitignored .env.local). ' +
+      'Format: SEED_ADMIN_EMAILS="user1@example.com|Display Name,user2@example.com"',
+    )
   }
 
-  const hashedPassword = await bcrypt.hash('ideapark2024', 10)
+  const hashedPassword = await bcrypt.hash(seedPassword, 10)
 
   // ── KOY IDEAPARK AB ─────────────────────────────────────
   const ideapark = await prisma.customer.upsert({
@@ -27,24 +42,25 @@ async function main() {
     create: { id: 'ideapark', name: 'Koy Ideapark Ab' },
   })
 
-  const users = [
-    { email: 'faforemichael001@gmail.com', name: 'Michael Fafore', role: 'ADMIN' as const },
-    { email: 'kimmoisbjornssund@pm.me', name: 'Kimmo Isbjörnssund', role: 'ADMIN' as const },
-  ]
+  const users = seedAdmins
 
   for (const u of users) {
     await prisma.user.upsert({
       where: { email: u.email },
-      update: {},
+      update: {
+        name: u.name,
+        role: u.role,
+        customerId: primaryCustomer.id,
+      },
       create: {
         email: u.email,
         password: hashedPassword,
         name: u.name,
         role: u.role,
-        customerId: ideapark.id,
+        customerId: primaryCustomer.id,
       },
     })
-    console.log(`  User: ${u.email} (${u.role})`)
+    console.log(`  User: ${u.email} (${u.role}, customer=${primaryCustomer.id})`)
   }
 
   // Upsert mall
@@ -54,13 +70,14 @@ async function main() {
       name: 'Ideapark Lempäälä',
       city: 'Lempäälä',
       totalShops: 163,
+      status: 'ALPHA',
     },
     create: {
       mallId: 'ideapark-lempaala',
       name: 'Ideapark Lempäälä',
       city: 'Lempäälä',
       totalShops: 163,
-      status: 'LIVE',
+      status: 'ALPHA',
       customerId: ideapark.id,
     },
   })
@@ -117,10 +134,8 @@ async function main() {
   }
 
   console.log('✅ Ideapark: 1 mall seeded')
-  console.log('🌱 Seeding complete!')
-  console.log('Logins:')
-  console.log('  faforemichael001@gmail.com / ideapark2024')
-  console.log('  kimmoisbjornssund@pm.me / ideapark2024')
+  console.log('🌱 Seeding complete. Production admin logins default to Realidea Oy.')
+  console.log(`Seeded ${users.length} admin account(s); credentials supplied via env.`)
 }
 
 main()

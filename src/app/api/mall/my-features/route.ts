@@ -8,7 +8,9 @@ const DEFAULT_FEATURES: PlanFeatures = {
   edgeVision: false,
   concierge: false,
   spaceAllocation: false,
+  venueMind: false,
   maxMalls: 1,
+  maxVenues: 1,
 };
 
 export async function GET() {

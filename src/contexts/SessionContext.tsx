@@ -2,14 +2,18 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useSession as useNextAuthSession } from 'next-auth/react';
+import { choosePrimaryMallId } from '@/lib/mall/primaryMall';
 
 interface MallUser {
   userId: string;
   email: string;
   mallId: string;
+  venueId?: string;
   companyName: string;
+  serviceType?: 'MALL' | 'VENUE' | 'MIXED';
   isMultiProperty: boolean;
   properties: string[];
+  venues?: string[];
   mallDisplayName?: string;
   role?: string | null;
 }
@@ -54,15 +58,21 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
       })
       .then((customer) => {
         const malls = customer.malls || [];
+        const venues = customer.venues || [];
         const properties = malls.map((m: any) => m.mallId);
+        const venueIds = venues.map((v: any) => v.venueId);
+        const mallId = choosePrimaryMallId(properties, customer.id);
 
         setMallUser({
           userId: session.user.id || '',
           email: session.user.email || '',
-          mallId: properties[0] || '',
+          mallId,
+          venueId: venueIds[0],
           companyName: customer.name || '',
-          isMultiProperty: properties.length > 1,
+          serviceType: customer.serviceType ?? (venueIds.length ? 'VENUE' : 'MALL'),
+          isMultiProperty: properties.length > 1 || venueIds.length > 1,
           properties,
+          venues: venueIds,
           mallDisplayName: customer.name || session.user.email || '',
           role: (session.user as { role?: string | null }).role ?? null,
         });

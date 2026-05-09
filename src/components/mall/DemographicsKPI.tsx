@@ -21,7 +21,7 @@ interface DemographicsKPIProps {
 export function DemographicsKPI({ demographics }: DemographicsKPIProps) {
   const { t } = useTranslation('mall');
   const [isHouseholdModalOpen, setIsHouseholdModalOpen] = useState(false);
-  const householdData = getHouseholdData();
+  const householdData = getHouseholdData(demographics);
   // Format numbers
   const formatNumber = (num: number) => {
     if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;

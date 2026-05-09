@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
 import { isMallId } from '@/lib/mall/ids';
 import { getSelloTenantSummary, SELLO_TENANT_UPDATED_AT } from '@/lib/data/selloTenantMix';
+import { getTriplaTenantSummary, TRIPLA_TENANT_UPDATED_AT } from '@/lib/data/triplaTenantMix';
 
 const IDEAPARK_DATA = {
   id: 'ideapark-lempaala',
@@ -95,6 +96,29 @@ export async function GET(
           retailer_type_percentages: tenant.retailerPercentages,
           top_categories: tenant.topCategories.slice(0, 7),
           shops_by_floor: tenant.floorCounts,
+        },
+        shops: null,
+      },
+    });
+  }
+
+  if (isMallId(mallId, 'realidea-tripla')) {
+    const tenant = getTriplaTenantSummary();
+    return NextResponse.json({
+      success: true,
+      data: {
+        id: 'realidea-tripla',
+        summary: {
+          mall_name: 'Mall of Tripla',
+          city: 'Helsinki',
+          total_shops: tenant.totalShops,
+          collection_date: TRIPLA_TENANT_UPDATED_AT,
+          data_source: 'Mall of Tripla official tenant listings',
+          shops_by_retailer_type: tenant.categoryCounts,
+          shops_by_category: tenant.categoryCounts,
+          retailer_type_percentages: tenant.retailerPercentages,
+          top_categories: tenant.topCategories.slice(0, 7),
+          shops_by_floor: {},
         },
         shops: null,
       },

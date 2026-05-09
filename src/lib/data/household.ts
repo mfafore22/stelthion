@@ -15,6 +15,7 @@
  */
 
 import type { MallHouseholdData } from '@/lib/types/household';
+import type { CatchmentDemographics } from '@/lib/types/transport';
 
 const IDEAPARK_HOUSEHOLDS: MallHouseholdData = {
   dataSource: 'Statistics Finland (Tilastokeskus) · Ideapark catchment 2025',
@@ -196,6 +197,71 @@ const IDEAPARK_HOUSEHOLDS: MallHouseholdData = {
   ],
 };
 
-export function getHouseholdData(): MallHouseholdData {
-  return IDEAPARK_HOUSEHOLDS;
+export function getHouseholdData(demographics?: CatchmentDemographics): MallHouseholdData {
+  if (!demographics || demographics.mallId === 'ideapark-lempaala') return IDEAPARK_HOUSEHOLDS;
+  return buildHouseholdDataFromCatchment(demographics);
+}
+
+function buildHouseholdDataFromCatchment(demographics: CatchmentDemographics): MallHouseholdData {
+  const catchmentAreas = demographics.zones.map((zone) => {
+    const total = zone.population.households;
+    const averageHouseholdSize = zone.population.total / Math.max(total, 1);
+    const onePerson = Math.round(total * onePersonShare(averageHouseholdSize));
+    const twoPerson = Math.round(total * twoPersonShare(averageHouseholdSize));
+    const fivePlusPerson = Math.round(total * largeHouseholdShare(averageHouseholdSize));
+    const remaining = Math.max(total - onePerson - twoPerson - fivePlusPerson, 0);
+    const threePerson = Math.round(remaining * 0.56);
+    const fourPerson = Math.max(total - onePerson - twoPerson - threePerson - fivePlusPerson, 0);
+    const ownershipRate = ownershipRateFromProfile(demographics.primaryProfile, zone.income.highIncomeShare);
+    const owned = Math.round(total * ownershipRate / 100);
+    const rented = Math.max(total - owned, 0);
+
+    return {
+      postalCode: zone.postalCodes.join(', '),
+      area: `${zone.driveTimeMinutes} min catchment`,
+      averageHouseholdSize,
+      households: { total, onePerson, twoPerson, threePerson, fourPerson, fivePlusPerson },
+      ownership: { owned, rented, ownershipRate },
+    };
+  });
+
+  const totalHouseholds = catchmentAreas.reduce((sum, area) => sum + area.households.total, 0);
+  const totalResidents = demographics.zones.reduce((sum, zone) => sum + zone.population.total, 0);
+  const owned = catchmentAreas.reduce((sum, area) => sum + area.ownership.owned, 0);
+
+  return {
+    dataSource: 'Derived from active Realidea catchment profile',
+    summary: {
+      totalHouseholds,
+      averageHouseholdSize: totalResidents / Math.max(totalHouseholds, 1),
+      ownershipRate: Number((owned / Math.max(totalHouseholds, 1) * 100).toFixed(1)),
+      predominantType: demographics.primaryProfile,
+    },
+    catchmentAreas,
+  };
+}
+
+function onePersonShare(avgSize: number): number {
+  if (avgSize < 1.9) return 0.48;
+  if (avgSize < 2.2) return 0.4;
+  if (avgSize < 2.5) return 0.31;
+  return 0.24;
+}
+
+function twoPersonShare(avgSize: number): number {
+  if (avgSize < 1.9) return 0.32;
+  if (avgSize < 2.2) return 0.33;
+  if (avgSize < 2.5) return 0.32;
+  return 0.3;
+}
+
+function largeHouseholdShare(avgSize: number): number {
+  if (avgSize < 2.1) return 0.03;
+  if (avgSize < 2.5) return 0.06;
+  return 0.09;
+}
+
+function ownershipRateFromProfile(profile: string, highIncomeShare: number): number {
+  const base = profile === 'urban-professional' ? 48 : 62;
+  return Math.min(82, Math.max(35, Number((base + highIncomeShare * 0.45).toFixed(1))));
 }

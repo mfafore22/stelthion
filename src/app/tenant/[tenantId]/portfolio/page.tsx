@@ -7,7 +7,6 @@ import useSWR from 'swr';
 import { Building2 } from 'lucide-react';
 import { useSession } from '@/contexts/SessionContext';
 import { useTranslation } from '@/lib/i18n/hooks';
-import { getCurrentFootfall } from '@/lib/data/footfall';
 import { getOperatorLogoOrFallback } from '@/lib/mall/operatorLogos';
 import { MallLeftNav } from '@/components/mall/shell/MallLeftNav';
 import { MallTopBar } from '@/components/mall/shell/MallTopBar';
@@ -31,7 +30,6 @@ export default function TenantPortfolioPage() {
   const tenantName = tenantId ? TENANT_MAP[tenantId] : '';
   const { data } = useSWR<CustomerResponse>(user && tenantId ? `/api/customers/${tenantId}` : null, fetcher);
   const operatorLogo = getOperatorLogoOrFallback(tenantName);
-  const footfall = useMemo(() => getCurrentFootfall(), []);
 
   useEffect(() => {
     if (!loading && !user) router.push('/mall/login');
@@ -74,7 +72,7 @@ export default function TenantPortfolioPage() {
             rightSlot={<LogoBox logo={operatorLogo} name={tenantName} />}
           />
           <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <MallKPICard label={t('mall:portfolio.currentVisitors')} value={compact(footfall.currentVisitors)} delta={`+${footfall.vsPlanned.toFixed(1)}% ${t('mall:portfolio.vsPlan')}`} deltaType="positive" accent="green" trendPercentage={footfall.vsPlanned} surfaceAccent={{ primary: '#328d2e', secondary: '#214990' }} />
+            <MallKPICard label={t('mall:portfolio.currentVisitors')} value={compact(malls.reduce((sum, mall) => sum + mall.currentVisitors, 0))} delta={t('mall:portfolio.liveDataPending')} deltaType="neutral" accent="green" trendPercentage={0} surfaceAccent={{ primary: '#328d2e', secondary: '#214990' }} />
             <MallKPICard label={t('mall:portfolio.annualVisitors')} value={compact(totals.visitors)} delta={`${totals.count} ${t('mall:portfolio.shoppingCenters', { count: totals.count })}`} accent="blue" trendPercentage={3.2} surfaceAccent={{ primary: '#214990', secondary: '#328d2e' }} />
             <MallKPICard label={t('mall:portfolio.annualSales')} value={compact(totals.sales, true)} delta={t('mall:portfolio.propertyOperator')} accent="orange" trendPercentage={2.1} surfaceAccent={{ primary: '#b45309', secondary: '#214990' }} />
           </section>
