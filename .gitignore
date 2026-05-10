@@ -17,3 +17,5 @@ packages/*/src/*.js.map
 
 # Claude Code workspace
 .claude/
+
+prisma/migrations.broken-backup/

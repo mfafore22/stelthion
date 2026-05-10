@@ -84,9 +84,9 @@ async function main(): Promise<void> {
 }
 
 // Run only when invoked directly.
-if (import.meta.url === `file://${process.argv[1]}`) {
-  main().catch((err) => {
+
+main().catch((err) => {
     console.error(err);
     process.exit(1);
-  });
-}
+});
+

@@ -28,12 +28,14 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
-, "src/app/lib"  ],
+    "**/*.mts",
+    "src/app/lib"
+  ],
   "exclude": [
     "node_modules",
     "prisma",
-    "scripts",
+    "**/scripts/**",
+    "**/*.bak",
     "packages/**/dist",
     "services/**/dist",
     "services/shoppermind/src",
